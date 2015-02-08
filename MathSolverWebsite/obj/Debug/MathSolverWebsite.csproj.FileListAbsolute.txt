@@ -1,0 +1,591 @@
+c:\users\andrew\documents\visual studio 2012\Projects\MathSolverWebsite\MathSolverWebsite\bin\MathSolverWebsite.dll
+c:\users\andrew\documents\visual studio 2012\Projects\MathSolverWebsite\MathSolverWebsite\bin\MathSolverWebsite.pdb
+c:\users\andrew\documents\visual studio 2012\Projects\MathSolverWebsite\MathSolverWebsite\bin\Antlr3.Runtime.dll
+c:\users\andrew\documents\visual studio 2012\Projects\MathSolverWebsite\MathSolverWebsite\bin\AspNet.ScriptManager.jQuery.dll
+c:\users\andrew\documents\visual studio 2012\Projects\MathSolverWebsite\MathSolverWebsite\bin\AspNet.ScriptManager.jQuery.UI.Combined.dll
+c:\users\andrew\documents\visual studio 2012\Projects\MathSolverWebsite\MathSolverWebsite\bin\DotNetOpenAuth.AspNet.dll
+c:\users\andrew\documents\visual studio 2012\Projects\MathSolverWebsite\MathSolverWebsite\bin\DotNetOpenAuth.Core.dll
+c:\users\andrew\documents\visual studio 2012\Projects\MathSolverWebsite\MathSolverWebsite\bin\DotNetOpenAuth.OAuth.Consumer.dll
+c:\users\andrew\documents\visual studio 2012\Projects\MathSolverWebsite\MathSolverWebsite\bin\DotNetOpenAuth.OAuth.dll
+c:\users\andrew\documents\visual studio 2012\Projects\MathSolverWebsite\MathSolverWebsite\bin\DotNetOpenAuth.OpenId.dll
+c:\users\andrew\documents\visual studio 2012\Projects\MathSolverWebsite\MathSolverWebsite\bin\DotNetOpenAuth.OpenId.RelyingParty.dll
+c:\users\andrew\documents\visual studio 2012\Projects\MathSolverWebsite\MathSolverWebsite\bin\EntityFramework.dll
+c:\users\andrew\documents\visual studio 2012\Projects\MathSolverWebsite\MathSolverWebsite\bin\Microsoft.AspNet.FriendlyUrls.dll
+c:\users\andrew\documents\visual studio 2012\Projects\MathSolverWebsite\MathSolverWebsite\bin\Microsoft.AspNet.Membership.OpenAuth.dll
+c:\users\andrew\documents\visual studio 2012\Projects\MathSolverWebsite\MathSolverWebsite\bin\Microsoft.AspNet.Web.Optimization.WebForms.dll
+c:\users\andrew\documents\visual studio 2012\Projects\MathSolverWebsite\MathSolverWebsite\bin\Microsoft.ScriptManager.MSAjax.dll
+c:\users\andrew\documents\visual studio 2012\Projects\MathSolverWebsite\MathSolverWebsite\bin\Microsoft.ScriptManager.WebForms.dll
+c:\users\andrew\documents\visual studio 2012\Projects\MathSolverWebsite\MathSolverWebsite\bin\Microsoft.Web.Infrastructure.dll
+c:\users\andrew\documents\visual studio 2012\Projects\MathSolverWebsite\MathSolverWebsite\bin\System.Web.Optimization.dll
+c:\users\andrew\documents\visual studio 2012\Projects\MathSolverWebsite\MathSolverWebsite\bin\System.Web.Providers.dll
+c:\users\andrew\documents\visual studio 2012\Projects\MathSolverWebsite\MathSolverWebsite\bin\WebGrease.dll
+c:\users\andrew\documents\visual studio 2012\Projects\MathSolverWebsite\MathSolverWebsite\bin\EntityFramework.xml
+c:\users\andrew\documents\visual studio 2012\Projects\MathSolverWebsite\MathSolverWebsite\bin\DotNetOpenAuth.Core.xml
+c:\users\andrew\documents\visual studio 2012\Projects\MathSolverWebsite\MathSolverWebsite\bin\DotNetOpenAuth.OAuth.xml
+c:\users\andrew\documents\visual studio 2012\Projects\MathSolverWebsite\MathSolverWebsite\bin\DotNetOpenAuth.OAuth.Consumer.xml
+c:\users\andrew\documents\visual studio 2012\Projects\MathSolverWebsite\MathSolverWebsite\bin\DotNetOpenAuth.OpenId.xml
+c:\users\andrew\documents\visual studio 2012\Projects\MathSolverWebsite\MathSolverWebsite\bin\DotNetOpenAuth.OpenId.RelyingParty.xml
+c:\users\andrew\documents\visual studio 2012\Projects\MathSolverWebsite\MathSolverWebsite\bin\DotNetOpenAuth.AspNet.xml
+c:\users\andrew\documents\visual studio 2012\Projects\MathSolverWebsite\MathSolverWebsite\bin\Microsoft.AspNet.Membership.OpenAuth.xml
+c:\users\andrew\documents\visual studio 2012\Projects\MathSolverWebsite\MathSolverWebsite\bin\Microsoft.AspNet.FriendlyUrls.xml
+c:\users\andrew\documents\visual studio 2012\Projects\MathSolverWebsite\MathSolverWebsite\obj\Debug\MathSolverWebsite.csprojResolveAssemblyReference.cache
+c:\users\andrew\documents\visual studio 2012\Projects\MathSolverWebsite\MathSolverWebsite\obj\Debug\MathSolverWebsite.dll
+c:\users\andrew\documents\visual studio 2012\Projects\MathSolverWebsite\MathSolverWebsite\obj\Debug\MathSolverWebsite.pdb
+C:\Users\Andrew\Desktop\MathSolverWebsite\MathSolverWebsite\bin\MathSolverWebsite.dll
+C:\Users\Andrew\Desktop\MathSolverWebsite\MathSolverWebsite\bin\MathSolverWebsite.pdb
+C:\Users\Andrew\Desktop\MathSolverWebsite\MathSolverWebsite\bin\Antlr3.Runtime.dll
+C:\Users\Andrew\Desktop\MathSolverWebsite\MathSolverWebsite\bin\AspNet.ScriptManager.jQuery.dll
+C:\Users\Andrew\Desktop\MathSolverWebsite\MathSolverWebsite\bin\AspNet.ScriptManager.jQuery.UI.Combined.dll
+C:\Users\Andrew\Desktop\MathSolverWebsite\MathSolverWebsite\bin\DotNetOpenAuth.AspNet.dll
+C:\Users\Andrew\Desktop\MathSolverWebsite\MathSolverWebsite\bin\DotNetOpenAuth.Core.dll
+C:\Users\Andrew\Desktop\MathSolverWebsite\MathSolverWebsite\bin\DotNetOpenAuth.OAuth.Consumer.dll
+C:\Users\Andrew\Desktop\MathSolverWebsite\MathSolverWebsite\bin\DotNetOpenAuth.OAuth.dll
+C:\Users\Andrew\Desktop\MathSolverWebsite\MathSolverWebsite\bin\DotNetOpenAuth.OpenId.dll
+C:\Users\Andrew\Desktop\MathSolverWebsite\MathSolverWebsite\bin\DotNetOpenAuth.OpenId.RelyingParty.dll
+C:\Users\Andrew\Desktop\MathSolverWebsite\MathSolverWebsite\bin\EntityFramework.dll
+C:\Users\Andrew\Desktop\MathSolverWebsite\MathSolverWebsite\bin\Microsoft.AspNet.FriendlyUrls.dll
+C:\Users\Andrew\Desktop\MathSolverWebsite\MathSolverWebsite\bin\Microsoft.AspNet.Membership.OpenAuth.dll
+C:\Users\Andrew\Desktop\MathSolverWebsite\MathSolverWebsite\bin\Microsoft.AspNet.Web.Optimization.WebForms.dll
+C:\Users\Andrew\Desktop\MathSolverWebsite\MathSolverWebsite\bin\Microsoft.ScriptManager.MSAjax.dll
+C:\Users\Andrew\Desktop\MathSolverWebsite\MathSolverWebsite\bin\Microsoft.ScriptManager.WebForms.dll
+C:\Users\Andrew\Desktop\MathSolverWebsite\MathSolverWebsite\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\Andrew\Desktop\MathSolverWebsite\MathSolverWebsite\bin\System.Web.Optimization.dll
+C:\Users\Andrew\Desktop\MathSolverWebsite\MathSolverWebsite\bin\System.Web.Providers.dll
+C:\Users\Andrew\Desktop\MathSolverWebsite\MathSolverWebsite\bin\WebGrease.dll
+C:\Users\Andrew\Desktop\MathSolverWebsite\MathSolverWebsite\bin\EntityFramework.xml
+C:\Users\Andrew\Desktop\MathSolverWebsite\MathSolverWebsite\bin\DotNetOpenAuth.Core.xml
+C:\Users\Andrew\Desktop\MathSolverWebsite\MathSolverWebsite\bin\DotNetOpenAuth.OAuth.xml
+C:\Users\Andrew\Desktop\MathSolverWebsite\MathSolverWebsite\bin\DotNetOpenAuth.OAuth.Consumer.xml
+C:\Users\Andrew\Desktop\MathSolverWebsite\MathSolverWebsite\bin\DotNetOpenAuth.OpenId.xml
+C:\Users\Andrew\Desktop\MathSolverWebsite\MathSolverWebsite\bin\DotNetOpenAuth.OpenId.RelyingParty.xml
+C:\Users\Andrew\Desktop\MathSolverWebsite\MathSolverWebsite\bin\DotNetOpenAuth.AspNet.xml
+C:\Users\Andrew\Desktop\MathSolverWebsite\MathSolverWebsite\bin\Microsoft.AspNet.Membership.OpenAuth.xml
+C:\Users\Andrew\Desktop\MathSolverWebsite\MathSolverWebsite\bin\Microsoft.AspNet.FriendlyUrls.xml
+C:\Users\Andrew\Desktop\MathSolverWebsite\MathSolverWebsite\obj\Debug\MathSolverWebsite.csprojResolveAssemblyReference.cache
+C:\Users\Andrew\Desktop\MathSolverWebsite\MathSolverWebsite\obj\Debug\MathSolverWebsite.dll
+C:\Users\Andrew\Desktop\MathSolverWebsite\MathSolverWebsite\obj\Debug\MathSolverWebsite.pdb
+C:\Users\728812\Desktop\MathSolverWebsite\MathSolverWebsite\obj\Debug\MathSolverWebsite.csprojResolveAssemblyReference.cache
+C:\Users\728812\Desktop\MathSolverWebsite\MathSolverWebsite\obj\Debug\MathSolverWebsite.dll
+C:\Users\728812\Desktop\MathSolverWebsite\MathSolverWebsite\obj\Debug\MathSolverWebsite.pdb
+C:\Users\728812\Desktop\MathSolverWebsite\MathSolverWebsite\bin\MathSolverWebsite.dll
+C:\Users\728812\Desktop\MathSolverWebsite\MathSolverWebsite\bin\MathSolverWebsite.pdb
+C:\Users\728812\Desktop\MathSolverWebsite\MathSolverWebsite\bin\Antlr3.Runtime.dll
+C:\Users\728812\Desktop\MathSolverWebsite\MathSolverWebsite\bin\AspNet.ScriptManager.jQuery.dll
+C:\Users\728812\Desktop\MathSolverWebsite\MathSolverWebsite\bin\AspNet.ScriptManager.jQuery.UI.Combined.dll
+C:\Users\728812\Desktop\MathSolverWebsite\MathSolverWebsite\bin\DotNetOpenAuth.AspNet.dll
+C:\Users\728812\Desktop\MathSolverWebsite\MathSolverWebsite\bin\DotNetOpenAuth.Core.dll
+C:\Users\728812\Desktop\MathSolverWebsite\MathSolverWebsite\bin\DotNetOpenAuth.OAuth.Consumer.dll
+C:\Users\728812\Desktop\MathSolverWebsite\MathSolverWebsite\bin\DotNetOpenAuth.OAuth.dll
+C:\Users\728812\Desktop\MathSolverWebsite\MathSolverWebsite\bin\DotNetOpenAuth.OpenId.dll
+C:\Users\728812\Desktop\MathSolverWebsite\MathSolverWebsite\bin\DotNetOpenAuth.OpenId.RelyingParty.dll
+C:\Users\728812\Desktop\MathSolverWebsite\MathSolverWebsite\bin\EntityFramework.dll
+C:\Users\728812\Desktop\MathSolverWebsite\MathSolverWebsite\bin\Microsoft.AspNet.FriendlyUrls.dll
+C:\Users\728812\Desktop\MathSolverWebsite\MathSolverWebsite\bin\Microsoft.AspNet.Membership.OpenAuth.dll
+C:\Users\728812\Desktop\MathSolverWebsite\MathSolverWebsite\bin\Microsoft.AspNet.Web.Optimization.WebForms.dll
+C:\Users\728812\Desktop\MathSolverWebsite\MathSolverWebsite\bin\Microsoft.ScriptManager.MSAjax.dll
+C:\Users\728812\Desktop\MathSolverWebsite\MathSolverWebsite\bin\Microsoft.ScriptManager.WebForms.dll
+C:\Users\728812\Desktop\MathSolverWebsite\MathSolverWebsite\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\728812\Desktop\MathSolverWebsite\MathSolverWebsite\bin\System.Web.Optimization.dll
+C:\Users\728812\Desktop\MathSolverWebsite\MathSolverWebsite\bin\System.Web.Providers.dll
+C:\Users\728812\Desktop\MathSolverWebsite\MathSolverWebsite\bin\WebGrease.dll
+C:\Users\728812\Desktop\MathSolverWebsite\MathSolverWebsite\bin\EntityFramework.xml
+C:\Users\728812\Desktop\MathSolverWebsite\MathSolverWebsite\bin\DotNetOpenAuth.Core.xml
+C:\Users\728812\Desktop\MathSolverWebsite\MathSolverWebsite\bin\DotNetOpenAuth.OAuth.xml
+C:\Users\728812\Desktop\MathSolverWebsite\MathSolverWebsite\bin\DotNetOpenAuth.OAuth.Consumer.xml
+C:\Users\728812\Desktop\MathSolverWebsite\MathSolverWebsite\bin\DotNetOpenAuth.OpenId.xml
+C:\Users\728812\Desktop\MathSolverWebsite\MathSolverWebsite\bin\DotNetOpenAuth.OpenId.RelyingParty.xml
+C:\Users\728812\Desktop\MathSolverWebsite\MathSolverWebsite\bin\DotNetOpenAuth.AspNet.xml
+C:\Users\728812\Desktop\MathSolverWebsite\MathSolverWebsite\bin\Microsoft.AspNet.Membership.OpenAuth.xml
+C:\Users\728812\Desktop\MathSolverWebsite\MathSolverWebsite\bin\Microsoft.AspNet.FriendlyUrls.xml
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\MathSolverWebsite.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\MathSolverWebsite.pdb
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\Antlr3.Runtime.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\AspNet.ScriptManager.jQuery.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\AspNet.ScriptManager.jQuery.UI.Combined.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.AspNet.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.Core.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.OAuth.Consumer.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.OAuth.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.OpenId.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.OpenId.RelyingParty.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\EntityFramework.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\Microsoft.AspNet.FriendlyUrls.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\Microsoft.AspNet.Membership.OpenAuth.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\Microsoft.AspNet.Web.Optimization.WebForms.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\Microsoft.ScriptManager.MSAjax.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\Microsoft.ScriptManager.WebForms.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\System.Web.Optimization.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\System.Web.Providers.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\WebGrease.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\EntityFramework.xml
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.Core.xml
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.OAuth.xml
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.OAuth.Consumer.xml
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.OpenId.xml
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.OpenId.RelyingParty.xml
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.AspNet.xml
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\Microsoft.AspNet.Membership.OpenAuth.xml
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\Microsoft.AspNet.FriendlyUrls.xml
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\obj\Debug\MathSolverWebsite.csprojResolveAssemblyReference.cache
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\obj\Debug\MathSolverWebsite.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\obj\Debug\MathSolverWebsite.pdb
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\MathSolverWebsite.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\MathSolverWebsite.pdb
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\Antlr3.Runtime.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\AspNet.ScriptManager.jQuery.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\AspNet.ScriptManager.jQuery.UI.Combined.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.AspNet.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.Core.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.OAuth.Consumer.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.OAuth.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.OpenId.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.OpenId.RelyingParty.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\EntityFramework.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\Microsoft.AspNet.FriendlyUrls.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\Microsoft.AspNet.Membership.OpenAuth.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\Microsoft.AspNet.Web.Optimization.WebForms.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\Microsoft.ScriptManager.MSAjax.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\Microsoft.ScriptManager.WebForms.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\System.Web.Optimization.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\System.Web.Providers.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\WebGrease.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\EntityFramework.xml
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.Core.xml
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.OAuth.xml
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.OAuth.Consumer.xml
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.OpenId.xml
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.OpenId.RelyingParty.xml
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.AspNet.xml
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\Microsoft.AspNet.Membership.OpenAuth.xml
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\Microsoft.AspNet.FriendlyUrls.xml
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\obj\Debug\MathSolverWebsite.csprojResolveAssemblyReference.cache
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\obj\Debug\MathSolverWebsite.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\obj\Debug\MathSolverWebsite.pdb
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\MathSolverWebsite.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\MathSolverWebsite.pdb
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\Antlr3.Runtime.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\AspNet.ScriptManager.jQuery.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\AspNet.ScriptManager.jQuery.UI.Combined.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.AspNet.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.Core.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.OAuth.Consumer.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.OAuth.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.OpenId.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.OpenId.RelyingParty.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\EntityFramework.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\Microsoft.AspNet.FriendlyUrls.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\Microsoft.AspNet.Membership.OpenAuth.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\Microsoft.AspNet.Web.Optimization.WebForms.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\Microsoft.ScriptManager.MSAjax.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\Microsoft.ScriptManager.WebForms.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\System.Web.Optimization.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\System.Web.Providers.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\WebGrease.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\EntityFramework.xml
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.Core.xml
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.OAuth.xml
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.OAuth.Consumer.xml
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.OpenId.xml
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.OpenId.RelyingParty.xml
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.AspNet.xml
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\Microsoft.AspNet.Membership.OpenAuth.xml
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\Microsoft.AspNet.FriendlyUrls.xml
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\obj\Debug\MathSolverWebsite.csprojResolveAssemblyReference.cache
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\obj\Debug\MathSolverWebsite.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\obj\Debug\MathSolverWebsite.pdb
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\Microsoft.Data.Edm.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\Microsoft.Data.OData.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\Microsoft.Data.Services.Client.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\Microsoft.WindowsAzure.Configuration.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\Microsoft.WindowsAzure.Storage.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\Newtonsoft.Json.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\System.Spatial.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\Microsoft.Data.Edm.xml
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\Microsoft.Data.OData.xml
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\Microsoft.Data.Services.Client.xml
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\Microsoft.WindowsAzure.Storage.xml
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\Newtonsoft.Json.xml
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\System.Spatial.xml
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\de\Microsoft.Data.Edm.resources.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\es\Microsoft.Data.Edm.resources.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\fr\Microsoft.Data.Edm.resources.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\it\Microsoft.Data.Edm.resources.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\ja\Microsoft.Data.Edm.resources.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\ko\Microsoft.Data.Edm.resources.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\ru\Microsoft.Data.Edm.resources.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\zh-Hans\Microsoft.Data.Edm.resources.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\zh-Hant\Microsoft.Data.Edm.resources.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\de\Microsoft.Data.OData.resources.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\es\Microsoft.Data.OData.resources.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\fr\Microsoft.Data.OData.resources.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\it\Microsoft.Data.OData.resources.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\ja\Microsoft.Data.OData.resources.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\ko\Microsoft.Data.OData.resources.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\ru\Microsoft.Data.OData.resources.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\zh-Hans\Microsoft.Data.OData.resources.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\zh-Hant\Microsoft.Data.OData.resources.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\de\Microsoft.Data.Services.Client.resources.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\es\Microsoft.Data.Services.Client.resources.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\fr\Microsoft.Data.Services.Client.resources.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\it\Microsoft.Data.Services.Client.resources.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\ja\Microsoft.Data.Services.Client.resources.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\ko\Microsoft.Data.Services.Client.resources.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\ru\Microsoft.Data.Services.Client.resources.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\zh-Hans\Microsoft.Data.Services.Client.resources.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\zh-Hant\Microsoft.Data.Services.Client.resources.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\de\System.Spatial.resources.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\es\System.Spatial.resources.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\fr\System.Spatial.resources.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\it\System.Spatial.resources.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\ja\System.Spatial.resources.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\ko\System.Spatial.resources.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\ru\System.Spatial.resources.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\zh-Hans\System.Spatial.resources.dll
+C:\Users\Andrew\Desktop\Main Website\MathSolverWebsite\bin\zh-Hant\System.Spatial.resources.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\Microsoft.Data.Edm.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\Microsoft.Data.OData.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\Microsoft.Data.Services.Client.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\Microsoft.WindowsAzure.Configuration.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\Microsoft.WindowsAzure.Storage.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\Newtonsoft.Json.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\System.Spatial.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\Microsoft.Data.Edm.xml
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\Microsoft.Data.OData.xml
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\Microsoft.Data.Services.Client.xml
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\Microsoft.WindowsAzure.Storage.xml
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\Newtonsoft.Json.xml
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\System.Spatial.xml
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\de\Microsoft.Data.Edm.resources.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\es\Microsoft.Data.Edm.resources.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\fr\Microsoft.Data.Edm.resources.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\it\Microsoft.Data.Edm.resources.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\ja\Microsoft.Data.Edm.resources.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\ko\Microsoft.Data.Edm.resources.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\ru\Microsoft.Data.Edm.resources.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\zh-Hans\Microsoft.Data.Edm.resources.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\zh-Hant\Microsoft.Data.Edm.resources.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\de\Microsoft.Data.OData.resources.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\es\Microsoft.Data.OData.resources.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\fr\Microsoft.Data.OData.resources.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\it\Microsoft.Data.OData.resources.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\ja\Microsoft.Data.OData.resources.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\ko\Microsoft.Data.OData.resources.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\ru\Microsoft.Data.OData.resources.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\zh-Hans\Microsoft.Data.OData.resources.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\zh-Hant\Microsoft.Data.OData.resources.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\de\Microsoft.Data.Services.Client.resources.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\es\Microsoft.Data.Services.Client.resources.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\fr\Microsoft.Data.Services.Client.resources.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\it\Microsoft.Data.Services.Client.resources.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\ja\Microsoft.Data.Services.Client.resources.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\ko\Microsoft.Data.Services.Client.resources.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\ru\Microsoft.Data.Services.Client.resources.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\zh-Hans\Microsoft.Data.Services.Client.resources.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\zh-Hant\Microsoft.Data.Services.Client.resources.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\de\System.Spatial.resources.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\es\System.Spatial.resources.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\fr\System.Spatial.resources.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\it\System.Spatial.resources.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\ja\System.Spatial.resources.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\ko\System.Spatial.resources.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\ru\System.Spatial.resources.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\zh-Hans\System.Spatial.resources.dll
+C:\Users\Andrew\Documents\Projects\Math Solver Stuff\Main Website\MathSolverWebsite\bin\zh-Hant\System.Spatial.resources.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\Microsoft.Data.Edm.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\Microsoft.Data.OData.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\Microsoft.Data.Services.Client.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\Microsoft.WindowsAzure.Configuration.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\Microsoft.WindowsAzure.Storage.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\Newtonsoft.Json.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\System.Spatial.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\Microsoft.Data.Edm.xml
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\Microsoft.Data.OData.xml
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\Microsoft.Data.Services.Client.xml
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\Microsoft.WindowsAzure.Storage.xml
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\Newtonsoft.Json.xml
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\System.Spatial.xml
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\de\Microsoft.Data.Edm.resources.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\es\Microsoft.Data.Edm.resources.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\fr\Microsoft.Data.Edm.resources.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\it\Microsoft.Data.Edm.resources.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\ja\Microsoft.Data.Edm.resources.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\ko\Microsoft.Data.Edm.resources.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\ru\Microsoft.Data.Edm.resources.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\zh-Hans\Microsoft.Data.Edm.resources.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\zh-Hant\Microsoft.Data.Edm.resources.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\de\Microsoft.Data.OData.resources.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\es\Microsoft.Data.OData.resources.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\fr\Microsoft.Data.OData.resources.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\it\Microsoft.Data.OData.resources.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\ja\Microsoft.Data.OData.resources.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\ko\Microsoft.Data.OData.resources.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\ru\Microsoft.Data.OData.resources.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\zh-Hans\Microsoft.Data.OData.resources.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\zh-Hant\Microsoft.Data.OData.resources.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\de\Microsoft.Data.Services.Client.resources.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\es\Microsoft.Data.Services.Client.resources.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\fr\Microsoft.Data.Services.Client.resources.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\it\Microsoft.Data.Services.Client.resources.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\ja\Microsoft.Data.Services.Client.resources.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\ko\Microsoft.Data.Services.Client.resources.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\ru\Microsoft.Data.Services.Client.resources.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\zh-Hans\Microsoft.Data.Services.Client.resources.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\zh-Hant\Microsoft.Data.Services.Client.resources.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\de\System.Spatial.resources.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\es\System.Spatial.resources.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\fr\System.Spatial.resources.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\it\System.Spatial.resources.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\ja\System.Spatial.resources.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\ko\System.Spatial.resources.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\ru\System.Spatial.resources.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\zh-Hans\System.Spatial.resources.dll
+C:\Users\728812\Desktop\Main Website\MathSolverWebsite\bin\zh-Hant\System.Spatial.resources.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\MathSolverWebsite.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\MathSolverWebsite.pdb
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\Antlr3.Runtime.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\AspNet.ScriptManager.jQuery.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\AspNet.ScriptManager.jQuery.UI.Combined.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.AspNet.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.Core.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.OAuth.Consumer.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.OAuth.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.OpenId.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.OpenId.RelyingParty.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\EntityFramework.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\Microsoft.AspNet.FriendlyUrls.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\Microsoft.AspNet.Membership.OpenAuth.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\Microsoft.AspNet.Web.Optimization.WebForms.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\Microsoft.Data.Edm.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\Microsoft.Data.OData.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\Microsoft.Data.Services.Client.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\Microsoft.ScriptManager.MSAjax.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\Microsoft.ScriptManager.WebForms.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\Microsoft.WindowsAzure.Configuration.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\Microsoft.WindowsAzure.Storage.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\Newtonsoft.Json.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\System.Spatial.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\System.Web.Optimization.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\System.Web.Providers.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\WebGrease.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\Microsoft.Data.Edm.xml
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\Microsoft.Data.OData.xml
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\Microsoft.Data.Services.Client.xml
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\Microsoft.WindowsAzure.Storage.xml
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\Newtonsoft.Json.xml
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\System.Spatial.xml
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\EntityFramework.xml
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.Core.xml
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.OAuth.xml
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.OAuth.Consumer.xml
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.OpenId.xml
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.OpenId.RelyingParty.xml
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.AspNet.xml
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\Microsoft.AspNet.Membership.OpenAuth.xml
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\Microsoft.AspNet.FriendlyUrls.xml
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\de\Microsoft.Data.Edm.resources.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\es\Microsoft.Data.Edm.resources.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\fr\Microsoft.Data.Edm.resources.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\it\Microsoft.Data.Edm.resources.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\ja\Microsoft.Data.Edm.resources.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\ko\Microsoft.Data.Edm.resources.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\ru\Microsoft.Data.Edm.resources.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\zh-Hans\Microsoft.Data.Edm.resources.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\zh-Hant\Microsoft.Data.Edm.resources.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\de\Microsoft.Data.OData.resources.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\es\Microsoft.Data.OData.resources.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\fr\Microsoft.Data.OData.resources.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\it\Microsoft.Data.OData.resources.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\ja\Microsoft.Data.OData.resources.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\ko\Microsoft.Data.OData.resources.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\ru\Microsoft.Data.OData.resources.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\zh-Hans\Microsoft.Data.OData.resources.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\zh-Hant\Microsoft.Data.OData.resources.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\de\Microsoft.Data.Services.Client.resources.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\es\Microsoft.Data.Services.Client.resources.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\fr\Microsoft.Data.Services.Client.resources.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\it\Microsoft.Data.Services.Client.resources.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\ja\Microsoft.Data.Services.Client.resources.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\ko\Microsoft.Data.Services.Client.resources.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\ru\Microsoft.Data.Services.Client.resources.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\zh-Hans\Microsoft.Data.Services.Client.resources.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\zh-Hant\Microsoft.Data.Services.Client.resources.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\de\System.Spatial.resources.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\es\System.Spatial.resources.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\fr\System.Spatial.resources.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\it\System.Spatial.resources.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\ja\System.Spatial.resources.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\ko\System.Spatial.resources.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\ru\System.Spatial.resources.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\zh-Hans\System.Spatial.resources.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\bin\zh-Hant\System.Spatial.resources.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\obj\Debug\MathSolverWebsite.csprojResolveAssemblyReference.cache
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\obj\Debug\MathSolverWebsite.dll
+C:\Users\Andrew\Desktop\Mathologica\Main Website\MathSolverWebsite\obj\Debug\MathSolverWebsite.pdb
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\MathSolverWebsite.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\MathSolverWebsite.pdb
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\Antlr3.Runtime.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\AspNet.ScriptManager.jQuery.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\AspNet.ScriptManager.jQuery.UI.Combined.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.AspNet.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.Core.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.OAuth.Consumer.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.OAuth.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.OpenId.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.OpenId.RelyingParty.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\EntityFramework.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\Microsoft.AspNet.FriendlyUrls.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\Microsoft.AspNet.Membership.OpenAuth.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\Microsoft.AspNet.Web.Optimization.WebForms.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\Microsoft.Data.Edm.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\Microsoft.Data.OData.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\Microsoft.Data.Services.Client.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\Microsoft.ScriptManager.MSAjax.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\Microsoft.ScriptManager.WebForms.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\Microsoft.WindowsAzure.Configuration.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\Microsoft.WindowsAzure.Storage.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\Newtonsoft.Json.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\System.Spatial.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\System.Web.Optimization.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\System.Web.Providers.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\WebGrease.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\Microsoft.Data.Edm.xml
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\Microsoft.Data.OData.xml
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\Microsoft.Data.Services.Client.xml
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\Microsoft.WindowsAzure.Storage.xml
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\Newtonsoft.Json.xml
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\System.Spatial.xml
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\EntityFramework.xml
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.Core.xml
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.OAuth.xml
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.OAuth.Consumer.xml
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.OpenId.xml
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.OpenId.RelyingParty.xml
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\DotNetOpenAuth.AspNet.xml
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\Microsoft.AspNet.Membership.OpenAuth.xml
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\Microsoft.AspNet.FriendlyUrls.xml
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\de\Microsoft.Data.Edm.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\es\Microsoft.Data.Edm.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\fr\Microsoft.Data.Edm.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\it\Microsoft.Data.Edm.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\ja\Microsoft.Data.Edm.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\ko\Microsoft.Data.Edm.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\ru\Microsoft.Data.Edm.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\zh-Hans\Microsoft.Data.Edm.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\zh-Hant\Microsoft.Data.Edm.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\de\Microsoft.Data.OData.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\es\Microsoft.Data.OData.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\fr\Microsoft.Data.OData.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\it\Microsoft.Data.OData.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\ja\Microsoft.Data.OData.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\ko\Microsoft.Data.OData.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\ru\Microsoft.Data.OData.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\zh-Hans\Microsoft.Data.OData.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\zh-Hant\Microsoft.Data.OData.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\de\Microsoft.Data.Services.Client.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\es\Microsoft.Data.Services.Client.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\fr\Microsoft.Data.Services.Client.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\it\Microsoft.Data.Services.Client.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\ja\Microsoft.Data.Services.Client.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\ko\Microsoft.Data.Services.Client.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\ru\Microsoft.Data.Services.Client.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\zh-Hans\Microsoft.Data.Services.Client.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\zh-Hant\Microsoft.Data.Services.Client.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\de\System.Spatial.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\es\System.Spatial.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\fr\System.Spatial.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\it\System.Spatial.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\ja\System.Spatial.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\ko\System.Spatial.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\ru\System.Spatial.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\zh-Hans\System.Spatial.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\bin\zh-Hant\System.Spatial.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\obj\Debug\MathSolverWebsite.csprojResolveAssemblyReference.cache
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\obj\Debug\MathSolverWebsite.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\Main Website\MathSolverWebsite\obj\Debug\MathSolverWebsite.pdb
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\MathSolverWebsite.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\MathSolverWebsite.pdb
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\Antlr3.Runtime.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\AspNet.ScriptManager.jQuery.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\AspNet.ScriptManager.jQuery.UI.Combined.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\DotNetOpenAuth.AspNet.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\DotNetOpenAuth.Core.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\DotNetOpenAuth.OAuth.Consumer.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\DotNetOpenAuth.OAuth.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\DotNetOpenAuth.OpenId.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\DotNetOpenAuth.OpenId.RelyingParty.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\EntityFramework.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\Microsoft.AspNet.FriendlyUrls.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\Microsoft.AspNet.Membership.OpenAuth.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\Microsoft.AspNet.Web.Optimization.WebForms.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\Microsoft.Data.Edm.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\Microsoft.Data.OData.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\Microsoft.Data.Services.Client.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\Microsoft.ScriptManager.MSAjax.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\Microsoft.ScriptManager.WebForms.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\Microsoft.WindowsAzure.Configuration.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\Microsoft.WindowsAzure.Storage.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\Newtonsoft.Json.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\System.Spatial.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\System.Web.Optimization.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\System.Web.Providers.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\WebGrease.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\Microsoft.Data.Edm.xml
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\Microsoft.Data.OData.xml
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\Microsoft.Data.Services.Client.xml
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\Microsoft.WindowsAzure.Storage.xml
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\Newtonsoft.Json.xml
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\System.Spatial.xml
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\EntityFramework.xml
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\DotNetOpenAuth.Core.xml
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\DotNetOpenAuth.OAuth.xml
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\DotNetOpenAuth.OAuth.Consumer.xml
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\DotNetOpenAuth.OpenId.xml
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\DotNetOpenAuth.OpenId.RelyingParty.xml
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\DotNetOpenAuth.AspNet.xml
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\Microsoft.AspNet.Membership.OpenAuth.xml
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\Microsoft.AspNet.FriendlyUrls.xml
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\de\Microsoft.Data.Edm.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\es\Microsoft.Data.Edm.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\fr\Microsoft.Data.Edm.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\it\Microsoft.Data.Edm.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\ja\Microsoft.Data.Edm.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\ko\Microsoft.Data.Edm.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\ru\Microsoft.Data.Edm.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\zh-Hans\Microsoft.Data.Edm.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\zh-Hant\Microsoft.Data.Edm.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\de\Microsoft.Data.OData.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\es\Microsoft.Data.OData.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\fr\Microsoft.Data.OData.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\it\Microsoft.Data.OData.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\ja\Microsoft.Data.OData.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\ko\Microsoft.Data.OData.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\ru\Microsoft.Data.OData.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\zh-Hans\Microsoft.Data.OData.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\zh-Hant\Microsoft.Data.OData.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\de\Microsoft.Data.Services.Client.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\es\Microsoft.Data.Services.Client.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\fr\Microsoft.Data.Services.Client.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\it\Microsoft.Data.Services.Client.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\ja\Microsoft.Data.Services.Client.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\ko\Microsoft.Data.Services.Client.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\ru\Microsoft.Data.Services.Client.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\zh-Hans\Microsoft.Data.Services.Client.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\zh-Hant\Microsoft.Data.Services.Client.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\de\System.Spatial.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\es\System.Spatial.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\fr\System.Spatial.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\it\System.Spatial.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\ja\System.Spatial.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\ko\System.Spatial.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\ru\System.Spatial.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\zh-Hans\System.Spatial.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin\zh-Hant\System.Spatial.resources.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\obj\Debug\MathSolverWebsite.csprojResolveAssemblyReference.cache
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\obj\Debug\MathSolverWebsite.dll
+C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\obj\Debug\MathSolverWebsite.pdb

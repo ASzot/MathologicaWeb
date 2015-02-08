@@ -1,0 +1,594 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E94C693E-D90F-40D7-8581-EE273DB5DBA9}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MathSolverWebsite</RootNamespace>
+    <AssemblyName>MathSolverWebsite</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Data.Edm, Version=5.6.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Data.Edm.5.6.3\lib\net40\Microsoft.Data.Edm.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.OData, Version=5.6.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Data.OData.5.6.3\lib\net40\Microsoft.Data.OData.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.Services.Client, Version=5.6.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Data.Services.Client.5.6.3\lib\net40\Microsoft.Data.Services.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Configuration">
+      <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.1.8.0.0\lib\net35-full\Microsoft.WindowsAzure.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Storage">
+      <HintPath>..\packages\WindowsAzure.Storage.4.3.0\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Spatial, Version=5.6.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\System.Spatial.5.6.3\lib\net40\System.Spatial.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="AspNet.ScriptManager.jQuery">
+      <HintPath>..\packages\AspNet.ScriptManager.jQuery.1.8.2\lib\net45\AspNet.ScriptManager.jQuery.dll</HintPath>
+    </Reference>
+    <Reference Include="AspNet.ScriptManager.jQuery.UI.Combined">
+      <HintPath>..\packages\AspNet.ScriptManager.jQuery.UI.Combined.1.8.24\lib\net45\AspNet.ScriptManager.jQuery.UI.Combined.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ScriptManager.MSAjax, Version=4.5.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <HintPath>..\packages\Microsoft.AspNet.ScriptManager.MSAjax.4.5.6\lib\net45\Microsoft.ScriptManager.MSAjax.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ScriptManager.WebForms, Version=4.5.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <HintPath>..\packages\Microsoft.AspNet.ScriptManager.WebForms.4.5.6\lib\net45\Microsoft.ScriptManager.WebForms.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.0.0\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Providers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <HintPath>..\packages\Microsoft.AspNet.Providers.Core.1.2\lib\net40\System.Web.Providers.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\DotNetOpenAuth.Core.4.1.4.12333\lib\net40-full\DotNetOpenAuth.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.OAuth, Version=4.0.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\DotNetOpenAuth.OAuth.Core.4.1.4.12333\lib\net40-full\DotNetOpenAuth.OAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.OAuth.Consumer, Version=4.0.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\DotNetOpenAuth.OAuth.Consumer.4.1.4.12333\lib\net40-full\DotNetOpenAuth.OAuth.Consumer.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.OpenId, Version=4.0.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\DotNetOpenAuth.OpenId.Core.4.1.4.12333\lib\net40-full\DotNetOpenAuth.OpenId.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.OpenId.RelyingParty, Version=4.0.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\DotNetOpenAuth.OpenId.RelyingParty.4.1.4.12333\lib\net40-full\DotNetOpenAuth.OpenId.RelyingParty.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.AspNet, Version=4.0.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\DotNetOpenAuth.AspNet.4.1.4.12333\lib\net40-full\DotNetOpenAuth.AspNet.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Membership.OpenAuth, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <HintPath>..\packages\Microsoft.AspNet.Membership.OpenAuth.1.0.1\lib\net45\Microsoft.AspNet.Membership.OpenAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.1.0\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.1.0\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Web.Optimization.WebForms">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.WebForms.1.0.0\lib\net45\Microsoft.AspNet.Web.Optimization.WebForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.FriendlyUrls, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <HintPath>..\packages\Microsoft.AspNet.FriendlyUrls.Core.1.0.0\lib\net45\Microsoft.AspNet.FriendlyUrls.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="About.aspx" />
+    <Content Include="Account\Preferences.aspx" />
+    <Content Include="ChangeLogForm.aspx" />
+    <Content Include="Content\DarkTheme.css" />
+    <Content Include="Content\Site.css" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\jquery-ui.css" />
+    <Content Include="Content\themes\base\jquery.ui.accordion.css" />
+    <Content Include="Content\themes\base\jquery.ui.all.css" />
+    <Content Include="Content\themes\base\jquery.ui.autocomplete.css" />
+    <Content Include="Content\themes\base\jquery.ui.base.css" />
+    <Content Include="Content\themes\base\jquery.ui.button.css" />
+    <Content Include="Content\themes\base\jquery.ui.core.css" />
+    <Content Include="Content\themes\base\jquery.ui.datepicker.css" />
+    <Content Include="Content\themes\base\jquery.ui.dialog.css" />
+    <Content Include="Content\themes\base\jquery.ui.progressbar.css" />
+    <Content Include="Content\themes\base\jquery.ui.resizable.css" />
+    <Content Include="Content\themes\base\jquery.ui.selectable.css" />
+    <Content Include="Content\themes\base\jquery.ui.slider.css" />
+    <Content Include="Content\themes\base\jquery.ui.tabs.css" />
+    <Content Include="Content\themes\base\jquery.ui.theme.css" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\minified\jquery-ui.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.accordion.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.autocomplete.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.button.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.core.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.datepicker.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.dialog.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.progressbar.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.resizable.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.selectable.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.slider.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
+    <None Include="Images\Cross.png" />
+    <Content Include="Content\Topics.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Content\WhiteTheme.css" />
+    <Content Include="ErrorPage.aspx" />
+    <Content Include="google8728d16f96719a44.html" />
+    <Content Include="HelpPage.aspx" />
+    <Content Include="HelpTopic.aspx" />
+    <Content Include="HelpTopicSearch.aspx" />
+    <Content Include="Help\CommonProblems.aspx" />
+    <Content Include="Help\FormattingTips.aspx" />
+    <Content Include="Help\GeneralHelp.aspx" />
+    <Content Include="Http404ErrorPage.aspx" />
+    <Content Include="Images\258x67_WP_Store_cyan.png" />
+    <Content Include="Images\css-tooltip-gradient-bg.png" />
+    <Content Include="Images\ErrorLogo.png" />
+    <Content Include="Images\Examples\ExampleClear.png" />
+    <Content Include="Images\Examples\ExampleDivFrac.PNG" />
+    <Content Include="Images\Examples\ExampleEvaluateSelection.png" />
+    <Content Include="Images\Examples\ExampleFormattedFrac.PNG" />
+    <Content Include="Images\Examples\ExampleSlashFrac.PNG" />
+    <Content Include="Images\Examples\ExampleSOE_0.PNG" />
+    <Content Include="Images\Examples\ExampleSOE_1.PNG" />
+    <Content Include="Images\Examples\ExampleSOE_2.PNG" />
+    <Content Include="Images\favlogo.ico" />
+    <Content Include="Images\ListCollapseBtn.png" />
+    <Content Include="Images\ListExpandBtn.png" />
+    <Content Include="Images\loading.gif" />
+    <Content Include="Images\Logo.png" />
+    <Content Include="mathquill\font\stixgeneral-bundle\STIXFontLicense2010.txt" />
+    <Content Include="mathquill\font\stixgeneral-bundle\stixgeneral-webfont.svg" />
+    <Content Include="mathquill\font\stixgeneral-bundle\stixgeneralbol-webfont.svg" />
+    <Content Include="mathquill\font\stixgeneral-bundle\stixgeneralbolita-webfont.svg" />
+    <Content Include="mathquill\font\stixgeneral-bundle\stixgeneralitalic-webfont.svg" />
+    <Content Include="mathquill\font\Symbola.svg" />
+    <Content Include="mathquill\mathquill.css" />
+    <Content Include="mathquill\mathquill.js" />
+    <Content Include="mathquill\mathquill.min.js" />
+    <Content Include="packages.config" />
+    <Content Include="mathquill\font\stixgeneral-bundle\stixgeneral-webfont.eot" />
+    <Content Include="mathquill\font\stixgeneral-bundle\stixgeneral-webfont.ttf" />
+    <Content Include="mathquill\font\stixgeneral-bundle\stixgeneral-webfont.woff" />
+    <Content Include="mathquill\font\stixgeneral-bundle\stixgeneralbol-webfont.eot" />
+    <Content Include="mathquill\font\stixgeneral-bundle\stixgeneralbol-webfont.ttf" />
+    <Content Include="mathquill\font\stixgeneral-bundle\stixgeneralbol-webfont.woff" />
+    <Content Include="mathquill\font\stixgeneral-bundle\stixgeneralbolita-webfont.eot" />
+    <Content Include="mathquill\font\stixgeneral-bundle\stixgeneralbolita-webfont.ttf" />
+    <Content Include="mathquill\font\stixgeneral-bundle\stixgeneralbolita-webfont.woff" />
+    <Content Include="mathquill\font\stixgeneral-bundle\stixgeneralitalic-webfont.eot" />
+    <Content Include="mathquill\font\stixgeneral-bundle\stixgeneralitalic-webfont.ttf" />
+    <Content Include="mathquill\font\stixgeneral-bundle\stixgeneralitalic-webfont.woff" />
+    <Content Include="mathquill\font\Symbola.eot" />
+    <Content Include="mathquill\font\Symbola.otf" />
+    <Content Include="mathquill\font\Symbola.ttf" />
+    <Content Include="mathquill\font\Symbola.woff" />
+    <None Include="Properties\PublishProfiles\mathologica - FTP %282%29.pubxml" />
+    <None Include="Properties\PublishProfiles\mathologica - FTP %283%29.pubxml" />
+    <None Include="Properties\PublishProfiles\mathologica - FTP %284%29.pubxml" />
+    <None Include="Properties\PublishProfiles\mathologica - FTP %285%29.pubxml" />
+    <None Include="Properties\PublishProfiles\mathologica - FTP %286%29.pubxml" />
+    <None Include="Properties\PublishProfiles\mathologica - FTP %287%29.pubxml" />
+    <None Include="Properties\PublishProfiles\mathologica - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\mathologica - Web Deploy %282%29.pubxml" />
+    <None Include="Properties\PublishProfiles\mathologica - Web Deploy %283%29.pubxml" />
+    <None Include="Properties\PublishProfiles\mathologica - Web Deploy %284%29.pubxml" />
+    <None Include="Properties\PublishProfiles\mathologica - Web Deploy %285%29.pubxml" />
+    <None Include="Properties\PublishProfiles\mathologica - Web Deploy %286%29.pubxml" />
+    <None Include="Properties\PublishProfiles\mathologica - Web Deploy %287%29.pubxml" />
+    <None Include="Properties\PublishProfiles\mathologica - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\ml - FTP %282%29.pubxml" />
+    <None Include="Properties\PublishProfiles\ml - FTP %283%29.pubxml" />
+    <None Include="Properties\PublishProfiles\ml - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\ml - Web Deploy %282%29.pubxml" />
+    <None Include="Properties\PublishProfiles\ml - Web Deploy %283%29.pubxml" />
+    <None Include="Properties\PublishProfiles\ml - Web Deploy.pubxml" />
+    <None Include="Scripts\jquery-1.8.2.intellisense.js" />
+    <None Include="Resources\Logo.bmp" />
+    <Content Include="Privacy.aspx" />
+    <Content Include="Products.aspx" />
+    <Content Include="Scripts\CollapsibleLists.js" />
+    <Content Include="Scripts\jquery-1.8.2.js" />
+    <Content Include="Scripts\jquery-1.8.2.min.js" />
+    <Content Include="Scripts\jquery-ui-1.8.24.js" />
+    <Content Include="Scripts\jquery-ui-1.8.24.min.js" />
+    <Content Include="Scripts\Main.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\WebForms\DetailsView.js" />
+    <Content Include="Scripts\WebForms\Focus.js" />
+    <Content Include="Scripts\WebForms\GridView.js" />
+    <Content Include="Scripts\WebForms\Menu.js" />
+    <Content Include="Scripts\WebForms\MenuStandards.js" />
+    <Content Include="Scripts\WebForms\MSAjax\MicrosoftAjax.js" />
+    <Content Include="Scripts\WebForms\MSAjax\MicrosoftAjaxApplicationServices.js" />
+    <Content Include="Scripts\WebForms\MSAjax\MicrosoftAjaxComponentModel.js" />
+    <Content Include="Scripts\WebForms\MSAjax\MicrosoftAjaxCore.js" />
+    <Content Include="Scripts\WebForms\MSAjax\MicrosoftAjaxGlobalization.js" />
+    <Content Include="Scripts\WebForms\MSAjax\MicrosoftAjaxHistory.js" />
+    <Content Include="Scripts\WebForms\MSAjax\MicrosoftAjaxNetwork.js" />
+    <Content Include="Scripts\WebForms\MSAjax\MicrosoftAjaxSerialization.js" />
+    <Content Include="Scripts\WebForms\MSAjax\MicrosoftAjaxTimer.js" />
+    <Content Include="Scripts\WebForms\MSAjax\MicrosoftAjaxWebForms.js" />
+    <Content Include="Scripts\WebForms\MSAjax\MicrosoftAjaxWebServices.js" />
+    <Content Include="Scripts\WebForms\SmartNav.js" />
+    <Content Include="Scripts\WebForms\TreeView.js" />
+    <Content Include="Scripts\WebForms\WebForms.js" />
+    <Content Include="Scripts\WebForms\WebParts.js" />
+    <Content Include="Scripts\WebForms\WebUIValidation.js" />
+    <Content Include="Scripts\_references.js" />
+    <Content Include="Default.aspx" />
+    <Content Include="Global.asax" />
+    <Content Include="sitemap.txt" />
+    <Content Include="Terms.aspx" />
+    <Content Include="ViewSwitcher.ascx" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Bundle.config" />
+    <Content Include="Site.Mobile.Master" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="About.aspx.cs">
+      <DependentUpon>About.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="About.aspx.designer.cs">
+      <DependentUpon>About.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Account\Preferences.aspx.cs">
+      <DependentUpon>Preferences.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Account\Preferences.aspx.designer.cs">
+      <DependentUpon>Preferences.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\AuthConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="ChangeLogForm.aspx.cs">
+      <DependentUpon>ChangeLogForm.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ChangeLogForm.aspx.designer.cs">
+      <DependentUpon>ChangeLogForm.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ErrorPage.aspx.cs">
+      <DependentUpon>ErrorPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ErrorPage.aspx.designer.cs">
+      <DependentUpon>ErrorPage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="HelpPage.aspx.cs">
+      <DependentUpon>HelpPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="HelpPage.aspx.designer.cs">
+      <DependentUpon>HelpPage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="HelpTopic.aspx.cs">
+      <DependentUpon>HelpTopic.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="HelpTopic.aspx.designer.cs">
+      <DependentUpon>HelpTopic.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="HelpTopicSearch.aspx.cs">
+      <DependentUpon>HelpTopicSearch.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="HelpTopicSearch.aspx.designer.cs">
+      <DependentUpon>HelpTopicSearch.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Help\CommonProblems.aspx.cs">
+      <DependentUpon>CommonProblems.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Help\CommonProblems.aspx.designer.cs">
+      <DependentUpon>CommonProblems.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Help\FormattingTips.aspx.cs">
+      <DependentUpon>FormattingTips.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Help\FormattingTips.aspx.designer.cs">
+      <DependentUpon>FormattingTips.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Help\GeneralHelp.aspx.cs">
+      <DependentUpon>GeneralHelp.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Help\GeneralHelp.aspx.designer.cs">
+      <DependentUpon>GeneralHelp.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Http404ErrorPage.aspx.cs">
+      <DependentUpon>Http404ErrorPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Http404ErrorPage.aspx.designer.cs">
+      <DependentUpon>Http404ErrorPage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MathSolverLibrary\AlgebraSolver.cs" />
+    <Compile Include="MathSolverLibrary\Core.cs" />
+    <Compile Include="MathSolverLibrary\Equation\EqSet.cs" />
+    <Compile Include="MathSolverLibrary\Equation\ExComp.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Functions\AbsValFunction.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Functions\AppliedFunction.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Functions\Calculus\AntiDerivativeHelper.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Functions\Calculus\CalcConstant.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Functions\Calculus\Derivative.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Functions\Calculus\Integral.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Functions\Calculus\Limit.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Functions\ChooseFunction.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Functions\FactorialFunction.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Functions\LogFunction.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Functions\PowerFunction.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Functions\SumFunction.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Functions\TrigFunctions.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Group\AlgebraGroup.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Group\GroupHelper.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Operators\AdditionOperator.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Operators\DivisionOperator.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Operators\DotOperator.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Operators\MultiplicationOperator.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Operators\PowerOperator.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Operators\SubtractionOperator.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Simplifier.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Structural\AlgebraComp.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Structural\AlgebraFunction.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Structural\AlgebraOperator.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Structural\AlgebraTerm.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Structural\AlgebraTermArray.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Structural\Constant.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Structural\FunctionDefinition.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Structural\GeneralSolution.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Structural\LinearAlg\Vector.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Structural\Number.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Structural\Solution.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Structural\SpecialSolutions.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Term\AdvAlgebraTerm.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Term\AlgebraTermDetection.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Term\AlgebraTermGet.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Term\AlgebraTermHelper.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Term\AlgebraTermOps.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Term\Extensions\PolynomialExt.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Term\Extensions\SimpleFraction.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Term\Extensions\TermExtension.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Term\PolyInfo.cs" />
+    <Compile Include="MathSolverLibrary\Information Helpers\FuncDefHelper.cs" />
+    <Compile Include="MathSolverLibrary\Information Helpers\UnitCircle.cs" />
+    <Compile Include="MathSolverLibrary\Information Helpers\WorkMgr.cs" />
+    <Compile Include="MathSolverLibrary\MathHelper.cs" />
+    <Compile Include="MathSolverLibrary\MathSolver.cs" />
+    <Compile Include="MathSolverLibrary\Parsing\LexicalParser.cs" />
+    <Compile Include="MathSolverLibrary\Solving\AbsoluteValueSolve.cs" />
+    <Compile Include="MathSolverLibrary\Solving\CubicSolve.cs" />
+    <Compile Include="MathSolverLibrary\Solving\ExponentSolve.cs" />
+    <Compile Include="MathSolverLibrary\Solving\FactorSolve.cs" />
+    <Compile Include="MathSolverLibrary\Solving\FractionalSolve.cs" />
+    <Compile Include="MathSolverLibrary\Solving\LinearSolve.cs" />
+    <Compile Include="MathSolverLibrary\Solving\LogBaseSolve.cs" />
+    <Compile Include="MathSolverLibrary\Solving\LogSolve.cs" />
+    <Compile Include="MathSolverLibrary\Solving\MixedTermsSolve.cs" />
+    <Compile Include="MathSolverLibrary\Solving\PolynomialSolve.cs" />
+    <Compile Include="MathSolverLibrary\Solving\PowerSolve.cs" />
+    <Compile Include="MathSolverLibrary\Solving\QuadraticSolve.cs" />
+    <Compile Include="MathSolverLibrary\Solving\SolveMethod.cs" />
+    <Compile Include="MathSolverLibrary\Solving\SubstitutionSolve.cs" />
+    <Compile Include="MathSolverLibrary\Solving\SystemOfEquationsSolve.cs" />
+    <Compile Include="MathSolverLibrary\Solving\TrigSolve.cs" />
+    <Compile Include="MathSolverLibrary\TermType\EqualityCheckTermType.cs" />
+    <Compile Include="MathSolverLibrary\TermType\EquationSystemTermType.cs" />
+    <Compile Include="MathSolverLibrary\TermType\FunctionType.cs" />
+    <Compile Include="MathSolverLibrary\TermType\LogTermType.cs" />
+    <Compile Include="MathSolverLibrary\TermType\QuadraticTermType.cs" />
+    <Compile Include="MathSolverLibrary\TermType\SimplifyTermType.cs" />
+    <Compile Include="MathSolverLibrary\TermType\SinusodalTermType.cs" />
+    <Compile Include="MathSolverLibrary\TermType\SolveTermType.cs" />
+    <Compile Include="MathSolverLibrary\TermType\TermType.cs" />
+    <Compile Include="Privacy.aspx.cs">
+      <DependentUpon>Privacy.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Privacy.aspx.designer.cs">
+      <DependentUpon>Privacy.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Products.aspx.cs">
+      <DependentUpon>Products.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Products.aspx.designer.cs">
+      <DependentUpon>Products.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Site.Master.cs">
+      <DependentUpon>Site.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Site.Master.designer.cs">
+      <DependentUpon>Site.Master</DependentUpon>
+    </Compile>
+    <Compile Include="Site.Mobile.Master.cs">
+      <DependentUpon>Site.Mobile.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Site.Mobile.Master.designer.cs">
+      <DependentUpon>Site.Mobile.Master</DependentUpon>
+    </Compile>
+    <Compile Include="Terms.aspx.cs">
+      <DependentUpon>Terms.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Terms.aspx.designer.cs">
+      <DependentUpon>Terms.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ViewSwitcher.ascx.cs">
+      <DependentUpon>ViewSwitcher.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ViewSwitcher.ascx.designer.cs">
+      <DependentUpon>ViewSwitcher.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="WebsiteHelpers\DataMgr.cs" />
+    <Compile Include="WebsiteHelpers\HtmlHelper.cs" />
+    <Compile Include="WebsiteHelpers\TopicData.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Site.Master" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:19074/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
