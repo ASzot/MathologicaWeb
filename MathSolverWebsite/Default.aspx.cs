@@ -15,7 +15,7 @@ namespace MathSolverWebsite
 {
     public partial class _Default : Page
     {
-        private const string DEF_PARSE_ERR_MSG = "Couldn't interpret input.";
+        private const string DEF_PARSE_ERR_MSG = "Invalid input";
 
         private const string RAD_SES_KEY = "UseRad";
         private const string LAST_INPUT_SES_KEY = "LastInput";
