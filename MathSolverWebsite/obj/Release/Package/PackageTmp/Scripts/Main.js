@@ -55,6 +55,7 @@ var constantsMenu = new TopicMenu(
     [
         new MenuItem("Derivative", "d/(dx)", "\\frac{d}{dx}", true),
         new MenuItem("Derivative of function", "(df)/(dx)", "\\frac{df}{dx}", true),
+        new MenuItem("Indefinite integral", "\\int", "\\int", true),
         new MenuItem("Limit", "\\lim_(x\\toh)", "\\lim_{x\\to}", false),
         new MenuItem("Summation", "\\sum_(i=0)^N", "\\sum^{}_{i=}", true),
         new MenuItem("Natural log (log base e)", "ln", "\\ln", false),

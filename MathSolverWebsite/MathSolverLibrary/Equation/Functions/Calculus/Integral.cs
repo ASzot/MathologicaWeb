@@ -10,6 +10,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 {
     class Integral : AppliedFunction
     {
+        private bool _failure = false;
         private AlgebraComp _dVar = null;
         private ExComp _lower = null;
         private ExComp _upper = null;
@@ -33,7 +34,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         public static Integral ConstructIntegral(ExComp innerEx, AlgebraComp dVar, ExComp lower, ExComp upper)
         {
-
             Integral integral = new Integral(innerEx);
             integral._dVar = dVar;
             integral._lower = lower;
@@ -45,11 +45,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         public override ExComp Evaluate(bool harshEval, ref TermType.EvalData pEvalData)
         {
             AlgebraTerm indefinite = Indefinite(ref pEvalData);
+            if (_failure)
+                return indefinite;      // Just 'this'
 
             if (_lower == null || _upper == null)
             {
                 // Add the constant.
-                return AddOp.StaticWeakCombine(indefinite, new CalcConstant());
+                ExComp retEx = AddOp.StaticWeakCombine(indefinite, new CalcConstant());
+                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + retEx.ToAlgTerm().FinalToDispStr() + WorkMgr.STM, 
+                    "Add in the constant of integration.");
+                return retEx;
             }
 
             AlgebraTerm upperEval = indefinite.Clone().ToAlgTerm().Substitute(_dVar, _upper);
@@ -121,6 +126,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 if (aderiv == null)
                 {
                     pEvalData.AddMsg("At this time only very simple integration works");
+                    _failure = true;
                     return this;
                 }
                 adGps[i] = aderiv;
@@ -149,22 +155,22 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         public override string FinalToAsciiKeepFormatting()
         {
-            return "\\int" + InnerTerm.FinalToAsciiKeepFormatting() + "\\d" + _dVar.ToMathAsciiString();
+            return "\\int(" + InnerTerm.FinalToAsciiKeepFormatting() + ")\\d" + _dVar.ToMathAsciiString();
         }
 
         public override string FinalToAsciiString()
         {
-            return "\\int" + InnerTerm.FinalToAsciiKeepFormatting() + "\\d" + _dVar.ToMathAsciiString();
+            return "\\int(" + InnerTerm.FinalToAsciiKeepFormatting() + ")\\d" + _dVar.ToMathAsciiString();
         }
 
         public override string FinalToTexKeepFormatting()
         {
-            return "\\int" + InnerTerm.FinalToTexKeepFormatting() + "\\d" + _dVar.ToTexString();
+            return "\\int(" + InnerTerm.FinalToTexKeepFormatting() + ")\\d" + _dVar.ToTexString();
         }
 
         public override string FinalToTexString()
         {
-            return "\\int" + InnerTerm.FinalToTexString() + "\\d" + _dVar.ToTexString();
+            return "\\int(" + InnerTerm.FinalToTexString() + ")\\d" + _dVar.ToTexString();
         }
         
         public override bool IsEqualTo(ExComp ex)
@@ -172,7 +178,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (ex is Integral)
             {
                 Integral integral = ex as Integral;
-                return integral._dVar.IsEqualTo(this._dVar);
+                return integral._dVar.IsEqualTo(this._dVar) && integral.InnerEx.IsEqualTo(this.InnerEx);
             }
 
             return false;
@@ -180,22 +186,22 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         public override string ToMathAsciiString()
         {
-            return "\\int" + InnerTerm.ToMathAsciiString() + "\\d" + _dVar.ToMathAsciiString();
+            return "\\int(" + InnerTerm.ToMathAsciiString() + ")\\d" + _dVar.ToMathAsciiString();
         }
 
         public override string ToSearchString()
         {
-            return "\\int" + InnerTerm.ToSearchString() + "\\d" + _dVar.ToSearchString();
+            return "\\int(" + InnerTerm.ToSearchString() + ")\\d" + _dVar.ToSearchString();
         }
 
         public override string ToString()
         {
-            return "\\int" + InnerTerm.ToString() + "\\d" + _dVar.ToString();
+            return "\\int(" + InnerTerm.ToString() + ")\\d" + _dVar.ToString();
         }
 
         public override string ToTexString()
         {
-            return "\\int" + InnerTerm.ToTexString() + "\\d" + _dVar.ToTexString();
+            return "\\int(" + InnerTerm.ToTexString() + ")\\d" + _dVar.ToTexString();
         }
     }
 }

@@ -34,6 +34,16 @@
             only additions of major features to the math solving system are.
         </p>
 
+        <p class="sectionHeading">Update #4</p>
+        <p class="dateHeading">February 7, 2015</p>
+        <ul class="changeLogList">
+            <li>Added <b>very basic</b> integration.</li>
+            <li>Fixed the quadratic term recognition with factor groups.</li>
+            <li>Fixed the trig term detection.</li>
+            <li>Slightly improved site load speed.</li>
+            <li>Various minor bug fixes.</li>
+        </ul>
+
         <p class="sectionHeading">Update #3</p>
         <p class="dateHeading">January 20, 2015</p>
         <ul class="changeLogList">

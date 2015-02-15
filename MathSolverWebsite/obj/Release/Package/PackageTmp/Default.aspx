@@ -9,7 +9,7 @@
     <meta name="description" 
         content="A math solver capable of showing step by step work and explanations for free. Solve algebra, trig, and calculus problems with detailed work." />
 
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=AM_HTMLorMML"></script>
+    <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=AM_HTMLorMML"></script>
 
     
 <%--    <script>
@@ -143,7 +143,7 @@
 
 <asp:Content runat="server" ID="BodyContent" ContentPlaceHolderID="MainContent">
 
-    <script type="text/javascript">
+    <script async="async" type="text/javascript">
 
         $(document).click(function () {
             hideEditBox();
@@ -232,9 +232,6 @@
 
             changeMath = true;
         }
-
-        $(document).ready(function () {
-        });
 
         function pageLoad() {
             if (!changeMath)
