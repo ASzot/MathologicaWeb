@@ -223,7 +223,7 @@
 
             var evalDropDownList = document.getElementById("<%= evaluteDropList.ClientID %>");
             var txt = evalDropDownList.options[evalDropDownList.selectedIndex].text;
-            if (txt == "Input is too long." || txt == "Couldn't interpret input." || txt == "Enter input above." || txt == "Please wait...")
+            if (txt == "Input is too long." || txt == "Invalid input" || txt == "Enter input above." || txt == "Please wait...")
                 return;
 
             $("#<%= loadingDiv.ClientID %>").attr('class', 'notHidden');

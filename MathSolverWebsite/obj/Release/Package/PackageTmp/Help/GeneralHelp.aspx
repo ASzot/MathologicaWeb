@@ -71,8 +71,8 @@
                 <span class="captionFooter">The drop down list for the potential evaluation options for a quadratic.</span>
 
                 <p>
-                    If it says <b>Couldn't interpret input</b> it means the input entered does not have correct formatting. These are statements such as `2*+3` or `(2+3*4`. 
-                    If there are definite problems with the <b>Couldn't interpret input</b> please report them <a class="fakeLink" onclick="BAROMETER.show();">here</a>. 
+                    If it says <b>Invalid input</b> it means the input entered does not have correct formatting. These are statements such as `2*+3` or `(2+3*4`. 
+                    If there are definite problems with the <b>Invalid input</b> please report them <a class="fakeLink" onclick="BAROMETER.show();">here</a>. 
                 </p>
             </li>
             <li class="helpTopicListItem wallOfText">

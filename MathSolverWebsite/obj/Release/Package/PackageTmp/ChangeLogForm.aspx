@@ -34,6 +34,18 @@
             only additions of major features to the math solving system are.
         </p>
 
+        <p class="sectionHeading">Update #5</p>
+        <p class="dateHeading">February 19, 2015</p>
+        <ul class="changeLogList">
+            <li>This update consisted of a number of bug fixes.</li>
+            <li>Integral recognization fix.</li>
+            <li>Integral evaluating fix.</li>
+            <li>Added constant of integration.</li>
+            <li>Fixed problems with derivatives of fractional powers in trig functions.</li>
+            <li>Fixed issue with solving equations where the variable is the base of the logarithm.</li>
+            <li>Fixed problems with evaluating radicals and negative coefficients.</li>
+        </ul>
+
         <p class="sectionHeading">Update #4</p>
         <p class="dateHeading">February 7, 2015</p>
         <ul class="changeLogList">
