@@ -773,9 +773,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             if (innerEx is Number)
             {
                 Number nInner = innerEx as Number;
-                if (nInner > 1.0)
+                if (nInner >= 1.0)
                     return false;
-                if (nInner < -1.0)
+                if (nInner <= -1.0)
                     return false;
             }
 
