@@ -13,7 +13,7 @@
             <li class="helpTopicListItem">
                 <p class="probQuestionTxt">Problem: Invalid input always being displayed</p>
                 <p>Solution: Ensure the input is actually correct. For rules regarding this go to the <a href="GeneralHelp">general help page</a>. If the input is definitely correct send an email to us 
-                    <a class="fakeLink" onclick="BAROMETER.show();">here</a> and we will do our best to fix the problem.
+                    <a href="MAILTO:contact@mathologica.com">here</a> and we will do our best to fix the problem.
                 </p>
             </li>
             <li class="helpTopicListItem">

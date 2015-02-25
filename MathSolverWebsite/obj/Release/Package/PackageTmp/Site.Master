@@ -45,12 +45,6 @@
         </Scripts>
     </asp:ScriptManager>
         <header>
-            <style type='text/css'>@import url('http://getbarometer.s3.amazonaws.com/assets/barometer/css/barometer.css');</style>
-            <script async="async" src='http://getbarometer.s3.amazonaws.com/assets/barometer/javascripts/barometer.js' type='text/javascript'></script>
-            <script async="async" type="text/javascript" charset="utf-8">
-                BAROMETER.load('nKXXPwHYdKCXsEjAFjMM4');
-                $("#barometer_tab").css('display', 'none');
-            </script>
             <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-547fe09d07b6d60f" async="async"></script>
             
             <%
@@ -102,7 +96,6 @@
                     <a runat="server" href="~/About" class="navBarSelection">About</a>
                     <a runat="server" href="~/Terms" class="navBarSelection">Terms</a>
                     <a runat="server" href="~/Privacy" class="navBarSelection">Privacy</a>
-                    <a onclick="BAROMETER.show();" class="fakeLink">Feedback</a>
                     <p>&copy; <%: DateTime.Now.Year %> - Mathologica, LLC</p>
                 </div>
                 <div class="float-right" style="margin-right: 10px;">

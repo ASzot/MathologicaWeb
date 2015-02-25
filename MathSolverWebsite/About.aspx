@@ -53,7 +53,7 @@
         </p>
 
         <p>
-            You can contact Mathologica at <a href="mailto:contact@mathologica.com">contact@mathologica.com</a>. However, please keep all feedback to the feedback submission form.
+            You can contact Mathologica at <a href="mailto:contact@mathologica.com">contact@mathologica.com</a>.
         </p>
     </div>
 

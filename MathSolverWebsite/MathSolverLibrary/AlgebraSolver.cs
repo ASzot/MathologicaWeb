@@ -1217,7 +1217,7 @@ namespace MathSolverWebsite.MathSolverLibrary
 
                 return SolveResult.InequalitySolved(ranges.ToArray());
             }
-
+           
             pEvalData.AddFailureMsg("Couldn't solve inequality.");
             return SolveResult.Failure();
         }
@@ -1235,7 +1235,7 @@ namespace MathSolverWebsite.MathSolverLibrary
                 simpEx = (simpEx as AlgebraTerm).HarshEvaluation().RemoveRedundancies();
 
             if (!(simpEx is Number) || (simpEx is Number && (simpEx as Number).HasImaginaryComp()))
-                return false;
+                return null;
 
             return (simpEx as Number).RealComp > 0.0;
         }

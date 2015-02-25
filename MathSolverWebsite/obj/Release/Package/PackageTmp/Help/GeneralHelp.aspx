@@ -72,7 +72,7 @@
 
                 <p>
                     If it says <b>Invalid input</b> it means the input entered does not have correct formatting. These are statements such as `2*+3` or `(2+3*4`. 
-                    If there are definite problems with the <b>Invalid input</b> please report them <a class="fakeLink" onclick="BAROMETER.show();">here</a>. 
+                    If there are definite problems with the <b>Invalid input</b> please report them by sending an email to <a href="MAILTO:contact@mathologica.com">contact@mathologica.com</a>
                 </p>
             </li>
             <li class="helpTopicListItem wallOfText">
