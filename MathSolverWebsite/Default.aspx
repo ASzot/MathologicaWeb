@@ -217,6 +217,7 @@
         function onClearBtnClicked() {
             $("#<%= resultSectionDiv.ClientID %>").html("");
             $("#<%= resultSectionDiv.ClientID %>").hide();
+            $("#<%= workSectionDiv.ClientID %>").html("");
         }
 
         function inputMathEnter() {
