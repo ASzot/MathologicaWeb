@@ -237,9 +237,17 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                     ExComp upper = rest.GetUpper();
 
                     if (lower is GeneralSolution)
-                        iterVarStrs.Add((lower as GeneralSolution).IterVarToDispString());
+                    {
+                        string addStr = (lower as GeneralSolution).IterVarToDispString();
+                        if (!iterVarStrs.Contains(addStr))
+                            iterVarStrs.Add(addStr);
+                    }
                     if (upper is GeneralSolution)
-                        iterVarStrs.Add((upper as GeneralSolution).IterVarToDispString());
+                    {
+                        string addStr = (upper as GeneralSolution).IterVarToDispString();
+                        if (!iterVarStrs.Contains(addStr))
+                            iterVarStrs.Add(addStr);
+                    }
                 }
             }
 
