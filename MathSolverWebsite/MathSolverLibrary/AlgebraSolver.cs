@@ -1066,9 +1066,20 @@ namespace MathSolverWebsite.MathSolverLibrary
                 pEvalData.WorkMgr.FromSides(left, right,
                     "The above equation has only one root, " +
                     WorkMgr.STM + WorkMgr.ExFinalToAsciiStr(result.Solutions[0].Result) + WorkMgr.EDM + ", with a multiplicity of two.");
-                return (Restriction.IsGreaterThan(comparison) == !switchSign ?
-                    SolveResult.InequalitySolved(Restriction.AllNumbers(solveForComp, ref pEvalData)) :
-                    SolveResult.NoSolutions());
+                if (Restriction.IsGreaterThan(comparison) == !switchSign)
+                {
+                    if (!Restriction.IsEqualTo(comparison))
+                        return SolveResult.InequalitySolved(Restriction.ConstructAllBut(result.Solutions[0].Result, solveForComp, ref pEvalData));
+                    else
+                        return SolveResult.InequalitySolved(Restriction.AllNumbers(solveForComp, ref pEvalData));
+                }
+                else 
+                {
+                    if (Restriction.IsEqualTo(comparison))
+                        return SolveResult.InequalitySolved(Restriction.FromOnly(result.Solutions[0].Result, solveForComp, ref pEvalData));
+                    else
+                        return SolveResult.NoSolutions();
+                }
             }
             else if (result.Solutions.Count != 0)
             {

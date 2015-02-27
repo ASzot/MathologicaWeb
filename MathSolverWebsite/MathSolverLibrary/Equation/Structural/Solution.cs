@@ -913,6 +913,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return NotRestriction.FromSolution(value, varFor);
         }
 
+        public static Restriction[] ConstructAllBut(ExComp value, AlgebraComp varFor, ref TermType.EvalData pEvalData)
+        {
+            OrRestriction lower = new OrRestriction(varFor, LexemeType.Less, value, ref pEvalData);
+            OrRestriction upper = new OrRestriction(varFor, LexemeType.Greater, value, ref pEvalData);
+
+            return new Restriction[] { lower, upper };
+        }
+
         public static Restriction FromOnly(ExComp value, AlgebraComp varFor, ref TermType.EvalData pEvalData)
         {
             return new AndRestriction(value, LexemeType.Less, varFor, LexemeType.Less, value, ref pEvalData);
