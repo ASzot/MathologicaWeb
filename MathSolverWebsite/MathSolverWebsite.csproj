@@ -225,6 +225,7 @@
     <Content Include="Http404ErrorPage.aspx" />
     <Content Include="Images\258x67_WP_Store_cyan.png" />
     <Content Include="Images\css-tooltip-gradient-bg.png" />
+    <Content Include="Images\en_app_rgb_wo_60.png" />
     <Content Include="Images\ErrorLogo.png" />
     <Content Include="Images\Examples\ExampleClear.png" />
     <Content Include="Images\Examples\ExampleDivFrac.PNG" />

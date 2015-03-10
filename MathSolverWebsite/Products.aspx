@@ -22,11 +22,18 @@
         <p>
             Take math solving capability on the go with the Mathologica mobile phone app.
         </p>
+        
+        <div>
+            <a href="https://play.google.com/store/apps/details?id=mathologica.android_mathologica" target="_blank">
+                <img class="storeBtn" src="Images/en_app_rgb_wo_60.png" />
+            </a>
+        </div>
 
         <div>
             <a href="http://www.windowsphone.com/s?appid=85bd9de4-fbd6-48fa-bb58-b063c863ac8d" target="_blank">
                 <img class="storeBtn" src="Images/258x67_WP_Store_cyan.png" />
             </a>
         </div>
+
     </div>
 </asp:Content>
