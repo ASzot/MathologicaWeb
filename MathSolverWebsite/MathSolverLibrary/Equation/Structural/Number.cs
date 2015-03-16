@@ -136,7 +136,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             if (dDecimal < EPSILON_ACCEPT)
                 return nextIntD * (d < 0.0 ? -1.0 : 1.0);
 
-            return d;
+            return Math.Round(d, ROUND_COUNT);
         }
 
         public static Number GCF(List<Number> numbers)

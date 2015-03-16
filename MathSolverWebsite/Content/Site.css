@@ -43,6 +43,10 @@
 #adPanel {
     margin: 0px auto;
     width: 800px;
+    background-color: #e2e2e2;
+    padding: 10px;
+    text-align: center;
+    border: 1px solid black;
 }
 
 a.tooltip {outline:none; }
@@ -711,7 +715,7 @@ a:hover {
 .toolBarBtn {
     width: 34px;
     height: 20px;
-    margin: 8px 0px 8px 2px;
+    margin: 2px 0px 2px 0px;
     display: inline-table;
     text-align: center;
     overflow: hidden;
@@ -722,7 +726,6 @@ a:hover {
 .toolBarBtn:hover {
     width: 34px;
     height: 20px;
-    margin: 8px 0px 8px 2px;
     display: inline-table;
     text-align: center;
     overflow: hidden;
@@ -975,7 +978,7 @@ h5, h6 {
 
 #body {
     clear: both;
-    padding-bottom: 110px;
+    padding-bottom: 100px;
 }
 
     .main-content {

@@ -15,6 +15,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         private ExComp _lower = null;
         private ExComp _upper = null;
 
+        public AlgebraComp DVar
+        {
+            get { return _dVar; }
+        }
+
+        public bool IsDefinite
+        {
+            get { return _lower != null && _upper != null; }
+        }
+
         public Integral(ExComp innerEx)
             : base(innerEx, FunctionType.AntiDerivative, typeof(Integral))
         {
@@ -44,6 +54,17 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         public override ExComp Evaluate(bool harshEval, ref TermType.EvalData pEvalData)
         {
+            ExComp innerEx = InnerEx;
+            if (innerEx is Derivative)
+            {
+                Derivative innerDeriv = innerEx as Derivative;
+                if (innerDeriv.WithRespectTo.IsEqualTo(_dVar) && innerDeriv.DerivOf == null && innerDeriv.Order == 1)
+                {
+                    pEvalData.WorkMgr.FromSides(this, null, "The integral and the derivative cancel.");
+                    return innerDeriv.InnerTerm;
+                }
+            }
+
             AlgebraTerm indefinite = Indefinite(ref pEvalData);
             if (_failure)
                 return indefinite;      // Just 'this'
@@ -95,6 +116,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         private AlgebraTerm Indefinite(ref TermType.EvalData pEvalData)
         {
             string thisStr = FinalToDispStr();
+
             // Split the integral up by groups.
             List<ExComp[]> gps = InnerTerm.Clone().ToAlgTerm().GetGroupsNoOps();
 
@@ -122,7 +144,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             ExComp[] adGps = new ExComp[gps.Count];
             for (int i = 0; i < gps.Count; ++i)
             {
-                ExComp aderiv = AntiDerivativeHelper.TakeAntiDerivativeGp(gps[i], _dVar, ref pEvalData);
+                IntegrationInfo integrationInfo = new IntegrationInfo();
+                ExComp aderiv = AntiDerivativeHelper.TakeAntiDerivativeGp(gps[i], _dVar, ref integrationInfo, ref pEvalData);
                 if (aderiv == null)
                 {
                     pEvalData.AddMsg("At this time only very simple integration works");
@@ -146,7 +169,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     "Add all together.");
 
             return finalTerm;
-        }
+        } 
 
         protected override AlgebraTerm CreateInstance(params ExComp[] args)
         {
@@ -155,22 +178,34 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         public override string FinalToAsciiKeepFormatting()
         {
-            return "\\int(" + InnerTerm.FinalToAsciiKeepFormatting() + ")\\d" + _dVar.ToMathAsciiString();
+            string boundariesStr = "";
+            if (IsDefinite)
+                boundariesStr = "_" + _lower.ToMathAsciiString() + "^" + _upper.ToMathAsciiString();
+            return "\\int" + boundariesStr + "(" + InnerTerm.FinalToAsciiKeepFormatting() + ")\\d" + _dVar.ToMathAsciiString();
         }
 
         public override string FinalToAsciiString()
         {
-            return "\\int(" + InnerTerm.FinalToAsciiKeepFormatting() + ")\\d" + _dVar.ToMathAsciiString();
+            string boundariesStr = "";
+            if (IsDefinite)
+                boundariesStr = "_" + _lower.ToMathAsciiString() + "^" + _upper.ToMathAsciiString();
+            return "\\int" + boundariesStr + "(" + InnerTerm.FinalToAsciiKeepFormatting() + ")\\d" + _dVar.ToMathAsciiString();
         }
 
         public override string FinalToTexKeepFormatting()
         {
-            return "\\int(" + InnerTerm.FinalToTexKeepFormatting() + ")\\d" + _dVar.ToTexString();
+            string boundariesStr = "";
+            if (IsDefinite)
+                boundariesStr = "_" + _lower.ToTexString() + "^" + _upper.ToTexString();
+            return "\\int" + boundariesStr + "(" + InnerTerm.FinalToTexKeepFormatting() + ")\\d" + _dVar.ToTexString();
         }
 
         public override string FinalToTexString()
         {
-            return "\\int(" + InnerTerm.FinalToTexString() + ")\\d" + _dVar.ToTexString();
+            string boundariesStr = "";
+            if (IsDefinite)
+                boundariesStr = "_" + _lower.ToTexString() + "^" + _upper.ToTexString();
+            return "\\int" + boundariesStr + "(" + InnerTerm.FinalToTexString() + ")\\d" + _dVar.ToTexString();
         }
         
         public override bool IsEqualTo(ExComp ex)
@@ -186,22 +221,34 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         public override string ToMathAsciiString()
         {
-            return "\\int(" + InnerTerm.ToMathAsciiString() + ")\\d" + _dVar.ToMathAsciiString();
+            string boundariesStr = "";
+            if (IsDefinite)
+                boundariesStr = "_" + _lower.ToMathAsciiString() + "^" + _upper.ToMathAsciiString();
+            return "\\int" + boundariesStr + "(" + InnerTerm.ToMathAsciiString() + ")\\d" + _dVar.ToMathAsciiString();
         }
 
         public override string ToSearchString()
         {
-            return "\\int(" + InnerTerm.ToSearchString() + ")\\d" + _dVar.ToSearchString();
+            string boundariesStr = "";
+            if (IsDefinite)
+                boundariesStr = "_" + _lower.ToSearchString() + "^" + _upper.ToSearchString();
+            return "\\int" + boundariesStr + "(" + InnerTerm.ToSearchString() + ")\\d" + _dVar.ToSearchString();
         }
 
         public override string ToString()
         {
-            return "\\int(" + InnerTerm.ToString() + ")\\d" + _dVar.ToString();
+            string boundariesStr = "";
+            if (IsDefinite)
+                boundariesStr = "_" + _lower.ToString() + "^" + _upper.ToString();
+            return "\\int" + boundariesStr + "(" + InnerTerm.ToString() + ")\\d" + _dVar.ToString();
         }
 
         public override string ToTexString()
         {
-            return "\\int(" + InnerTerm.ToTexString() + ")\\d" + _dVar.ToTexString();
+            string boundariesStr = "";
+            if (IsDefinite)
+                boundariesStr = "_" + _lower.ToTexString() + "^" + _upper.ToTexString();
+            return "\\int" + boundariesStr + "(" + InnerTerm.ToTexString() + ")\\d" + _dVar.ToTexString();
         }
     }
 }

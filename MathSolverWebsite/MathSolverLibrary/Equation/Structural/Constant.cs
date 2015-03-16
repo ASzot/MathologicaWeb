@@ -47,7 +47,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                     return constant;
             }
 
-            throw new ArgumentException();
+            return null;
         }
 
         public override ExComp Clone()

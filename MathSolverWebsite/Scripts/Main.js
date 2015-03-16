@@ -182,12 +182,16 @@ function getLatexInput() {
     return latex;
 }
 
+
+
 function setLatexInput(setInput) {
     if (selectedTextBox != null) {
         selectedTextBox.mathquill('latex', setInput);
         selectedTextBox.focus();
     }
 }
+
+
 
 
 var inputBoxIds = [];
@@ -349,7 +353,6 @@ function fixInput(latex) {
 
     if (replaced != latex) {
         setLatexInput(replaced);
-
     }
 }
 

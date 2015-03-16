@@ -96,7 +96,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                                              LexemeType.Summation),
 			new TypePair<string, LexemeType>(@"lim_\((" + IDEN_MATCH + @")to(\-)?((inf)|(" + NUM_MATCH + @")|(" + IDEN_MATCH + @"))\)", 
                                              LexemeType.Limit),
-            new TypePair<string, LexemeType>(@"int", LexemeType.Integral),
+            new TypePair<string, LexemeType>(@"(int_\((.*?)\))|(int_((" + NUM_MATCH + ")|(" + IDEN_MATCH + ")|(pi)))|(int)", LexemeType.Integral),
             new TypePair<string, LexemeType>(@"\$d(" + IDEN_MATCH + @")", LexemeType.Differential),
             new TypePair<string, LexemeType>(@"(sum)|(inf)|(lim)", LexemeType.ErrorType),
         };
@@ -1906,32 +1906,41 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
         private ExComp ParseIntegral(ref int currentIndex, LexemeTable lt, ref List<string> pParseErrors)
         {
             ExComp lower = null, upper = null;
-            //if (lt[currentIndex].Data2.Contains("_"))
-            //{
-            //    // This is a definite integral.
-            //    string boundsStr = lt[currentIndex].Data2.Remove(0, "int_".Length);
-            //    string[] bounds = boundsStr.Split('^');
+            if (lt[currentIndex].Data2.Contains("_"))
+            {
+                // Parse the lower bound.
+                string[] integralData = lt[currentIndex].Data2.Split('_');
+                if (integralData.Length != 2)
+                    return null;
 
-            //    if (bounds.Length != 2)
-            //        return null;
+                string lowerBound = integralData[1];
+                if (lowerBound.StartsWith("("))
+                {
+                    lowerBound = lowerBound.Remove(0, 1);
+                    lowerBound = lowerBound.Remove(lowerBound.Length - 1, 1);
+                }
 
-            //    LexemeTable lowerLt = CreateLexemeTable(bounds[0], ref pParseErrors);
-            //    if (lowerLt == null)
-            //        return null;
-            //    LexemeTable upperLt = CreateLexemeTable(bounds[1], ref pParseErrors);
-            //    if (upperLt == null)
-            //        return null;
+                // Try all the different possibilities.
+                ExComp useEx = Number.Parse(lowerBound);
+                if (useEx == null)
+                {
+                    useEx = Constant.ParseConstant(lowerBound);
+                    if (useEx == null)
+                        useEx = new AlgebraComp(lowerBound);
+                }
 
-            //    AlgebraTerm lowerTerm = LexemeTableToAlgebraTerm(lowerLt, ref pParseErrors);
-            //    if (lowerLt == null)
-            //        return null;
-            //    AlgebraTerm upperTerm = LexemeTableToAlgebraTerm(upperLt, ref pParseErrors);
-            //    if (upperLt == null)
-            //        return null;
+                lower = useEx;
 
-            //    lower = lowerTerm.RemoveRedundancies();
-            //    upper = upperTerm.RemoveRedundancies();
-            //}
+                if (lt[currentIndex + 1].Data1 != LexemeType.Operator || lt[currentIndex + 1].Data2 != "^")
+                    return null;
+
+                currentIndex += 2;
+
+                upper = LexemeToExComp(lt, ref currentIndex, ref pParseErrors);
+                if (upper == null)
+                    return null;
+            }
+
 
             int startIndex = currentIndex + 1;
             int endIndex = -1;
@@ -1953,6 +1962,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                 pParseErrors.Add("Couldn't find the variable of integration.");
                 return null;
             }
+
+            currentIndex = endIndex;
 
             LexemeTable integralTerm = lt.GetRange(startIndex, endIndex - startIndex);
             AlgebraTerm innerTerm = LexemeTableToAlgebraTerm(integralTerm, ref pParseErrors);

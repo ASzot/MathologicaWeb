@@ -24,6 +24,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             }
         }
 
+        public AlgebraComp DerivOf
+        {
+            get { return _derivOf; }
+        }
+
+        public int Order
+        {
+            get { return _order; }
+        }
+
         public Derivative(ExComp innerEx)
             : base(innerEx, FunctionType.Derivative, typeof(Derivative))
         {
@@ -117,6 +127,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             ca_derivSymb = "d/(d" + _withRespectTo.ToDispString() + ")";
 
             ExComp final = InnerEx;
+            if (final is Integral && _derivOf == null && _order == 1)
+            {
+                Integral finalInt = final as Integral;
+                if (finalInt.DVar.IsEqualTo(_withRespectTo) && finalInt.IsDefinite)
+                {
+                    pEvalData.WorkMgr.FromSides(this, null, "The derivative and the integral cancel.");
+                    return finalInt.InnerTerm;
+                }
+            }
             pEvalData.WorkMgr.FromFormatted("`{0}`", "Find the " + (_order).ToString() + MathHelper.GetCountingPrefix(_order) + " derivative of the above.", InnerEx);
             for (int i = 0; i < _order; ++i)
             {
