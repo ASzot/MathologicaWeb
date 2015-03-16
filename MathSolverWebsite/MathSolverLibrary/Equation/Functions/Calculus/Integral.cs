@@ -142,7 +142,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             // Independantly take the derivative of each group.
             ExComp[] adGps = new ExComp[gps.Count];
-            for (int i = 0; i < gps.Count; ++i)
+            for (int i = 0; i < gps.Count; ++i) 
             {
                 IntegrationInfo integrationInfo = new IntegrationInfo();
                 ExComp aderiv = AntiDerivativeHelper.TakeAntiDerivativeGp(gps[i], _dVar, ref integrationInfo, ref pEvalData);
