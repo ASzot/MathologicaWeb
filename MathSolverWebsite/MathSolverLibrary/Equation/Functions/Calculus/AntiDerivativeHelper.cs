@@ -223,7 +223,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 if (attempt != null)
                     return attempt;
                 else
-                    pEvalData.WorkMgr.PopSteps(prevWorkStepCount);
+                    pEvalData.WorkMgr.PopSteps(pEvalData.WorkMgr.WorkSteps.Count - prevWorkStepCount);
             }
 
             return null;
@@ -231,9 +231,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         private static ExComp TryU(ExComp[] group, ExComp uatmpt, AlgebraComp dVar, ref IntegrationInfo pIntInfo, ref EvalData pEvalData)
         {
-            string thisStr = "\\int(" + group.ToArray() + ")" + dVar.ToDispString();
+            string thisStr = "\\int(" + group.ToArray().ToAlgTerm().FinalToDispStr() + ")" + dVar.ToDispString();
+            string atmptStr = uatmpt.ToAlgTerm().FinalToDispStr();
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\int (" + group.ToAlgTerm().FinalToDispStr() + ") \\d" + dVar.ToDispString(), 
+            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\int (" + group.ToAlgTerm().FinalToDispStr() + ") \\d" + dVar.ToDispString() + WorkMgr.EDM, 
                 "Do the u-substitution integration method.");
 
             AlgebraTerm term = group.ToAlgNoRedunTerm();
@@ -263,7 +264,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + thisStr + WorkMgr.EDM,
                 "Try to substitute " + WorkMgr.STM + subInVar.ToDispString() + "=" + uatmpt.ToAlgTerm().FinalToDispStr() + WorkMgr.EDM);
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\frac{d}{d" + dVar.ToDispString() + "}" + subInVar.ToDispString() + WorkMgr.EDM, 
+            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\frac{d}{d" + dVar.ToDispString() + "}" + subInVar.ToDispString() + "=\\frac{d}{d" + dVar.ToDispString() + "}[" + atmptStr + "]" + WorkMgr.EDM, 
                 "Find " + WorkMgr.STM + "d" + subInVar.ToDispString() + WorkMgr.EDM);
 
             ExComp evaluated = derivative.Evaluate(false, ref pEvalData);
@@ -288,22 +289,25 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 {
                     pEvalData.WorkMgr.WorkSteps.Add(new WorkStep(WorkMgr.STM + thisStr +
                         WorkMgr.EDM, "Make the substitution " + WorkMgr.STM + subInVar.ToDispString() + "=" + 
-                        uatmpt.ToAlgTerm().FinalToDispStr() + WorkMgr.EDM + " and " + WorkMgr.STM + "d" + subInVar.ToDispString() + "=" + 
+                        atmptStr + WorkMgr.EDM + " and " + WorkMgr.STM + "d" + subInVar.ToDispString() + "=" + 
                         evaluated.ToAlgTerm().FinalToDispStr() + WorkMgr.EDM));
 
-                    pEvalData.WorkMgr.FromFormatted(group.ToArray().ToAlgTerm().FinalToDispStr());
+                    
+                    pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + constEx.ToAlgTerm().FinalToDispStr() + "\\int ("+ group.ToArray().ToAlgTerm().FinalToDispStr() + ") d" + subInVar.ToDispString() + WorkMgr.EDM);
 
                     ExComp innerAntiDeriv = TakeAntiDerivativeGp(group.ToArray(), subInVar, ref pIntInfo, ref pEvalData);
                     if (innerAntiDeriv == null)
                         return null;
 
-                    pEvalData.WorkMgr.FromSides(innerAntiDeriv, null, "Substitute back in " + WorkMgr.STM + subInVar.ToDispString() + "=" +
-                        uatmpt.ToAlgTerm().FinalToDispStr());
+                    pEvalData.WorkMgr.FromSides(MulOp.StaticWeakCombine(constEx, innerAntiDeriv), null, "Substitute back in " + WorkMgr.STM + subInVar.ToDispString() + "=" +
+                        atmptStr + WorkMgr.EDM);
 
                     // Sub back in the appropriate values.
                     innerAntiDeriv = innerAntiDeriv.ToAlgTerm().Substitute(subInVar, uatmpt);
 
-                    return MulOp.StaticCombine(innerAntiDeriv, constEx);
+                    ExComp retEx = MulOp.StaticCombine(innerAntiDeriv, constEx);
+                    pEvalData.WorkMgr.FromSides(retEx, null);
+                    return retEx;
                 }
 
                 evaluated = varTo.ToAlgTerm().RemoveRedundancies();
@@ -328,26 +332,35 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
                     pEvalData.WorkMgr.WorkSteps.Add(new WorkStep(WorkMgr.STM + thisStr +
                         WorkMgr.EDM, "Make the substitution " + WorkMgr.STM + subInVar.ToDispString() + "=" +
-                        uatmpt.ToAlgTerm().FinalToDispStr() + WorkMgr.EDM + " and " + WorkMgr.STM + "d" + subInVar.ToDispString() + "=" +
+                        atmptStr + WorkMgr.EDM + " and " + WorkMgr.STM + "d" + subInVar.ToDispString() + "=" +
                         evaluated.ToAlgTerm().FinalToDispStr() + WorkMgr.EDM));
 
-                    pEvalData.WorkMgr.FromFormatted(group.ToArray().ToAlgTerm().FinalToDispStr());
+                    bool mulInCost = constEx != null && !Number.One.IsEqualTo(constEx);
+                    string mulInCostStr = (mulInCost ? constEx.ToAlgTerm().FinalToDispStr() : "");
+
+                    pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + mulInCostStr + 
+                        "\\int (" + group.ToArray().ToAlgTerm().FinalToDispStr() + ") d" + subInVar.ToDispString() + WorkMgr.EDM);
 
                     pIntInfo.IncSubCount();
                     ExComp innerAntiDeriv = TakeAntiDerivativeGp(groupList.ToArray(), subInVar, ref pIntInfo, ref pEvalData);
                     if (innerAntiDeriv == null)
                         return null;
 
-                    pEvalData.WorkMgr.FromSides(innerAntiDeriv, null, "Substitute back in " + WorkMgr.STM + subInVar.ToDispString() + "=" +
-                        uatmpt.ToAlgTerm().FinalToDispStr());
+                    pEvalData.WorkMgr.FromFormatted(mulInCostStr + "(" + innerAntiDeriv.ToAlgTerm().FinalToDispStr() + ")", "Substitute back in " + WorkMgr.STM + subInVar.ToDispString() + "=" +
+                                    uatmpt.ToAlgTerm().FinalToDispStr() + WorkMgr.EDM);
 
                     // Sub back in the appropriate values.
                     innerAntiDeriv = innerAntiDeriv.ToAlgTerm().Substitute(subInVar, uatmpt);
 
-                    if (constEx != null && !Number.One.IsEqualTo(constEx))
-                        return MulOp.StaticCombine(constEx, innerAntiDeriv);
+                    ExComp retEx;
+
+                    if (mulInCost)
+                        retEx = MulOp.StaticCombine(constEx, innerAntiDeriv);
                     else
-                        return innerAntiDeriv;
+                        retEx = innerAntiDeriv;
+
+                    pEvalData.WorkMgr.FromSides(retEx, null);
+                    return retEx;
                 }
                 else if (group[j] is PowerFunction && evaluated is PowerFunction && (group[j] as PowerFunction).Power.IsEqualTo((evaluated as PowerFunction).Power))
                 {
@@ -369,26 +382,35 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
                                 pEvalData.WorkMgr.WorkSteps.Add(new WorkStep(WorkMgr.STM + thisStr +
                                     WorkMgr.EDM, "Make the substitution " + WorkMgr.STM + subInVar.ToDispString() + "=" +
-                                    uatmpt.ToAlgTerm().FinalToDispStr() + WorkMgr.EDM + " and " + WorkMgr.STM + "d" + subInVar.ToDispString() + "=" +
+                                    atmptStr + WorkMgr.EDM + " and " + WorkMgr.STM + "d" + subInVar.ToDispString() + "=" +
                                     evaluated.ToAlgTerm().FinalToDispStr() + WorkMgr.EDM));
 
-                                pEvalData.WorkMgr.FromFormatted(group.ToArray().ToAlgTerm().FinalToDispStr());
+                                bool mulInCost = constEx != null && !Number.One.IsEqualTo(constEx);
+                                string mulInCostStr = (mulInCost ? constEx.ToAlgTerm().FinalToDispStr() : "");
+
+                                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + mulInCostStr +
+                                    "\\int (" + group.ToArray().ToAlgTerm().FinalToDispStr() + ") d" + subInVar.ToDispString() + WorkMgr.EDM);
 
                                 pIntInfo.IncSubCount();
                                 ExComp innerAntiDeriv = TakeAntiDerivativeGp(group, subInVar, ref pIntInfo, ref pEvalData);
                                 if (innerAntiDeriv == null)
                                     return null;
 
-                                pEvalData.WorkMgr.FromSides(innerAntiDeriv, null, "Substitute back in " + WorkMgr.STM + subInVar.ToDispString() + "=" +
-                                    uatmpt.ToAlgTerm().FinalToDispStr());
+                                pEvalData.WorkMgr.FromFormatted(mulInCostStr + "(" + innerAntiDeriv.ToAlgTerm().FinalToDispStr() + ")", "Substitute back in " + WorkMgr.STM + subInVar.ToDispString() + "=" +
+                                    uatmpt.ToAlgTerm().FinalToDispStr() + WorkMgr.EDM);
 
                                 // Sub back in the appropriate values.
                                 innerAntiDeriv = innerAntiDeriv.ToAlgTerm().Substitute(subInVar, uatmpt);
 
-                                if (constEx != null && !Number.One.IsEqualTo(constEx))
-                                    return MulOp.StaticCombine(constEx, innerAntiDeriv);
+                                ExComp retEx;
+
+                                if (mulInCost)
+                                    retEx = MulOp.StaticCombine(constEx, innerAntiDeriv);
                                 else
-                                    return innerAntiDeriv;
+                                    retEx = innerAntiDeriv;
+
+                                pEvalData.WorkMgr.FromSides(retEx, null);
+                                return retEx;
                             }
                         }
                     }
