@@ -56,6 +56,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                 throw new ArgumentException();
         }
 
+        public override ExComp MakeWorkable()
+        {
+            return base.MakeWorkable();
+        }
+
         public override ExComp Clone()
         {
             return CreateInstance(InnerTerm.Clone());
@@ -171,6 +176,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         {
             return (AlgebraTerm)Activator.CreateInstance(_type, args[0]);
         }
+
+
     }
 
     internal abstract class AppliedFunction_NArgs : AppliedFunction

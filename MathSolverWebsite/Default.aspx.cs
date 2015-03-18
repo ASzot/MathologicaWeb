@@ -258,22 +258,7 @@ namespace MathSolverWebsite
             if (selectedIndex < evaluteDropList.Items.Count && selectedIndex >= 0)
                 selectedVal = evaluteDropList.Items[selectedIndex].Text;
 
-            //_dataMgr.CreateBlobData(LastInput ?? "null", selectedVal, rawResultStr);
-
-            //var graphEqSets = termEval.GetDispGraphs();
-            //string finalStr = "";
-            //if (graphEqSets != null)
-            //{
-            //    for (int i = 0; i < graphEqSets.Count; ++i)
-            //    {
-            //        var graphEqSet = graphEqSets[i];
-            //        finalStr += graphEqSet.FinalToTexString();
-            //        if (i != graphEqSets.Count - 1)
-            //            finalStr += ";";
-            //    }
-            //}
-
-            //graphFuncTxtBox.Value = finalStr;
+            _dataMgr.CreateBlobData(LastInput ?? "null", selectedVal, rawResultStr);
 
             ////////////////////////
             // Enable other solving.

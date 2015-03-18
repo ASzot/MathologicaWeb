@@ -12,10 +12,28 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
     {
         private bool _failure = false;
         private AlgebraComp _dVar = null;
-        private ExComp _lower = null;
         private bool _addConstant = true;
         private IntegrationInfo _integralInfo = null;
         private ExComp _upper = null;
+        private ExComp _lower = null;
+
+
+        private ExComp UpperLimit
+        {
+            get { return _upper; }
+            set 
+            {
+                _upper = value;
+            }
+        }
+        private ExComp LowerLimit
+        {
+            get { return _lower; }
+            set
+            {
+                _lower = value;
+            }
+        }
 
         public bool AddConstant
         {
@@ -34,7 +52,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         public bool IsDefinite
         {
-            get { return _lower != null && _upper != null; }
+            get { return LowerLimit != null && UpperLimit != null; }
         }
 
         public Integral(ExComp innerEx)
@@ -46,7 +64,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         public override ExComp Clone()
         {
-            return ConstructIntegral(InnerTerm, _dVar, _lower, _upper);
+            return ConstructIntegral(InnerTerm, _dVar, LowerLimit, UpperLimit);
         }
 
         public static Integral ConstructIntegral(ExComp innerEx, AlgebraComp dVar)
@@ -58,8 +76,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         {
             Integral integral = new Integral(innerEx);
             integral._dVar = dVar;
-            integral._lower = lower;
-            integral._upper = upper;
+            integral.LowerLimit = lower;
+            integral.UpperLimit = upper;
 
             return integral;
         }
@@ -81,7 +99,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (_failure)
                 return indefinite;      // Just 'this'
 
-            if (_lower == null || _upper == null)
+            if (LowerLimit == null || UpperLimit == null)
             {
                 if (_addConstant)
                 {
@@ -95,7 +113,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     return indefinite;
             }
 
-            AlgebraTerm upperEval = indefinite.Clone().ToAlgTerm().Substitute(_dVar, _upper);
+            AlgebraTerm upperEval = indefinite.Clone().ToAlgTerm().Substitute(_dVar, UpperLimit);
             if (upperEval.Contains(_dVar))
             {
                 pEvalData.AddFailureMsg("Internal error evaluating antiderivative");
@@ -103,7 +121,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             }
             ExComp upperEx = Simplifier.Simplify(upperEval, ref pEvalData);
 
-            AlgebraTerm lowerEval = indefinite.Clone().ToAlgTerm().Substitute(_dVar, _lower);
+            AlgebraTerm lowerEval = indefinite.Clone().ToAlgTerm().Substitute(_dVar, LowerLimit);
             if (lowerEval.Contains(_dVar))
             {
                 pEvalData.AddFailureMsg("Internal error evaluating antiderivative");
@@ -113,7 +131,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             string integralStr = FinalToDispStr();
             pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + integralStr + "=F(" +
-                WorkMgr.ExFinalToAsciiStr(_upper) + ")-F(" + WorkMgr.ExFinalToAsciiStr(_lower) + ")" + WorkMgr.EDM,
+                WorkMgr.ExFinalToAsciiStr(UpperLimit) + ")-F(" + WorkMgr.ExFinalToAsciiStr(LowerLimit) + ")" + WorkMgr.EDM,
                 "Evaluate the definite integral where F is the antiderivative.");
 
             string resultStr0 = SubOp.StaticWeakCombine(upperEx, lowerEx).ToAlgTerm().FinalToDispStr();
@@ -193,14 +211,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         protected override AlgebraTerm CreateInstance(params ExComp[] args)
         {
-            return ConstructIntegral(args[0], this._dVar, _lower, _upper);
+            return ConstructIntegral(args[0], this._dVar, LowerLimit, UpperLimit);
         }
 
         public override string FinalToAsciiKeepFormatting()
         {
             string boundariesStr = "";
             if (IsDefinite)
-                boundariesStr = "_" + _lower.ToMathAsciiString() + "^" + _upper.ToMathAsciiString();
+                boundariesStr = "_" + LowerLimit.ToMathAsciiString() + "^" + UpperLimit.ToMathAsciiString();
             return "\\int" + boundariesStr + "(" + InnerTerm.FinalToAsciiKeepFormatting() + ")\\d" + _dVar.ToMathAsciiString();
         }
 
@@ -208,7 +226,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         {
             string boundariesStr = "";
             if (IsDefinite)
-                boundariesStr = "_" + _lower.ToMathAsciiString() + "^" + _upper.ToMathAsciiString();
+                boundariesStr = "_" + LowerLimit.ToMathAsciiString() + "^" + UpperLimit.ToMathAsciiString();
             return "\\int" + boundariesStr + "(" + InnerTerm.FinalToAsciiKeepFormatting() + ")\\d" + _dVar.ToMathAsciiString();
         }
 
@@ -216,7 +234,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         {
             string boundariesStr = "";
             if (IsDefinite)
-                boundariesStr = "_" + _lower.ToTexString() + "^" + _upper.ToTexString();
+                boundariesStr = "_" + LowerLimit.ToTexString() + "^" + UpperLimit.ToTexString();
             return "\\int" + boundariesStr + "(" + InnerTerm.FinalToTexKeepFormatting() + ")\\d" + _dVar.ToTexString();
         }
 
@@ -224,7 +242,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         {
             string boundariesStr = "";
             if (IsDefinite)
-                boundariesStr = "_" + _lower.ToTexString() + "^" + _upper.ToTexString();
+                boundariesStr = "_" + LowerLimit.ToTexString() + "^" + UpperLimit.ToTexString();
             return "\\int" + boundariesStr + "(" + InnerTerm.FinalToTexString() + ")\\d" + _dVar.ToTexString();
         }
         
@@ -243,7 +261,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         {
             string boundariesStr = "";
             if (IsDefinite)
-                boundariesStr = "_" + _lower.ToMathAsciiString() + "^" + _upper.ToMathAsciiString();
+                boundariesStr = "_" + LowerLimit.ToMathAsciiString() + "^" + UpperLimit.ToMathAsciiString();
             return "\\int" + boundariesStr + "(" + InnerTerm.ToMathAsciiString() + ")\\d" + _dVar.ToMathAsciiString();
         }
 
@@ -251,7 +269,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         {
             string boundariesStr = "";
             if (IsDefinite)
-                boundariesStr = "_" + _lower.ToSearchString() + "^" + _upper.ToSearchString();
+                boundariesStr = "_" + LowerLimit.ToSearchString() + "^" + UpperLimit.ToSearchString();
             return "\\int" + boundariesStr + "(" + InnerTerm.ToSearchString() + ")\\d" + _dVar.ToSearchString();
         }
 
@@ -259,7 +277,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         {
             string boundariesStr = "";
             if (IsDefinite)
-                boundariesStr = "_" + _lower.ToString() + "^" + _upper.ToString();
+                boundariesStr = "_" + LowerLimit.ToString() + "^" + UpperLimit.ToString();
             return "\\int" + boundariesStr + "(" + InnerTerm.ToString() + ")\\d" + _dVar.ToString();
         }
 
@@ -267,8 +285,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         {
             string boundariesStr = "";
             if (IsDefinite)
-                boundariesStr = "_" + _lower.ToTexString() + "^" + _upper.ToTexString();
+                boundariesStr = "_" + LowerLimit.ToTexString() + "^" + UpperLimit.ToTexString();
             return "\\int" + boundariesStr + "(" + InnerTerm.ToTexString() + ")\\d" + _dVar.ToTexString();
         }
+
     }
 }

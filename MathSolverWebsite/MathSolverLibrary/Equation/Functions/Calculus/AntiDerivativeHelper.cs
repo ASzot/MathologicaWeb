@@ -302,7 +302,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             Derivative derivative = Derivative.ConstructDeriv(uatmpt, dVar, null);
 
             pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + thisStr + WorkMgr.EDM,
-                "Try to substitute " + WorkMgr.STM + subInVar.ToDispString() + "=" + uatmpt.ToAlgTerm().FinalToDispStr() + WorkMgr.EDM);
+                "Substitute " + WorkMgr.STM + subInVar.ToDispString() + "=" + uatmpt.ToAlgTerm().FinalToDispStr() + WorkMgr.EDM);
 
             pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\frac{d}{d" + dVar.ToDispString() + "}" + subInVar.ToDispString() + "=\\frac{d}{d" + dVar.ToDispString() + "}[" + atmptStr + "]" + WorkMgr.EDM, 
                 "Find " + WorkMgr.STM + "d" + subInVar.ToDispString() + WorkMgr.EDM);
@@ -323,7 +323,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 ExComp[] varTo, constTo;
                 singularGp.GetConstVarTo(out varTo, out constTo, dVar);
 
-                constEx = AlgebraTerm.FromFraction(Number.One, constTo.ToAlgTerm());
+                constEx = constTo.Length == 0 ? Number.One : (ExComp)AlgebraTerm.FromFraction(Number.One, constTo.ToAlgTerm());
 
                 if (varTo.Length == 0)
                 {
@@ -388,7 +388,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     if (innerAntiDeriv == null)
                         return null;
 
-                    pEvalData.WorkMgr.FromFormatted(mulInCostStr + "(" + innerAntiDeriv.ToAlgTerm().FinalToDispStr() + ")", "Substitute back in " + WorkMgr.STM + subInVar.ToDispString() + "=" +
+                    pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + mulInCostStr + "(" + innerAntiDeriv.ToAlgTerm().FinalToDispStr() + ")" + WorkMgr.EDM, "Substitute back in " + WorkMgr.STM + subInVar.ToDispString() + "=" +
                                     uatmpt.ToAlgTerm().FinalToDispStr() + WorkMgr.EDM);
 
                     // Sub back in the appropriate values.
@@ -437,7 +437,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                                 if (innerAntiDeriv == null)
                                     return null;
 
-                                pEvalData.WorkMgr.FromFormatted(mulInCostStr + "(" + innerAntiDeriv.ToAlgTerm().FinalToDispStr() + ")", "Substitute back in " + WorkMgr.STM + subInVar.ToDispString() + "=" +
+                                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + mulInCostStr + "(" + innerAntiDeriv.ToAlgTerm().FinalToDispStr() + ")" + WorkMgr.EDM, "Substitute back in " + WorkMgr.STM + subInVar.ToDispString() + "=" +
                                     uatmpt.ToAlgTerm().FinalToDispStr() + WorkMgr.EDM);
 
                                 // Sub back in the appropriate values.

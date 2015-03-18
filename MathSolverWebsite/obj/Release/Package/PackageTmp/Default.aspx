@@ -11,67 +11,6 @@
 
     <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=AM_HTMLorMML"></script>
 
-    
-<%--    <script>
-
-        var calculator;
-        var prevGraphDataStr = "";
-        $(document).ready(function () {
-            var elt = document.getElementById('calculator');
-            calculator = Desmos.Calculator(elt,
-                {
-                    expressions: false,
-                    settingsMenu: true,
-                    zoomButtons: true,
-                });
-
-            Sys.WebForms.PageRequestManager.getInstance().add_pageLoaded(PageLoaded);
-
-
-            function PageLoaded(sender, args) {
-
-                var graphDataStr = $("#<% = graphFuncTxtBox.ClientID %>").val();
-                console.log(graphDataStr);
-                if (graphDataStr == "") {
-                    $("#graphSectionDiv").hide();
-                    console.log("Hiding the graph as the set value was blank");
-                    return;
-                }
-
-                var workSectionVisible = $("#<% = resultSectionDiv.ClientID %>").is(":visible");
-                console.log(workSectionVisible);
-                if (workSectionVisible) {
-                    $("#graphSectionDiv").show();
-                    console.log("showing the graph");
-                    calculator.resize();
-                }
-                else {
-                    $("#graphSectionDiv").hide();
-                }
-
-                if (prevGraphDataStr == graphDataStr)
-                    return;2
-
-
-
-                console.log(graphDataStr);
-
-                var splitEqStrs = graphDataStr.split(";");
-
-                // Each is an equation to graph.
-                calculator.setBlank();
-                for (var i = 0; i < splitEqStrs.length; ++i) {
-                    var curExpStr = splitEqStrs[i];
-                    console.log("Plotting equation: " + curExpStr);
-                    calculator.setExpression({ id: 'graph' + i, latex: curExpStr });
-                }
-
-                prevGraphDataStr = graphDataStr;
-            }
-        });
-
-    </script>--%>
-
 
     <script type="text/javascript" src="Scripts/Main.js"></script>
     <script>
@@ -162,8 +101,6 @@
         $("#clearResultBtnId").click(function (e) {
             onClearBtnClicked();
             e.stopPropagation();
-
-            $("#graphSectionDiv").hide();
 
             return false;
         });
@@ -282,19 +219,6 @@
                 </ContentTemplate>
             </asp:UpdatePanel>
         </asp:Panel>
-        
-        <div id="graphSectionDiv" style="display:none;" >
-            <p class="sectionHeading"><input class="workCollapseBtn" type="button" onclick="$('#graphDiv').toggle();" value="Graph" /></p>
-            <div id="graphDiv">
-                <div id="calculator" style="width: 100%; height: 500px;"></div>
-            </div>
-        </div>
-
-<%--        <asp:UpdatePanel runat="server">
-            <ContentTemplate>
-                <input type="text" id="graphFuncTxtBox" runat="server" value="" class="hidden" />
-            </ContentTemplate>
-        </asp:UpdatePanel>--%>
 
         <asp:UpdatePanel runat="server">
             <ContentTemplate>

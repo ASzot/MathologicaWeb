@@ -1923,16 +1923,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                     lowerBound = lowerBound.Remove(lowerBound.Length - 1, 1);
                 }
 
-                // Try all the different possibilities.
-                ExComp useEx = Number.Parse(lowerBound);
-                if (useEx == null)
-                {
-                    useEx = Constant.ParseConstant(lowerBound);
-                    if (useEx == null)
-                        useEx = new AlgebraComp(lowerBound);
-                }
+                var lowerLexTable = CreateLexemeTable(lowerBound, ref pParseErrors);
+                if (lowerLexTable == null)
+                    return null;
+                var lowerTerm = LexemeTableToAlgebraTerm(lowerLexTable, ref pParseErrors);
+                if (lowerTerm == null)
+                    return null;
 
-                lower = useEx;
+                lower = lowerTerm.RemoveRedundancies();
+
 
                 if (lt[currentIndex + 1].Data1 != LexemeType.Operator || lt[currentIndex + 1].Data2 != "^")
                     return null;
@@ -1942,6 +1941,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                 upper = LexemeToExComp(lt, ref currentIndex, ref pParseErrors);
                 if (upper == null)
                     return null;
+
+                AlgebraTerm upperTerm = upper.ToAlgTerm();
+                upperTerm = upperTerm.WeakMakeWorkable().ToAlgTerm();
+                upperTerm = upperTerm.ApplyOrderOfOperations();
+                upperTerm = upperTerm.MakeWorkable().ToAlgTerm();
+                upperTerm = upperTerm.CompoundFractions();
+
+                upper = upperTerm.RemoveRedundancies();
             }
 
 

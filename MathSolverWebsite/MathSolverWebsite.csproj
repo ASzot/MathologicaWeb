@@ -511,6 +511,7 @@
     <Compile Include="MathSolverLibrary\TermType\SinusodalTermType.cs" />
     <Compile Include="MathSolverLibrary\TermType\SolveTermType.cs" />
     <Compile Include="MathSolverLibrary\TermType\TermType.cs" />
+    <Compile Include="Physics\PhysicsEqData.cs" />
     <Compile Include="Privacy.aspx.cs">
       <DependentUpon>Privacy.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
