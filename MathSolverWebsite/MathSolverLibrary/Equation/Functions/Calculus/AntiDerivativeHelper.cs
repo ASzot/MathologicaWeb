@@ -25,7 +25,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (constTo.Length > 0)
             {
                 constOutStr = constToStr + "\\int(" +
-                    varTo.ToAlgTerm().FinalToDispStr() + ")\\d" + dVar.ToDispString();
+                    (varTo.Length == 0 ? "1" : varTo.ToAlgTerm().FinalToDispStr()) + ")\\d" + dVar.ToDispString();
                 if (constToStr != "1")
                     pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + constOutStr + WorkMgr.EDM, "Take out the constants.");
             }
@@ -67,9 +67,33 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             // Is this a single function? (power included)
             if (gp.Length == 1 && gp[0] is AlgebraFunction)
             {
+                if (gp[0] is PowerFunction)
+                {
+                    PowerFunction gpPf = gp[0] as PowerFunction;
+                    if (gpPf.Power.IsEqualTo(Number.NegOne) && gpPf.Base is PowerFunction)
+                    {
+                        PowerFunction baseGpPf = gpPf.Base as PowerFunction;
+                        baseGpPf.Power = MulOp.StaticCombine(baseGpPf.Power, gpPf.Power);
+                        if (baseGpPf.Power is AlgebraTerm)
+                            baseGpPf.Power = (baseGpPf.Power as AlgebraTerm).RemoveRedundancies();
+                        gp[0] = baseGpPf;
+                    }
+                }
+
                 atmpt = GetIsSingleFunc(gp[0], dVar, ref pEvalData);
                 if (atmpt != null)
                     return atmpt;
+
+                if (pIntInfo.ByPartsCount < IntegrationInfo.MAX_BY_PARTS_COUNT && (gp[0] is LogFunction || gp[0] is InverseTrigFunction))
+                {
+                    string thisStr = gp.ToAlgTerm().FinalToDispStr();
+                    pIntInfo.IncPartsCount();
+                    atmpt = SingularIntByParts(gp[0], dVar, thisStr, ref pIntInfo, ref pEvalData);
+                    if (atmpt != null)
+                    {
+                        return atmpt;
+                    }
+                }
             }
             else if (gp.Length == 1 && gp[0] is AlgebraComp)
             {
@@ -103,37 +127,37 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             if (pIntInfo.USubCount < IntegrationInfo.MAX_U_SUB_COUNT)
             {
+                pIntInfo.IncSubCount();
                 atmpt = AttemptUSub(gp, dVar, ref pIntInfo, ref pEvalData);
 
                 if (atmpt != null)
                 {
-                    pIntInfo.IncSubCount();
                     return atmpt;
                 }
             }
 
             if (gp.Length == 2)
             {
-                ExComp[] den = gp.GetDenominator();
-                if (den != null && den.Length == 1)
-                {
-                    ExComp[] num = gp.GetNumerator();
-                    if (num.Length == 1)
-                    {
-                        atmpt = AttemptPartialFractions(num[0], den[0], dVar, ref pIntInfo, ref pEvalData);
-                        if (atmpt != null)
-                            return atmpt;
-                    }
-                }
+                //ExComp[] den = gp.GetDenominator();
+                //if (den != null && den.Length == 1)
+                //{
+                //    ExComp[] num = gp.GetNumerator();
+                //    if (num.Length == 1)
+                //    {
+                //        atmpt = AttemptPartialFractions(num[0], den[0], dVar, ref pIntInfo, ref pEvalData);
+                //        if (atmpt != null)
+                //            return atmpt;
+                //    }
+                //}
 
                 if (pIntInfo.ByPartsCount < IntegrationInfo.MAX_BY_PARTS_COUNT)
                 {
                     int prevWorkStepCount = pEvalData.WorkMgr.WorkSteps.Count;
                     string thisStr = gp.ToAlgTerm().FinalToDispStr();
+                    pIntInfo.IncPartsCount();
                     atmpt = IntByParts(gp[0], gp[1], dVar, thisStr, ref pIntInfo, ref pEvalData);
                     if (atmpt != null)
                     {
-                        pIntInfo.IncPartsCount();
                         return atmpt;
                     }
                     else
@@ -162,7 +186,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (denPoly.MaxPow < 2 || numPoly.MaxPow >= denPoly.MaxPow)
                 return null;
 
-            ExComp atmpt = PartialFracs.PartialFracs(numTerm, denTerm, numPoly, dVar, ref pIntInfo, ref pEvalData);
+            ExComp atmpt = PartialFracs.Evaluate(numTerm, denTerm, numPoly, dVar, ref pIntInfo, ref pEvalData);
             if (atmpt == null)
                 return null;
 
@@ -246,10 +270,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         private static ExComp TryU(ExComp[] group, ExComp uatmpt, AlgebraComp dVar, ref IntegrationInfo pIntInfo, ref EvalData pEvalData)
         {
-            string thisStr = "\\int(" + group.ToArray().ToAlgTerm().FinalToDispStr() + ")" + dVar.ToDispString();
+            string groupStr = group.CloneGroup().ToArray().ToAlgTerm().FinalToDispStr();
+            string thisStr = "\\int(" + groupStr + ")" + dVar.ToDispString();
             string atmptStr = uatmpt.ToAlgTerm().FinalToDispStr();
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\int (" + group.ToAlgTerm().FinalToDispStr() + ") \\d" + dVar.ToDispString() + WorkMgr.EDM, 
+            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\int (" + groupStr + ") \\d" + dVar.ToDispString() + WorkMgr.EDM, 
                 "Do the u-substitution integration method.");
 
             AlgebraTerm term = group.ToAlgNoRedunTerm();
@@ -302,6 +327,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
                 if (varTo.Length == 0)
                 {
+                    if (group.GroupContains(dVar))
+                        return null;
+
                     pEvalData.WorkMgr.WorkSteps.Add(new WorkStep(WorkMgr.STM + thisStr +
                         WorkMgr.EDM, "Make the substitution " + WorkMgr.STM + subInVar.ToDispString() + "=" + 
                         atmptStr + WorkMgr.EDM + " and " + WorkMgr.STM + "d" + subInVar.ToDispString() + "=" + 
@@ -434,18 +462,52 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             return null;
         }
 
+        private static ExComp SingularIntByParts(ExComp ex0, AlgebraComp dVar, string thisSTr, ref IntegrationInfo pIntInfo, ref EvalData pEvalData)
+        {
+            return IntByParts(ex0, Number.One, dVar, thisSTr, ref pIntInfo, ref pEvalData);
+        }
+
         private static ExComp IntByParts(ExComp ex0, ExComp ex1, AlgebraComp dVar, string thisStr, ref IntegrationInfo pIntInfo, ref EvalData pEvalData)
         {
             // Integration by parts states \int{uv'}=uv-\int{vu'}
             // Choose either ex0 or ex1 to be a suitable u and v'
 
+            //if (ex0 is PowerFunction && (ex0 as PowerFunction).Power.IsEqualTo(Number.NegOne) && (ex0 as PowerFunction).Base is PowerFunction)
+            //{
+            //    PowerFunction ex0Pf = ex0 as PowerFunction;
+
+            //    ex0 = new PowerFunction((ex0Pf.Base as PowerFunction).Base, MulOp.StaticCombine((ex0Pf.Base as PowerFunction).Power, ex0Pf.Power));
+            //}
+
+            //if (ex1 is PowerFunction && (ex1 as PowerFunction).Power.IsEqualTo(Number.NegOne) && (ex1 as PowerFunction).Base is PowerFunction)
+            //{
+            //    PowerFunction ex1Pf = ex0 as PowerFunction;
+
+            //    ex1 = new PowerFunction((ex1Pf.Base as PowerFunction).Base, MulOp.StaticCombine((ex1Pf.Base as PowerFunction).Power, ex1Pf.Power));
+            //}
+
             ExComp u, dv;
-            if ((ex0 is PowerFunction && (ex0 as PowerFunction).Power is Number) || ex0 is AlgebraComp)
+            if (ex0 is Number)
+            {
+                u = ex1;
+                dv = ex0;
+            }
+            else if (ex1 is Number)
             {
                 u = ex0;
                 dv = ex1;
             }
-            else if ((ex1 is PowerFunction && (ex1 as PowerFunction).Power is Number) || ex1 is AlgebraComp)
+            else if ((ex0 is PowerFunction && (ex0 as PowerFunction).Power is Number && 
+                !((ex0 as PowerFunction).Base is PowerFunction && !(((ex0 as PowerFunction).Base as PowerFunction).Power is Number))) || 
+                ex0 is AlgebraComp)
+            {
+
+                u = ex0;
+                dv = ex1;
+            }
+            else if ((ex1 is PowerFunction && (ex1 as PowerFunction).Power is Number &&
+                !((ex1 as PowerFunction).Base is PowerFunction && !(((ex1 as PowerFunction).Base as PowerFunction).Power is Number))) ||
+                ex1 is AlgebraComp)
             {
                 u = ex1;
                 dv = ex0;
@@ -463,10 +525,34 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             else
                 return null;
 
+            int stepCount = pEvalData.WorkMgr.WorkSteps.Count;
+            Integral antiderivativeOfDV = Integral.ConstructIntegral(dv.Clone(), dVar);
+            antiderivativeOfDV.Info = pIntInfo;
+            antiderivativeOfDV.AddConstant = false;
+            ExComp v = antiderivativeOfDV.Evaluate(false, ref pEvalData);
+
+            if (v is Integral)
+            {
+                pEvalData.WorkMgr.PopSteps(pEvalData.WorkMgr.WorkSteps.Count - stepCount);
+                // Try to switch the variables.
+                ExComp tmp = u;
+                u = dv;
+                dv = tmp;
+
+                antiderivativeOfDV = Integral.ConstructIntegral(dv, dVar);
+                antiderivativeOfDV.Info = pIntInfo;
+                antiderivativeOfDV.AddConstant = false;
+                v = antiderivativeOfDV.Evaluate(false, ref pEvalData);
+                if (v is Integral)
+                    return null;
+            }
+
+            var stepRange = pEvalData.WorkMgr.WorkSteps.GetRange(stepCount, pEvalData.WorkMgr.WorkSteps.Count - stepCount);
+            pEvalData.WorkMgr.WorkSteps.RemoveRange(stepCount, pEvalData.WorkMgr.WorkSteps.Count - stepCount);
+
             pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\int(" + thisStr + ")d" + dVar.ToDispString() + WorkMgr.EDM,
                 "Integrate by parts using the formula " + WorkMgr.STM + "\\int u v' = uv - \\int v u' " + WorkMgr.EDM + " where " +
                 WorkMgr.STM + "u=" + u.ToAlgTerm().FinalToDispStr() + ", dv = " + dv.ToAlgTerm().FinalToDispStr() + WorkMgr.EDM);
-
 
             Derivative derivativeOfU = Derivative.ConstructDeriv(u, dVar, null);
             pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "du=" + derivativeOfU.FinalToDispStr() + WorkMgr.EDM, "Find " + WorkMgr.STM +
@@ -476,28 +562,26 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (du is Derivative)
                 return null;
 
-            Integral antiderivativeOfDV = Integral.ConstructIntegral(dv, dVar);
             pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "v=" + antiderivativeOfDV.FinalToDispStr() + WorkMgr.EDM, "Find " + WorkMgr.STM +
                 "v" + WorkMgr.EDM);
-            antiderivativeOfDV.AddConstant = false;
-            ExComp v = antiderivativeOfDV.Evaluate(false, ref pEvalData);
 
-            if (v is Integral)
-                return null;
+            pEvalData.WorkMgr.WorkSteps.AddRange(stepRange);
+
 
             pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "({0})({1})-\\int ({1}) ({2}) d" + dVar.ToDispString() + WorkMgr.EDM, 
                 "Substitute the values into the integration by parts formula.", u, v, du);
 
-            ExComp uv = MulOp.StaticCombine(u, v);
+            ExComp uv = MulOp.StaticCombine(u, v.Clone());
             ExComp vDu = MulOp.StaticCombine(v, du);
 
-            ExComp antiDerivVDU = Integral.ConstructIntegral(dv, dVar);
-            antiderivativeOfDV.AddConstant = false;
-            antiDerivVDU = antiderivativeOfDV.Evaluate(false, ref pEvalData);
-            if (antiDerivVDU is Integral)
+            Integral antiDerivVDU = Integral.ConstructIntegral(vDu, dVar);
+            antiDerivVDU.Info = pIntInfo;
+            antiDerivVDU.AddConstant = false;
+            ExComp antiDerivVDUEval = antiDerivVDU.Evaluate(false, ref pEvalData);
+            if (antiDerivVDUEval is Integral)
                 return null;
 
-            ExComp final = SubOp.StaticCombine(uv, antiDerivVDU);
+            ExComp final = SubOp.StaticCombine(uv, antiDerivVDUEval);
             pEvalData.WorkMgr.FromSides(final, null);
 
             return final;
@@ -577,6 +661,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                         "=" + pf.FinalToDispStr() + WorkMgr.EDM, "Use the common antiderivative.");
                     return pf;
                 }
+                else if (!pf.Base.ToAlgTerm().Contains(dVar) && pf.Power.IsEqualTo(dVar))
+                {
+                    ExComp finalEx = DivOp.StaticWeakCombine(pf, LogFunction.Ln(pf.Base));
+                    pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\int(" + pf.FinalToDispStr() + ")\\d" + dVar.ToDispString() +
+                        "=" + finalEx.ToAlgTerm().FinalToDispStr() + WorkMgr.EDM, "Use the common antiderivative law.");
+
+                    return finalEx;
+                }
 
                 if (IsDerivAcceptable(pf, dVar) && !pf.Power.ToAlgTerm().Contains(dVar))
                 {
@@ -593,8 +685,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     if (powChange is AlgebraTerm)
                         powChange = (powChange as AlgebraTerm).CompoundFractions();
 
+                    string changedPowStr = WorkMgr.ExFinalToAsciiStr(AddOp.StaticWeakCombine(pf.Power, Number.One));
                     pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\int(" + WorkMgr.ExFinalToAsciiStr(single) + ")\\d" + dVar.ToDispString() +
-                        "=" + dVar.ToDispString() + "^{" + WorkMgr.ExFinalToAsciiStr(AddOp.StaticWeakCombine(pf.Power, Number.One)) + "}" + WorkMgr.EDM,
+                        "=\\frac{" + dVar.ToDispString() + "^{" + changedPowStr + "}}{" + changedPowStr + "}" + WorkMgr.EDM,
                         "Use the power rule of antiderivatives.");
 
                     pf.Power = powChange;
@@ -656,14 +749,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     "Use the common antiderivative.");
 
                 return ad;
-            }
-            else if (single is InverseTrigFunction)
-            {
-
-            }
-            else if (single is LogFunction)
-            {
-
             }
 
             return null;

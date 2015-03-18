@@ -14,11 +14,17 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         private AlgebraComp _dVar = null;
         private ExComp _lower = null;
         private bool _addConstant = true;
+        private IntegrationInfo _integralInfo = null;
         private ExComp _upper = null;
 
         public bool AddConstant
         {
             set { _addConstant = value; }
+        }
+
+        public IntegrationInfo Info
+        {
+            set { _integralInfo = value; }
         }
 
         public AlgebraComp DVar
@@ -82,7 +88,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     // Add the constant.
                     ExComp retEx = AddOp.StaticWeakCombine(indefinite, new CalcConstant());
                     pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + retEx.ToAlgTerm().FinalToDispStr() + WorkMgr.STM,
-                        "Add in the constant of integration.");
+                        "Add the constant of integration.");
                     return retEx;
                 }
                 else
@@ -155,11 +161,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             ExComp[] adGps = new ExComp[gps.Count];
             for (int i = 0; i < gps.Count; ++i) 
             {
-                IntegrationInfo integrationInfo = new IntegrationInfo();
+                IntegrationInfo integrationInfo = _integralInfo ?? new IntegrationInfo();
+                int prevStepCount = pEvalData.WorkMgr.WorkSteps.Count;
+
                 ExComp aderiv = AntiDerivativeHelper.TakeAntiDerivativeGp(gps[i], _dVar, ref integrationInfo, ref pEvalData);
+
                 if (aderiv == null)
                 {
-                    pEvalData.AddMsg("At this time only very simple integration works");
+                    pEvalData.WorkMgr.PopSteps(pEvalData.WorkMgr.WorkSteps.Count - prevStepCount);
                     _failure = true;
                     return this;
                 }

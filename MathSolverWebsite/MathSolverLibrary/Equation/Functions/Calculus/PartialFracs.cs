@@ -9,7 +9,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 {
     class PartialFracs
     {
-        public static ExComp PartialFracs(AlgebraTerm num, AlgebraTerm den, PolynomialExt numPoly, AlgebraComp dVar, 
+        public static ExComp Evaluate(AlgebraTerm num, AlgebraTerm den, PolynomialExt numPoly, AlgebraComp dVar, 
             ref IntegrationInfo pIntInfo, ref TermType.EvalData pEvalData)
         {
             // Be sure that something like (x-2)(x^2-1) already in factored form works.

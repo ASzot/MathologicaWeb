@@ -53,8 +53,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public override ExComp Clone()
         {
-            LogFunction log = new LogFunction(InnerTerm);
-            log.Base = this.Base;
+            LogFunction log = new LogFunction(InnerTerm.Clone());
+            log.Base = this.Base.Clone();
             return log;
         }
 

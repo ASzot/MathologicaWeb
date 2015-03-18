@@ -668,17 +668,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                 Number powNum = _power as Number;
                 return (powNum < 0.0);
             }
-            else if (_power is AlgebraTerm)
-            {
-                AlgebraTerm powTerm = _power as AlgebraTerm;
-
-                var coeffs = powTerm.GetCoeffs();
-
-                if (coeffs.Count == 1 && coeffs[0] != null)
-                {
-                    return (coeffs[0] < 0.0);
-                }
-            }
 
             return false;
         }
@@ -1087,7 +1076,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         public override string ToMathAsciiString()
         {
             string powerAsciiStr = _power.ToMathAsciiString();
-            if (powerAsciiStr.StartsWith("-1"))
+            if (powerAsciiStr.StartsWith("-1") && !powerAsciiStr.StartsWith("-1*"))
                 powerAsciiStr = powerAsciiStr.Remove(0, 2);
 
             ExComp baseNoRedun = Base is AlgebraTerm ? (Base as AlgebraTerm).RemoveRedundancies() : Base;
@@ -1164,7 +1153,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         public override string ToTexString()
         {
             string powerTexStr = _power.ToTexString();
-            if (powerTexStr.StartsWith("-1"))
+            if (powerTexStr.StartsWith("-1") && !powerTexStr.StartsWith("-1*"))
                 powerTexStr = powerTexStr.Remove(0, 2);
 
             ExComp baseNoRedun = Base is AlgebraTerm ? (Base as AlgebraTerm).RemoveRedundancies() : Base;

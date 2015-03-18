@@ -225,7 +225,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
             for (int i = 0; i < orderedTolkensList.Count; ++i)
             {
                 if (orderedTolkensList[i].Data1 == LexemeType.FunctionDef && i > 0 &&
-                    (orderedTolkensList[i - 1].Data1 == LexemeType.Function || orderedTolkensList[i - 1].Data1 == LexemeType.Derivative))
+                    (orderedTolkensList[i - 1].Data1 == LexemeType.Function || orderedTolkensList[i - 1].Data1 == LexemeType.Derivative || orderedTolkensList[i - 1].Data1 == LexemeType.Integral))
                 {
                     string funcDef = orderedTolkensList[i].Data2;
                     string func = orderedTolkensList[i - 1].Data2;
@@ -1117,7 +1117,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                         depth++;
                 }
                 if (endIndex == -1)
+                {
+                    pParseErrors.Add("Missing differential.");
                     return null;
+                }
 
                 if (endIndex == lexemeTable.Count - 1)
                 {

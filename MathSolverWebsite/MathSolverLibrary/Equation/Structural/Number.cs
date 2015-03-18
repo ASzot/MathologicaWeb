@@ -6,8 +6,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 {
     internal class Number : ExComp
     {
-        private const double EPSILON_ACCEPT = 1E-10;
-        private const int ROUND_COUNT = 7;
+        private const double EPSILON_ACCEPT = 1E-7;
+        private const int ROUND_COUNT = 9;
         private double d_imagComp;
         private double d_realComp;
 
@@ -711,6 +711,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         {
             double real = (n1.RealComp * n2.RealComp) - (n1.ImagComp * n2.ImagComp);
             double imag = (n1.RealComp * n2.ImagComp) + (n1.ImagComp * n2.RealComp);
+
+            real = EpsilonCorrect(real);
+            imag = EpsilonCorrect(imag);
 
             return new Number(real, imag);
         }
