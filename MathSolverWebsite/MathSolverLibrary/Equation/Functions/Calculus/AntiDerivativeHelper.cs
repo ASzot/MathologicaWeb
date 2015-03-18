@@ -106,7 +106,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 atmpt = AttemptUSub(gp, dVar, ref pIntInfo, ref pEvalData);
 
                 if (atmpt != null)
+                {
+                    pIntInfo.IncSubCount();
                     return atmpt;
+                }
             }
 
             if (gp.Length == 2)
@@ -117,22 +120,32 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     ExComp[] num = gp.GetNumerator();
                     if (num.Length == 1)
                     {
-                        atmpt = AttemptPartialFractions(num[0], den[0], dVar, ref pEvalData);
+                        atmpt = AttemptPartialFractions(num[0], den[0], dVar, ref pIntInfo, ref pEvalData);
                         if (atmpt != null)
                             return atmpt;
                     }
                 }
 
-                atmpt = IntByParts(gp[0], gp[1], dVar, ref pEvalData);
-                if (atmpt != null)
-                    return atmpt;
+                if (pIntInfo.ByPartsCount < IntegrationInfo.MAX_BY_PARTS_COUNT)
+                {
+                    int prevWorkStepCount = pEvalData.WorkMgr.WorkSteps.Count;
+                    string thisStr = gp.ToAlgTerm().FinalToDispStr();
+                    atmpt = IntByParts(gp[0], gp[1], dVar, thisStr, ref pIntInfo, ref pEvalData);
+                    if (atmpt != null)
+                    {
+                        pIntInfo.IncPartsCount();
+                        return atmpt;
+                    }
+                    else
+                        pEvalData.WorkMgr.PopSteps(pEvalData.WorkMgr.WorkSteps.Count - prevWorkStepCount);
+                }
             }
             
 
             return null;
         }
 
-        private static ExComp AttemptPartialFractions(ExComp num, ExComp den, AlgebraComp dVar, ref EvalData pEvalData)
+        private static ExComp AttemptPartialFractions(ExComp num, ExComp den, AlgebraComp dVar, ref IntegrationInfo pIntInfo, ref EvalData pEvalData)
         {
             if (!(num is AlgebraTerm) || !(den is AlgebraTerm))
                 return null;
@@ -149,9 +162,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (denPoly.MaxPow < 2 || numPoly.MaxPow >= denPoly.MaxPow)
                 return null;
 
+            ExComp atmpt = PartialFracs.PartialFracs(numTerm, denTerm, numPoly, dVar, ref pIntInfo, ref pEvalData);
+            if (atmpt == null)
+                return null;
 
-
-            return null;
+            return atmpt;
         }
 
         private static List<ExComp> GetPotentialU(ExComp[] group, AlgebraComp dVar)
@@ -259,7 +274,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (updatedGroups.Count != 1)
                 return null;
             
-            Derivative derivative = Derivative.CreateDeriv(uatmpt, dVar, null);
+            Derivative derivative = Derivative.ConstructDeriv(uatmpt, dVar, null);
 
             pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + thisStr + WorkMgr.EDM,
                 "Try to substitute " + WorkMgr.STM + subInVar.ToDispString() + "=" + uatmpt.ToAlgTerm().FinalToDispStr() + WorkMgr.EDM);
@@ -341,7 +356,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + mulInCostStr + 
                         "\\int (" + group.ToArray().ToAlgTerm().FinalToDispStr() + ") d" + subInVar.ToDispString() + WorkMgr.EDM);
 
-                    pIntInfo.IncSubCount();
                     ExComp innerAntiDeriv = TakeAntiDerivativeGp(groupList.ToArray(), subInVar, ref pIntInfo, ref pEvalData);
                     if (innerAntiDeriv == null)
                         return null;
@@ -391,7 +405,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                                 pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + mulInCostStr +
                                     "\\int (" + group.ToArray().ToAlgTerm().FinalToDispStr() + ") d" + subInVar.ToDispString() + WorkMgr.EDM);
 
-                                pIntInfo.IncSubCount();
                                 ExComp innerAntiDeriv = TakeAntiDerivativeGp(group, subInVar, ref pIntInfo, ref pEvalData);
                                 if (innerAntiDeriv == null)
                                     return null;
@@ -421,10 +434,73 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             return null;
         }
 
-        private static ExComp IntByParts(ExComp ex0, ExComp ex1, AlgebraComp dVar, ref EvalData pEvalData)
+        private static ExComp IntByParts(ExComp ex0, ExComp ex1, AlgebraComp dVar, string thisStr, ref IntegrationInfo pIntInfo, ref EvalData pEvalData)
         {
             // Integration by parts states \int{uv'}=uv-\int{vu'}
-            return null;
+            // Choose either ex0 or ex1 to be a suitable u and v'
+
+            ExComp u, dv;
+            if ((ex0 is PowerFunction && (ex0 as PowerFunction).Power is Number) || ex0 is AlgebraComp)
+            {
+                u = ex0;
+                dv = ex1;
+            }
+            else if ((ex1 is PowerFunction && (ex1 as PowerFunction).Power is Number) || ex1 is AlgebraComp)
+            {
+                u = ex1;
+                dv = ex0;
+            }
+            else if (ex1 is AppliedFunction)
+            {
+                u = ex0;
+                dv = ex1;
+            }
+            else if (ex0 is AppliedFunction)
+            {
+                u = ex1;
+                dv = ex0;
+            }
+            else
+                return null;
+
+            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\int(" + thisStr + ")d" + dVar.ToDispString() + WorkMgr.EDM,
+                "Integrate by parts using the formula " + WorkMgr.STM + "\\int u v' = uv - \\int v u' " + WorkMgr.EDM + " where " +
+                WorkMgr.STM + "u=" + u.ToAlgTerm().FinalToDispStr() + ", dv = " + dv.ToAlgTerm().FinalToDispStr() + WorkMgr.EDM);
+
+
+            Derivative derivativeOfU = Derivative.ConstructDeriv(u, dVar, null);
+            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "du=" + derivativeOfU.FinalToDispStr() + WorkMgr.EDM, "Find " + WorkMgr.STM +
+                "du" + WorkMgr.EDM);
+            ExComp du = derivativeOfU.Evaluate(false, ref pEvalData);
+
+            if (du is Derivative)
+                return null;
+
+            Integral antiderivativeOfDV = Integral.ConstructIntegral(dv, dVar);
+            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "v=" + antiderivativeOfDV.FinalToDispStr() + WorkMgr.EDM, "Find " + WorkMgr.STM +
+                "v" + WorkMgr.EDM);
+            antiderivativeOfDV.AddConstant = false;
+            ExComp v = antiderivativeOfDV.Evaluate(false, ref pEvalData);
+
+            if (v is Integral)
+                return null;
+
+            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "({0})({1})-\\int ({1}) ({2}) d" + dVar.ToDispString() + WorkMgr.EDM, 
+                "Substitute the values into the integration by parts formula.", u, v, du);
+
+            ExComp uv = MulOp.StaticCombine(u, v);
+            ExComp vDu = MulOp.StaticCombine(v, du);
+
+            ExComp antiDerivVDU = Integral.ConstructIntegral(dv, dVar);
+            antiderivativeOfDV.AddConstant = false;
+            antiDerivVDU = antiderivativeOfDV.Evaluate(false, ref pEvalData);
+            if (antiDerivVDU is Integral)
+                return null;
+
+            ExComp final = SubOp.StaticCombine(uv, antiDerivVDU);
+            pEvalData.WorkMgr.FromSides(final, null);
+
+            return final;
         }
 
         private static bool IsDerivAcceptable(ExComp ex, AlgebraComp dVar)

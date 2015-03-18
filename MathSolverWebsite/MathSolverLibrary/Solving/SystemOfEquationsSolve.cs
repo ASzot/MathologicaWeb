@@ -20,6 +20,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
     internal class EquationSystemSolve
     {
+        private const int MAX_EQ_COUNT = 3;
+
         private List<string> _solveFors;
         private EquationSystemSolveMethod _solveMethod = EquationSystemSolveMethod.Substitution;
         private AlgebraSolver p_agSolver;
@@ -84,6 +86,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
         public SolveResult SolveEquationArray(List<EquationSet> equations, List<LexemeTable> lexemeTables, Dictionary<string, int> allIdens, ref TermType.EvalData pEvalData)
         {
             DoAssignments(ref equations);
+
+            if (equations.Count > MAX_EQ_COUNT)
+                return SolveResult.Failure();
 
             if (_solveMethod == EquationSystemSolveMethod.Substitution)
             {

@@ -7,7 +7,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.Polynomial
 {
     class PolynomialGen
     {
-        public static AlgebraTerm GenGenericOfDegree(int deg, AlgebraComp varFor, int startAlphaChar)
+        public static AlgebraTerm GenGenericOfDegree(int deg, AlgebraComp varFor, int startAlphaChar, List<AlgebraComp> usedVars)
         {
             if (deg > 26)
                 return null;
@@ -17,6 +17,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.Polynomial
             {
                 char alphaChar = (char)(i + startAlphaChar);
                 AlgebraComp generic = new AlgebraComp(alphaChar.ToString());
+                usedVars.Add(generic);
                 int reversedI = deg - i;
 
                 ExComp raised = varFor.ToPow(reversedI);

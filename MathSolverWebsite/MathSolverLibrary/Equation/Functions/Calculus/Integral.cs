@@ -13,7 +13,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         private bool _failure = false;
         private AlgebraComp _dVar = null;
         private ExComp _lower = null;
+        private bool _addConstant = true;
         private ExComp _upper = null;
+
+        public bool AddConstant
+        {
+            set { _addConstant = value; }
+        }
 
         public AlgebraComp DVar
         {
@@ -71,11 +77,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             if (_lower == null || _upper == null)
             {
-                // Add the constant.
-                ExComp retEx = AddOp.StaticWeakCombine(indefinite, new CalcConstant());
-                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + retEx.ToAlgTerm().FinalToDispStr() + WorkMgr.STM, 
-                    "Add in the constant of integration.");
-                return retEx;
+                if (_addConstant)
+                {
+                    // Add the constant.
+                    ExComp retEx = AddOp.StaticWeakCombine(indefinite, new CalcConstant());
+                    pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + retEx.ToAlgTerm().FinalToDispStr() + WorkMgr.STM,
+                        "Add in the constant of integration.");
+                    return retEx;
+                }
+                else
+                    return indefinite;
             }
 
             AlgebraTerm upperEval = indefinite.Clone().ToAlgTerm().Substitute(_dVar, _upper);
