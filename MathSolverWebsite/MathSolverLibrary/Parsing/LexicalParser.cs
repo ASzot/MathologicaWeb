@@ -96,10 +96,35 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                                              LexemeType.Summation),
 			new TypePair<string, LexemeType>(@"lim_\((" + IDEN_MATCH + @")to(\-)?((inf)|(" + NUM_MATCH + @")|(" + IDEN_MATCH + @"))\)", 
                                              LexemeType.Limit),
-            new TypePair<string, LexemeType>(@"(int_\((.*?)\))|(int_((" + NUM_MATCH + ")|(" + IDEN_MATCH + ")|(pi)))|(int)", LexemeType.Integral),
+            new TypePair<string, LexemeType>(@"(int_\()|(int_((" + NUM_MATCH + ")|(" + IDEN_MATCH + ")|(pi)))|(int)", LexemeType.Integral),
             new TypePair<string, LexemeType>(@"\$d(" + IDEN_MATCH + @")", LexemeType.Differential),
             new TypePair<string, LexemeType>(@"(sum)|(inf)|(lim)", LexemeType.ErrorType),
         };
+
+        private class MatchTolken
+        {
+            public int Length;
+            public int Index;
+            public string Value;
+
+            public MatchTolken(int length, int index, string value)
+            {
+                Length = length;
+                Index = index;
+                Value = value;
+            }
+
+            public MatchTolken(Match match)
+                : this(match.Length, match.Index, match.Value)
+            {
+
+            }
+
+            public override string ToString()
+            {
+                return Value;
+            }
+        }
 
         public LexicalParser(TermType.EvalData pEvalData)
         {
@@ -125,15 +150,88 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
         {
             inputStr = CleanTexInput(inputStr);
 
-            List<TypePair<LexemeType, Match>> tolkenMatches = new List<TypePair<LexemeType, Match>>();
+            List<TypePair<LexemeType, MatchTolken>> tolkenMatches = new List<TypePair<LexemeType, MatchTolken>>();
             foreach (TypePair<string, LexemeType> rulset in _rulesets)
             {
                 MatchCollection matches = Regex.Matches(inputStr, rulset.Data1);
                 foreach (Match match in matches)
-                    tolkenMatches.Add(new TypePair<LexemeType, Match>(rulset.Data2, match));
+                    tolkenMatches.Add(new TypePair<LexemeType, MatchTolken>(rulset.Data2, new MatchTolken(match)));
             }
 
-            List<TypePair<LexemeType, Match>> tolkensToRemove = new List<TypePair<LexemeType, Match>>();
+            tolkenMatches = (from t in tolkenMatches
+                             orderby t.Data2.Index
+                             select t).ToList();
+
+
+            for (int i = 0; i < tolkenMatches.Count; ++i)
+            {
+                var tolkenMatch = tolkenMatches[i];
+
+                if (tolkenMatch.Data1 == LexemeType.Integral)
+                {
+                    string tolkenStr = tolkenMatch.Data2.Value;
+
+                    if (tolkenStr.EndsWith("("))
+                    {
+                        // Swallow up the next tolkens leading to the last paranthese.
+                        int endIndex = -1;
+                        int depth = 1;
+
+                        int minIndex = tolkenMatch.Data2.Index + tolkenMatch.Data2.Length;
+
+                        for (int j = i + 1; j < tolkenMatches.Count; ++j)
+                        {
+                            var compareTolken = tolkenMatches[j];
+                            if (compareTolken.Data2.Index < minIndex)
+                            {
+                                tolkenMatches.RemoveAt(j--);
+                                continue;
+                            }
+                            if (compareTolken.Data2.Value == ")")
+                            {
+                                depth--;
+                                if (depth == 0)
+                                {
+                                    endIndex = j;
+                                    break;
+                                }
+                            }
+                            else if (compareTolken.Data2.Value == "(")
+                                depth++;
+                        }
+
+                        if (endIndex == -1)
+                            return null;
+
+                        var tolkenRange = tolkenMatches.GetRange(i + 1, endIndex - i);
+                        tolkenMatches.RemoveRange(i + 1, endIndex - i);
+                        for (int j = 0; j < tolkenRange.Count; ++j)
+                        {
+                            var tolken = tolkenRange[j];
+                            for (int k = j + 1; k < tolkenRange.Count; ++k)
+                            {
+                                var compTolken = tolkenRange[k];
+                                if (compTolken.Data2.Index < (tolken.Data2.Index + tolken.Data2.Length))
+                                {
+                                    tolkenRange.RemoveAt(k--);
+                                    continue;
+                                }
+                            }
+                        }
+
+                        string addStr = "";
+                        foreach (var tolken in tolkenRange)
+                        {
+                            addStr += tolken.Data2.Value;
+                        }
+
+                        tolkenMatches[i].Data2.Value += addStr;
+                    }
+                }
+            }
+
+
+            List<TypePair<LexemeType, MatchTolken>> tolkensToRemove = new List<TypePair<LexemeType, MatchTolken>>();
             for (int i = 0; i < tolkenMatches.Count; ++i)
             {
                 var tolken = tolkenMatches[i];
@@ -413,14 +511,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
             foreach (string equationSet in equationSets)
             {
                 LexemeTable setLexemeTable = CreateLexemeTable(equationSet, ref pParseErrors);
+
+                if (setLexemeTable == null || setLexemeTable.Count == 0)
+                    return null;
+
                 if (!MathSolver.PLAIN_TEXT && !CheckCoeffCorrectness(setLexemeTable))
                 {
                     pParseErrors.Add("Invalid number placement.");
                     return null;
                 }
-
-                if (setLexemeTable == null || setLexemeTable.Count == 0)
-                    return null;
                 if (setLexemeTable == null)
                     return null;
                 if (!LexemeTableContainsComparisonOp(setLexemeTable))
@@ -1929,6 +2028,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                 var lowerTerm = LexemeTableToAlgebraTerm(lowerLexTable, ref pParseErrors);
                 if (lowerTerm == null)
                     return null;
+
+                lowerTerm = lowerTerm.WeakMakeWorkable().ToAlgTerm();
+                lowerTerm = lowerTerm.ApplyOrderOfOperations();
+                lowerTerm = lowerTerm.MakeWorkable().ToAlgTerm();
+                lowerTerm = lowerTerm.CompoundFractions();
 
                 lower = lowerTerm.RemoveRedundancies();
 

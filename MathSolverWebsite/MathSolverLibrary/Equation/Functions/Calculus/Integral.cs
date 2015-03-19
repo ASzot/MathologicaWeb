@@ -218,7 +218,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         {
             string boundariesStr = "";
             if (IsDefinite)
-                boundariesStr = "_" + LowerLimit.ToMathAsciiString() + "^" + UpperLimit.ToMathAsciiString();
+                boundariesStr = "_{" + LowerLimit.ToMathAsciiString() + "}^{" + UpperLimit.ToMathAsciiString() +"}";
             return "\\int" + boundariesStr + "(" + InnerTerm.FinalToAsciiKeepFormatting() + ")\\d" + _dVar.ToMathAsciiString();
         }
 
@@ -226,7 +226,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         {
             string boundariesStr = "";
             if (IsDefinite)
-                boundariesStr = "_" + LowerLimit.ToMathAsciiString() + "^" + UpperLimit.ToMathAsciiString();
+                boundariesStr = "_{" + LowerLimit.ToMathAsciiString() + "}^{" + UpperLimit.ToMathAsciiString() + "}";
             return "\\int" + boundariesStr + "(" + InnerTerm.FinalToAsciiKeepFormatting() + ")\\d" + _dVar.ToMathAsciiString();
         }
 
@@ -234,7 +234,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         {
             string boundariesStr = "";
             if (IsDefinite)
-                boundariesStr = "_" + LowerLimit.ToTexString() + "^" + UpperLimit.ToTexString();
+                boundariesStr = "_{" + LowerLimit.ToTexString() + "}^{" + UpperLimit.ToTexString() + "}";
             return "\\int" + boundariesStr + "(" + InnerTerm.FinalToTexKeepFormatting() + ")\\d" + _dVar.ToTexString();
         }
 
@@ -242,7 +242,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         {
             string boundariesStr = "";
             if (IsDefinite)
-                boundariesStr = "_" + LowerLimit.ToTexString() + "^" + UpperLimit.ToTexString();
+                boundariesStr = "_{" + LowerLimit.ToTexString() + "}^{" + UpperLimit.ToTexString() + "}";
             return "\\int" + boundariesStr + "(" + InnerTerm.FinalToTexString() + ")\\d" + _dVar.ToTexString();
         }
         
@@ -261,7 +261,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         {
             string boundariesStr = "";
             if (IsDefinite)
-                boundariesStr = "_" + LowerLimit.ToMathAsciiString() + "^" + UpperLimit.ToMathAsciiString();
+                boundariesStr = "_{" + LowerLimit.ToMathAsciiString() + "}^{" + UpperLimit.ToMathAsciiString() + "}";
             return "\\int" + boundariesStr + "(" + InnerTerm.ToMathAsciiString() + ")\\d" + _dVar.ToMathAsciiString();
         }
 
@@ -269,7 +269,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         {
             string boundariesStr = "";
             if (IsDefinite)
-                boundariesStr = "_" + LowerLimit.ToSearchString() + "^" + UpperLimit.ToSearchString();
+                boundariesStr = "_{" + LowerLimit.ToSearchString() + "}^{" + UpperLimit.ToSearchString() + "}";
             return "\\int" + boundariesStr + "(" + InnerTerm.ToSearchString() + ")\\d" + _dVar.ToSearchString();
         }
 
@@ -277,7 +277,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         {
             string boundariesStr = "";
             if (IsDefinite)
-                boundariesStr = "_" + LowerLimit.ToString() + "^" + UpperLimit.ToString();
+                boundariesStr = "_{" + LowerLimit.ToString() + "}^{" + UpperLimit.ToString() + "}";
             return "\\int" + boundariesStr + "(" + InnerTerm.ToString() + ")\\d" + _dVar.ToString();
         }
 
@@ -285,7 +285,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         {
             string boundariesStr = "";
             if (IsDefinite)
-                boundariesStr = "_" + LowerLimit.ToTexString() + "^" + UpperLimit.ToTexString();
+                boundariesStr = "_{" + LowerLimit.ToTexString() + "}^{" + UpperLimit.ToTexString()+ "}";
             return "\\int" + boundariesStr + "(" + InnerTerm.ToTexString() + ")\\d" + _dVar.ToTexString();
         }
 

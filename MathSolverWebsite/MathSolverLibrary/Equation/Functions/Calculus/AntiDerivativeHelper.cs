@@ -336,7 +336,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                         evaluated.ToAlgTerm().FinalToDispStr() + WorkMgr.EDM));
 
                     
-                    pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + constEx.ToAlgTerm().FinalToDispStr() + "\\int ("+ group.ToArray().ToAlgTerm().FinalToDispStr() + ") d" + subInVar.ToDispString() + WorkMgr.EDM);
+                    pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + constEx.ToAlgTerm().FinalToDispStr() + "\\int (" + group.ToArray().ToAlgTerm().FinalToDispStr() + ") d" + subInVar.ToDispString() + WorkMgr.EDM);
 
                     ExComp innerAntiDeriv = TakeAntiDerivativeGp(group.ToArray(), subInVar, ref pIntInfo, ref pEvalData);
                     if (innerAntiDeriv == null)
@@ -381,10 +381,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     bool mulInCost = constEx != null && !Number.One.IsEqualTo(constEx);
                     string mulInCostStr = (mulInCost ? constEx.ToAlgTerm().FinalToDispStr() : "");
 
-                    pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + mulInCostStr + 
-                        "\\int (" + group.ToArray().ToAlgTerm().FinalToDispStr() + ") d" + subInVar.ToDispString() + WorkMgr.EDM);
+                    group = groupList.ToArray();
 
-                    ExComp innerAntiDeriv = TakeAntiDerivativeGp(groupList.ToArray(), subInVar, ref pIntInfo, ref pEvalData);
+                    pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + mulInCostStr + 
+                        "\\int (" + group.ToAlgTerm().FinalToDispStr() + ") d" + subInVar.ToDispString() + WorkMgr.EDM);
+
+                    ExComp innerAntiDeriv = TakeAntiDerivativeGp(group, subInVar, ref pIntInfo, ref pEvalData);
                     if (innerAntiDeriv == null)
                         return null;
 
@@ -431,7 +433,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                                 string mulInCostStr = (mulInCost ? constEx.ToAlgTerm().FinalToDispStr() : "");
 
                                 pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + mulInCostStr +
-                                    "\\int (" + group.ToArray().ToAlgTerm().FinalToDispStr() + ") d" + subInVar.ToDispString() + WorkMgr.EDM);
+                                    "\\int (" + group.ToAlgTerm().FinalToDispStr() + ") d" + subInVar.ToDispString() + WorkMgr.EDM);
 
                                 ExComp innerAntiDeriv = TakeAntiDerivativeGp(group, subInVar, ref pIntInfo, ref pEvalData);
                                 if (innerAntiDeriv == null)

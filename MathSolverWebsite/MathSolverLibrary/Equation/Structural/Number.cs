@@ -11,6 +11,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         private double d_imagComp;
         private double d_realComp;
 
+        public const int FINAL_ROUND_COUNT = 4;
+
         public static Number ImagOne
         {
             get { return new Number(0.0, 1.0); }
@@ -889,6 +891,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         {
             Number result = this * n;
             AssignTo(result);
+        }
+
+        public void Round(int digits)
+        {
+            d_realComp = Math.Round(d_realComp, digits);
+            d_imagComp = Math.Round(d_imagComp, digits);
         }
 
         public override AlgebraTerm ToAlgTerm()

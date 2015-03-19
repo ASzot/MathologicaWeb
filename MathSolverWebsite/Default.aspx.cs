@@ -258,7 +258,7 @@ namespace MathSolverWebsite
             if (selectedIndex < evaluteDropList.Items.Count && selectedIndex >= 0)
                 selectedVal = evaluteDropList.Items[selectedIndex].Text;
 
-            _dataMgr.CreateBlobData(LastInput ?? "null", selectedVal, rawResultStr);
+            //_dataMgr.CreateBlobData(LastInput ?? "null", selectedVal, rawResultStr);
 
             ////////////////////////
             // Enable other solving.

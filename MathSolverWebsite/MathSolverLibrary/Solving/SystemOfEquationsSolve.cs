@@ -452,6 +452,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 ExComp result = agSolver.SolveEq(solveFor, term0, term1, ref pEvalData, false);
                 pEvalData.WorkMgr.WorkLabel = null;
 
+                // I have not really though about how this would work with three systems of equations. So for now I will just keep it at two.
+                if (result is SpecialSolution && completeEqs.Count == 2)
+                {
+                    pEvalData.AddMsg("The lines are parallel.");
+                    return SolveResult.NoSolutions();
+                }
+
                 if (result is AlgebraTermArray || result is GeneralSolution || result is NoSolutions || result is AllSolutions)
                 {
                     pEvalData.AddFailureMsg("Can't solve equations due to the complexity of the equations. The ability to solve this type of problem might be added sometime in the future.");
