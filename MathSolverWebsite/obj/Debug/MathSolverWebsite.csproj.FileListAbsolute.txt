@@ -752,3 +752,4 @@ C:\Users\Andrew\Documents\Projects\Mathologica\mathologica-web\MathSolverWebsite
 C:\Users\Andrew\Documents\Projects\Mathologica\mathologica-web\MathSolverWebsite\bin\zh-Hant\System.Spatial.resources.dll
 C:\Users\Andrew\Documents\Projects\Mathologica\mathologica-web\MathSolverWebsite\obj\Debug\MathSolverWebsite.dll
 C:\Users\Andrew\Documents\Projects\Mathologica\mathologica-web\MathSolverWebsite\obj\Debug\MathSolverWebsite.pdb
+C:\Users\Andrew\Documents\Projects\Mathologica\mathologica-web\MathSolverWebsite\obj\Debug\MathSolverWebsite.csprojResolveAssemblyReference.cache

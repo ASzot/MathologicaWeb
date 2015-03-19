@@ -45,7 +45,7 @@ namespace MathSolverWebsite.WebsiteHelpers
         }
     }
 
-    public struct TopicData
+    public struct TopicData : TopicPath
     {
         private string s_dispName;
         private string _path;
@@ -55,6 +55,7 @@ namespace MathSolverWebsite.WebsiteHelpers
         private IEnumerable<TopicExample> _exampleInputs;
 
         private const int MAX_DESC_PREV_LENGTH = 400;
+
 
         public string Path
         {
@@ -98,7 +99,7 @@ namespace MathSolverWebsite.WebsiteHelpers
             return trunDescTxt + "...";
         }
 
-        public string GetHintStr()
+        public override string GetHintStr()
         {
             string explainStr = GetTrunExplainStr();
             explainStr = Regex.Replace(explainStr, "<a(.*)?>", "<p>");

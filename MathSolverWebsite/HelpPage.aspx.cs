@@ -30,7 +30,7 @@ namespace MathSolverWebsite
                 _topics = new TopicDatas();
 
             _topicLoadFailure = !_topics.LoadTopics(Server.MapPath(EXAMPLE_FILE_PATH));
-            topicContentDiv.InnerHtml = HtmlHelper.TopicDataToHtmlTree(_topics, "All Topics", Server);
+            topicContentDiv.InnerHtml = HtmlHelper.TopicDataToHtmlTree(_topics.TopicDataInfo.Cast<TopicPath>().ToList(), "All Topics", Server);
 		}
 
         protected void searchBtn_Click(object sender, EventArgs e)

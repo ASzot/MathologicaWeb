@@ -8,18 +8,37 @@ using MathSolverWebsite.MathSolverLibrary.Parsing;
 using MathSolverWebsite.MathSolverLibrary.TermType;
 using MathSolverWebsite.MathSolverLibrary;
 
+using MathSolverWebsite.WebsiteHelpers;
+
 namespace MathSolverWebsite.Physics
 {
-    class PhysicsEqData
+    class PhysicsEqData : TopicPath
     {
         private ExComp _left;
         private ExComp _right;
+        private string _path;
+        private string _dispName;
         private List<string> _variables;
         private List<string> _unitListings;
 
-        public PhysicsEqData()
+        public string Path
         {
+            get { return _path; }
+        }
 
+        public string DispName
+        {
+            get { return _dispName; }
+        }
+
+        public PhysicsEqData(string path)
+        {
+            _path = path;
+        }
+
+        public override string GetHintStr()
+        {
+            return "";
         }
 
         public SolveResult Evaluate(string selectedOption, List<string> variables, List<string> values, ref EvalData pEvalData)

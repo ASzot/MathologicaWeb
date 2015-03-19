@@ -33,6 +33,15 @@
             This will include an extensive list of all features. Minor fixes are not included, 
             only additions of major features to the math solving system are.
         </p>
+        
+        <p class="sectionHeading">Update #7</p>
+        <p class="dateHeading">March 17, 2015</p>
+        <ul class="changeLogList">
+            <li>Complete support for definite integration.</li>
+            <li>Added u-substitution.</li>
+            <li>Added integration by parts.</li>
+            <li>As always more bug changes.</li>
+        </ul>
 
         <p class="sectionHeading">Update #5</p>
         <p class="dateHeading">February 19, 2015</p>

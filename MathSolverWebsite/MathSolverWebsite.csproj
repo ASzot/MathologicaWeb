@@ -558,6 +558,7 @@
     <Compile Include="WebsiteHelpers\DataMgr.cs" />
     <Compile Include="WebsiteHelpers\HtmlHelper.cs" />
     <Compile Include="WebsiteHelpers\TopicData.cs" />
+    <Compile Include="WebsiteHelpers\TopicPath.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

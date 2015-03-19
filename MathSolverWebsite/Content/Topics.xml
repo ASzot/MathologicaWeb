@@ -2,6 +2,124 @@
 
 <topics>
 
+  <topic>
+    <topicName>Polynomials</topicName>
+    <topicPath>Calculus/Integration/Polynomials</topicPath>
+    <topicDesc>
+      Take both the definite and indefinite integrals of polynomial functions.
+    </topicDesc>
+    <info>
+      Either the definite or indefinite integral of a simple polynomial can be taken. Work is shown for both taking the anti derivative
+      and evaluating the function at the boundaries using the fundemental theorem of calculus if the problem is a definite integral. With polynomials
+      the key strategies to evaluating the integral are splitting the integral up using the integration property that 
+      `\int (f(x)+g(x)) dx = \int f(x) dx + \int g(x) dx`. Then the integration power rule can be applied stating `\int x^n dx = \frac{x^{n+1}}{n+1}`
+      also don't forget to add on the constant of integration `C` when doing indefinite integrals.
+    </info>
+    <exampleInput>
+      <input>\int(3x^4 + 5x^3 + 2x^2 - 8x + 9)dx</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\int_{-2}^{3}(-3t^2+2t-5)dt</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\int_{0}^{10}(-3x+20)dx</input>
+    </exampleInput>
+  </topic>
+
+  <topic>
+    <topicName>Simple Functions</topicName>
+    <topicPath>Calculus/Integration/Simple Functions</topicPath>
+    <topicDesc>Taking the definite and indefinite integrals of elementary functions.</topicDesc>
+    <info>
+      Starting from the rules of derivatives take the anti derivatives of simple functions. 
+    </info>
+    <exampleInput>
+      <input>\int e^{x} dx</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\int 4^{x} dx</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\int_{0}^{\\frac{pi}{2}} 2\\cos(x) dx</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\int_{-\\frac{pi}{2}}^{pi} \\frac{1}{3} \\sin(x) dx</input>
+    </exampleInput>
+  </topic>
+
+  <topic>
+    <topicName>U-Substitution</topicName>
+    <topicPath>Calculus/Integration/U-Substitution</topicPath>
+    <topicDesc>
+      Make substitutions in the integral to allow the integral to be evaluated. 
+    </topicDesc>
+    <info>
+      U-Substitution is used to solve integrals in the form `\int g'(x)f(g(x)) dx` this integral solving technique can be thought of the opposite 
+      of the chain rule for derivatives.
+    </info>
+
+    <exampleInput>
+      <input>\int (3-x)^{10} dx</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\int \sqrt{7x-9} dx</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\int (2x+5)(x^2+5x)^7 dx</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\int e^{5x+2} dx</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\int 4\cos(3x) dx</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\int \frac{\sin(ln(x))}{x} dx</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\int \frac{3x+6}{x^2+4x-3} dx</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\int_{0}^{\sqrt{\pi}} x\sin(x^2) dx</input>
+    </exampleInput>
+  </topic>
+
+  <topic>
+    <topicName>Integration by Parts</topicName>
+    <topicPath>Calculus/Integration/Integration by Parts</topicPath>
+    <topicDesc>Allows the integral of two functions multiplied together to be taken.</topicDesc>
+    <info>
+      Integration by parts is used when there are two functions multiplied together. It can be 
+      thought of as the product rule of derivatives for anti derivatives. The formula is 
+      derived from the product rule of derivaties. `\int uv' = uv - \int vu'`
+    </info>
+    <exampleInput>
+      <input>\int  x^2 \ln(x) dx</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\int x \cos(5x) dx</input>
+    </exampleInput>
+
+    <exampleInput>
+      <input>\int  t e^{-3t} dt</input>
+    </exampleInput>
+
+    <exampleInput>
+      <input>\int (x^2+2x)\cos(x) dx</input>
+    </exampleInput>
+
+    <exampleInput>
+      <input>\int \ln(x^{\frac{1}{3}}) dx</input>
+    </exampleInput>
+
+    <exampleInput>
+      <input>\int_{0}^{1} x\cos(\pi x) dx</input>
+    </exampleInput>
+
+    <exampleInput>
+      <input>\int \arccos(x) dx</input>
+    </exampleInput>
+  </topic>
 
   <topic>
     <topicName>Defining functions</topicName>

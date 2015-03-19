@@ -119,7 +119,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 pEvalData.AddFailureMsg("Internal error evaluating antiderivative");
                 return this;
             }
-            ExComp upperEx = Simplifier.Simplify(upperEval, ref pEvalData);
+            ExComp upperEx = Simplifier.Simplify(new AlgebraTerm(upperEval), ref pEvalData);
 
             AlgebraTerm lowerEval = indefinite.Clone().ToAlgTerm().Substitute(_dVar, LowerLimit);
             if (lowerEval.Contains(_dVar))
@@ -127,7 +127,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 pEvalData.AddFailureMsg("Internal error evaluating antiderivative");
                 return this;
             }
-            ExComp lowerEx = Simplifier.Simplify(lowerEval, ref pEvalData);
+            ExComp lowerEx = Simplifier.Simplify(new AlgebraTerm(lowerEval), ref pEvalData);
 
             string integralStr = FinalToDispStr();
             pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + integralStr + "=F(" +
@@ -203,8 +203,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             AlgebraTerm finalTerm = finalEx.ToAlgTerm();
             finalTerm = finalTerm.Order();
             if (adGps.Length > 1)
-                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + thisStr + "=" + finalTerm.FinalToDispStr() + WorkMgr.EDM, 
+            {
+                string definiteStr = IsDefinite ? "|_{" + _lower.ToAlgTerm().FinalToDispStr() + "}^{" + _upper.ToAlgTerm().FinalToDispStr() + "}" : "";
+                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + thisStr + "=" + finalTerm.FinalToDispStr() + definiteStr + WorkMgr.EDM,
                     "Add all together.");
+            }
 
             return finalTerm;
         } 

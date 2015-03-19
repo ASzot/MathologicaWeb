@@ -226,21 +226,21 @@ namespace MathSolverWebsite.WebsiteHelpers
             return html;
         }
 
-        public static string TopicDataToHtmlTree(TopicDatas topics, string headerStr, HttpServerUtility server)
+        public static string TopicDataToHtmlTree(List<TopicPath> topics, string headerStr, HttpServerUtility server)
         {
             string html = "<p class='sectionHeading'>" + headerStr + "</p>";
 
             html += "<ul class='collapsibleList' id='collapseUl'>";
 
             string trashVal;
-            html += GetFormattedTopicTree(topics.TopicDataInfo, 0, server, out trashVal);
+            html += GetFormattedTopicTree(topics, 0, server, out trashVal);
 
             html += "</ul>";
 
             return html;
         }
 
-        private static string GetFormattedTopicTree(List<TopicData> topicDatas, int currentBranch, HttpServerUtility server, out string branchName)
+        private static string GetFormattedTopicTree(List<TopicPath> topicDatas, int currentBranch, HttpServerUtility server, out string branchName)
         {
             branchName = null;
             if (topicDatas.Count == 1)
@@ -249,20 +249,23 @@ namespace MathSolverWebsite.WebsiteHelpers
                 if (currentBranch == branch.Length)
                 {
                     branchName = branch[currentBranch - 1];
+
+                    string hintPopup = topicDatas[0].GetHintStr() == "" ? topicDatas[0].DispName : topicDatas[0].GetHintStr();
+
                     return "<li><a href='HelpTopic?Name=" + server.UrlEncode(topicDatas[0].DispName) + "' class='tooltip'>"
                         + branch[currentBranch - 1] + "<span>" + topicDatas[0].GetHintStr() + "</span></a></li>";
                 }
             }
 
             // Split by branch.
-            Dictionary<string, List<TopicData>> topicDataTree = new Dictionary<string, List<TopicData>>();
+            Dictionary<string, List<TopicPath>> topicDataTree = new Dictionary<string, List<TopicPath>>();
 
-            foreach (TopicData topicData in topicDatas)
+            foreach (TopicPath topicData in topicDatas)
             {
                 string[] branch = topicData.Path.Split('/');
                 string currentBranchStr = branch[currentBranch];
                 if (!topicDataTree.ContainsKey(currentBranchStr))
-                    topicDataTree.Add(currentBranchStr, new List<TopicData>());
+                    topicDataTree.Add(currentBranchStr, new List<TopicPath>());
                 topicDataTree[currentBranchStr].Add(topicData);
             }
 
