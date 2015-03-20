@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Web.Hosting;
 
 using MathSolverWebsite.WebsiteHelpers;
 
@@ -14,24 +15,39 @@ namespace MathSolverWebsite
         public const string EXAMPLE_FILE_PATH = "~/Content/Topics.xml";
 
         private static TopicDatas _topics = null;
-        private static bool _topicLoadFailure = false;
 
         public static TopicDatas Topics
         {
-            get { return _topics; }
+            get 
+            {
+                if (_topics == null)
+                    LoadTopics();
+                return _topics; 
+            }
             set { _topics = value; }
         }
+
+
 
 		protected void Page_Load(object sender, EventArgs e)
 		{
             searchTxtBox.Focus();
 
+            if (LoadTopics())
+                topicContentDiv.InnerHtml = HtmlHelper.TopicDataToHtmlTree(_topics.TopicDataInfo.Cast<TopicPath>().ToList(), "All Topics", "HelpTopic", Server);
+		}
+
+        public static bool LoadTopics()
+        {
             if (_topics == null)
+            {
                 _topics = new TopicDatas();
 
-            _topicLoadFailure = !_topics.LoadTopics(Server.MapPath(EXAMPLE_FILE_PATH));
-            topicContentDiv.InnerHtml = HtmlHelper.TopicDataToHtmlTree(_topics.TopicDataInfo.Cast<TopicPath>().ToList(), "All Topics", Server);
-		}
+                return _topics.LoadTopics(HostingEnvironment.MapPath(EXAMPLE_FILE_PATH));
+            }
+
+            return true;
+        }
 
         protected void searchBtn_Click(object sender, EventArgs e)
         {

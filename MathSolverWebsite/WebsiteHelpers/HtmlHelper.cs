@@ -226,21 +226,21 @@ namespace MathSolverWebsite.WebsiteHelpers
             return html;
         }
 
-        public static string TopicDataToHtmlTree(List<TopicPath> topics, string headerStr, HttpServerUtility server)
+        public static string TopicDataToHtmlTree(List<TopicPath> topics, string headerStr, string baseUrl, HttpServerUtility server)
         {
             string html = "<p class='sectionHeading'>" + headerStr + "</p>";
 
             html += "<ul class='collapsibleList' id='collapseUl'>";
 
             string trashVal;
-            html += GetFormattedTopicTree(topics, 0, server, out trashVal);
+            html += GetFormattedTopicTree(topics, 0, server, baseUrl, out trashVal);
 
             html += "</ul>";
 
             return html;
         }
 
-        private static string GetFormattedTopicTree(List<TopicPath> topicDatas, int currentBranch, HttpServerUtility server, out string branchName)
+        private static string GetFormattedTopicTree(List<TopicPath> topicDatas, int currentBranch, HttpServerUtility server, string baseUrl, out string branchName)
         {
             branchName = null;
             if (topicDatas.Count == 1)
@@ -252,7 +252,7 @@ namespace MathSolverWebsite.WebsiteHelpers
 
                     string hintPopup = topicDatas[0].GetHintStr() == "" ? topicDatas[0].DispName : topicDatas[0].GetHintStr();
 
-                    return "<li><a href='HelpTopic?Name=" + server.UrlEncode(topicDatas[0].DispName) + "' class='tooltip'>"
+                    return "<li><a href='" + baseUrl + "?Name=" + server.UrlEncode(topicDatas[0].DispName) + "' class='tooltip'>"
                         + branch[currentBranch - 1] + "<span>" + topicDatas[0].GetHintStr() + "</span></a></li>";
                 }
             }
@@ -274,7 +274,7 @@ namespace MathSolverWebsite.WebsiteHelpers
             foreach (var topicDataBranch in topicDataTree)
             {
                 string nextBranch;
-                string nextFormatted = GetFormattedTopicTree(topicDataBranch.Value, currentBranch, server, out nextBranch);
+                string nextFormatted = GetFormattedTopicTree(topicDataBranch.Value, currentBranch, server, baseUrl, out nextBranch);
 
                 if (nextBranch == null || nextBranch != topicDataBranch.Key)
                 {

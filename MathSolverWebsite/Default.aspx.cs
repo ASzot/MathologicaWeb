@@ -17,7 +17,7 @@ namespace MathSolverWebsite
     {
         private const string DEF_PARSE_ERR_MSG = "Invalid input";
 
-        private const string RAD_SES_KEY = "UseRad";
+        public const string RAD_SES_KEY = "UseRad";
         private const string LAST_INPUT_SES_KEY = "LastInput";
         private const string PARSE_CONTINUE_SES_KEY = "ParseContinue";
         private const string SOLVE_CONTINUE_SES_KEY = "SolveContinue";
@@ -113,11 +113,7 @@ namespace MathSolverWebsite
             contentUpdate.UpdateMode = UpdatePanelUpdateMode.Conditional;
 
             // Load the help topics.
-            if (HelpPage.Topics == null)
-            {
-                HelpPage.Topics = new TopicDatas();
-                HelpPage.Topics.LoadTopics(Server.MapPath(HelpPage.EXAMPLE_FILE_PATH));
-            }
+            HelpPage.LoadTopics();
 
             // For uploading analyze data to the cloud.
             if (_dataMgr == null)

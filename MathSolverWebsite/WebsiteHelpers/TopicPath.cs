@@ -7,8 +7,8 @@ namespace MathSolverWebsite.WebsiteHelpers
 {
     public interface TopicPath
     {
-        public string Path { get; }
-        public string DispName { get; }
-        public string GetHintStr();
+        string Path { get; }
+        string DispName { get; }
+        string GetHintStr();
     }
 }

@@ -1050,7 +1050,7 @@
     <info>
       The bottom part of the summation is what to first plug in for the variable and the top part is what to end on. Always increase the variable by one each time.
       In the example `\sum_(i=i_0)^(n)f(i)` the variable starts at `i_0` and ends at `n` incrementing by `1` each successive step. The `f(i)` is some function involving
-      the variable `i`. So the example given would evaluate to `\sum^n_{i=i_0}f(i)=f(i_0)+f(i_0+1)+f(i_0+2)+...+f(n)`.
+      the variable `i`. So the example given would evaluate to `\sum_{i=i_0}^{n}f(i)=f(i_0)+f(i_0+1)+f(i_0+2)+...+f(n)`.
     </info>
     <exampleInput>
       <inputDisp>\sum_{i=0}^5i^2</inputDisp>

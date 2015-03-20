@@ -67,9 +67,10 @@
 
             <div id='navbar'>
                 <ul>
-                   <li id="evalMenuBar"><a id="A1" runat="server" href='~/'><span>Evaluator</span></a></li>
-                   <li id="helpMenuBar"><a id="A2" runat="server" title="Help" href='~/HelpPage'><span>Help</span></a></li>
-                   <li id="preferencesMenuBar"><a id="A3" runat="server" title="Preferences" href="~/Products">Apps</a></li>
+                   <li id="evalMenuBar"><a id="evalLink" runat="server" href='~/'><span>Evaluator</span></a></li>
+                    <li id="equationsMenuBar"><a id="equationsLink" runat="server" href="~/Physics/PhysicsEquations"><span>Equations</span></a></li>
+                   <li id="helpMenuBar"><a id="helpLink" runat="server" title="Help" href='~/HelpPage'><span>Help</span></a></li>
+                   <li id="preferencesMenuBar"><a id="prefLink" runat="server" title="Preferences" href="~/Products">Apps</a></li>
                 </ul>
             </div>
 

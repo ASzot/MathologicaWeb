@@ -99,7 +99,7 @@ namespace MathSolverWebsite.WebsiteHelpers
             return trunDescTxt + "...";
         }
 
-        public override string GetHintStr()
+        public string GetHintStr()
         {
             string explainStr = GetTrunExplainStr();
             explainStr = Regex.Replace(explainStr, "<a(.*)?>", "<p>");
