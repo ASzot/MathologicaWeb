@@ -33,5 +33,10 @@ namespace MathSolverWebsite.Physics
 
             Title = nlblTopicData.DispName;
         }
+
+        protected void hiddenDisplayBtn_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

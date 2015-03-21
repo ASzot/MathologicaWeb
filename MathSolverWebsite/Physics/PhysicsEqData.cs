@@ -100,30 +100,6 @@ namespace MathSolverWebsite.Physics
             return SolveResult.Failure();
         }
 
-        public string[] GetOptions(List<string> variables)
-        {
-            List<string> checkVars = new List<string>();
-            foreach (string variable in variables)
-            {
-                checkVars.Add(variable);
-            }
-            for (int i = 0; i < variables.Count; ++i)
-            {
-                checkVars.Remove(variables[i]);
-            }
-
-            if (checkVars.Count == 0)
-                return new string[] { "Check" };
-
-            string[] options = new string[checkVars.Count];
-            for (int i = 0; i < options.Length; ++i)
-            {
-                options[i] = "Solve for " + options[i];
-            }
-
-            return options;
-        }
-
         public bool Init(string initStr, Dictionary<string, bool> variables, List<string> variableHints, List<string> unitListings, ref EvalData pEvalData)
         {
             if (variables.Count != unitListings.Count || variables.Count != variableHints.Count)
@@ -166,7 +142,7 @@ namespace MathSolverWebsite.Physics
                 string key = _variables.Keys.ElementAt(i);
 
                 finalStr += "<p>" + WorkMgr.STM + key + ":" + WorkMgr.EDM +
-                    "<span class='mathquill-editable' style='width: auto; margin-left: 10px; margin-right: 10px; position: relative; top: 20px; overflow-x: hidden;' ></span>" + 
+                    "<span id='" + key + "' class='mathquill-editable' onkeyup='mathInputChanged(event);' style='width: auto; margin-left: 10px; margin-right: 10px; position: relative; top: 20px; overflow-x: hidden;' ></span>" +
                     WorkMgr.STM + _unitListings[i] + WorkMgr.EDM + "</p>";
             }
 

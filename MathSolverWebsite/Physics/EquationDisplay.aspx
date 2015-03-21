@@ -36,11 +36,63 @@
                     "</div>");
             }
         %>
+
+    <script type="text/javascript" src="Scripts/Main.js"></script>
+
+    <script>
+
+        function inputMathEnter() {
+            var evalDropDownList = document.getElementById("<%= evaluteDropList.ClientID %>");
+            var txt = evalDropDownList.options[evalDropDownList.selectedIndex].text;
+            if (txt == "Input is too long." || txt == "Invalid input" || txt == "Enter input above." || txt == "Please wait...")
+                return;
+
+            $("#<%= hiddenDisplayBtn.ClientID %>").click();
+        }
+
+        function mathInputChanged(event) {
+            if (typeof event == 'object' && event !== null) {
+                if (event.which == 13 || event.key == 13) {
+                    inputMathEnter();
+                    return;
+                }
+            }
+
+            var evalDropDownList = document.getElementById("<%= evaluteDropList.ClientID %>");
+            //var txt = evalDropDownList.options[evalDropDownList.selectedIndex].text;
+
+            var solveVars = [];
+            $("span").each(function (index) {
+                var latex = $(this).mathquill("latex");
+                if (latex != "") {
+                    solvevars.push($(this).id);
+                }
+            });
+
+            // Clear the options list.
+            for (var i = 0; i < evalDropDownList.options.length; ++i) {
+                evalDropDownList.remove(i);
+            }
+
+            var 
+        }
+    </script>
+
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContent" runat="server">
-    <div runat="server" class="centeredDiv" style="padding: 10px;" id="contentDiv">
+    <div runat="server" class="centeredDiv" style="padding: 10px;">
+        <div id="contentDiv" runat="server">
 
+        </div>
+        <input type="button" title="Evaluate the input" class="btn-solve" onclick="inputMathEnter();" value="Solve" />
+        <span class="genDropDownWrapper">
+            <asp:DropDownList ID="evaluteDropList" runat="server" CssClass="genDropDown"></asp:DropDownList>
+        </span>
     </div>
+
+    <asp:Button CssClass="hiddenBtn" runat="server" ID="hiddenUpdateBtn" ClientIDMode="Static" OnClick="hiddenUpdateBtn_Click" />
+    <asp:TextBox CssClass="hiddenBtn" runat="server" ID="hiddenInputTxtBox" ClientIDMode="Static" />
+    <asp:Button CssClass="hiddenBtn" runat="server" ID="hiddenDisplayBtn" ClientIDMode="Static" OnClick="hiddenDisplayBtn_Click" />
     
     <%
             string u = Request.ServerVariables["HTTP_USER_AGENT"];
