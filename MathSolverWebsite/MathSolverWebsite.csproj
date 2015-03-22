@@ -154,7 +154,6 @@
     <Content Include="Account\Preferences.aspx" />
     <Content Include="ChangeLogForm.aspx" />
     <Content Include="Content\DarkTheme.css" />
-    <Content Include="Content\Equations.xml" />
     <Content Include="Content\Site.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
@@ -297,8 +296,6 @@
     <None Include="Properties\PublishProfiles\ml - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <None Include="Resources\Logo.bmp" />
-    <Content Include="Physics\EquationDisplay.aspx" />
-    <Content Include="Physics\PhysicsEquations.aspx" />
     <Content Include="Privacy.aspx" />
     <Content Include="Products.aspx" />
     <Content Include="Scripts\CollapsibleLists.js" />
@@ -514,22 +511,6 @@
     <Compile Include="MathSolverLibrary\TermType\SinusodalTermType.cs" />
     <Compile Include="MathSolverLibrary\TermType\SolveTermType.cs" />
     <Compile Include="MathSolverLibrary\TermType\TermType.cs" />
-    <Compile Include="Physics\EquationDisplay.aspx.cs">
-      <DependentUpon>EquationDisplay.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Physics\EquationDisplay.aspx.designer.cs">
-      <DependentUpon>EquationDisplay.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Physics\EquationMgr.cs" />
-    <Compile Include="Physics\PhysicsEqData.cs" />
-    <Compile Include="Physics\PhysicsEquations.aspx.cs">
-      <DependentUpon>PhysicsEquations.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Physics\PhysicsEquations.aspx.designer.cs">
-      <DependentUpon>PhysicsEquations.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Privacy.aspx.cs">
       <DependentUpon>Privacy.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
