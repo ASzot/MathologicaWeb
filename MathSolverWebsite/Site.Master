@@ -46,23 +46,7 @@
     </asp:ScriptManager>
         <header>
             <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-547fe09d07b6d60f" async="async"></script>
-            
-            <%
-                HttpCookie userPrefCookies = Request.Cookies["UserPref"];
-                
-                if (userPrefCookies != null)
-                {
-                    string colorTheme = userPrefCookies["ColorTheme"];
-                    if (colorTheme == "black")
-                        Response.Write("<link type='text/css' rel='stylesheet' href='/Content/DarkTheme.css'/>");
-                    else
-                        Response.Write("<link type='text/css' rel='stylesheet' href='/Content/WhiteTheme.css'/>");
-                }
-                else
-                    Response.Write("<link type='text/css' rel='stylesheet' href='/Content/WhiteTheme.css'/>");
-                
-                
-            %>
+            <link type='text/css' rel='stylesheet' href='/Content/WhiteTheme.css'/>
 
 
             <div id='navbar'>

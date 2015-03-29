@@ -151,7 +151,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="About.aspx" />
-    <Content Include="Account\Preferences.aspx" />
+    <Content Include="Account\Login.aspx" />
+    <Content Include="Account\Manage.aspx" />
+    <Content Include="Account\Register.aspx" />
     <Content Include="ChangeLogForm.aspx" />
     <Content Include="Content\DarkTheme.css" />
     <Content Include="Content\Site.css" />
@@ -346,15 +348,28 @@
     <Compile Include="About.aspx.designer.cs">
       <DependentUpon>About.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Account\Preferences.aspx.cs">
-      <DependentUpon>Preferences.aspx</DependentUpon>
+    <Compile Include="Account\Login.aspx.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Account\Preferences.aspx.designer.cs">
-      <DependentUpon>Preferences.aspx</DependentUpon>
+    <Compile Include="Account\Login.aspx.designer.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Account\Manage.aspx.cs">
+      <DependentUpon>Manage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Account\Manage.aspx.designer.cs">
+      <DependentUpon>Manage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Account\Register.aspx.cs">
+      <DependentUpon>Register.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Account\Register.aspx.designer.cs">
+      <DependentUpon>Register.aspx</DependentUpon>
     </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
-    <Compile Include="App_Start\AuthConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="ChangeLogForm.aspx.cs">
       <DependentUpon>ChangeLogForm.aspx</DependentUpon>
@@ -554,10 +569,10 @@
     <Compile Include="ViewSwitcher.ascx.designer.cs">
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
     </Compile>
-    <Compile Include="WebsiteHelpers\DataMgr.cs" />
-    <Compile Include="WebsiteHelpers\HtmlHelper.cs" />
-    <Compile Include="WebsiteHelpers\TopicData.cs" />
-    <Compile Include="WebsiteHelpers\TopicPath.cs" />
+    <Compile Include="Website_Logic\DataMgr.cs" />
+    <Compile Include="Website_Logic\HtmlHelper.cs" />
+    <Compile Include="Website_Logic\TopicData.cs" />
+    <Compile Include="Website_Logic\TopicPath.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -179,10 +179,6 @@
 
             changeMath = false;
         }
-
-        function exampleChange() {
-            alert("Changed");
-        }
     </script>
 
     <div id="mathInputArea">

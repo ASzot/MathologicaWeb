@@ -10,24 +10,24 @@
 namespace MathSolverWebsite.Account {
     
     
-    public partial class Preferences {
+    public partial class Register {
         
         /// <summary>
-        /// whiteOptionId control.
+        /// RegisterUser control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button whiteOptionId;
+        protected global::System.Web.UI.WebControls.CreateUserWizard RegisterUser;
         
         /// <summary>
-        /// blackOptionId control.
+        /// RegisterUserWizardStep control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button blackOptionId;
+        protected global::System.Web.UI.WebControls.CreateUserWizardStep RegisterUserWizardStep;
     }
 }
