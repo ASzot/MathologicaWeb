@@ -38,10 +38,11 @@
             <div class="w-clearfix all-input">
                 <div class="input-landing input"></div>
                 <div class="submission">
-                    <input style="height: 40px" type="button" class="button" value="Solve" />
+                    <input style="height: 40px" type="button" class="solve_button" value="Solve" />
                     <span class="genDropDownWrapper">
                         <asp:DropDownList CssClass="genDropDown" runat="server" ID="evaluateDropDownList"></asp:DropDownList>
                     </span>
+                    <input style="height: 40px" type="button" class="button" value="Edit+" />
                 </div>
             </div>
         </div>
