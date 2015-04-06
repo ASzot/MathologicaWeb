@@ -137,6 +137,15 @@ namespace MathSolverWebsite
 
                 if (eqQueryStr != null)
                 {
+                    javascriptOutput.InnerHtml =
+                    "<div id='box' class='jxgbox' style='margin-left:auto; margin-right:auto; width:100%; height:500px;'></div>" +
+                    "<script type='text/javascript'>" +
+                     "var board = JXG.JSXGraph.initBoard('box', {boundingbox: [-10, 10, 10, -10], axis:true});" +
+                        // The actual version would have x be the singular variable in the equation.
+                        // Like... function([var for]) { return Math.sin([var for]); }
+                     "board.create('functiongraph', [function(x) {return Math.sin(x);}]);" +        
+                    "</script>";
+
                     eqQueryStr = HtmlHelper.CleanQueryStr(eqQueryStr);
                     hiddenInputTxtBox.Text = eqQueryStr;
 
@@ -247,6 +256,7 @@ namespace MathSolverWebsite
                 }
             }
 
+            //solveResultHtml = "<script>function() {alert('Hello')}</scrpt>" + solveResultHtml;
             resultSectionDiv.InnerHtml = solveResultHtml;
             workSectionDiv.InnerHtml = workHtml;
 

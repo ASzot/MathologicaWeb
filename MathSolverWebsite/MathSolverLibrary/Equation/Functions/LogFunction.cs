@@ -297,9 +297,18 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             return finalStr;
         }
 
-        public override string ToSearchString()
+        public override string ToJavaScriptString(bool useRad)
         {
-            return "log(" + _baseEx.ToSearchString() + ")(" + InnerTerm.ToSearchString() + ")";
+            string innerStr = InnerTerm.ToJavaScriptString(useRad);
+            if (innerStr == null)
+                return null;
+
+            if (_baseEx is Constant && (_baseEx as Constant).Var.Var == "e")
+            {
+                return "Math.log(" + innerStr + ")";
+            }
+
+            return "(Math.log(" + innerStr + ") / Math.LN10)";
         }
 
         public override string ToString()

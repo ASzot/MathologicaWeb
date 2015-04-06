@@ -1134,13 +1134,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             return baseAsciiStr + "^(" + powerAsciiStr + ")";
         }
 
-        public override string ToSearchString()
+        public override string ToJavaScriptString(bool useRad)
         {
-            string baseStr = base.ToSearchString();
-            string powerStr = _power.ToSearchString();
-            powerStr = powerStr.SurroundWithParas();
+            string baseStr = base.ToJavaScriptString(useRad);
+            if (baseStr == null)
+                return null;
+            string powerStr = _power.ToJavaScriptString(useRad);
+            if (powerStr == null)
+                return null;
 
-            return baseStr + "^" + powerStr;
+            return "Math.pow(" + baseStr + "," + powerStr + ")";
         }
 
         public override string ToString()

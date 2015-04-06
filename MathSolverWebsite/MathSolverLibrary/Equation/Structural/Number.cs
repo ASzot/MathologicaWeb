@@ -938,11 +938,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return d_realComp.ToString();
         }
 
-        public override string ToSearchString()
+        public override string ToJavaScriptString(bool useRad)
         {
             if (HasImaginaryComp())
             {
-                return d_realComp.ToString() + "+i" + d_imagComp.ToString();
+                return null;
             }
             return d_realComp.ToString();
         }

@@ -156,6 +156,15 @@ namespace MathSolverWebsite.MathSolverLibrary
             return new EquationSet(clonedSides, _comparisonOps);
         }
 
+        public ExComp[] GetFuncDefComps()
+        {
+            if ((Left is FunctionDefinition && !(Right is FunctionDefinition)) ||
+                Left is AlgebraComp)
+                return new ExComp[] { Left, Right };
+
+            return null;
+        }
+
         public bool ContainsVar(AlgebraComp varFor)
         {
             foreach (ExComp side in _sides)
@@ -267,6 +276,8 @@ namespace MathSolverWebsite.MathSolverLibrary
                 pEvalData.AddFailureMsg("Internal error.");
                 return SolveResult.Failure();
             }
+
+            pEvalData.AttemptSetInputType(TermType.InputType.DerivImp);
 
             AlgebraComp withRespectTo = new AlgebraComp(withRespectToStr);
             AlgebraComp derivOf = new AlgebraComp(derivativeOfStr);

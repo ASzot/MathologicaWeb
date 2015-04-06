@@ -16,11 +16,36 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
         private bool _isWorkable = false;
         private Solving.QuadraticSolveMethod _quadSolveMethod;
         private Information_Helpers.FuncDefHelper _funcDefs;
+        private string[] _graphEqStrs = null;
+        private InputType _inputType = InputType.Invalid;
+        private InputAddType _inputAddType = InputAddType.Invalid;
+
+
+        public string InputTypeStr
+        {
+            get
+            {
+                return InputTypeHelper.ToDescStr(_inputType, _inputAddType);
+            }
+        }
 
         public Solving.QuadraticSolveMethod QuadSolveMethod
         {
             get { return _quadSolveMethod; }
             set { _quadSolveMethod = value; } 
+        }
+
+        public string[] GraphEqStrs
+        {
+            get { return _graphEqStrs; }
+            set
+            {
+                _graphEqStrs = new string[value.Length];
+                for (int i = 0; i < value.Length; ++i)
+                {
+                    _graphEqStrs[i] = value[i].Replace("+-", "-");
+                }
+            }
         }
 
         public Information_Helpers.FuncDefHelper FuncDefs
@@ -81,6 +106,66 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             _useRad = useRad;
             _workMgr = workMgr;
             _funcDefs = pFuncDefHelper;
+        }
+
+        public void AttemptSetInputType(InputType inputType)
+        {
+            if (_inputType == (MathSolverLibrary.TermType.InputType.Invalid))
+                _inputType = inputType;
+        }
+
+        public void AddInputType(InputAddType inputType)
+        {
+            if (_inputAddType == (MathSolverLibrary.TermType.InputAddType.Invalid))
+                _inputAddType = inputType;
+        }
+
+        public void SwitchInputTypeForInequality()
+        {
+            _inputType = InputTypeHelper.ToInequalityType(_inputType);
+        }
+
+        public bool AttemptSetGraphData(ExComp graphEx)
+        {
+            if (_graphEqStrs == null)
+            {
+                AlgebraTerm term = graphEx.ToAlgTerm();
+                var vars = term.GetAllAlgebraCompsStr();
+                if (vars.Count != 1)
+                    return false;
+
+                string graphStr = term.ToJavaScriptString(_useRad);
+                if (graphStr != null)
+                {
+                    GraphEqStrs = new string[1] { graphStr };
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public bool AttemptSetGraphData(string str)
+        {
+            if (_graphEqStrs == null)
+            {
+                GraphEqStrs = new string[1] { str };
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool AttemptSetGraphData(string[] strs)
+        {
+            if (strs == null)
+                return false;
+            if (_graphEqStrs == null)
+            {
+                GraphEqStrs = strs;
+                return true;
+            }
+            return false;
         }
 
         public void AddFailureMsg(string msg)

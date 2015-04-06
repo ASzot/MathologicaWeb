@@ -141,6 +141,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             ExComp result = SubOp.StaticCombine(upperEx, lowerEx);
 
+            pEvalData.AddInputType(TermType.InputAddType.IntDef);
+
             string resultStr1 = WorkMgr.ExFinalToAsciiStr(result);
             if (resultStr0 != resultStr1)
                 pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + integralStr + "=" + resultStr1 + WorkMgr.EDM);
@@ -268,12 +270,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             return "\\int" + boundariesStr + "(" + InnerTerm.ToMathAsciiString() + ")\\d" + _dVar.ToMathAsciiString();
         }
 
-        public override string ToSearchString()
+        public override string ToJavaScriptString(bool useRad)
         {
-            string boundariesStr = "";
-            if (IsDefinite)
-                boundariesStr = "_{" + LowerLimit.ToSearchString() + "}^{" + UpperLimit.ToSearchString() + "}";
-            return "\\int" + boundariesStr + "(" + InnerTerm.ToSearchString() + ")\\d" + _dVar.ToSearchString();
+            return null;
         }
 
         public override string ToString()

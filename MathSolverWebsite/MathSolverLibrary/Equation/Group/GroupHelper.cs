@@ -729,14 +729,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return finalStr;
         }
 
-        public static string ToSearchableString(this ExComp[] group)
-        {
-            string finalStr = "";
-            foreach (ExComp groupComp in group)
-                finalStr += groupComp.ToSearchString();
-            return finalStr;
-        }
-
         public static string ToTexString(this ExComp[] group)
         {
             string finalStr = "";

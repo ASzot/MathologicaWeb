@@ -328,9 +328,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             return s_name + _useStart + InnerTerm.ToMathAsciiString() + _useEnd;
         }
 
-        public override string ToSearchString()
+        public override string ToJavaScriptString(bool useRad)
         {
-            return s_name + _useStart + InnerTerm.ToSearchString() + _useEnd;
+            string innerStr = InnerTerm.ToJavaScriptString(useRad);
+            if (InnerTerm == null)
+                return null;
+            return "Math." + s_name + "(" + innerStr + ")";
         }
 
         public override string ToString()

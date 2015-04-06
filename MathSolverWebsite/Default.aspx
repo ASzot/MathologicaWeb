@@ -2,12 +2,16 @@
 
 <asp:Content runat="server" ID="HeadContent" ContentPlaceHolderID="HeadContent">
 <%--    <script src="https://www.desmos.com/api/v0.4/calculator.js?apiKey=dcb31709b452b1cf9dc26972add0fda6"></script>--%>
+    
 </asp:Content>
 
 <asp:Content runat="server" ID="FeaturedContent" ContentPlaceHolderID="FeaturedContent">
 
     <meta name="description" 
         content="A math solver capable of showing step by step work and explanations for free. Solve algebra, trig, and calculus problems with detailed work." />
+    
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jsxgraph/0.99.3/jsxgraphcore.js"></script>
+
 
     <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=AM_HTMLorMML"></script>
 
@@ -215,6 +219,10 @@
                 </ContentTemplate>
             </asp:UpdatePanel>
         </asp:Panel>
+        
+        <div runat="server" id="javascriptOutput">
+
+        </div>
 
         <asp:UpdatePanel runat="server">
             <ContentTemplate>

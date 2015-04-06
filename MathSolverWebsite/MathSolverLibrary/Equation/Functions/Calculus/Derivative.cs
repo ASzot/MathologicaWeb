@@ -242,15 +242,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 InnerEx.ToMathAsciiString() + "])";
         }
 
-        public override string ToSearchString()
+        public override string ToJavaScriptString(bool useRad)
         {
-            string orderStr = _order == 1 ? "" : "^" + _order.ToString();
-            if (!_isDefined)
-            {
-                return "(d" + orderStr + _derivOf.ToSearchString() + ")/(d" + _withRespectTo.ToSearchString() + orderStr + ")";
-            }
-            return "(d" + orderStr + ")/(d" + _withRespectTo.ToSearchString() + orderStr + ")[" +
-                InnerEx.ToSearchString() + "]";
+            return null;
         }
 
         public override string ToString()
@@ -302,6 +296,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             if (useChainRule)
             {
+                pEvalData.AddInputType(TermType.InputAddType.DerivCR);
                 pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]`", "Next take the derivative of the inner function.", abs.InnerTerm);
 
                 ExComp innerDeriv = TakeDerivativeOf(abs.InnerTerm, ref pEvalData);
@@ -331,8 +326,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]={1}`",
                 "Use the common definition that `d/(dx)[" + invTrigFunc.FuncName + "(x)]=" + invTrigFunc.GetDerivativeOfStr() + "`.", invTrigFunc, deriv);
 
+            pEvalData.AttemptSetInputType(TermType.InputType.DerivInvTrig);
+
             if (useChainRule)
             {
+                pEvalData.AddInputType(TermType.InputAddType.DerivCR);
                 pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]`", "Next take the derivative of the inner function.", invTrigFunc.InnerTerm);
 
                 // Apply the chain rule.
@@ -380,8 +378,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 deriv = DivOp.StaticCombine(Number.One, MulOp.StaticWeakCombine(log.InnerTerm, LogFunction.Ln(log.Base)));
             }
 
+            pEvalData.AttemptSetInputType(TermType.InputType.DerivLog);
+
             if (useChainRule)
             {
+                pEvalData.AddInputType(TermType.InputAddType.DerivCR);
                 pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]`", "Next take the derivative of the inner function.", log.InnerTerm);
 
                 ExComp innerDeriv = TakeDerivativeOf(log.InnerTerm, ref pEvalData);
@@ -460,8 +461,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]={1}`",
                 "Through using the power rule which states `d/(dx)[x^n]=nx^(n-1)`.", powFunc, term);
 
+            pEvalData.AttemptSetInputType(TermType.InputType.DerivPoly);
+
             if (useChainRule)
             {
+                pEvalData.AddInputType(TermType.InputAddType.DerivCR);
                 pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]`", "Next take the derivative of the inner function.", powFunc.Base);
                 // The chain rule has to be applied here.
                 ExComp innerDeriv = TakeDerivativeOf(powFunc.Base, ref pEvalData);
@@ -498,8 +502,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]={1}`", "Using the exponent rule which states `d/(dx)[a^x]=ln(a)a^x`", powFunc, deriv);
             }
 
+            pEvalData.AttemptSetInputType(TermType.InputType.DerivExp);
+
             if (useChainRule)
             {
+                pEvalData.AddInputType(TermType.InputAddType.DerivCR);
                 pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]`", "Next take the derivative of the inner function.", powFunc.Power);
 
                 // Apply chain rule.
@@ -528,8 +535,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]={1}`",
                 "Use the common definition that `d/(dx)[" + trigFunc.FuncName + "(x)]=" + trigFunc.GetDerivativeOfStr() + "`.", trigFunc, deriv);
 
+            pEvalData.AttemptSetInputType(TermType.InputType.DerivTrig);
+
             if (useChainRule)
             {
+                pEvalData.AddInputType(TermType.InputAddType.DerivCR);
                 pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]`", "Next take the derivative of the inner function.", trigFunc.InnerTerm);
 
                 ExComp innerDeriv = TakeDerivativeOf(trigFunc.InnerTerm, ref pEvalData);
