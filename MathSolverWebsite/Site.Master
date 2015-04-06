@@ -1,18 +1,24 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="MathSolverWebsite.SiteMaster" %>
 <%@ Import Namespace="System.Text.RegularExpressions" %>
 
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head runat="server">
     <meta charset="utf-8" />
     <title><%: Page.Title %></title>
+
     <link href="Images/favlogo.ico" rel="shortcut icon" type="image/x-icon" />
     <link href="Images/favlogo.ico" rel="icon" type="images/ico" />
+
     <asp:PlaceHolder runat="server">     
           <%: Scripts.Render("~/bundles/modernizr") %>
     </asp:PlaceHolder>  
     <webopt:BundleReference runat="server" Path="~/Content/css" /> 
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <asp:ContentPlaceHolder runat="server" ID="HeadContent" />
 </head>
 <body>
@@ -45,24 +51,38 @@
         </Scripts>
     </asp:ScriptManager>
         <header>
-            <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-547fe09d07b6d60f" async="async"></script>
-            <link type='text/css' rel='stylesheet' href='/Content/WhiteTheme.css'/>
+            <link rel="stylesheet" type="text/css" href="/Content/css/normalize.css">
+            <link rel="stylesheet" type="text/css" href="/Content/css/mainstyle.css">
+            <link rel="stylesheet" type="text/css" href="/Content/css/mlogica-final.css">
+            <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js"></script>
+            <script>
+                WebFont.load({
+                    google: {
+                        families: ["Roboto:100,regular,500"]
+                    }
+                });
+            </script>
 
-
-            <div id='navbar'>
-                <ul>
-                   <li id="evalMenuBar"><a id="evalLink" runat="server" href='~/'><span>Evaluator</span></a></li>
-                   <li id="helpMenuBar"><a id="helpLink" runat="server" title="Help" href='~/HelpPage'><span>Help</span></a></li>
-                   <li id="preferencesMenuBar"><a id="prefLink" runat="server" title="Preferences" href="~/Products">Apps</a></li>
-                </ul>
+            
+            <div class="w-nav navbar" data-collapse="medium" data-animation="default" data-duration="400" data-contain="1">
+            <div class="w-container">
+                <nav class="w-nav-menu" role="navigation">
+                    <a class="w-nav-link nav-link" href="index.html">Calculator</a>
+                    <a class="w-nav-link nav-link" href="praticehelp.html">Practice</a>
+                    <a class="w-nav-link nav-link" href="account-creation.html">Account</a>
+                </nav>
+                <div class="w-nav-button">
+                <div class="w-icon-nav-menu"></div>
+                </div>
+            </div>
             </div>
 
-            <p class="site-title">
-                <a runat="server" href="~/"><img style="border:0;" src="/Images/Logo.png" alt="Mathologica" width="300" height="75" /></a>
-            </p>
+            <!-- Logo -->
+            <div><img class="mathlogo" src="/Images/MathologicaLogo.png" width="263" alt="Mathologica">
+                <div class="moto">Computation, simplified</div>
+            </div>
 
-            <link rel="stylesheet" type="text/css" href="/mathquill/mathquill.css" />
-            <script src="/mathquill/mathquill.min.js"></script>
+
         </header>
         <div id="body">
             <asp:ContentPlaceHolder runat="server" ID="FeaturedContent" />
@@ -71,27 +91,35 @@
             </section>
         </div>
         
-        <footer>
-            <div>
-                <div class="float-left">
-                    <div style="margin: 5px;">
-                        <div class="addthis_horizontal_follow_toolbox"></div>
+        <div class="w-section">
+            <div class="w-container feeback">
+                <div class="feedback">
+                <div class="w-row">
+                    <div class="w-col w-col-6 w-clearfix">
+                        <div class="footer-links"><a class="tou-link" href="terms-of-useprivacy.html">Terms of Use |</a><a class="tou-link" href="terms-of-useprivacy.html">&nbsp;Privacy Policy |</a><a class="tou-link" href="mailto:info.mathologica@gmail.com?subject=Inquiry">&nbsp;Contact us</a>
+                            <div class="tou-link">2015 – Mathologica, LLC.&nbsp;</div>
+                        </div>
                     </div>
-                    <a runat="server" href="~/About" class="navBarSelection">About</a>
-                    <a runat="server" href="~/Terms" class="navBarSelection">Terms</a>
-                    <a runat="server" href="~/Privacy" class="navBarSelection">Privacy</a>
-                    <p>&copy; <%: DateTime.Now.Year %> - Mathologica, LLC</p>
-                </div>
-                <div class="float-right" style="margin-right: 10px;">
-                    <p class="importantText">    
-                        <a id="A4" runat="server" href="~/Account/Preferences">
-                            Preferences
+                    <div class="w-col w-col-6">
+                        <a class="w-inline-block" href="https://twitter.com/mathologica" target="_blank">
+                            <img class="tw-link" src="/Images/Branding/twitter.png" width="89" alt="Twitter">
                         </a>
-                    </p>
+                        <a class="w-inline-block" href="https://www.facebook.com/pages/Mathologica/388128111363690" target="_blank">
+                            <img class="fb" src="/Images/Branding/facebook.png" width="89" alt="Facebook">
+                        </a>
+                        <a class="w-inline-block" href="#">
+                            <img class="fb" src="Images/Branding/mail.png" width="89" alt="551fb3d78177a9a77de94426_mail.png">
+                        </a>
+                    </div>
+                </div>
                 </div>
             </div>
-            
-        </footer>
+        </div>
+
+        <script type="text/javascript" src="/Scripts/mainscript.js"></script>
+        <!-- Mathquill include -->
+        <link rel="stylesheet" type="text/css" href="/mathquill/mathquill.css" />
+        <script src="/mathquill/mathquill.min.js"></script>
     </form>
 </body>
 </html>

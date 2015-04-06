@@ -150,13 +150,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="About.aspx" />
     <Content Include="Account\Login.aspx" />
     <Content Include="Account\Manage.aspx" />
     <Content Include="Account\Register.aspx" />
-    <Content Include="ChangeLogForm.aspx" />
-    <Content Include="Content\DarkTheme.css" />
-    <Content Include="Content\Site.css" />
+    <Content Include="Content\css\mlogica-final.css" />
+    <Content Include="Content\css\normalize.css" />
+    <Content Include="Content\css\mainstyle.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -211,37 +210,20 @@
     <Content Include="Content\themes\base\minified\jquery.ui.slider.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
-    <None Include="Images\Cross.png" />
     <Content Include="Content\Topics.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Content\WhiteTheme.css" />
     <Content Include="ErrorPage.aspx" />
     <Content Include="google8728d16f96719a44.html" />
-    <Content Include="HelpPage.aspx" />
-    <Content Include="HelpTopic.aspx" />
-    <Content Include="HelpTopicSearch.aspx" />
     <Content Include="Help\CommonProblems.aspx" />
     <Content Include="Help\FormattingTips.aspx" />
     <Content Include="Help\GeneralHelp.aspx" />
     <Content Include="Http404ErrorPage.aspx" />
-    <Content Include="Images\258x67_WP_Store_cyan.png" />
-    <Content Include="Images\css-tooltip-gradient-bg.png" />
-    <Content Include="Images\en_app_rgb_wo_60.png" />
-    <Content Include="Images\ErrorLogo.png" />
-    <Content Include="Images\Examples\ExampleClear.png" />
-    <Content Include="Images\Examples\ExampleDivFrac.PNG" />
-    <Content Include="Images\Examples\ExampleEvaluateSelection.png" />
-    <Content Include="Images\Examples\ExampleFormattedFrac.PNG" />
-    <Content Include="Images\Examples\ExampleSlashFrac.PNG" />
-    <Content Include="Images\Examples\ExampleSOE_0.PNG" />
-    <Content Include="Images\Examples\ExampleSOE_1.PNG" />
-    <Content Include="Images\Examples\ExampleSOE_2.PNG" />
-    <Content Include="Images\favlogo.ico" />
-    <Content Include="Images\ListCollapseBtn.png" />
-    <Content Include="Images\ListExpandBtn.png" />
+    <Content Include="Images\Branding\facebook.png" />
     <Content Include="Images\loading.gif" />
-    <Content Include="Images\Logo.png" />
+    <Content Include="Images\Branding\mail.png" />
+    <Content Include="Images\MathologicaLogo.png" />
+    <Content Include="Images\Branding\twitter.png" />
     <Content Include="mathquill\font\stixgeneral-bundle\STIXFontLicense2010.txt" />
     <Content Include="mathquill\font\stixgeneral-bundle\stixgeneral-webfont.svg" />
     <Content Include="mathquill\font\stixgeneral-bundle\stixgeneralbol-webfont.svg" />
@@ -297,16 +279,12 @@
     <None Include="Properties\PublishProfiles\ml - Web Deploy %287%29.pubxml" />
     <None Include="Properties\PublishProfiles\ml - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
-    <None Include="Resources\Logo.bmp" />
-    <Content Include="Privacy.aspx" />
-    <Content Include="Products.aspx" />
-    <Content Include="Scripts\CollapsibleLists.js" />
     <Content Include="Scripts\jquery-1.8.2.js" />
     <Content Include="Scripts\jquery-1.8.2.min.js" />
     <Content Include="Scripts\jquery-ui-1.8.24.js" />
     <Content Include="Scripts\jquery-ui-1.8.24.min.js" />
-    <Content Include="Scripts\Main.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\mainscript.js" />
     <Content Include="Scripts\WebForms\DetailsView.js" />
     <Content Include="Scripts\WebForms\Focus.js" />
     <Content Include="Scripts\WebForms\GridView.js" />
@@ -331,8 +309,6 @@
     <Content Include="Scripts\_references.js" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
-    <Content Include="sitemap.txt" />
-    <Content Include="Terms.aspx" />
     <Content Include="ViewSwitcher.ascx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -341,13 +317,6 @@
     <Content Include="Site.Mobile.Master" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="About.aspx.cs">
-      <DependentUpon>About.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="About.aspx.designer.cs">
-      <DependentUpon>About.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Account\Login.aspx.cs">
       <DependentUpon>Login.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -371,13 +340,6 @@
     </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="ChangeLogForm.aspx.cs">
-      <DependentUpon>ChangeLogForm.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ChangeLogForm.aspx.designer.cs">
-      <DependentUpon>ChangeLogForm.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -394,27 +356,6 @@
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
-    <Compile Include="HelpPage.aspx.cs">
-      <DependentUpon>HelpPage.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="HelpPage.aspx.designer.cs">
-      <DependentUpon>HelpPage.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="HelpTopic.aspx.cs">
-      <DependentUpon>HelpTopic.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="HelpTopic.aspx.designer.cs">
-      <DependentUpon>HelpTopic.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="HelpTopicSearch.aspx.cs">
-      <DependentUpon>HelpTopicSearch.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="HelpTopicSearch.aspx.designer.cs">
-      <DependentUpon>HelpTopicSearch.aspx</DependentUpon>
     </Compile>
     <Compile Include="Help\CommonProblems.aspx.cs">
       <DependentUpon>CommonProblems.aspx</DependentUpon>
@@ -527,21 +468,7 @@
     <Compile Include="MathSolverLibrary\TermType\SinusodalTermType.cs" />
     <Compile Include="MathSolverLibrary\TermType\SolveTermType.cs" />
     <Compile Include="MathSolverLibrary\TermType\TermType.cs" />
-    <Compile Include="Privacy.aspx.cs">
-      <DependentUpon>Privacy.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Privacy.aspx.designer.cs">
-      <DependentUpon>Privacy.aspx</DependentUpon>
-    </Compile>
     <Compile Include="ProblemGen\HelpLinks.cs" />
-    <Compile Include="Products.aspx.cs">
-      <DependentUpon>Products.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Products.aspx.designer.cs">
-      <DependentUpon>Products.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
@@ -556,13 +483,6 @@
     </Compile>
     <Compile Include="Site.Mobile.Master.designer.cs">
       <DependentUpon>Site.Mobile.Master</DependentUpon>
-    </Compile>
-    <Compile Include="Terms.aspx.cs">
-      <DependentUpon>Terms.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Terms.aspx.designer.cs">
-      <DependentUpon>Terms.aspx</DependentUpon>
     </Compile>
     <Compile Include="ViewSwitcher.ascx.cs">
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
