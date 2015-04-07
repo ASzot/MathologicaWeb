@@ -31,54 +31,39 @@
 </asp:Content>
 
 <asp:Content runat="server" ID="BodyContent" ContentPlaceHolderID="MainContent">
-    
-    <div class="w-row main-input">
-
-        <div class="w-col w-col-7 w-col-medium-6 w-col-small-6 w-col-tiny-6 w-clearfix left">
-            <div class="w-clearfix all-input">
-                <div class="input-landing input"></div>
-                <div class="submission">
-                    <input style="height: 40px" type="button" class="solve_button" value="Solve" />
-                    <span class="genDropDownWrapper">
-                        <asp:DropDownList CssClass="genDropDown" runat="server" ID="evaluateDropDownList"></asp:DropDownList>
-                    </span>
-                    <input style="height: 40px" type="button" class="button" value="Edit+" />
+    <div id="panel-container">
+        <div id="left-paneling">
+            <div id="work-space">
+            </div>
+            <div id="eval-space">
+                <input type="button" class="solve-btn" value="Solve" />
+                <span class="gen-drop-down-wrapper">
+                    <asp:DropDownList ID="DropDownList1" runat="server" CssClass="gen-drop-down"></asp:DropDownList>
+                </span>
+                <div class="tool-bar-btn-space">
+                    <input type="button" class="gen-btn" value="CLR" />
+                    <input type="button" class="gen-btn" style="font-size: 48px;" value="-" />
+                    <input type="button" class="gen-btn" style="font-size: 32px;" value="+" />
                 </div>
+            </div>
+            <div class="ad-space" style="height: 90px; width: 70%">
+                <p>(Ad here)</p>
             </div>
         </div>
 
-        <div class="w-col w-col-5 w-col-medium-6 w-col-small-6 w-col-tiny-6 w-clearfix right">
-            <div class="symbols">
-                <div class="w-tabs" data-duration-in="300" data-duration-out="100">
-                    <div class="w-tab-menu tabs-menu">
-                    <a class="w-tab-link w-inline-block tab-link" data-w-tab="Tab 1">
-                        <div class="text-link">Basic</div>
-                    </a>
-                    <a class="w-tab-link w-inline-block tab-link" data-w-tab="Tab 2">
-                        <div class="text-link">Trig</div>
-                    </a>
-                    <a class="w-tab-link w-inline-block tab-link" data-w-tab="Tab 3">
-                        <div class="text-link">Calc</div>
-                    </a>
-                    <a class="w-tab-link w--current w-inline-block tab-link" data-w-tab="Tab 4">
-                        <div class="text-link">Symbols</div>
-                    </a>
-                    </div>
-                    <div class="w-tab-content">
-                    <div class="w-tab-pane tab-content" data-w-tab="Tab 1"></div>
-                    <div class="w-tab-pane tab-content" data-w-tab="Tab 2"></div>
-                    <div class="w-tab-pane tab-content" data-w-tab="Tab 3"></div>
-                    <div class="w-tab-pane w--tab-active tab-content" data-w-tab="Tab 4"></div>
-                    </div>
-                </div>
+        <div id="right-paneling">
+            <div id="toolbar-space">
+
             </div>
-            <div class="symbols social-media"></div>
-            <div class="symbols"></div>
+
+            <div id="pod-space">
+
+            </div>
+
+            <div id="account-space">
+
+            </div>
         </div>
+        <div style="clear: both;"></div>
     </div>
-
-    <div class="w-section">
-        <div class="ad"></div>
-    </div>
-
 </asp:Content>

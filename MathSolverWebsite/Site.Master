@@ -19,6 +19,15 @@
     <webopt:BundleReference runat="server" Path="~/Content/css" /> 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+      <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js"></script>
+      <script>
+          WebFont.load({
+              google: {
+                  families: ["Roboto:100,regular,500"]
+              }
+          });
+      </script>
+
     <asp:ContentPlaceHolder runat="server" ID="HeadContent" />
 </head>
 <body>
@@ -51,70 +60,54 @@
         </Scripts>
     </asp:ScriptManager>
         <header>
-            <link rel="stylesheet" type="text/css" href="/Content/css/normalize.css">
-            <link rel="stylesheet" type="text/css" href="/Content/css/mainstyle.css">
             <link rel="stylesheet" type="text/css" href="/Content/css/mlogica-final.css">
-            <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js"></script>
-            <script>
-                WebFont.load({
-                    google: {
-                        families: ["Roboto:100,regular,500"]
-                    }
-                });
-            </script>
-
-            
-            <div class="w-nav navbar" data-collapse="medium" data-animation="default" data-duration="400" data-contain="1">
-            <div class="w-container">
-                <nav class="w-nav-menu" role="navigation">
-                    <a class="w-nav-link nav-link" href="index.html">Calculator</a>
-                    <a class="w-nav-link nav-link" href="praticehelp.html">Practice</a>
-                    <a class="w-nav-link nav-link" href="account-creation.html">Account</a>
-                </nav>
-                <div class="w-nav-button">
-                <div class="w-icon-nav-menu"></div>
-                </div>
-            </div>
-            </div>
-
-            <!-- Logo -->
-            <div><img class="mathlogo" src="/Images/MathologicaLogo.png" width="263" alt="Mathologica">
-                <div class="moto">Computation, simplified</div>
-            </div>
-
-
         </header>
-        <div id="body">
-            <asp:ContentPlaceHolder runat="server" ID="FeaturedContent" />
-            <section class="content-wrapper main-content clear-fix">
+
+        <div id="container">
+            <div id="header">
+                <div id="title-block">
+                    <img class="mathlogo" src="Images/MathologicaLogo.png" width="263" alt="Mathologica" />
+                    <div class="moto">Computation, simplified</div>
+                </div>
+
+                <nav class="nav-menu">
+                    <a class="w-nav-link nav-link" href="asdf.aspx">Calculator</a>
+                    <a class="w-nav-link nav-link" href="asdf.aspx">Practice</a>
+                    <a class="w-nav-link nav-link" href="asdf.aspx">Apps</a>
+                </nav>
+            </div>
+
+            <div id="body">
+                <asp:ContentPlaceHolder runat="server" ID="FeaturedContent" />
                 <asp:ContentPlaceHolder runat="server" ID="MainContent" />
-            </section>
-        </div>
-        
-        <div class="w-section">
-            <div class="w-container feeback">
-                <div class="feedback">
-                <div class="w-row">
-                    <div class="w-col w-col-6 w-clearfix">
-                        <div class="footer-links"><a class="tou-link" href="terms-of-useprivacy.html">Terms of Use |</a><a class="tou-link" href="terms-of-useprivacy.html">&nbsp;Privacy Policy |</a><a class="tou-link" href="mailto:info.mathologica@gmail.com?subject=Inquiry">&nbsp;Contact us</a>
-                            <div class="tou-link">2015 – Mathologica, LLC.&nbsp;</div>
+            </div>
+
+            <div id="footer">
+                <div class="centered-col">
+                    <div class="footer-links">
+                        <a href="asdf.aspx">Terms |</a>
+                        <a href="asdf.aspx">Privacy |</a>
+                        <a href="asdf.aspx">About</a>
+                        <div class="copy-right">
+                            &copy; <%: DateTime.Now.Year %> - Mathologica, LLC &nbsp;
                         </div>
                     </div>
-                    <div class="w-col w-col-6">
-                        <a class="w-inline-block" href="https://twitter.com/mathologica" target="_blank">
-                            <img class="tw-link" src="/Images/Branding/twitter.png" width="89" alt="Twitter">
+
+                    <div style="float: right;">
+                        <a class="img-disp" href="https://twitter.com/mathologica">
+                            <img class="tw-link" src="Images/Branding/twitter.png" width="89" alt="Mathologica Twitter" />
                         </a>
-                        <a class="w-inline-block" href="https://www.facebook.com/pages/Mathologica/388128111363690" target="_blank">
-                            <img class="fb" src="/Images/Branding/facebook.png" width="89" alt="Facebook">
+                        <a class="img-disp" href="https://www.facebook.com/pages/Mathologica/388128111363690">
+                            <img class="fb" src="Images/Branding/facebook.png" width="89" alt="Mathologica Facebook" />
                         </a>
-                        <a class="w-inline-block" href="#">
-                            <img class="fb" src="Images/Branding/mail.png" width="89" alt="551fb3d78177a9a77de94426_mail.png">
+                        <a class="img-disp" href="asdf.aspx">
+                            <img class="mail" src="Images/Branding/mail.png" width="89" alt="Mathologica Mail" />
                         </a>
                     </div>
                 </div>
-                </div>
             </div>
         </div>
+        
 
         <script type="text/javascript" src="/Scripts/mainscript.js"></script>
         <!-- Mathquill include -->

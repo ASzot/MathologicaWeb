@@ -17,8 +17,8 @@ namespace MathSolverWebsite
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            evaluateDropDownList.Items.Clear();
-            evaluateDropDownList.Items.Add("Tester eval input");
+            //evaluateDropDownList.Items.Clear();
+            //evaluateDropDownList.Items.Add("Tester eval input");
         }
     }
 }
