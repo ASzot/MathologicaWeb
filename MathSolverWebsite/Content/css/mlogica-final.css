@@ -24,38 +24,187 @@ body {
    width: 100%;
 }
 #footer {
-   position:fixed;
-   bottom:0;
-   width:100%;
-   padding: 10px;
-   height:60px;   /* Height of the footer */
-   background: #ecf0f1;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 10px;
+    height: 60px; /* Height of the footer */
+    background: #ecf0f1;
 }
 
 #work-space {
 
 }
 
+.pob-problem {
+    display: inline-block;
+    transition: all 0.5s ease;
+}
 
+    .pob-problem:hover {
+        -moz-transform: scale(1.1);
+        -ms-transform: scale(1.1);
+        -webkit-transform: scale(1.1);
+        transform: scale(1.1);
+        color: #339ce1;
+        background-color: #F5F5F5;
+    }
+
+.pob-title {
+    font-size: 20px;
+    display: inline-block;
+    margin-bottom: 0px;
+}
+
+.account-division {
+    height: 50px;
+    width: 50%;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 50px;
+    font-size: 28px;
+}
+
+    .account-division:hover {
+        cursor: pointer;
+    }
+
+#signup-space {
+    background-color: #3498db;
+    float: left;
+    color: white;
+    border-right: 1px solid #adadad;
+}
+
+#login-space {
+    position: absolute;
+    right: 0px;
+    background-color: #1abc9c;
+    color: white;
+    float: right;
+}
+
+#tool-bar-selection-space {
+    font-size: 22px;
+    padding: 5px;
+    text-align: center;
+    margin-bottom: 5px;
+    background-color: #F5F5F5;
+}
+
+.subject-bar-btn {
+    display: inline-block;
+    padding: 12px;
+    padding-bottom: 5px;
+    margin-bottom: 7px;
+    margin-top: 7px;
+    border-bottom: 2px solid #3498db;
+}
+
+.subject-bar-btn:hover {
+    cursor: pointer;
+    color: #3498db;
+    box-shadow: inset 0 1px 0 5px #3498db;
+
+    transition: all 0.3s ease;
+}
+
+#toolbar-btn-space {
+    /*background-color: #ecf0f1;*/
+}
+
+.toolbar-btn {
+    width: 34px;
+    height: 20px;
+    margin: 2px 0px 2px 0px;
+    display: inline-table;
+    text-align: center;
+    overflow: hidden;
+    cursor: pointer;
+    padding: 3px;
+}
+
+    .toolbar-btn:hover {
+        border: 1px solid black;
+        padding: 2px;
+        background-color: lightblue;
+    }
+
+.toolbar-icon {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    vertical-align: middle;
+    width: auto;
+    height: 40px;
+    font-size: 18pt;
+}
+
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.pointable {
+    cursor: pointer !important;
+}
+
+.toolbar-icon-large {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    vertical-align: middle;
+    width: auto;
+    height: 55px;
+    font-size: 17px;
+}
 
 #toolbar-space {
-    width: 100%;
-    height: 50%;
+    width: 29.9%;
+    position: fixed;
     background-color: #ffffff;
+    right: 0px;
+    /* Firefox */
+    height: -moz-calc(100% - 475px);
+    /* WebKit */
+    height: -webkit-calc(100% - 475px);
+    /* Opera */
+    height: -o-calc(100% - 475px);
+    /* Standard */
+    height: calc(100% - 475px);
+    overflow-y: auto;
 }
 
 #pod-space {
-    width: 100%;
-    height: 25%;
+    width: 29.9%;
     border-top: 1px solid #adadad;
     background-color: #ffffff;
+    position: fixed;
+    right: 0px;
+    height: 200px;
+    bottom: 130px;
 }
 
 #account-space {
-    width: 100%;
-    height: 25%;
+    width: 30%;
     border-top: 1px solid #adadad;
+    height: 50px;
     background-color: #ffffff;
+    position: fixed;
+    right: 0px;
+    bottom: 80px;
+}
+
+#right-paneling {
+    background-color: #ffffff;
+    height: 100%;
+}
+
+#right-paneling div {
 }
 
 .ad-space {
@@ -70,17 +219,23 @@ body {
     border: 0px;
     height: 100%;
     float: right;
-    width: 33.3%;
+    width: 27.5%;
     font-size: 0.8em;
     border-left: 1px solid black;
     display: inline-block;
+    transition: all 0.5s ease;
 }
+
+    .gen-btn:hover {
+        cursor: pointer;
+        opacity: 0.2;
+    }
 
 .tool-bar-btn-space {
     position: absolute;
     display: inline-block;
     height: 100%;
-    width: 16.1%;
+    width: 19.1%;
     float: right;
 }
 
@@ -99,7 +254,7 @@ body {
     position: relative;
     display: inline-block;
     vertical-align: middle;
-    width: 64%;
+    width: 61%;
     height: 100%;
 }
 
@@ -158,7 +313,13 @@ body {
   text-align: center;
   text-decoration: none;
   border: 0px;
+  transition: all 0.5s ease;
 }
+
+    .solve-btn:hover {
+        cursor: pointer;
+        opacity: 0.5;
+    }
 
 #title-block {
     float: left;
@@ -201,16 +362,17 @@ body {
   text-align: left;
   margin-left: auto;
   margin-right: auto;
+  transition: color 0.1s linear;
 }
 
 .w-nav-link:hover {
   text-decoration: none;
-  color: #222222;
+  color: #339ce1;
+  opacity: 0.5;
 }
 
 .nav-link {
   font-family: Roboto, sans-serif;
-  color: black;
   font-size: 28px;
   font-weight: 100;
   display: inline;
@@ -274,10 +436,6 @@ body {
     border-right: 2px solid #adadad;
 }
 
-#right-paneling {
-    background-color: #ffffff;
-    height: 100%;
-}
 
 * {
     font-family: Roboto, sans-serif;
