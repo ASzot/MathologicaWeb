@@ -7,11 +7,11 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MathSolverWebsite.Help
+namespace MathSolverWebsite.prac
 {
 
 
-    public partial class FormattingTips
+    public partial class TopicPage
     {
     }
 }

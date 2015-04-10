@@ -10,7 +10,7 @@
     <meta name="description" content="" />
     
     <!-- JSX graph include. -->
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jsxgraph/0.99.3/jsxgraphcore.js"></script>
+    <script async="async" type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jsxgraph/0.99.3/jsxgraphcore.js"></script>
 
     <!-- MathJax include. -->
     <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=AM_HTMLorMML"></script>
@@ -54,47 +54,47 @@
         <div id="right-paneling">
             <div id="toolbar-space">
                 <div id="tool-bar-selection-space">
-                    <div class="subject-bar-btn">Basic</div>
-                    <div class="subject-bar-btn">Trig</div>
-                    <div class="subject-bar-btn">Calc</div>
-                    <div class="subject-bar-btn">Symb</div>
-                    <div class="subject-bar-btn">Prob</div>
-                    <div class="subject-bar-btn">Lin Alg</div>
+                    <div class="subject-bar-btn noselect">Basic</div>
+                    <div class="subject-bar-btn noselect">Trig</div>
+                    <div class="subject-bar-btn noselect">Calc</div>
+                    <div class="subject-bar-btn noselect">Symb</div>
+                    <div class="subject-bar-btn noselect">Prob</div>
+                    <div class="subject-bar-btn noselect">Lin Alg</div>
                 </div>
                 <div id="toolbar-btn-space">
-                    <div class="toolbar-btn">
+                    <div class="toolbar-btn noselect">
                         <div class="toolbar-icon">
-                            <span class="mathquill-rendered-math pointable noselect">`+`</span>
+                            <span class="mathquill-rendered-math pointable">`+`</span>
+                        </div>
+                    </div>
+                    <div class="toolbar-btn noselect">
+                        <div class="toolbar-icon">
+                            <span class="mathquill-rendered-math pointable">`-`</span>
                         </div>
                     </div>
                     <div class="toolbar-btn">
                         <div class="toolbar-icon">
-                            <span class="mathquill-rendered-math pointable noselect">`-`</span>
-                        </div>
-                    </div>
-                    <div class="toolbar-btn">
-                        <div class="toolbar-icon">
-                            <span class="mathquill-rendered-math pointable noselect">`*`</span>
+                            <span class="mathquill-rendered-math pointable">`*`</span>
                         </div>
                     </div>
                     <div class="toolbar-btn">
                         <div class="toolbar-icon-large">
-                            <span class="mathquill-rendered-math pointable noselect">`\frac{x}{y}`</span>
+                            <span class="mathquill-rendered-math pointable">`\frac{x}{y}`</span>
                         </div>
                     </div>
                     <div class="toolbar-btn">
                         <div class="toolbar-icon">
-                            <span class="mathquill-rendered-math pointable noselect">`x`</span>
+                            <span class="mathquill-rendered-math pointable">`x`</span>
                         </div>
                     </div>
                     <div class="toolbar-btn">
                         <div class="toolbar-icon">
-                            <span class="mathquill-rendered-math pointable noselect">`y`</span>
+                            <span class="mathquill-rendered-math pointable">`y`</span>
                         </div>
                     </div>
                     <div class="toolbar-btn">
                         <div class="toolbar-icon">
-                            <span class="mathquill-rendered-math pointable noselect">`z`</span>
+                            <span class="mathquill-rendered-math pointable">`z`</span>
                         </div>
                     </div>
                     <div class="toolbar-btn">
@@ -104,37 +104,37 @@
                     </div>
                     <div class="toolbar-btn">
                         <div class="toolbar-icon">
-                            <span class="mathquill-rendered-math pointable noselect">`x^n`</span>
+                            <span class="mathquill-rendered-math pointable">`x^n`</span>
                         </div>
                     </div>
                     <div class="toolbar-btn">
                         <div class="toolbar-icon">
-                            <span class="mathquill-rendered-math pointable noselect">`\sqrt{x}`</span>
+                            <span class="mathquill-rendered-math pointable">`\sqrt{x}`</span>
                         </div>
                     </div>
                     <div class="toolbar-btn">
                         <div class="toolbar-icon">
-                            <span class="mathquill-rendered-math pointable noselect">`\root{n}{x}`</span>
+                            <span class="mathquill-rendered-math pointable">`\root{n}{x}`</span>
                         </div>
                     </div>
                     <div class="toolbar-btn">
                         <div class="toolbar-icon">
-                            <span class="mathquill-rendered-math pointable noselect">`|x|`</span>
+                            <span class="mathquill-rendered-math pointable">`|x|`</span>
                         </div>
                     </div>
                     <div class="toolbar-btn">
                         <div class="toolbar-icon">
-                            <span class="mathquill-rendered-math pointable noselect">`=`</span>
+                            <span class="mathquill-rendered-math pointable">`=`</span>
                         </div>
                     </div>
                     <div class="toolbar-btn">
                         <div class="toolbar-icon">
-                            <span class="mathquill-rendered-math pointable noselect">`>`</span>
+                            <span class="mathquill-rendered-math pointable">`>`</span>
                         </div>
                     </div>
                     <div class="toolbar-btn">
                         <div class="toolbar-icon">
-                            <span class="mathquill-rendered-math pointable noselect">`<`</span>
+                            <span class="mathquill-rendered-math pointable">`<`</span>
                         </div>
                     </div>
                 </div>
@@ -143,9 +143,9 @@
             <div id="pod-space">
                 <div style="margin-left: 10px;">
                     <p class="pob-title">Problem of the Day:</p>
-                    <div style="text-align: center;">
+                    <div style="text-align: center;" class="pob-problem">
                         <p>Volume Integral</p>
-                        <div class="pob-problem">
+                        <div>
                             <span class="mathquill-rendered-math noselect pointable">`\int\int\int_V \frac{\cos(xy)x^2}{\ln(z)} dV`</span>
                         </div>
                     </div>

@@ -9,7 +9,7 @@ using System.Web.UI.WebControls;
 
 using MathSolverWebsite.MathSolverLibrary;
 
-namespace MathSolverWebsite.WebsiteHelpers
+namespace MathSolverWebsite.Website_Logic
 {
     public struct TopicExample
     {
@@ -60,6 +60,11 @@ namespace MathSolverWebsite.WebsiteHelpers
         public string Path
         {
             get { return _path; }
+        }
+
+        public string BasePath
+        {
+            get { return _path.Split('/')[0].Replace("_", " "); }
         }
 
         public string DispName
@@ -213,6 +218,15 @@ namespace MathSolverWebsite.WebsiteHelpers
         public TopicDatas(List<TopicData> topicDatas)
         {
             _topicDatas = topicDatas;
+        }
+
+        public List<TopicData> GetTopics(string basePath)
+        {
+            var matches = from td in _topicDatas
+                          where td.BasePath == basePath
+                          select td;
+
+            return matches.ToList();
         }
 
         public TopicData? GetTopic(string name)

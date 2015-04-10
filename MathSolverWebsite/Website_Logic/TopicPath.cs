@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace MathSolverWebsite.WebsiteHelpers
+namespace MathSolverWebsite.Website_Logic
 {
     public interface TopicPath
     {

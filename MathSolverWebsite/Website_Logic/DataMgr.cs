@@ -8,7 +8,7 @@ using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Auth;
 using Microsoft.WindowsAzure.Storage.Blob;
 
-namespace MathSolverWebsite.WebsiteHelpers
+namespace MathSolverWebsite.Website_Logic
 {
     public class DataMgr
     {

@@ -7,11 +7,11 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MathSolverWebsite.Help
+namespace MathSolverWebsite.help
 {
 
 
-    public partial class CommonProblems
+    public partial class GraphingPage
     {
     }
 }

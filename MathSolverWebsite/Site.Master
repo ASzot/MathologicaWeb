@@ -19,14 +19,14 @@
     <webopt:BundleReference runat="server" Path="~/Content/css" /> 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-      <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js"></script>
-      <script>
-          WebFont.load({
-              google: {
-                  families: ["Roboto:100,regular,500"]
-              }
-          });
-      </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js"></script>
+    <script>
+        WebFont.load({
+            google: {
+                families: ["Roboto:100,regular,500"]
+            }
+        });
+    </script>
 
     <asp:ContentPlaceHolder runat="server" ID="HeadContent" />
 </head>
@@ -61,33 +61,44 @@
     </asp:ScriptManager>
         <header>
             <link rel="stylesheet" type="text/css" href="/Content/css/mlogica-final.css">
+            <asp:ContentPlaceHolder runat="server" ID="FeaturedContent" />
         </header>
 
-        <div id="container">
-            <div id="header">
+
+        <div class="container">
+            <div class="header">
                 <div id="title-block">
-                    <img class="mathlogo" src="Images/MathologicaLogo.png" width="263" alt="Mathologica" />
+                    <img class="mathlogo" src="/Images/MathologicaLogo.png" width="263" alt="Mathologica" />
                     <div class="moto">Computation, simplified</div>
                 </div>
+                    
+                <div class="w-nav navbar" data-collapse="medium" data-animation="default" data-duration="400" data-contain="1">
+                    <div class="w-container noselect">
+                        <nav class="w-nav-menu" role="navigation">
+                            <a runat="server" class="w-nav-link nav-link" style="max-width: 940px;" href="~/">Calculator</a>
+                            <a runat="server" class="w-nav-link nav-link" style="max-width: 940px;" href="/practice.aspx">Practice</a>
+                            <a runat="server" class="w-nav-link nav-link" style="max-width: 940px;" href="~/helptopics.aspx">Help</a>
+                        </nav>
+                        <div class="w-nav-button">
+                            <div class="w-icon-nav-menu">
 
-                <nav class="nav-menu">
-                    <a class="w-nav-link nav-link" href="asdf.aspx">Calculator</a>
-                    <a class="w-nav-link nav-link" href="asdf.aspx">Practice</a>
-                    <a class="w-nav-link nav-link" href="asdf.aspx">Apps</a>
-                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div id="body">
-                <asp:ContentPlaceHolder runat="server" ID="FeaturedContent" />
+            <div class="body">
                 <asp:ContentPlaceHolder runat="server" ID="MainContent" />
             </div>
 
-            <div id="footer">
+            <div class="footer">
                 <div class="centered-col">
-                    <div class="footer-links">
-                        <a href="asdf.aspx">Terms |</a>
-                        <a href="asdf.aspx">Privacy |</a>
-                        <a href="asdf.aspx">About</a>
+                    <div class="footer-links noselect">
+                        <a href="terms.aspx">Terms |</a>
+                        <a href="privacy.aspx">Privacy |</a>
+                        <a href="about.aspx">About |</a>
+                        <a href="apps.aspx">Apps</a>
                         <div class="copy-right">
                             &copy; <%: DateTime.Now.Year %> - Mathologica, LLC &nbsp;
                         </div>
@@ -95,13 +106,13 @@
 
                     <div style="float: right;">
                         <a class="img-disp" href="https://twitter.com/mathologica">
-                            <img class="tw-link" src="Images/Branding/twitter.png" width="89" alt="Mathologica Twitter" />
+                            <img class="tw-link" src="/Images/Branding/twitter.png" width="89" alt="Mathologica Twitter" />
                         </a>
                         <a class="img-disp" href="https://www.facebook.com/pages/Mathologica/388128111363690">
-                            <img class="fb" src="Images/Branding/facebook.png" width="89" alt="Mathologica Facebook" />
+                            <img class="fb" src="/Images/Branding/facebook.png" width="89" alt="Mathologica Facebook" />
                         </a>
                         <a class="img-disp" href="asdf.aspx">
-                            <img class="mail" src="Images/Branding/mail.png" width="89" alt="Mathologica Mail" />
+                            <img class="mail" src="/Images/Branding/mail.png" width="89" alt="Mathologica Mail" />
                         </a>
                     </div>
                 </div>

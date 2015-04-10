@@ -1,6 +1,6 @@
 ﻿using MathSolverWebsite.MathSolverLibrary;
 using MathSolverWebsite.MathSolverLibrary.Equation;
-using MathSolverWebsite.WebsiteHelpers;
+using MathSolverWebsite.Website_Logic;
 using System;
 using System.Web.UI;
 using System.Web.UI.WebControls;

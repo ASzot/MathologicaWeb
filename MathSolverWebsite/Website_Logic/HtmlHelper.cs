@@ -6,7 +6,7 @@ using System.Web;
 using MathSolverWebsite.MathSolverLibrary;
 using MathSolverWebsite.MathSolverLibrary.Equation;
 
-namespace MathSolverWebsite.WebsiteHelpers
+namespace MathSolverWebsite.Website_Logic
 {
     static class HtmlHelper
     {
