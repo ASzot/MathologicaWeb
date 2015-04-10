@@ -76,8 +76,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
             new TypePair<string, LexemeType>("(" + IDEN_MATCH + @")\((" + IDEN_MATCH + @")\)", LexemeType.FunctionDef),
             new TypePair<string, LexemeType>(NUM_MATCH, LexemeType.Number),
             new TypePair<string, LexemeType>(@"asin|arcsin|acos|arccos|atan|arctan|acsc|arccsc|asec|arcsec|acot|arccot|sin|cos|tan|csc|sec|cot|log_|log|ln|sqrt|root|frac", LexemeType.Function),
-            new TypePair<string, LexemeType>(@"\{", LexemeType.StartBracket),
-            new TypePair<string, LexemeType>(@"\}", LexemeType.EndBracket),
+            new TypePair<string, LexemeType>(@"\[", LexemeType.StartBracket),
+            new TypePair<string, LexemeType>(@"\]", LexemeType.EndBracket),
             new TypePair<string, LexemeType>(@"\|", LexemeType.Bar),
             new TypePair<string, LexemeType>(@"\;", LexemeType.EquationSeperator),
             new TypePair<string, LexemeType>(@">", LexemeType.Greater),
@@ -517,7 +517,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
 
                 if (!MathSolver.PLAIN_TEXT && !CheckCoeffCorrectness(setLexemeTable))
                 {
-                    pParseErrors.Add("Invalid number placement.");
+                    pParseErrors.Add("Here parantheses following exponent are required.");
                     return null;
                 }
                 if (setLexemeTable == null)
@@ -823,6 +823,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
 
                     if ((beforeLexeme.Data1 == LexemeType.EndPara
                         && afterLexeme.Data1 == LexemeType.StartPara) ||
+                        (beforeLexeme.Data1 == LexemeType.StartBracket 
+                        && afterLexeme.Data1 == LexemeTYpe.EndBracket) || 
                         (beforeLexeme.Data1 == LexemeType.Bar
                         && afterLexeme.Data1 == LexemeType.Bar))
                     {
@@ -1005,8 +1007,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
             str = str.Replace(@"\ge", ">=");
             str = str.Replace(@"\d", "$d");
             str = str.Replace("sqrt[", "root(");
-            str = str.Replace("]", ")");
-            str = str.Replace("[", "(");
             str = str.Replace('{', '(');
             str = str.Replace('}', ')');
             if (str.Contains("\\int"))
@@ -1042,6 +1042,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                     lexeme.Data1 == LexemeType.Number ||
                     lexeme.Data1 == LexemeType.Constant ||
                     lexeme.Data1 == LexemeType.StartPara ||
+                    lexeme.Data1 == LexemeType.StartBracket ||
                     lexeme.Data1 == LexemeType.Function ||
                     lexeme.Data1 == LexemeType.Derivative ||
                     lexeme.Data1 == LexemeType.Limit ||
@@ -1052,6 +1053,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                 {
                     lexemeTable.Insert(i++, new Lexeme(LexemeType.Operator, "*"));
                     if (lexeme.Data1 == LexemeType.StartPara ||
+                        lexeme.Data1 == LexemeType.StartBracket ||
                         lexeme.Data1 == LexemeType.Function ||
                         lexeme.Data1 == LexemeType.Derivative ||
                         lexeme.Data1 == LexemeType.Limit ||
@@ -1067,7 +1069,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                     lexeme.Data1 == LexemeType.Number ||
                     lexeme.Data1 == LexemeType.Constant ||
                     lexeme.Data1 == LexemeType.Number ||
-                    lexeme.Data1 == LexemeType.EndPara)
+                    lexeme.Data1 == LexemeType.EndPara ||
+                    lexeme.Data1 == LexemeType.EndBracket)
                     multipliablePreceeding = true;
                 else
                     multipliablePreceeding = false;
@@ -1101,7 +1104,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                     continue;
                 }
 
-                if (lexeme.Data1 == LexemeType.Operator || (lexeme.Data1 == LexemeType.StartPara))
+                if ((lexeme.Data1 == LexemeType.Operator || lexeme.Data1 == LexemeType.StartPara) || lexeme.Data1 == LexemeType.StartBracket)
                     operatorPreceeding = true;
                 else
                     operatorPreceeding = false;
@@ -1428,13 +1431,54 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                     algebraTermLexemeTable = lexemeTable.GetRange(startIndex, endIndex - startIndex);
                     currentIndex = endIndex;
                     if (algebraTermLexemeTable.Count == 0)
+                    {
+                        pParseErrors.Add("Nothing between bars.");
                         return null;
+                    }
                     algebraTerm = LexemeTableToAlgebraTerm(algebraTermLexemeTable, ref pParseErrors);
                     if (algebraTerm == null)
                         return null;
 
                     var absVal = new Equation.Functions.AbsValFunction(algebraTerm);
                     return absVal;
+                    
+                case LexemeType.StartBracket:
+                  endIndex = -1;
+                  depth = 0;
+                  for (int i = currentIndex + 1; i < lexemeTable.Count; ++i)
+                  {
+                    var compareLexeme = lexemeTable[i];
+                    if (compareLexeme.Data1 == LexemeType.StartBracket)
+                      depth++;
+                      if (compareLexmeme.Data1 == Lexeme.EndBracket)
+                      {
+                        if (depth == 0)
+                        {
+                          endIndex  = i;
+                          depth = -1;
+                          break;
+                        }
+                        deph--;
+                      }
+                  }
+                  
+                  if (depth != -1 || endIndex == -1)
+                      return null;
+                      
+                  startIndex = currentIndex + 1;
+                  algebraTermLexemeTable = lexemeTable.GetRange(startIndex, endIndex - startIndex);
+                  currentIndex = endIndex;
+                  if (algebraTermLexemeTable.Count == 0) 
+                  {
+                      pParseErrors.Add("Empty vector.");
+                      return null;
+                  }
+                  
+                  algebraTerm = ParseVector(algebraLexemeTable, ref pParseErrors);
+                  if (algebraTerm == null)
+                      return null;
+                      
+                  return algebraTerm;
 
                 case LexemeType.StartPara:
                     endIndex = -1;
@@ -1515,6 +1559,26 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                     return null;
             }
 
+            return null;
+        }
+        
+        private AlgebraTerm ParseVector(LexemeTable lt, ref List<string> pParseErrors)
+        {
+            // Split the term up by the commas.
+            List<LexemeTable> ranges = new List<LexemeTable>();
+            int lastRangeIndex = 0;
+            for (int i = 0; i < lt.Count; ++i)
+            {
+                if (lt[i].Data1 == LexemeType.Comma)
+                {
+                    LexemeTable range = lt.GetRange(lastRangeIndex, i);
+                    lastRangeIndex = i + 1;
+                    ranges.Add(range);
+                }
+            }
+            
+            
+        
             return null;
         }
 
