@@ -1,0 +1,97 @@
+﻿@media only screen and (max-device-width: 480px) {
+    .header {
+        padding: 0px !important;
+    }
+
+    .mathlogo {
+        width: 190px !important;
+        float: left !important;
+    }
+
+    .moto {
+        display: none !important;
+    }
+
+    .header {
+        height: 65px !important;
+    }
+
+    .navbar {
+        margin-bottom: 0px !important;
+    }
+
+    .w-nav-button {
+        padding: 6px !important;
+    }
+
+    #left-paneling {
+        width: 100%;
+        float: none;
+    }
+
+    #right-paneling {
+        height: 100px !important;
+        width: 100% !important;
+        position: fixed !important;
+        top: 69px !important;
+        border-bottom: 1px solid #adadad;
+    }
+
+    #pod-space {
+        display: none !important;
+    }
+
+    #account-space {
+        display: none !important;
+    }
+
+    #toolbar-space {
+        width: 100% !important;
+        position: initial !important;
+        height: 100% !important;
+        right: auto !important;
+        overflow-y: hidden;
+    }
+
+    #tool-bar-selection-space {
+        font-size: 20px !important;
+        margin-left: 5px;
+        padding: 0px !important;
+        text-align: initial !important;
+        margin-bottom: 0px !important;
+    }
+
+    .subject-bar-btn {
+        padding: 0px !important;
+    }
+
+    .toolbar-icon {
+        font-size: 14pt !important;
+    }
+
+    #toolbar-btn-space {
+        white-space: nowrap;
+        overflow-x: auto;
+    }
+
+    .ad-space {
+        display: none;
+    }
+
+    .footer {
+        height: 40px;
+    }
+
+    .branding-images {
+        display: none;
+    }
+
+    #eval-space {
+        margin-bottom: 60px;
+        width: 100%;
+    }
+
+    .solve-btn {
+
+    }
+}

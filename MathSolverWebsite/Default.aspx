@@ -40,10 +40,17 @@
                 <span class="gen-drop-down-wrapper pointable">
                     <asp:DropDownList ID="DropDownList1" runat="server" CssClass="gen-drop-down pointable"></asp:DropDownList>
                 </span>
-                <div class="tool-bar-btn-space">
-                    <input type="button" style="width: 45%; font-size: 20px" class="gen-btn" value="CLR" />
-                    <input type="button" class="gen-btn" style="font-size: 48px;" value="-" />
-                    <input type="button" class="gen-btn" style="font-size: 32px;" value="+" />
+                <div class="m-tool-bar">
+                    <div class="tool-bar-btn-space">
+                        <input type="button" style="width: 45%; font-size: 20px" class="gen-btn" value="CLR" />
+                        <input type="button" class="gen-btn" style="font-size: 48px;" value="-" />
+                        <input type="button" class="gen-btn" style="font-size: 32px;" value="+" />
+                    </div>
+                    <div class="m-tool-bar-btn-overlay">
+                        <div class="m-icon-tool-bar">
+
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="ad-space" style="height: 90px; width: 70%">

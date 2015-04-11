@@ -60,7 +60,8 @@
         </Scripts>
     </asp:ScriptManager>
         <header>
-            <link rel="stylesheet" type="text/css" href="/Content/css/mlogica-final.css">
+            <link rel="stylesheet" type="text/css" href="/Content/css/mlogica-final.css" />
+            <link rel="stylesheet" type="text/css" href="/Content/css/mlogica-mobile.css" />
             <asp:ContentPlaceHolder runat="server" ID="FeaturedContent" />
         </header>
 
@@ -104,7 +105,7 @@
                         </div>
                     </div>
 
-                    <div style="float: right;">
+                    <div class="branding-images" style="float: right;">
                         <a class="img-disp" href="https://twitter.com/mathologica">
                             <img class="tw-link" src="/Images/Branding/twitter.png" width="89" alt="Mathologica Twitter" />
                         </a>

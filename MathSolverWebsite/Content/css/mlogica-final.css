@@ -428,13 +428,25 @@ h1 {
   position: relative;
   z-index: 1000;
 }
+.m-tool-bar {
+  position: relative;
+  z-index: 1000;
+}
 .w-nav:before,
 .w-nav:after {
   content: " ";
   display: table;
 }
+.m-tool-bar:before,
+.m-tool-bar:after {
+    content: " ";
+    display: table;
+}
 .w-nav:after {
   clear: both;
+}
+.m-tool-bar:after {
+    clear: both;
 }
 .w-nav-brand {
   position: relative;
@@ -450,7 +462,20 @@ h1 {
   position: relative;
   float: right;
 }
+
 .w--nav-menu-open {
+  display: block !important;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #999;
+  text-align: center;
+  overflow: visible;
+  min-width: 200px;
+}
+
+.m--tool-bar-btn-space-open {
   display: block !important;
   position: absolute;
   top: 100%;
@@ -477,12 +502,29 @@ h1 {
   right: 0;
   width: 100%;
 }
+
+.m-tool-bar-btn-overlay {
+  position: absolute;
+  overflow: hidden;
+  display: none;
+  top: 100%;
+  left: 0;
+  right: 0;
+  width: 100%;
+}
+
 .w-nav-overlay .w--nav-menu-open {
   top: 0;
 }
+
+.m-tool-bar-btn-overlay .m--tool-bar-btn-space-open {
+    top: 0;
+}
+
 .w-nav[data-animation="over-left"] .w-nav-overlay {
   width: auto;
 }
+
 .w-nav[data-animation="over-left"] .w-nav-overlay,
 .w-nav[data-animation="over-left"] .w--nav-menu-open {
   right: auto;
@@ -514,7 +556,28 @@ h1 {
   bottom: 0px;
   right: 0px;
 }
+.m-tool-bar-button {
+  position: absolute;
+  float: right;
+  padding: 18px;
+  font-size: 24px;
+  display: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  bottom: 0px;
+  right: 0px;
+}
+
 .w-nav-button.w--open {
+  background-color: #999;
+  color: white;
+}
+.m-tool-bar-button.m--open {
   background-color: #999;
   color: white;
 }
@@ -534,6 +597,10 @@ h1 {
 }
 .w-icon-nav-menu:before {
   content: "\e602";
+}
+
+.icon-tool-bar:before {
+    content: "^";
 }
 
 .nav-link {

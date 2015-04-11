@@ -157,6 +157,7 @@
     <Content Include="apps.aspx" />
     <Content Include="Content\css\mlogica-def.css" />
     <Content Include="Content\css\mlogica-final.css" />
+    <Content Include="Content\css\mlogica-mobile.css" />
     <Content Include="Content\css\mlogica-practice.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
