@@ -525,8 +525,18 @@ h1 {
   width: auto;
 }
 
+.m-tool-bar[data-animation="over-left"] .m-nav-overlay {
+  width: auto;
+}
+
 .w-nav[data-animation="over-left"] .w-nav-overlay,
 .w-nav[data-animation="over-left"] .w--nav-menu-open {
+  right: auto;
+  z-index: 1;
+  top: 0;
+}
+.m-tool-bar[data-animation="over-left"] .m-tool-bar-btn-overlay,
+.m-tool-bar[data-animation="over-left"] .m-tool-bar-btn-overlay {
   right: auto;
   z-index: 1;
   top: 0;
@@ -534,8 +544,17 @@ h1 {
 .w-nav[data-animation="over-right"] .w-nav-overlay {
   width: auto;
 }
+.m-tool-bar[data-animation="over-right"] .m-tool-bar-btn-overlay {
+  width: auto;
+}
 .w-nav[data-animation="over-right"] .w-nav-overlay,
 .w-nav[data-animation="over-right"] .w--nav-menu-open {
+  left: auto;
+  z-index: 1;
+  top: 0;
+}
+.m-tool-bar[data-animation="over-right"] .m-tool-bar-btn-overlay,
+.m-tool-bar[data-animation="over-right"] .m--tool-bar-btn-space-open {
   left: auto;
   z-index: 1;
   top: 0;
@@ -587,6 +606,12 @@ h1 {
 .w-nav[data-collapse="all"] .w-nav-button {
   display: block;
 }
+.m-tool-bar[data-collapse="all"] .tool-bar-btn-space {
+    display: none;
+}
+.m-tool-bar[data-collapse="all"] .m-tool-bar-button {
+    display: block;
+}
 @media screen and (max-width: 749px) {
   .w-nav[data-collapse="medium"] .w-nav-menu {
     display: none;
@@ -594,6 +619,12 @@ h1 {
   .w-nav[data-collapse="medium"] .w-nav-button {
     display: block;
   }
+    .m-tool-bar[data-collapse="medium"] .tool-bar-btn-space {
+        display: none;
+    }
+    .m-tool-bar[data-collapse="medium"] .m-tool-bar-button {
+        display: block;
+    }
 }
 .w-icon-nav-menu:before {
   content: "\e602";
