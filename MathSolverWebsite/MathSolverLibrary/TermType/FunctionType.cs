@@ -49,9 +49,9 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 if (_assignTo is AlgebraTerm)
                     funcDefStr = (_assignTo as AlgebraTerm).FinalToDispStr();
                 else
-                    funcDefStr = _assignTo.ToMathAsciiString();
+                    funcDefStr = _assignTo.ToAsciiString();
                 funcDefStr = MathSolver.FinalizeOutput(funcDefStr);
-                pEvalData.AddMsg(WorkMgr.STM + _func.ToMathAsciiString() + WorkMgr.EDM + " defined as " + WorkMgr.STM + funcDefStr + WorkMgr.EDM);
+                pEvalData.AddMsg(WorkMgr.STM + _func.ToAsciiString() + WorkMgr.EDM + " defined as " + WorkMgr.STM + funcDefStr + WorkMgr.EDM);
 
                 // Assign the function.
                 pEvalData.FuncDefs.Define(_func, _assignTo);
@@ -66,7 +66,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             }
             else if (command == "Graph")
             {
-                if (pEvalData.AttemptSetGraphData(_assignTo))
+                if (pEvalData.AttemptSetGraphData(_assignTo, _func.InputArgs[0].Var.Var))
                     return SolveResult.Solved();
                 else
                     return SolveResult.Failure();
@@ -75,8 +75,11 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             return SolveResult.InvalidCmd(ref pEvalData);
         }
 
-        public bool Init(EquationSet eqSet, List<TypePair<LexemeType, string>> lt, Dictionary<string, int> solveVars, string probSolveVar)
+        public bool Init(EqSet eqSet, List<TypePair<LexemeType, string>> lt, Dictionary<string, int> solveVars, string probSolveVar)
         {
+            // Also allow the single variable assigns like y=x^2
+            AlgebraComp funcIden = null;
+
             if (eqSet.Left is FunctionDefinition)
             {
                 _func = eqSet.Left as FunctionDefinition;
@@ -87,8 +90,30 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 _func = eqSet.Right as FunctionDefinition;
                 _assignTo = eqSet.Left;
             }
+            else if (eqSet.Left is AlgebraComp && !eqSet.RightTerm.Contains(eqSet.Left as AlgebraComp))
+            {
+                funcIden = eqSet.Left as AlgebraComp;
+                _assignTo = eqSet.Right;
+            }
+            else if (eqSet.Right is AlgebraComp && !eqSet.LeftTerm.Contains(eqSet.Right as AlgebraComp))
+            {
+                funcIden = eqSet.Right as AlgebraComp;
+                _assignTo = eqSet.Left;
+            }
             else
                 return false;
+
+            if (funcIden != null)
+            {
+                // The input variable for the function needs to be assumed.
+                if (probSolveVar == funcIden.Var.Var)
+                    return false;
+
+                // For graphing later.
+                solveVars.Remove(funcIden.Var.Var);
+
+                _func = new FunctionDefinition(funcIden, new AlgebraComp[] { new AlgebraComp(probSolveVar) }, null, false);
+            }
 
             if (_assignTo == null || Number.IsUndef(_assignTo))
                 return false;
@@ -114,7 +139,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             solveVarKeys.Insert(0, probSolveVar);
 
             List<string> tmpCmds = new List<string>();
-            if (_func.InputArgCount == 1 && _assignTo.ToAlgTerm().Contains(_func.InputArgs[0]))
+            if (!_func.IsMultiValued && _assignTo.ToAlgTerm().Contains(_func.InputArgs[0]))
                 tmpCmds.Add("Find inverse");
             tmpCmds.Add("Assign function");
             for (int i = 0; i < solveVarKeys.Count; ++i)
@@ -122,7 +147,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 tmpCmds.Add("Domain of " + solveVarKeys[i]);
             }
 
-            if (solveVars.Count == 1)
+            if (solveVars.Count == 1 && !_func.IsMultiValued)
             {
                 AlgebraTerm term = _assignTo.ToAlgTerm();
                 string graphStr = term.ToJavaScriptString(true);

@@ -1,5 +1,6 @@
 ﻿using MathSolverWebsite.MathSolverLibrary.Equation.Term;
 using System.Text.RegularExpressions;
+using System.Collections.Generic;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation
 {
@@ -8,7 +9,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         private AlgebraComp[] _args;
         private ExComp[] _callArgs;
         private AlgebraComp _iden;
+        private bool _funcNotation = true;
 
+        /// <summary>
+        /// The supplied arguments to the function.
+        /// They are not defined they are given.
+        /// Example is f(2) but not f(x)
+        /// </summary>
         public ExComp[] CallArgs
         {
             set { _callArgs = value; }
@@ -30,6 +37,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             get { return _args.Length; }
         }
 
+        public bool IsMultiValued
+        {
+            get { return _args.Length != 1; }
+        }
+
+        /// <summary>
+        /// The defined arguments to the function.
+        /// These are not supplied.
+        /// Example is f(x) but not f(2)
+        /// </summary>
         public AlgebraComp[] InputArgs
         {
             get { return _args; }
@@ -39,18 +56,28 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         {
         }
 
-        public FunctionDefinition(AlgebraComp iden, AlgebraComp[] args, ExComp[] callArgs)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="iden">The identifier of the function.</param>
+        /// <param name="args">The definition of the arguments. Null is not acceptable.</param>
+        /// <param name="callArgs">What the user is inputting. These are not defined. Null is acceptable.</param>
+        /// <param name="funcNotation">True means the function will output like y(x). False means the function will output just y.</param>
+        public FunctionDefinition(AlgebraComp iden, AlgebraComp[] args, ExComp[] callArgs, bool funcNotation = true)
         {
             _iden = iden;
             _args = args;
             _callArgs = callArgs;
+            _funcNotation = funcNotation;
         }
 
         public ExComp CallFunc(ref TermType.EvalData pEvalData)
         {
-            var def = pEvalData.FuncDefs.GetDefinition(this);
+            KeyValuePair<FunctionDefinition, ExComp> def = pEvalData.FuncDefs.GetDefinition(this);
             if (def.Value == null)
             {
+                if (CallArgs != null && InputArgs == null)
+                    return null;
                 return this;
             }
 
@@ -99,7 +126,18 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public override ExComp Clone()
         {
-            return new FunctionDefinition(_iden, _args, _callArgs);
+            return new FunctionDefinition(_iden, _args, _callArgs, _funcNotation);
+        }
+
+        public bool IsArg(string argIden)
+        {
+            foreach (AlgebraComp arg in _args)
+            {
+                if (arg.Var.Var == argIden)
+                    return true;
+            }
+
+            return false;
         }
 
         public override double GetCompareVal()
@@ -160,15 +198,17 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return new AlgebraTerm(this);
         }
 
-        public override string ToMathAsciiString()
+        public override string ToAsciiString()
         {
-            string funcStr = _iden.ToMathAsciiString() + "(";
+            if (!_funcNotation || (_args == null || _args.Length == 0))
+                return _iden.ToAsciiString();
+            string funcStr = _iden.ToAsciiString() + "(";
             for (int i = 0; i < _args.Length; ++i)
             {
                 if (_callArgs != null && _callArgs.Length > i)
-                    funcStr += _callArgs[i].ToMathAsciiString();
+                    funcStr += _callArgs[i].ToAsciiString();
                 else
-                    funcStr += _args[i].ToMathAsciiString();
+                    funcStr += _args[i].ToAsciiString();
                 if (i != _args.Length - 1)
                     funcStr += ",";
             }
@@ -185,6 +225,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public override string ToString()
         {
+            if (!_funcNotation || (_args == null || _args.Length == 0))
+                return _iden.ToString();
             string funcStr = _iden.ToString() + "(";
             for (int i = 0; i < _args.Length; ++i)
             {
@@ -203,6 +245,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public override string ToTexString()
         {
+            if (!_funcNotation || (_args == null || _args.Length == 0))
+                return _iden.ToTexString();
             string funcStr = _iden.ToTexString() + "(";
             for (int i = 0; i < _args.Length; ++i)
             {

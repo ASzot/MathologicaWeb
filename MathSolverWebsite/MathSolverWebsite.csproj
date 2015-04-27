@@ -151,9 +151,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="about.aspx" />
-    <Content Include="Account\Login.aspx" />
-    <Content Include="Account\Manage.aspx" />
-    <Content Include="Account\Register.aspx" />
+    <Content Include="account\login.aspx" />
+    <Content Include="account\manage.aspx" />
+    <Content Include="account\register.aspx" />
     <Content Include="apps.aspx" />
     <Content Include="Content\css\mlogica-def.css" />
     <Content Include="Content\css\mlogica-final.css" />
@@ -295,6 +295,7 @@
     <Content Include="Scripts\jquery-1.8.2.min.js" />
     <Content Include="Scripts\jquery-ui-1.8.24.js" />
     <Content Include="Scripts\jquery-ui-1.8.24.min.js" />
+    <Content Include="Scripts\ml-main.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\mainscript.js" />
     <Content Include="Scripts\WebForms\DetailsView.js" />
@@ -338,26 +339,26 @@
     <Compile Include="about.aspx.designer.cs">
       <DependentUpon>about.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Account\Login.aspx.cs">
-      <DependentUpon>Login.aspx</DependentUpon>
+    <Compile Include="account\login.aspx.cs">
+      <DependentUpon>login.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Account\Login.aspx.designer.cs">
-      <DependentUpon>Login.aspx</DependentUpon>
+    <Compile Include="account\login.aspx.designer.cs">
+      <DependentUpon>login.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Account\Manage.aspx.cs">
-      <DependentUpon>Manage.aspx</DependentUpon>
+    <Compile Include="account\manage.aspx.cs">
+      <DependentUpon>manage.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Account\Manage.aspx.designer.cs">
-      <DependentUpon>Manage.aspx</DependentUpon>
+    <Compile Include="account\manage.aspx.designer.cs">
+      <DependentUpon>manage.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Account\Register.aspx.cs">
-      <DependentUpon>Register.aspx</DependentUpon>
+    <Compile Include="account\register.aspx.cs">
+      <DependentUpon>register.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Account\Register.aspx.designer.cs">
-      <DependentUpon>Register.aspx</DependentUpon>
+    <Compile Include="account\register.aspx.designer.cs">
+      <DependentUpon>register.aspx</DependentUpon>
     </Compile>
     <Compile Include="apps.aspx.cs">
       <DependentUpon>apps.aspx</DependentUpon>
@@ -443,6 +444,7 @@
     </Compile>
     <Compile Include="MathSolverLibrary\AlgebraSolver.cs" />
     <Compile Include="MathSolverLibrary\Core.cs" />
+    <Compile Include="MathSolverLibrary\EquationInformation.cs" />
     <Compile Include="MathSolverLibrary\Equation\EqSet.cs" />
     <Compile Include="MathSolverLibrary\Equation\ExComp.cs" />
     <Compile Include="MathSolverLibrary\Equation\Functions\AbsValFunction.cs" />
@@ -454,9 +456,14 @@
     <Compile Include="MathSolverLibrary\Equation\Functions\Calculus\IntegrationInfo.cs" />
     <Compile Include="MathSolverLibrary\Equation\Functions\Calculus\Limit.cs" />
     <Compile Include="MathSolverLibrary\Equation\Functions\Calculus\PartialFracs.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Functions\Calculus\Vector\CurlFunc.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Functions\Calculus\Vector\DivergenceFunc.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Functions\Calculus\Vector\GradientFunc.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Functions\Calculus\Vector\VectorFieldOperation.cs" />
     <Compile Include="MathSolverLibrary\Equation\Functions\ChooseFunction.cs" />
     <Compile Include="MathSolverLibrary\Equation\Functions\FactorialFunction.cs" />
     <Compile Include="MathSolverLibrary\Equation\Functions\LogFunction.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Functions\PermutationFunction.cs" />
     <Compile Include="MathSolverLibrary\Equation\Functions\PowerFunction.cs" />
     <Compile Include="MathSolverLibrary\Equation\Functions\SumFunction.cs" />
     <Compile Include="MathSolverLibrary\Equation\Functions\TrigFunctions.cs" />
@@ -464,9 +471,13 @@
     <Compile Include="MathSolverLibrary\Equation\Group\GroupHelper.cs" />
     <Compile Include="MathSolverLibrary\Equation\Group\GroupUtil.cs" />
     <Compile Include="MathSolverLibrary\Equation\Operators\AdditionOperator.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Operators\CombinationOp.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Operators\CompWiseMul.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Operators\CrossProductOp.cs" />
     <Compile Include="MathSolverLibrary\Equation\Operators\DivisionOperator.cs" />
     <Compile Include="MathSolverLibrary\Equation\Operators\DotOperator.cs" />
     <Compile Include="MathSolverLibrary\Equation\Operators\MultiplicationOperator.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Operators\PermutationOp.cs" />
     <Compile Include="MathSolverLibrary\Equation\Operators\PowerOperator.cs" />
     <Compile Include="MathSolverLibrary\Equation\Operators\SubtractionOperator.cs" />
     <Compile Include="MathSolverLibrary\Equation\Simplifier.cs" />
@@ -478,6 +489,10 @@
     <Compile Include="MathSolverLibrary\Equation\Structural\Constant.cs" />
     <Compile Include="MathSolverLibrary\Equation\Structural\FunctionDefinition.cs" />
     <Compile Include="MathSolverLibrary\Equation\Structural\GeneralSolution.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Structural\LinearAlg\Determinant.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Structural\LinearAlg\Matrix.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Structural\LinearAlg\MatrixHelper.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Structural\LinearAlg\Transpose.cs" />
     <Compile Include="MathSolverLibrary\Equation\Structural\LinearAlg\Vector.cs" />
     <Compile Include="MathSolverLibrary\Equation\Structural\Number.cs" />
     <Compile Include="MathSolverLibrary\Equation\Structural\Polynomial\PolynomialGen.cs" />
@@ -497,9 +512,11 @@
     <Compile Include="MathSolverLibrary\Information Helpers\WorkMgr.cs" />
     <Compile Include="MathSolverLibrary\MathHelper.cs" />
     <Compile Include="MathSolverLibrary\MathSolver.cs" />
+    <Compile Include="MathSolverLibrary\Parsing\LexemeType.cs" />
     <Compile Include="MathSolverLibrary\Parsing\LexicalParser.cs" />
     <Compile Include="MathSolverLibrary\Solving\AbsoluteValueSolve.cs" />
     <Compile Include="MathSolverLibrary\Solving\CubicSolve.cs" />
+    <Compile Include="MathSolverLibrary\Solving\Diff Eqs\DiffAgSolver.cs" />
     <Compile Include="MathSolverLibrary\Solving\ExponentSolve.cs" />
     <Compile Include="MathSolverLibrary\Solving\FactorSolve.cs" />
     <Compile Include="MathSolverLibrary\Solving\FractionalSolve.cs" />
@@ -514,10 +531,13 @@
     <Compile Include="MathSolverLibrary\Solving\SubstitutionSolve.cs" />
     <Compile Include="MathSolverLibrary\Solving\SystemOfEquationsSolve.cs" />
     <Compile Include="MathSolverLibrary\Solving\TrigSolve.cs" />
+    <Compile Include="MathSolverLibrary\TermType\DiffEqTermType.cs" />
     <Compile Include="MathSolverLibrary\TermType\EqualityCheckTermType.cs" />
     <Compile Include="MathSolverLibrary\TermType\EquationSystemTermType.cs" />
+    <Compile Include="MathSolverLibrary\TermType\EvalData.cs" />
     <Compile Include="MathSolverLibrary\TermType\FunctionType.cs" />
     <Compile Include="MathSolverLibrary\TermType\InputType.cs" />
+    <Compile Include="MathSolverLibrary\TermType\LinearAlgebraSolve.cs" />
     <Compile Include="MathSolverLibrary\TermType\LogTermType.cs" />
     <Compile Include="MathSolverLibrary\TermType\QuadraticTermType.cs" />
     <Compile Include="MathSolverLibrary\TermType\SimplifyTermType.cs" />

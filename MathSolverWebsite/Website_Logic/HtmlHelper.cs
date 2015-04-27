@@ -61,7 +61,7 @@ namespace MathSolverWebsite.Website_Logic
             final += "<p class='solutionHeader'>Solution</p>";
 
             string solSolveFor = SolSolveForToHtml(sol);
-            string solveForStr = sol.SolveFor != null ? sol.SolveFor.ToMathAsciiString() : "";
+            string solveForStr = sol.SolveFor != null ? sol.SolveFor.ToDispString() : "";
 
             if (sol.Result != null)
                 final += "<div class='solutionData'>" + WorkMgr.STM + solSolveFor + sol.ResultToMathAsciiStr() + WorkMgr.EDM + "</div>";
@@ -86,9 +86,24 @@ namespace MathSolverWebsite.Website_Logic
             rawSolStr = "";
             string final = "";
 
-            final += "<ul>";
+            final += "<ul class='sol-list'>";
             if (sr.Success)
             {
+                if (evalData.GraphEqStrs != null && evalData.GraphVar != null)
+                {
+                    string finalJavascript = "";
+                    finalJavascript += "<script>";
+                    finalJavascript += "var grapher = JXG.JSXGraph.initBoard('graphbox', {boundingbox: [-10, 10, 10, -10], axis: true});";
+                    foreach (string graphEqStr in evalData.GraphEqStrs)
+                    {
+                        finalJavascript += "grapher.create('functiongraph', [function(" + evalData.GraphVar + ") { return " + graphEqStr + ";}]);";
+                    }
+                    finalJavascript += "</script>";
+                    final += finalJavascript;
+                    final += "<li class='resultListItem graphListItem'>";
+                    final += "<div id='graphbox' class='graph-disp'></div>";
+                    final += "</li>";
+                }
                 if (evalData.Msgs != null)
                 {
                     foreach (var msg in evalData.Msgs)
@@ -198,7 +213,7 @@ namespace MathSolverWebsite.Website_Logic
                 "<input class='workCollapseBtn' type='button' onclick=\"$('#workDisplayList').toggle();\" value='Work'></input>" + 
                 "</p>";
 
-            final += "<ul id='workDisplayList'>";
+            final += "<ul id='workDisplayList' class='work-disp-list'>";
 
             foreach (WorkStep workStep in workMgr.WorkSteps)
             {
@@ -226,16 +241,16 @@ namespace MathSolverWebsite.Website_Logic
             return html;
         }
 
-        public static string TopicDataToHtmlTree(List<TopicPath> topics, string headerStr, string baseUrl, HttpServerUtility server)
+        public static string TopicDataToHtmlTree(List<TopicPath> topics, string baseUrl, HttpServerUtility server)
         {
-            string html = "<p class='sectionHeading'>" + headerStr + "</p>";
+            string html = "";
 
-            html += "<ul class='collapsibleList' id='collapseUl'>";
+            //html += "<ul class='collapsible-list' id='collapseUl'>";
 
             string trashVal;
             html += GetFormattedTopicTree(topics, 0, server, baseUrl, out trashVal);
 
-            html += "</ul>";
+            //html += "</ul>";
 
             return html;
         }
@@ -252,8 +267,8 @@ namespace MathSolverWebsite.Website_Logic
 
                     string hintPopup = topicDatas[0].GetHintStr() == "" ? topicDatas[0].DispName : topicDatas[0].GetHintStr();
 
-                    return "<li><a href='" + baseUrl + "?Name=" + server.UrlEncode(topicDatas[0].DispName) + "' class='tooltip'>"
-                        + branch[currentBranch - 1] + "<span>" + topicDatas[0].GetHintStr() + "</span></a></li>";
+                    return "<div class='slink-div'><a class='specific-link' href='" + baseUrl + "?Name=" + server.UrlEncode(topicDatas[0].DispName) + "'>"
+                        + branch[currentBranch - 1] + "</a></div>";
                 }
             }
 
@@ -278,10 +293,11 @@ namespace MathSolverWebsite.Website_Logic
 
                 if (nextBranch == null || nextBranch != topicDataBranch.Key)
                 {
-                    final += "<li>";
-                    final += "<span>" + topicDataBranch.Key + "</span>";
-                    final += "<ul>" + nextFormatted + "</ul>";
-                    final += "</li>";
+                    int spacing = currentBranch * 10;
+                    final += "<div class='topic-container' style='margin-left: " + spacing.ToString() + "px;'>";
+                    final += "<h4>" + topicDataBranch.Key + "</h4>";
+                    final += "<div>" + nextFormatted + "</div>";
+                    final += "</div>";
                 }
                 else
                     final += nextFormatted;

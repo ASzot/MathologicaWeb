@@ -101,17 +101,17 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             {
                 bool multiplyOut = true;
 
-                var groups = term.GetGroupsNoOps();
+                List<ExComp[]> groups = term.GetGroupsNoOps();
 
                 int modGroupCount = 0;
 
                 for (int i = 0; i < groups.Count; ++i)
                 {
-                    var group = groups[i];
+                    ExComp[] group = groups[i];
                     bool equalTerm = false;
                     for (int j = 0; j < group.Length; ++j)
                     {
-                        var groupComp = group[j];
+                        ExComp groupComp = group[j];
                         if (groupComp.IsEqualTo(pf))
                         {
                             equalTerm = true;
@@ -303,13 +303,28 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             return new PowerFunction(baseEx, powEx);
         }
 
+        protected override ExComp CancelWith(ExComp innerEx, ref TermType.EvalData evalData)
+        {
+            LogFunction log = innerEx as LogFunction;
+            if (log == null)
+                return null;
+            if (log.Base.IsEqualTo(Base))
+                return log.InnerEx;
+
+            return null;
+        }
+
         public override ExComp Evaluate(bool harshEval, ref TermType.EvalData pEvalData)
         {
+            ExComp cancelResult = CancelWith(_power, ref pEvalData);
+            if (cancelResult != null)
+                return cancelResult;
+
             ExComp baseEx = Base;
             if (Number.IsUndef(baseEx) || Number.IsUndef(_power))
                 return Number.Undefined;
 
-            if (Number.Zero.IsEqualTo(baseEx))
+            if (Number.Zero.IsEqualTo(baseEx) && !Number.NegOne.IsEqualTo(_power))
                 return Number.Zero;
 
             if (baseEx is AlgebraTerm)
@@ -345,7 +360,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public override string FinalToAsciiString()
         {
-            string powerAsciiStr = _power.ToMathAsciiString();
+            string powerAsciiStr = _power.ToAsciiString();
             if (powerAsciiStr == ("-1"))
                 powerAsciiStr = powerAsciiStr.Remove(0, 2);
 
@@ -354,10 +369,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             {
                 BasicAppliedFunc funcBase = baseNoRedun as BasicAppliedFunc;
 
-                return funcBase.FuncName + "^{" + powerAsciiStr + "}(" + funcBase.InnerTerm.ToMathAsciiString() + ")";
+                return funcBase.FuncName + "^{" + powerAsciiStr + "}(" + funcBase.InnerTerm.ToAsciiString() + ")";
             }
 
-            string baseAsciiStr = Base is AlgebraTerm ? (Base as AlgebraTerm).FinalToDispStr() : Base.ToMathAsciiString();
+            string baseAsciiStr = Base is AlgebraTerm ? (Base as AlgebraTerm).FinalToDispStr() : Base.ToAsciiString();
 
             if (powerAsciiStr == "")
                 return baseAsciiStr;
@@ -379,7 +394,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                         if ((new Number(2.0)).IsEqualTo(den))
                             return "sqrt(" + baseAsciiStr + ")";
                         else
-                            return "root(" + den.ToMathAsciiString() + ")(" + baseAsciiStr + ")";
+                            return "root(" + den.ToAsciiString() + ")(" + baseAsciiStr + ")";
                     }
                 }
             }
@@ -526,7 +541,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             List<ExComp[]> groups = new List<ExComp[]>();
 
             AlgebraTerm baseTerm = new AlgebraTerm();
-            foreach (var comp in _subComps)
+            foreach (ExComp comp in _subComps)
             {
                 baseTerm.Add(comp);
             }
@@ -781,7 +796,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public override List<ExComp[]> PopGroups()
         {
-            var groups = GetGroups();
+            List<ExComp[]> groups = GetGroups();
 
             _subComps.Clear();
 
@@ -1073,9 +1088,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             return Base.IsEqualTo(comp);
         }
 
-        public override string ToMathAsciiString()
+        public override string ToAsciiString()
         {
-            string powerAsciiStr = _power.ToMathAsciiString();
+            string powerAsciiStr = _power.ToAsciiString();
             if (powerAsciiStr.StartsWith("-1") && !powerAsciiStr.StartsWith("-1*"))
                 powerAsciiStr = powerAsciiStr.Remove(0, 2);
 
@@ -1084,10 +1099,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             {
                 BasicAppliedFunc funcBase = baseNoRedun as BasicAppliedFunc;
 
-                return funcBase.FuncName + "^{" + powerAsciiStr + "}(" + funcBase.InnerTerm.ToMathAsciiString() + ")";
+                return funcBase.FuncName + "^{" + powerAsciiStr + "}(" + funcBase.InnerTerm.ToAsciiString() + ")";
             }
 
-            string baseAsciiStr = Base.ToMathAsciiString();
+            string baseAsciiStr = Base.ToAsciiString();
 
             if (powerAsciiStr == "")
                 return baseAsciiStr;
@@ -1115,7 +1130,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                         if ((new Number(2.0)).IsEqualTo(den))
                             return "sqrt(" + finalBaseAsciiStr + ")";
                         else
-                            return "root(" + den.ToMathAsciiString() + ")(" + finalBaseAsciiStr + ")";
+                            return "root(" + den.ToAsciiString() + ")(" + finalBaseAsciiStr + ")";
                     }
                 }
             }
@@ -1176,7 +1191,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                 return @"\sqrt{" + baseTexStr + "}";
             else if (powerTexStr.StartsWith(@"\frac"))
             {
-                var matches = Regex.Matches(powerTexStr, MathSolverLibrary.Parsing.LexicalParser.REAL_NUM_PATTERN);
+                MatchCollection matches = Regex.Matches(powerTexStr, MathSolverLibrary.Parsing.LexicalParser.REAL_NUM_PATTERN);
                 if (matches.Count != 2)
                     throw new ArgumentException();
                 string numStr = matches[0].Value;

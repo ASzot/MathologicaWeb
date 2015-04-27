@@ -96,10 +96,10 @@
             <div class="footer">
                 <div class="centered-col">
                     <div class="footer-links noselect">
-                        <a href="terms.aspx">Terms |</a>
-                        <a href="privacy.aspx">Privacy |</a>
-                        <a href="about.aspx">About |</a>
-                        <a href="apps.aspx">Apps</a>
+                        <a href="/terms.aspx">Terms |</a>
+                        <a href="/privacy.aspx">Privacy |</a>
+                        <a href="/about.aspx">About |</a>
+                        <a href="/apps.aspx">Apps</a>
                         <div class="copy-right">
                             &copy; <%: DateTime.Now.Year %> - Mathologica, LLC &nbsp;
                         </div>
@@ -120,9 +120,6 @@
             </div>
         </div>
         
-
-        <script type="text/javascript" src="/Scripts/mainscript.js"></script>
-        <!-- Mathquill include -->
         <link rel="stylesheet" type="text/css" href="/mathquill/mathquill.css" />
         <script src="/mathquill/mathquill.min.js"></script>
     </form>

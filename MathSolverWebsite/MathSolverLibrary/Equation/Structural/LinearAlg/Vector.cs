@@ -1,73 +1,110 @@
-﻿namespace MathSolverWebsite.MathSolverLibrary.Equation.LinearAlg
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
+
+namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
 {
-    internal class ExVector : ExComp
+    class ExVector : ExMatrix
     {
-        private ExComp _x;
-        private ExComp _y;
+        public const string I = "\\bar{i}";
+        public const string J = "\\bar{j}";
+        public const string K = "\\bar{k}";
+
+        public int Length
+        {
+            get { return base.Cols; }
+        }
 
         public ExComp X
         {
-            get { return _x; }
+            get { return Get(0); }
         }
 
         public ExComp Y
         {
-            get { return _y; }
+            get { return Get(1); }
         }
 
-        public ExVector(ExComp x, ExComp y)
+        public ExComp Z
         {
-            _x = x;
-            _y = y;
-        }
-
-        public override ExComp Clone()
-        {
-            return new ExVector(_x, _y);
-        }
-
-        public override double GetCompareVal()
-        {
-            return 1.0;
-        }
-
-        public override bool IsEqualTo(ExComp ex)
-        {
-            if (ex is ExVector)
+            get 
             {
-                ExVector vec = ex as ExVector;
-                if (vec.X.IsEqualTo(_x) && vec.Y.IsEqualTo(_y))
-                    return true;
+                // Not all vectors will have Z component whereas 
+                // they are garunteed to have a least an x and y component.
+                return 2 < Length ? Get(2) : Number.Zero; 
+            }
+        }
+
+        public ExComp[] Components
+        {
+            get
+            {
+                return base._exData[0];
+            }
+        }
+
+        public ExVector(int length)
+            : base(1, length)
+        {
+
+        }
+
+        public ExVector(params ExComp[] exs)
+            : base(exs)
+        {
+
+        }
+
+        public ExComp Get(int index)
+        {
+            return Get(0, index);
+        }
+
+        public void Set(int index, ExComp val)
+        {
+            Set(0, index, val);
+        }
+
+        public static ExComp Dot(ExVector vec0, ExVector vec1)
+        {
+            if (vec0.Length != vec1.Length)
+                return Number.Undefined;
+
+            ExComp totalSum = Number.Zero;
+            for (int i = 0; i < vec0.Length; ++i)
+            {
+                ExComp prod = MulOp.StaticCombine(vec0.Get(i), vec1.Get(i));
+                totalSum = AddOp.StaticCombine(prod, totalSum);
+            }
+            return totalSum;
+        }
+
+        public ExComp GetVecLength()
+        {
+            ExComp sum = Number.Zero;
+            for (int i = 0; i < this.Length; ++i)
+            {
+                sum = AddOp.StaticCombine(Get(i), sum);
             }
 
-            return false;
+            return PowOp.StaticCombine(sum, AlgebraTerm.FromFraction(Number.One, new Number(2.0)));
         }
 
-        public override AlgebraTerm ToAlgTerm()
+        public ExVector Normalize()
         {
-            return new AlgebraTerm(this);
-        }
+            ExVector vec = new ExVector(this.Length);
+            ExComp vecLength = GetVecLength();
 
-        public override string ToMathAsciiString()
-        {
-            return "(" + _x.ToMathAsciiString() + "," + _y.ToMathAsciiString() + ")";
-        }
+            for (int i = 0; i < this.Length; ++i)
+            {
+                ExComp setVal = DivOp.StaticCombine(this.Get(i), vecLength);
+                vec.Set(i, setVal);
+            }
 
-        public override string ToJavaScriptString(bool useRad)
-        {
-            return null;
-        }
-
-        public override string ToString()
-        {
-            if (MathSolver.USE_TEX_DEBUG)
-                return ToTexString();
-            return "(" + _x.ToString() + "," + _y.ToString() + ")";
-        }
-
-        public override string ToTexString()
-        {
-            return "(" + _x.ToTexString() + "," + _y.ToTexString() + ")";
+            return vec;
         }
     }
 }

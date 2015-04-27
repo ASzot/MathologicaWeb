@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg;
+using MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector;
+
 namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 {
     internal abstract class AppliedFunction : AlgebraFunction
@@ -192,8 +195,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public override ExComp Clone()
         {
-            var cloned = from arg in _args
-                         select arg.Clone();
+            IEnumerable<ExComp> cloned = from arg in _args
+										 select arg.Clone();
             return CreateInstance(cloned.ToArray());
         }
 
@@ -211,36 +214,36 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public override AlgebraTerm HarshEvaluation()
         {
-            var harshEval = from arg in _args
-                            select arg.ToAlgTerm().HarshEvaluation();
+            IEnumerable<ExComp> harshEval = from arg in _args
+											select arg.ToAlgTerm().HarshEvaluation();
             return CreateInstance(harshEval.ToArray());
         }
 
         public override AlgebraTerm Order()
         {
-            var ordered = from arg in _args
-                          select arg.ToAlgTerm().Order();
+            IEnumerable<ExComp> ordered = from arg in _args
+										  select arg.ToAlgTerm().Order();
             return CreateInstance(ordered.ToArray());
         }
 
         public override AlgebraTerm RemoveOneCoeffs()
         {
-            var noOneCoeffs = from arg in _args
-                              select (arg is AlgebraTerm ? (arg as AlgebraTerm).RemoveOneCoeffs() : arg);
+            IEnumerable<ExComp> noOneCoeffs = from arg in _args
+											  select (arg is AlgebraTerm ? (arg as AlgebraTerm).RemoveOneCoeffs() : arg);
             return CreateInstance(noOneCoeffs.ToArray());
         }
 
         public override ExComp RemoveRedundancies(bool postWorkable = false)
         {
-            var noRedun = from arg in _args
-                          select arg.ToAlgTerm().RemoveRedundancies(postWorkable);
+            IEnumerable<ExComp> noRedun = from arg in _args
+                                          select arg.ToAlgTerm().RemoveRedundancies(postWorkable);
             return CreateInstance(noRedun.ToArray());
         }
 
         public override AlgebraTerm Substitute(ExComp subOut, ExComp subIn)
         {
-            var substituted = from arg in _args
-                              select arg.ToAlgTerm().Substitute(subOut, subIn);
+            IEnumerable<ExComp> substituted = from arg in _args
+											  select arg.ToAlgTerm().Substitute(subOut, subIn);
             return CreateInstance(substituted.ToArray());
         }
 
@@ -278,7 +281,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             s_name = name;
         }
 
-        public static ExComp Parse(string parseStr, ExComp innerEx)
+        public static ExComp Parse(string parseStr, ExComp innerEx, ref List<string> pParseErrors)
         {
             if (parseStr == "sin")
                 return new SinFunction(innerEx);
@@ -314,8 +317,41 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                 return new ACotFunction(innerEx);
             else if (parseStr == "sqrt")
                 return new AlgebraTerm(innerEx, new Operators.PowOp(), new AlgebraTerm(Number.One, new Operators.DivOp(), new Number(2.0)));
-            else
-                return null;
+            else if (parseStr == "det")
+            {
+                ExMatrix exMat = innerEx as ExMatrix;
+                if (exMat == null)
+                {
+                    pParseErrors.Add("Can only take the determinant of matrices.");
+                    return null;
+                }
+
+                return new Structural.LinearAlg.Determinant(exMat);
+            }
+            else if (parseStr == "curl")
+            {
+                if (innerEx is AlgebraTerm)
+                    innerEx = (innerEx as AlgebraTerm).RemoveRedundancies();
+                if (!CurlFunc.IsSuitableField(innerEx))
+                    return null;
+                
+                return new CurlFunc(innerEx);
+            }
+            else if (parseStr == "div")
+            {
+                if (innerEx is AlgebraTerm)
+                    innerEx = (innerEx as AlgebraTerm).RemoveRedundancies();
+                if (!DivergenceFunc.IsSuitableField(innerEx))
+                    return null;
+
+                return new DivergenceFunc(innerEx);
+            }
+            else if (parseStr == "!")
+            {
+                return new FactorialFunction(innerEx);
+            }
+
+            return null;
         }
 
         public override string FinalToDispStr()
@@ -323,9 +359,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             return s_name + _useStart + InnerTerm.FinalToDispStr() + _useEnd;
         }
 
-        public override string ToMathAsciiString()
+        public override string ToAsciiString()
         {
-            return s_name + _useStart + InnerTerm.ToMathAsciiString() + _useEnd;
+            return s_name + _useStart + InnerTerm.ToAsciiString() + _useEnd;
         }
 
         public override string ToJavaScriptString(bool useRad)

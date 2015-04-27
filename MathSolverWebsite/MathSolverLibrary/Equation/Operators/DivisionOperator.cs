@@ -3,6 +3,7 @@ using MathSolverWebsite.MathSolverLibrary.Equation.Term;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
 {
@@ -62,7 +63,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
 
                 for (int j = 0; j < subCoeffs.Info.Count; ++j)
                 {
-                    var subCoeffInfo = subCoeffs.Info[j];
+                    TypePair<ExComp, int> subCoeffInfo = subCoeffs.Info[j];
                     if (coeffs.HasPower(subCoeffInfo.Data2))
                     {
                         ExComp coeff = coeffs.GetCoeffForPow(subCoeffInfo.Data2);
@@ -99,7 +100,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + (divided as AlgebraTerm).FinalToDispStr() + WorkMgr.EDM,
                     "Above is the divided result without the remainder. Since the division produced " +
                     "a remainder of " + WorkMgr.STM +
-                    (remainder is AlgebraTerm ? (remainder as AlgebraTerm).FinalToDispStr() : remainder.ToMathAsciiString()) +
+                    (remainder is AlgebraTerm ? (remainder as AlgebraTerm).FinalToDispStr() : remainder.ToAsciiString()) +
                     WorkMgr.EDM + " the remainder of the result = " + WorkMgr.STM + "\\frac{\\text{Division Remainder}}{\\text{Divisor}}" + WorkMgr.EDM +
                     ". This comes from the statement that " + WorkMgr.STM + "\\frac{f(x)}{g(x)}=q(x)+\\frac{r(x)}{d(x)}" + WorkMgr.EDM);
                 remainder = DivOp.StaticWeakCombine(remainder, divisor.ToAlgTerm());
@@ -114,7 +115,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
             }
 
             pEvalData.WorkMgr.FromFormatted(
-                    WorkMgr.STM + (divided is AlgebraTerm ? (divided as AlgebraTerm).FinalToDispStr() : divided.ToMathAsciiString()) + WorkMgr.EDM,
+                    WorkMgr.STM + (divided is AlgebraTerm ? (divided as AlgebraTerm).FinalToDispStr() : divided.ToAsciiString()) + WorkMgr.EDM,
                     finalStepDesc);
 
             return divided;
@@ -153,12 +154,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
             if (exComp is AlgebraTerm)
             {
                 AlgebraTerm term = exComp as AlgebraTerm;
-                var groups = term.PopGroupsNoOps();
+                List<ExComp[]> groups = term.PopGroupsNoOps();
 
                 // First try and just cancel one of the terms.
                 if (groups.Count == 1)
                 {
-                    var singleGroup = groups[0];
+                    ExComp[] singleGroup = groups[0];
                     for (int i = 0; i < singleGroup.Length; ++i)
                     {
                         ExComp singleGroupComp = singleGroup[i];
@@ -293,7 +294,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 {
                     if (GroupHelper.CompsRelatable(group[i], factorOutTerm))
                     {
-                        var groupRelatableComp = group[i];
+                        ExComp groupRelatableComp = group[i];
                         if (groupRelatableComp is AlgebraComp)
                         {
                             List<ExComp> removedGroup = group.ToList();
@@ -319,16 +320,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
             else if (factorOutTerm is AlgebraTerm)
             {
                 AlgebraTerm factorOutAgTerm = factorOutTerm as AlgebraTerm;
-                var groups = factorOutAgTerm.GetGroupsNoOps();
+                List<ExComp[]> groups = factorOutAgTerm.GetGroupsNoOps();
 
                 ExComp[] matchGp = group.CloneGroup();
 
                 bool allGroupMatchesFound = true;
                 for (int i = 0; i < groups.Count; ++i)
                 {
-                    var groupToFactorOut = groups[i];
+                    ExComp[] groupToFactorOut = groups[i];
                     List<TypePair<int, int>> matchingIndices;
-                    var matching = GroupHelper.MatchCorresponding(matchGp, groupToFactorOut, out matchingIndices);
+                    List<TypePair<ExComp, ExComp>> matching = GroupHelper.MatchCorresponding(matchGp, groupToFactorOut, out matchingIndices);
                     if (matching == null || matching.Count == 0)
                     {
                         allGroupMatchesFound = false;
@@ -337,8 +338,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
 
                     for (int j = 0; j < matching.Count; ++j)
                     {
-                        var matchPair = matching[j];
-                        var matchIndices = matchingIndices[j];
+                        TypePair<ExComp, ExComp> matchPair = matching[j];
+                        TypePair<int, int> matchIndices = matchingIndices[j];
 
                         matchGp[matchIndices.Data1] = FactorOutTerm(matchPair.Data1, matchPair.Data2);
                     }
@@ -431,7 +432,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                             return powerFuncGcf;
                         }
 
-                        return new PowerFunction(powFunc1.Base, SubOp.StaticCombine(pow1, pow2));
+                        return new PowerFunction(powFunc1.Base, pow2);//SubOp.StaticCombine(pow1, pow2));
                     }
                 }
             }
@@ -512,9 +513,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                     }
 
                     List<ExComp> commonFactors = new List<ExComp>();
-                    foreach (var numGroupTerm in numGroupTerms)
+                    foreach (ExComp numGroupTerm in numGroupTerms)
                     {
-                        foreach (var denGroupTerm in denGroupTerms)
+                        foreach (ExComp denGroupTerm in denGroupTerms)
                         {
                             if (numGroupTerm.IsEqualTo(denGroupTerm))
                                 commonFactors.Add(denGroupTerm);
@@ -557,8 +558,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 AlgebraTerm term = ex1 is AlgebraTerm ? ex1 as AlgebraTerm : ex2 as AlgebraTerm;
                 Number num = ex2 is Number ? ex2 as Number : ex1 as Number;
 
-                var coeffs = term.GetCoeffs();
-                foreach (var coeff in coeffs)
+                List<Number> coeffs = term.GetCoeffs();
+                foreach (Number coeff in coeffs)
                 {
                     if (coeff == null)
                         return null;
@@ -619,6 +620,26 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
             if (ex1.IsEqualTo(ex2))
                 return Number.One;
 
+            if (ex1 is ExMatrix || ex2 is ExMatrix)
+            {
+                ExMatrix mat;
+                ExComp other;
+                if (ex1 is ExMatrix)
+                {
+                    mat = ex1 as ExMatrix;
+                    other = ex2;
+                }
+                else
+                {
+                    mat = ex2 as ExMatrix;
+                    other = ex1;
+                }
+
+                ExComp atmpt = MatrixHelper.DivOpCombine(mat, other);
+                if (atmpt != null)
+                    return atmpt;
+            }
+
             if (ex1 is AlgebraTerm && (ex1 as AlgebraTerm).IsSimpleFraction() && !(ex2 is AlgebraTerm && (ex2 as AlgebraTerm).IsSimpleFraction()))
             {
                 SimpleFraction frac = new SimpleFraction();
@@ -651,11 +672,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
             {
                 AlgebraTerm ex2Term = ex2 as AlgebraTerm;
 
-                var numDen = ex2Term.GetNumDenFrac();
+                AlgebraTerm[] numDen = ex2Term.GetNumDenFrac();
                 if (numDen != null)
                 {
-                    var num = numDen[0];
-                    var den = numDen[1];
+                    AlgebraTerm num = numDen[0];
+					AlgebraTerm den = numDen[1];
 
                     AlgebraTerm reversedFrac = AlgebraTerm.FromFraction(den, num);
                     ExComp reverseFracMulResult = MulOp.StaticCombine(ex1, reversedFrac);

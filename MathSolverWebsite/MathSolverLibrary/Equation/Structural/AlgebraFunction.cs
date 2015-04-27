@@ -18,6 +18,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         Derivative,
         AntiDerivative,
         Limit,
+        Deteriment, 
+        Transpose,
+        Gradient,
+        Curl,
+        Divergence,
     };
 
     internal abstract class AlgebraFunction : AlgebraTerm
@@ -60,15 +65,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
             //throw new ArgumentException();
 
-            var groups = term.GetGroupsNoOps();
+            List<ExComp[]> groups = term.GetGroupsNoOps();
             for (int i = 0; i < groups.Count; ++i)
             {
-                var group = groups[i];
+                ExComp[] group = groups[i];
 
                 bool combined = false;
                 for (int j = 0; j < group.Length; ++j)
                 {
-                    var groupComp = group[j];
+                    ExComp groupComp = group[j];
 
                     if (groupComp.IsEqualTo(af))
                     {
@@ -101,6 +106,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             AlgebraTerm term = new AlgebraTerm();
             term.Add(a1, new Operators.AddOp(), a2);
             return term;
+        }
+
+        protected virtual ExComp CancelWith(ExComp innerEx, ref TermType.EvalData evalData)
+        {
+            return null;
         }
 
         public abstract ExComp Evaluate(bool harshEval, ref TermType.EvalData pEvalData);

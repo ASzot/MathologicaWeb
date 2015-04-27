@@ -1,5 +1,5 @@
 ﻿using MathSolverWebsite.MathSolverLibrary.Equation;
-using MathSolverWebsite.MathSolverLibrary.Equation.LinearAlg;
+using MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg;
 using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
 using MathSolverWebsite.MathSolverLibrary.Equation.Term;
 using MathSolverWebsite.MathSolverLibrary.Parsing;
@@ -80,7 +80,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             }
             else if (command == "Graph")
             {
-                if (pEvalData.AttemptSetGraphData(_graphStr))
+                if (pEvalData.AttemptSetGraphData(_graphStr, _solveFor.Var))
                     return SolveResult.Solved();
                 else
                     return SolveResult.Failure();
@@ -134,7 +134,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             if (_funcIden is FunctionDefinition)
             {
                 tt_func = new FunctionTermType();
-                if (!tt_func.Init(new EquationSet(_funcIden, left == null ? right : left, LexemeType.EqualsOp), lexemeTable, solveVars, probSolveVar))
+                if (!tt_func.Init(new EqSet(_funcIden, left == null ? right : left, LexemeType.EqualsOp), lexemeTable, solveVars, probSolveVar))
                     tt_func = null;
             }
 
@@ -164,7 +164,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             }
 
             if (promptStrs != null)
-                tt_solve = new SolveTermType(new EquationSet(_eq, Number.Zero, LexemeType.EqualsOp), lexemeTable, solveVars, probSolveVar, promptStrs,
+                tt_solve = new SolveTermType(new EqSet(_eq, Number.Zero, LexemeType.EqualsOp), lexemeTable, solveVars, probSolveVar, promptStrs,
                     _funcIden is AlgebraComp ? (_funcIden as AlgebraComp).Var.Var : "");
 
             AlgebraTerm nullTerm = null;

@@ -9,12 +9,13 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
     internal class EquationSystemTermType : TermType
     {
         private Dictionary<string, int> _allIdens;
-        private List<EquationSet> _eqSets;
+        private List<EqSet> _eqSets;
         private List<List<TypePair<LexemeType, string>>> _lts;
         private int _singularIndex = -1;
         private string[] _graphStrs;
+        private string _graphVarStr = null;
 
-        public EquationSystemTermType(List<EquationSet> eqSets, List<List<TypePair<LexemeType, string>>> lts, Dictionary<string, int> allIdens)
+        public EquationSystemTermType(List<EqSet> eqSets, List<List<TypePair<LexemeType, string>>> lts, Dictionary<string, int> allIdens)
             : base()
         {
             _lts = lts;
@@ -77,13 +78,13 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                     if (assignTo is AlgebraTerm)
                         funcDefStr = (assignTo as AlgebraTerm).FinalToDispStr();
                     else
-                        funcDefStr = assignTo.ToMathAsciiString();
+                        funcDefStr = assignTo.ToAsciiString();
                     funcDefStr = MathSolver.FinalizeOutput(funcDefStr);
-                    pEvalData.AddMsg(WorkMgr.STM + funcDef.ToMathAsciiString() + WorkMgr.EDM + " defined as " + WorkMgr.STM + funcDefStr + WorkMgr.EDM);
+                    pEvalData.AddMsg(WorkMgr.STM + funcDef.ToAsciiString() + WorkMgr.EDM + " defined as " + WorkMgr.STM + funcDefStr + WorkMgr.EDM);
 
                     pEvalData.FuncDefs.Define((FunctionDefinition)funcDef.Clone(), assignTo.Clone());
                 }
-                EquationSet tmpEqSet;
+                EqSet tmpEqSet;
                 if (!_eqSets[_singularIndex].ReparseInfo(out tmpEqSet, ref pEvalData))
                 {
                     pEvalData.AddFailureMsg("Internal error.");
@@ -118,7 +119,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             }
             else if (command == "Graph")
             {
-                if (pEvalData.AttemptSetGraphData(_graphStrs))
+                if (_graphVarStr != null && pEvalData.AttemptSetGraphData(_graphStrs, _graphVarStr))
                     return SolveResult.Solved();
                 else
                     return SolveResult.Failure();
@@ -160,10 +161,10 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
             bool isGraph = true;
             _graphStrs = new string[_eqSets.Count];
-            string singularVar = null;
+            _graphVarStr = null;
             for (int i = 0; i < _eqSets.Count; ++i)
             {
-                EquationSet eqSet = _eqSets[i];
+                EqSet eqSet = _eqSets[i];
                 if (!eqSet.IsSingular)
                 {
                     ExComp[] funcDef = eqSet.GetFuncDefComps();
@@ -171,9 +172,9 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                     {
                         AlgebraTerm term = funcDef[1].ToAlgTerm();
                         var vars = term.GetAllAlgebraCompsStr();
-                        if (vars.Count == 1 && (singularVar == null || vars[0] == singularVar))
+                        if (vars.Count == 1 && (_graphVarStr == null || vars[0] == _graphVarStr))
                         {
-                            singularVar = vars[0];
+                            _graphVarStr = vars[0];
                             string graphStr = term.ToJavaScriptString(true);
                             if (graphStr != null)
                             {
@@ -187,9 +188,9 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 {
                     AlgebraTerm term = eqSet.LeftTerm;
                     var vars = term.GetAllAlgebraCompsStr();
-                    if (vars.Count == 1 && (singularVar == null || vars[0] == singularVar))
+                    if (vars.Count == 1 && (_graphVarStr == null || vars[0] == _graphVarStr))
                     {
-                        singularVar = vars[0];
+                        _graphVarStr = vars[0];
                         string graphStr = term.ToJavaScriptString(true);
                         if (graphStr != null)
                         {

@@ -66,7 +66,11 @@
     }
 
     .toolbar-icon {
-        font-size: 14pt !important;
+        font-size: 28px !important;
+    }
+
+    .toolbar-icon-large {
+        font-size: 18px !important;
     }
 
     #toolbar-btn-space {
@@ -79,7 +83,7 @@
     }
 
     .footer {
-        height: 40px;
+        height: 10px;
     }
 
     .branding-images {
@@ -87,11 +91,42 @@
     }
 
     #eval-space {
-        margin-bottom: 60px;
+        margin-bottom: 30px;
         width: 100%;
     }
 
-    .solve-btn {
-
+    .centered-col {
+        display: block;
+        width: 100%;
     }
+
+    .footer-links {
+        margin-right: 0px;
+        margin-top: -3px;
+        font-size: 13px;
+    }
+
+    .copy-right {
+        margin-top: 2px;
+        display: inline;
+        font-size: 10px;
+        float: right;
+        padding-right: 10px;
+    }
+
+    .solve-btn {
+    }
+
+    #work-space {
+        height: -moz-calc(100% - 260px);
+        height: -webkit-calc(100% - 260px);
+        height: -o-calc(100% - 260px);
+        height: calc(100% - 260px);
+        margin-top: 100px;
+    }
+
+    .input-txt-box-area {
+        width: 78% !important;
+    }
+
 }

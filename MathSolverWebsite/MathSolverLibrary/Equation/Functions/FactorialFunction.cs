@@ -36,9 +36,9 @@
             return this;
         }
 
-        public override string ToMathAsciiString()
+        public override string ToAsciiString()
         {
-            return InnerEx.ToMathAsciiString() + "!";
+            return InnerEx.ToAsciiString() + "!";
         }
 
         public override string ToJavaScriptString(bool useRad)
@@ -51,6 +51,26 @@
             if (MathSolver.USE_TEX_DEBUG)
                 return ToTexString();
             return InnerEx.ToString() + "!";
+        }
+
+        public override string FinalToAsciiKeepFormatting()
+        {
+            return ToAsciiString();
+        }
+
+        public override string FinalToAsciiString()
+        {
+            return ToAsciiString();
+        }
+
+        public override string FinalToTexKeepFormatting()
+        {
+            return ToTexString();
+        }
+
+        public override string FinalToTexString()
+        {
+            return ToTexString();
         }
 
         public override string ToTexString()

@@ -87,9 +87,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             List<ExComp> decomCoeffs = new List<ExComp>();
             for (int i = max; i >= 0; --i)
             {
-                var decomVarGroups = finalTerm.GetGroupContainingTerm(dVar.ToPow(i));
-                var decomVarTerms = from decomVarGroup in decomVarGroups
-                                    select decomVarGroup.GetUnrelatableTermsOfGroup(dVar).ToAlgTerm();
+                List<ExComp[]> decomVarGroups = finalTerm.GetGroupContainingTerm(dVar.ToPow(i));
+                IEnumerable<AlgebraTerm> decomVarTerms = from decomVarGroup in decomVarGroups
+														 select decomVarGroup.GetUnrelatableTermsOfGroup(dVar).ToAlgTerm();
 
                 AlgebraTerm decomCoeff = new AlgebraTerm();
                 foreach (AlgebraTerm aTerm in decomVarTerms)
@@ -101,13 +101,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             }
 
             // Solve the system of equations for the decomposition coefficients.
-            List<EquationSet> equations = new List<EquationSet>();
+            List<EqSet> equations = new List<EqSet>();
             for (int i = 0; i < decomCoeffs.Count; ++i)
             {
                 ExComp coeffForPow = numPoly.Info.GetCoeffForPow(i);
                 ExComp right = coeffForPow ?? Number.Zero;
 
-                equations.Add(new EquationSet(decomCoeffs[i], right, Parsing.LexemeType.EqualsOp));
+                equations.Add(new EqSet(decomCoeffs[i], right, Parsing.LexemeType.EqualsOp));
             }
 
             AlgebraSolver agSolver = new AlgebraSolver();

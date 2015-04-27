@@ -19,6 +19,8 @@ namespace MathSolverWebsite.Account
             {
                 RegisterHyperLink.NavigateUrl += "?ReturnUrl=" + returnUrl;
             }
+           
+            
         }
     }
 }

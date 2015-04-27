@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
+using MathSolverWebsite.MathSolverLibrary.Equation.Functions;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation
 {
@@ -615,7 +617,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public bool HasImaginaryComp()
         {
-            return (d_imagComp != 0.0);
+            return (d_imagComp != 0.0 && !IsUndefined());
         }
 
         public bool HasImagRealComp()
@@ -713,9 +715,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         {
             double real = (n1.RealComp * n2.RealComp) - (n1.ImagComp * n2.ImagComp);
             double imag = (n1.RealComp * n2.ImagComp) + (n1.ImagComp * n2.RealComp);
+            if (n1.IsInfinity() || n2.IsInfinity())
+                imag = 0.0;
 
             real = EpsilonCorrect(real);
             imag = EpsilonCorrect(imag);
+
+            if (imag == 0.0 && n1.IsPosInfinity())
+                return n2 < 0.0 ? NegInfinity : PosInfinity;
+            else if (imag == 0.0 && n2.IsPosInfinity())
+                return n1 < 0.0 ? NegInfinity : PosInfinity;
 
             return new Number(real, imag);
         }
@@ -877,7 +886,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         public bool IsRealInteger()
         {
             string realStr = d_realComp.ToString();
-            return !realStr.Contains(".");
+            return !realStr.Contains(".") && !IsInfinity();
         }
 
         public bool IsUndefined()
@@ -904,7 +913,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return new AlgebraTerm(this);
         }
 
-        public override string ToMathAsciiString()
+        public override string ToAsciiString()
         {
             if (IsUndefined())
                 return "\\text{Undefined}";
@@ -992,6 +1001,31 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             }
 
             return d_realComp.ToString();
+        }
+
+        public ExComp ToPolarForm(ref TermType.EvalData pEvalData)
+        {
+            ExComp mag, angle;
+            GetPolarData(out mag, out angle, ref pEvalData);
+
+            bool origRadVal = pEvalData.UseRad;
+            pEvalData.TmpSetUseRad(true);
+
+            ExComp result = MulOp.StaticCombine(mag,
+                SubOp.StaticCombine(new CosFunction(angle), 
+                MulOp.StaticCombine(Number.ImagOne, new SinFunction(angle))));
+
+            pEvalData.TmpSetUseRad(origRadVal);
+
+            return result;
+        }
+
+        public ExComp ToExponentialForm(ref TermType.EvalData pEvalData)
+        {
+            ExComp mag, angle;
+            GetPolarData(out mag, out angle, ref pEvalData);
+
+            return MulOp.StaticCombine(mag, PowOp.Exp(MulOp.StaticCombine(angle, Number.ImagOne)));
         }
     }
 }

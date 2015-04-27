@@ -117,7 +117,7 @@ namespace MathSolverWebsite.Website_Logic
             string firstNameTag, secondNameTag;
             if (useNameLink)
             {
-                firstNameTag = "<a href='HelpTopic?Name=" + server.UrlEncode(s_dispName) + "'>";
+                firstNameTag = "<a href='/prac/topic?Name=" + server.UrlEncode(s_dispName) + "'>";
                 secondNameTag = "</a>";
             }
             else
@@ -127,18 +127,18 @@ namespace MathSolverWebsite.Website_Logic
             }
 
             string final = firstNameTag + s_dispName + secondNameTag;
-            final += "<p>" + (useNameLink ? GetTrunExplainStr() : s_descTxt) + "</p>";
+            final += "<p class='sample-desc-txt'>" + (useNameLink ? GetTrunExplainStr() : s_descTxt) + "</p>";
             if (!useNameLink)
                 final += "<p>" + _info + "</p>";
             if (!useNameLink)
-                final += "<p>Examples</p>";
+                final += "<h3>Examples</h3>";
 
 
             int i;
             for (i = 0; i < _exampleInputs.Count(); ++i)
             {
                 TopicExample exampleInput = _exampleInputs.ElementAt(i);
-                final += "<a class='mathEquationLink' href='Default?Index=" +
+                final += "<a class='mathEquationLink' href='/Default?Index=" +
                     server.UrlEncode(exampleInput.CommandIndex.ToString()) + "&InputDisp=" + server.UrlEncode(exampleInput.Input);
 
                 if (exampleInput.UseRad.HasValue)

@@ -8,12 +8,12 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
     internal class SolveTermType : TermType
     {
         private AlgebraSolver _agSolver;
-        private EquationSet _eqSet;
+        private EqSet _eqSet;
         private List<TypePair<LexemeType, string>> _lt;
         private string[] s_promptStrs;
 
-        public SolveTermType(EquationSet eqSet, List<TypePair<LexemeType, string>> lt, Dictionary<string, int> solveVars, string probSolveVar, 
-            string[] promptStrs, string noIncludeVar)
+        public SolveTermType(EqSet eqSet, List<TypePair<LexemeType, string>> lt, Dictionary<string, int> solveVars, 
+            string probSolveVar, string[] promptStrs, string noIncludeVar)
         {
             s_promptStrs = promptStrs;
 
@@ -66,7 +66,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             _cmds = tmpCmds.ToArray();
         }
 
-        public SolveTermType(EquationSet eqSet, List<TypePair<LexemeType, string>> lt, Dictionary<string, int> solveVars, string probSolveVar, string promptStr)
+        public SolveTermType(EqSet eqSet, List<TypePair<LexemeType, string>> lt, Dictionary<string, int> solveVars, string probSolveVar, string promptStr)
             : base()
         {
             s_promptStrs = new string[1];
@@ -92,8 +92,22 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             }
 
             solveVarKeys.Insert(0, probSolveVar);
-
             List<string> cmds = new List<string>();
+            
+            if (_eqSet.Left is AlgebraComp)
+            {
+                string graphStr = _eqSet.Right.ToJavaScriptString(false);
+                if (graphStr != null)
+                    cmds.Add("Graph");
+            }
+
+            if (cmds.Count == 0 && _eqSet.Right is AlgebraComp)
+            {
+                string graphStr = _eqSet.Left.ToJavaScriptString(false);
+                if (graphStr != null)
+                    cmds.Add("Graph");
+            }
+
             for (int i = 0; i < solveVarKeys.Count; ++i)
             {
                 cmds.Add(s_promptStrs[0] + solveVarKeys[i]);
@@ -119,7 +133,8 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             _cmds = cmds.ToArray();
         }
 
-        public SolveTermType(EquationSet eqSet, List<TypePair<LexemeType, string>> lt, Dictionary<string, int> solveVars, string probSolveVar)
+        public SolveTermType(EqSet eqSet, List<TypePair<LexemeType, string>> lt, Dictionary<string, int> solveVars, 
+            string probSolveVar)
             : this(eqSet, lt, solveVars, probSolveVar, "Solve for ")
         {
         }
@@ -135,7 +150,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                     string solveForKey = command.Substring(promptStr.Length, command.Length - promptStr.Length);
                     AlgebraVar solveFor = new AlgebraVar(solveForKey);
 
-                    EquationSet useSet = _eqSet.Clone();
+                    EqSet useSet = _eqSet.Clone();
 
                     pEvalData.IsWorkable = false;
                     SolveResult result;
@@ -172,6 +187,29 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 result.RemoveUndefinedSolutions();
 
                 return result;
+            }
+            else if (command == "Graph")
+            {
+                string graphStr = null;
+                string graphVarStr = null;
+                List<string> compsStrs = null;
+                if (_eqSet.Left is AlgebraComp)
+                {
+                    graphStr = _eqSet.Right.ToJavaScriptString(pEvalData.UseRad);
+                    compsStrs = _eqSet.Right.ToAlgTerm().GetAllAlgebraCompsStr();
+                }
+
+                if (graphStr == null && _eqSet.Right is AlgebraComp)
+                {
+                    graphStr = _eqSet.Left.ToJavaScriptString(pEvalData.UseRad);
+                    compsStrs = _eqSet.Left.ToAlgTerm().GetAllAlgebraCompsStr();
+                }
+
+                if (graphStr == null || compsStrs == null || compsStrs.Count != 1)
+                    return SolveResult.Failure();
+
+                pEvalData.AttemptSetGraphData(graphStr, compsStrs[0]);
+                return SolveResult.Solved();
             }
 
             return SolveResult.InvalidCmd(ref pEvalData);

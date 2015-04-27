@@ -4,6 +4,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 {
     internal class ChooseFunction : AppliedFunction_NArgs
     {
+        private const string IDEN = "C";
         public ExComp Bottom
         {
             get { return _args[1]; }
@@ -14,6 +15,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         {
             get { return _args[0]; }
             set { _args[0] = value; }
+        }
+
+        public AlgebraTerm TopTerm
+        {
+            get { return Top.ToAlgTerm(); }
+        }
+
+        public AlgebraTerm BottomTerm
+        {
+            get { return Bottom.ToAlgTerm(); }
         }
 
         public ChooseFunction(ExComp top, ExComp bottom)
@@ -52,14 +63,17 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                 FactorialFunction nMinusKFactorial = new FactorialFunction(Operators.SubOp.StaticCombine(n, k));
 
                 ExComp nFactEval = nFactorial.Evaluate(harshEval, ref pEvalData);
-                if (nFactEval == null)
+                if (Number.IsUndef(nFactEval))
                     return Number.Undefined;
+
                 ExComp kFactEval = kFactorial.Evaluate(harshEval, ref pEvalData);
-                if (kFactEval == null)
+                if (Number.IsUndef(kFactEval))
                     return Number.Undefined;
+
                 ExComp nMinusKFactEval = nMinusKFactorial.Evaluate(harshEval, ref pEvalData);
-                if (nMinusKFactEval == null)
+                if (Number.IsUndef(nMinusKFactEval))
                     return Number.Undefined;
+
                 ExComp divBy = Operators.MulOp.StaticCombine(kFactEval, nMinusKFactEval);
                 return Operators.DivOp.StaticCombine(nFactEval, divBy);
             }
@@ -67,9 +81,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             return this;
         }
 
-        public override string ToMathAsciiString()
+        public override string ToAsciiString()
         {
-            return String.Format("({0},{1})", Top.ToMathAsciiString(), Bottom.ToMathAsciiString());
+            return "(_{" + Top.ToAsciiString() + "} " + IDEN + " _{" + Bottom.ToAsciiString() + "})";
         }
 
         public override string ToJavaScriptString(bool useRad)
@@ -79,14 +93,36 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public override string ToString()
         {
-            if (MathSolver.USE_TEX_DEBUG)
-                return ToTexString();
-            return String.Format("({0},{1})", Top.ToString(), Bottom.ToString());
+            return ToTexString();
         }
 
         public override string ToTexString()
         {
-            return String.Format("({0},{1})", Top.ToTexString(), Bottom.ToTexString());
+            return "(_{" + Top.ToTexString() + "} " + IDEN + " _{" + Bottom.ToTexString() + "})";
+        }
+
+        public override string FinalToAsciiKeepFormatting()
+        {
+            return "_{" + TopTerm.FinalToAsciiKeepFormatting() + "} " + IDEN + 
+                " _{" + BottomTerm.FinalToAsciiKeepFormatting() + "}";
+        }
+
+        public override string FinalToAsciiString()
+        {
+            return "_{" + TopTerm.FinalToAsciiString() + "} " + IDEN +
+                " _{" + BottomTerm.FinalToAsciiString() + "}";
+        }
+
+        public override string FinalToTexKeepFormatting()
+        {
+            return "_{" + TopTerm.FinalToTexKeepFormatting() + "} " + IDEN +
+                " _{" + BottomTerm.FinalToTexKeepFormatting() + "}";
+        }
+
+        public override string FinalToTexString()
+        {
+            return "_{" + TopTerm.FinalToTexString() + "} " + IDEN +
+                " _{" + BottomTerm.FinalToTexString() + "}";
         }
     }
 }

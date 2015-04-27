@@ -51,6 +51,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             return log;
         }
 
+        public static LogFunction Create(ExComp innerEx, ExComp baseEx)
+        {
+            LogFunction logFunc = new LogFunction(innerEx);
+            logFunc.Base = baseEx;
+
+            return logFunc;
+        }
+
         public override ExComp Clone()
         {
             LogFunction log = new LogFunction(InnerTerm.Clone());
@@ -89,6 +97,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             return InnerTerm.Contains(varFor) || Base.ToAlgTerm().Contains(varFor);
         }
 
+        protected override ExComp CancelWith(ExComp innerEx, ref TermType.EvalData evalData)
+        {
+            PowerFunction powFunc = innerEx as PowerFunction;
+            if (powFunc != null && powFunc.Base.IsEqualTo(this.Base))
+                return powFunc.Power;
+            return null;
+        }
+
         public override ExComp Evaluate(bool harshEval, ref TermType.EvalData pEvalData)
         {
             double dInnerVal = double.NaN;
@@ -98,6 +114,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
             if (Number.IsUndef(innerEx))
                 return Number.Undefined;
+
+            ExComp cancelResult = CancelWith(innerEx, ref pEvalData);
+            if (cancelResult != null)
+                return cancelResult;
 
             if ((innerEx is Number && !(innerEx as Number).HasImaginaryComp()) ||
                 (innerEx is Constant && !(innerEx as Constant).Value.HasImaginaryComp()))
@@ -282,7 +302,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             return log;
         }
 
-        public override string ToMathAsciiString()
+        public override string ToAsciiString()
         {
             if (_baseEx is Constant && (_baseEx as Constant).Var.Var == "e")
             {
