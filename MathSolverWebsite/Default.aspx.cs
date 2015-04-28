@@ -231,6 +231,9 @@ namespace MathSolverWebsite
 
         protected void hiddenSaveProbBtn_Click(object sender, EventArgs e)
         {
+            if (!User.Identity.IsAuthenticated)
+                return;
+
             string saveProbTxt = Server.HtmlDecode(hiddenSavedProblemTxtBox.Text);
             string saveProbDate = Server.HtmlDecode(hiddenTimeTxtBox.Text);
             MembershipUser currentUser = Membership.GetUser(User.Identity.Name);

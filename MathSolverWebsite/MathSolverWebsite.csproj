@@ -154,11 +154,14 @@
     <Content Include="account\login.aspx" />
     <Content Include="account\manage.aspx" />
     <Content Include="account\register.aspx" />
+    <Content Include="account\you.aspx" />
     <Content Include="apps.aspx" />
     <Content Include="Content\css\mlogica-def.css" />
     <Content Include="Content\css\mlogica-final.css" />
     <Content Include="Content\css\mlogica-mobile.css" />
     <Content Include="Content\css\mlogica-practice.css" />
+    <Content Include="Content\css\mlogica-work.css" />
+    <Content Include="Content\css\mlogica-you.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -233,6 +236,8 @@
     <Content Include="Images\Branding\mail.png" />
     <Content Include="Images\MathologicaLogo.png" />
     <Content Include="Images\Branding\twitter.png" />
+    <Content Include="JSXGraph\jsxgraph.css" />
+    <Content Include="JSXGraph\jsxgraphcore.js" />
     <Content Include="mathquill\font\stixgeneral-bundle\STIXFontLicense2010.txt" />
     <Content Include="mathquill\font\stixgeneral-bundle\stixgeneral-webfont.svg" />
     <Content Include="mathquill\font\stixgeneral-bundle\stixgeneralbol-webfont.svg" />
@@ -298,6 +303,7 @@
     <Content Include="Scripts\ml-main.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\mainscript.js" />
+    <Content Include="Scripts\webflow.js" />
     <Content Include="Scripts\WebForms\DetailsView.js" />
     <Content Include="Scripts\WebForms\Focus.js" />
     <Content Include="Scripts\WebForms\GridView.js" />
@@ -359,6 +365,14 @@
     </Compile>
     <Compile Include="account\register.aspx.designer.cs">
       <DependentUpon>register.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="account\SavedProblem.cs" />
+    <Compile Include="account\you.aspx.cs">
+      <DependentUpon>you.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="account\you.aspx.designer.cs">
+      <DependentUpon>you.aspx</DependentUpon>
     </Compile>
     <Compile Include="apps.aspx.cs">
       <DependentUpon>apps.aspx</DependentUpon>
@@ -604,6 +618,7 @@
     </Compile>
     <Compile Include="Website_Logic\DataMgr.cs" />
     <Compile Include="Website_Logic\HtmlHelper.cs" />
+    <Compile Include="Website_Logic\SqlHelper.cs" />
     <Compile Include="Website_Logic\TopicData.cs" />
     <Compile Include="Website_Logic\TopicMgr.cs" />
     <Compile Include="Website_Logic\TopicPath.cs" />

@@ -1,0 +1,16 @@
+﻿#to-bottom-btn {
+    width: 60px;
+    height: 60px;
+    position: absolute;
+    background-color: #F5F5F5;
+    border: 1px solid #adadad;
+    text-align: center;
+    line-height: 60px;
+    right: 31%;
+    display: none;
+}
+
+    #to-bottom-btn:hover {
+        cursor: pointer;
+        color: #3498db;
+    }

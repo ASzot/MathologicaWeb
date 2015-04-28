@@ -26,6 +26,15 @@ fieldset {
     margin-bottom: 50px;
 }
 
+
+.logout-btn {
+    color: white;
+}
+
+.nav-login-area {
+    display: none;
+}
+
 .del-btn {
     margin-left: 40px;
     font-size: 30px;
@@ -92,6 +101,7 @@ fieldset {
     display: inline-block;
     margin-top: 30px;
     color: #919191;
+    font-size: 20px;
 }
 
 legend {
@@ -161,6 +171,7 @@ legend {
     height: 62px;
     background-color: #e74c3c;
 }
+
 
 .parse-error-txt {
     text-align: center;
@@ -372,6 +383,16 @@ h1 {
     box-shadow: inset 0 1px 0 5px #3498db;
 
     transition: all 0.3s ease;
+}
+
+.subject-bar-btn-clicked {
+    display: inline-block;
+    padding: 12px;
+    padding-bottom: 5px;
+    margin-bottom: 7px;
+    margin-top: 7px;
+    font-size: 30px;
+    border-bottom: 2px solid #1abc9c;
 }
 
 #toolbar-btn-space {
@@ -602,13 +623,29 @@ h1 {
   margin-right: auto;
   margin-left: auto;
   font-family: Roboto, sans-serif;
-  color: #b8b8b8;
+  color: #676767;
   font-size: 24px;
   font-weight: 100;
   text-align: center;
 }
 
+.click-area {
+    height: 130px;
+    width: 300px;
+    position: absolute;
+    z-index: 1001;
+}
 
+.mathlogo:hover {
+    cursor: pointer;
+    opacity: 0.6;
+}
+
+.moto:hover {
+    color: #3498db;
+    opacity: 0.6;
+    cursor: pointer;
+}
 
 .w-container {
   margin-left: auto;
@@ -757,7 +794,6 @@ h1 {
   top: 0;
 }
 .w-nav-button {
-  position: absolute;
   float: right;
   padding: 18px;
   font-size: 24px;
@@ -934,10 +970,11 @@ body {
 }
 
 a {
-  width: 100%;
-  background-color: transparent;
-  -webkit-transition: all 750ms ease;
-  transition: all 750ms ease;
+    width: 100%;
+    background-color: transparent;
+    -webkit-transition: all 750ms ease;
+    transition: all 750ms ease;
+    text-decoration: none;
 }
 
 a:hover {
@@ -1010,6 +1047,12 @@ img {
     color: #e80c4d;
 }
 
+.gen-error {
+    color: #e80c4d;
+    text-align: center;
+    font-size: 18px;
+}
+
 .sectionHeading {
     font-size: 24pt;
     text-align: center;
@@ -1017,14 +1060,13 @@ img {
 
 .workCollapseBtn {
     border: 2px solid black;
-    border-radius: 20px;
     padding: 10px;
     width: 300px;
     background-color: white;
+    font-size: 30px;
 }
 
     .workCollapseBtn:hover {
-        border-radius: 20px;
         border: 2px solid #1592db;
         cursor: pointer;
     }

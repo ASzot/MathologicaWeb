@@ -24,6 +24,15 @@
         padding: 6px !important;
     }
 
+    .w-nav-link {
+        line-height: 68px;
+    }
+
+    .click-area {
+        width: 200px;
+        height: 60px;
+    }
+
     #left-paneling {
         width: 100%;
         float: none;
@@ -86,6 +95,10 @@
         height: 10px;
     }
 
+    .nav-login-area {
+        display: block;
+    }
+
     .branding-images {
         display: none;
     }
@@ -126,7 +139,46 @@
     }
 
     .input-txt-box-area {
-        width: 78% !important;
+        width: 95% !important;
     }
 
+    .mathquill-rendered-math {
+        font-size: 21px !important;
+    }
+
+    .text-notice {
+        position: relative;
+        top: 5px;
+    }
+
+    .gen-drop-down {
+        font-size: 12pt;
+    }
+
+    .input-disp-area {
+        font-size: 16px;
+    }
+
+    .solutionData {
+        font-size: 17px;
+    }
+
+    .workListItem {
+        font-size: 14px;
+    }
+
+    .workDescText {
+        font-size: 16px; 
+    }
+
+    .workCollapseBtn {
+        width: 200px;
+        font-size: 22px;
+    }
+
+    .graph-disp {
+        min-width: 240px;
+        width: 80%;
+        height: 250px;
+    }
 }

@@ -10,9 +10,11 @@
     <meta name="description" content="" />
     
     <!-- JSX graph include. -->
-    <script async="async" type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jsxgraph/0.99.3/jsxgraphcore.js"></script>
+    <link rel="stylesheet" href="JSXGraph/jsxgraph.css" type="text/css" />
+    <script async="async" type="text/javascript" src="JSXGraph/jsxgraphcore.js"></script>
 
     <script type="text/javascript" src="Scripts/ml-main.js"></script> 
+    <link rel="stylesheet" href="Content/css/mlogica-work.css" type="text/css" />
 
     <!-- MathJax include. -->
     <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=AM_HTMLorMML"></script>
@@ -85,6 +87,21 @@
             $(".account-space").click(function (e) {
                 $(".account-popup").toggle(300);
                 return false;
+            });
+
+            $("#work-space").on('scroll', function () {
+                var currentScroll = $("#work-space").scrollTop();
+                var scrollHeight = $("#work-space").height();
+                if (currentScroll >= scrollHeight)
+                    $("#to-bottom-btn").hide();
+                else {
+                    $("#to-bottom-btn").show();
+                }
+            });
+
+            $("#to-bottom-btn").click(function (e) {
+                var objDiv = document.getElementById("work-space");
+                objDiv.scrollTop = objDiv.scrollHeight;
             });
 
             prevWidth = $(window).width();
@@ -234,6 +251,20 @@
                 });
             });
 
+            function createPopUp(innerHtml) {
+                $(".pop").remove();
+                return "<div class='messagepop pop'>" + innerHtml + "<a class='close' href='#'>Close</a></div>";
+            }
+
+            function showPopUp() {
+                $(".pop").slideFadeToggle();
+
+                $(".close").live('click', function () {
+                    $(".pop").remove();
+                    return false;
+                });
+            }
+
             $(".save-btn").each(function () {
                 $(this).click(function () {
                     var prevOutput = $(this).prev();
@@ -244,33 +275,38 @@
                     if (isAuthen == "True") {
                         var currentDate = new Date();
 
+
                         $("#<%= hiddenSavedProblemTxtBox.ClientID %>").val(htmlEncode(inputTxt));
                         var currentDate = currentDate.today();
                         $("#<%= hiddenTimeTxtBox.ClientID %>").val(htmlEncode(currentDate));
 
                         $("#<%= hiddenSaveProbBtn.ClientID %>").click();
+
+                        $(this).parent().parent().parent().parent().prepend(createPopUp(
+                            "<p class='text-notice' style='font-size: 25px'>Problem Saved</p>"
+                            ));
+                        showPopUp();
                     }
                     else {
-                        $(this).parent().append("<div class='messagepop pop'><p>Create an account to save problems and access them anywhere at anytime!</p>" + 
-                            "<a class='btn-link' href='account/register.aspx'>" + 
-                                "<div class='signup-space account-division'>" + 
-                                    "Sign Up" + 
+                        $(this).parent().parent().parent().parent().prepend(createPopUp(
+                            "<p>Create an account to save problems and access them anywhere at anytime!</p>" +
+                            "<a class='btn-link' href='account/register.aspx'>" +
+                                "<div class='signup-space account-division'>" +
+                                    "Sign Up" +
+                                "</div>" +
+                            "</a>" +
+                            "<a class='btn-link' href='account/login'>" + 
+                                "<div class='login-space account-division' style='margin-right: 29px; width: 198px;'>" +
+                                    "Log In" + 
                                 "</div>" + 
-                            "</a><a class='close' href='#'>Close</a></div>");
-                        $(".pop").slideFadeToggle();
-
-                        $(".close").live('click', function () {
-                            $(".pop").remove();
-                            return false;
-                        });
+                            "</a>"
+                                ));
+                        showPopUp();
                     }
                 });
             });
-        }
 
-        function scrollToBottom() {
-            var objDiv = document.getElementById("work-space");
-            objDiv.scrollTop = objDiv.scrollHeight;
+
         }
 
         function onClearBtnClicked() {
@@ -296,6 +332,11 @@
         <div id="left-paneling">
             <div id="work-space">
                 <div id="inner-work-space-id" class="inner-work-space">
+                    <a class="btn-link">
+                        <div id="to-bottom-btn">
+                            &#x25BC;
+                        </div>
+                    </a>
                     <div id="work-list-disp">
 
                     </div>
@@ -362,12 +403,12 @@
         <div id="right-paneling">
             <div id="toolbar-space">
                 <div id="tool-bar-selection-space">
-                    <div class="subject-bar-btn noselect">Basic</div>
-                    <div class="subject-bar-btn noselect">Trig</div>
-                    <div class="subject-bar-btn noselect">Calc</div>
-                    <div class="subject-bar-btn noselect">Symb</div>
-                    <div class="subject-bar-btn noselect">Prob</div>
-                    <div class="subject-bar-btn noselect">Lin Alg</div>
+                    <div id="sb0" class="subject-bar-btn-clicked noselect">Basic</div>
+                    <div id="sb1" class="subject-bar-btn noselect">Trig</div>
+                    <div id="sb2" class="subject-bar-btn noselect">Calc</div>
+                    <div id="sb3" class="subject-bar-btn noselect">Symb</div>
+                    <div id="sb4" class="subject-bar-btn noselect">Prob</div>
+                    <div id="sb5" class="subject-bar-btn noselect">Lin Alg</div>
                 </div>
                 <div id="toolbar-btn-space">
                     <div class="toolbar-btn noselect">
@@ -489,7 +530,7 @@
                             <div class="account-popup">
                                 <a class="btn-link" href="#">
                                     <div class="account-popup-item noselect">
-                                        <asp:LoginStatus ID="LoginStatus1" runat="server" LogoutAction="Redirect" LogoutText="Log off" LogoutPageUrl="~/" />
+                                        <asp:LoginStatus CssClass="logout-btn" ID="LoginStatus1" runat="server" LogoutAction="Redirect" LogoutText="Log off" LogoutPageUrl="~/" />
                                     </div>
                                 </a>
                                 <a class="btn-link" href="account/manage.aspx">
@@ -498,10 +539,6 @@
                                     </div>
                                 </a>
                             </div>
-
-                            <%--   Hello, <a id="A1" runat="server" class="username" href="~/Account/Manage" title="Manage your account">
-                                    </a>!
-                                --%>
                         </LoggedInTemplate>
                     </asp:LoginView>
                 </section>

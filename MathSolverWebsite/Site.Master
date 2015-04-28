@@ -1,9 +1,6 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="MathSolverWebsite.SiteMaster" %>
 <%@ Import Namespace="System.Text.RegularExpressions" %>
 
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head runat="server">
@@ -27,6 +24,7 @@
             }
         });
     </script>
+
 
     <asp:ContentPlaceHolder runat="server" ID="HeadContent" />
 </head>
@@ -62,15 +60,18 @@
         <header>
             <link rel="stylesheet" type="text/css" href="/Content/css/mlogica-final.css" />
             <link rel="stylesheet" type="text/css" href="/Content/css/mlogica-mobile.css" />
+         
             <asp:ContentPlaceHolder runat="server" ID="FeaturedContent" />
         </header>
 
 
         <div class="container">
             <div class="header">
-                <div id="title-block">
-                    <img class="mathlogo" src="/Images/MathologicaLogo.png" width="263" alt="Mathologica" />
-                    <div class="moto">Computation, simplified</div>
+                <div class="click-area">
+                    <div id="title-block">
+                        <a href="~" runat="server"><img class="mathlogo" src="/Images/MathologicaLogo.png" width="263" alt="Mathologica" /></a>
+                        <a href="~" runat="server"><div class="moto">Computation, simplified</div></a>
+                    </div>
                 </div>
                     
                 <div class="w-nav navbar" data-collapse="medium" data-animation="default" data-duration="400" data-contain="1">
@@ -79,6 +80,19 @@
                             <a runat="server" class="w-nav-link nav-link" style="max-width: 940px;" href="~/">Calculator</a>
                             <a runat="server" class="w-nav-link nav-link" style="max-width: 940px;" href="/practice.aspx">Practice</a>
                             <a runat="server" class="w-nav-link nav-link" style="max-width: 940px;" href="~/helptopics.aspx">Help</a>
+                            <div class="nav-login-area">
+                                <asp:LoginView ID="NavLogIn" runat="server" ViewStateMode="Disabled">
+                                    <AnonymousTemplate>
+                                        <a class="w-nav-link nav-link" href="account/register.aspx">Sign Up</a>
+                                        <a class="w-nav-link nav-link" href="account/login.aspx">Log In</a>
+                                    </AnonymousTemplate>
+                                    <LoggedInTemplate>
+                                        <a class="w-nav-link nav-link" href="account/you">You</a>
+                                        <asp:LoginStatus CssClass="w-nav-link nav-link logout-btn" ID="LoginStatus1" runat="server" LogoutAction="Redirect" LogoutText="Log off" LogoutPageUrl="~/" />
+                                        <a class="w-nav-link nav-link" href="account/manage.aspx">Settings</a>
+                                    </LoggedInTemplate>
+                                </asp:LoginView>
+                            </div>
                         </nav>
                         <div class="w-nav-button">
                             <div class="w-icon-nav-menu">
@@ -122,6 +136,7 @@
         
         <link rel="stylesheet" type="text/css" href="/mathquill/mathquill.css" />
         <script src="/mathquill/mathquill.min.js"></script>
+        <script src="/Scripts/webflow.js"></script>
     </form>
 </body>
 </html>
