@@ -27,6 +27,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             get { return _callArgs != null; }
         }
 
+        public bool FuncNotation
+        {
+            get { return _funcNotation; }
+        }
+
         public AlgebraComp Iden
         {
             get { return _iden; }

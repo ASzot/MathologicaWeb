@@ -236,6 +236,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         {
             for (int i = 0; i < _subComps.Count; ++i)
             {
+                if (_subComps[i] is AlgebraComp)
+                {
+                    AlgebraComp iden = _subComps[i] as AlgebraComp;
+                    ExComp definition = pEvalData.FuncDefs.GetSingleVarDefinition(iden);
+                    if (definition == null)
+                        continue;
+                    _subComps[i] = definition;
+                }
                 if (_subComps[i] is AlgebraTerm)
                 {
                     if (!(_subComps[i] as AlgebraTerm).CallFunctions(ref pEvalData))

@@ -11,6 +11,17 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
         {
         }
 
+        public ExComp GetSingleVarDefinition(AlgebraComp iden)
+        {
+            foreach (KeyValuePair<FunctionDefinition, ExComp> def in _defs)
+            {
+                if (!def.Key.FuncNotation && def.Key.Iden.IsEqualTo(iden))
+                    return def.Value;
+            }
+
+            return null;
+        }
+
         public void Define(FunctionDefinition func, ExComp funcDef, ref TermType.EvalData pEvalData)
         {
             string funcDefStr = WorkMgr.ExFinalToAsciiStr(funcDef);
@@ -36,7 +47,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
 
         public KeyValuePair<FunctionDefinition, ExComp> GetDefinition(FunctionDefinition func)
         {
-            foreach (var def in _defs)
+            foreach (KeyValuePair<FunctionDefinition, ExComp> def in _defs)
             {
                 if (def.Key.Iden.IsEqualTo(func.Iden))
                     return def;

@@ -2788,7 +2788,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
 
             if (upper == null && lower != null)
                 return LineIntegral.ConstructLineIntegral(innerTerm, (AlgebraComp)lower, dVar);
-            return MathSolverLibrary.Equation.Functions.Calculus.Integral.ConstructIntegral(innerEx, dVar, lower, upper);
+
+
+            return Equation.Functions.Calculus.Integral.ConstructIntegral(innerEx, dVar, lower, upper);
         }
 
         private ExComp ParseVectorNotation(ref int currentIndex, LexemeTable lt, ref List<string> pParseErrors)

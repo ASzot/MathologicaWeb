@@ -75,6 +75,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         public static Integral ConstructIntegral(ExComp innerEx, AlgebraComp dVar, ExComp lower, ExComp upper)
         {
+            // In the case of multidimensional integrals the boundaries have to potentially rearranged with variable boundaries.
+        
             Integral integral = new Integral(innerEx);
             integral._dVar = dVar;
             integral.LowerLimit = lower;
