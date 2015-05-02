@@ -12,11 +12,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
     class Integral : AppliedFunction
     {
         private bool _failure = false;
-        private AlgebraComp _dVar = null;
+        protected AlgebraComp _dVar = null;
         private bool _addConstant = true;
         private IntegrationInfo _integralInfo = null;
-        private ExComp _upper = null;
-        private ExComp _lower = null;
+        protected ExComp _upper = null;
+        protected ExComp _lower = null;
 
 
         private ExComp UpperLimit

@@ -121,7 +121,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         {
             AlgebraTerm harshEval = InnerTerm.HarshEvaluation();
 
-            return CreateInstance(harshEval);
+            AlgebraTerm created = CreateInstance(harshEval);
+            return created;
         }
 
         public override bool IsEqualTo(ExComp ex)
@@ -216,7 +217,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         {
             IEnumerable<ExComp> harshEval = from arg in _args
 											select arg.ToAlgTerm().HarshEvaluation();
-            return CreateInstance(harshEval.ToArray());
+            AlgebraTerm created = CreateInstance(harshEval.ToArray());
+            return created;
         }
 
         public override AlgebraTerm Order()
@@ -319,6 +321,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                 return new AlgebraTerm(innerEx, new Operators.PowOp(), new AlgebraTerm(Number.One, new Operators.DivOp(), new Number(2.0)));
             else if (parseStr == "det")
             {
+                if (innerEx is AlgebraTerm)
+                    innerEx = (innerEx as AlgebraTerm).RemoveRedundancies();
                 ExMatrix exMat = innerEx as ExMatrix;
                 if (exMat == null)
                 {

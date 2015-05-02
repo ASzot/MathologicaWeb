@@ -584,7 +584,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 return;
             }
             ExComp div = Operators.DivOp.StaticCombine(Imag, Real);
-            Functions.TanFunction tan = new Functions.TanFunction(div);
+            Functions.ATanFunction tan = new Functions.ATanFunction(div);
             ExComp evaluated = tan.Evaluate(false, ref pEvalData);
 
             Term.SimpleFraction simpFrac = new Term.SimpleFraction();

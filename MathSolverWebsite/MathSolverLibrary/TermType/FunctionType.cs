@@ -18,6 +18,8 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
         public override Equation.SolveResult ExecuteCommand(string command, ref EvalData pEvalData)
         {
+            base.ExecuteCommand(command, ref pEvalData);
+
             _agSolver.ResetIterCount();
 
             if (command == "Find inverse")
@@ -44,17 +46,8 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             }
             else if (command == "Assign function")
             {
-                // Display the assignment as a message.
-                string funcDefStr;
-                if (_assignTo is AlgebraTerm)
-                    funcDefStr = (_assignTo as AlgebraTerm).FinalToDispStr();
-                else
-                    funcDefStr = _assignTo.ToAsciiString();
-                funcDefStr = MathSolver.FinalizeOutput(funcDefStr);
-                pEvalData.AddMsg(WorkMgr.STM + _func.ToAsciiString() + WorkMgr.EDM + " defined as " + WorkMgr.STM + funcDefStr + WorkMgr.EDM);
-
                 // Assign the function.
-                pEvalData.FuncDefs.Define(_func, _assignTo);
+                pEvalData.FuncDefs.Define(_func, _assignTo, ref pEvalData);
                 return SolveResult.Solved();
             }
             else if (command.StartsWith("Domain of "))

@@ -4,6 +4,7 @@ using MathSolverWebsite.MathSolverLibrary.Parsing;
 using MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace MathSolverWebsite.MathSolverLibrary.TermType
 {
@@ -15,13 +16,18 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
         private PolynomialExt _numPolyInfo = null;
         private ExComp _term;
 
+        public SimplifyTermType()
+        {
+            _cmds = new string[] { KEY_SIMPLIFY };
+        }
+
         public SimplifyTermType(ExComp term)
         {
             _term = term;
             _agSolver = new AlgebraSolver();
         }
 
-        public SimplifyTermType(ExComp term, List<TypePair<LexemeType, string>> lt, Dictionary<string, int> solveVars, string probSolveVar, bool isFuncDef = false)
+        public SimplifyTermType(ExComp term, List<TypePair<LexemeType, string>> lt, Dictionary<string, int> solveVars, string probSolveVar, Type startingType, bool isFuncDef = false)
             : base()
         {
             _term = term;
@@ -75,6 +81,9 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             {
                 tmpCmds.Add("Divide");
             }
+
+            if ((startingType != null && startingType != typeof(ExMatrix) && startingType != typeof(ExVector)) && !tmpCmds.Contains(KEY_SIMPLIFY))
+                tmpCmds.Add(KEY_SIMPLIFY);
 
             if (_term is ExMatrix)
             {
@@ -207,10 +216,15 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
         public override SolveResult ExecuteCommand(string command, ref EvalData pEvalData)
         {
-            _agSolver.ResetIterCount();
+            base.ExecuteCommand(command, ref pEvalData);
+
+            if (_agSolver != null)
+                _agSolver.ResetIterCount();
 
             if (command == KEY_SIMPLIFY)
             {
+                if (_term == null)
+                    return SolveResult.Solved();
                 return SimplfyTerm(_term.Clone(), ref pEvalData);
             }
             else if (command == "To polar form")
@@ -235,7 +249,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 if (vec == null)
                     return SolveResult.Failure();
 
-                return SolveResult.Simplified(vec.Normalize());
+                return SolveResult.SimplifiedCalcApprox(vec.Normalize(), ref pEvalData);
             }
             else if (command == "Find determinant")
             {
@@ -245,7 +259,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
                 Determinant det = new Determinant(mat);
 
-                return SolveResult.Simplified(det.Evaluate(false, ref pEvalData));
+                return SolveResult.SimplifiedCalcApprox(det.Evaluate(false, ref pEvalData), ref pEvalData);
             }
             else if (command == "Transpose")
             {

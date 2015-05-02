@@ -815,6 +815,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         /// <summary>
         /// Makes the messy numbers where there previously was the reduced term.
         /// Like (1/4) will turn into 0.25.
+        /// This is not intended for evaluating functions.
+        /// For that functionality see Simplifier.HarshSimplify
         /// </summary>
         /// <returns></returns>
         public virtual AlgebraTerm HarshEvaluation()

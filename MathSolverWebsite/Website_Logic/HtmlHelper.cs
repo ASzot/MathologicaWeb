@@ -100,7 +100,7 @@ namespace MathSolverWebsite.Website_Logic
                     }
                     finalJavascript += "</script>";
                     final += finalJavascript;
-                    final += "<li class='resultListItem graphListItem'>";
+                    final += "<li class='resultListItem graphListItem noselect'>";
                     final += "<div id='graphbox' class='graph-disp'></div>";
                     final += "</li>";
                 }

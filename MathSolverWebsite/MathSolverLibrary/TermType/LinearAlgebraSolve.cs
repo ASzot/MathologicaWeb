@@ -80,6 +80,8 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
         public override SolveResult ExecuteCommand(string command, ref EvalData pEvalData)
         {
+            base.ExecuteCommand(command, ref pEvalData);
+
             if (command.StartsWith(GAUSSIAN_SOLVE))
             {
                 return SolveResult.Failure();

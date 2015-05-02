@@ -134,9 +134,7 @@
             </div>
         </div>
         
-        <link rel="stylesheet" type="text/css" href="/mathquill/mathquill.css" />
-        <script src="/mathquill/mathquill.min.js"></script>
-        <script src="/Scripts/webflow.js"></script>
+        <script src="/Scripts/mainscript.js"></script>
     </form>
 </body>
 </html>

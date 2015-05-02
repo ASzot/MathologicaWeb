@@ -134,7 +134,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
                 {
                     if (j == cancelCol)
                         continue;
-                    comps[i][j] = _exData[i][j];
+                    comps[cancelRow < i ? i - 1 : i][cancelCol < j ? j - 1 : j] = _exData[i][j];
                 }
             }
 

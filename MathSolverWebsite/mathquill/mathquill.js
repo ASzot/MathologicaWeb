@@ -1971,6 +1971,16 @@ LatexCmds['√'] = P(MathCommand, function(_, _super) {
   };
 });
 
+var EmptyBlock = LatexCmds.EMPTYGP = P(MathCommand, function (_, _super) {
+    _.ctrlSeq = '\\EMPTYGP';
+    _.htmlTemplate =
+          '<span class="non-leaf">'
+        +   '<span class="vector-stem">&0</span>'
+        + '</span>'
+    ;
+    _.textTemplate = ['ea(', ')'];
+});
+
 var Vec = LatexCmds.vec = P(MathCommand, function(_, _super) {
   _.ctrlSeq = '\\vec';
   _.htmlTemplate =
@@ -2424,107 +2434,79 @@ LatexCmds.choose = P(Binomial, function(_) {
   _.createLeftOf = LiveFraction.prototype.createLeftOf;
 });
 
-var Vector =
-LatexCmds.vector = P(MathCommand, function(_, _super) {
-  _.ctrlSeq = '\\vector';
-  _.htmlTemplate = '<span class="array"><span>&0</span></span>';
-  _.latex = function() {
-    return '\\begin{matrix}' + this.foldChildren([], function(latex, child) {
-      latex.push(child.latex());
-      return latex;
-    }).join('\\\\') + '\\end{matrix}';
-  };
-  _.text = function() {
-    return '[' + this.foldChildren([], function(text, child) {
-      text.push(child.text());
-      return text;
-    }).join() + ']';
-  };
-  _.createLeftOf = function(cursor) {
-    _super.createLeftOf.call(this, this.cursor = cursor);
-  };
-  _.onKey = function(key, e) {
-    var currentBlock = this.cursor.parent;
+var Vectora =
+LatexCmds.vectora = P(MathCommand, function(_, _super) {
+    _.ctrlSeq = '\\vectora';
+    _.htmlTemplate =
+      '<span class="paren scaled">[</span>'
+      + '<span class="non-leaf">'
+      + '<span class="array non-leaf">'
+      + '<span>&0</span>'
+      + '<span>&1</span>'
+      + '</span>'
+      + '</span>'
+      + '<span class="paren scaled">]</span>'
+    ;
+    _.textTemplate = ['choose(', ',', ')'];
+    _.redraw = function () {
+        var blockjQ = this.jQ.eq(1);
 
-    if (currentBlock.parent === this) {
-      if (key === 'Enter') { //enter
-        var newBlock = MathBlock();
-        newBlock.parent = this;
-        newBlock.jQ = $('<span></span>')
-          .attr(mqBlockId, newBlock.id)
-          .insertAfter(currentBlock.jQ);
-        if (currentBlock[R])
-          currentBlock[R][L] = newBlock;
-        else
-          this.ends[R] = newBlock;
+        var height = blockjQ.outerHeight() / +blockjQ.css('fontSize').slice(0, -2);
 
-        newBlock[R] = currentBlock[R];
-        currentBlock[R] = newBlock;
-        newBlock[L] = currentBlock;
-        this.bubble('redraw').cursor.insAtRightEnd(newBlock);
+        var parens = this.jQ.filter('.paren');
+        scale(parens, min(1 + .2 * (height - 1), 1.2), 1.05 * height);
+    };
+});
 
-        e.preventDefault();
-        return false;
-      }
-      else if (key === 'Tab' && !currentBlock[R]) {
-        if (currentBlock.isEmpty()) {
-          if (currentBlock[L]) {
-            this.cursor.insRightOf(this);
-            delete currentBlock[L][R];
-            this.ends[R] = currentBlock[L];
-            currentBlock.jQ.remove();
-            this.bubble('redraw');
+var Vectorb =
+LatexCmds.vectorb = P(MathCommand, function (_, _super) {
+    _.ctrlSeq = '\\vectorb';
+    _.htmlTemplate =
+      '<span class="paren scaled">[</span>'
+      + '<span class="non-leaf">'
+      + '<span class="array non-leaf">'
+      + '<span>&0</span>'
+      + '<span>&1</span>'
+      + '<span>&2</span>'
+      + '</span>'
+      + '</span>'
+      + '<span class="paren scaled">]</span>'
+    ;
+    _.textTemplate = ['choose(', ',', ')'];
+    _.redraw = function () {
+        var blockjQ = this.jQ.eq(1);
 
-            e.preventDefault();
-            return false;
-          }
-          else
-            return;
-        }
+        var height = blockjQ.outerHeight() / +blockjQ.css('fontSize').slice(0, -2);
 
-        var newBlock = MathBlock();
-        newBlock.parent = this;
-        newBlock.jQ = $('<span></span>').attr(mqBlockId, newBlock.id).appendTo(this.jQ);
-        this.ends[R] = newBlock;
-        currentBlock[R] = newBlock;
-        newBlock[L] = currentBlock;
-        this.bubble('redraw').cursor.insAtRightEnd(newBlock);
+        var parens = this.jQ.filter('.paren');
+        scale(parens, min(1 + .2 * (height - 1), 1.2), 1.05 * height);
+    };
+});
 
-        e.preventDefault();
-        return false;
-      }
-      else if (e.which === 8) { //backspace
-        if (currentBlock.isEmpty()) {
-          if (currentBlock[L]) {
-            this.cursor.insAtRightEnd(currentBlock[L])
-            currentBlock[L][R] = currentBlock[R];
-          }
-          else {
-            this.cursor.insLeftOf(this);
-            this.ends[L] = currentBlock[R];
-          }
+var Vectorc =
+LatexCmds.vectorc = P(MathCommand, function (_, _super) {
+    _.ctrlSeq = '\\vectorc';
+    _.htmlTemplate =
+      '<span class="paren scaled">[</span>'
+      + '<span class="non-leaf">'
+      + '<span class="array non-leaf">'
+      + '<span>&0</span>'
+      + '<span>&1</span>'
+      + '<span>&2</span>'
+      + '<span>&3</span>'
+      + '</span>'
+      + '</span>'
+      + '<span class="paren scaled">]</span>'
+    ;
+    _.textTemplate = ['choose(', ',', ')'];
+    _.redraw = function () {
+        var blockjQ = this.jQ.eq(1);
 
-          if (currentBlock[R])
-            currentBlock[R][L] = currentBlock[L];
-          else
-            this.ends[R] = currentBlock[L];
+        var height = blockjQ.outerHeight() / +blockjQ.css('fontSize').slice(0, -2);
 
-          currentBlock.jQ.remove();
-          if (this.isEmpty())
-            this.cursor.deleteForward();
-          else
-            this.bubble('redraw');
-
-          e.preventDefault();
-          return false;
-        }
-        else if (!this.cursor[L]) {
-          e.preventDefault();
-          return false;
-        }
-      }
-    }
-  };
+        var parens = this.jQ.filter('.paren');
+        scale(parens, min(1 + .2 * (height - 1), 1.2), 1.05 * height);
+    };
 });
 
 LatexCmds.editable = P(RootMathCommand, function(_, _super) {
@@ -2814,8 +2796,8 @@ LatexCmds.ast = LatexCmds.star = LatexCmds.loast = LatexCmds.lowast =
 LatexCmds.therefor = LatexCmds.therefore =
   bind(BinaryOperator,'\\therefore ','&there4;');
 
-LatexCmds.cuz = // l33t
-LatexCmds.because = bind(BinaryOperator,'\\because ','&#8757;');
+LatexCmds.cuz = 
+LatexCmds.because = bind(BinaryOperator,'\\because ','&#8747;');
 
 LatexCmds.prop = LatexCmds.propto = bind(BinaryOperator,'\\propto ','&prop;');
 

@@ -14,3 +14,56 @@
         cursor: pointer;
         color: #3498db;
     }
+
+.sub-toolbar-btn {
+}
+
+.sub-toolbar-btn-space {
+    position: absolute;
+    background: #D5E9F7;
+    z-index: 20000;
+    padding: 5px 10px;
+}
+
+
+.toolbar-btn {
+    width: 34px;
+    margin: 2px 0px 2px 0px;
+    display: inline-table;
+    text-align: center;
+    overflow: hidden;
+    cursor: pointer;
+    padding: 3px;
+}
+
+    .toolbar-btn:hover {
+    }
+
+.toolbar-btn-dropdown {
+    position: absolute;
+    z-index: 3000;
+    height: 40px;
+    line-height: 40px;
+    margin-left: 16px;
+    margin-top: -40px;
+}
+
+.include-padding {
+    padding-right: 20px !important;
+}
+
+    .toolbar-btn-dropdown:hover {
+        background-color: #77bae7;
+    }
+
+.toolbar-icn {
+    border: 1px solid white;
+    padding: 2px;
+}
+
+    .toolbar-icn:hover {
+        border: 1px solid rgba(52, 152, 219, 0.2);
+        padding: 2px;
+        color: rgb(0, 0, 215);
+        background-color: rgba(52, 152, 219, 0.2);
+    }

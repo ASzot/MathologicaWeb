@@ -74,6 +74,42 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return new SolveResult(new Solution(new NoSolutions()));
         }
 
+        /// <summary>
+        /// In the case of AlgebraTerm's the approximate is also automatically calculated.
+        /// </summary>
+        /// <param name="result"></param>
+        /// <returns></returns>
+        public static SolveResult SimplifiedCalcApprox(ExComp result, ref TermType.EvalData pEvalData)
+        {
+            SolveResult success;
+            success.Success = true;
+            success.Solutions = new List<Solution>();
+            success.Restrictions = null;
+
+            if (result is AlgebraTermArray)
+            {
+                AlgebraTermArray resultArray = result as AlgebraTermArray;
+
+                foreach (AlgebraTerm resultTerm in resultArray.Terms)
+                {
+                    success.Solutions.Add(new Solution(resultTerm));
+                }
+            }
+            else
+            {
+                Solution solToAdd = new Solution(result);
+                if (result is AlgebraTerm)
+                {
+                    ExComp harshEval = Simplifier.HarshSimplify(result.Clone() as AlgebraTerm, ref pEvalData);
+                    if (!harshEval.IsEqualTo(result))
+                        solToAdd.ApproximateResult = harshEval;
+                }
+                success.Solutions.Add(solToAdd);
+            }
+
+            return success;
+        }
+
         public static SolveResult Simplified(ExComp result)
         {
             SolveResult success;
@@ -91,7 +127,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 }
             }
             else
+            {
                 success.Solutions.Add(new Solution(result));
+            }
 
             return success;
         }

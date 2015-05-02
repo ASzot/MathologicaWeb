@@ -396,24 +396,8 @@ h1 {
 }
 
 #toolbar-btn-space {
+    padding-right: 5px;
 }
-
-.toolbar-btn {
-    width: 34px;
-    height: 20px;
-    margin: 2px 0px 2px 0px;
-    display: inline-table;
-    text-align: center;
-    overflow: hidden;
-    cursor: pointer;
-    padding: 3px;
-}
-
-    .toolbar-btn:hover {
-        border: 1px solid black;
-        padding: 2px;
-        background-color: lightblue;
-    }
 
 .toolbar-icon {
     margin-left: auto;
@@ -438,14 +422,13 @@ h1 {
     cursor: pointer !important;
 }
 
-.toolbar-icon-large {
+.toolbar-icon-larger {
     margin-left: auto;
     margin-right: auto;
     text-align: center;
     vertical-align: middle;
     width: auto;
-    height: 55px;
-    font-size: 23px;
+    font-size: 19px;
 }
 
 #toolbar-space {

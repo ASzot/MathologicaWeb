@@ -303,7 +303,6 @@
     <Content Include="Scripts\ml-main.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\mainscript.js" />
-    <Content Include="Scripts\webflow.js" />
     <Content Include="Scripts\WebForms\DetailsView.js" />
     <Content Include="Scripts\WebForms\Focus.js" />
     <Content Include="Scripts\WebForms\GridView.js" />
@@ -473,6 +472,8 @@
     <Compile Include="MathSolverLibrary\Equation\Functions\Calculus\Vector\CurlFunc.cs" />
     <Compile Include="MathSolverLibrary\Equation\Functions\Calculus\Vector\DivergenceFunc.cs" />
     <Compile Include="MathSolverLibrary\Equation\Functions\Calculus\Vector\GradientFunc.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Functions\Calculus\Vector\LineIntegral.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Functions\Calculus\Vector\SurfaceIntegral.cs" />
     <Compile Include="MathSolverLibrary\Equation\Functions\Calculus\Vector\VectorFieldOperation.cs" />
     <Compile Include="MathSolverLibrary\Equation\Functions\ChooseFunction.cs" />
     <Compile Include="MathSolverLibrary\Equation\Functions\FactorialFunction.cs" />
@@ -545,14 +546,15 @@
     <Compile Include="MathSolverLibrary\Solving\SubstitutionSolve.cs" />
     <Compile Include="MathSolverLibrary\Solving\SystemOfEquationsSolve.cs" />
     <Compile Include="MathSolverLibrary\Solving\TrigSolve.cs" />
-    <Compile Include="MathSolverLibrary\TermType\DiffEqTermType.cs" />
+    <Compile Include="MathSolverLibrary\TermType\Multi Line\DiffEqTermType.cs" />
     <Compile Include="MathSolverLibrary\TermType\EqualityCheckTermType.cs" />
-    <Compile Include="MathSolverLibrary\TermType\EquationSystemTermType.cs" />
+    <Compile Include="MathSolverLibrary\TermType\Multi Line\EquationSystemTermType.cs" />
     <Compile Include="MathSolverLibrary\TermType\EvalData.cs" />
     <Compile Include="MathSolverLibrary\TermType\FunctionType.cs" />
     <Compile Include="MathSolverLibrary\TermType\InputType.cs" />
     <Compile Include="MathSolverLibrary\TermType\LinearAlgebraSolve.cs" />
     <Compile Include="MathSolverLibrary\TermType\LogTermType.cs" />
+    <Compile Include="MathSolverLibrary\TermType\Multi Line\MultiLineHelper.cs" />
     <Compile Include="MathSolverLibrary\TermType\QuadraticTermType.cs" />
     <Compile Include="MathSolverLibrary\TermType\SimplifyTermType.cs" />
     <Compile Include="MathSolverLibrary\TermType\SinusodalTermType.cs" />

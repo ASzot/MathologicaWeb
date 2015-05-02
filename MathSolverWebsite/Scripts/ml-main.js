@@ -1,10 +1,21 @@
 ﻿
-function MenuItem(name, displayTex, addStr, useLargerIcon) {
+function MenuItem(name, displayTex, addStr, useLargerIcon, subItems, needsSpacing) {
+    this.SubItems = subItems;
     this.name = name;
     this.displayTex = displayTex;
     this.useLargerIcon = useLargerIcon;
     this.addStr = addStr;
+    if (typeof needsSpacing === 'undefined' || typeof subItems === null)
+        needsSpacing = false;
+
+    this.needsSpacing = needsSpacing;
 }
+
+var uniqueId = (function () {
+    var id = 0;
+
+    return function () { return id += 1; };
+})();
 
 function TopicMenu(items) {
     this.items = items;
@@ -13,9 +24,26 @@ function TopicMenu(items) {
         for (var i = 0; i < this.items.length; ++i) {
             var currentItem = this.items[i];
             var thisElementId = "tme" + i.toString();
-            htmlStr += "<div class='toolbar-btn noselect' onclick='onToolBarEleClicked(this.id);' id='" + thisElementId + "' title='" + currentItem.name + "'>";
+            htmlStr += "<div class='toolbar-btn noselect'>";
+
             var iconStyling = currentItem.useLargerIcon ? "toolbar-icon-larger" : "toolbar-icon";
-            htmlStr += "<div class='" + iconStyling + "'>`" + currentItem.displayTex + "`</div>";
+            var subItems = currentItem.SubItems;
+            var displaySub = typeof subItems !== 'undefined' && typeof subItems !== null;
+            htmlStr += "<div id='" + thisElementId + "' onclick='onToolBarEleClicked(this.id);' class='" + iconStyling + " toolbar-icn" + (displaySub ? " include-padding" : "") + "' title='" + currentItem.name + "'>`" + currentItem.displayTex + "`</div>";
+            if (displaySub) {
+                htmlStr += "<span class='toolbar-btn-dropdown" + (currentItem.needsSpacing ? " extra-space" : "") + "'>▼</span>";
+                htmlStr += "<div class='sub-toolbar-btn-space' id='" + uniqueId() + "'>";
+                for (var j = 0; j < subItems.length; ++j) {
+                    var currentSubItem = subItems[j];
+                    iconStyling = currentSubItem.useLargerIcon ? "toolbar-icon-larger" : "toolbar-icon";
+                    var id = "tme" + (i + "A" + j);
+                    htmlStr += "<div id='" + id + "' onclick='onToolBarEleClicked(this.id);' style='border-color: #D5E9F7' class='sub-toolbar-btn " + iconStyling + " toolbar-icn'>" +
+                        "`" +
+                        currentSubItem.displayTex + "`</div>";
+                }
+                htmlStr += "</div>";
+            }
+
             htmlStr += "</div>";
         }
 
@@ -25,16 +53,15 @@ function TopicMenu(items) {
 
 var basic = new TopicMenu(
     [
-        new MenuItem("Plus", "+", "+", false),
         new MenuItem("Minus", "-", "-", false),
+        new MenuItem("Plus", "+", "+", false),
         new MenuItem("Multiply", "*", "*", false),
-        new MenuItem("Fraction", "x/y", "\\frac{}{}", true),
+        new MenuItem("Fraction", "\\frac{x}{y}", "\\frac{}{}", true),
         new MenuItem("Divide", "-:", "\\div", false),
         new MenuItem("Divide", "/", "/", false),
         new MenuItem("Variable x", "x", "x", false),
         new MenuItem("Variable y", "y", "y", false),
         new MenuItem("Variable z", "z", "z", false),
-        new MenuItem("Lowercase theta", "theta", "\\theta", false),
         new MenuItem("Raise to power", "x^n", "^", false),
         new MenuItem("Square root", "sqrt(x)", "\\sqrt{}", false),
         new MenuItem("nth root", "root(n)(x)", "\\nthroot{}{}", false),
@@ -46,6 +73,7 @@ var basic = new TopicMenu(
         new MenuItem("Less equal to", "<=", "\\le", false),
         new MenuItem("Open parentheses", "(", "(", false),
         new MenuItem("Close parentheses", ")", ")", false),
+        new MenuItem("Lowercase theta", "theta", "\\theta", false),
         new MenuItem("Euler's number", "e", "e", false),
         new MenuItem("Pi", "pi", "\\pi", false),
         new MenuItem("Imaginary number.", "i", "i", false),
@@ -53,27 +81,79 @@ var basic = new TopicMenu(
 
 var trig = new TopicMenu(
     [
-        new MenuItem("Derivative", "d/(dx)", "\\frac{d}{dx}", true),
-        new MenuItem("Derivative of function", "(df)/(dx)", "\\frac{df}{dx}", true),
-        new MenuItem("Indefinite integral", "\\int", "\\int", true),
+        new MenuItem("Logarithm", "log", "\\log(\\EMPTYGP{})", false, 
+            [
+                new MenuItem("Logarithm base n", "x^2", "log_{}", false),
+            ]),
+        new MenuItem("Natural log (log base e)", "ln", "\\ln", false),
+        new MenuItem("Sine", "sin", "\\sin", false, 
+            [
+                new MenuItem("Cosecant, the reciprocal of sine.", "csc", "\\csc", false),
+                new MenuItem("Inverse sine", "arcsin", "\\arcsin", false),
+                new MenuItem("Inverse cosecant", "\\text{arccsc}", "\\arccsc", false),
+            ]),
+        new MenuItem("Cosine", "cos", "\\cos", false,
+            [
+                new MenuItem("Secant, the reciprocal of cosine.", "sec", "\\sec", false),
+                new MenuItem("Inverse cosine", "arccos", "\\arccos", false),
+                new MenuItem("Inverse secant", "\\text{arcsec}", "\\arcsec", false),
+            ]),
+        new MenuItem("Tangent", "tan", "\\tan", false,
+            [
+                new MenuItem("Cotangent, the reciprocal of tangent.", "cot", "\\cot", false),
+                new MenuItem("Inverse tangent", "arctan", "\\arctan", false),
+                new MenuItem("Inverse cotangent", "\\text{arccot}", "\\arccot", false),
+            ]),
+        new MenuItem("Define a function", "f(x)=", "f(x)=", false),
+    ]);
+
+var calc = new TopicMenu(
+    [
+        new MenuItem("Derivative", "d/(dx)", "\\frac{d}{dx}", true,
+            [
+                new MenuItem("Derivative of function", "(df)/(dx)", "\\frac{df}{dx}", true),
+            ]),
+        new MenuItem("Indefinite integral", "\\int", "\\int", true, 
+            [
+                new MenuItem("Indefinite integral", "\\int\\int", "\\int\\int", true),
+                new MenuItem("Indefinite integral", "\\int\\int\\int", "\\int\\int\\int", true),
+            ]),
         new MenuItem("Definite integral", "\\int_{a}^{b}", "\\int_{}^{}", true),
-        new MenuItem("Limit", "\\lim_(x\\toh)", "\\lim_{x\\to}", false),
+        new MenuItem("Limit", "\\lim_(x\\toh)", "\\lim_{x\\to}", true),
         new MenuItem("Summation", "\\sum_(i=0)^N", "\\sum^{}_{i=}", true),
         new MenuItem("Natural log (log base e)", "ln", "\\ln", false),
         new MenuItem("Sine", "sin", "\\sin", false),
         new MenuItem("Cosine", "cos", "\\cos", false),
         new MenuItem("Tangent", "tan", "\\tan", false),
-        new MenuItem("Dot", "@", "\\circ", false),
-        new MenuItem("Define a function", "f(x)=", "f(x)=", false),
-        new MenuItem("nth derivative of function", "f^n(x)", "f^{}(x)", false),
+        new MenuItem("Define a function", "f(x)", "f(x)=", false,
+            [
+                new MenuItem("nth derivative of function", "f^n(x)", "f^{}(x)", false),
+            ]),
         new MenuItem("Euler's number", "e", "e", false),
         new MenuItem("Pi", "pi", "\\pi", false),
         new MenuItem("Imaginary number.", "i", "i", false),
         new MenuItem("Infinity", "oo", "\\inf", false),
         new MenuItem("Lowercase theta", "theta", "\\theta", false),
+        new MenuItem("Partial Derivative", "\\frac{\\partial}{\\partial x}", "\\frac{\\partial}{\\partial x}", true, 
+            [
+                new MenuItem("Partial derivative of function", "\\frac{\\partial f}{\\partial x}", "\\frac{\\partial f}{\\partial x}", true),
+            ]),
+        new MenuItem("Nabla", "\\nabla", "\\nabla", false, 
+            [
+                new MenuItem("Divergence", "\\nabla\\cdot", "\nabla\\cdot", false),
+                new MenuItem("Curl", "\\nabla\\times", "\\nabla\\cdot", false),
+            ]),
+        new MenuItem("Divergence", "\\text{div}(F)", "div(\\EMPTYGP{})", false),
+        new MenuItem("Curl", "\\text{curl}(F)", "\\text{curl}(\\EMPTYGP{})", false),
+        new MenuItem("Laplacian", "\\nabla^{2}", "\\nabla^{2}", false),
+        new MenuItem("Line integral", "\\int_{C}\\vec{F} \\cdot d\\vec{r}", "\\vec{F}=\\EMPTYGP{}\\vec{i}+\\EMPTYGP{}\\vec{j};x(t)=\\EMPTYGP{};y(t)=\\EMPTYGP{};\\EMPTYGP{} \\le t \\le \\EMPTYGP{};\\int_{c}F \\cdot dr", true,
+            [
+                new MenuItem("Line Integral", "\\int_{C}f *\\ds", "f(x,y)=\\EMPTYGP{}; x(t)=\\EMPTYGP{};y(t)=\\EMPTYGP{}; \\EMPTYGP{} \\le t \\le \\EMPTYGP{}; \\int_{c}f*ds", true),
+            ], true),
+        new MenuItem("Surface integral", "\\int\\int_{\\Sigma}f*\\d \\sigma", "f=\\EMPTYGP{};x(t,s)=\\EMPTYGP{};y(t,s)=\\EMPTYGP{};z(t,s)=\\EMPTYGP{};\\EMPTYGP{}\\le t \\le \\EMPTYGP{};\\EMPTYGP{}\\le s \\le \\EMPTYGP{}; \\int\\int_{\\Sigma}f\\cdot d\\sigma", true),
     ]);
 
-var calc = new TopicMenu(
+var symb = new TopicMenu(
     [
         new MenuItem("Underscore variable", "x_{n}", "x_{}", false),
         new MenuItem("Variable x", "x", "x", false),
@@ -100,83 +180,105 @@ var calc = new TopicMenu(
         new MenuItem("Lowercase phi", "phi", "\\phi", false),
         new MenuItem("Lowercase psi", "psi", "\\psi", false),
         new MenuItem("Lowercase omega", "omega", "\\omega", false),
+        new MenuItem("Zero", "0", "0", false),
+        new MenuItem("One", "1", "1", false),
+        new MenuItem("Two", "2", "2", false),
+        new MenuItem("Three", "3", "3", false),
+        new MenuItem("Four", "4", "4", false),
+        new MenuItem("Five", "5", "5", false),
+        new MenuItem("Six", "6", "6", false),
+        new MenuItem("Seven", "7", "7", false),
+        new MenuItem("Eight", "8", "8", false),
+        new MenuItem("Nine", "9", "9", false),
     ]);
 
-var symb = new TopicMenu(
-    [
-        new MenuItem("Logarithm", "log", "\\log", false),
-        new MenuItem("Natural log (log base e)", "ln", "\\ln", false),
-        new MenuItem("Logarithm base n", "log_{n}", "log_{}", false),
-        new MenuItem("Sine", "sin", "\\sin", false),
-        new MenuItem("Cosine", "cos", "\\cos", false),
-        new MenuItem("Tangent", "tan", "\\tan", false),
-        new MenuItem("Cosecant, the reciprocal of sine.", "csc", "\\csc", false),
-        new MenuItem("Secant, the reciprocal of cosine.", "sec", "\\sec", false),
-        new MenuItem("Cotangent, the reciprocal of tangent.", "cot", "\\cot", false),
-        new MenuItem("Inverse sine", "arcsin", "\\arcsin", false),
-        new MenuItem("Inverse cosine", "arccos", "\\arccos", false),
-        new MenuItem("Inverse tangent", "arctan", "\\arctan", false),
-        new MenuItem("Dot", "@", "\\circ", false),
-        new MenuItem("Define a function", "f(x)=", "f(x)=", false),
-    ]);
 
 var prob = new TopicMenu(
     [
-        new MenuItem("Number zero", "0", "0", false),
-        new MenuItem("Number one", "1", "1", false),
-        new MenuItem("Number two", "2", "2", false),
-        new MenuItem("Number three", "3", "3", false),
-        new MenuItem("Number four", "4", "4", false),
-        new MenuItem("Number five", "5", "5", false),
-        new MenuItem("Number six", "6", "6", false),
-        new MenuItem("Number seven", "7", "7", false),
-        new MenuItem("Number eight", "8", "8", false),
-        new MenuItem("Number nine", "9", "9", false),
+        new MenuItem("Summation", "\\sum_(i=0)^N", "\\sum^{}_{i=}", true),
+        new MenuItem("Factorial", "!", "\\EMPTYGP{}!", false),
+        new MenuItem("Choose", "nCr", "\\EMPTYGP{}C\\EMPTYGP{}", false),
+        new MenuItem("Permutation", "nPr", "\\EMPTYGP{}P\\EMPTYGP{}", false),
     ]);
 
 var linAlg = new TopicMenu(
     [
-        new MenuItem("Number zero", "\\alpha", "\\alpha", false),
-        new MenuItem("Number one", "1", "1", false),
-        new MenuItem("Number two", "2", "2", false),
-        new MenuItem("Number three", "3", "3", false),
-        new MenuItem("Number four", "4", "4", false),
-        new MenuItem("Number five", "5", "5", false),
-        new MenuItem("Number six", "6", "6", false),
-        new MenuItem("Number seven", "7", "7", false),
-        new MenuItem("Number eight", "8", "8", false),
-        new MenuItem("Number nine", "9", "9", false),
+        new MenuItem("Number zero", "[x,y]", "[\\EMPTYGP{},\\EMPTYGP{}]", false, 
+            [
+                new MenuItem("3D vector", "[x,y,z]", "[\\EMPTYGP{}, \\EMPTYGP{}, \\EMPTYGP{}]", false),
+                new MenuItem("4D vector", "[x,y,z,w]", "[\\EMPTYGP{},\\EMPTYGP{},\\EMPTYGP{},\\EMPTYGP{}]", false),
+            ]),
+        new MenuItem("Number one", "[(a,b),(c,d)]", "\\vectora{\\EMPTYGP{}, \\EMPTYGP{}}{\\EMPTYGP{}, \\EMPTYGP{}}", true, 
+            [
+                new MenuItem("3x3 matrix", "[[a, b, c], [d, e, f], [g, h, k]]", "\\vectorb{\\EMPTYGP{}, \\EMPTYGP{}, \\EMPTYGP{}}{\\EMPTYGP{}, \\EMPTYGP{}, \\EMPTYGP{}}{\\EMPTYGP{}, \\EMPTYGP{}, \\EMPTYGP{}}", true),
+                new MenuItem("4x4 matrix", "[[a, b, c, d], [e, f, g, h], [k, l, m, n], [p, q, r, s]]", "\\vectorc{\\EMPTYGP{}, \\EMPTYGP{}, \\EMPTYGP{}, \\EMPTYGP{}}{\\EMPTYGP{}, \\EMPTYGP{}, \\EMPTYGP{}, \\EMPTYGP{}}{\\EMPTYGP{}, \\EMPTYGP{}, \\EMPTYGP{}, \\EMPTYGP{}} {\\EMPTYGP{}, \\EMPTYGP{}, \\EMPTYGP{}, \\EMPTYGP{}}", true),
+            ]),
+        new MenuItem("Dot product", "\\vec{a}\\cdot\\vec{b}", "\\cdot", false),
+        new MenuItem("Cross product", "\\vec{a}\\times\\vec{b}", "\\times", false),
+        new MenuItem("Determinant", "det(A)", "det(\\EMPTYGP{})", false),
+        new MenuItem("Transpose", "[(a,b),(c,d)]^{T}", "^{T}", true),
     ]);
 
 var menus = [basic, trig, calc, symb, prob, linAlg];
+var currentMenu = basic;
 
 /////////////////////////
 // Tool-bar
 ///////////////////////
 
 
-function onToolBarEleClicked(clickedId) {
+function onToolBarEleClicked(clickedId, event) {
+    if (typeof clickedId.substring === 'undefined')
+        return;
     var index = clickedId.substring(3, clickedId.length);
 
+    var subIndex = -1;
+    if (index.indexOf('A') > -1) {
+        var split = index.split('A');
+        index = split[0];
+        subIndex = split[1];
+    }
+    
     var clickedItem = currentMenu.items[index];
+    if (subIndex != -1) {
+        clickedItem = clickedItem.SubItems[subIndex];
+    }
 
+    if (clickedItem.addStr.indexOf(';') >= 0) {
+        // This is a complete substitution of input.
+        var splitInput = clickedItem.addStr.split(';');
+        var html = "";
+        inputBoxIds = [];
+        for (var i = 0; i < splitInput.length; ++i) {
+            var inputHtml = createInputBox(i, i == 0);
+            html += inputHtml;
+        }
 
-    var phvalue = selectedTextBox.attr("placeholder");
-    var val = selectedTextBox.mathquill('latex');
-    if (phvalue == val) {
-        selectedTextBox.mathquill('latex', "");
-        selectedTextBox.css('color', 'black');
-        selectedTextBox.css('font-style', 'normal');
-        selectedTextBox.focus();
+        $("#input-list").html(html);
+
+        for (var i = 0; i < splitInput.length; ++i) {
+            $("#mathInputSpan" + i).mathquill('editable');
+            $("#mathInputSpan" + i).mathquill('latex', splitInput[i]);
+
+            if (i == 0)
+                selectedTextBox = $("#mathInputSpan" + i);
+            inputBoxIds.push(i);
+        }
+
+        mathInputChanged();
+        return;
     }
 
     selectedTextBox.mathquill('write', clickedItem.addStr);
 
-    selectedTextBox.focus();
+    //var emptyEle = $(".non-leaf").first();
+    //selectedTextBox.focus();
+    //if (typeof emptyEle !== 'undefined' && typeof emptyEle !== null) {
 
-    mathInputChangedSafe();
+    //}
+    mathInputChanged();
 
-    hideModeBox();
+    return true;
 }
 
 $(document).ready(function () {
@@ -196,9 +298,43 @@ $(document).ready(function () {
         // Update the tool box with the correct items for the menu.
         var selectedMenu = menus[idIndex];
         currentMenu = selectedMenu;
+
         var toolBoxHTML = selectedMenu.outputItems();
         $('#toolbar-btn-space').html(toolBoxHTML);
-        MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+
+        MathJax.Hub.Queue(["Typeset", MathJax.Hub], function () {
+            $(".sub-toolbar-btn-space").each(function () {
+                $(this).hide();
+            });
+            
+            $(".toolbar-btn-dropdown").each(function () {
+                var subs = $(this).parent().children(".sub-toolbar-btn-space");
+                var parentHeight = $(this).parent().height();
+                var parentWidth = $(this).parent().width();
+                if ($(this).hasClass("extra-space")) {
+                    parentWidth += 47.0;
+                }
+                $(this).css('height', parentHeight);
+                $(this).css('line-height', parentHeight + "px");
+                $(this).css('margin-top', "-" + parentHeight + "px");
+                var factor = Math.pow(parentWidth, new Number(1.0)) / 4.5;
+                $(this).css('margin-left', (factor) + 'px');
+
+                $(this).click(function (e) {
+                    var subBtns = $(this).parent().children(".sub-toolbar-btn-space");
+                    subBtns.toggle();
+                    $(".sub-toolbar-btn-space").each(function () {
+                        if ($(this).attr('id') != subBtns.attr('id')) {
+                            if ($(this).is(":visible"))
+                                $(this).hide();
+                        }
+                    });
+
+                    return false;
+                });
+            });
+        });
+
     }
 
     for (var i = 0; i < 7; ++i) {
@@ -206,7 +342,7 @@ $(document).ready(function () {
     }
 
     // Create the toolbar.
-    var operatorsHTML = operatorsMenu.outputItems();
+    var operatorsHTML = basic.outputItems();
     $("#toolbar-btn-space").html(operatorsHTML);
 });
 

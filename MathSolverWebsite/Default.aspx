@@ -19,6 +19,10 @@
     <!-- MathJax include. -->
     <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=AM_HTMLorMML"></script>
 
+    <!--Mathquill include-->
+    <link rel="stylesheet" type="text/css" href="/mathquill/mathquill.css" />
+    <script src="/mathquill/mathquill.js"></script>
+
     <!-- Google analytics -->
     <script>
         (function (i, s, o, g, r, a, m) {
@@ -89,10 +93,16 @@
                 return false;
             });
 
+            $(".pob-problem").click(function (e) {
+                // Paste into the input.
+                var inputDisp = $(this).children("span").html();
+                var inputDispEncoded = encodeURIComponent(inputDisp);
+                window.location.replace("/Default?Index=0&InputDisp=" + inputDispEncoded);
+            });
+
             $("#work-space").on('scroll', function () {
-                var currentScroll = $("#work-space").scrollTop();
-                var scrollHeight = $("#work-space").height();
-                if (currentScroll >= scrollHeight)
+                var elem = $(this);
+                if (elem[0].scrollHeight - elem.scrollTop() == elem.outerHeight())
                     $("#to-bottom-btn").hide();
                 else {
                     $("#to-bottom-btn").show();
@@ -237,7 +247,7 @@
             var prevSolveOutput = $("#<% = calcOutput.ClientID %>").html();
 
             // Remove all of the existing graphs. (There can only be one graph at once).
-            $("#work-list-disp").prepend("<div class='prev-output'>" + prevSolveOutput + "</div><input type='button' class='save-btn' value='Save' /><div class='horiz-divide'></div>");
+            $("#work-list-disp").append("<div class='prev-output'>" + prevSolveOutput + "</div><input type='button' class='save-btn' value='Save' /><div class='horiz-divide'></div>");
             MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
 
             $(".input-disp-area").each(function () {
@@ -250,6 +260,8 @@
                     setInputs(inputTxts);
                 });
             });
+
+            $(".input-disp-txt span").mathquill();
 
             function createPopUp(innerHtml) {
                 $(".pop").remove();
@@ -311,6 +323,7 @@
 
         function onClearBtnClicked() {
             $("#work-list-disp").html("");
+            $("#to-bottom-btn").hide();
         }
 
     </script>
@@ -494,6 +507,7 @@
                     <p class="pob-title">Problem of the Day:</p>
                     <div style="text-align: center;" class="pob-problem">
                         <p>Volume Integral</p>
+                        <span class="hidden">\int\int\int_V \frac{\cos(xy)x^2}{\ln(z)} dV</span>
                         <div>
                             <span class="mathquill-rendered-math noselect pointable">`\int\int\int_V \frac{\cos(xy)x^2}{\ln(z)} dV`</span>
                         </div>

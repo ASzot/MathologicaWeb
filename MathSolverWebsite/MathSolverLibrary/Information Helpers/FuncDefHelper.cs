@@ -11,8 +11,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
         {
         }
 
-        public void Define(FunctionDefinition func, ExComp funcDef)
+        public void Define(FunctionDefinition func, ExComp funcDef, ref TermType.EvalData pEvalData)
         {
+            string funcDefStr = WorkMgr.ExFinalToAsciiStr(funcDef);
+            funcDefStr = MathSolver.FinalizeOutput(funcDefStr);
+            pEvalData.AddMsg(WorkMgr.STM + func.ToDispString() + WorkMgr.EDM + " defined as " + WorkMgr.STM + funcDefStr + WorkMgr.EDM);
+
             FunctionDefinition removeKey = null;
             foreach (var def in _defs)
             {

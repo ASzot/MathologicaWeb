@@ -27,7 +27,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
                 ExComp c = mat.Get(1, 0);
                 ExComp d = mat.Get(1, 1);
 
-                return SubOp.StaticCombine(MulOp.StaticCombine(a, c), MulOp.StaticCombine(b, d));
+                return SubOp.StaticCombine(MulOp.StaticCombine(a, d), MulOp.StaticCombine(b, c));
             }
 
             ExComp total = Number.Zero;
