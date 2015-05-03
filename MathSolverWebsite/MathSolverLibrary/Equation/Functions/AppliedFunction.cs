@@ -320,40 +320,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             else if (parseStr == "sqrt")
                 return new AlgebraTerm(innerEx, new Operators.PowOp(), new AlgebraTerm(Number.One, new Operators.DivOp(), new Number(2.0)));
             else if (parseStr == "det")
-            {
-                if (innerEx is AlgebraTerm)
-                    innerEx = (innerEx as AlgebraTerm).RemoveRedundancies();
-                ExMatrix exMat = innerEx as ExMatrix;
-                if (exMat == null)
-                {
-                    pParseErrors.Add("Can only take the determinant of matrices.");
-                    return null;
-                }
-
-                return new Structural.LinearAlg.Determinant(exMat);
-            }
+                return new Structural.LinearAlg.Determinant(innerEx);
             else if (parseStr == "curl")
-            {
-                if (innerEx is AlgebraTerm)
-                    innerEx = (innerEx as AlgebraTerm).RemoveRedundancies();
-                if (!CurlFunc.IsSuitableField(innerEx))
-                    return null;
-                
                 return new CurlFunc(innerEx);
-            }
             else if (parseStr == "div")
-            {
-                if (innerEx is AlgebraTerm)
-                    innerEx = (innerEx as AlgebraTerm).RemoveRedundancies();
-                if (!DivergenceFunc.IsSuitableField(innerEx))
-                    return null;
-
                 return new DivergenceFunc(innerEx);
-            }
             else if (parseStr == "!")
-            {
                 return new FactorialFunction(innerEx);
-            }
 
             return null;
         }

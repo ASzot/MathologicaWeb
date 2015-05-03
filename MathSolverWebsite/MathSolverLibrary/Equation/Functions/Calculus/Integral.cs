@@ -19,7 +19,17 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         protected ExComp _lower = null;
 
 
-        private ExComp UpperLimit
+        public AlgebraTerm UpperLimitTerm
+        {
+            get { return _upper.ToAlgTerm(); }
+        }
+
+        public AlgebraTerm LowerLimitTerm
+        {
+            get { return _lower.ToAlgTerm(); }
+        }
+
+        public ExComp UpperLimit
         {
             get { return _upper; }
             set 
@@ -27,7 +37,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 _upper = value;
             }
         }
-        private ExComp LowerLimit
+        public ExComp LowerLimit
         {
             get { return _lower; }
             set

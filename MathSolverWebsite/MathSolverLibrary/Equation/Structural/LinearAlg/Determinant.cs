@@ -12,7 +12,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
     {
         private const int MAX_DET_DIMEN = 4;
 
-        public Determinant(ExMatrix innerMat)
+        public Determinant(ExComp innerMat)
             : base(innerMat, FunctionType.Deteriment, typeof(Determinant))
         {
 
