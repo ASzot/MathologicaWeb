@@ -154,6 +154,10 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
         public static ExComp BasicSimplify(ExComp term, ref EvalData pEvalData)
         {
+            AlgebraTerm tmpTerm = term.ToAlgTerm();
+            tmpTerm.CallFunctions(ref pEvalData);
+            term = tmpTerm.RemoveRedundancies();
+
             AlgebraTerm agTerm;
             if (term is AlgebraTerm)
             {

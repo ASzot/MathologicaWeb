@@ -22,6 +22,19 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             get { return _callArgs; }
         }
 
+        public bool HasValidInputArgs
+        {
+            get 
+            {
+                foreach (AlgebraComp arg in _args)
+                {
+                    if (arg.IsTrash)
+                        return false;
+                }
+                return true; 
+            }
+        }
+
         public bool HasCallArgs
         {
             get { return _callArgs != null; }
