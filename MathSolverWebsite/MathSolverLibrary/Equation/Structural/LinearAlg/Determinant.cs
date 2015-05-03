@@ -52,11 +52,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
         public override ExComp Evaluate(bool harshEval, ref TermType.EvalData pEvalData)
         {
             ExComp innerEx = InnerEx;
-            if (!(innerEx is ExMatrix))
-                return Number.Undefined;
 
             ExMatrix mat = innerEx as ExMatrix;
-            if (!mat.IsSquare)
+            if (mat == null || !mat.IsSquare)
             {
                 pEvalData.AddMsg("Only the deteriment of square matrices can be taken");
                 return Number.Undefined;

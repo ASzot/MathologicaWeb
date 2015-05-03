@@ -1623,6 +1623,24 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                         return ParseVectorNotation(ref currentIndex, lexemeTable, ref pParseErrors);
                     else if (lexeme.Data2 == "binom") 
                         return ParseBinomNotation(ref currentIndex, lexemeTable, ref pParseErrors);
+                    else if (lexeme.Data2 == "det")
+                    {
+                        currentIndex++;
+                        // If the next element is not a matrix then return null.
+                        if (currentIndex < lexemeTable.Count && 
+                            (lexemeTable[currentIndex].Data1 == LexemeType.VectorStore ||
+                            (lexemeTable[currentIndex].Data1 == LexemeType.Function && lexemeTable[currentIndex].Data2.StartsWith("vector"))))
+                        {
+                            ExComp vectorEle = LexemeToExComp(lexemeTable, ref currentIndex, ref pParseErrors);
+                            if (!(vectorEle is ExMatrix))
+                            {
+                                pParseErrors.Add("Matrix must follow determinant");
+                                return null;
+                            }
+
+                            return new Determinant(vectorEle);
+                        }
+                    }
 
                     if (TrigFunction.IsValidType(lexeme.Data2) ||
                         InverseTrigFunction.IsValidType(lexeme.Data2))
