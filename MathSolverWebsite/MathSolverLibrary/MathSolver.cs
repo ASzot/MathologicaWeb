@@ -70,7 +70,7 @@ namespace MathSolverWebsite.MathSolverLibrary
 
                 if (singularEqSet.IsLinearAlgebraTerm())
                 {
-                    return new LinearAlgebraSolve(singularEqSet);
+                    return new LinearAlgebraSolve(singularEqSet, probSolveVar);
                 }
 
                 return new SolveTermType(singularEqSet, completeLexemeTable, solveVars, probSolveVar);

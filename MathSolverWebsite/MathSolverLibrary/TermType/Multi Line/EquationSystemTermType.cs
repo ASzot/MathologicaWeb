@@ -22,6 +22,15 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             _allIdens = allIdens;
         }
 
+        /// <summary>
+        /// Everything will be created automatically.
+        /// </summary>
+        /// <param name="eqSets"></param>
+        public EquationSystemTermType(List<EqSet> eqSets)
+        {
+            
+        }
+
         public override SolveResult ExecuteCommand(string command, ref EvalData pEvalData)
         {
             if (command.StartsWith("Solve by substitution for "))

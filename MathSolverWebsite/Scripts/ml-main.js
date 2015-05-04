@@ -197,8 +197,9 @@ var prob = new TopicMenu(
     [
         new MenuItem("Summation", "\\sum_(i=0)^N", "\\sum^{}_{i=}", true),
         new MenuItem("Factorial", "!", "\\EMPTYGP{}!", false),
-        new MenuItem("Choose", "nCr", "\\EMPTYGP{}C\\EMPTYGP{}", false),
-        new MenuItem("Permutation", "nPr", "\\EMPTYGP{}P\\EMPTYGP{}", false),
+        new MenuItem("Binomial", "((n),(r))", "\\binom{}{}", true),
+        new MenuItem("Choose", "nCr", "\\EMPTYGP{}\\text{C}\\EMPTYGP{}", false),
+        new MenuItem("Permutation", "nPr", "\\EMPTYGP{}\\text{P}\\EMPTYGP{}", false),
     ]);
 
 var linAlg = new TopicMenu(

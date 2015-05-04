@@ -18,7 +18,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
 
         }
 
-        private ExComp TakeDeteriment(ExMatrix mat)
+        public static ExComp TakeDeteriment(ExMatrix mat)
         {
             if (mat.Rows == 2)
             {
@@ -33,15 +33,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
             ExComp total = Number.Zero;
             for (int i = 0; i < mat.Cols; ++i)
             {
-                ExComp cofactor = mat.Get(0, i);
-                // Multiply by the matrix minor not including the current row or column.
-                // Cancel the 0th row and the ith col.
-                ExMatrix minor = mat.GetMatrixMinor(0, i);
-                ExComp minorDet = TakeDeteriment(minor);
-
-                ExComp comp = MulOp.StaticCombine(cofactor, minorDet);
-                if (i != 0 && i % 2 != 0)
-                    comp = MulOp.Negate(comp);
+                ExComp factor = mat.Get(0, i);
+                ExComp cofactor = mat.GetCofactor(0, i);
+                ExComp comp = MulOp.StaticCombine(factor, cofactor);
 
                 total = AddOp.StaticCombine(total, comp);
             }

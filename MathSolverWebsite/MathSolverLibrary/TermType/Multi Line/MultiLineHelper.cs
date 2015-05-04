@@ -113,6 +113,14 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 funcDef = eqSet.Right as FunctionDefinition;
                 assignTo = eqSet.Left;
             }
+            else if (eqSet.Left is AlgebraComp)
+            {
+
+            }
+            else if (eqSet.Right is AlgebraComp)
+            {
+
+            }
             else
                 return false;
 

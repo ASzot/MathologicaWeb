@@ -93,6 +93,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 }
                 else
                 {
+                    tmpCmds.Add("Find inverse");
                     tmpCmds.Add("Find determinant");
                     tmpCmds.Add("Transpose");
                 }
@@ -264,6 +265,20 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 Determinant det = new Determinant(mat);
 
                 return SolveResult.SimplifiedCalcApprox(det.Evaluate(false, ref pEvalData), ref pEvalData);
+            }
+            else if (command == "Find inverse")
+            {
+                ExMatrix mat = _term as ExMatrix;
+                if (mat == null)
+                    return SolveResult.Failure();
+
+                ExMatrix inverse = mat.GetInverse();
+                if (inverse == null)
+                {
+                    pEvalData.AddMsg("Inverse doesn't exist");
+                    return SolveResult.Solved();
+                }
+                return SolveResult.Simplified(inverse);
             }
             else if (command == "Transpose")
             {

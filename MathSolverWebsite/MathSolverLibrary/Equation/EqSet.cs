@@ -334,6 +334,23 @@ namespace MathSolverWebsite.MathSolverLibrary
             return agSolver.SolveEquationEquality(solveFor.Var, left.ToAlgTerm(), right.ToAlgTerm(), ref pEvalData);
         }
 
+        public LexemeTable CreateLexemeTable()
+        {
+            LexemeTable lt = new LexemeTable();
+            for (int i = 0; i < _sides.Count; ++i)
+            {
+                List<string> variables = _sides[i].ToAlgTerm().GetAllAlgebraCompsStr();
+                foreach (string variable in variables)
+                {
+                    lt.Add(new TypePair<LexemeType, string>(LexemeType.Identifier, variable));
+                }
+                if (i + 1 < _sides.Count)
+                    lt.Add(new TypePair<LexemeType, string>(_comparisonOps[i], Restriction.ComparisonOpToStr(_comparisonOps[i])));
+            }
+
+            return lt;
+        }
+
         public bool ReparseInfo(out EqSet eqSet, ref TermType.EvalData pEvalData)
         {
             eqSet = new EqSet();
