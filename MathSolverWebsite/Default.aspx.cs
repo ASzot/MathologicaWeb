@@ -1,8 +1,10 @@
 ﻿using MathSolverWebsite.MathSolverLibrary;
 using MathSolverWebsite.MathSolverLibrary.Equation;
+using MathSolverWebsite.MathSolverLibrary.Information_Helpers;
 using MathSolverWebsite.MathSolverLibrary.TermType;
 using MathSolverWebsite.Website_Logic;
 using System;
+using System.Linq;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Collections.Generic;
@@ -19,6 +21,27 @@ namespace MathSolverWebsite
 {
     public partial class _Default : Page
     {
+        private class FuncDispConv
+        {
+            public string FuncName
+            {
+                get;
+                set;
+            }
+
+            public string FuncDef
+            {
+                get;
+                set;
+            }
+
+            public FuncDispConv(KeyValuePair<FunctionDefinition, ExComp> def)
+            {
+                FuncName = def.Key.ToDispString();
+                FuncDef = WorkMgr.ExFinalToAsciiStr(def.Value);
+            }
+        }
+
         private const string DEF_PARSE_ERR_MSG = "Invalid input";
         private const string SAVE_PROB_DATABASE_NAME = "SavedProblems";
 
@@ -31,7 +54,7 @@ namespace MathSolverWebsite
         private const int MAX_INPUT_LEN = 200;
 
 
-        private MathSolverLibrary.Information_Helpers.FuncDefHelper FuncDefHelper
+        private FuncDefHelper FuncDefHelper
         {
             set
             {
@@ -111,7 +134,28 @@ namespace MathSolverWebsite
                     evalDropDownList.Items.Clear();
                     evalDropDownList.Items.Add("Enter input above.");
                 }
+
+                BindListView();
             }
+        }
+
+        private void BindListView()
+        {
+            FuncDefHelper funcDefHelper = FuncDefHelper;
+            List<FuncDispConv> funcDisps;
+            if (funcDefHelper == null)
+            {
+                funcDisps = new List<FuncDispConv>();
+            }
+            else
+            {
+                IEnumerable<KeyValuePair<FunctionDefinition, ExComp>> allFuncDefs = funcDefHelper.AllDefinitions;
+                funcDisps = (from funcDef in allFuncDefs
+                             select new FuncDispConv(funcDef)).ToList();
+            }
+
+            functionDefsListView.DataSource = funcDisps;
+            functionDefsListView.DataBind();
         }
 
         protected void hiddenSolveBtn_Click(object sender, EventArgs e)

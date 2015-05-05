@@ -222,7 +222,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 if (_B == null || _A == null || (_x == null && _X == null))
                     return SolveResult.Failure();
 
-                return SolveInverse();
+                return SolveInverse(ref pEvalData);
             }
 
             return SolveResult.Failure();

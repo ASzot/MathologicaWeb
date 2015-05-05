@@ -112,6 +112,15 @@ namespace MathSolverWebsite {
         protected global::System.Web.UI.WebControls.DropDownList evalDropDownList;
         
         /// <summary>
+        /// functionDefsListView control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ListView functionDefsListView;
+        
+        /// <summary>
         /// LoginView1 control.
         /// </summary>
         /// <remarks>

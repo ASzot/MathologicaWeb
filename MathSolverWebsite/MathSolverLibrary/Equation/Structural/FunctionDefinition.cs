@@ -10,6 +10,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         private ExComp[] _callArgs;
         private AlgebraComp _iden;
         private bool _funcNotation = true;
+        private int _funcDefIndex = -1;
 
         /// <summary>
         /// The supplied arguments to the function.
@@ -20,6 +21,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         {
             set { _callArgs = value; }
             get { return _callArgs; }
+        }
+
+        public int FuncDefIndex
+        {
+            get { return _funcDefIndex; }
+            set { _funcDefIndex = value; }
         }
 
         public bool HasValidInputArgs
@@ -52,7 +59,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public int InputArgCount
         {
-            get { return _args.Length; }
+            get { return _args == null ? 0 : _args.Length; }
         }
 
         public bool IsMultiValued
@@ -72,6 +79,19 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public FunctionDefinition()
         {
+        }
+
+        public static string GetDimenStr(int dimen)
+        {
+            if (dimen == 0)
+                return "x";
+            else if (dimen == 1)
+                return "y";
+            else if (dimen == 2)
+                return "z";
+            else if (dimen == 3)
+                return "w";
+            return "w_" + (dimen + 1).ToString();
         }
 
         /// <summary>

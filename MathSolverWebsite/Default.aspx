@@ -46,121 +46,6 @@
             return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
         }
 
-        $(document).ready(function () {
-            $("#tool-bar-overlay").mouseenter(function () {
-                $("#tool-bar-space").show(200);
-            });
-
-            $("#tool-bar-overlay").mouseleave(function () {
-                var isHovered = $("#tool-bar-space").is(":hover");
-                if (!isHovered) {
-                    $("#tool-bar-space").hide(200);
-                }
-            });
-
-            $("#tool-bar-space").mouseleave(function () {
-                var width = $(window).width;
-                if (width < 749)
-                    $("#tool-bar-space").hide(200);
-            });
-
-            $("#tool-bar-overlay").click(function () {
-                $("#tool-bar-space").toggle(200);
-            });
-
-
-            $("#clear-btn-id").click(function (e) {
-                onClearBtnClicked();
-                e.stopPropagation();
-
-                return false;
-            });
-
-            $("#remove-btn-id").click(function (e) {
-                clearInputBtn_Clicked();
-                e.stopPropagation();
-                return false;
-            });
-
-            $("#add-btn-id").click(function (e) {
-                addInputBtn_Clicked();
-                e.stopPropagation();
-                return false;
-            });
-
-            $(".account-space").click(function (e) {
-                $(".account-popup").toggle(300);
-                return false;
-            });
-
-            $(".pob-problem").click(function (e) {
-                // Paste into the input.
-                var inputDisp = $(this).children("span").html();
-                var inputDispEncoded = encodeURIComponent(inputDisp);
-                window.location.replace("/Default?Index=0&InputDisp=" + inputDispEncoded);
-            });
-
-            $("#work-space").on('scroll', function () {
-                var elem = $(this);
-                if (elem[0].scrollHeight - elem.scrollTop() == elem.outerHeight())
-                    $("#to-bottom-btn").hide();
-                else {
-                    $("#to-bottom-btn").show();
-                }
-            });
-
-            $("#to-bottom-btn").click(function (e) {
-                var objDiv = document.getElementById("work-space");
-                objDiv.scrollTop = objDiv.scrollHeight;
-            });
-
-            prevWidth = $(window).width();
-
-            $(window).resize(function (e) {
-                var winWidth = $(window).width();
-                if (winWidth != prevWidth && winWidth) {
-                    if (winWidth > 749) {
-                        $("#tool-bar-space").show();
-                    }
-                    else {
-                        $("#tool-bar-space").hide();
-                    }
-                    prevWidth = winWidth;
-                }
-            });
-
-            var html = $("#input-list").html();
-
-            var inputDispVal = getParameterByName("InputDisp");
-            if (inputDispVal !== null && inputDispVal != "") {
-                var splitInput = inputDispVal.split(';');
-                for (var i = 0; i < splitInput.length; ++i) {
-                    var inputHtml = createInputBox(i, i == 0);
-                    html += inputHtml;
-                }
-
-                $("#input-list").html(html);
-
-
-                for (var i = 0; i < splitInput.length; ++i) {
-                    $("#mathInputSpan" + i).mathquill('editable');
-                    $("#mathInputSpan" + i).mathquill('latex', splitInput[i]);
-
-                    if (i == 0)
-                        selectedTextBox = $("#mathInputSpan" + i);
-                    inputBoxIds.push(i);
-                }
-            }
-            else {
-                var inputBoxHtml = createInputBox(0, true);
-
-                $("#input-list").html(html + inputBoxHtml);
-                $("#mathInputSpan0").mathquill("editable");
-                selectedTextBox = $("#mathInputSpan0");
-                inputBoxIds.push(0);
-            }
-        });
-
 
         function mathInputChanged(event) {
             if (typeof event == 'object' && event !== null) {
@@ -307,10 +192,10 @@
                                     "Sign Up" +
                                 "</div>" +
                             "</a>" +
-                            "<a class='btn-link' href='account/login'>" + 
+                            "<a class='btn-link' href='account/login'>" +
                                 "<div class='login-space account-division' style='margin-right: 29px; width: 198px;'>" +
-                                    "Log In" + 
-                                "</div>" + 
+                                    "Log In" +
+                                "</div>" +
                             "</a>"
                                 ));
                         showPopUp();
@@ -325,6 +210,132 @@
             $("#work-list-disp").html("");
             $("#to-bottom-btn").hide();
         }
+
+        $(document).ready(function () {
+            $("#tool-bar-overlay").mouseenter(function () {
+                $("#tool-bar-space").show(200);
+            });
+
+            $("#tool-bar-overlay").mouseleave(function () {
+                var isHovered = $("#tool-bar-space").is(":hover");
+                if (!isHovered) {
+                    $("#tool-bar-space").hide(200);
+                }
+            });
+
+            $("#tool-bar-space").mouseleave(function () {
+                var width = $(window).width;
+                if (width < 749)
+                    $("#tool-bar-space").hide(200);
+            });
+
+            $("#tool-bar-overlay").click(function () {
+                $("#tool-bar-space").toggle(200);
+            });
+
+
+            $("#clear-btn-id").click(function (e) {
+                onClearBtnClicked();
+                e.stopPropagation();
+
+                return false;
+            });
+
+            $("#remove-btn-id").click(function (e) {
+                clearInputBtn_Clicked();
+                e.stopPropagation();
+                return false;
+            });
+
+            $("#add-btn-id").click(function (e) {
+                addInputBtn_Clicked();
+                e.stopPropagation();
+                return false;
+            });
+
+            $(".account-space").click(function (e) {
+                $(".account-popup").toggle(300);
+                return false;
+            });
+
+            $(".pob-problem").click(function (e) {
+                // Paste into the input.
+                var inputDisp = $(this).children("span").html();
+                var inputDispEncoded = encodeURIComponent(inputDisp);
+                window.location.replace("/Default?Index=0&InputDisp=" + inputDispEncoded);
+            });
+
+            $("#work-space").on('scroll', function () {
+                var elem = $(this);
+                if (elem[0].scrollHeight - elem.scrollTop() == elem.outerHeight())
+                    $("#to-bottom-btn").hide();
+                else {
+                    $("#to-bottom-btn").show();
+                }
+            });
+
+            $("#to-bottom-btn").click(function (e) {
+                var objDiv = document.getElementById("work-space");
+                objDiv.scrollTop = objDiv.scrollHeight;
+            });
+
+
+            prevWidth = $(window).width();
+
+            $(window).resize(function (e) {
+                var winWidth = $(window).width();
+                if (winWidth != prevWidth && winWidth) {
+                    if (winWidth > 749) {
+                        $("#tool-bar-space").show();
+                    }
+                    else {
+                        $("#tool-bar-space").hide();
+                    }
+                    prevWidth = winWidth;
+                }
+            });
+
+            var html = $("#input-list").html();
+
+            var inputDispVal = getParameterByName("InputDisp");
+            if (inputDispVal !== null && inputDispVal != "") {
+                var splitInput = inputDispVal.split(';');
+                for (var i = 0; i < splitInput.length; ++i) {
+                    var inputHtml = createInputBox(i, i == 0);
+                    html += inputHtml;
+                }
+
+                $("#input-list").html(html);
+
+
+                for (var i = 0; i < splitInput.length; ++i) {
+                    $("#mathInputSpan" + i).mathquill('editable');
+                    $("#mathInputSpan" + i).mathquill('latex', splitInput[i]);
+
+                    if (i == 0)
+                        selectedTextBox = $("#mathInputSpan" + i);
+                    inputBoxIds.push(i);
+                }
+            }
+            else {
+                var inputBoxHtml = createInputBox(0, true);
+
+                $("#input-list").html(html + inputBoxHtml);
+                $("#mathInputSpan0").mathquill("editable");
+                selectedTextBox = $("#mathInputSpan0");
+                inputBoxIds.push(0);
+            }
+
+
+            $("#expand-more-popup").click(function (e) {
+                var html = $(this).html();
+                if (html == "+")
+                    $(this).html("-");
+                else
+                    $(this).html("+");
+                $(".more-popup-content").hide(1.0);
+            });
+        });
 
     </script>
 
@@ -414,7 +425,7 @@
         </div>
 
         <div id="right-paneling">
-            <div id="toolbar-space">
+            <div id="toolbar-space" class="noselect">
                 <div id="tool-bar-selection-space">
                     <div id="sb0" class="subject-bar-btn-clicked noselect">Basic</div>
                     <div id="sb1" class="subject-bar-btn noselect">Trig</div>
@@ -424,80 +435,36 @@
                     <div id="sb5" class="subject-bar-btn noselect">Lin Alg</div>
                 </div>
                 <div id="toolbar-btn-space">
-                    <div class="toolbar-btn noselect">
-                        <div class="toolbar-icon">
-                            <span class="mathquill-rendered-math pointable">`+`</span>
-                        </div>
+                </div>
+                <div class="more-popup">
+                    <div class="more-popup-content" style="display: none;">
+<%--                        <div class="onoffswitch">
+                            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>
+                            <label class="onoffswitch-label" for="myonoffswitch">
+                                <span class="onoffswitch-inner"></span>
+                                <span class="onoffswitch-switch"></span>
+                            </label>
+                        </div>--%>
+                        
+                        <asp:ListView ID="functionDefsListView" runat="server">
+                            <LayoutTemplate>
+                                <ul>
+                                    <asp:PlaceHolder ID="itemPlaceholder" runat="server" />
+                                </ul>
+                            </LayoutTemplate>
+                            <ItemTemplate>
+                                <li>
+                                    <%# Eval("FuncName") %> = <%# Eval("FuncDef") %>
+                                </li>
+                            </ItemTemplate>
+                            <EmptyDataTemplate>
+                                No data
+                            </EmptyDataTemplate>
+                        </asp:ListView>
                     </div>
-                    <div class="toolbar-btn noselect">
-                        <div class="toolbar-icon">
-                            <span class="mathquill-rendered-math pointable">`-`</span>
-                        </div>
-                    </div>
-                    <div class="toolbar-btn">
-                        <div class="toolbar-icon">
-                            <span class="mathquill-rendered-math pointable">`*`</span>
-                        </div>
-                    </div>
-                    <div class="toolbar-btn">
-                        <div class="toolbar-icon-large">
-                            <span class="mathquill-rendered-math pointable">`\frac{x}{y}`</span>
-                        </div>
-                    </div>
-                    <div class="toolbar-btn">
-                        <div class="toolbar-icon">
-                            <span class="mathquill-rendered-math pointable">`x`</span>
-                        </div>
-                    </div>
-                    <div class="toolbar-btn">
-                        <div class="toolbar-icon">
-                            <span class="mathquill-rendered-math pointable">`y`</span>
-                        </div>
-                    </div>
-                    <div class="toolbar-btn">
-                        <div class="toolbar-icon">
-                            <span class="mathquill-rendered-math pointable">`z`</span>
-                        </div>
-                    </div>
-                    <div class="toolbar-btn">
-                        <div class="toolbar-icon">
-                            <span class="mathquill-rendered-math pointable noselect">`\theta`</span>
-                        </div>
-                    </div>
-                    <div class="toolbar-btn">
-                        <div class="toolbar-icon">
-                            <span class="mathquill-rendered-math pointable">`x^n`</span>
-                        </div>
-                    </div>
-                    <div class="toolbar-btn">
-                        <div class="toolbar-icon">
-                            <span class="mathquill-rendered-math pointable">`\sqrt{x}`</span>
-                        </div>
-                    </div>
-                    <div class="toolbar-btn">
-                        <div class="toolbar-icon">
-                            <span class="mathquill-rendered-math pointable">`\root{n}{x}`</span>
-                        </div>
-                    </div>
-                    <div class="toolbar-btn">
-                        <div class="toolbar-icon">
-                            <span class="mathquill-rendered-math pointable">`|x|`</span>
-                        </div>
-                    </div>
-                    <div class="toolbar-btn">
-                        <div class="toolbar-icon">
-                            <span class="mathquill-rendered-math pointable">`=`</span>
-                        </div>
-                    </div>
-                    <div class="toolbar-btn">
-                        <div class="toolbar-icon">
-                            <span class="mathquill-rendered-math pointable">`>`</span>
-                        </div>
-                    </div>
-                    <div class="toolbar-btn">
-                        <div class="toolbar-icon">
-                            <span class="mathquill-rendered-math pointable">`<`</span>
-                        </div>
+
+                    <div id="expand-more-popup">
+                        +
                     </div>
                 </div>
             </div>
