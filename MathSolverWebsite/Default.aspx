@@ -48,6 +48,7 @@
 
 
         function mathInputChanged(event) {
+
             if (typeof event == 'object' && event !== null) {
                 if (event.which == 13 || event.key == 13) {
                     event.stopPropagation = true;
@@ -66,6 +67,7 @@
 
 
             $("#<%= hiddenUpdateBtn.ClientID %>").click();
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub, "funcDispList"]);
         }
 
         function solveBtnClick() {
@@ -127,8 +129,12 @@
             else {
                 $("#parse-errors-id").show();
             }
-            if (senderId != "id-solve-btn" && senderId.indexOf("hiddenSolveBtn") == -1)
+            if (senderId != "id-solve-btn" && senderId.indexOf("hiddenSolveBtn") == -1) {
+                if (senderId.indexOf("hiddenUpdateBtn") != -1 || senderId.indexOf("RadBtn") != -1) {
+                    MathJax.Hub.Queue(['Typeset', MathJax.Hub, 'funcDispList']);
+                }
                 return;
+            }
             var prevSolveOutput = $("#<% = calcOutput.ClientID %>").html();
 
             // Remove all of the existing graphs. (There can only be one graph at once).
@@ -333,7 +339,11 @@
                     $(this).html("-");
                 else
                     $(this).html("+");
-                $(".more-popup-content").hide(1.0);
+                $(".more-popup-content").toggle();
+            });
+
+            $(".onoffswitch").click(function (e) {
+                $(this)
             });
         });
 
@@ -438,34 +448,34 @@
                 </div>
                 <div class="more-popup">
                     <div class="more-popup-content" style="display: none;">
-<%--                        <div class="onoffswitch">
-                            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>
-                            <label class="onoffswitch-label" for="myonoffswitch">
-                                <span class="onoffswitch-inner"></span>
-                                <span class="onoffswitch-switch"></span>
-                            </label>
-                        </div>--%>
-                        
-                        <asp:ListView ID="functionDefsListView" runat="server">
-                            <LayoutTemplate>
-                                <ul>
-                                    <asp:PlaceHolder ID="itemPlaceholder" runat="server" />
-                                </ul>
-                            </LayoutTemplate>
-                            <ItemTemplate>
-                                <li>
-                                    <%# Eval("FuncName") %> = <%# Eval("FuncDef") %>
-                                </li>
-                            </ItemTemplate>
-                            <EmptyDataTemplate>
-                                No data
-                            </EmptyDataTemplate>
-                        </asp:ListView>
+                        <asp:UpdatePanel runat="server" ID="moreContentUpdatePanel">
+                            <ContentTemplate>
+                                <asp:RadioButton AutoPostBack="true" TextAlign="Left" CssClass="angle-rad-btn" Text="Use Radians: " OnCheckedChanged="angleRadBtn_CheckedChanged" runat="server" ID="radRadBtn" GroupName="angleGroup" />
+                                <asp:RadioButton AutoPostBack="true" TextAlign="Left" CssClass="angle-rad-btn" Text="Use Degrees: " OnCheckedChanged="angleRadBtn_CheckedChanged" runat="server" ID="degRadBtn" GroupName="angleGroup" />
+
+                                <asp:ListView ID="functionDefsListView" runat="server" OnItemCommand="functionDefsListView_ItemCommand" OnItemDeleting="functionDefsListView_ItemDeleting">
+                                    <LayoutTemplate>
+                                        <span class="func-list-title">Function Definitions</span>
+                                        <ul class="func-disp-list" id="funcDispList">
+                                            <asp:PlaceHolder ID="itemPlaceholder" runat="server" />
+                                        </ul>
+                                    </LayoutTemplate>
+                                    <ItemTemplate>
+                                        <li>
+                                            <span>`<%# Eval("FuncName") %> = <%# Eval("FuncDef") %>`</span>
+                                            <asp:Button CssClass="del-span" runat="server" ID="SelectCategoryButton" CommandName="Delete" 
+                                                CommandArgument='<%# Eval("FuncName") %>' Text="Delete" />
+                                        </li>
+                                    </ItemTemplate>
+                                    <EmptyDataTemplate>
+                                        <span class='func-list-title'>No functions defined.</span>
+                                    </EmptyDataTemplate>
+                                </asp:ListView>
+                            </ContentTemplate>
+                        </asp:UpdatePanel>
                     </div>
 
-                    <div id="expand-more-popup">
-                        +
-                    </div>
+                    <div id="expand-more-popup">+</div>
                 </div>
             </div>
 

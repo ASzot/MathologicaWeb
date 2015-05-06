@@ -27,6 +27,24 @@ fieldset {
 }
 
 
+
+.del-span {
+    float: right;
+    margin-right: 30px;
+    background-color: #e74c3c;
+    color: white;
+    padding: 10px 20px;
+    margin-top: -10px;
+}
+
+    .del-span a {
+        color: white;
+    }
+
+    .del-span:hover {
+        cursor: pointer;
+    }
+
 .logout-btn {
     color: white;
 }
@@ -1139,6 +1157,7 @@ img {
     min-width: 300px;
     margin-left: auto;
     margin-right: auto;
+    border: 1px solid #adadad;
 }
 
 .topic-container {

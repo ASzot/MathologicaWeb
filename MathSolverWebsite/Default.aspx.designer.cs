@@ -112,6 +112,33 @@ namespace MathSolverWebsite {
         protected global::System.Web.UI.WebControls.DropDownList evalDropDownList;
         
         /// <summary>
+        /// moreContentUpdatePanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel moreContentUpdatePanel;
+        
+        /// <summary>
+        /// radRadBtn control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton radRadBtn;
+        
+        /// <summary>
+        /// degRadBtn control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton degRadBtn;
+        
+        /// <summary>
         /// functionDefsListView control.
         /// </summary>
         /// <remarks>

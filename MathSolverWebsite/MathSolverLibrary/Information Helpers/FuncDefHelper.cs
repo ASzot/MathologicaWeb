@@ -88,6 +88,19 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
             return func;
         }
 
+        public void Remove(string iden)
+        {
+            FunctionDefinition removeKey = null;
+            foreach (FunctionDefinition funcDef in _defs.Keys)
+            {
+                if (funcDef.ToDispString() == iden)
+                    removeKey = funcDef;
+            }
+
+            if (removeKey != null)
+                _defs.Remove(removeKey);
+        }
+
         public List<FunctionDefinition> GetAllVecEquations(int dimen)
         {
             List<FunctionDefinition> funcs = new List<FunctionDefinition>();

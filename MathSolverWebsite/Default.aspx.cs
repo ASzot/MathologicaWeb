@@ -40,6 +40,12 @@ namespace MathSolverWebsite
                 FuncName = def.Key.ToDispString();
                 FuncDef = WorkMgr.ExFinalToAsciiStr(def.Value);
             }
+
+            public FuncDispConv(string funcName, string funcDef)
+            {
+                FuncName = funcName;
+                FuncDef = funcDef;
+            }
         }
 
         private const string DEF_PARSE_ERR_MSG = "Invalid input";
@@ -52,6 +58,7 @@ namespace MathSolverWebsite
         private const string FUNC_DEF_SES_KEY = "FuncDefs";
 
         private const int MAX_INPUT_LEN = 200;
+        private static int _bindCount = 0;
 
 
         private FuncDefHelper FuncDefHelper
@@ -134,6 +141,9 @@ namespace MathSolverWebsite
                     evalDropDownList.Items.Clear();
                     evalDropDownList.Items.Add("Enter input above.");
                 }
+
+                radRadBtn.Checked = UseRad;
+                degRadBtn.Checked = !UseRad;
 
                 BindListView();
             }
@@ -221,6 +231,8 @@ namespace MathSolverWebsite
             inputHtml = "<div class='input-disp-area'>" + inputHtml + "</div>";
 
             calcOutput.InnerHtml = inputHtml + solveResultHtml + workHtml;
+
+            BindListView();
         }
 
         private bool UpdateUI(string inputStr, int selectIndex = 0)
@@ -322,5 +334,28 @@ namespace MathSolverWebsite
 
             }
         }
+
+        protected void angleRadBtn_CheckedChanged(object sender, EventArgs e)
+        {
+            UseRad = !degRadBtn.Checked;
+        }
+
+        protected void functionDefsListView_ItemCommand(object sender, ListViewCommandEventArgs e)
+        {
+            if (e.CommandName == "Delete")
+            {
+                string funcIdentifier = (string)e.CommandArgument;
+                int removeIndex = e.Item.DisplayIndex;
+                functionDefsListView.DeleteItem(removeIndex);
+                FuncDefHelper.Remove(funcIdentifier);
+                BindListView();
+            }
+        }
+
+        protected void functionDefsListView_ItemDeleting(object sender, ListViewDeleteEventArgs e)
+        {
+        }
+
+
     }
 }
