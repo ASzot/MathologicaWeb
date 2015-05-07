@@ -55,6 +55,11 @@
                 Number absInner = Number.Abs(innerEx as Number);
                 return absInner;
             }
+            else if (innerEx is Equation.Structural.LinearAlg.ExVector)
+            {
+                // Vector magnitude.
+                return (innerEx as Equation.Structural.LinearAlg.ExVector).GetVecLength();
+            }
 
             return this;
         }
