@@ -61,6 +61,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
                 // This is the transpose operation.
                 return mat.Transpose();
             }
+            else if (ex is Number && (ex as Number) == -1 && !(mat is ExVector))
+            {
+                // This is the inverse operation.
+                return mat.GetInverse();
+            }
 
             mat.ModifyEach((ExComp comp) =>
                 {
