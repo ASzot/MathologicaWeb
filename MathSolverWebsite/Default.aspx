@@ -152,7 +152,11 @@
                 });
             });
 
-            $(".input-disp-txt span").mathquill();
+            $(".input-disp-area .input-disp-txt span").each(function () {
+                var ele = $(this);
+                MathJax.Hub.Queue(["Typeset", MathJax.Hub, ele]);
+                alert("");
+            });
 
             function createPopUp(innerHtml) {
                 $(".pop").remove();
@@ -339,11 +343,7 @@
                     $(this).html("-");
                 else
                     $(this).html("+");
-                $(".more-popup-content").toggle();
-            });
-
-            $(".onoffswitch").click(function (e) {
-                $(this)
+                $(".more-popup").toggle();
             });
         });
 
@@ -446,8 +446,8 @@
                 </div>
                 <div id="toolbar-btn-space">
                 </div>
-                <div class="more-popup">
-                    <div class="more-popup-content" style="display: none;">
+                <div class="more-popup" style="display: none;">
+                    <div class="more-popup-content">
                         <asp:UpdatePanel runat="server" ID="moreContentUpdatePanel">
                             <ContentTemplate>
                                 <asp:RadioButton AutoPostBack="true" TextAlign="Left" CssClass="angle-rad-btn" Text="Use Radians: " OnCheckedChanged="angleRadBtn_CheckedChanged" runat="server" ID="radRadBtn" GroupName="angleGroup" />
@@ -475,9 +475,9 @@
                         </asp:UpdatePanel>
                     </div>
 
-                    <div id="expand-more-popup">+</div>
                 </div>
             </div>
+            <div id="expand-more-popup" class="noselect">+</div>
 
             <div id="pod-space">
                 <div style="margin-left: 10px;">

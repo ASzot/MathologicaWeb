@@ -224,7 +224,7 @@ namespace MathSolverWebsite
             if (selectedIndex < evalDropDownList.Items.Count && selectedIndex >= 0)
                 selectedVal = evalDropDownList.Items[selectedIndex].Text;
 
-            string inputHtml = "<div class='input-disp-txt'><span class='mathquill-embedded-latex'>" + inputTxt + "</span></div>";
+            string inputHtml = "<div class='input-disp-txt'>`" + inputTxt + "`</div>";
             inputHtml += "<div class='selected-cmd-txt'>" + termEval.GetCommands()[selectedIndex] + "</div>";
             inputHtml += "<p class='hidden'>" + inputTxt + "</p>";
 
@@ -254,10 +254,11 @@ namespace MathSolverWebsite
             evalDropDownList.Items.Clear();
 
             // Display the commands for the parsed input.
-            if (termEval != null)
+            if (termEval != null && termEval.GetCommands() != null)
             {
-                parseErrorSpan.InnerHtml = "";
                 string[] cmds = termEval.GetCommands();
+
+                parseErrorSpan.InnerHtml = "";
                 for (int i = 0; i < cmds.Length; ++i)
                 {
                     string cmd = cmds[i];

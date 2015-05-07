@@ -1547,7 +1547,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                             {
                                 Lexeme insertLex = new Lexeme(LexemeType.Derivative, MathSolver.PLAIN_TEXT ?
                                     "(partial" + funcIden + ")/(partial" + split[1] + ")" :
-                                    "\\frac(partial" + funcIden + ")(partial" + split[1] + ")");
+                                    "frac(partial" + funcIden + ")(partial" + split[1] + ")");
                                 lt.RemoveAt(i);
                                 lt.Insert(i, insertLex);
                             }
@@ -2359,6 +2359,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                 top = topSymbMatch.Value;
                 bottom = bottomSymbMatch.Value;
             }
+            else
+                indexOfDeriv = 1;
 
             if (top.Length != 0)
             {

@@ -72,12 +72,20 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
             return maxIndex;
         }
 
-        public static FunctionDefinition GetMostCurrentDef(List<FunctionDefinition> funcDefs)
+        /// <summary>
+        /// Get the most current definition from a list favoring the bias identifier.
+        /// </summary>
+        /// <param name="funcDefs"></param>
+        /// <param name="biasIden"></param>
+        /// <returns></returns>
+        public static FunctionDefinition GetMostCurrentDef(List<FunctionDefinition> funcDefs, AlgebraComp biasIden)
         {
             int maxIndex = int.MinValue;
             FunctionDefinition func = null;
             foreach (FunctionDefinition funcDef in funcDefs)
             {
+                if (biasIden != null && funcDef.Iden.IsEqualTo(biasIden))
+                    return funcDef;
                 if (funcDef.FuncDefIndex > maxIndex)
                 {
                     maxIndex = funcDef.FuncDefIndex;

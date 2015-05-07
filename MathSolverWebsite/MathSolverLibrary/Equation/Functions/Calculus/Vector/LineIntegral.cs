@@ -11,7 +11,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
 {
     class LineIntegral : Integral
     {
-        private AlgebraComp _surfaceIden;
+        private AlgebraComp _lineIden;
 
         public LineIntegral(ExComp innerEx)
             : base(innerEx)
@@ -22,7 +22,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
         public static LineIntegral ConstructLineIntegral(ExComp innerEx, AlgebraComp surfaceIden, AlgebraComp withRespectTo)
         {
             LineIntegral lineIntegral = new LineIntegral(innerEx);
-            lineIntegral._surfaceIden = surfaceIden;
+            lineIntegral._lineIden = surfaceIden;
             lineIntegral._dVar = withRespectTo;
 
             return lineIntegral;
@@ -66,12 +66,48 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
             return integral.Evaluate(false, ref pEvalData);
         }
 
+        private ExComp EvaluateVectorField(ref TermType.EvalData pEvalData, AlgebraComp pathVar, AndRestriction pathRestriction, TypePair<string, ExComp>[] useDefs)
+        {
+            // Rewrite the function in terms of the path variable.
+            AlgebraTerm innerTerm = InnerTerm;
+            foreach (TypePair<string, ExComp> useDef in useDefs)
+            {
+                innerTerm = innerTerm.Substitute(new AlgebraComp(useDef.Data1), useDef.Data2);
+            }
+
+            ExComp innerEx = innerTerm is AlgebraTerm ? (innerTerm as AlgebraTerm).RemoveRedundancies() : innerTerm;
+            if (!(innerEx is ExVector))
+                return this;
+
+            ExVector innerVec = innerEx as ExVector;
+
+            // Take the dot product of the function and the path equation.
+            ExComp[] overallTerms = new ExComp[useDefs.Length];
+            for (int i = 0; i < overallTerms.Length; ++i)
+            {
+                overallTerms[i] = MulOp.StaticCombine(innerVec.Get(i), useDefs[i].Data2);
+            }
+
+            if (overallTerms.Length < 1)
+                return this;
+
+            // Add all terms together.
+            ExComp overallTerm = overallTerms[0];
+            for (int i = 1; i < overallTerms.Length; ++i)
+            {
+                overallTerm = AddOp.StaticCombine(overallTerm, overallTerms[i]);
+            }
+
+            Integral integral = Integral.ConstructIntegral(overallTerm, pathVar, pathRestriction.GetLower(), pathRestriction.GetUpper());
+
+            return integral.Evaluate(false, ref pEvalData);
+        }
+
         public override ExComp Evaluate(bool harshEval, ref TermType.EvalData pEvalData)
         {
-
             // Get the line.
             List<FunctionDefinition> vectorFuncs = pEvalData.FuncDefs.GetAllVecEquations(1);
-            FunctionDefinition vectorFunc = FuncDefHelper.GetMostCurrentDef(vectorFuncs);
+            FunctionDefinition vectorFunc = FuncDefHelper.GetMostCurrentDef(vectorFuncs, _lineIden);
 
             List<FunctionDefinition> paraFuncs = pEvalData.FuncDefs.GetProbableParametricEquations(1);
             int maxIndex = FuncDefHelper.GetMostCurrentIndex(paraFuncs);
@@ -102,12 +138,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
             }
 
             AndRestriction pathRestriction = pEvalData.GetVariableRestriction(pathVar);
+            if (pathRestriction == null)
+                return this;
 
             ExComp innerEx = InnerEx;
             if (innerEx is ExVector)
-            {
-                return this;
-            }
+                return EvaluateVectorField(ref pEvalData, pathVar, pathRestriction, useDefs);
             else if (innerEx is ExMatrix)
                 return this;
             else
