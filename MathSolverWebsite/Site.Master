@@ -114,9 +114,6 @@
                         <a href="/privacy.aspx">Privacy |</a>
                         <a href="/about.aspx">About |</a>
                         <a href="/apps.aspx">Apps</a>
-                        <div class="copy-right">
-                            &copy; <%: DateTime.Now.Year %> - Mathologica, LLC &nbsp;
-                        </div>
                     </div>
 
                     <div class="branding-images" style="float: right;">
@@ -129,6 +126,10 @@
                         <a class="img-disp" href="asdf.aspx">
                             <img class="mail" src="/Images/Branding/mail.png" width="89" alt="Mathologica Mail" />
                         </a>
+                    </div>
+                    
+                    <div class="copy-right">
+                        &copy; <%: DateTime.Now.Year %> - Mathologica, LLC &nbsp;
                     </div>
                 </div>
             </div>

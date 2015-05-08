@@ -224,7 +224,7 @@ namespace MathSolverWebsite
             if (selectedIndex < evalDropDownList.Items.Count && selectedIndex >= 0)
                 selectedVal = evalDropDownList.Items[selectedIndex].Text;
 
-            string inputHtml = "<div class='input-disp-txt'>`" + inputTxt + "`</div>";
+            string inputHtml = "<div class='input-disp-txt'><span class='mathquill-rendered-math'>" + inputTxt + "</span></div>";
             inputHtml += "<div class='selected-cmd-txt'>" + termEval.GetCommands()[selectedIndex] + "</div>";
             inputHtml += "<p class='hidden'>" + inputTxt + "</p>";
 

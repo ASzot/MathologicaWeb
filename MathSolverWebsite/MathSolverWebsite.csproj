@@ -232,10 +232,12 @@
     <Content Include="Images\Branding\258x67_WP_Store_cyan.png" />
     <Content Include="Images\Branding\en_app_rgb_wo_60.png" />
     <Content Include="Images\Branding\facebook.png" />
+    <Content Include="Images\LinkIcon.png" />
     <Content Include="Images\loading.gif" />
     <Content Include="Images\Branding\mail.png" />
-    <Content Include="Images\MathologicaLogo.png" />
     <Content Include="Images\Branding\twitter.png" />
+    <Content Include="Images\MathologicaLogo.png" />
+    <Content Include="Images\SaveIcon.png" />
     <Content Include="JSXGraph\jsxgraph.css" />
     <Content Include="JSXGraph\jsxgraphcore.js" />
     <Content Include="mathquill\font\stixgeneral-bundle\STIXFontLicense2010.txt" />

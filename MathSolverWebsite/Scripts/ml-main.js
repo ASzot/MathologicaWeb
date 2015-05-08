@@ -218,6 +218,7 @@ var linAlg = new TopicMenu(
         new MenuItem("Cross product", "\\vec{a}\\times\\vec{b}", "\\times", false),
         new MenuItem("Determinant", "det(A)", "det(\\EMPTYGP{})", false),
         new MenuItem("Transpose", "[(a,b),(c,d)]^{T}", "^{T}", true),
+        new MenuItem("Inverse", "[(a,b),(c,d)]^{-1}", "^{-1}", true),
     ]);
 
 var menus = [basic, trig, calc, symb, prob, linAlg];

@@ -114,6 +114,20 @@
             return this.animate({ opacity: 'toggle', height: 'toggle' }, "fast", easing, callback);
         };
 
+        function createPopUp(innerHtml) {
+            $(".pop").remove();
+            return "<div class='messagepop pop'>" + innerHtml + "<a class='close' href='#'>Close</a></div>";
+        }
+
+        function showPopUp() {
+            $(".pop").slideFadeToggle();
+
+            $(".close").live('click', function () {
+                $(".pop").remove();
+                return false;
+            });
+        }
+
         Sys.WebForms.PageRequestManager.getInstance().add_beginRequest(BeginRequestHandler);
         Sys.WebForms.PageRequestManager.getInstance().add_endRequest(EndRequestHandler);
         function BeginRequestHandler(sender, args) {
@@ -138,7 +152,9 @@
             var prevSolveOutput = $("#<% = calcOutput.ClientID %>").html();
 
             // Remove all of the existing graphs. (There can only be one graph at once).
-            $("#work-list-disp").append("<div class='prev-output'>" + prevSolveOutput + "</div><input type='button' class='save-btn' value='Save' /><div class='horiz-divide'></div>");
+            $("#work-list-disp").append("<div class='prev-output'>" + prevSolveOutput + "<div class='more-options-area'>" +
+                "<div style='border-right: 1px solid #adadad' class='link-btn icon-btn'><img src='/Images/LinkIcon.png' />" +
+                "</div><div class='share-btn icon-btn'><img src='/Images/SaveIcon.png' /></div></div></div><div class='horiz-divide'></div>");
             MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
 
             $(".input-disp-area").each(function () {
@@ -152,29 +168,30 @@
                 });
             });
 
-            $(".input-disp-area .input-disp-txt span").each(function () {
-                var ele = $(this);
-                MathJax.Hub.Queue(["Typeset", MathJax.Hub, ele]);
-                alert("");
+            var x = $("#work-list-disp").children().last().prev().children(".input-disp-area").children(".input-disp-txt").children("span").each(function () {
+                $(this).mathquill();
             });
 
-            function createPopUp(innerHtml) {
-                $(".pop").remove();
-                return "<div class='messagepop pop'>" + innerHtml + "<a class='close' href='#'>Close</a></div>";
-            }
+            $(".link-btn").click(function () {
+                // Get the input.
+                var prevOutput = $(this).parent().parent();
+                var inputInfo = prevOutput.children(".input-disp-area");
+                var inputTxt = inputInfo.children("p").text();
 
-            function showPopUp() {
-                $(".pop").slideFadeToggle();
+                // Create the link to the input.
+                var linkStr = "mathologica.com/Default?Index=0&InputDisp=" + htmlEncode(inputTxt);
+                $(this).parent().parent().parent().parent().prepend(createPopUp(
+                    "<p>Copy and past the link to share this problem.</p>" + 
+                    "<input class='copy-past-link' type='text' value='" + linkStr + "' />"
+                        ));
+                showPopUp();
 
-                $(".close").live('click', function () {
-                    $(".pop").remove();
-                    return false;
-                });
-            }
+                $(".copy-past-link").select();
+            });
 
-            $(".save-btn").each(function () {
+            $(".share-btn").each(function () {
                 $(this).click(function () {
-                    var prevOutput = $(this).prev();
+                    var prevOutput = $(this).parent().parent();
                     var inputInfo = prevOutput.children(".input-disp-area");
                     var inputTxt = inputInfo.children("p").text();
 
@@ -430,7 +447,16 @@
                 </div>
             </div>
             <div class="ad-space" style="height: 90px; width: 70%">
-                <p>(Ad here)</p>
+                <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                <!-- Lower Ad -->
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-3516117000150402"
+                     data-ad-slot="5259228574"
+                     data-ad-format="auto"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
             </div>
         </div>
 
@@ -483,7 +509,7 @@
                 <div style="margin-left: 10px;">
                     <p class="pob-title">Problem of the Day:</p>
                     <div style="text-align: center;" class="pob-problem">
-                        <p>Volume Integral</p>
+                        <p class="pob-sub-title">Volume Integral</p>
                         <span class="hidden">\int\int\int_V \frac{\cos(xy)x^2}{\ln(z)} dV</span>
                         <div>
                             <span class="mathquill-rendered-math noselect pointable">`\int\int\int_V \frac{\cos(xy)x^2}{\ln(z)} dV`</span>

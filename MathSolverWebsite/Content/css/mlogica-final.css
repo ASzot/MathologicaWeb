@@ -79,21 +79,6 @@ fieldset {
     font-size: 35px;
 }
 
-.save-btn {
-    border: 1px solid black;
-    background-color: #3498db;
-    color: white;
-    font-size: 30px;
-    padding: 5px 20px;
-    margin-left: auto;
-    position: relative;
-    right: 0px;
-    margin-left: 8%;
-}
-
-    .save-btn:hover {
-        cursor: pointer;
-    }
 
     
 .messagepop p, .messagepop.div {
@@ -166,13 +151,6 @@ legend {
     margin-bottom: 30px;
 }
 
-#work-space {
-    height: -moz-calc(100% - 375px);
-    height: -webkit-calc(100% - 375px);
-    height: -o-calc(100% - 375px);
-    height: calc(100% - 375px);
-    overflow-y: auto;
-}
 
 .inner-work-space {
     width: 100%;
@@ -254,7 +232,7 @@ h1 {
 .header {
    background:#ecf0f1;
    padding:10px;
-   height: 120px;
+   height: 70px;
 }
 .body {
    height: 100%;
@@ -268,7 +246,7 @@ h1 {
     bottom: 0;
     width: 100%;
     padding: 10px;
-    height: 60px; /* Height of the footer */
+    height: 20px; /* Height of the footer */
     background: #ecf0f1;
 }
 
@@ -455,13 +433,13 @@ h1 {
     background-color: #ffffff;
     right: 0px;
     /* Firefox */
-    height: -moz-calc(100% - 475px);
+    height: -moz-calc(100% - 350px);
     /* WebKit */
-    height: -webkit-calc(100% - 475px);
+    height: -webkit-calc(100% - 350px);
     /* Opera */
-    height: -o-calc(100% - 475px);
+    height: -o-calc(100% - 350px);
     /* Standard */
-    height: calc(100% - 475px);
+    height: calc(100% - 350px);
     overflow-y: auto;
 }
 
@@ -471,8 +449,8 @@ h1 {
     background-color: #ffffff;
     position: fixed;
     right: 0px;
-    height: 200px;
-    bottom: 130px;
+    height: 160px;
+    bottom: 90px;
 }
 
 #account-space {
@@ -482,7 +460,7 @@ h1 {
     background-color: #ffffff;
     position: fixed;
     right: 0px;
-    bottom: 80px;
+    bottom: 40px;
 }
 
 #right-paneling {
@@ -496,9 +474,10 @@ h1 {
 .ad-space {
     position: fixed;
     bottom: 0px;
-    margin-bottom: 80px;
+    margin-bottom: 40px;
     background-color: #e2e2e2;
     text-align: center;
+    padding-top: 5px;
 }
 
 .gen-btn {
@@ -532,7 +511,7 @@ h1 {
     bottom: 0px;
     width: 70%;
     border-top: 1px solid #adadad;
-    margin-bottom: 170px;
+    margin-bottom: 130px;
 }
 
 
@@ -620,18 +599,20 @@ h1 {
 }
 
 .moto {
-  display: block;
-  margin-right: auto;
-  margin-left: auto;
-  font-family: Roboto, sans-serif;
-  color: #676767;
-  font-size: 24px;
-  font-weight: 100;
-  text-align: center;
+    font-family: Roboto, sans-serif;
+    color: #676767;
+    font-size: 24px;
+    font-weight: 100;
+    text-align: center;
+    position: absolute;
+    top: 0px;
+    line-height: 80px;
+    left: 300px;
+    width: 300px;
 }
 
 .click-area {
-    height: 130px;
+    height: 70px;
     width: 300px;
     position: absolute;
     z-index: 1001;
@@ -879,7 +860,7 @@ h1 {
   font-family: Roboto, sans-serif;
   color: black;
   font-size: 28px;
-  line-height: 120px;
+  line-height: 70px;
   font-weight: 100;
 }
 
@@ -913,6 +894,8 @@ h1 {
 
 .copy-right {
     margin-top: 5px;
+    display: inline;
+    margin-left: 15px;
 }
 
 .footer-links a {
@@ -921,7 +904,7 @@ h1 {
 }
 
 .centered-col {
-    width: 600px;
+    width: 640px;
     margin-left: auto;
     display: -webkit-box;
     margin-right: auto;
@@ -931,17 +914,27 @@ h1 {
     max-width: 100%;
 }
 
+.branding-images {
+    margin-top: -5px;
+}
+
 .tw-link {
   background-color: transparent;
   opacity: 0.5;
+  width: 60px;
+  height: auto;
 }
 
 .fb {
   opacity: 0.5;
+  height: auto;
+  width: 60px;
 }
 
 .mail {
   opacity: 0.5;
+  height: auto;
+  width: 60px;
 }
 
 #panel-container {
@@ -1118,24 +1111,11 @@ img {
     display: inline-block;
 }
 
-    .input-disp-area:after {
-        display: block;
-    }
-
     .input-disp-area:hover {
         color: #1592db;
         opacity: 1.0;
         cursor: pointer;
     }
-
-        .input-disp-area:hover:after {
-            content: "Click to Re-Enter to Input";
-            margin-left: 11px;
-            background-color: rgb(237, 237, 237);
-            padding: 12px;
-            margin-top: 5px;
-            display: block;
-        }
 
 .sol-list {
     padding-left: 2%;
