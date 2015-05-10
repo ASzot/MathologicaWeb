@@ -166,7 +166,20 @@
             $("#work-list-disp").append("<div class='prev-output'>" + prevSolveOutput + "<div class='more-options-area'>" +
                 "<div style='border-right: 1px solid #adadad' class='link-btn icon-btn'><img src='/Images/LinkIcon.png' />" +
                 "</div><div class='share-btn icon-btn'><img src='/Images/SaveIcon.png' /></div></div></div><div class='horiz-divide'></div>");
-            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub], function () {
+            });
+
+            var workSpaceEle = $("#work-space");
+            // Scroll to the solution.
+            var scrollToVal = workSpaceEle.scrollTop() + $("#work-list-disp").children().last().prev().offset().top;
+            console.log(scrollToVal);
+            workSpaceEle.scrollTop(scrollToVal);
+
+            if (workSpaceEle[0].scrollHeight - workSpaceEle.scrollTop() == workSpaceEle.outerHeight())
+                $("#to-bottom-btn").hide();
+            else {
+                $("#to-bottom-btn").show();
+            }
 
             $(".input-disp-area").each(function () {
                 $(this).click(function () {
