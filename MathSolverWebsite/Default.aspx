@@ -138,16 +138,21 @@
             if (typeof sender._postBackSettings.sourceElement == 'object' && sender._postBackSettings.sourceElement !== null)
                 senderId = sender._postBackSettings.sourceElement.id;
             var errorTxt = $("#<%= parseErrorSpan.ClientID %>").html();
-            if (errorTxt == "") {
-                $("#parse-errors-id").hide();
+            if (/\S/.test(errorTxt)) {
+                $("#parse-errors-id").show();
             }
             else {
-                $("#parse-errors-id").show();
+                $("#parse-errors-id").hide();
             }
             if (senderId != "id-solve-btn" && senderId.indexOf("hiddenSolveBtn") == -1) {
                 if (senderId.indexOf("hiddenUpdateBtn") != -1 || senderId.indexOf("RadBtn") != -1) {
                     MathJax.Hub.Queue(['Typeset', MathJax.Hub, 'funcDispList']);
                 }
+                else if (senderId.indexOf('updateExampleTimer') != -1 || senderId.indexOf('exampleNav') != -1) {
+                    MathJax.Hub.Queue(['Typeset', MathJax.Hub, "pob-space"]);
+                }
+
+                $("#<% = parseErrorSpan.ClientID %>").html("");
                 return;
             }
 
@@ -329,9 +334,10 @@
 
             $(".pob-problem").click(function (e) {
                 // Paste into the input.
-                var inputDisp = $(this).children("span").html();
-                var inputDispEncoded = encodeURIComponent(inputDisp);
-                window.location.replace("/Default?Index=0&InputDisp=" + inputDispEncoded);
+                var inputDisp = $(this).find(".hidden").html();
+                var inputDispSplit = inputDisp.split('|');
+                var inputDispEncoded = encodeURIComponent(inputDispSplit[0]);
+                window.location.replace("/Default?Index=0&InputDisp=" + inputDispEncoded + (inputDispSplit[1] == null ? "" : "&UseRad=" + inputDispSplit[1]));
             });
 
             $("#work-space").on('scroll', function () {
@@ -348,6 +354,15 @@
                 objDiv.scrollTop = objDiv.scrollHeight;
             });
 
+            $("#example-nav-forward").click(function (e) {
+                $("#<% = exampleNavForwardBtn.ClientID %>").click();
+                e.stopPropagation();
+            });
+
+            $("#example-nav-backward").click(function (e) {
+                $("#<% = exampleNavBackBtn.ClientID %>").click();
+                e.stopPropagation();
+            });
 
             prevWidth = $(window).width();
 
@@ -549,16 +564,26 @@
 
             <div id="pod-space">
                 <div style="margin-left: 10px;">
-                    <p class="pob-title">Problem of the Day:</p>
+                    <input type="button" id="example-nav-forward" style="float: left;" class="example-nav-btn" value="&#x25C0" />
+                    <p class="pob-title">Example Input:</p>
+                    <input type="button" id="example-nav-backward" style="float: right;" class="example-nav-btn" value="&#x25B6" />
                     <div style="text-align: center;" class="pob-problem">
-                        <p class="pob-sub-title">Volume Integral</p>
-                        <span class="hidden">\int\int\int_V \frac{\cos(xy)x^2}{\ln(z)} dV</span>
-                        <div>
-                            <span class="mathquill-rendered-math noselect pointable">`\int\int\int_V \frac{\cos(xy)x^2}{\ln(z)} dV`</span>
-                        </div>
+                        <asp:UpdatePanel runat="server">
+                            <ContentTemplate>
+                                <asp:Timer ID="updateExampleTimer" runat="server" Interval="10000" OnTick="updateExampleTimer_Tick"></asp:Timer> 
+                                <div id="exampleOutputContent" runat="server"></div>
+                            </ContentTemplate>
+                        </asp:UpdatePanel>
                     </div>
                 </div>
             </div>
+
+            <asp:UpdatePanel ID="exampleNavBtnUpdatePanel" runat="server" UpdateMode="Conditional">
+                <ContentTemplate>
+                    <asp:Button runat="server" ID="exampleNavBackBtn" CssClass="hidden" OnClick="exampleNavBackBtn_Click" />
+                    <asp:Button runat="server" ID="exampleNavForwardBtn" CssClass="hidden" OnClick="exampleNavForwardBtn_Click" />
+                </ContentTemplate>
+            </asp:UpdatePanel>
 
             <div id="account-space">
                 <section id="login">

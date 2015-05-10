@@ -623,6 +623,7 @@
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
     </Compile>
     <Compile Include="Website_Logic\DataMgr.cs" />
+    <Compile Include="Website_Logic\ExampleInputMgr.cs" />
     <Compile Include="Website_Logic\HtmlHelper.cs" />
     <Compile Include="Website_Logic\SqlHelper.cs" />
     <Compile Include="Website_Logic\TopicData.cs" />

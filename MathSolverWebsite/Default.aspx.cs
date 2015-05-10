@@ -56,9 +56,10 @@ namespace MathSolverWebsite
         private const string PARSE_CONTINUE_SES_KEY = "ParseContinue";
         private const string SOLVE_CONTINUE_SES_KEY = "SolveContinue";
         private const string FUNC_DEF_SES_KEY = "FuncDefs";
+        private const string EXAMPLE_INDEX_SES_KEY = "ExampleIndex";
 
         private const int MAX_INPUT_LEN = 200;
-        private static int _bindCount = 0;
+        private static ExampleInputMgr _exampleInputMgr = null;
 
 
         private FuncDefHelper FuncDefHelper
@@ -87,6 +88,19 @@ namespace MathSolverWebsite
             }
         }
 
+        public int ExampleIndex
+        {
+            get
+            {
+                object indexObj = Session[EXAMPLE_INDEX_SES_KEY];
+                return indexObj != null ? (int)indexObj : 0;
+            }
+            set
+            {
+                Session[EXAMPLE_INDEX_SES_KEY] = value;
+            }
+        }
+
         public string LastInput
         {
             get
@@ -100,6 +114,14 @@ namespace MathSolverWebsite
             }
         }
 
+        private void CreateExamples()
+        {
+            if (_exampleInputMgr == null)
+            {
+                _exampleInputMgr = new ExampleInputMgr(TopicsPage.Topics);
+            }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             MathSolver.Init();
@@ -107,6 +129,9 @@ namespace MathSolverWebsite
 
             if (!Page.IsPostBack)
             {
+                CreateExamples();
+                updateExampleTimer_Tick(null, null);
+
                 string eqQueryStr = Request.QueryString["InputDisp"];
                 string optionSelStr = Request.QueryString["Index"];
                 string useRadStr = Request.QueryString["UseRad"];
@@ -355,6 +380,40 @@ namespace MathSolverWebsite
 
         protected void functionDefsListView_ItemDeleting(object sender, ListViewDeleteEventArgs e)
         {
+        }
+
+        protected void updateExampleTimer_Tick(object sender, EventArgs e)
+        {
+            if (_exampleInputMgr == null)
+                return;
+            // Get the next example.
+            ExampleIndex = _exampleInputMgr.IncrementIndex(ExampleIndex);
+
+            // Display the example.
+            var example = _exampleInputMgr.GetExample(ExampleIndex);
+            exampleOutputContent.InnerHtml = example.ToHtml();
+        }
+
+        protected void exampleNavBackBtn_Click(object sender, EventArgs e)
+        {
+            if (_exampleInputMgr == null)
+                return;
+            // Get the previous example.
+            ExampleIndex = _exampleInputMgr.DecrementIndex(ExampleIndex);
+
+            var example = _exampleInputMgr.GetExample(ExampleIndex);
+            exampleOutputContent.InnerHtml = example.ToHtml();
+        }
+
+        protected void exampleNavForwardBtn_Click(object sender, EventArgs e)
+        {
+            if (_exampleInputMgr == null)
+                return;
+            // Get the next example.
+            ExampleIndex = _exampleInputMgr.IncrementIndex(ExampleIndex);
+
+            var example = _exampleInputMgr.GetExample(ExampleIndex);
+            exampleOutputContent.InnerHtml = example.ToHtml();
         }
 
 
