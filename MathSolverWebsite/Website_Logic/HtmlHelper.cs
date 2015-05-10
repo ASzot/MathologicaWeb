@@ -40,7 +40,7 @@ namespace MathSolverWebsite.Website_Logic
         {
             string final = "";
 
-            if (workStep.WorkHtml != null || workStep.WorkDesc != null)
+            if (workStep.WorkHtml != null || workStep.WorkDesc != null || (workStep.SubWorkSteps != null && workStep.SubWorkSteps.Count != 0))
                 final += "<li class='workListItem'>";
 
             if (workStep.WorkHtml != null)
@@ -48,6 +48,17 @@ namespace MathSolverWebsite.Website_Logic
 
             if (workStep.WorkDesc != null)
                 final += "<p class='workDescText'>" + workStep.WorkDesc + "</p>";
+
+            if (workStep.SubWorkSteps != null && workStep.SubWorkSteps.Count != 0)
+            {
+                final += "<input type='button' class='sub-work-list-toggle-btn' value='+ Show Work Steps' />";
+                final += "<ul class='sub-work-list' style='display: none;'>";
+                foreach (WorkStep subWorkStep in workStep.SubWorkSteps)
+                {
+                    final += WorkStepToHtml(subWorkStep);
+                }
+                final += "</ul>";
+            }
 
             if (final != "")
                 final += "</li>";

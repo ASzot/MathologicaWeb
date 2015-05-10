@@ -190,6 +190,17 @@
                 });
             });
 
+            $(".sub-work-list-toggle-btn").each(function () {
+                $(this).click(function () {
+                    var htmlVal = $(this).val();
+                    if (htmlVal.indexOf('+') != -1)
+                        $(this).val('- Hide Work Steps');
+                    else
+                        $(this).val("+ Show Work Steps");
+                    $(this).next().toggle();
+                });
+            });
+
 
             $(".link-btn").click(function () {
                 // Get the input.

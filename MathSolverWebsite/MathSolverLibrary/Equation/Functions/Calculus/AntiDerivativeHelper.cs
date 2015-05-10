@@ -622,8 +622,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\frac{d}{d" + dVar.ToDispString() + "}" + subInVar.ToDispString() + "=\\frac{d}{d" + dVar.ToDispString() + "}[" + atmptStr + "]" + WorkMgr.EDM, 
                 "Find " + WorkMgr.STM + "d" + subInVar.ToDispString() + WorkMgr.EDM);
+            WorkStep last = pEvalData.WorkMgr.GetLast();
 
+            last.GoDown(ref pEvalData);
             ExComp evaluated = derivative.Evaluate(false, ref pEvalData);
+            last.GoUp(ref pEvalData);
 
             if (evaluated is Derivative)
                 return null;
@@ -914,8 +917,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             return false;
         }
-
-
 
         private static ExComp GetIsSingleFunc(ExComp single, AlgebraComp dVar, ref EvalData pEvalData)
         {

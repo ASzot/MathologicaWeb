@@ -608,8 +608,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             {
                 pEvalData.AddInputType(TermType.InputAddType.DerivCR);
                 pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]`", "Next take the derivative of the inner function.", abs.InnerTerm);
+                WorkStep last = pEvalData.WorkMgr.GetLast();
 
+                last.GoDown(ref pEvalData);
                 ExComp innerDeriv = TakeDerivativeOf(abs.InnerTerm, ref pEvalData);
+                last.GoUp(ref pEvalData);
 
                 pEvalData.WorkMgr.FromFormatted("`{0}`",
                     "According to the chain rule multiply the derivative of the inner function by the derivative of the outer function.",
@@ -642,9 +645,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             {
                 pEvalData.AddInputType(TermType.InputAddType.DerivCR);
                 pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]`", "Next take the derivative of the inner function.", invTrigFunc.InnerTerm);
+                WorkStep last = pEvalData.WorkMgr.GetLast();
 
+                last.GoDown(ref pEvalData);
                 // Apply the chain rule.
                 ExComp innerDeriv = TakeDerivativeOf(invTrigFunc.InnerTerm, ref pEvalData);
+                last.GoUp(ref pEvalData);
 
                 pEvalData.WorkMgr.FromFormatted("`{0}`",
                     "According to the chain rule multiply the derivative of the inner function by the derivative of the outer function.",
@@ -694,8 +700,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             {
                 pEvalData.AddInputType(TermType.InputAddType.DerivCR);
                 pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]`", "Next take the derivative of the inner function.", log.InnerTerm);
+                WorkStep last = pEvalData.WorkMgr.GetLast();
 
+                last.GoDown(ref pEvalData);
                 ExComp innerDeriv = TakeDerivativeOf(log.InnerTerm, ref pEvalData);
+                last.GoUp(ref pEvalData);
 
                 pEvalData.WorkMgr.FromFormatted("`{0}`",
                     "According to the chain rule multiply the derivative of the inner function by the derivative of the outer function.",
@@ -798,8 +807,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             {
                 pEvalData.AddInputType(TermType.InputAddType.DerivCR);
                 pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]`", "Next take the derivative of the inner function.", powFunc.Base);
+                WorkStep last = pEvalData.WorkMgr.GetLast();
+
+                last.GoDown(ref pEvalData);
                 // The chain rule has to be applied here.
                 ExComp innerDeriv = TakeDerivativeOf(powFunc.Base, ref pEvalData);
+                last.GoUp(ref pEvalData);
 
                 pEvalData.WorkMgr.FromFormatted("`{0}`",
                     "According to the chain rule multiply the derivative of the inner function by the derivative of the outer function.",
@@ -839,9 +852,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             {
                 pEvalData.AddInputType(TermType.InputAddType.DerivCR);
                 pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]`", "Next take the derivative of the inner function.", powFunc.Power);
+                WorkStep last = pEvalData.WorkMgr.GetLast();
 
+                last.GoDown(ref pEvalData);
                 // Apply chain rule.
                 ExComp innerDeriv = TakeDerivativeOf(powFunc.Power, ref pEvalData);
+                last.GoUp(ref pEvalData);
 
                 pEvalData.WorkMgr.FromFormatted("`{0}`",
                     "According to the chain rule multiply the derivative of the inner function by the derivative of the outer function.",
@@ -872,8 +888,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             {
                 pEvalData.AddInputType(TermType.InputAddType.DerivCR);
                 pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]`", "Next take the derivative of the inner function.", trigFunc.InnerTerm);
+                WorkStep lastWorkStep = pEvalData.WorkMgr.GetLast();
 
+                lastWorkStep.GoDown(ref pEvalData);
                 ExComp innerDeriv = TakeDerivativeOf(trigFunc.InnerTerm, ref pEvalData);
+                lastWorkStep.GoUp(ref pEvalData);
 
                 pEvalData.WorkMgr.FromFormatted("`{0}`",
                     "According to the chain rule multiply the derivative of the inner function by the derivative of the outer function.",
@@ -1068,11 +1087,19 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     // Use the quotient rule.
                     pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[" + varToStr + "]`",
                         "First find the derivative of the numerator.");
+                    WorkStep last0 = pEvalData.WorkMgr.GetLast();
+
+                    last0.GoDown(ref pEvalData);
                     ExComp numDeriv = TakeDerivativeOfGp(num, ref pEvalData);
+                    last0.GoUp(ref pEvalData);
 
                     pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[" + varToStr + "]`",
                         "Find the derivative of the denominator.");
+                    WorkStep last1 = pEvalData.WorkMgr.GetLast();
+
+                    last1.GoDown(ref pEvalData);
                     ExComp denDeriv = TakeDerivativeOfGp(den, ref pEvalData);
+                    last1.GoUp(ref pEvalData);
 
                     pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[" + varToStr + "]=(({0})({1})-({2})({3}))/(({1})^2)`",
                         "Plug the values back into the equation for the quotient rule `d/(dx)[u/v]=(u'v-uv')/(v^2)`. In the above case `u={2}`, `u'={0}`, `v={1}`, `v'={3}`", numDeriv, denEx, numEx, denDeriv);
@@ -1094,9 +1121,18 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                         "Apply the product rule which states `d/(dx)[u*v]=u'v+uv'` in this case `u={0}`, `v={1}`", u, v);
 
                     pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]`", "Calculate `u'` for the product rule.", u);
+                    WorkStep last0 = pEvalData.WorkMgr.GetLast();
+
+                    last0.GoDown(ref pEvalData);
                     ExComp uDeriv = TakeDerivativeOf(u, ref pEvalData);
+                    last0.GoUp(ref pEvalData);
+
                     pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]`", "Calculate `v'` for the product rule.", v);
+                    WorkStep last1 = pEvalData.WorkMgr.GetLast();
+
+                    last1.GoDown(ref pEvalData);
                     ExComp vDeriv = TakeDerivativeOf(v, ref pEvalData);
+                    last1.GoUp(ref pEvalData);
 
                     derivTerm = AddOp.StaticCombine(MulOp.StaticCombine(uDeriv, v), MulOp.StaticCombine(vDeriv, u));
                 }

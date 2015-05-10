@@ -118,6 +118,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
         public virtual WorkMgr WorkMgr
         {
             get { return _workMgr; }
+            set { _workMgr = value; }
         }
 
         public EvalData(bool useRad, WorkMgr workMgr, Information_Helpers.FuncDefHelper pFuncDefHelper)

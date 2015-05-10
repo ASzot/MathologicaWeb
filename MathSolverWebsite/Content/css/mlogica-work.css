@@ -205,3 +205,18 @@
 #graphbox_navigationbar span  {
     font-size: 26px;
 }
+
+.sub-work-list-toggle-btn {
+    border: 0px;
+    margin-bottom: 5px;
+    padding: 0px 13px;
+    font-size: 18px;
+}
+
+    .sub-work-list-toggle-btn:hover {
+        cursor: pointer;
+    }
+
+.sub-work-list {
+
+}

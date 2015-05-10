@@ -47,6 +47,11 @@ namespace MathSolverWebsite.MathSolverLibrary
         {
         }
 
+        public WorkMgr(List<WorkStep> workSteps)
+        {
+            _workSteps = workSteps;
+        }
+
         public static string CG_TXT_TG(string inStr)
         {
             return "<span class='changeText'>" + inStr + "</span>";
@@ -200,6 +205,11 @@ namespace MathSolverWebsite.MathSolverLibrary
             _workSteps.Add(WorkStep.Formatted(work, workDesc + WorkLabel, args));
         }
 
+        public WorkStep GetLast()
+        {
+            return _workSteps[_workSteps.Count - 1];
+        }
+
         public void FromFormatted(string work, params object[] args)
         {
             if (!AllowWork)
@@ -313,6 +323,8 @@ namespace MathSolverWebsite.MathSolverLibrary
     {
         private string _work;
         private string _workDesc;
+        private List<WorkStep> _subWorkSteps = null;
+        private WorkMgr _origWorkMgr = null;
 
         public string WorkDesc
         {
@@ -326,10 +338,28 @@ namespace MathSolverWebsite.MathSolverLibrary
             set { _work = value; }
         }
 
+        public List<WorkStep> SubWorkSteps
+        {
+            get { return _subWorkSteps; }
+        }
+
         public WorkStep(string work, string workDesc)
         {
             _work = work;
             _workDesc = workDesc;
+        }
+
+        public void GoDown(ref TermType.EvalData pEvalData)
+        {
+            _subWorkSteps = new List<WorkStep>();
+            _origWorkMgr = pEvalData.WorkMgr;
+            pEvalData.WorkMgr = new WorkMgr(_subWorkSteps);
+        }
+
+        public void GoUp(ref TermType.EvalData pEvalData)
+        {
+            pEvalData.WorkMgr = _origWorkMgr;
+            _origWorkMgr = null;
         }
 
         public static string FormatStr(string str, params object[] args)
