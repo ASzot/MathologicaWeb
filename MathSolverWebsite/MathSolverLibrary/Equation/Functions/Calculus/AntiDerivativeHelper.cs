@@ -30,6 +30,57 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + constOutStr + WorkMgr.EDM, "Take out the constants.");
             }
 
+            if (varTo.Length == 1 && varTo[0] is AlgebraTerm)
+            {
+                AlgebraTerm varToTerm = varTo[0] as AlgebraTerm;
+                var gps = varToTerm.GetGroups();
+                if (gps.Count > 1)
+                {
+                    // This integral should be split up even further.
+                    string overallStr = "";
+                    for (int i = 0; i < gps.Count; ++i)
+                    {
+                        overallStr += "\\int" + gps[i].FinalToMathAsciiString() + "\\d" + dVar.ToDispString();
+                        if (i != gps.Count - 1)
+                            overallStr += "+";
+                    }
+
+                    pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + overallStr + WorkMgr.EDM, "Split the integral up.");
+
+                    // Independently take the derivative of each group.
+                    ExComp[] adGps = new ExComp[gps.Count];
+                    for (int i = 0; i < gps.Count; ++i)
+                    {
+                        IntegrationInfo integrationInfo = new IntegrationInfo();
+                        int prevStepCount = pEvalData.WorkMgr.WorkSteps.Count;
+
+                        ExComp aderiv = AntiDerivativeHelper.TakeAntiDerivativeGp(gps[i], dVar, ref integrationInfo, ref pEvalData);
+
+                        if (aderiv == null)
+                        {
+                            pEvalData.WorkMgr.PopSteps(pEvalData.WorkMgr.WorkSteps.Count - prevStepCount);
+                            return null;
+                        }
+                        adGps[i] = aderiv;
+                    }
+
+                    // Convert to a term.
+                    ExComp finalEx = adGps[0];
+                    for (int i = 1; i < adGps.Length; ++i)
+                    {
+                        finalEx = AddOp.StaticCombine(finalEx, adGps[i].ToAlgTerm());
+                    }
+
+                    if (constTo.Length > 0)
+                    {
+                        finalEx = MulOp.StaticCombine(finalEx, constTo.ToAlgTerm());
+                        pEvalData.WorkMgr.FromSides(finalEx, null, "Multiply both sides by the constants");
+                    }
+
+                    return finalEx;
+                }
+            }
+
             ExComp antiDeriv = TakeAntiDerivativeVarGp(varTo, dVar, ref pIntInfo, ref pEvalData);
             if (antiDeriv == null) 
                 return null;

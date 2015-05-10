@@ -342,7 +342,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + overallStr + WorkMgr.EDM, "Split the integral up.");
             }
 
-            // Independantly take the derivative of each group.
+            // Independently take the derivative of each group.
             ExComp[] adGps = new ExComp[gps.Count];
             for (int i = 0; i < gps.Count; ++i) 
             {
