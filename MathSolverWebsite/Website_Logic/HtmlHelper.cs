@@ -210,7 +210,7 @@ namespace MathSolverWebsite.Website_Logic
 
             final += 
                 "<p class='sectionHeading'>" +
-                "<input class='workCollapseBtn' type='button' onclick=\"$('#workDisplayList').toggle();\" value='Work'></input>" + 
+                "<input class='workCollapseBtn' type='button' value='Work'></input>" + 
                 "</p>";
 
             final += "<ul id='workDisplayList' class='work-disp-list'>";

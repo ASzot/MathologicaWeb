@@ -4,7 +4,10 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="FeaturedContent" runat="server">
     <link rel="stylesheet" type="text/css" href="Content/css/mlogica-practice.css" />
     <style type="text/css">
-        * {
+        .w-col-4 {
+            box-sizing: border-box;
+        }
+        .hlep {
             box-sizing: border-box;
         }
 
@@ -21,7 +24,7 @@
         <div class="w-col w-col-4 link-practice">
           <div class="hlep">
             <div>
-              <div><a class="wordlink-help" href="/help/general.aspx">General</a>
+              <div><a class="wordlink-help" href="/help/general">General</a>
               </div>
             </div>
           </div>
@@ -29,7 +32,7 @@
         <div class="w-col w-col-4 link-practice">
           <div class="hlep">
             <div>
-              <div><a class="wordlink-help" href="/help/faq.aspx">FAQ</a>
+              <div><a class="wordlink-help" href="/help/faq">FAQ</a>
               </div>
             </div>
           </div>
@@ -37,7 +40,7 @@
         <div class="w-col w-col-4 link-practice">
           <div class="hlep">
             <div>
-              <div><a class="wordlink-help" href="/help/formatting.aspx">Formatting</a>
+              <div><a class="wordlink-help" href="/help/formatting">Formatting</a>
               </div>
             </div>
           </div>
@@ -47,7 +50,7 @@
         <div class="w-col w-col-4 link-practice">
           <div class="hlep">
             <div>
-              <div><a class="wordlink-help" href="/help/changelog.html">Change Log</a>
+              <div><a class="wordlink-help" href="/help/changelog">Change Log</a>
               </div>
             </div>
           </div>
@@ -55,7 +58,7 @@
         <div class="w-col w-col-4 link-practice">
           <div class="hlep">
             <div>
-              <div><a class="wordlink-help" href="/help/account.html">Account</a>
+              <div><a class="wordlink-help" href="/help/account">Account</a>
               </div>
             </div>
           </div>
@@ -63,7 +66,7 @@
         <div class="w-col w-col-4 link-practice">
           <div class="hlep">
             <div>
-              <div><a class="wordlink-help" href="/help/graphing.html">Graphing</a>
+              <div><a class="wordlink-help" href="/help/graphing">Graphing</a>
               </div>
             </div>
           </div>

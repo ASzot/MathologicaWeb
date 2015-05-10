@@ -1,0 +1,162 @@
+﻿
+.w-col {
+  position: relative;
+  float: left;
+  width: 100%;
+  min-height: 1px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.w-col .w-col {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.w-col-4 {
+  width: 33.33333333%;
+}
+
+.wordlink-help {
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+  font-family: Roboto, sans-serif;
+  color: white;
+  font-size: 53px;
+  font-weight: 100;
+  text-align: center;
+  text-decoration: none;
+}
+
+.header {
+    height: 130px;
+}
+
+.body {
+    /* Firefox */
+    height: -moz-calc(100% - 190px);
+    /* WebKit */
+    height: -webkit-calc(100% - 190px);
+    /* Opera */
+    height: -o-calc(100% - 100px);
+    /* Standard */
+    height: calc(100% - 190px);
+
+    overflow-y: auto;
+}
+
+.link-practice {
+  background-color: transparent;
+}
+
+.hlep {
+  min-height: 100px;
+  margin-right: 0px;
+  margin-bottom: 20px;
+  padding-top: 100px;
+  padding-bottom: 100px;
+  background-color: #3498db;
+}
+
+.help {
+    padding-right: 0px;
+    padding-left: 0px;
+}
+
+.w-row .w-row {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.w-container .w-row {
+}
+
+.topic-section {
+  background-color: #3498db;
+}
+
+.w-inline-block {
+  max-width: 100%;
+  display: inline-block;
+}
+
+.link-backtext {
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+  font-family: Roboto, sans-serif;
+  color: white;
+  font-size: 31px;
+  text-align: center;
+  text-decoration: none;
+}
+
+.w-col-8 {
+  width: 66.66666667%;
+}
+
+.slink-div {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.link-help {
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+  text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+}
+
+h2 {
+  display: block;
+  margin: 20px auto 10px;
+  padding-top: 50px;
+  font-family: Roboto, sans-serif;
+  color: white;
+  font-size: 32px;
+  line-height: 36px;
+  font-weight: 100;
+  text-align: center;
+}
+
+
+h4 {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 20px;
+  font-family: Roboto, sans-serif;
+  font-size: 24px;
+  line-height: 24px;
+  font-weight: 700;
+}
+
+.specific-link {
+  margin-left: 70px;
+  font-family: Roboto, sans-serif;
+  color: #3498db;
+  font-size: 20px;
+  font-weight: 400;
+  text-decoration: none;
+}
+
+@media screen and (max-width: 767px) {
+  .w-col {
+    width: 100%;
+    left: auto;
+    right: auto;
+  }
+
+    .hlep {
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+}

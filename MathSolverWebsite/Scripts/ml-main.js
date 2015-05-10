@@ -335,6 +335,17 @@ $(document).ready(function () {
                     return false;
                 });
             });
+
+            $(".sub-toolbar-btn-space").mouseleave(function () {
+                setTimeout(function () {
+                    $(".sub-toolbar-btn-space").fadeOut();
+                }, 2000);
+
+
+            });
+            $(".sub-toolbar-btn-space").mouseenter(function () {
+                $(this).stop(true, true).fadeIn();
+            });
         });
 
     }

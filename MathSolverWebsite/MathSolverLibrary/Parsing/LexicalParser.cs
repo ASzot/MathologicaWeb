@@ -2809,7 +2809,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
 
             // Next should be the expression.
             // Parse until the differential.
-            int depth = 1;
+            int depth = 0;
             for (; currentIndex < lt.Count; ++currentIndex)
             {
                 if (lt[currentIndex].Data1 == LexemeType.Integral)

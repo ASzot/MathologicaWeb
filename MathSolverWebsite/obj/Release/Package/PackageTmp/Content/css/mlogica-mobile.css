@@ -1,0 +1,184 @@
+﻿@media only screen and (max-device-width: 480px) {
+    .header {
+        padding: 0px !important;
+    }
+
+    .mathlogo {
+        width: 190px !important;
+        float: left !important;
+    }
+
+    .moto {
+        display: none !important;
+    }
+
+    .header {
+        height: 65px !important;
+    }
+
+    .navbar {
+        margin-bottom: 0px !important;
+    }
+
+    .w-nav-button {
+        padding: 6px !important;
+    }
+
+    .w-nav-link {
+        line-height: 68px;
+    }
+
+    .click-area {
+        width: 200px;
+        height: 60px;
+    }
+
+    #left-paneling {
+        width: 100%;
+        float: none;
+    }
+
+    #right-paneling {
+        height: 100px !important;
+        width: 100% !important;
+        position: fixed !important;
+        top: 69px !important;
+        border-bottom: 1px solid #adadad;
+    }
+
+    #pod-space {
+        display: none !important;
+    }
+
+    #account-space {
+        display: none !important;
+    }
+
+    #toolbar-space {
+        width: 100% !important;
+        position: initial !important;
+        height: 100% !important;
+        right: auto !important;
+        overflow-y: hidden;
+    }
+
+    #tool-bar-selection-space {
+        font-size: 20px !important;
+        margin-left: 5px;
+        padding: 0px !important;
+        text-align: initial !important;
+        margin-bottom: 0px !important;
+    }
+
+    .subject-bar-btn {
+        padding: 0px !important;
+    }
+
+    .toolbar-icon {
+        font-size: 28px !important;
+    }
+
+    .toolbar-icon-large {
+        font-size: 18px !important;
+    }
+
+    #toolbar-btn-space {
+        white-space: nowrap;
+        overflow-x: auto;
+    }
+
+    .ad-space {
+        display: none;
+    }
+
+    .footer {
+        height: 10px;
+    }
+
+    .nav-login-area {
+        display: block;
+    }
+
+    .branding-images {
+        display: none;
+    }
+
+    #eval-space {
+        margin-bottom: 30px;
+        width: 100%;
+    }
+
+    .centered-col {
+        display: block;
+        width: 100%;
+    }
+
+    .footer-links {
+        margin-right: 0px;
+        margin-top: -3px;
+        font-size: 13px;
+    }
+
+    .copy-right {
+        margin-top: 2px;
+        display: inline;
+        font-size: 10px;
+        float: right;
+        padding-right: 10px;
+    }
+
+    .solve-btn {
+    }
+
+    #work-space {
+        height: -moz-calc(100% - 260px);
+        height: -webkit-calc(100% - 260px);
+        height: -o-calc(100% - 260px);
+        height: calc(100% - 260px);
+        margin-top: 100px;
+    }
+
+    .input-txt-box-area {
+        width: 95% !important;
+    }
+
+    .mathquill-rendered-math {
+        font-size: 21px !important;
+    }
+
+    .text-notice {
+        position: relative;
+        top: 5px;
+    }
+
+    .gen-drop-down {
+        font-size: 12pt;
+    }
+
+    .input-disp-area {
+        font-size: 16px;
+    }
+
+    .solutionData {
+        font-size: 17px;
+    }
+
+    .workListItem {
+        font-size: 14px;
+    }
+
+    .workDescText {
+        font-size: 16px; 
+    }
+
+    .workCollapseBtn {
+        width: 200px;
+        font-size: 22px;
+    }
+
+    .graph-disp {
+        min-width: 240px;
+        width: 80%;
+        height: 250px;
+    }
+}

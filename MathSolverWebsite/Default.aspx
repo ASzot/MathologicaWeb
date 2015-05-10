@@ -40,6 +40,7 @@
         // Basic styling stuff.
 
         var prevWidth = 0;
+        var btnDropDownTimeout = 0;
 
         function getParameterByName(name) {
             var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
@@ -149,7 +150,17 @@
                 }
                 return;
             }
+
+
             var prevSolveOutput = $("#<% = calcOutput.ClientID %>").html();
+
+
+            $("#<% = calcOutput.ClientID %>").html("");
+
+            // Hide all of the previous work steps.
+            $(".workCollapseBtn").each(function () {
+                $(this).parent().next().hide();
+            });
 
             // Remove all of the existing graphs. (There can only be one graph at once).
             $("#work-list-disp").append("<div class='prev-output'>" + prevSolveOutput + "<div class='more-options-area'>" +
@@ -171,6 +182,14 @@
             var x = $("#work-list-disp").children().last().prev().children(".input-disp-area").children(".input-disp-txt").children("span").each(function () {
                 $(this).mathquill();
             });
+
+            $(".workCollapseBtn").each(function () {
+                $(this).click(function () {
+                    $(this).parent().next().toggle();
+                    evt.stopPropagation();
+                });
+            });
+
 
             $(".link-btn").click(function () {
                 // Get the input.
@@ -259,7 +278,6 @@
             $("#tool-bar-overlay").click(function () {
                 $("#tool-bar-space").toggle(200);
             });
-
 
             $("#clear-btn-id").click(function (e) {
                 onClearBtnClicked();

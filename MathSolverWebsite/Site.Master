@@ -83,13 +83,13 @@
                             <div class="nav-login-area">
                                 <asp:LoginView ID="NavLogIn" runat="server" ViewStateMode="Disabled">
                                     <AnonymousTemplate>
-                                        <a class="w-nav-link nav-link" href="account/register.aspx">Sign Up</a>
-                                        <a class="w-nav-link nav-link" href="account/login.aspx">Log In</a>
+                                        <a class="w-nav-link nav-link" href="/account/register.aspx">Sign Up</a>
+                                        <a class="w-nav-link nav-link" href="/account/login.aspx">Log In</a>
                                     </AnonymousTemplate>
                                     <LoggedInTemplate>
-                                        <a class="w-nav-link nav-link" href="account/you">You</a>
+                                        <a class="w-nav-link nav-link" href="/account/you">You</a>
                                         <asp:LoginStatus CssClass="w-nav-link nav-link logout-btn" ID="LoginStatus1" runat="server" LogoutAction="Redirect" LogoutText="Log off" LogoutPageUrl="~/" />
-                                        <a class="w-nav-link nav-link" href="account/manage.aspx">Settings</a>
+                                        <a class="w-nav-link nav-link" href="/account/manage.aspx">Settings</a>
                                     </LoggedInTemplate>
                                 </asp:LoginView>
                             </div>

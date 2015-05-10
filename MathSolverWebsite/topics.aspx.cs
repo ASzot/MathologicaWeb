@@ -40,8 +40,21 @@ namespace MathSolverWebsite
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (LoadTopics())
-                rightHelp.InnerHtml = HtmlHelper.TopicDataToHtmlTree(_topics.TopicDataInfo.Cast<TopicPath>().ToList(), "prac/topic", Server);
+            if (!this.IsPostBack)
+            {
+                string topicStr = Request.QueryString["tn"];
+                if (topicStr == null)
+                    Response.Redirect("~/practice");
+                if (topicStr.Contains("."))
+                    topicStr = topicStr.Split('.')[0];
+                topicStr = HttpUtility.HtmlDecode(topicStr);
+                if (LoadTopics())
+                {
+                    var dispTopics = _topics.GetTopics(topicStr);
+                    practiceTopicTitleId.InnerText = topicStr;
+                    rightHelp.InnerHtml = HtmlHelper.TopicDataToHtmlTree(dispTopics.Cast<TopicPath>().ToList(), "prac/topic", Server);
+                }
+            }
         }
     }
 }

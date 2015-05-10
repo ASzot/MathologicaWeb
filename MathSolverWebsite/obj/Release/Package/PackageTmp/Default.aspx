@@ -1,18 +1,29 @@
 ﻿<%@ Page Title="Mathologica-Free Math Solver" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="MathSolverWebsite._Default" %>
 
 <asp:Content runat="server" ID="HeadContent" ContentPlaceHolderID="HeadContent">
-<%--    <script src="https://www.desmos.com/api/v0.4/calculator.js?apiKey=dcb31709b452b1cf9dc26972add0fda6"></script>--%>
+    
 </asp:Content>
 
 <asp:Content runat="server" ID="FeaturedContent" ContentPlaceHolderID="FeaturedContent">
 
-    <meta name="description" 
-        content="A math solver capable of showing step by step work and explanations for free. Solve algebra, trig, and calculus problems with detailed work." />
+    <!-- Meta description here. -->
+    <meta name="description" content="" />
+    
+    <!-- JSX graph include. -->
+    <link rel="stylesheet" href="JSXGraph/jsxgraph.css" type="text/css" />
+    <script async="async" type="text/javascript" src="JSXGraph/jsxgraphcore.js"></script>
 
+    <script type="text/javascript" src="Scripts/ml-main.js"></script> 
+    <link rel="stylesheet" href="Content/css/mlogica-work.css" type="text/css" />
+
+    <!-- MathJax include. -->
     <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=AM_HTMLorMML"></script>
 
+    <!--Mathquill include-->
+    <link rel="stylesheet" type="text/css" href="/mathquill/mathquill.css" />
+    <script src="/mathquill/mathquill.js"></script>
 
-    <script type="text/javascript" src="Scripts/Main.js"></script>
+    <!-- Google analytics -->
     <script>
         (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
@@ -23,118 +34,25 @@
 
         ga('create', 'UA-56848508-1', 'auto');
         ga('send', 'pageview');
-
     </script>
-
     
-    <p class="motoTxt">
-        Solve math problems and show work <b>for free</b>
-    </p>
+    <script>
+        // Basic styling stuff.
 
-    <div class="subjectBar">
-        <div id="sb0" class="subjectBarButtonClicked">
-            <span>Basic</span>
-        </div>
-        <div id="sb3" class="subjectBarButton">
-            <span>Trig</span>
-        </div>
-        <div id="sb2" class="subjectBarButton">
-            <span>Calculus</span>
-        </div>
-        <div id="sb1" class="subjectBarButton">
-            <span>Symbols</span>
-        </div>
-        <div id="sb4" class="subjectBarButton">
-            <span>Numbers</span>
-        </div>
-    </div>
+        var prevWidth = 0;
 
-    <div>
-        
-        <div id="toolBox">
-        </div>
-
-        <div id="editBox">
-            <span class="titleHeader" id="editTitleHeader" onclick="toggleEditBoxVisibility();">Edit+</span>
-            <br />
-            <div class="editContainer" id="editContainerId">
-                <input id="addInputBtnId" type="button" class="btn-clear" value="Add Line" />
-                <input id="removeInputBtnId" type="button" class="btn-clear" value="Remove Line" />
-                <input id="clearResultBtnId" type="button" class="btn-clear" value="Clear Result"/>
-            </div>
-        </div>
-
-        <div id="modeBox">
-            <span class="titleHeader" id="optionsTitleHeader" onclick="toggleModeBoxVisibility();">Options+</span>
-            <br />
-            <div class="optionsContainer" id="optionsContainerId">
-                <asp:UpdatePanel runat="server">
-                    <ContentTemplate>
-                        <asp:RadioButton TextAlign="Left" runat="server" CssClass="siteRadBtn" GroupName="angleMode" ID="radRadBtn" Text="Use Radians:" OnCheckedChanged="angleRadBtn_CheckedChanged" AutoPostBack="true" Checked="true" />
-                        <asp:RadioButton TextAlign="Left" runat="server" CssClass="siteRadBtn" GroupName="angleMode" ID="degRadBtn" Text="Use Degrees:" OnCheckedChanged="angleRadBtn_CheckedChanged" AutoPostBack="true" Checked="false" />
-                    </ContentTemplate>
-                </asp:UpdatePanel>
-            </div>
-        </div>
-    </div>
-
-</asp:Content>
-
-<asp:Content runat="server" ID="BodyContent" ContentPlaceHolderID="MainContent">
-
-    <script async="async" type="text/javascript">
-
-        $(document).click(function () {
-            hideEditBox();
-        });
-
-        $(".titleHeader").click(function (e) {
-            e.stopPropagation();
-            return false;
-        });
-
-        $(".editContainer").click(function (e) {
-            e.stopPropagation();
-            return false;
-        });
-
-        $("#clearResultBtnId").click(function (e) {
-            onClearBtnClicked();
-            e.stopPropagation();
-
-            return false;
-        });
-
-        $("#removeInputBtnId").click(function (e) {
-            clearInputBtn_Clicked();
-            e.stopPropagation();
-            return false;
-        });
-
-        $("#addInputBtnId").click(function (e) {
-            addInputBtn_Clicked();
-            e.stopPropagation();
-            return false;
-        });
-
-        var changeMath = true;
-
-        function mathInputChangedSafe() {
-            var latex = getLatexInput();
-
-            fixInput(latex);
-
-            var encodedLatex = htmlEncode(latex);
-
-            $("#<%= hiddenInputTxtBox.ClientID %>").val(encodedLatex);
-
-            $("#<%= hiddenUpdateBtn.ClientID %>").click();
+        function getParameterByName(name) {
+            var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+            return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
         }
 
+
         function mathInputChanged(event) {
+
             if (typeof event == 'object' && event !== null) {
                 if (event.which == 13 || event.key == 13) {
-                    inputMathEnter();
+                    event.stopPropagation = true;
+                    solveBtnClick();
                     return;
                 }
             }
@@ -145,108 +63,521 @@
 
             var encodedLatex = htmlEncode(latex);
 
-            $("#<%= hiddenInputTxtBox.ClientID %>").val(encodedLatex);
-            
+            $("#<%= hiddenUpdateTxtBox.ClientID %>").val(encodedLatex);
+
 
             $("#<%= hiddenUpdateBtn.ClientID %>").click();
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub, "funcDispList"]);
+        }
+
+        function solveBtnClick() {
+            // Make sure there is not an error in the eval drop down.
+            var dropDown = document.getElementById("<% = evalDropDownList.ClientID %>");
+            var txt = dropDown.options[dropDown.selectedIndex].text;
+            if (txt == "Input is too long" ||
+                txt == "Invalid input" ||
+                txt == "Enter input above" ||
+                txt == "Please wait...")
+                return;
+
+            // Take the previous solve info and move it up a 'space'.
+            $("#<% = hiddenSolveBtn.ClientID %>").click();
+
+        }
+
+        Date.prototype.today = function () { 
+            return (((this.getMonth() + 1) < 10) ? "0" : "") + (this.getMonth() + 1) + "/" + ((this.getDate() < 10) ? "0" : "") + this.getDate() + "/" + this.getFullYear();
+        }
+
+        function setInputs(inputs) {
+            $("#input-list").html("");
+            inputBoxIds = [];
+            selectedTextBox = null;
+            var totalHtml = "";
+            for (var i = 0; i < inputs.length; ++i) {
+                totalHtml += createInputBox(i, i == 0);
+                inputBoxIds[i] = i;
+            }
+
+            $("#input-list").html(totalHtml);
+            selectedTextBox = $("#mathInputSpan0");
+            
+            for (var i = 0; i < inputs.length; ++i) {
+                $("#mathInputSpan" + i).mathquill('editable');
+                $("#mathInputSpan" + i).mathquill('latex', inputs[i]);
+            }
+
+            mathInputChanged(null);
+        }
+
+        $.fn.slideFadeToggle = function (easing, callback) {
+            return this.animate({ opacity: 'toggle', height: 'toggle' }, "fast", easing, callback);
+        };
+
+        function createPopUp(innerHtml) {
+            $(".pop").remove();
+            return "<div class='messagepop pop'>" + innerHtml + "<a class='close' href='#'>Close</a></div>";
+        }
+
+        function showPopUp() {
+            $(".pop").slideFadeToggle();
+
+            $(".close").live('click', function () {
+                $(".pop").remove();
+                return false;
+            });
+        }
+
+        Sys.WebForms.PageRequestManager.getInstance().add_beginRequest(BeginRequestHandler);
+        Sys.WebForms.PageRequestManager.getInstance().add_endRequest(EndRequestHandler);
+        function BeginRequestHandler(sender, args) {
+        }
+        function EndRequestHandler(sender, args) {
+            var senderId = "";
+            if (typeof sender._postBackSettings.sourceElement == 'object' && sender._postBackSettings.sourceElement !== null)
+                senderId = sender._postBackSettings.sourceElement.id;
+            var errorTxt = $("#<%= parseErrorSpan.ClientID %>").html();
+            if (errorTxt == "") {
+                $("#parse-errors-id").hide();
+            }
+            else {
+                $("#parse-errors-id").show();
+            }
+            if (senderId != "id-solve-btn" && senderId.indexOf("hiddenSolveBtn") == -1) {
+                if (senderId.indexOf("hiddenUpdateBtn") != -1 || senderId.indexOf("RadBtn") != -1) {
+                    MathJax.Hub.Queue(['Typeset', MathJax.Hub, 'funcDispList']);
+                }
+                return;
+            }
+
+
+            var prevSolveOutput = $("#<% = calcOutput.ClientID %>").html();
+
+
+            $("#<% = calcOutput.ClientID %>").html("");
+
+            // Hide all of the previous work steps.
+            $(".workCollapseBtn").each(function () {
+                $(this).parent().next().hide();
+            });
+
+            // Remove all of the existing graphs. (There can only be one graph at once).
+            $("#work-list-disp").append("<div class='prev-output'>" + prevSolveOutput + "<div class='more-options-area'>" +
+                "<div style='border-right: 1px solid #adadad' class='link-btn icon-btn'><img src='/Images/LinkIcon.png' />" +
+                "</div><div class='share-btn icon-btn'><img src='/Images/SaveIcon.png' /></div></div></div><div class='horiz-divide'></div>");
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+
+            $(".input-disp-area").each(function () {
+                $(this).click(function () {
+                    var inputTxt = $(this).children("p").text();
+                    var selCmd = $(this).children(".selected-cmd-txt").html();
+
+                    var inputTxts = inputTxt.split(",");
+
+                    setInputs(inputTxts);
+                });
+            });
+
+            var x = $("#work-list-disp").children().last().prev().children(".input-disp-area").children(".input-disp-txt").children("span").each(function () {
+                $(this).mathquill();
+            });
+
+            $(".workCollapseBtn").each(function () {
+                $(this).click(function () {
+                    $(this).parent().next().toggle();
+                    evt.stopPropagation();
+                });
+            });
+
+
+            $(".link-btn").click(function () {
+                // Get the input.
+                var prevOutput = $(this).parent().parent();
+                var inputInfo = prevOutput.children(".input-disp-area");
+                var inputTxt = inputInfo.children("p").text();
+
+                // Create the link to the input.
+                var linkStr = "mathologica.com/Default?Index=0&InputDisp=" + htmlEncode(inputTxt);
+                $(this).parent().parent().parent().parent().prepend(createPopUp(
+                    "<p>Copy and past the link to share this problem.</p>" + 
+                    "<input class='copy-past-link' type='text' value='" + linkStr + "' />"
+                        ));
+                showPopUp();
+
+                $(".copy-past-link").select();
+            });
+
+            $(".share-btn").each(function () {
+                $(this).click(function () {
+                    var prevOutput = $(this).parent().parent();
+                    var inputInfo = prevOutput.children(".input-disp-area");
+                    var inputTxt = inputInfo.children("p").text();
+
+                    var isAuthen = '<% = Request.IsAuthenticated  %>';
+                    if (isAuthen == "True") {
+                        var currentDate = new Date();
+
+
+                        $("#<%= hiddenSavedProblemTxtBox.ClientID %>").val(htmlEncode(inputTxt));
+                        var currentDate = currentDate.today();
+                        $("#<%= hiddenTimeTxtBox.ClientID %>").val(htmlEncode(currentDate));
+
+                        $("#<%= hiddenSaveProbBtn.ClientID %>").click();
+
+                        $(this).parent().parent().parent().parent().prepend(createPopUp(
+                            "<p class='text-notice' style='font-size: 25px'>Problem Saved</p>"
+                            ));
+                        showPopUp();
+                    }
+                    else {
+                        $(this).parent().parent().parent().parent().prepend(createPopUp(
+                            "<p>Create an account to save problems and access them anywhere at anytime!</p>" +
+                            "<a class='btn-link' href='account/register.aspx'>" +
+                                "<div class='signup-space account-division'>" +
+                                    "Sign Up" +
+                                "</div>" +
+                            "</a>" +
+                            "<a class='btn-link' href='account/login'>" +
+                                "<div class='login-space account-division' style='margin-right: 29px; width: 198px;'>" +
+                                    "Log In" +
+                                "</div>" +
+                            "</a>"
+                                ));
+                        showPopUp();
+                    }
+                });
+            });
+
+
         }
 
         function onClearBtnClicked() {
-            $("#<%= resultSectionDiv.ClientID %>").html("");
-            $("#<%= resultSectionDiv.ClientID %>").hide();
-            $("#<%= workSectionDiv.ClientID %>").html("");
+            $("#work-list-disp").html("");
+            $("#to-bottom-btn").hide();
         }
 
-        function inputMathEnter() {
+        $(document).ready(function () {
+            $("#tool-bar-overlay").mouseenter(function () {
+                $("#tool-bar-space").show(200);
+            });
 
-            var evalDropDownList = document.getElementById("<%= evaluteDropList.ClientID %>");
-            var txt = evalDropDownList.options[evalDropDownList.selectedIndex].text;
-            if (txt == "Input is too long." || txt == "Invalid input" || txt == "Enter input above." || txt == "Please wait...")
-                return;
+            $("#tool-bar-overlay").mouseleave(function () {
+                var isHovered = $("#tool-bar-space").is(":hover");
+                if (!isHovered) {
+                    $("#tool-bar-space").hide(200);
+                }
+            });
 
-            $("#<%= loadingDiv.ClientID %>").attr('class', 'notHidden');
+            $("#tool-bar-space").mouseleave(function () {
+                var width = $(window).width;
+                if (width < 749)
+                    $("#tool-bar-space").hide(200);
+            });
 
-            $("#<%= hiddenDisplayBtn.ClientID %>").click();
+            $("#tool-bar-overlay").click(function () {
+                $("#tool-bar-space").toggle(200);
+            });
 
-            changeMath = true;
-        }
+            $("#clear-btn-id").click(function (e) {
+                onClearBtnClicked();
+                e.stopPropagation();
 
-        function pageLoad() {
-            if (!changeMath)
-                return;
+                return false;
+            });
 
-            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+            $("#remove-btn-id").click(function (e) {
+                clearInputBtn_Clicked();
+                e.stopPropagation();
+                return false;
+            });
 
-            changeMath = false;
-        }
+            $("#add-btn-id").click(function (e) {
+                addInputBtn_Clicked();
+                e.stopPropagation();
+                return false;
+            });
 
-        function exampleChange() {
-            alert("Changed");
-        }
+            $(".account-space").click(function (e) {
+                $(".account-popup").toggle(300);
+                return false;
+            });
+
+            $(".pob-problem").click(function (e) {
+                // Paste into the input.
+                var inputDisp = $(this).children("span").html();
+                var inputDispEncoded = encodeURIComponent(inputDisp);
+                window.location.replace("/Default?Index=0&InputDisp=" + inputDispEncoded);
+            });
+
+            $("#work-space").on('scroll', function () {
+                var elem = $(this);
+                if (elem[0].scrollHeight - elem.scrollTop() == elem.outerHeight())
+                    $("#to-bottom-btn").hide();
+                else {
+                    $("#to-bottom-btn").show();
+                }
+            });
+
+            $("#to-bottom-btn").click(function (e) {
+                var objDiv = document.getElementById("work-space");
+                objDiv.scrollTop = objDiv.scrollHeight;
+            });
+
+
+            prevWidth = $(window).width();
+
+            $(window).resize(function (e) {
+                var winWidth = $(window).width();
+                if (winWidth != prevWidth && winWidth) {
+                    if (winWidth > 749) {
+                        $("#tool-bar-space").show();
+                    }
+                    else {
+                        $("#tool-bar-space").hide();
+                    }
+                    prevWidth = winWidth;
+                }
+            });
+
+            var html = $("#input-list").html();
+
+            var inputDispVal = getParameterByName("InputDisp");
+            if (inputDispVal !== null && inputDispVal != "") {
+                var splitInput = inputDispVal.split(';');
+                for (var i = 0; i < splitInput.length; ++i) {
+                    var inputHtml = createInputBox(i, i == 0);
+                    html += inputHtml;
+                }
+
+                $("#input-list").html(html);
+
+
+                for (var i = 0; i < splitInput.length; ++i) {
+                    $("#mathInputSpan" + i).mathquill('editable');
+                    $("#mathInputSpan" + i).mathquill('latex', splitInput[i]);
+
+                    if (i == 0)
+                        selectedTextBox = $("#mathInputSpan" + i);
+                    inputBoxIds.push(i);
+                }
+            }
+            else {
+                var inputBoxHtml = createInputBox(0, true);
+
+                $("#input-list").html(html + inputBoxHtml);
+                $("#mathInputSpan0").mathquill("editable");
+                selectedTextBox = $("#mathInputSpan0");
+                inputBoxIds.push(0);
+            }
+
+
+            $("#expand-more-popup").click(function (e) {
+                var html = $(this).html();
+                if (html == "+")
+                    $(this).html("-");
+                else
+                    $(this).html("+");
+                $(".more-popup").toggle();
+            });
+        });
+
     </script>
 
-    <div id="mathInputArea">
-        <div>
-            <ul id="inputList">
-            </ul>
-        </div>
+</asp:Content>
 
-        <div class="btnToolbar">
-            <asp:UpdatePanel runat="server" UpdateMode="Conditional">
+<asp:Content runat="server" ID="BodyContent" ContentPlaceHolderID="MainContent">
+    <style type="text/css">
+        #<%=UpdatePanel1.ClientID%> {
+            height: 60px;
+            bottom: 0px;
+            width: 81%;
+            display: block;
+            position: relative;
+            float: left;
+        }
+    </style>
+    <div id="panel-container">
+        <div id="left-paneling">
+            <div id="work-space">
+                <div id="inner-work-space-id" class="inner-work-space">
+                    <a class="btn-link">
+                        <div id="to-bottom-btn">
+                            &#x25BC;
+                        </div>
+                    </a>
+                    <div id="work-list-disp">
+
+                    </div>
+                    <asp:UpdatePanel ID="resultUpdatePanel" runat="server" >
+                        <ContentTemplate>
+                                <div id="calcOutput" class="hidden" runat="server">
+
+                                </div>
+                        </ContentTemplate>
+                    </asp:UpdatePanel>
+                    <div id="input-area">
+                        <ul id="input-list">
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <asp:UpdatePanel runat="server">
                 <ContentTemplate>
-                    <span runat="server" class="parseErrorTxt" id="parseErrorSpan"></span>
-                    <div>
-                        <input type="button" title="Evaluate the input" class="btn-solve" onclick="inputMathEnter();" value="Solve" />
-                        <span class="genDropDownWrapper">
-                            <asp:DropDownList ID="evaluteDropList" runat="server" CssClass="genDropDown"></asp:DropDownList>
+                    <asp:TextBox runat="server" ID="hiddenSavedProblemTxtBox" CssClass="hidden" />
+                    <asp:TextBox runat="server" ID="hiddenTimeTxtBox" CssClass="hidden" />
+                    <asp:Button runat="server" ID="hiddenSaveProbBtn" CssClass="hidden" OnClick="hiddenSaveProbBtn_Click" />
+                </ContentTemplate>
+            </asp:UpdatePanel>
+            <div class="parse-errors" id="parse-errors-id" style="display: none;">
+                <asp:UpdatePanel runat="server">
+                    <ContentTemplate>
+                        <span id="parseErrorSpan" class="parse-error-txt" runat="server">
+
                         </span>
-                        <asp:Button CssClass="hiddenBtn" runat="server" ID="hiddenUpdateBtn" ClientIDMode="Static" OnClick="hiddenUpdate_Click" />
-                        <asp:TextBox CssClass="hiddenBtn" runat="server" ID="hiddenInputTxtBox" ClientIDMode="Static" />
+                    </ContentTemplate>
+                </asp:UpdatePanel>
+            </div>
+            <div id="eval-space">
+                <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+                    <ContentTemplate>
+                        <input type="button" id="id-solve-btn" class="solve-btn" value="Solve" onclick="solveBtnClick();" />
+                        <asp:Button runat="server" ID="hiddenSolveBtn" CssClass="hidden" OnClick="hiddenSolveBtn_Click" />
+                        <asp:Button runat="server" ID="hiddenUpdateBtn" CssClass="hidden" OnClick="hiddenUpdateBtn_Click" />
+                        <asp:TextBox runat="server" ID="hiddenUpdateTxtBox" CssClass="hidden" />
+                        <span class="gen-drop-down-wrapper pointable">
+                            <asp:DropDownList ID="evalDropDownList" runat="server" CssClass="gen-drop-down pointable"></asp:DropDownList>
+                        </span>
+                    </ContentTemplate>
+                </asp:UpdatePanel>
+                <div class="m-tool-bar">
+                    <div class="tool-bar-btn-space" id="tool-bar-space">
+                        <input type="button" id="clear-btn-id" style="width: 45%; font-size: 20px" class="gen-btn" value="CLR" />
+                        <input type="button" id="remove-btn-id" class="gen-btn" style="font-size: 48px;" value="-" />
+                        <input type="button" id="add-btn-id" class="gen-btn" style="font-size: 32px;" value="+" />
                     </div>
-                </ContentTemplate>
-            </asp:UpdatePanel>
+                    <div class="m-tool-bar-btn-overlay" id="tool-bar-overlay">
+                        <div class="m-icon-tool-bar">
+                            ^
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ad-space" style="height: 90px; width: 70%">
+                <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                <!-- Lower Ad -->
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-3516117000150402"
+                     data-ad-slot="5259228574"
+                     data-ad-format="auto"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
         </div>
 
-        <asp:Panel runat="server">
-            <asp:UpdatePanel runat="server" ID="contentUpdate" UpdateMode="Conditional">
-                <ContentTemplate>
-                    <div runat="server" class="hidden" id="loadingDiv" style="margin-top: 30px; border-top: 1px solid black; border-bottom: 1px solid black;">
-                        <p style="text-align: center; font-size: 25pt;">Loading</p>
-                        <img id="loadingImg" src="Images/loading.gif" class="centerImage" style="margin-top: 30px;" />
+        <div id="right-paneling">
+            <div id="toolbar-space" class="noselect">
+                <div id="tool-bar-selection-space">
+                    <div id="sb0" class="subject-bar-btn-clicked noselect">Basic</div>
+                    <div id="sb1" class="subject-bar-btn noselect">Trig</div>
+                    <div id="sb2" class="subject-bar-btn noselect">Calc</div>
+                    <div id="sb3" class="subject-bar-btn noselect">Symb</div>
+                    <div id="sb4" class="subject-bar-btn noselect">Prob</div>
+                    <div id="sb5" class="subject-bar-btn noselect">Lin Alg</div>
+                </div>
+                <div id="toolbar-btn-space">
+                </div>
+                <div class="more-popup" style="display: none;">
+                    <div class="more-popup-content">
+                        <asp:UpdatePanel runat="server" ID="moreContentUpdatePanel">
+                            <ContentTemplate>
+                                <asp:RadioButton AutoPostBack="true" TextAlign="Left" CssClass="angle-rad-btn" Text="Use Radians: " OnCheckedChanged="angleRadBtn_CheckedChanged" runat="server" ID="radRadBtn" GroupName="angleGroup" />
+                                <asp:RadioButton AutoPostBack="true" TextAlign="Left" CssClass="angle-rad-btn" Text="Use Degrees: " OnCheckedChanged="angleRadBtn_CheckedChanged" runat="server" ID="degRadBtn" GroupName="angleGroup" />
+
+                                <asp:ListView ID="functionDefsListView" runat="server" OnItemCommand="functionDefsListView_ItemCommand" OnItemDeleting="functionDefsListView_ItemDeleting">
+                                    <LayoutTemplate>
+                                        <span class="func-list-title">Function Definitions</span>
+                                        <ul class="func-disp-list" id="funcDispList">
+                                            <asp:PlaceHolder ID="itemPlaceholder" runat="server" />
+                                        </ul>
+                                    </LayoutTemplate>
+                                    <ItemTemplate>
+                                        <li>
+                                            <span>`<%# Eval("FuncName") %> = <%# Eval("FuncDef") %>`</span>
+                                            <asp:Button CssClass="del-span" runat="server" ID="SelectCategoryButton" CommandName="Delete" 
+                                                CommandArgument='<%# Eval("FuncName") %>' Text="Delete" />
+                                        </li>
+                                    </ItemTemplate>
+                                    <EmptyDataTemplate>
+                                        <span class='func-list-title'>No functions defined.</span>
+                                    </EmptyDataTemplate>
+                                </asp:ListView>
+                            </ContentTemplate>
+                        </asp:UpdatePanel>
                     </div>
-                    <asp:Button CssClass="hiddenBtn" runat="server" ID="hiddenDisplayBtn" ClientIDMode="Static" OnClick="hiddenDisplayBtn_Click" />
-                    <div runat="server" visible="false" id="resultSectionDiv" class="resultSection"></div>
-                </ContentTemplate>
-            </asp:UpdatePanel>
-        </asp:Panel>
 
-        <asp:UpdatePanel runat="server">
-            <ContentTemplate>
-                <div runat="server" visible="false" id="workSectionDiv" class="resultSection"></div>
-            </ContentTemplate>
-        </asp:UpdatePanel>
+                </div>
+            </div>
+            <div id="expand-more-popup" class="noselect">+</div>
+
+            <div id="pod-space">
+                <div style="margin-left: 10px;">
+                    <p class="pob-title">Problem of the Day:</p>
+                    <div style="text-align: center;" class="pob-problem">
+                        <p class="pob-sub-title">Volume Integral</p>
+                        <span class="hidden">\int\int\int_V \frac{\cos(xy)x^2}{\ln(z)} dV</span>
+                        <div>
+                            <span class="mathquill-rendered-math noselect pointable">`\int\int\int_V \frac{\cos(xy)x^2}{\ln(z)} dV`</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="account-space">
+                <section id="login">
+                    <asp:LoginView ID="LoginView1" runat="server" ViewStateMode="Disabled">
+                        <AnonymousTemplate>
+                            <a class="btn-link" href="account/register.aspx">
+                                <div class="signup-space account-division">
+                                    Sign Up
+                                </div>
+                            </a>
+                            <a class="btn-link" href="account/login.aspx">
+                                <div class="login-space account-division">
+                                    Log In
+                                </div>
+                            </a>
+                        </AnonymousTemplate>
+                        <LoggedInTemplate>
+                            <a class="btn-link" href="account/you">
+                                <div class="you-space account-division noselect">
+                                    You
+                                </div>
+                            </a>
+                            <a class="btn-link">
+                                <div class="account-space account-division">
+                                    <asp:LoginName ID="LoginName1" runat="server" CssClass="username noselect" />
+                                </div>
+                            </a>
+                            <div class="account-popup">
+                                <a class="btn-link" href="#">
+                                    <div class="account-popup-item noselect">
+                                        <asp:LoginStatus CssClass="logout-btn" ID="LoginStatus1" runat="server" LogoutAction="Redirect" LogoutText="Log off" LogoutPageUrl="~/" />
+                                    </div>
+                                </a>
+                                <a class="btn-link" href="account/manage.aspx">
+                                    <div class="account-popup-item noselect">
+                                        Settings
+                                    </div>
+                                </a>
+                            </div>
+                        </LoggedInTemplate>
+                    </asp:LoginView>
+                </section>
+            </div>
+        </div>
+        <div style="clear: both;"></div>
     </div>
-
-     <%
-            string u = Request.ServerVariables["HTTP_USER_AGENT"];
-            Regex b = new Regex(@"(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino", RegexOptions.IgnoreCase | RegexOptions.Multiline);
-            Regex v = new Regex(@"1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-", RegexOptions.IgnoreCase | RegexOptions.Multiline);
-            if (!(b.IsMatch(u) || v.IsMatch(u.Substring(0, 4)))) {
-                Response.Write(
-                    "<div>" +
-                        "<div id='adPanel' style='margin-top: 50px;'>" + 
-                            "<script async src='//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'></script>" + 
-                            "<!-- Mathologica Default Ad -->" + 
-                            "<ins class='adsbygoogle'" + 
-                                    "style='display:inline-block; width:728px; height:90px'" + 
-                                    "data-ad-client='ca-pub-3516117000150402'" + 
-                                    "data-ad-slot='4392690570'></ins>" + 
-                            "<script>" + 
-                                "(adsbygoogle = window.adsbygoogle || []).push({});" + 
-                            "</script>" + 
-                        "</div>" + 
-                    "</div>");
-            }
-        %>
-    
 </asp:Content>

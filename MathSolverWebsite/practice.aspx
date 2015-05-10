@@ -4,7 +4,10 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="FeaturedContent" runat="server">
     <link rel="stylesheet" type="text/css" href="Content/css/mlogica-practice.css" />
     <style type="text/css">
-        * {
+        .w-col-4 {
+            box-sizing: border-box;
+        }
+        .hlep {
             box-sizing: border-box;
         }
     </style>
@@ -17,7 +20,7 @@
         <div class="w-col w-col-4 link-practice">
           <div class="hlep">
             <div>
-              <div><a class="wordlink-help" href="topics.aspx">Algebra</a>
+              <div><a class="wordlink-help" href="topics?tn=Algebra">Algebra</a>
               </div>
             </div>
           </div>
@@ -25,7 +28,7 @@
         <div class="w-col w-col-4 link-practice">
           <div class="hlep">
             <div>
-              <div><a class="wordlink-help" href="topics.aspx">Trig</a>
+              <div><a class="wordlink-help" href="topics?tn=Trig">Trig</a>
               </div>
             </div>
           </div>
@@ -33,7 +36,7 @@
         <div class="w-col w-col-4 link-practice">
           <div class="hlep">
             <div>
-              <div><a class="wordlink-help" href="topics.aspx">Pre-Calc</a>
+              <div><a class="wordlink-help" href="topics?tn=Pre+Calc">Pre-Calc</a>
               </div>
             </div>
           </div>
@@ -43,7 +46,7 @@
         <div class="w-col w-col-4 link-practice">
           <div class="hlep">
             <div>
-              <div><a class="wordlink-help" href="general.html">Lin Alg</a>
+              <div><a class="wordlink-help" href="topics?tn=Lin+Alg">Lin Alg</a>
               </div>
             </div>
           </div>
@@ -51,7 +54,7 @@
         <div class="w-col w-col-4 link-practice">
           <div class="hlep">
             <div>
-              <div><a class="wordlink-help" href="faq.html">Prob</a>
+              <div><a class="wordlink-help" href="topics?tn=Prob">Prob</a>
               </div>
             </div>
           </div>
@@ -59,7 +62,7 @@
         <div class="w-col w-col-4 link-practice">
           <div class="hlep">
             <div>
-              <div><a class="wordlink-help" href="account-creation.html">Calculus</a>
+              <div><a class="wordlink-help" href="topics?tn=Calculus">Calculus</a>
               </div>
             </div>
           </div>

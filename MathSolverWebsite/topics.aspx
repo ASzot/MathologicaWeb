@@ -23,7 +23,7 @@
     <div class="w-row help">
       <div class="w-col w-col-4 help-eft" style="margin-left: -10px; margin-top: -20px;">
         <div class="topic-section" id="left-help">
-          <h2>Algebra</h2>
+          <h2 id="practiceTopicTitleId" runat="server">Algebra</h2>
           <a class="w-inline-block link-help" href="practice.aspx">
             <div class="link-backtext">&lt;</div>
           </a>

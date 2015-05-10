@@ -6,13 +6,26 @@
 <head runat="server">
     <meta charset="utf-8" />
     <title><%: Page.Title %></title>
+
     <link href="Images/favlogo.ico" rel="shortcut icon" type="image/x-icon" />
     <link href="Images/favlogo.ico" rel="icon" type="images/ico" />
+
     <asp:PlaceHolder runat="server">     
           <%: Scripts.Render("~/bundles/modernizr") %>
     </asp:PlaceHolder>  
     <webopt:BundleReference runat="server" Path="~/Content/css" /> 
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js"></script>
+    <script>
+        WebFont.load({
+            google: {
+                families: ["Roboto:100,regular,500"]
+            }
+        });
+    </script>
+
+
     <asp:ContentPlaceHolder runat="server" ID="HeadContent" />
 </head>
 <body>
@@ -45,69 +58,84 @@
         </Scripts>
     </asp:ScriptManager>
         <header>
-            <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-547fe09d07b6d60f" async="async"></script>
-            
-            <%
-                HttpCookie userPrefCookies = Request.Cookies["UserPref"];
-                
-                if (userPrefCookies != null)
-                {
-                    string colorTheme = userPrefCookies["ColorTheme"];
-                    if (colorTheme == "black")
-                        Response.Write("<link type='text/css' rel='stylesheet' href='/Content/DarkTheme.css'/>");
-                    else
-                        Response.Write("<link type='text/css' rel='stylesheet' href='/Content/WhiteTheme.css'/>");
-                }
-                else
-                    Response.Write("<link type='text/css' rel='stylesheet' href='/Content/WhiteTheme.css'/>");
-                
-                
-            %>
+            <link rel="stylesheet" type="text/css" href="/Content/css/mlogica-final.css" />
+            <link rel="stylesheet" type="text/css" href="/Content/css/mlogica-mobile.css" />
+         
+            <asp:ContentPlaceHolder runat="server" ID="FeaturedContent" />
+        </header>
 
 
-            <div id='navbar'>
-                <ul>
-                   <li id="evalMenuBar"><a id="A1" runat="server" href='~/'><span>Evaluator</span></a></li>
-                   <li id="helpMenuBar"><a id="A2" runat="server" title="Help" href='~/HelpPage'><span>Help</span></a></li>
-                   <li id="preferencesMenuBar"><a id="A3" runat="server" title="Preferences" href="~/Products">Apps</a></li>
-                </ul>
+        <div class="container">
+            <div class="header">
+                <div class="click-area">
+                    <div id="title-block">
+                        <a href="~" runat="server"><img class="mathlogo" src="/Images/MathologicaLogo.png" width="263" alt="Mathologica" /></a>
+                        <a href="~" runat="server"><div class="moto">Computation, simplified</div></a>
+                    </div>
+                </div>
+                    
+                <div class="w-nav navbar" data-collapse="medium" data-animation="default" data-duration="400" data-contain="1">
+                    <div class="w-container noselect">
+                        <nav class="w-nav-menu" role="navigation">
+                            <a runat="server" class="w-nav-link nav-link" style="max-width: 940px;" href="~/">Calculator</a>
+                            <a runat="server" class="w-nav-link nav-link" style="max-width: 940px;" href="/practice.aspx">Practice</a>
+                            <a runat="server" class="w-nav-link nav-link" style="max-width: 940px;" href="~/helptopics.aspx">Help</a>
+                            <div class="nav-login-area">
+                                <asp:LoginView ID="NavLogIn" runat="server" ViewStateMode="Disabled">
+                                    <AnonymousTemplate>
+                                        <a class="w-nav-link nav-link" href="account/register.aspx">Sign Up</a>
+                                        <a class="w-nav-link nav-link" href="account/login.aspx">Log In</a>
+                                    </AnonymousTemplate>
+                                    <LoggedInTemplate>
+                                        <a class="w-nav-link nav-link" href="account/you">You</a>
+                                        <asp:LoginStatus CssClass="w-nav-link nav-link logout-btn" ID="LoginStatus1" runat="server" LogoutAction="Redirect" LogoutText="Log off" LogoutPageUrl="~/" />
+                                        <a class="w-nav-link nav-link" href="account/manage.aspx">Settings</a>
+                                    </LoggedInTemplate>
+                                </asp:LoginView>
+                            </div>
+                        </nav>
+                        <div class="w-nav-button">
+                            <div class="w-icon-nav-menu">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <p class="site-title">
-                <a runat="server" href="~/"><img style="border:0;" src="/Images/Logo.png" alt="Mathologica" width="300" height="75" /></a>
-            </p>
-
-            <link rel="stylesheet" type="text/css" href="/mathquill/mathquill.css" />
-            <script src="/mathquill/mathquill.min.js"></script>
-        </header>
-        <div id="body">
-            <asp:ContentPlaceHolder runat="server" ID="FeaturedContent" />
-            <section class="content-wrapper main-content clear-fix">
+            <div class="body">
                 <asp:ContentPlaceHolder runat="server" ID="MainContent" />
-            </section>
+            </div>
+
+            <div class="footer">
+                <div class="centered-col">
+                    <div class="footer-links noselect">
+                        <a href="/terms.aspx">Terms |</a>
+                        <a href="/privacy.aspx">Privacy |</a>
+                        <a href="/about.aspx">About |</a>
+                        <a href="/apps.aspx">Apps</a>
+                    </div>
+
+                    <div class="branding-images" style="float: right;">
+                        <a class="img-disp" href="https://twitter.com/mathologica">
+                            <img class="tw-link" src="/Images/Branding/twitter.png" width="89" alt="Mathologica Twitter" />
+                        </a>
+                        <a class="img-disp" href="https://www.facebook.com/pages/Mathologica/388128111363690">
+                            <img class="fb" src="/Images/Branding/facebook.png" width="89" alt="Mathologica Facebook" />
+                        </a>
+                        <a class="img-disp" href="asdf.aspx">
+                            <img class="mail" src="/Images/Branding/mail.png" width="89" alt="Mathologica Mail" />
+                        </a>
+                    </div>
+                    
+                    <div class="copy-right">
+                        &copy; <%: DateTime.Now.Year %> - Mathologica, LLC &nbsp;
+                    </div>
+                </div>
+            </div>
         </div>
         
-        <footer>
-            <div>
-                <div class="float-left">
-                    <div style="margin: 5px;">
-                        <div class="addthis_horizontal_follow_toolbox"></div>
-                    </div>
-                    <a runat="server" href="~/About" class="navBarSelection">About</a>
-                    <a runat="server" href="~/Terms" class="navBarSelection">Terms</a>
-                    <a runat="server" href="~/Privacy" class="navBarSelection">Privacy</a>
-                    <p>&copy; <%: DateTime.Now.Year %> - Mathologica, LLC</p>
-                </div>
-                <div class="float-right" style="margin-right: 10px;">
-                    <p class="importantText">    
-                        <a id="A4" runat="server" href="~/Account/Preferences">
-                            Preferences
-                        </a>
-                    </p>
-                </div>
-            </div>
-            
-        </footer>
+        <script src="/Scripts/mainscript.js"></script>
     </form>
 </body>
 </html>

@@ -28,19 +28,15 @@
   text-decoration: none;
 }
 
-.header {
-    height: 130px;
-}
-
 .body {
     /* Firefox */
-    height: -moz-calc(100% - 190px);
+    height: -moz-calc(100% - 130px);
     /* WebKit */
-    height: -webkit-calc(100% - 190px);
+    height: -webkit-calc(100% - 130px);
     /* Opera */
-    height: -o-calc(100% - 100px);
+    height: -o-calc(100% - 130px);
     /* Standard */
-    height: calc(100% - 190px);
+    height: calc(100% - 130px);
 
     overflow-y: auto;
 }

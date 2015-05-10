@@ -96,6 +96,18 @@ namespace MathSolverWebsite.Website_Logic
             _info = info;
         }
 
+        public TopicData RemoveBasePath()
+        {
+            string[] split = _path.Split('/');
+            string removedStr = "";
+            for (int i = 1; i < split.Length; ++i)
+            {
+                removedStr += split[i] + "/";
+            }
+
+            return new TopicData(s_dispName, s_descTxt, _info, _exampleInputs, removedStr);
+        }
+
         public string GetTrunExplainStr()
         {
             if (s_descTxt.Length < MAX_DESC_PREV_LENGTH)
