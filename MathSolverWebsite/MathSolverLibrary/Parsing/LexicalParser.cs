@@ -2840,7 +2840,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
             AlgebraTerm innerTerm = LexemeTableToAlgebraTerm(integralTerm, ref pParseErrors);
             if (innerTerm == null)
                 return null;
-            ExComp innerEx = innerTerm.RemoveRedundancies();
+            ExComp innerEx = innerTerm.RemoveRedundancies(true);
 
             if (endIndex == -1)
             {
