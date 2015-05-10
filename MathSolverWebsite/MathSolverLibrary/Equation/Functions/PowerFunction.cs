@@ -399,7 +399,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                 }
             }
 
-            if (!(Base is Constant || Base is AlgebraComp))
+            if (!(Base is Constant || Base is AlgebraComp || Base is BasicAppliedFunc))
                 baseAsciiStr = baseAsciiStr.SurroundWithParas();
 
             return baseAsciiStr + "^(" + powerAsciiStr + ")";

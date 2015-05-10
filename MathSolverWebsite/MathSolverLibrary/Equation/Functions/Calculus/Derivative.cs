@@ -922,7 +922,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 if (_withRespectTo.IsEqualTo(ex))
                 {
                     pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]=1`",
-                        "Using the power rule the above is one. This is because `{0}` has an exponent of `1` and by the power rule `(d)/(d{0})[{0}^1]=1*{0}^(0)=1`", ex);
+                        "Use the power rule.", ex);
                     return Number.One;
                 }
                 else if (_derivOf != null && _derivOf.IsEqualTo(ex))

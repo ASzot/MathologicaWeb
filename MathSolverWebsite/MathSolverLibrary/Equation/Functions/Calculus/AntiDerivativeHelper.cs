@@ -539,7 +539,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     }
                 }
                 else if (gpCmp is BasicAppliedFunc)
+                {
                     innerEx = ((BasicAppliedFunc)gpCmp).InnerEx;
+                    potentialU.Add(gpCmp);
+                }
 
                 if (innerEx == null || innerEx is AlgebraComp || !innerEx.ToAlgTerm().Contains(dVar))
                     continue;
