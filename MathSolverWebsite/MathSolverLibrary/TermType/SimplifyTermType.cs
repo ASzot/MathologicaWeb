@@ -2,6 +2,7 @@
 using MathSolverWebsite.MathSolverLibrary.Equation.Term;
 using MathSolverWebsite.MathSolverLibrary.Parsing;
 using MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg;
+using MathSolverWebsite.MathSolverLibrary.Equation.Functions;
 using System.Collections.Generic;
 using System.Linq;
 using System;
@@ -114,6 +115,13 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                     tmpCmds.Add("To polar form");
                     tmpCmds.Add("To exponential form");
                 }
+            }
+
+            if (term is SumFunction)
+            {
+                SumFunction sum = term as SumFunction;
+                if (sum.IsInfiniteSeries)
+                    tmpCmds.Add("Test for convergence");
             }
 
             if (!(_term is Equation.Functions.Calculus.Derivative ||
@@ -332,6 +340,18 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                     return SolveResult.Solved();
                 else
                     return SolveResult.Failure();
+            }
+            else if (command == "Test for convergence")
+            {
+                SumFunction sum = _term as SumFunction;
+                ExComp result = null;
+                bool? converges = sum.Converges(ref pEvalData, out result);
+                if (converges == null)
+                    return SolveResult.Failure("Cannot determine convergence or divergence", ref pEvalData);
+
+                pEvalData.Msgs.Add(converges.Value ? "Converges" : "Diverges");
+
+                return result == null ? SolveResult.Solved() : SolveResult.Simplified(result);
             }
 
             return SolveResult.InvalidCmd(ref pEvalData);

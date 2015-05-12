@@ -289,6 +289,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (denEval is Limit)
                 return null;
 
+
+            // Check the conditions for applying L'Hopitals rule.
             if (!Number.Zero.IsEqualTo(numEval) && !Number.NegInfinity.IsEqualTo(numEval) && !Number.PosInfinity.IsEqualTo(numEval))
                 return null;
 
