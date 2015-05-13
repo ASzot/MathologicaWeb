@@ -83,6 +83,13 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 tmpCmds.Add("Divide");
             }
 
+            if (term is SumFunction)
+            {
+                SumFunction sum = term as SumFunction;
+                if (sum.IsInfiniteSeries)
+                    tmpCmds.Add("Test for convergence");
+            }
+
             if ((startingType != null && startingType != typeof(ExMatrix) && startingType != typeof(ExVector)) && !tmpCmds.Contains(KEY_SIMPLIFY))
                 tmpCmds.Add(KEY_SIMPLIFY);
 
@@ -115,13 +122,6 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                     tmpCmds.Add("To polar form");
                     tmpCmds.Add("To exponential form");
                 }
-            }
-
-            if (term is SumFunction)
-            {
-                SumFunction sum = term as SumFunction;
-                if (sum.IsInfiniteSeries)
-                    tmpCmds.Add("Test for convergence");
             }
 
             if (!(_term is Equation.Functions.Calculus.Derivative ||

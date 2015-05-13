@@ -51,28 +51,44 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             }
 
             ExComp innerEx = InnerEx;
+            string thisStr = WorkMgr.STM + this.FinalToDispStr() + WorkMgr.EDM;
 
             // The basic divergence test.
             pEvalData.WorkMgr.FromSides(this, null, "If " + WorkMgr.STM + 
-                "\\lim_{" + IterVar.ToDispString() + " \\to \infty}" + InnerTerm.FinalToDispStr() + "\\ne 0 " + WorkMgr.EDM + " then the series is divergent");
+                "\\lim_{" + IterVar.ToDispString() + " \\to \\infty}" + InnerTerm.FinalToDispStr() + "\\ne 0 " + WorkMgr.EDM + " then the series is divergent");
 
             ExComp divTest = Limit.TakeLim(innerEx, IterVar, Number.PosInfinity, ref pEvalData);
+            if (divTest is Limit)
+                return null;
             if (divTest is AlgebraTerm)
                 divTest = (divTest as AlgebraTerm).RemoveRedundancies();
             if (!divTest.IsEqualTo(Number.Zero))
             {
-                pEvalData.WorkMgr.FromSides(this, null, "The limit did not equal zero the series is divergent.");
+                pEvalData.WorkMgr.FromFormatted(thisStr, "The limit did not equal zero, the series is divergent.");
                 return false;
             }
 
             // The p-series test.
-            if (innerEx is PowerFunction)
+            AlgebraTerm[] frac = InnerTerm.GetNumDenFrac();
+            if (frac != null && frac[0].RemoveRedundancies().IsEqualTo(Number.One))
             {
-                PowerFunction powFunc = innerEx as PowerFunction;
-                if (powFunc.Base.IsEqualTo(IterVar) && powFunc.Power is Number && (powFunc.Power as Number) < 0.0)
+                ExComp den = frac[1].RemoveRedundancies();
+                if (den is PowerFunction)
                 {
-                    Number nPow = powFunc.Power as Number;
-                    return nPow <= -1.0;
+                    PowerFunction powFunc = den as PowerFunction;
+                    if (powFunc.Base.IsEqualTo(IterVar) && powFunc.Power is Number && (powFunc.Power as Number) > 0.0 &&
+                        IterStart is Number && (IterStart as Number) >= 1.0)
+                    {
+                        Number nPow = powFunc.Power as Number;
+                        bool isConvergent = nPow > 1.0;
+                        pEvalData.WorkMgr.FromFormatted(thisStr, "In the form " + WorkMgr.STM + "1/n^p" + WorkMgr.EDM + " if " +
+                            WorkMgr.STM + "p \\gt 1" + WorkMgr.EDM + " then the series is convergent.");
+                        if (isConvergent)
+                            pEvalData.WorkMgr.FromFormatted(thisStr, WorkMgr.STM + "p > 1" + WorkMgr.EDM + " so the series converges");
+                        else
+                            pEvalData.WorkMgr.FromFormatted(thisStr, WorkMgr.STM + "p <= 1" + WorkMgr.EDM + " so the series diverges");
+                        return isConvergent;
+                    }
                 }
             }
 
@@ -98,7 +114,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                     a = ele0;
                 }
 
-                if (a != null && pf != null && !a.ToAlgTerm().Contains(IterVar) && pf.Base is Number && !(pf.Base as Number).HasImaginaryComp())
+                if (a != null && pf != null && !a.ToAlgTerm().Contains(IterVar) && pf.Base is Number && !(pf.Base as Number).HasImaginaryComp() && 
+                    IterStart is Number && (IterStart as Number) >= 1.0)
                 {
                     Number nBase = pf.Base as Number;
                     nBase = Number.Abs(nBase);
@@ -106,10 +123,21 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                     List<ExComp> powers = pfPow.GetPowersOfVar(IterVar);
                     if (powers.Count == 1 && powers[0].IsEqualTo(Number.One))
                     {
-                        if (nBase > 1.0)
+                        pEvalData.WorkMgr.FromFormatted(thisStr, "In the geometric series form " + WorkMgr.STM + "ar^{n-1}" + WorkMgr.EDM + " if " + 
+                            WorkMgr.STM + "|r| \\lt 1 " + WorkMgr.EDM + " than the series is convergent");
+                        if (nBase >= 1.0)
+                        {
+                            pEvalData.WorkMgr.FromFormatted(thisStr, WorkMgr.STM + "|r| \\ge 1" + WorkMgr.EDM + ", the series is divergent."); 
                             return false;
+                        }
                         if (pfPow.IsEqualTo(new AlgebraTerm(IterVar, new SubOp(), IterStart)))
+                        {
+                            pEvalData.WorkMgr.FromSides(this, result, "Use the formula " + WorkMgr.STM + "\\sum_{n=1}^{\\infty}ar^{n-1}=\\frac{a}{1-r}" + 
+                                WorkMgr.EDM);
                             result = DivOp.StaticCombine(a, SubOp.StaticCombine(Number.One, nBase));
+                        }
+
+                        pEvalData.WorkMgr.FromFormatted(thisStr, WorkMgr.STM + "|r| \\lt 1 " + WorkMgr.EDM + ", the series is convergent.");
                         return true;
                     }
                 }
@@ -143,7 +171,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             if (toInfinity)
             {
                 ExComp result = null;
+
+                int stepCount = pEvalData.WorkMgr.WorkSteps.Count;
                 bool? converges = Converges(ref pEvalData, out result);
+                pEvalData.WorkMgr.PopSteps(stepCount);
+
                 if (converges != null)
                 {
                     if (result != null)

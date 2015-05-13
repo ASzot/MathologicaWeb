@@ -1297,6 +1297,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                 algebraTerm.Add(toAdd);
             }
 
+            if (algebraTerm.TermCount == 1 && algebraTerm[0] is AgOp)
+                return null;
+
             return algebraTerm;
         }
 
@@ -2410,7 +2413,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
             // Should be in the form \frac(num)(den)
 
             ExComp numEx = LexemeToExComp(lt, ref currentIndex, ref pParseErrors);
-            if (numEx == null)
+            if (numEx == null || numEx is AgOp)
                 return null;
 
             currentIndex += 2;
@@ -2422,7 +2425,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                 return null;
 
             ExComp denEx = LexemeToExComp(lt, ref currentIndex, ref pParseErrors);
-            if (denEx == null)
+            if (denEx == null || denEx is AgOp)
                 return null;
 
             return new AlgebraTerm(numEx, new Equation.Operators.DivOp(), denEx);
@@ -2638,7 +2641,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                 return null;
 
             ExComp rootEx = LexemeToExComp(lexemeTable, ref currentIndex, ref pParseErrors);
-            if (rootEx == null)
+            if (rootEx == null || rootEx is AgOp)
                 return null;
 
             currentIndex += 2;
@@ -2650,7 +2653,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                 return null;
 
             ExComp innerEx = LexemeToExComp(lexemeTable, ref currentIndex, ref pParseErrors);
-            if (innerEx == null)
+            if (innerEx == null || innerEx is AgOp)
                 return null;
 
             return new AlgebraTerm(innerEx, new Equation.Operators.PowOp(), Equation.Operators.DivOp.StaticCombine(Number.One, rootEx));
@@ -2960,7 +2963,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
             if (parseLt[parseCurrentIndex].Data1 != LexemeType.StartPara)
                 return null;
             ExComp top = LexemeToExComp(parseLt, ref parseCurrentIndex, ref pParseErrors);
-            if (top == null)
+            if (top == null || top is AgOp)
                 return null;
             parseCurrentIndex++;
 
@@ -2971,7 +2974,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
             if (parseLt[parseCurrentIndex].Data1 != LexemeType.StartPara)
                 return null;
             ExComp bottom = LexemeToExComp(parseLt, ref parseCurrentIndex, ref pParseErrors);
-            if (bottom == null)
+            if (bottom == null || bottom is AgOp)
                 return null;
 
             return new ChooseFunction(top, bottom);
