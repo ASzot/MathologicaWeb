@@ -152,7 +152,7 @@
                     MathJax.Hub.Queue(['Typeset', MathJax.Hub, "pob-space"]);
                 }
 
-                $("#<% = parseErrorSpan.ClientID %>").html("");
+                //$("#<% = parseErrorSpan.ClientID %>").html("");
                 return;
             }
 

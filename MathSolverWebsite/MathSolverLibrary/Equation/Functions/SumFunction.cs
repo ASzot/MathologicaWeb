@@ -45,14 +45,25 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                 return true;
 
             if (!InnerTerm.Contains(IterVar))
+            {
+                pEvalData.WorkMgr.FromSides(this, null, "The above diverges");
                 return false;
-
-            // The basic divergence test.
-            ExComp divTest = Limit.TakeLim(InnerEx, IterVar, Number.PosInfinity, ref pEvalData);
-            if (divTest.IsEqualTo(Number.Zero))
-                return false;
+            }
 
             ExComp innerEx = InnerEx;
+
+            // The basic divergence test.
+            pEvalData.WorkMgr.FromSides(this, null, "If " + WorkMgr.STM + 
+                "\\lim_{" + IterVar.ToDispString() + " \\to \infty}" + InnerTerm.FinalToDispStr() + "\\ne 0 " + WorkMgr.EDM + " then the series is divergent");
+
+            ExComp divTest = Limit.TakeLim(innerEx, IterVar, Number.PosInfinity, ref pEvalData);
+            if (divTest is AlgebraTerm)
+                divTest = (divTest as AlgebraTerm).RemoveRedundancies();
+            if (!divTest.IsEqualTo(Number.Zero))
+            {
+                pEvalData.WorkMgr.FromSides(this, null, "The limit did not equal zero the series is divergent.");
+                return false;
+            }
 
             // The p-series test.
             if (innerEx is PowerFunction)
@@ -130,7 +141,19 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             }
 
             if (toInfinity)
+            {
+                ExComp result = null;
+                bool? converges = Converges(ref pEvalData, out result);
+                if (converges != null)
+                {
+                    if (result != null)
+                        return result;
+                    if (!converges.Value)
+                        return Number.PosInfinity;
+                }
+
                 return this;
+            }
 
             ExComp innerEx = InnerEx;
             if (innerEx.IsEqualTo(IterVar) && IterStart.IsEqualTo(Number.One))
@@ -172,7 +195,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public override string ToAsciiString()
         {
-            return "\\Sigma_{" + IterVar + "=" + IterStart + "}^{" + IterCount + "}" +
+            return "\\sum_{" + IterVar + "=" + IterStart + "}^{" + IterCount + "}" +
                 InnerEx.ToAsciiString();
         }
 

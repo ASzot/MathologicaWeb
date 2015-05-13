@@ -349,7 +349,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 if (converges == null)
                     return SolveResult.Failure("Cannot determine convergence or divergence", ref pEvalData);
 
-                pEvalData.Msgs.Add(converges.Value ? "Converges" : "Diverges");
+                pEvalData.AddMsg(converges.Value ? "Converges" : "Diverges");
 
                 return result == null ? SolveResult.Solved() : SolveResult.Simplified(result);
             }

@@ -299,8 +299,9 @@ namespace MathSolverWebsite
                 {
                     parseErrorsTxt += "<p>" + parseErrors[i] + "</p>";
                 }
+                if (parseErrors.Count == 0)
+                    parseErrorsTxt = "<p>" + (inputSizeExceeded ? "Input is too long" : DEF_PARSE_ERR_MSG) + "</p>";
                 parseErrorSpan.InnerHtml = parseErrorsTxt;
-                evalDropDownList.Items.Add(inputSizeExceeded ? "Input is too long" : DEF_PARSE_ERR_MSG);
 
                 return false;
             }

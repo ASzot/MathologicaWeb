@@ -2690,7 +2690,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
             AlgebraTerm tmp = LexemeTableToAlgebraTerm(startValLt, ref pParseErrors);
             if (tmp == null)
                 return null;
-            ExComp startVal = tmp.RemoveRedundancies();
+            ExComp startVal = tmp;
 
             currentIndex = endParaIndex + 1;
 
@@ -2707,7 +2707,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                 return null;
 
             currentIndex++;
-            if (lt[currentIndex].Data1 == LexemeType.Operator && lt[currentIndex].Data2 == "*")
+            if (currentIndex < lt.Count && lt[currentIndex].Data1 == LexemeType.Operator && lt[currentIndex].Data2 == "*")
             {
                 currentIndex++;
             }
@@ -2717,6 +2717,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
             int endIndex = lt.Count;
             depth = 0;
             int prevOp = -1;
+
+            if (endIndex == currentIndex)
+            {
+                pParseErrors.Add("Nothing following summation");
+                return null;
+            }
+
             for (int i = currentIndex; i < lt.Count; ++i)
             {
                 if (lt[i].Data1 == LexemeType.StartPara)
@@ -2741,6 +2748,17 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                 return null;
 
             currentIndex = endIndex == lt.Count - 1 ? endIndex : endIndex - 1;
+
+            if (startVal is AlgebraTerm)
+            {
+                (startVal as AlgebraTerm).ApplyOrderOfOperations();
+                startVal = (startVal as AlgebraTerm).MakeWorkable();
+            }
+            if (endVal is AlgebraTerm)
+            {
+                (endVal as AlgebraTerm).ApplyOrderOfOperations();
+                endVal = (endVal as AlgebraTerm).MakeWorkable();
+            }
 
             Equation.Functions.SumFunction sumFunc = new SumFunction(innerEx, iterVar, startVal, endVal);
 
