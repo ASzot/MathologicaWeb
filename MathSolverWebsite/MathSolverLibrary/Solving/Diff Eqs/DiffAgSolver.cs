@@ -48,8 +48,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             if (left == null)
                 return null;
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + WorkMgr.ExFinalToAsciiStr(left) + "d" + solveFunc.ToDispString() + "=" +
-                WorkMgr.ExFinalToAsciiStr(right) + "d" + withRespect.ToDispString() + WorkMgr.EDM, "Multiply both sides by " + WorkMgr.STM +
+            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + WorkMgr.ToDisp(left) + "d" + solveFunc.ToDispString() + "=" +
+                WorkMgr.ToDisp(right) + "d" + withRespect.ToDispString() + WorkMgr.EDM, "Multiply both sides by " + WorkMgr.STM +
                 "d" + withRespect.ToDispString() + WorkMgr.EDM);
 
             return new ExComp[] { left, right };

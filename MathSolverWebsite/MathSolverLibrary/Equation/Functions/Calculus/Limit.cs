@@ -78,7 +78,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 if (attempt == null)
                 {
                     _evalFail = true;
-                    pEvalData.WorkMgr.PopSteps(pEvalData.WorkMgr.WorkSteps.Count - stepCount);
+                    pEvalData.WorkMgr.PopStepsCount(pEvalData.WorkMgr.WorkSteps.Count - stepCount);
                 }
 
                 if (attempt == null)
@@ -88,11 +88,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
                 if (attempt == null)
                 {
+                    stepCount = pEvalData.WorkMgr.WorkSteps.Count;
                     attempt = AttemptLeHopitals(reduced, ref pEvalData);
+
                     if (attempt == null)
                     {
                         _leHopitalCount = 0;
-                        pEvalData.WorkMgr.PopSteps(pEvalData.WorkMgr.WorkSteps.Count - stepCount);
+                        pEvalData.WorkMgr.PopStepsCount(pEvalData.WorkMgr.WorkSteps.Count - stepCount);
                         return this;
                     }
                 }
@@ -133,7 +135,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 return attempt;
             }
 
+            int prevStepCount = pEvalData.WorkMgr.WorkSteps.Count;
             attempt = AttemptLeHopitals(reduced, ref pEvalData);
+
             if (attempt != null)
             {
                 pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + _thisDispStr + "={0}" + WorkMgr.EDM, attempt);
@@ -141,10 +145,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 pEvalData.AttemptSetInputType(TermType.InputType.LeHopital);
                 return attempt;
             }
+            else
+                pEvalData.WorkMgr.PopSteps(prevStepCount);
 
 
             _evalFail = true;
-            pEvalData.WorkMgr.PopSteps(pEvalData.WorkMgr.WorkSteps.Count - stepCount);
+            pEvalData.WorkMgr.PopStepsCount(pEvalData.WorkMgr.WorkSteps.Count - stepCount);
             return this;
         }
 
@@ -284,14 +290,40 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             ExComp num = numDen[0];
             ExComp den = numDen[1];
 
+            string numStr = WorkMgr.ToDisp(num);
+            string denStr = WorkMgr.ToDisp(den);
+
+            string limStr = "\\lim_{" + _varFor.ToDispString() + " \\to " + _valTo.ToAlgTerm().FinalToDispStr() + "}";
+
+            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\frac{" + limStr + "(" + numStr + ")}{" + limStr + "(" + denStr + ")}" + WorkMgr.EDM,
+                "Check if in the indeterminate form.");
+
             // Is this an indefinite form.
+            pEvalData.WorkMgr.FromFormatted("",
+                "Take the limit of the numerator.");
+            WorkStep last = pEvalData.WorkMgr.GetLast();
+
+            last.GoDown(ref pEvalData);
             ExComp numEval = TakeLim(num, _varFor, _valTo, ref pEvalData, _leHopitalCount);
             if (numEval is Limit)
                 return null;
+            last.GoUp(ref pEvalData);
+            string numEvalStr = WorkMgr.ToDisp(numEval);
+
+            last.WorkHtml = WorkMgr.STM + limStr + "(" + numStr + ")=" + numEvalStr + WorkMgr.EDM;
+
+            pEvalData.WorkMgr.FromFormatted("",
+                "Take the limit of the denominator");
+            last = pEvalData.WorkMgr.GetLast();
+
+            last.GoDown(ref pEvalData);
             ExComp denEval = TakeLim(den, _varFor, _valTo, ref pEvalData, _leHopitalCount);
             if (denEval is Limit)
                 return null;
+            last.GoUp(ref pEvalData);
+            string denEvalStr = WorkMgr.ToDisp(denEval);
 
+            last.WorkHtml = WorkMgr.STM + limStr + "(" + denStr + ")=" + denEvalStr + WorkMgr.EDM;
 
             // Check the conditions for applying L'Hopitals rule.
             if (!Number.Zero.IsEqualTo(numEval) && !Number.NegInfinity.IsEqualTo(numEval) && !Number.PosInfinity.IsEqualTo(numEval))
@@ -300,11 +332,37 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (!numEval.IsEqualTo(denEval))
                 return null;
 
-            // This is in indefinite form.
-            ExComp numDeriv = Derivative.TakeDeriv(num, _varFor, ref pEvalData);
-            ExComp denDeriv = Derivative.TakeDeriv(den, _varFor, ref pEvalData);
+            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + limStr + "\\frac{" + numStr + "}{" + denStr +
+                "}=\\frac{" + numEvalStr + "}{" + denEvalStr + "}" + WorkMgr.EDM,
+                "The limit is in the form to apply L'Hospital's Rule.");
 
-            AlgebraTerm frac = new AlgebraTerm(numDeriv, denDeriv);
+            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + limStr + "(\\frac{" + numStr + "}{" + denStr +
+                "})=\\frac{\\frac{d}{d" + _varFor.ToDispString() + "}[" + numStr + "]}{\\frac{d}{d" + _varFor.ToDispString() + "}[" + denStr + "]}" + WorkMgr.EDM,
+                "Apply L'Hospital's rule.");
+
+            // This is in indefinite form.
+            pEvalData.WorkMgr.FromFormatted("", "Take the derivative of the numerator");
+            last = pEvalData.WorkMgr.GetLast();
+
+            last.GoDown(ref pEvalData);
+            ExComp numDeriv = Derivative.TakeDeriv(num, _varFor, ref pEvalData);
+            last.GoUp(ref pEvalData);
+
+            last.WorkHtml = WorkMgr.STM + "\\frac{d}{d" + _varFor.ToDispString() + "}[" + numStr + "]=" + WorkMgr.ToDisp(numDeriv) + WorkMgr.EDM;
+
+            pEvalData.WorkMgr.FromFormatted("", "Take the derivative of the denominator");
+            last = pEvalData.WorkMgr.GetLast();
+
+            last.GoDown(ref pEvalData);
+            ExComp denDeriv = Derivative.TakeDeriv(den, _varFor, ref pEvalData);
+            last.GoUp(ref pEvalData);
+
+            last.WorkHtml = WorkMgr.STM + "\\frac{d}{d" + _varFor.ToDispString() + "}[" + denStr + "]=" + WorkMgr.ToDisp(denDeriv) + WorkMgr.EDM;
+
+            ExComp frac = DivOp.StaticCombine(numDeriv, denDeriv);
+
+            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + limStr + "(\\frac{" + WorkMgr.ToDisp(numDeriv) + "}{" + WorkMgr.ToDisp(denDeriv) + "})" + WorkMgr.EDM,
+                "Divide the derivatives.");
 
             return TakeLim(frac, _varFor, _valTo, ref pEvalData, _leHopitalCount);
         }
@@ -538,12 +596,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         private ExComp PlugIn(ExComp ex, ref TermType.EvalData pEvalData)
         {
             AlgebraTerm subbedIn = _reducedInner.ToAlgTerm().Substitute(_varFor, _valTo);
-            ExComp evaluated = TermType.SimplifyTermType.BasicSimplify(subbedIn, ref pEvalData);
+            ExComp evaluated = TermType.SimplifyTermType.BasicSimplify(subbedIn.Clone(), ref pEvalData);
 
             if (evaluated != null && !Number.IsUndef(evaluated) && !(evaluated is AlgebraTerm && (evaluated as AlgebraTerm).IsUndefined()))
             {
-                pEvalData.WorkMgr.FromFormatted("`" + _limStr + "{0}=" + _limStr + "{1}={2}`",
-                    "As `" + _varFor.ToDispString() + "=" + _valTo.ToDispString() + "`" + " is defined in this function just plug in the value to evaluate the limit.",
+                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + _limStr + "{0}=" + _limStr + "{1}={2}" + WorkMgr.EDM,
+                    "As " + WorkMgr.STM + _varFor.ToDispString() + "=" + _valTo.ToDispString() + WorkMgr.EDM + " is defined in this function just plug in the value to evaluate the limit.",
                     ex, subbedIn, evaluated);
                 return evaluated;
             }

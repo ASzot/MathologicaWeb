@@ -358,8 +358,8 @@ namespace MathSolverWebsite.MathSolverLibrary
                     else
                     {
                         pEvalData.WorkMgr.FromFormatted(workStr, "Above are the solutions of " + WorkMgr.STM + solveForComp.ToDispString() + WorkMgr.EDM +
-                        " for " + WorkMgr.STM + WorkMgr.ExFinalToAsciiStr(origLeft) + "=" +
-                        WorkMgr.ExFinalToAsciiStr(origRight) + WorkMgr.EDM + ".");
+                        " for " + WorkMgr.STM + WorkMgr.ToDisp(origLeft) + "=" +
+                        WorkMgr.ToDisp(origRight) + WorkMgr.EDM + ".");
                     }
                 }
                 else if (result != null)
@@ -370,8 +370,8 @@ namespace MathSolverWebsite.MathSolverLibrary
                     {
                         pEvalData.WorkMgr.FromSides(solveForComp, result,
                         "The above is the solution of " + WorkMgr.STM + solveForComp.ToDispString() + WorkMgr.EDM +
-                        " for " + WorkMgr.STM + WorkMgr.ExFinalToAsciiStr(origLeft) + "=" +
-                        WorkMgr.ExFinalToAsciiStr(origRight) + WorkMgr.EDM + ".");
+                        " for " + WorkMgr.STM + WorkMgr.ToDisp(origLeft) + "=" +
+                        WorkMgr.ToDisp(origRight) + WorkMgr.EDM + ".");
                     }
                 }
             }
@@ -454,25 +454,25 @@ namespace MathSolverWebsite.MathSolverLibrary
                     if (Restriction.IsGreaterThan(comparisonTypes[0]) && nSide0 < nSide2)
                     {
                         pEvalData.WorkMgr.FromFormatted(WorkMgr.STM +
-                            WorkMgr.ExFinalToAsciiStr(nSide0) + Restriction.ComparisonOpToStr(comparisonTypes[0]) + WorkMgr.ExFinalToAsciiStr(sides[1]) + WorkMgr.EDM, "Remove the redundant side.");
+                            WorkMgr.ToDisp(nSide0) + Restriction.ComparisonOpToStr(comparisonTypes[0]) + WorkMgr.ToDisp(sides[1]) + WorkMgr.EDM, "Remove the redundant side.");
                         return SolveRegInequality(nSide0.ToAlgTerm(), sides[1].ToAlgTerm(), comparisonTypes[0], solveFor, ref pEvalData);
                     }
                     else if (!Restriction.IsGreaterThan(comparisonTypes[1]) && nSide2 < nSide0)
                     {
                         pEvalData.WorkMgr.FromFormatted(WorkMgr.STM +
-                            WorkMgr.ExFinalToAsciiStr(sides[1]) + Restriction.ComparisonOpToStr(comparisonTypes[1]) + WorkMgr.ExFinalToAsciiStr(nSide2) + WorkMgr.EDM, "Remove the redundant side.");
+                            WorkMgr.ToDisp(sides[1]) + Restriction.ComparisonOpToStr(comparisonTypes[1]) + WorkMgr.ToDisp(nSide2) + WorkMgr.EDM, "Remove the redundant side.");
                         return SolveRegInequality(sides[1].ToAlgTerm(), nSide2.ToAlgTerm(), comparisonTypes[1], solveFor, ref pEvalData);
                     }
                     else if (!Restriction.IsGreaterThan(comparisonTypes[0]) && nSide0 > nSide2)
                     {
                         pEvalData.WorkMgr.FromFormatted(WorkMgr.STM +
-                            WorkMgr.ExFinalToAsciiStr(nSide0) + Restriction.ComparisonOpToStr(comparisonTypes[0]) + WorkMgr.ExFinalToAsciiStr(sides[1]) + WorkMgr.EDM, "Remove the redundant side.");
+                            WorkMgr.ToDisp(nSide0) + Restriction.ComparisonOpToStr(comparisonTypes[0]) + WorkMgr.ToDisp(sides[1]) + WorkMgr.EDM, "Remove the redundant side.");
                         return SolveRegInequality(nSide0.ToAlgTerm(), sides[1].ToAlgTerm(), comparisonTypes[0], solveFor, ref pEvalData);
                     }
                     else if (Restriction.IsGreaterThan(comparisonTypes[1]) && nSide2 > nSide0)
                     {
                         pEvalData.WorkMgr.FromFormatted(WorkMgr.STM +
-                            WorkMgr.ExFinalToAsciiStr(sides[1]) + Restriction.ComparisonOpToStr(comparisonTypes[1]) + WorkMgr.ExFinalToAsciiStr(nSide2) + WorkMgr.EDM, "Remove the redundant side.");
+                            WorkMgr.ToDisp(sides[1]) + Restriction.ComparisonOpToStr(comparisonTypes[1]) + WorkMgr.ToDisp(nSide2) + WorkMgr.EDM, "Remove the redundant side.");
                         return SolveRegInequality(sides[1].ToAlgTerm(), nSide2.ToAlgTerm(), comparisonTypes[1], solveFor, ref pEvalData);
                     }
                 }
@@ -666,7 +666,7 @@ namespace MathSolverWebsite.MathSolverLibrary
                 // We have a quadratic function (or quadratic like function) which bounces off the x-axis.
                 pEvalData.WorkMgr.FromSides(left, right,
                     "The above equation has only one root, " +
-                    WorkMgr.STM + WorkMgr.ExFinalToAsciiStr(result.Solutions[0].Result) + WorkMgr.EDM + ", with a multiplicity of two.");
+                    WorkMgr.STM + WorkMgr.ToDisp(result.Solutions[0].Result) + WorkMgr.EDM + ", with a multiplicity of two.");
                 if (Restriction.IsGreaterThan(comparison) == !switchSign)
                 {
                     if (!Restriction.IsEqualTo(comparison))
@@ -708,7 +708,7 @@ namespace MathSolverWebsite.MathSolverLibrary
                     string rootsStr = "";
                     for (int i = 0; i < roots.Count; ++i)
                     {
-                        rootsStr += WorkMgr.STM + WorkMgr.ExFinalToAsciiStr(roots[i].Data2) + WorkMgr.EDM;
+                        rootsStr += WorkMgr.STM + WorkMgr.ToDisp(roots[i].Data2) + WorkMgr.EDM;
                         if (i != roots.Count - 1)
                             rootsStr += ", ";
                     }

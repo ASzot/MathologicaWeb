@@ -57,7 +57,7 @@ namespace MathSolverWebsite.MathSolverLibrary
             return "<span class='changeText'>" + inStr + "</span>";
         }
 
-        public static string ExFinalToAsciiStr(ExComp ex)
+        public static string ToDisp(ExComp ex)
         {
             if (ex is AlgebraTerm)
                 return (ex as AlgebraTerm).FinalToDispStr();
@@ -75,23 +75,23 @@ namespace MathSolverWebsite.MathSolverLibrary
             finalHtml += "<table>";
 
             finalHtml += "<tr>"; 
-            finalHtml += "<td><span class='changeText'>" + STM + WorkMgr.ExFinalToAsciiStr(root) + EDM + "</span></td>";
+            finalHtml += "<td><span class='changeText'>" + STM + WorkMgr.ToDisp(root) + EDM + "</span></td>";
             foreach (ExComp polyEx in poly)
-                finalHtml += "<td>" + STM + WorkMgr.ExFinalToAsciiStr(polyEx) + EDM + "</td>";
+                finalHtml += "<td>" + STM + WorkMgr.ToDisp(polyEx) + EDM + "</td>";
             finalHtml += "</tr>";
 
             finalHtml += "<tr>";
             finalHtml += "<td></td>";
             finalHtml += "<td></td>";
             foreach (ExComp resultEx in results)
-                finalHtml += "<td>" + STM + WorkMgr.ExFinalToAsciiStr(resultEx) + EDM + "</td>";
+                finalHtml += "<td>" + STM + WorkMgr.ToDisp(resultEx) + EDM + "</td>";
             finalHtml += "</tr>";
 
             finalHtml += "<tr>";
             finalHtml += "<td></td>";
             finalHtml += "<td></td>";
             foreach (ExComp mulEx in muls)
-                finalHtml += "<td>" + STM + WorkMgr.ExFinalToAsciiStr(mulEx) + EDM + "</td>";
+                finalHtml += "<td>" + STM + WorkMgr.ToDisp(mulEx) + EDM + "</td>";
             finalHtml += "</tr>";
 
             finalHtml += "</table>";
@@ -185,7 +185,7 @@ namespace MathSolverWebsite.MathSolverLibrary
             {
                 ExComp tmpleft = Equation.Operators.MulOp.StaticWeakCombine(left, numDen[1]);
                 ExComp tmpright = Equation.Operators.MulOp.StaticWeakCombine(right, numDen[1]);
-                _workSteps.Add(WorkStep.Formatted(WorkMgr.STM + "{0}" + _useComparison + "{1}" + WorkMgr.EDM, "Multiply both sides by " + WorkMgr.STM + WorkMgr.ExFinalToAsciiStr(numDen[1]) + WorkMgr.EDM + WorkLabel,
+                _workSteps.Add(WorkStep.Formatted(WorkMgr.STM + "{0}" + _useComparison + "{1}" + WorkMgr.EDM, "Multiply both sides by " + WorkMgr.STM + WorkMgr.ToDisp(numDen[1]) + WorkMgr.EDM + WorkLabel,
                     tmpleft, tmpright));
             }
             else
@@ -193,7 +193,7 @@ namespace MathSolverWebsite.MathSolverLibrary
                 //string divStr = CG_TXT_TG("{1}");
                 string divStr = "{1}";
                 _workSteps.Add(WorkStep.Formatted(WorkMgr.STM + "({0})/(" + divStr + ")" + _useComparison + "({2})/(" + divStr + ")" + WorkMgr.EDM, "Divide both sides by " + WorkMgr.STM +
-                    WorkMgr.ExFinalToAsciiStr(divBy) + WorkMgr.EDM + WorkLabel, left, divBy, right));
+                    WorkMgr.ToDisp(divBy) + WorkMgr.EDM + WorkLabel, left, divBy, right));
             }
         }
 
@@ -247,12 +247,12 @@ namespace MathSolverWebsite.MathSolverLibrary
             if (sides.Length + 1 != comparisons.Length)
                 return;
 
-            string finalFormatted = ExFinalToAsciiStr(sides[0]);
+            string finalFormatted = ToDisp(sides[0]);
 
             for (int i = 0; i < comparisons.Length; ++i)
             {
                 finalFormatted += Restriction.ComparisonOpToStr(comparisons[i]);
-                finalFormatted += ExFinalToAsciiStr(sides[i + 1]);
+                finalFormatted += ToDisp(sides[i + 1]);
             }
 
             _workSteps.Add(new WorkStep(finalFormatted + WorkLabel, desc));
@@ -312,10 +312,15 @@ namespace MathSolverWebsite.MathSolverLibrary
             _workSteps.RemoveAt(_workSteps.Count - 1);
         }
 
-        public void PopSteps(int count)
+        public void PopStepsCount(int count)
         {
             for (int i = 0; i < count; ++i)
                 PopStep();
+        }
+
+        public void PopSteps(int count)
+        {
+            PopStepsCount(WorkSteps.Count - count);
         }
     }
 

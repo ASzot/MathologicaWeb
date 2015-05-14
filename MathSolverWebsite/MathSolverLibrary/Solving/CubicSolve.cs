@@ -111,7 +111,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             if (factors == null)
             {
                 // Remove all the steps that were associated with factoring.
-                pEvalData.WorkMgr.PopSteps(pEvalData.WorkMgr.WorkSteps.Count - startCount);
+                pEvalData.WorkMgr.PopStepsCount(pEvalData.WorkMgr.WorkSteps.Count - startCount);
                 pEvalData.WorkMgr.FromSides(left, right, "This cubic doesn't factor.");
                 return null;
             }

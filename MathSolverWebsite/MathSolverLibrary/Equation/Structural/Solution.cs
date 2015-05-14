@@ -433,7 +433,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
                     if (!TermType.EqualityCheckTermType.EvalComparison(leftEx, rightEx, comparison))
                     {
-                        string varSolStr = Solutions[i].SolveFor.ToAsciiString() + "=" + WorkMgr.ExFinalToAsciiStr(Solutions[i].Result);
+                        string varSolStr = Solutions[i].SolveFor.ToAsciiString() + "=" + WorkMgr.ToDisp(Solutions[i].Result);
 
                         pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "{0}\\ne{1}" + WorkMgr.EDM, "Plugging " + WorkMgr.STM + varSolStr + WorkMgr.EDM +
                             " back into the original equation gives the above. The equation doesn't hold true under this solution therefore " + WorkMgr.STM +
@@ -646,7 +646,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public override string ToMathAsciiStr()
         {
-            return VarComp.ToAsciiString() + "\\ne" + WorkMgr.ExFinalToAsciiStr(NotVal);
+            return VarComp.ToAsciiString() + "\\ne" + WorkMgr.ToDisp(NotVal);
         }
 
         public override string ToString()

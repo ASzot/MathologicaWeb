@@ -311,7 +311,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
             string baseStr = "";
             if (!(new Number(10.0)).IsEqualTo(_baseEx))
-                baseStr = "_(" + WorkMgr.ExFinalToAsciiStr(_baseEx) + ")";
+                baseStr = "_(" + WorkMgr.ToDisp(_baseEx) + ")";
             string finalStr = @"\log" + baseStr + "(" + InnerTerm.FinalToAsciiString() + ")";
 
             return finalStr;

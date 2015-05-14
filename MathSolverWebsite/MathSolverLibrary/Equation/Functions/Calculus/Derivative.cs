@@ -253,7 +253,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                                 dispStr += "(";
                             }
 
-                            dispStr += WorkMgr.ExFinalToAsciiStr(modified[i]);
+                            dispStr += WorkMgr.ToDisp(modified[i]);
 
                             if (chainRules[i] != null)
                             {
@@ -270,11 +270,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                             chainRuled[i] = chainRules[i] == null ? null : chainRules[i].Evaluate(harshEval, ref pEvalData);
                             if (chainRuled[i] != null)
                             {
-                                dispStr += WorkMgr.ExFinalToAsciiStr(chainRuled[i]);
+                                dispStr += WorkMgr.ToDisp(chainRuled[i]);
                                 dispStr += "(";
                             }
 
-                            dispStr += WorkMgr.ExFinalToAsciiStr(modified[i]);
+                            dispStr += WorkMgr.ToDisp(modified[i]);
 
                             if (chainRuled[i] != null)
                                 dispStr += ")";
@@ -1011,7 +1011,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                             indvDerivs += "+";
                     }
 
-                    pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[" + WorkMgr.ExFinalToAsciiStr(ex) + "]=" + indvDerivs + "`",
+                    pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[" + WorkMgr.ToDisp(ex) + "]=" + indvDerivs + "`",
                         "Split the derivative up using the property of derivatives that `d/(dx)[f(x)+g(x)]=f'(x)+g'(x)`");
                 }
 

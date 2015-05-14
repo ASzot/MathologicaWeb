@@ -58,7 +58,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
                         if (aderiv == null)
                         {
-                            pEvalData.WorkMgr.PopSteps(pEvalData.WorkMgr.WorkSteps.Count - prevStepCount);
+                            pEvalData.WorkMgr.PopStepsCount(pEvalData.WorkMgr.WorkSteps.Count - prevStepCount);
                             return null;
                         }
                         adGps[i] = aderiv;
@@ -89,8 +89,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             {
                 if (constToStr != "1")
                 {
-                    pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + constOutStr + "=" + WorkMgr.ExFinalToAsciiStr(constTo.ToAlgTerm()) +
-                        WorkMgr.ExFinalToAsciiStr(antiDeriv) + WorkMgr.EDM, "Multiply the constants back in.");
+                    pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + constOutStr + "=" + WorkMgr.ToDisp(constTo.ToAlgTerm()) +
+                        WorkMgr.ToDisp(antiDeriv) + WorkMgr.EDM, "Multiply the constants back in.");
                 }
                 return MulOp.StaticCombine(antiDeriv, constTo.ToAlgTerm());
             }
@@ -226,7 +226,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                         return atmpt;
                     }
                     else
-                        pEvalData.WorkMgr.PopSteps(pEvalData.WorkMgr.WorkSteps.Count - prevWorkStepCount);
+                        pEvalData.WorkMgr.PopStepsCount(pEvalData.WorkMgr.WorkSteps.Count - prevWorkStepCount);
                 }
             }
             
@@ -303,7 +303,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     cp = tf0Pow;
                 }
 
-                string dispStr = WorkMgr.ExFinalToAsciiStr(ex0) + WorkMgr.ExFinalToAsciiStr(ex1);
+                string dispStr = WorkMgr.ToDisp(ex0) + WorkMgr.ToDisp(ex1);
 
                 simplified = SinCosTrig(sf, cf, sp, cp, dispStr, ref pEvalData);
             }
@@ -391,7 +391,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
                 subbedCos = MulOp.StaticCombine(cf, MulOp.StaticCombine(PowOp.StaticCombine(sf, new Number(sp)), subbedCos));
 
-                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + dispStr + "=" + WorkMgr.ExFinalToAsciiStr(subbedCos) + WorkMgr.EDM,
+                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + dispStr + "=" + WorkMgr.ToDisp(subbedCos) + WorkMgr.EDM,
                     "Use the identity " + WorkMgr.STM + "cos^{2}(x)=1-sin^{2}(x)" + WorkMgr.EDM);
 
                 return subbedCos;
@@ -408,7 +408,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
                 subbedCos = MulOp.StaticCombine(sf, MulOp.StaticCombine(PowOp.StaticCombine(cf, new Number(cp)), subbedCos));
 
-                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + dispStr + "=" + WorkMgr.ExFinalToAsciiStr(subbedCos) + WorkMgr.EDM,
+                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + dispStr + "=" + WorkMgr.ToDisp(subbedCos) + WorkMgr.EDM,
                     "Use the identity " + WorkMgr.STM + "sin^{2}(x)=1-cos^{2}(x)" + WorkMgr.EDM);
 
                 return subbedCos;
@@ -428,7 +428,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     PowOp.StaticCombine(sinSub, new Number(sp / 2)),
                     PowOp.StaticCombine(cosSub, new Number(cp / 2)));
 
-                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + dispStr + "=" + WorkMgr.ExFinalToAsciiStr(finalEx) + WorkMgr.EDM,
+                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + dispStr + "=" + WorkMgr.ToDisp(finalEx) + WorkMgr.EDM,
                     "Use the identities " + WorkMgr.STM + "sin^2(x)=\\frac{1}{2}(1-cos(2x))" + WorkMgr.EDM + " and " + WorkMgr.STM +
                     "cos^2(x)=\\frac{1}{2}(1+cos(2x))" + WorkMgr.EDM);
 
@@ -566,7 +566,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 if (attempt != null)
                     return attempt;
                 else
-                    pEvalData.WorkMgr.PopSteps(pEvalData.WorkMgr.WorkSteps.Count - prevWorkStepCount);
+                    pEvalData.WorkMgr.PopStepsCount(pEvalData.WorkMgr.WorkSteps.Count - prevWorkStepCount);
             }
 
             return null;
@@ -579,7 +579,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (attempt != null)
                 return attempt;
             else
-                pEvalData.WorkMgr.PopSteps(pEvalData.WorkMgr.WorkSteps.Count - prevWorkStepCount);
+                pEvalData.WorkMgr.PopStepsCount(pEvalData.WorkMgr.WorkSteps.Count - prevWorkStepCount);
 
             return null;
         }
@@ -854,7 +854,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             if (v is Integral)
             {
-                pEvalData.WorkMgr.PopSteps(pEvalData.WorkMgr.WorkSteps.Count - stepCount);
+                pEvalData.WorkMgr.PopStepsCount(pEvalData.WorkMgr.WorkSteps.Count - stepCount);
                 // Try to switch the variables.
                 ExComp tmp = u;
                 u = dv;
@@ -1006,8 +1006,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     if (powChange is AlgebraTerm)
                         powChange = (powChange as AlgebraTerm).CompoundFractions();
 
-                    string changedPowStr = WorkMgr.ExFinalToAsciiStr(AddOp.StaticWeakCombine(pf.Power, Number.One));
-                    pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\int(" + WorkMgr.ExFinalToAsciiStr(single) + ")\\d" + dVar.ToDispString() +
+                    string changedPowStr = WorkMgr.ToDisp(AddOp.StaticWeakCombine(pf.Power, Number.One));
+                    pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\int(" + WorkMgr.ToDisp(single) + ")\\d" + dVar.ToDispString() +
                         "=\\frac{" + dVar.ToDispString() + "^{" + changedPowStr + "}}{" + changedPowStr + "}" + WorkMgr.EDM,
                         "Use the power rule of antiderivatives.");
 
@@ -1026,7 +1026,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     if (ad != null)
                     {
                         pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\int(" + pf.FinalToDispStr() + ")\\d" + dVar.ToDispString() + "=" +
-                            WorkMgr.ExFinalToAsciiStr(ad) + WorkMgr.EDM, "Use the common antiderivative.");
+                            WorkMgr.ToDisp(ad) + WorkMgr.EDM, "Use the common antiderivative.");
 
                         return ad;
                     }

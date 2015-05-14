@@ -1112,12 +1112,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
             if (powerAsciiStr == "0.5")
             {
-                string finalBaseAsciiStr = WorkMgr.ExFinalToAsciiStr(Base);
+                string finalBaseAsciiStr = WorkMgr.ToDisp(Base);
                 return @"sqrt(" + finalBaseAsciiStr + ")";
             }
             else if (_power is AlgebraTerm)
             {
-                string finalBaseAsciiStr = WorkMgr.ExFinalToAsciiStr(Base);
+                string finalBaseAsciiStr = WorkMgr.ToDisp(Base);
                 AlgebraTerm powTerm = _power as AlgebraTerm;
 
                 AlgebraTerm[] numDen = powTerm.GetNumDenFrac();

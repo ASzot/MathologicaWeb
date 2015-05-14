@@ -29,9 +29,9 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
                 if (pEvalData.WorkMgr.AllowWork && _func.InputArgCount > 0)
                 {
-                    string funcStr = WorkMgr.ExFinalToAsciiStr(_func);
-                    string callArgStr = WorkMgr.ExFinalToAsciiStr(_func.InputArgs[0]);
-                    pEvalData.WorkMgr.FromSides(_func, _assignTo, "To find the inverse switch `" + WorkMgr.ExFinalToAsciiStr(_func) + "` with `" + callArgStr +
+                    string funcStr = WorkMgr.ToDisp(_func);
+                    string callArgStr = WorkMgr.ToDisp(_func.InputArgs[0]);
+                    pEvalData.WorkMgr.FromSides(_func, _assignTo, "To find the inverse switch `" + WorkMgr.ToDisp(_func) + "` with `" + callArgStr +
                         "` and solve for `" + funcStr + "`");
                 }
 
@@ -41,7 +41,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 AlgebraTerm right = _assignTo.Clone().ToAlgTerm().Substitute(_func.InputArgs[0], inverseFunc);
 
                 if (pEvalData.WorkMgr.AllowWork)
-                    pEvalData.WorkMgr.FromSides(left, right, "`" + WorkMgr.ExFinalToAsciiStr(inverseFunc) + "` is the inverse function, solve for it.");
+                    pEvalData.WorkMgr.FromSides(left, right, "`" + WorkMgr.ToDisp(inverseFunc) + "` is the inverse function, solve for it.");
 
                 return _agSolver.SolveEquationEquality(inverseFunc.Var, left, right, ref pEvalData);
             }

@@ -149,7 +149,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             }
             else
             {
-                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "({0})^({2})=({1})^({2})" + WorkMgr.EDM, "Raise both sides to the " + WorkMgr.STM + WorkMgr.ExFinalToAsciiStr(reciprocalPow) + WorkMgr.EDM + " power.", left, right, reciprocalPow);
+                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "({0})^({2})=({1})^({2})" + WorkMgr.EDM, "Raise both sides to the " + WorkMgr.STM + WorkMgr.ToDisp(reciprocalPow) + WorkMgr.EDM + " power.", left, right, reciprocalPow);
 
                 // The powers should cancel.
                 left = PowOp.StaticCombine(left, reciprocalPow).ToAlgTerm();

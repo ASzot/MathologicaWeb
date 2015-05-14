@@ -131,10 +131,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
                 descStr += "Where ";
                 string funcParamsStr = z == null ? "(x,y)" : "(x,y,z)";
                 ExVector innerVec = innerEx as ExVector;
-                descStr += WorkMgr.STM + "P" + formulaStr + " = " + WorkMgr.ExFinalToAsciiStr(innerVec.X) + ",Q" + formulaStr + "=" +
-                    WorkMgr.ExFinalToAsciiStr(innerVec.Y);
+                descStr += WorkMgr.STM + "P" + formulaStr + " = " + WorkMgr.ToDisp(innerVec.X) + ",Q" + formulaStr + "=" +
+                    WorkMgr.ToDisp(innerVec.Y);
                 if (z != null)
-                    descStr += "," + "R" + funcParamsStr + "=" + WorkMgr.ExFinalToAsciiStr(innerVec.Z);
+                    descStr += "," + "R" + funcParamsStr + "=" + WorkMgr.ToDisp(innerVec.Z);
                 descStr += WorkMgr.EDM;
             }
 

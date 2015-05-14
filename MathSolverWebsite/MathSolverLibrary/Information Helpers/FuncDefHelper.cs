@@ -176,7 +176,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
             func.FuncDefIndex = _defineIndex++;
 
             pEvalData.AddMsg(WorkMgr.STM + func.ToDispString() + WorkMgr.EDM + " defined as " + 
-                WorkMgr.STM + WorkMgr.ExFinalToAsciiStr(funcDef) + WorkMgr.EDM);
+                WorkMgr.STM + WorkMgr.ToDisp(funcDef) + WorkMgr.EDM);
 
             _defs.Add(func, funcDef);
         }

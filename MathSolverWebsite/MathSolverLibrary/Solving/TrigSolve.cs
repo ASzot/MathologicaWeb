@@ -176,7 +176,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             ExComp otherAngle;
 
             pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\text{arc" + appliedTrigFunc.FuncName + "}(" + appliedTrigFunc.FinalToDispStr() + ")=\\text{arc" + appliedTrigFunc.FuncName + "}(" +
-                WorkMgr.ExFinalToAsciiStr(inverseOf) + ")" + WorkMgr.EDM, "Take the inverse " + WorkMgr.STM +
+                WorkMgr.ToDisp(inverseOf) + ")" + WorkMgr.EDM, "Take the inverse " + WorkMgr.STM +
                 appliedTrigFunc.FuncName + WorkMgr.EDM + " of both sides.");
 
             if (appliedTrigFunc is SinFunction)
@@ -328,7 +328,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 if (success && pEvalData.WorkMgr.AllowWork)
                 {
                     pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + subbedTerm.FinalToDispStr() + WorkMgr.EDM,
-                        "Make the substitution " + WorkMgr.STM + subOut.FinalToDispStr() + "=" + WorkMgr.ExFinalToAsciiStr(subIn) + WorkMgr.EDM +
+                        "Make the substitution " + WorkMgr.STM + subOut.FinalToDispStr() + "=" + WorkMgr.ToDisp(subIn) + WorkMgr.EDM +
                         " that comes from the Pythagorean trig identities.");
                 }
 

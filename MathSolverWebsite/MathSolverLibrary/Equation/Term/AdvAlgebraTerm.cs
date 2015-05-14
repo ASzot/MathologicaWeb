@@ -761,7 +761,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
                 AlgebraTerm den = numDen[1].Clone().ToAlgTerm();
 
                 pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "{0}" + WorkMgr.EDM, "The denominator of this term can never be zero so solve for when " + WorkMgr.STM +
-                    WorkMgr.ExFinalToAsciiStr(numDen[1]) + "=0" + WorkMgr.EDM, term);
+                    WorkMgr.ToDisp(numDen[1]) + "=0" + WorkMgr.EDM, term);
 
                 ExComp sol = agSolver.SolveEq(varFor, den, Number.Zero.ToAlgTerm(), ref pEvalData);
                 if (sol == null)

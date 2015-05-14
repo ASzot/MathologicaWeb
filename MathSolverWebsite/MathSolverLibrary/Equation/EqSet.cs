@@ -225,7 +225,7 @@ namespace MathSolverWebsite.MathSolverLibrary
                     finalStr += Restriction.ComparisonOpToStr(_comparisonOps[i - 1]);
                 }
 
-                finalStr += WorkMgr.ExFinalToAsciiStr(_sides[i]);
+                finalStr += WorkMgr.ToDisp(_sides[i]);
             }
 
             return finalStr;

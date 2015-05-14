@@ -17,7 +17,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
         {
             AlgebraComp subIn = p_agSolver.NextSubVar();
 
-            pEvalData.WorkMgr.FromSides(left, right, "Make the substitution " + WorkMgr.STM + WorkMgr.ExFinalToAsciiStr(_subOut) + "=" + WorkMgr.ExFinalToAsciiStr(subIn) + WorkMgr.EDM);
+            pEvalData.WorkMgr.FromSides(left, right, "Make the substitution " + WorkMgr.STM + WorkMgr.ToDisp(_subOut) + "=" + WorkMgr.ToDisp(subIn) + WorkMgr.EDM);
 
             left = left.Substitute(_subOut, subIn);
             right = right.Substitute(_subOut, subIn);

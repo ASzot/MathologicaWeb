@@ -83,7 +83,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
                 pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\frac{\\partial " + vectorFuncIden + "}{\\partial " + withRespect1Str + "}" + WorkMgr.EDM, "Calculate.");
                 ExComp surfacePartial1 = Derivative.TakeDeriv(definition, withRespect1, ref pEvalData, true);
 
-                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + WorkMgr.ExFinalToAsciiStr(surfacePartial0) + CrossProductOp.IDEN + WorkMgr.ExFinalToAsciiStr(surfacePartial1) + WorkMgr.EDM, "Calculate the cross product");
+                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + WorkMgr.ToDisp(surfacePartial0) + CrossProductOp.IDEN + WorkMgr.ToDisp(surfacePartial1) + WorkMgr.EDM, "Calculate the cross product");
                 ExComp crossed = CrossProductOp.StaticCombine(surfacePartial0, surfacePartial1);
                 pEvalData.WorkMgr.FromSides(crossed, null, "The calculated cross product.");
 
@@ -96,11 +96,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
                 ExVector crossedVec = crossed as ExVector;
                 ExComp crossedVecLength = crossedVec.GetVecLength();
 
-                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "|" + crossedVec.FinalToDispStr() + "|=" + WorkMgr.ExFinalToAsciiStr(crossedVecLength) + WorkMgr.EDM,
+                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "|" + crossedVec.FinalToDispStr() + "|=" + WorkMgr.ToDisp(crossedVecLength) + WorkMgr.EDM,
                     "Calculate the length of the vector.");
 
                 string surfaceDiffIdenStr = "d" + _withRespect0.ToDispString();
-                string surfaceDiffStr = WorkMgr.ExFinalToAsciiStr(crossedVecLength);
+                string surfaceDiffStr = WorkMgr.ToDisp(crossedVecLength);
                 pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + surfaceDiffIdenStr + "=" + surfaceDiffStr + WorkMgr.EDM, "The calculated surface differential");
 
                 // Sub the parameterization of the surface into the function.

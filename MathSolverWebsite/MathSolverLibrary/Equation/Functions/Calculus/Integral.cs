@@ -231,8 +231,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
                 ExComp added = AddOp.StaticCombine(upperSideEval, lowerSideEval);
 
-                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + WorkMgr.ExFinalToAsciiStr(upperSideEval) + "+" + WorkMgr.ExFinalToAsciiStr(lowerSideEval) +
-                    "=" + WorkMgr.ExFinalToAsciiStr(added) + WorkMgr.EDM, "Combine the integral back together.");
+                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + WorkMgr.ToDisp(upperSideEval) + "+" + WorkMgr.ToDisp(lowerSideEval) +
+                    "=" + WorkMgr.ToDisp(added) + WorkMgr.EDM, "Combine the integral back together.");
 
                 return added;
             }
@@ -272,7 +272,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             ExComp lowerEx = Simplifier.Simplify(new AlgebraTerm(lowerEval), ref pEvalData);
 
             pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + integralStr + "=F(" +
-                WorkMgr.ExFinalToAsciiStr(UpperLimit) + ")-F(" + WorkMgr.ExFinalToAsciiStr(LowerLimit) + ")" + WorkMgr.EDM,
+                WorkMgr.ToDisp(UpperLimit) + ")-F(" + WorkMgr.ToDisp(LowerLimit) + ")" + WorkMgr.EDM,
                 "Evaluate the definite integral where F is the antiderivative.");
 
             string resultStr0 = SubOp.StaticWeakCombine(upperEx, lowerEx).ToAlgTerm().FinalToDispStr();
@@ -297,18 +297,18 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (subVar != null)
             {
                 pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + integralStr + "=\\lim_{" + subVar.ToDispString() +
-                    " \\to \\infty} \\int_{" + subVar.ToDispString() + "}^{" + WorkMgr.ExFinalToAsciiStr(result) + "} + " +
+                    " \\to \\infty} \\int_{" + subVar.ToDispString() + "}^{" + WorkMgr.ToDisp(result) + "} + " +
                     InnerTerm.FinalToDispStr() + "d" + _dVar.ToDispString() + WorkMgr.EDM);
 
                 pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\lim_{" + subVar.ToDispString() + " \\to \\infty}" +
-                    WorkMgr.ExFinalToAsciiStr(result) + WorkMgr.EDM, "Take the limit to infinity.");
+                    WorkMgr.ToDisp(result) + WorkMgr.EDM, "Take the limit to infinity.");
 
                 result = Limit.TakeLim(result, subVar, limVal, ref pEvalData);
             }
 
             pEvalData.AddInputType(TermType.InputAddType.IntDef);
 
-            string resultStr1 = WorkMgr.ExFinalToAsciiStr(result);
+            string resultStr1 = WorkMgr.ToDisp(result);
             if (resultStr0 != resultStr1)
                 pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + integralStr + "=" + resultStr1 + WorkMgr.EDM);
 
@@ -353,7 +353,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
                 if (aderiv == null)
                 {
-                    pEvalData.WorkMgr.PopSteps(pEvalData.WorkMgr.WorkSteps.Count - prevStepCount);
+                    pEvalData.WorkMgr.PopStepsCount(pEvalData.WorkMgr.WorkSteps.Count - prevStepCount);
                     _failure = true;
                     return this;
                 }

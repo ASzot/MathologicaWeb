@@ -38,7 +38,7 @@ namespace MathSolverWebsite
             public FuncDispConv(KeyValuePair<FunctionDefinition, ExComp> def)
             {
                 FuncName = def.Key.ToDispString();
-                FuncDef = WorkMgr.ExFinalToAsciiStr(def.Value);
+                FuncDef = WorkMgr.ToDisp(def.Value);
             }
 
             public FuncDispConv(string funcName, string funcDef)

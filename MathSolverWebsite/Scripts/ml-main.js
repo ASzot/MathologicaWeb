@@ -119,7 +119,7 @@ var calc = new TopicMenu(
                 new MenuItem("Indefinite integral", "\\int\\int\\int", "\\int\\int\\int", true),
             ]),
         new MenuItem("Definite integral", "\\int_{a}^{b}", "\\int_{}^{}", true),
-        new MenuItem("Limit", "\\lim_(x\\toh)", "\\lim_{x\\to} ", true),
+        new MenuItem("Limit", "\\lim_(x\\toh)", "\\lim_{x \\to }", true),
         new MenuItem("Summation", "\\sum_(i=0)^N", "\\sum_{i=}^{}", true),
         new MenuItem("Natural log (log base e)", "ln", "\\ln", false),
         new MenuItem("Sine", "sin", "\\sin", false),

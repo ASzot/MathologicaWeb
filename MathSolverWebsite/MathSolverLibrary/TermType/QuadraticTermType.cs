@@ -70,7 +70,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 subVal = MulOp.StaticCombine(subVal, new Number(4.0));
                 ExComp discriminant = SubOp.StaticCombine(PowOp.StaticCombine(_b, new Number(2.0)), subVal);
 
-                pEvalData.WorkMgr.FromFormatted("`" + WorkMgr.ExFinalToAsciiStr(discriminant) + "`", "Simplify getting the final discriminant.");
+                pEvalData.WorkMgr.FromFormatted("`" + WorkMgr.ToDisp(discriminant) + "`", "Simplify getting the final discriminant.");
 
                 return SolveResult.Simplified(discriminant);
             }
