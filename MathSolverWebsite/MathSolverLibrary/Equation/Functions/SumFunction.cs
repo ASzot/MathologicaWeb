@@ -102,10 +102,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             }
 
             // Geometric series test.
-            if (varGp.Length == 2)
+            if (varGp.Length == 2 || varGp.Length == 1)
             {
                 ExComp ele0 = varGp[0];
-                ExComp ele1 = varGp[1];
+                ExComp ele1 = varGp.Length > 1 ? varGp[1] : Number.One; 
 
                 // Needs to be in the form a_n=a*r^n
                 ExComp a = null;
