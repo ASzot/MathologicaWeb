@@ -2793,7 +2793,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                 lower = lowerTerm.RemoveRedundancies();
 
 
-                if (lt[currentIndex + 1].Data1 != LexemeType.Operator || lt[currentIndex + 1].Data2 != "^")
+                if (currentIndex + 1 < lt.Count && lt[currentIndex + 1].Data1 != LexemeType.Operator || lt[currentIndex + 1].Data2 != "^")
                 {
                     // Don't necessarily return null as the user could be declaring a surface or line integral.
                     if (!(lower is AlgebraComp))
@@ -2816,6 +2816,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                     upper = upperTerm.RemoveRedundancies();
                 }
             }
+
+            if (currentIndex + 1 < lt.Count && lt[currentIndex + 1].Data1 == LexemeType.Operator && lt[currentIndex + 1].Data2 == "*")
+                currentIndex++;
 
 
             int startIndex = currentIndex + 1;
