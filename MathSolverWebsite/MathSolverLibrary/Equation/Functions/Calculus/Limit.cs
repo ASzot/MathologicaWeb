@@ -160,9 +160,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (ex is PowerFunction)
             {
                 PowerFunction pf = ex as PowerFunction;
-                if (pf.Base is Number && !(pf.Base as Number).HasImaginaryComp())
+                ExComp baseVal = pf.Base is Constant ? (pf.Base as Constant).Value : pf.Base;
+                if (baseVal is Number && !(baseVal as Number).HasImaginaryComp())
                 {
-                    Number baseNum = pf.Base as Number;
+                    Number baseNum = baseVal as Number;
                     if (Number.One.IsEqualTo(baseNum))
                         return Number.One;
                     bool ltOne = baseNum < 1.0;
