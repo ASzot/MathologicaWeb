@@ -68,6 +68,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 _reducedInner = TermType.SimplifyTermType.BasicSimplify(InnerTerm, ref pEvalData);
 
             AlgebraTerm reduced = _reducedInner.ToAlgTerm();
+            if (!reduced.Contains(_varFor))
+                return InnerTerm;
+
             ExComp attempt;
             if (Number.NegInfinity.IsEqualTo(_valTo) || Number.PosInfinity.IsEqualTo(_valTo))
             {
@@ -472,6 +475,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 pEvalData.WorkMgr.FromFormatted("`" + this.FinalToDispStr() + "`", explainStr);
 
                 return infRet;
+            }
+            else if (Number.PosInfinity.IsEqualTo(_valTo))
+            {
+                List<ExComp> varPowers = term.GetPowersOfVar(_varFor);
+                if (varPowers.Count == 1 && varPowers[0] is Number)
+                {
+                    return (varPowers[0] as Number) > 0.0 ? Number.PosInfinity : Number.Zero;
+                }
             }
 
             return null;

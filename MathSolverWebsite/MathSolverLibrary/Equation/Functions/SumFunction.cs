@@ -38,24 +38,33 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             return new SumFunction(InnerEx.Clone(), (AlgebraComp)IterVar.Clone(), IterStart.Clone(), IterCount.Clone());
         }
 
-        public bool? Converges(ref TermType.EvalData pEvalData, out ExComp result)
+        private bool? Converges(ref TermType.EvalData pEvalData, out ExComp result, ExComp[] gp)
         {
             result = null;
-            if (!IsInfiniteSeries)
-                return true;
-
-            if (!InnerTerm.Contains(IterVar))
+            if (!gp.GroupContains(IterVar))
             {
-                pEvalData.WorkMgr.FromSides(this, null, "The above diverges");
                 return false;
             }
 
-            ExComp innerEx = InnerEx;
-            string thisStr = WorkMgr.STM + this.FinalToDispStr() + WorkMgr.EDM;
+            // Take out the constants.
+            ExComp[] varGp;
+            ExComp[] constGp;
+            gp.GetConstVarTo(out varGp, out constGp, IterVar);
+
+            if (constGp.Length != 0)
+            {
+                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + constGp.ToAlgTerm().FinalToDispStr() + "*" + varGp.ToAlgTerm().FinalToDispStr() + WorkMgr.EDM,
+                    "Take constants out.");
+            }
+
+
+            ExComp innerEx = varGp.ToAlgTerm().RemoveRedundancies();
+            string thisStr = WorkMgr.STM + "\\sum_{" + IterVar.ToDispString() + "=" + IterStart.ToAlgTerm().FinalToDispStr() + "}^{" + 
+                IterCount.ToAlgTerm().ToDispString() + "}" + innerEx.ToAlgTerm().FinalToDispStr() + WorkMgr.EDM;
 
             // The basic divergence test.
-            pEvalData.WorkMgr.FromSides(this, null, "If " + WorkMgr.STM + 
-                "\\lim_{" + IterVar.ToDispString() + " \\to \\infty}" + InnerTerm.FinalToDispStr() + "\\ne 0 " + WorkMgr.EDM + " then the series is divergent");
+            pEvalData.WorkMgr.FromSides(this, null, "If " + WorkMgr.STM +
+                "\\lim_{" + IterVar.ToDispString() + " \\to \\infty}" + gp.ToAlgTerm().FinalToDispStr() + "\\ne 0 " + WorkMgr.EDM + " then the series is divergent");
 
             ExComp divTest = Limit.TakeLim(innerEx, IterVar, Number.PosInfinity, ref pEvalData);
             if (divTest is Limit)
@@ -69,7 +78,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             }
 
             // The p-series test.
-            AlgebraTerm[] frac = InnerTerm.GetNumDenFrac();
+            AlgebraTerm[] frac = innerEx.ToAlgTerm().GetNumDenFrac();
             if (frac != null && frac[0].RemoveRedundancies().IsEqualTo(Number.One))
             {
                 ExComp den = frac[1].RemoveRedundancies();
@@ -92,13 +101,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                 }
             }
 
-            List<ExComp[]> gps = InnerTerm.GetGroupsNoOps();
-
             // Geometric series test.
-            if (gps.Count == 1 && gps[0].Length == 2)
+            if (varGp.Length == 2)
             {
-                ExComp ele0 = gps[0][0];
-                ExComp ele1 = gps[0][1];
+                ExComp ele0 = varGp[0];
+                ExComp ele1 = varGp[1];
 
                 // Needs to be in the form a_n=a*r^n
                 ExComp a = null;
@@ -114,7 +121,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                     a = ele0;
                 }
 
-                if (a != null && pf != null && !a.ToAlgTerm().Contains(IterVar) && pf.Base is Number && !(pf.Base as Number).HasImaginaryComp() && 
+                if (a != null && pf != null && !a.ToAlgTerm().Contains(IterVar) && pf.Base is Number && !(pf.Base as Number).HasImaginaryComp() &&
                     IterStart is Number && (IterStart as Number) >= 1.0)
                 {
                     Number nBase = pf.Base as Number;
@@ -123,18 +130,28 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                     List<ExComp> powers = pfPow.GetPowersOfVar(IterVar);
                     if (powers.Count == 1 && powers[0].IsEqualTo(Number.One))
                     {
-                        pEvalData.WorkMgr.FromFormatted(thisStr, "In the geometric series form " + WorkMgr.STM + "ar^{n-1}" + WorkMgr.EDM + " if " + 
+                        pEvalData.WorkMgr.FromFormatted(thisStr, "In the geometric series form " + WorkMgr.STM + "ar^{n-1}" + WorkMgr.EDM + " if " +
                             WorkMgr.STM + "|r| \\lt 1 " + WorkMgr.EDM + " than the series is convergent");
                         if (nBase >= 1.0)
                         {
-                            pEvalData.WorkMgr.FromFormatted(thisStr, WorkMgr.STM + "|r| \\ge 1" + WorkMgr.EDM + ", the series is divergent."); 
+                            pEvalData.WorkMgr.FromFormatted(thisStr, WorkMgr.STM + "|r| \\ge 1" + WorkMgr.EDM + ", the series is divergent.");
                             return false;
                         }
-                        if (pfPow.IsEqualTo(new AlgebraTerm(IterVar, new SubOp(), IterStart)))
+                        if (pfPow.IsEqualTo(SubOp.StaticCombine(IterVar, IterStart)))
                         {
-                            pEvalData.WorkMgr.FromSides(this, result, "Use the formula " + WorkMgr.STM + "\\sum_{n=1}^{\\infty}ar^{n-1}=\\frac{a}{1-r}" + 
-                                WorkMgr.EDM);
                             result = DivOp.StaticCombine(a, SubOp.StaticCombine(Number.One, nBase));
+
+                            string resultStr = result.ToAlgTerm().FinalToDispStr();
+                            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + thisStr + "=" + resultStr + WorkMgr.EDM, "Use the formula " + WorkMgr.STM + "\\sum_{n=1}^{\\infty}ar^{n-1}=\\frac{a}{1-r}" +
+                                WorkMgr.EDM);
+
+                            if (constGp.Length != 0)
+                            {
+                                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + constGp.ToAlgTerm().FinalToDispStr() + "*" + varGp.ToAlgTerm().FinalToDispStr() + "=" +
+                                    resultStr + WorkMgr.EDM,
+                                    "Multiply the by the constants.");
+                                result = MulOp.StaticCombine(result, constGp.ToAlgTerm());
+                            }
                         }
 
                         pEvalData.WorkMgr.FromFormatted(thisStr, WorkMgr.STM + "|r| \\lt 1 " + WorkMgr.EDM + ", the series is convergent.");
@@ -144,6 +161,40 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             }
 
             return null;
+        }
+
+        public bool? Converges(ref TermType.EvalData pEvalData, out ExComp result)
+        {
+            result = null;
+            if (!IsInfiniteSeries)
+                return true;
+
+            if (!InnerTerm.Contains(IterVar))
+            {
+                pEvalData.WorkMgr.FromSides(this, null, "The above diverges");
+                return false;
+            }
+
+            // Split into groups and take the summation of each group independently.
+            List<ExComp[]> gps = InnerTerm.GetGroupsNoOps();
+            ExComp overallResult = Number.Zero;
+            for (int i = 0; i < gps.Count; ++i)
+            {
+                ExComp gpResult;
+                bool? gpConverges = Converges(ref pEvalData, out gpResult, gps[0]);
+                if (gpConverges == null || !gpConverges.Value)
+                    return gpConverges;
+
+                if (gpResult != null && overallResult != null)
+                    overallResult = AddOp.StaticCombine(overallResult, gpResult);
+                if (gpResult == null)
+                    overallResult = null;
+            }
+
+            if (overallResult != null)
+                result = overallResult;
+
+            return true;
         }
 
         public override ExComp Evaluate(bool harshEval, ref TermType.EvalData pEvalData)

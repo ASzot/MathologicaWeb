@@ -49,7 +49,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public static SolveResult Failure(string msg, ref TermType.EvalData pEvalData)
         {
-            pEvalData.AddMsg(msg);
+            pEvalData.AddFailureMsg(msg);
             return Failure();
         }
 
