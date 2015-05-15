@@ -53,20 +53,23 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
             if (constGp.Length != 0)
             {
-                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + constGp.ToAlgTerm().FinalToDispStr() + "*" + varGp.ToAlgTerm().FinalToDispStr() + WorkMgr.EDM,
+                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + constGp.ToAlgTerm().FinalToDispStr() + "*\\sum_{" + IterVar.ToDispString() + "=" + 
+                    IterStart.ToAlgTerm().FinalToDispStr() + "}^{" + IterCount.ToAlgTerm().ToDispString() + "}" + varGp.ToAlgTerm().FinalToDispStr() + WorkMgr.EDM,
                     "Take constants out.");
             }
 
 
-            ExComp innerEx = varGp.ToAlgTerm().RemoveRedundancies();
-            string thisStr = WorkMgr.STM + "\\sum_{" + IterVar.ToDispString() + "=" + IterStart.ToAlgTerm().FinalToDispStr() + "}^{" + 
-                IterCount.ToAlgTerm().ToDispString() + "}" + innerEx.ToAlgTerm().FinalToDispStr() + WorkMgr.EDM;
+            AlgebraTerm innerTerm = varGp.ToAlgTerm();
+            string innerExStr = innerTerm.FinalToDispStr();
+            string thisStrNoMathMark = "\\sum_{" + IterVar.ToDispString() + "=" + IterStart.ToAlgTerm().FinalToDispStr() + "}^{" +
+                IterCount.ToAlgTerm().ToDispString() + "}" + innerExStr;
+            string thisStr = WorkMgr.STM + thisStrNoMathMark + WorkMgr.EDM;
 
             // The basic divergence test.
-            pEvalData.WorkMgr.FromSides(this, null, "If " + WorkMgr.STM +
+            pEvalData.WorkMgr.FromFormatted(thisStr, "If " + WorkMgr.STM +
                 "\\lim_{" + IterVar.ToDispString() + " \\to \\infty}" + gp.ToAlgTerm().FinalToDispStr() + "\\ne 0 " + WorkMgr.EDM + " then the series is divergent");
 
-            ExComp divTest = Limit.TakeLim(innerEx, IterVar, Number.PosInfinity, ref pEvalData);
+            ExComp divTest = Limit.TakeLim(innerTerm, IterVar, Number.PosInfinity, ref pEvalData);
             if (divTest is Limit)
                 return null;
             if (divTest is AlgebraTerm)
@@ -78,7 +81,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             }
 
             // The p-series test.
-            AlgebraTerm[] frac = innerEx.ToAlgTerm().GetNumDenFrac();
+            AlgebraTerm[] frac = innerTerm.GetNumDenFrac();
             if (frac != null && frac[0].RemoveRedundancies().IsEqualTo(Number.One))
             {
                 ExComp den = frac[1].RemoveRedundancies();
@@ -105,26 +108,53 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             if (varGp.Length == 2 || varGp.Length == 1)
             {
                 ExComp ele0 = varGp[0];
-                ExComp ele1 = varGp.Length > 1 ? varGp[1] : Number.One; 
+                ExComp ele1 = varGp.Length > 1 ? varGp[1] : Number.One;
+                bool ele0Den = false;
+                bool ele1Den = false;
+
+                if (ele0 is PowerFunction && (ele0 as PowerFunction).Power.IsEqualTo(Number.NegOne))
+                {
+                    ele0Den = true;
+                    ele0 = (ele0 as PowerFunction).Base;
+                }
+                if (ele1 is PowerFunction && (ele1 as PowerFunction).Power.IsEqualTo(Number.NegOne))
+                {
+                    ele1Den = true;
+                    ele1 = (ele1 as PowerFunction).Base;
+                }
 
                 // Needs to be in the form a_n=a*r^n
                 ExComp a = null;
                 PowerFunction pf = null;
+                bool pfDen = false;
                 if (ele0 is PowerFunction && (ele0 as PowerFunction).Power.ToAlgTerm().Contains(IterVar))
                 {
                     pf = ele0 as PowerFunction;
                     a = ele1;
+                    pfDen = ele0Den;
                 }
                 else if (ele1 is PowerFunction && (ele1 as PowerFunction).Power.ToAlgTerm().Contains(IterVar))
                 {
                     pf = ele1 as PowerFunction;
                     a = ele0;
+                    pfDen = ele1Den;
                 }
 
                 if (a != null && pf != null && !a.ToAlgTerm().Contains(IterVar) && pf.Base is Number && !(pf.Base as Number).HasImaginaryComp() &&
-                    IterStart is Number && (IterStart as Number) >= 1.0)
+                    IterStart is Number && (IterStart as Number) >= 0.0)
                 {
                     Number nBase = pf.Base as Number;
+                    ExComp exBase = nBase;
+                    if (pfDen)
+                        exBase = Number.One / nBase;
+
+                    if (!(exBase is Number))
+                        return null;
+
+                    nBase = exBase as Number;
+                    if (pfDen)
+                        exBase = DivOp.StaticCombine(Number.One, pf.Base as Number);
+
                     nBase = Number.Abs(nBase);
                     AlgebraTerm pfPow = pf.Power.ToAlgTerm();
                     List<ExComp> powers = pfPow.GetPowersOfVar(IterVar);
@@ -137,20 +167,26 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                             pEvalData.WorkMgr.FromFormatted(thisStr, WorkMgr.STM + "|r| \\ge 1" + WorkMgr.EDM + ", the series is divergent.");
                             return false;
                         }
-                        if (pfPow.IsEqualTo(SubOp.StaticCombine(IterVar, IterStart)))
+
+
+                        if (pfPow.RemoveRedundancies().IsEqualTo(SubOp.StaticCombine(IterVar, IterStart)))
                         {
-                            result = DivOp.StaticCombine(a, SubOp.StaticCombine(Number.One, nBase));
+                            ExComp tmpDen = SubOp.StaticCombine(Number.One, exBase);
+                            tmpDen = tmpDen.ToAlgTerm().CompoundFractions();
+
+                            result = DivOp.StaticCombine(a, tmpDen);
 
                             string resultStr = result.ToAlgTerm().FinalToDispStr();
-                            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + thisStr + "=" + resultStr + WorkMgr.EDM, "Use the formula " + WorkMgr.STM + "\\sum_{n=1}^{\\infty}ar^{n-1}=\\frac{a}{1-r}" +
+                            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + thisStrNoMathMark + "=" + resultStr + WorkMgr.EDM, "Use the formula " + WorkMgr.STM + "\\sum_{n=1}^{\\infty}ar^{n-1}=\\frac{a}{1-r}" +
                                 WorkMgr.EDM);
 
                             if (constGp.Length != 0)
                             {
-                                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + constGp.ToAlgTerm().FinalToDispStr() + "*" + varGp.ToAlgTerm().FinalToDispStr() + "=" +
-                                    resultStr + WorkMgr.EDM,
-                                    "Multiply the by the constants.");
                                 result = MulOp.StaticCombine(result, constGp.ToAlgTerm());
+                                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + constGp.ToAlgTerm().FinalToDispStr() + "*\\sum_{" + IterVar.ToDispString() + "=" + 
+                                    IterStart.ToAlgTerm().FinalToDispStr() + "}^{" + IterCount.ToAlgTerm().ToDispString() + "}" + varGp.ToAlgTerm().FinalToDispStr() + "=" +
+                                    WorkMgr.ToDisp(result) + WorkMgr.EDM,
+                                    "Multiply the by the constants.");
                             }
                         }
 

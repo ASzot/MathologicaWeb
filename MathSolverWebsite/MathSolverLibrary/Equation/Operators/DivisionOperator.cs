@@ -746,6 +746,25 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
             if (ex2 is AlgebraTerm)
                 ex2 = (ex2 as AlgebraTerm).RemoveZeros();
 
+            if (ex1 is AlgebraTerm)
+            {
+                AlgebraTerm[] ex1NumDen = (ex1 as AlgebraTerm).GetNumDenFrac();
+                if (ex1NumDen != null)
+                {
+                    ex1 = ex1NumDen[0];
+                    ex2 = MulOp.StaticCombine(ex2, ex1NumDen[1]);
+                }
+            }
+            if (ex2 is AlgebraTerm)
+            {
+                AlgebraTerm[] ex2NumDen = (ex2 as AlgebraTerm).GetNumDenFrac();
+                if (ex2NumDen != null)
+                {
+                    ex2 = ex2NumDen[0];
+                    ex1 = MulOp.StaticCombine(ex1, ex2NumDen[1]);
+                }
+            }
+
             AlgebraTerm agTerm = AlgebraTerm.FromFraction(ex1, ex2);
 
             return agTerm;

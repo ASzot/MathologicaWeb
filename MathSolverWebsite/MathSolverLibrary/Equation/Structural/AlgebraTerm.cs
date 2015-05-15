@@ -485,8 +485,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 			List<ExComp[]> numFracGroups = (from fracGp in fracGroups
                                  select fracGp.GetNumerator()).ToList();
 
-            DivOp divOp = new DivOp();
-
             ExComp[] lcfDen = GroupHelper.LCF(denFracGroups);
             AlgebraTerm lcfTerm = lcfDen.ToAlgTerm();
 
@@ -497,7 +495,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 ExComp[] denGroup = denFracGroups[i];
                 AlgebraTerm denGroupTerm = denGroup.ToAlgTerm();
 
-                ExComp mulTerm = divOp.Combine(lcfTerm.Clone(), denGroupTerm);
+                ExComp mulTerm = DivOp.StaticCombine(lcfTerm.Clone(), denGroupTerm);
                 numMulTerms.Add(mulTerm);
             }
 
@@ -533,7 +531,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             if (finalNum is AlgebraTerm)
                 finalNum = (finalNum as AlgebraTerm).CompoundFractions();
 
-            ExComp finalFrac = divOp.Combine(finalNum, lcfTerm);
+            ExComp finalFrac = DivOp.StaticCombine(finalNum, lcfTerm);
 
             AlgebraTerm finalTerm = new AlgebraTerm(finalFrac);
 
