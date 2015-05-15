@@ -172,8 +172,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
 
             if (removeKey != null)
                 _defs.Remove(removeKey);
-
             func.FuncDefIndex = _defineIndex++;
+
+            if (funcDef is ExVector)
+                func.IsVectorFunc = true;
 
             pEvalData.AddMsg(WorkMgr.STM + func.ToDispString() + WorkMgr.EDM + " defined as " + 
                 WorkMgr.STM + WorkMgr.ToDisp(funcDef) + WorkMgr.EDM);

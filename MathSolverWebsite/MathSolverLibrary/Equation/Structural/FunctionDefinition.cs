@@ -11,6 +11,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         private AlgebraComp _iden;
         private bool _funcNotation = true;
         private int _funcDefIndex = -1;
+        private bool _isVectorFunc = false;
 
         /// <summary>
         /// The supplied arguments to the function.
@@ -65,6 +66,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         public bool IsMultiValued
         {
             get { return _args.Length != 1; }
+        }
+
+        public bool IsVectorFunc
+        {
+            set { _isVectorFunc = value; }
         }
 
         /// <summary>
@@ -240,7 +246,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         {
             if (!_funcNotation || (_args == null || _args.Length == 0))
                 return _iden.ToAsciiString();
-            string funcStr = _iden.ToAsciiString() + "(";
+
+            string funcStr = "";
+            if (_isVectorFunc)
+                funcStr += "\\vec{";
+            funcStr += _iden.ToAsciiString();
+            if (_isVectorFunc)
+                funcStr += "}";
+            funcStr += "(";
+
             for (int i = 0; i < _args.Length; ++i)
             {
                 if (_callArgs != null && _callArgs.Length > i)
@@ -285,7 +299,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         {
             if (!_funcNotation || (_args == null || _args.Length == 0))
                 return _iden.ToTexString();
-            string funcStr = _iden.ToTexString() + "(";
+
+            string funcStr = "";
+            if (_isVectorFunc)
+                funcStr += "\\vec{";
+            funcStr += _iden.ToAsciiString();
+            if (_isVectorFunc)
+                funcStr += "}";
+            funcStr += "(";
+
             for (int i = 0; i < _args.Length; ++i)
             {
                 if (_callArgs != null && _callArgs.Length > i)

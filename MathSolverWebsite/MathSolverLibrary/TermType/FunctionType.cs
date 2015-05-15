@@ -153,7 +153,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 if (graphStr != null)
                     tmpCmds.Add("Graph");
             }
-            if (!_func.IsMultiValued && _assignTo.ToAlgTerm().Contains(_func.InputArgs[0]))
+            if (!_func.IsMultiValued && _assignTo.ToAlgTerm().Contains(_func.InputArgs[0]) && !(_assignTo is Equation.Structural.LinearAlg.ExMatrix))
                 tmpCmds.Add("Find inverse");
             tmpCmds.Add(_func.HasValidInputArgs ? "Assign function" : "Assign value");
             for (int i = 0; i < solveVarKeys.Count; ++i)

@@ -80,6 +80,9 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 term = right as AlgebraTerm;
             }
 
+            if (term == null || mat == null)
+                return false;
+
             _B = mat;
 
             // Both in the forms...
