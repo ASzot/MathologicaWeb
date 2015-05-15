@@ -1230,50 +1230,44 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
 
         private AlgebraTerm LexemeTableToAlgebraTerm(LexemeTable lexemeTable, ref List<string> pParseErrors, bool fixIntegrals = false)
         {
-			//if (lexemeTable.Count > 0 && lexemeTable[0].Data1 == LexemeType.Integral)
-			//{
-			//	int depth = 0;
-			//	int endIndex = -1;
+            if (lexemeTable.Count > 0 && lexemeTable[0].Data1 == LexemeType.Integral)
+            {
+                int depth = 0;
+                int endIndex = -1;
 
-			//	for (int i = 0; i < lexemeTable.Count; ++i)
-			//	{
-			//		if (lexemeTable[i].Data1 == LexemeType.Differential)
-			//		{
-			//			depth--;
+                for (int i = 0; i < lexemeTable.Count; ++i)
+                {
+                    if (lexemeTable[i].Data1 == LexemeType.Differential)
+                    {
+                        depth--;
 
-			//			if (depth == 0)
-			//			{
-			//				endIndex = i;
-			//				break;
-			//			}
-			//		}
-			//		else if (lexemeTable[i].Data1 == LexemeType.Integral)
-			//		{
-			//			// Check for that the special surface integral notation is not present.
-			//			if (!(lexemeTable[i].Data2.Contains("_") &&
-			//				i + 1 < lexemeTable.Count &&
-			//				!(lexemeTable[i + 1].Data1 == LexemeType.Operator && lexemeTable[i + 1].Data2 == "^")))
-			//			{
-			//				depth++;
-			//			}
-			//		}
-			//	}
+                        if (depth == 0)
+                        {
+                            endIndex = i;
+                            break;
+                        }
+                    }
+                    else if (lexemeTable[i].Data1 == LexemeType.Integral)
+                    {
+                        depth++;
+                    }
+                }
 
-			//	if (endIndex == -1)
-			//	{
-			//		pParseErrors.Add("Missing differential.");
-			//		return null;
-			//	}
+                if (endIndex == -1)
+                {
+                    pParseErrors.Add("Missing differential.");
+                    return null;
+                }
 
-			//	if (endIndex == lexemeTable.Count - 1)
-			//	{
-			//		int index = 0;
-			//		ExComp parsedEx = ParseIntegral(ref index, lexemeTable, ref pParseErrors);
-			//		if (parsedEx == null)
-			//			return null;
-			//		return parsedEx.ToAlgTerm();
-			//	}
-			//}
+                if (endIndex == lexemeTable.Count - 1)
+                {
+                    int index = 0;
+                    ExComp parsedEx = ParseIntegral(ref index, lexemeTable, ref pParseErrors);
+                    if (parsedEx == null)
+                        return null;
+                    return parsedEx.ToAlgTerm();
+                }
+            }
 
             FixLexemeTableUserInput(ref lexemeTable);
             if (lexemeTable == null)
@@ -1666,6 +1660,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
 
         private ExComp LexemeToExComp(List<TypePair<LexemeType, string>> lexemeTable, ref int currentIndex, ref List<string> pParseErrors)
         {
+            if (currentIndex >= lexemeTable.Count)
+                return null;
             var lexeme = lexemeTable[currentIndex];
             int endIndex = -1;
             int depth = 0;
@@ -2777,13 +2773,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
         {
             ExComp lower = null, upper = null;
             if (lt[currentIndex].Data2.Contains("_"))
-			{
-				currentIndex++;
-				// Get the next lexeme which will be the lower bound.
-				lower = LexemeToExComp(lt, ref currentIndex, ref pParseErrors);
-				if (lower == null || lower is AgOp)
-					return null;
-				AlgebraTerm lowerTerm = lower.ToAlgTerm();
+            {
+                currentIndex++;
+                // Get the next lexeme which will be the lower bound.
+                lower = LexemeToExComp(lt, ref currentIndex, ref pParseErrors);
+                if (lower == null || lower is AgOp)
+                    return null;
+                AlgebraTerm lowerTerm = lower.ToAlgTerm();
 
                 lowerTerm = lowerTerm.WeakMakeWorkable().ToAlgTerm();
                 lowerTerm = lowerTerm.ApplyOrderOfOperations();
@@ -2793,7 +2789,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                 lower = lowerTerm.RemoveRedundancies();
 
 
-                if (currentIndex + 1 < lt.Count && lt[currentIndex + 1].Data1 != LexemeType.Operator || lt[currentIndex + 1].Data2 != "^")
+                if (currentIndex + 1 < lt.Count && (lt[currentIndex + 1].Data1 != LexemeType.Operator || lt[currentIndex + 1].Data2 != "^"))
                 {
                     // Don't necessarily return null as the user could be declaring a surface or line integral.
                     if (!(lower is AlgebraComp))
@@ -2820,8 +2816,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
             if (currentIndex + 1 < lt.Count && lt[currentIndex + 1].Data1 == LexemeType.Operator && lt[currentIndex + 1].Data2 == "*")
                 currentIndex++;
 
+            currentIndex++;
 
-            int startIndex = currentIndex + 1;
+            int startIndex = currentIndex;
             int endIndex = -1;
 
             // Next should be the expression.
