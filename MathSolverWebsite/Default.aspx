@@ -37,8 +37,6 @@
     </script>
     
     <script>
-        // Basic styling stuff.
-
         var prevWidth = 0;
         var btnDropDownTimeout = 0;
 
@@ -86,7 +84,7 @@
 
         }
 
-        Date.prototype.today = function () { 
+        Date.prototype.today = function () {
             return (((this.getMonth() + 1) < 10) ? "0" : "") + (this.getMonth() + 1) + "/" + ((this.getDate() < 10) ? "0" : "") + this.getDate() + "/" + this.getFullYear();
         }
 
@@ -102,7 +100,7 @@
 
             $("#input-list").html(totalHtml);
             selectedTextBox = $("#mathInputSpan0");
-            
+
             for (var i = 0; i < inputs.length; ++i) {
                 $("#mathInputSpan" + i).mathquill('editable');
                 $("#mathInputSpan" + i).mathquill('latex', inputs[i]);
@@ -144,6 +142,8 @@
             else {
                 $("#parse-errors-id").hide();
             }
+
+
             if (senderId != "id-solve-btn" && senderId.indexOf("hiddenSolveBtn") == -1) {
                 if (senderId.indexOf("hiddenUpdateBtn") != -1 || senderId.indexOf("RadBtn") != -1) {
                     MathJax.Hub.Queue(['Typeset', MathJax.Hub, 'funcDispList']);
@@ -152,7 +152,6 @@
                     MathJax.Hub.Queue(['Typeset', MathJax.Hub, "pob-space"]);
                 }
 
-                //$("#<% = parseErrorSpan.ClientID %>").html("");
                 return;
             }
 
@@ -166,6 +165,14 @@
             $(".workCollapseBtn").each(function () {
                 $(this).parent().next().hide();
             });
+
+            var resultListCount = $("#work-list-disp").children().length / 2;
+
+            // Have a max count of results to be displayed.
+            if (resultListCount > 4) {
+                $("#work-list-disp").children().first().remove();
+                $("#work-list-disp").children().first().remove();
+            }
 
             // Remove all of the existing graphs. (There can only be one graph at once).
             $("#work-list-disp").append("<div class='prev-output'>" + prevSolveOutput + "<div class='more-options-area'>" +
@@ -229,7 +236,7 @@
                 // Create the link to the input.
                 var linkStr = "mathologica.com/Default?Index=0&InputDisp=" + htmlEncode(inputTxt);
                 $(this).parent().parent().parent().parent().prepend(createPopUp(
-                    "<p>Copy and past the link to share this problem.</p>" + 
+                    "<p>Copy and past the link to share this problem.</p>" +
                     "<input class='copy-past-link' type='text' value='" + linkStr + "' />"
                         ));
                 showPopUp();

@@ -66,7 +66,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
             new TypePair<string, LexemeType>("(" + IDEN_MATCH + @")(((\')+)|((\^((" + NUM_MATCH + @")|(" + IDEN_MATCH + @")))\((" + IDEN_MATCH + @")\)))", LexemeType.FuncDeriv),
             new TypePair<string, LexemeType>(@"sum_\((" + IDEN_MATCH + ")=", 
                                              LexemeType.Summation),
-			new TypePair<string, LexemeType>(@"lim_\((" + IDEN_MATCH + @")to(\-)?((inf)|(" + NUM_MATCH + @")|(" + IDEN_MATCH + @"))\)", 
+			new TypePair<string, LexemeType>(@"lim_\((" + IDEN_MATCH + @")to", 
                                              LexemeType.Limit),
             new TypePair<string, LexemeType>(@"(int_)|(int)", LexemeType.Integral),
             new TypePair<string, LexemeType>(@"\$d(" + IDEN_MATCH + @")", LexemeType.Differential),
@@ -2495,47 +2495,55 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
         private AlgebraTerm ParseLimit(ref int currentIndex, LexemeTable lt, ref List<string> pParseErrors)
         {
             string limitStr = lt[currentIndex].Data2.Remove(0, "lim_(".Length);
-            limitStr = limitStr.Remove(limitStr.Length - 1, 1);
 
             int index = limitStr.IndexOf("to");
             if (index == -1)
                 return null;
-            string[] limitParts = { limitStr.Substring(0, index), limitStr.Substring(index + 2, limitStr.Length - (index + 2)) };
 
-            AlgebraComp varFor = new AlgebraComp(limitParts[0]);
+            AlgebraComp varFor = new AlgebraComp(limitStr.Substring(0, index));
 
-            bool negate = limitParts[1].StartsWith("-");
-            if (negate)
-                limitParts[1] = limitParts[1].Remove(0, 1);
-
-            ExComp parsedValTo = null;
-            if (limitParts[1] == "inf")
-                parsedValTo = Number.PosInfinity;
-            else if (Regex.IsMatch(limitParts[1], IDEN_MATCH))
+            int startIndex = currentIndex + 1;
+            int depth = 1;
+            int endIndex = -1;
+            for (int i = currentIndex; i < lt.Count; ++i)
             {
-                parsedValTo = new AlgebraComp(limitParts[1]);
+                if (lt[i].Data1 == LexemeType.EndPara)
+                {
+                    depth--;
+                    if (depth == 0)
+                    {
+                        endIndex = i;
+                        break;
+                    }
+                }
+                else if (lt[i].Data1 == LexemeType.StartPara)
+                    depth++;
             }
-            else if (Regex.IsMatch(limitParts[1], NUM_MATCH))
-            {
-                parsedValTo = Number.Parse(limitParts[1]);
-            }
 
-            if (parsedValTo == null)
-            {
-                pParseErrors.Add("Incorrect limit approach value.");
+            if (endIndex == -1)
                 return null;
-            }
 
-            if (negate)
-                parsedValTo = Equation.Operators.MulOp.Negate(parsedValTo);
+            LexemeTable limToLt = lt.GetRange(startIndex, endIndex - startIndex);
+            if (limToLt.Count == 0)
+                return null;
+
+            AlgebraTerm limTo = LexemeTableToAlgebraTerm(limToLt, ref pParseErrors);
+            if (limTo == null)
+                return null;
+
+            limTo.ApplyOrderOfOperations();
+            limTo = limTo.MakeWorkable().ToAlgTerm();
+
+            currentIndex = endIndex;
 
             currentIndex++;
-            if (currentIndex > lt.Count - 1)
-                return null;
+
+            if (lt[currentIndex].Data1 == LexemeType.Operator && lt[currentIndex].Data2 == "*")
+                currentIndex++;
 
             ExComp innerEx;
-            int endIndex = lt.Count;
-            int depth = 0;
+            endIndex = lt.Count;
+            depth = 0;
             int prevOp = -1;
             for (int i = currentIndex; i < lt.Count; ++i)
             {
@@ -2563,7 +2571,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
 
             currentIndex = endIndex == lt.Count - 1 ? endIndex : endIndex - 1;
 
-            return Equation.Functions.Calculus.Limit.Create(innerEx, varFor, parsedValTo);
+            return Equation.Functions.Calculus.Limit.Create(innerEx, varFor, limTo.RemoveRedundancies());
         }
 
         private AlgebraTerm ParseLogBaseInner(ref int currentIndex, LexemeTable lexemeTable, ref List<string> pParseErrors)
