@@ -173,7 +173,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 agTerm = term as AlgebraTerm;
 
                 agTerm = agTerm.ApplyOrderOfOperations();
-                agTerm = agTerm.WeakMakeWorkable().ToAlgTerm();
+                agTerm = agTerm.WeakMakeWorkable(ref pEvalData).ToAlgTerm();
                 agTerm = Simplifier.AttemptCancelations(agTerm, ref pEvalData).ToAlgTerm();
 
                 agTerm = agTerm.ApplyOrderOfOperations();

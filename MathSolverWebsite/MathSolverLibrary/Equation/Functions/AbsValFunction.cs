@@ -1,4 +1,6 @@
-﻿namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
+﻿using System.Collections.Generic;
+
+namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 {
     internal class AbsValFunction : AppliedFunction
     {
@@ -47,7 +49,7 @@
 
         public override ExComp Evaluate(bool harshEval, ref TermType.EvalData pEvalData)
         {
-            ExComp innerEx = InnerTerm.RemoveRedundancies();
+            ExComp innerEx = InnerEx;
             if (Number.IsUndef(innerEx))
                 return Number.Undefined;
             if (innerEx is Number)
@@ -59,6 +61,19 @@
             {
                 // Vector magnitude.
                 return (innerEx as Equation.Structural.LinearAlg.ExVector).GetVecLength();
+            }
+            else if (innerEx is AlgebraTerm && !(innerEx is AlgebraFunction))
+            {
+                AlgebraTerm innerTerm = innerEx as AlgebraTerm;
+                List<ExComp[]> groups = innerTerm.GetGroupsNoOps();
+                if (groups.Count == 1)
+                {
+                    ExComp[] gp = groups[0];
+                    Number coeff = gp.GetCoeff();
+                    coeff = Number.Abs(coeff);
+                    gp.AssignCoeff(coeff);
+                    return new AbsValFunction(gp.ToAlgTerm());
+                }
             }
 
             return this;

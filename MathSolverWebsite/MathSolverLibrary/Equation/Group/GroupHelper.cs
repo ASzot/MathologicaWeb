@@ -554,9 +554,31 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return corresponding;
         }
 
+        public static Number GetCoeff(this ExComp[] group)
+        {
+            foreach (ExComp gpCmp in group)
+            {
+                if (gpCmp is Number)
+                    return gpCmp as Number;
+            }
+
+            return null;
+        }
+
+        public static void AssignCoeff(this ExComp[] group, Number coeff)
+        {
+            for (int i = 0; i < group.Length; ++i)
+            {
+                if (group[i] is Number)
+                {
+                    group[i] = coeff;
+                    break;
+                }
+            }
+        }
+
         public static ExComp[] OrderGroup(this ExComp[] group)
         {
-
             List<Number> coeffs = new List<Number>();
             foreach (ExComp gpCmp in group)
             {

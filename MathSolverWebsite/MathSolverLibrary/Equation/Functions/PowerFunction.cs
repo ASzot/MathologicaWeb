@@ -154,7 +154,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
                 if (modGroupCount != 0)
                 {
-                    return (new AlgebraTerm(groups.ToArray())).WeakMakeWorkable();
+                    return (new AlgebraTerm(groups.ToArray())).MakeWorkable();
                 }
 
                 if (multiplyOut && (groups.Count != 1 || groups[0].Length != 1))
@@ -976,10 +976,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             if (baseEx is AlgebraTerm)
                 baseEx = (baseEx as AlgebraTerm).RemoveRedundancies();
             if (Number.One.IsEqualTo(baseEx))
-                return outsideTerm.WeakMakeWorkable();
+                return outsideTerm.MakeWorkable();
 
             ExComp finalPowFunc = PowOp.StaticWeakCombine(baseEx, _power);
-            ExComp finalTerm = MulOp.StaticWeakCombine(outsideTerm.WeakMakeWorkable(), finalPowFunc);
+            ExComp finalTerm = MulOp.StaticWeakCombine(outsideTerm.MakeWorkable(), finalPowFunc);
 
             return finalTerm;
         }

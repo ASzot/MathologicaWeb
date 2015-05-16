@@ -50,7 +50,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             lim._varFor = varFor;
             lim._leHopitalCount = leHopitalCount;
 
-            return lim.Evaluate(false, ref pEvalData);
+            ExComp retVal = lim.Evaluate(false, ref pEvalData);
+            return retVal;
         }
 
         public override ExComp Evaluate(bool harshEval, ref TermType.EvalData pEvalData)
@@ -69,7 +70,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             AlgebraTerm reduced = _reducedInner.ToAlgTerm();
             if (!reduced.Contains(_varFor))
-                return InnerTerm;
+                return reduced;
 
             ExComp attempt;
             if (Number.NegInfinity.IsEqualTo(_valTo) || Number.PosInfinity.IsEqualTo(_valTo))
@@ -88,18 +89,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
                 if (attempt == null)
                 {
-                    stepCount = pEvalData.WorkMgr.WorkSteps.Count;
+                    int preHopitalsRuleStepCount = pEvalData.WorkMgr.WorkSteps.Count;
                     attempt = AttemptLeHopitals(reduced, ref pEvalData);
 
                     if (attempt == null)
                     {
                         _leHopitalCount = 0;
-                        pEvalData.WorkMgr.PopStepsCount(pEvalData.WorkMgr.WorkSteps.Count - stepCount);
+                        pEvalData.WorkMgr.PopStepsCount(pEvalData.WorkMgr.WorkSteps.Count - preHopitalsRuleStepCount);
                         return this;
                     }
                 }
-
-
 
                 pEvalData.WorkMgr.FromFormatted("`" + _thisDispStr + "={0}`", attempt);
 
@@ -126,6 +125,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 return attempt;
             }
 
+            if (CheckForLimitDivergence(reduced, ref pEvalData))
+            {
+                pEvalData.AddMsg("Limit Diverges");
+                return Number.Undefined;
+            }
+
             attempt = TryRadicalConjugate(reduced, ref pEvalData);
             if (attempt != null)
             {
@@ -135,7 +140,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 return attempt;
             }
 
-            int prevStepCount = pEvalData.WorkMgr.WorkSteps.Count;
             attempt = AttemptLeHopitals(reduced, ref pEvalData);
 
             if (attempt != null)
@@ -145,8 +149,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 pEvalData.AttemptSetInputType(TermType.InputType.LeHopital);
                 return attempt;
             }
-            else
-                pEvalData.WorkMgr.PopSteps(prevStepCount);
 
 
             _evalFail = true;
@@ -365,7 +367,98 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + limStr + "(\\frac{" + WorkMgr.ToDisp(numDeriv) + "}{" + WorkMgr.ToDisp(denDeriv) + "})" + WorkMgr.EDM,
                 "Divide the derivatives.");
 
-            return TakeLim(frac, _varFor, _valTo, ref pEvalData, _leHopitalCount);
+            ExComp evalLim = TakeLim(frac, _varFor, _valTo, ref pEvalData, _leHopitalCount);
+
+            if (evalLim is Limit)
+                return null;
+            return evalLim;
+        }
+
+        private AlgebraTerm ConvertAbsVal(AlgebraTerm term, Number valApproaching, bool pos, ref bool changed)
+        {
+            for (int i = 0; i < term.TermCount; ++i)
+            {
+                if (term[i] is AbsValFunction)
+                {
+                    AbsValFunction absValFunc = term[i] as AbsValFunction;
+                    ExComp compareEx = SubOp.StaticCombine(_varFor, valApproaching);
+
+                    if (absValFunc.InnerEx.IsEqualTo(compareEx))
+                    {
+                        changed = true;
+                        term[i] = pos ? absValFunc.InnerTerm : MulOp.Negate(absValFunc.InnerTerm);
+                    }
+                }
+                if (term[i] is AlgebraTerm)
+                {
+                    term[i] = ConvertAbsVal(term[i] as AlgebraTerm, valApproaching, pos, ref changed);
+                }
+            }
+
+            return term;
+        }
+
+        private bool CheckForLimitDivergence(ExComp ex, ref TermType.EvalData pEvalData)
+        {
+            if (!(_valTo is Number))
+                return false;
+            Number nValTo = _valTo as Number;
+            // Are the limits the same going from both sides?
+
+            bool changed = false;
+            AlgebraTerm posSimp = ConvertAbsVal(ex.Clone().ToAlgTerm(), nValTo, true, ref changed);
+            if (!changed)
+                return false;
+
+            changed = false;
+            AlgebraTerm negSimp = ConvertAbsVal(ex.Clone().ToAlgTerm(), nValTo, false, ref changed);
+            if (!changed)
+                return false;
+
+            string innerStr = WorkMgr.ToDisp(ex);
+
+            pEvalData.WorkMgr.FromFormatted("",
+                "Take the limit from the positive direction.");
+            WorkStep lastStep = pEvalData.WorkMgr.GetLast();
+
+            lastStep.GoDown(ref pEvalData);
+            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "lim_{" + _varFor.ToDispString() + "=" + nValTo.ToDispString() + "^{+}}" +
+                "(" + innerStr + ")=lim_{" + _varFor.ToDispString() + "=" + nValTo.ToDispString() + "}(" +  WorkMgr.ToDisp(posSimp) + ")" + WorkMgr.EDM, 
+                "As the limit approaches from the positive direction.");
+            ExComp posEval = Limit.TakeLim(posSimp.Clone(), _varFor, nValTo, ref pEvalData);
+            if (posEval is AlgebraTerm)
+                posEval = (posEval as AlgebraTerm).RemoveRedundancies();
+            if (!(posEval is Number))
+                return false;
+            lastStep.GoUp(ref pEvalData);
+
+            lastStep.WorkHtml = WorkMgr.STM + "lim_{" + _varFor.ToDispString() + "=" + nValTo.ToDispString() + "^{+}}" +
+                "(" + innerStr + ")=" + WorkMgr.ToDisp(posEval) + WorkMgr.EDM;
+
+            pEvalData.WorkMgr.FromFormatted("",
+                "Take the limit from the negative direction.");
+            lastStep = pEvalData.WorkMgr.GetLast();
+
+            lastStep.GoDown(ref pEvalData);
+            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "lim_{" + _varFor.ToDispString() + "=" + nValTo.ToDispString() + "^{-}}" +
+                "(" + innerStr + ")=lim_{" + _varFor.ToDispString() + "=" + nValTo.ToDispString() + "}(" + WorkMgr.ToDisp(negSimp) + ")" + WorkMgr.EDM, 
+                "As the limit approaches from the negative direction.");
+            ExComp negEval = Limit.TakeLim(negSimp.Clone(), _varFor, nValTo, ref pEvalData);
+            if (negEval is AlgebraTerm)
+                negEval = (negEval as AlgebraTerm).RemoveRedundancies();
+            if (!(negEval is Number))
+                return false;
+            lastStep.GoUp(ref pEvalData);
+
+            lastStep.WorkHtml = WorkMgr.STM + "lim_{" + _varFor.ToDispString() + "=" + nValTo.ToDispString() + "^{-}}" +
+                "(" + innerStr + ")=" + WorkMgr.ToDisp(negEval) + WorkMgr.EDM;
+
+
+            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "lim_{" + _varFor.ToDispString() + "=" + nValTo.ToDispString() + "^{-}}(" +
+                innerStr + ") \\ne lim_{" + _varFor.ToDispString() + "=" + nValTo.ToDispString() + "^{+}}(" + innerStr + ")" + WorkMgr.EDM,
+                "The limit is not equal from both directions and therefore is divergent.");
+
+            return !posEval.IsEqualTo(negEval);
         }
 
         public override string FinalToAsciiKeepFormatting()

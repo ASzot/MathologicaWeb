@@ -145,7 +145,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 AlgebraComp varParameter = _args[i];
                 AlgebraTerm input = _callArgs[i].ToAlgTerm();
                 // The input for some reason isn't weak workable most of the time.
-                ExComp inputEx = input.WeakMakeWorkable();
+                ExComp inputEx = input.WeakMakeWorkable(ref pEvalData);
                 if (inputEx == null)
                     return null;
                 if (inputEx is AlgebraTerm)

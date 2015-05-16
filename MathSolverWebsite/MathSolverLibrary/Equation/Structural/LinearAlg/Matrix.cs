@@ -620,14 +620,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
             return 1.0;
         }
 
-        public override ExComp WeakMakeWorkable(ref List<string> pParseErrors)
+        public override ExComp WeakMakeWorkable(ref List<string> pParseErrors, ref TermType.EvalData pEvalData)
         {
             for (int i = 0; i < Rows; ++i)
             {
                 for (int j = 0; j < Cols; ++j)
                 {
                     if (_exData[i][j] is AlgebraTerm)
-                        _exData[i][j] = (_exData[i][j] as AlgebraTerm).WeakMakeWorkable(ref pParseErrors);
+                        _exData[i][j] = (_exData[i][j] as AlgebraTerm).WeakMakeWorkable(ref pParseErrors, ref pEvalData);
                 }
             }
 

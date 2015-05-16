@@ -340,7 +340,11 @@ namespace MathSolverWebsite.MathSolverLibrary
         public string WorkHtml
         {
             get { return _work; }
-            set { _work = value; }
+            set 
+            { 
+                _work = value;
+                _work = CorrectString(_work);
+            }
         }
 
         public List<WorkStep> SubWorkSteps
@@ -367,6 +371,17 @@ namespace MathSolverWebsite.MathSolverLibrary
             _origWorkMgr = null;
         }
 
+        private static string CorrectString(string str)
+        {
+            str = MathSolver.FinalizeOutput(str);
+            str = str.Replace("--", "+");
+            str = str.Replace(WorkMgr.STM + "+", WorkMgr.STM);
+            str = str.Replace("&", "+-");
+            str = str.Replace("-" + WorkMgr.EDM + "<span class='changeText'>" + WorkMgr.STM + "-", WorkMgr.EDM + "<span class='changeText'>" + WorkMgr.STM + "+");
+
+            return str;
+        }
+
         public static string FormatStr(string str, params object[] args)
         {
             string[] argStrs = new string[args.Length];
@@ -391,11 +406,7 @@ namespace MathSolverWebsite.MathSolverLibrary
             {
                 str = String.Format(str, argStrs);
 
-                str = MathSolver.FinalizeOutput(str);
-                str = str.Replace("--", "+");
-                str = str.Replace(WorkMgr.STM + "+", WorkMgr.STM);
-                str = str.Replace("&", "+-");
-                str = str.Replace("-" + WorkMgr.EDM + "<span class='changeText'>" + WorkMgr.STM + "-", WorkMgr.EDM + "<span class='changeText'>" + WorkMgr.STM + "+");
+                str = CorrectString(str);
             }
 
             return str;

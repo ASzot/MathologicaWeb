@@ -537,7 +537,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                     if (final is AlgebraTerm)
                     {
                         AlgebraTerm finalTerm = final as AlgebraTerm;
-                        final = finalTerm.WeakMakeWorkable(ref pParseErrors);
+                        final = finalTerm.WeakMakeWorkable(ref pParseErrors, ref p_EvalData);
                         if (final == null)
                             return null;
                     }
@@ -577,7 +577,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                         if (final is AlgebraTerm)
                         {
                             AlgebraTerm finalTerm = final as AlgebraTerm;
-                            final = finalTerm.WeakMakeWorkable(ref pParseErrors);
+                            final = finalTerm.WeakMakeWorkable(ref pParseErrors, ref p_EvalData);
                             if (final == null)
                                 return null;
                         }
@@ -611,7 +611,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                     if (final is AlgebraTerm)
                     {
                         AlgebraTerm finalTerm = final as AlgebraTerm;
-                        final = finalTerm.WeakMakeWorkable(ref pParseErrors);
+                        final = finalTerm.WeakMakeWorkable(ref pParseErrors, ref p_EvalData);
                         if (final == null)
                             return null;
                     }
@@ -2781,7 +2781,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                     return null;
                 AlgebraTerm lowerTerm = lower.ToAlgTerm();
 
-                lowerTerm = lowerTerm.WeakMakeWorkable().ToAlgTerm();
+                lowerTerm = lowerTerm.WeakMakeWorkable(ref p_EvalData).ToAlgTerm();
                 lowerTerm = lowerTerm.ApplyOrderOfOperations();
                 lowerTerm = lowerTerm.MakeWorkable().ToAlgTerm();
                 lowerTerm = lowerTerm.CompoundFractions();
@@ -2804,7 +2804,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                         return null;
 
                     AlgebraTerm upperTerm = upper.ToAlgTerm();
-                    upperTerm = upperTerm.WeakMakeWorkable().ToAlgTerm();
+                    upperTerm = upperTerm.WeakMakeWorkable(ref p_EvalData).ToAlgTerm();
                     upperTerm = upperTerm.ApplyOrderOfOperations();
                     upperTerm = upperTerm.MakeWorkable().ToAlgTerm();
                     upperTerm = upperTerm.CompoundFractions();

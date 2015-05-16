@@ -1418,14 +1418,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return finalStr;
         }
 
-        public virtual ExComp WeakMakeWorkable(ref List<string> pParseErrors)
+        public virtual ExComp WeakMakeWorkable(ref List<string> pParseErrors, ref TermType.EvalData pEvalData)
         {
             for (int i = 0; i < _subComps.Count; ++i)
             {
                 ExComp comp = _subComps[i];
                 if (comp is AlgebraTerm)
                 {
-                    ExComp weakWorkable = (comp as AlgebraTerm).WeakMakeWorkable();
+                    ExComp weakWorkable = (comp as AlgebraTerm).WeakMakeWorkable(ref pEvalData);
                     if (weakWorkable == null)
                         return null;
                     if (Number.IsUndef(weakWorkable))
@@ -1473,6 +1473,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                         isMultiGroup = (afterComp as AlgebraTerm).GroupCount > 1;
 
                     AgOp algebraOp = comp as AgOp;
+
+                    // Ensure that a potential division by 0 is not being ignored.
+                    if (algebraOp is DivOp && afterComp is AlgebraFunction)
+                    {
+                        ExComp tmpEval = (afterComp.Clone() as AlgebraFunction).Evaluate(true, ref pEvalData);
+                        if (tmpEval is AlgebraTerm)
+                            tmpEval = (tmpEval as AlgebraTerm).RemoveRedundancies();
+                        if (Number.Zero.IsEqualTo(tmpEval))
+                            afterComp = tmpEval;
+                    }
 
                     if (comp is Operators.PowOp)
                     {
@@ -1508,14 +1518,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return finalEx;
         }
 
-        public ExComp WeakMakeWorkable()
+        public ExComp WeakMakeWorkable(ref TermType.EvalData pEvalData)
         {
             for (int i = 0; i < _subComps.Count; ++i)
             {
                 ExComp comp = _subComps[i];
                 if (comp is AlgebraTerm)
                 {
-                    ExComp weakWorkable = (comp as AlgebraTerm).WeakMakeWorkable();
+                    ExComp weakWorkable = (comp as AlgebraTerm).WeakMakeWorkable(ref pEvalData);
                     if (weakWorkable == null)
                         return null;
                     if (Number.IsUndef(weakWorkable))
@@ -1560,6 +1570,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                         isMultiGroup = (afterComp as AlgebraTerm).GroupCount > 1;
 
                     AgOp algebraOp = comp as AgOp;
+                    // Ensure that a potential division by 0 is not being ignored.
+                    if ((algebraOp is MulOp || algebraOp is DivOp) && afterComp is AlgebraFunction)
+                    {
+                        ExComp tmpEval = (afterComp.Clone() as AlgebraFunction).Evaluate(true, ref pEvalData);
+                        if (tmpEval is AlgebraTerm)
+                            tmpEval = (tmpEval as AlgebraTerm).RemoveRedundancies();
+                        if (Number.Zero.IsEqualTo(tmpEval) || (tmpEval is PowerFunction && (tmpEval as PowerFunction).Base.IsEqualTo(Number.Zero)))
+                            afterComp = tmpEval;
+                    }
 
                     if (comp is Operators.PowOp)
                     {
