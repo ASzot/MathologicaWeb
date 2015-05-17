@@ -184,7 +184,6 @@
             var workSpaceEle = $("#work-space");
             // Scroll to the solution.
             var scrollToVal = workSpaceEle.scrollTop() + $("#work-list-disp").children().last().prev().offset().top;
-            console.log(scrollToVal);
             workSpaceEle.scrollTop(scrollToVal);
 
             if (workSpaceEle[0].scrollHeight - workSpaceEle.scrollTop() == workSpaceEle.outerHeight())
@@ -201,6 +200,10 @@
                     var inputTxts = inputTxt.split(",");
 
                     setInputs(inputTxts);
+
+                    // Scroll to the bottom.
+                    var objDiv = document.getElementById("work-space");
+                    objDiv.scrollTop = objDiv.scrollHeight;
                 });
             });
 

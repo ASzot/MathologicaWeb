@@ -108,7 +108,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return term;
         }
 
-        protected virtual ExComp CancelWith(ExComp innerEx, ref TermType.EvalData evalData)
+        public virtual ExComp CancelWith(ExComp innerEx, ref TermType.EvalData evalData)
         {
             return null;
         }

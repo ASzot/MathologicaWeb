@@ -303,7 +303,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             return new PowerFunction(baseEx, powEx);
         }
 
-        protected override ExComp CancelWith(ExComp innerEx, ref TermType.EvalData evalData)
+        public override ExComp CancelWith(ExComp innerEx, ref TermType.EvalData evalData)
         {
             LogFunction log = innerEx as LogFunction;
             if (log == null)
@@ -316,10 +316,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public override ExComp Evaluate(bool harshEval, ref TermType.EvalData pEvalData)
         {
-            ExComp cancelResult = CancelWith(_power, ref pEvalData);
-            if (cancelResult != null)
-                return cancelResult;
-
             ExComp baseEx = Base;
             if (Number.IsUndef(baseEx) || Number.IsUndef(_power))
                 return Number.Undefined;
@@ -571,10 +567,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public override AlgebraTerm HarshEvaluation()
         {
-            ExComp evalBase = Base.ToAlgTerm().HarshEvaluation();
             ExComp evalPow = _power;
             if (_power is AlgebraTerm)
                 evalPow = (_power as AlgebraTerm).HarshEvaluation();
+
+            ExComp evalBase;
+            if (!(evalPow is Number) && Base is Constant)
+                evalBase = Base;
+            else
+                evalBase = Base.ToAlgTerm().HarshEvaluation();
 
             PowerFunction powFunc = new PowerFunction(evalBase, evalPow);
             return powFunc;

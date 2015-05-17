@@ -81,9 +81,9 @@ var basic = new TopicMenu(
 
 var trig = new TopicMenu(
     [
-        new MenuItem("Logarithm", "log", "\\log(\\EMPTYGP{})", false, 
+        new MenuItem("Logarithm", "log", "\\log \\left( \\right)", false,
             [
-                new MenuItem("Logarithm base n", "x^2", "log_{}", false),
+                new MenuItem("Logarithm base n", "\\log_n", "log_{} \\left( \\right)", false),
             ]),
         new MenuItem("Natural log (log base e)", "ln", "\\ln", false),
         new MenuItem("Sine", "sin", "\\sin \\left( \\right)", false,

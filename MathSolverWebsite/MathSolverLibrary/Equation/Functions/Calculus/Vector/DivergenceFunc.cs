@@ -39,7 +39,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
                 return false;
         }
 
-        protected override ExComp CancelWith(ExComp innerEx, ref TermType.EvalData evalData)
+        public override ExComp CancelWith(ExComp innerEx, ref TermType.EvalData evalData)
         {
             if (innerEx is CurlFunc)
                 return Number.Zero;
@@ -53,9 +53,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
 
             ExComp p, q, r;
             ExComp innerEx = InnerEx;
-            ExComp cancelWithResult = CancelWith(innerEx, ref pEvalData);
-            if (cancelWithResult != null)
-                return cancelWithResult;
 
             AlgebraComp x = null;
             AlgebraComp y = null;

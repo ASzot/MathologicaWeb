@@ -168,36 +168,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             return new AlgebraComp("(" + iden + derivOf.ToDispString() + ")/(" + iden + withRespectTo.ToDispString() + ")");
         }
 
-        /// <summary>
-        /// Harsh evaluations have no importance here as derivatives are always symbolic.
-        /// </summary>
-        /// <param name="harshEval">Value doesn't matter.</param>
-        /// <returns></returns>
-        public override ExComp Evaluate(bool harshEval, ref TermType.EvalData pEvalData)
+        public override ExComp CancelWith(ExComp innerEx, ref TermType.EvalData pEvalData)
         {
-            if (!_isDefined)
-                return this;
-
-            if (_withRespectTo == null)
-                return this;
-
             if (!(_order is Number && (_order as Number).IsRealInteger()))
-                return this;
+                return null;
 
             int order = (int)(_order as Number).RealComp;
 
-            if (order > MAX_DERIV)
-                return this;
-
-            if (_isPartial)
-                pEvalData.AttemptSetInputType(TermType.InputType.PartialDerivative);
-
-            ca_derivSymb = "d/(d" + _withRespectTo.ToDispString() + ")";
-
-            ExComp final = InnerEx;
-            if (final is Integral && _derivOf == null && order == 1)
+            if (innerEx is Integral && _derivOf == null && order == 1)
             {
-                Integral finalInt = final as Integral;
+                Integral finalInt = innerEx as Integral;
                 if (finalInt.DVar.IsEqualTo(_withRespectTo) && finalInt.IsDefinite)
                 {
                     pEvalData.WorkMgr.FromSides(this, null, "The derivative and the integral cancel.");
@@ -267,7 +247,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                         dispStr = "";
                         for (int i = 0; i < chainRuled.Length; ++i)
                         {
-                            chainRuled[i] = chainRules[i] == null ? null : chainRules[i].Evaluate(harshEval, ref pEvalData);
+                            chainRuled[i] = chainRules[i] == null ? null : chainRules[i].Evaluate(false, ref pEvalData);
                             if (chainRuled[i] != null)
                             {
                                 dispStr += WorkMgr.ToDisp(chainRuled[i]);
@@ -296,10 +276,41 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     }
                 }
             }
-            else if (final is ExVector)
+            return null;
+        }
+
+        /// <summary>
+        /// Harsh evaluations have no importance here as derivatives are always symbolic.
+        /// </summary>
+        /// <param name="harshEval">Value doesn't matter.</param>
+        /// <returns></returns>
+        public override ExComp Evaluate(bool harshEval, ref TermType.EvalData pEvalData)
+        {
+            if (!_isDefined)
+                return this;
+
+            if (_withRespectTo == null)
+                return this;
+
+            if (!(_order is Number && (_order as Number).IsRealInteger()))
+                return this;
+
+            int order = (int)(_order as Number).RealComp;
+
+            if (order > MAX_DERIV)
+                return this;
+
+            if (_isPartial)
+                pEvalData.AttemptSetInputType(TermType.InputType.PartialDerivative);
+
+            ca_derivSymb = "d/(d" + _withRespectTo.ToDispString() + ")";
+
+            ExComp final = InnerEx;
+
+            if (final is ExVector)
             {
                 ExVector vec = final as ExVector;
-                // Take the derivative of each component seperately.
+                // Take the derivative of each component separately.
                 ExVector derivVec = new ExVector(vec.Length);
 
                 // Work steps should go here.

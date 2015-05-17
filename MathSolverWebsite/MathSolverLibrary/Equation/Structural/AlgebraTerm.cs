@@ -605,6 +605,17 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             for (int i = 0; i < _subComps.Count; ++i)
             {
                 ExComp subComp = _subComps[i];
+                if (subComp is AlgebraFunction)
+                {
+                    // Before evaluating anything check if a cancellation is possible.
+                    ExComp innerEx = (new AlgebraTerm((subComp as AlgebraFunction)._subComps.ToArray())).RemoveRedundancies();
+                    ExComp cancelAtmpt = (_subComps[i] as AlgebraFunction).CancelWith(innerEx, ref pEvalData);
+                    if (cancelAtmpt != null)
+                    {
+                        _subComps.RemoveAt(i);
+                        _subComps.Insert(i, cancelAtmpt);
+                    }
+                }
                 if (subComp is AlgebraTerm)
                 {
                     (_subComps[i] as AlgebraTerm).EvaluateFunctions(harshEval, ref pEvalData);

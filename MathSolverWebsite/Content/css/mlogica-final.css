@@ -1100,6 +1100,10 @@ img {
    
 }
 
+    .input-disp-txt:hover {
+        cursor: pointer;
+    }
+
 .selected-cmd-txt {
 
 }

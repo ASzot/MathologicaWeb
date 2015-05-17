@@ -871,23 +871,33 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             List<WorkStep> stepRange = pEvalData.WorkMgr.WorkSteps.GetRange(stepCount, pEvalData.WorkMgr.WorkSteps.Count - stepCount);
             pEvalData.WorkMgr.WorkSteps.RemoveRange(stepCount, pEvalData.WorkMgr.WorkSteps.Count - stepCount);
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\int(" + thisStr + ")d" + dVar.ToDispString() + WorkMgr.EDM,
+            pEvalData.WorkMgr.FromFormatted("",
                 "Integrate by parts using the formula " + WorkMgr.STM + "\\int u v' = uv - \\int v u' " + WorkMgr.EDM + " where " +
                 WorkMgr.STM + "u=" + u.ToAlgTerm().FinalToDispStr() + ", dv = " + dv.ToAlgTerm().FinalToDispStr() + WorkMgr.EDM);
 
             Derivative derivativeOfU = Derivative.ConstructDeriv(u, dVar, null);
+
             pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "du=" + derivativeOfU.FinalToDispStr() + WorkMgr.EDM, "Find " + WorkMgr.STM +
                 "du" + WorkMgr.EDM);
+            WorkStep lastStep = pEvalData.WorkMgr.GetLast();
+
+            lastStep.GoDown(ref pEvalData);
             ExComp du = derivativeOfU.Evaluate(false, ref pEvalData);
+            lastStep.GoUp(ref pEvalData);
+
+            lastStep.WorkHtml = WorkMgr.STM + "\\int(" + thisStr + ")d" + dVar.ToDispString() + "=" + WorkMgr.ToDisp(du) + WorkMgr.EDM;
 
             if (du is Derivative)
                 return null;
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "v=" + antiderivativeOfDV.FinalToDispStr() + WorkMgr.EDM, "Find " + WorkMgr.STM +
+            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "v=" + antiderivativeOfDV.FinalToDispStr() + "=" + WorkMgr.ToDisp(v) + WorkMgr.EDM, 
+            "Find " + WorkMgr.STM +
                 "v" + WorkMgr.EDM);
+            lastStep = pEvalData.WorkMgr.GetLast();
 
+            lastStep.GoDown(ref pEvalData);
             pEvalData.WorkMgr.WorkSteps.AddRange(stepRange);
-
+            lastStep.GoUp(ref pEvalData);
 
             pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "({0})({1})-\\int ({1}) ({2}) d" + dVar.ToDispString() + WorkMgr.EDM, 
                 "Substitute the values into the integration by parts formula.", u, v, du);

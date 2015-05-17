@@ -1401,14 +1401,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                 PowerFunction pf = ex as PowerFunction;
                 if (pf.Base is TrigFunction)
                 {
-                    ExComp cancelResult = CancelWith(pf.Base as TrigFunction);
-                    if (cancelResult == null)
-                        return null;
+                    ExComp cancelResult = (pf.Base as TrigFunction).CancelWith(this);
                     pf.Power = Operators.SubOp.StaticCombine(pf.Power, Number.One);
 
                     if (Number.One.IsEqualTo(cancelResult))
                     {
-                        return pf;
+                        return pf.Base;
                     }
                     else
                     {

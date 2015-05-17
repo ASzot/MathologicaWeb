@@ -165,21 +165,28 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             return integral.Evaluate(false, ref pEvalData);
         }
 
-        public override ExComp Evaluate(bool harshEval, ref TermType.EvalData pEvalData)
+        public override ExComp CancelWith(ExComp innerEx, ref TermType.EvalData evalData)
         {
-            ExComp innerEx = InnerEx;
             if (innerEx is Derivative)
             {
                 Derivative innerDeriv = innerEx as Derivative;
                 if (innerDeriv.WithRespectTo.IsEqualTo(_dVar) && innerDeriv.DerivOf == null && innerDeriv.OrderInt == 1)
                 {
-                    pEvalData.WorkMgr.FromSides(this, null, "The integral and the derivative cancel.");
+                    evalData.WorkMgr.FromSides(this, null, "The integral and the derivative cancel.");
                     return innerDeriv.InnerTerm;
                 }
             }
-            else if (innerEx is ExVector && !IsDefinite)
+
+            return null;
+        }
+
+        public override ExComp Evaluate(bool harshEval, ref TermType.EvalData pEvalData)
+        {
+            ExComp innerEx = InnerEx;
+            if (innerEx is ExVector && !IsDefinite)
             {
                 ExVector vec = innerEx as ExVector;
+
                 // Take the anti derivative of each component seperately.
 
                 ExVector antiDerivVec = new ExVector(vec.Length);

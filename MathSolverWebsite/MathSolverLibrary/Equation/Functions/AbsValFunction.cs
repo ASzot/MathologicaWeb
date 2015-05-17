@@ -50,6 +50,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         public override ExComp Evaluate(bool harshEval, ref TermType.EvalData pEvalData)
         {
             ExComp innerEx = InnerEx;
+
             if (Number.IsUndef(innerEx))
                 return Number.Undefined;
             if (innerEx is Number)

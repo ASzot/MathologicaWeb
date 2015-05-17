@@ -443,7 +443,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                             orderedTolkensList.RemoveAt(i - 1);
                         }
                         if (i < orderedTolkensList.Count && !tolken.Data2.Contains("^"))
-                            orderedTolkensList.RemoveAt(i);
+                            orderedTolkensList.RemoveAt(i--);
                     }
                 }
 
@@ -454,6 +454,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                     orderedTolkensList.RemoveAt(i + 1);
                 else if (tolken.Data1 == LexemeType.Limit && i < orderedTolkensList.Count - 1 && orderedTolkensList[i + 1].Data2 == "inf")
                     orderedTolkensList.RemoveAt(i + 1);
+                else if (tolken.Data1 == LexemeType.Derivative && i < orderedTolkensList.Count - 1 && orderedTolkensList[i + 1].Data1 == LexemeType.Differential && 
+                    tolken.Data2.Contains(orderedTolkensList[i + 1].Data2))
+                {
+                    orderedTolkensList.RemoveAt(i + 1);
+                }
             }
 
             // Make sure there are no lone summations.
@@ -1968,7 +1973,18 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                     return ParseIntegral(ref currentIndex, lexemeTable, ref pParseErrors);
 
                 case LexemeType.Differential:
-                    pParseErrors.Add("Cannot have lone differential.");
+                    // If the lexeme before is a derivative just ignore this, it is probably an error.
+                    if (currentIndex == 0 || lexemeTable[currentIndex - 1].Data1 != LexemeType.Derivative || !lexemeTable[currentIndex - 1].Data2.Contains(lexeme.Data2))
+                    {
+                        pParseErrors.Add("Cannot have lone differential.");
+                        return null;
+                    }
+
+                    if (currentIndex  + 1 < lexemeTable.Count)
+                    {
+                        currentIndex++;
+                        return LexemeToExComp(lexemeTable, ref currentIndex, ref pParseErrors);
+                    }
                     return null;
 
                 case LexemeType.I_Number:
@@ -2581,12 +2597,56 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                 return null;
 
             // This should be in the form log_(base)(inner)
+            if (lexemeTable[currentIndex].Data1 == LexemeType.FuncIden)
+                lexemeTable[currentIndex].Data1 = LexemeType.Identifier;
+
             ExComp baseEx = LexemeToExComp(lexemeTable, ref currentIndex, ref pParseErrors);
             if (baseEx == null)
                 return null;
 
+            currentIndex++;
+            if (currentIndex > lexemeTable.Count - 1)
+                return null;
+
+            if (lexemeTable[currentIndex].Data1 == LexemeType.FuncArgStart)
+            {
+                int depth = 0;
+                int endIndex = -1;
+                for (int i = currentIndex; i < lexemeTable.Count; ++i)
+                {
+                    if (lexemeTable[i].Data1 == LexemeType.FuncArgStart)
+                        depth++;
+                    else if (lexemeTable[i].Data1 == LexemeType.FuncArgEnd)
+                    {
+                        depth--;
+                        if (depth == 0)
+                        {
+                            endIndex = i;
+                            break;
+                        }
+                    }
+                }
+
+                if (endIndex == -1)
+                    return null;
+
+                currentIndex++;
+                LexemeTable innerLt = lexemeTable.GetRange(currentIndex, endIndex - currentIndex);
+                if (innerLt.Count == 0)
+                    return null;
+                AlgebraTerm innerTerm = LexemeTableToAlgebraTerm(innerLt, ref pParseErrors);
+                if (innerTerm == null)
+                    return null;
+
+                currentIndex = endIndex;
+
+                LogFunction retLog = new LogFunction(innerTerm);
+                retLog.Base = baseEx;
+                return retLog;
+            }
+
             // Skip past the multiplication operator which has been placed here on default.
-            currentIndex += 2;
+            currentIndex++;
 
             if (currentIndex > lexemeTable.Count - 1)
                 return null;
