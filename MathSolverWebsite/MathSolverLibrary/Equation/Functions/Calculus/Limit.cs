@@ -72,42 +72,102 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (!reduced.Contains(_varFor))
                 return reduced;
 
-            ExComp attempt;
+            bool infEval = false;
             if (Number.NegInfinity.IsEqualTo(_valTo) || Number.PosInfinity.IsEqualTo(_valTo))
             {
-                attempt = EvaluateInfinity(reduced, ref pEvalData);
-                if (attempt == null)
-                {
-                    _evalFail = true;
-                    pEvalData.WorkMgr.PopStepsCount(pEvalData.WorkMgr.WorkSteps.Count - stepCount);
-                }
+                PolynomialExt poly = new PolynomialExt();
+                if (poly.Init(reduced))
+                    return EvaluatePoly(poly, ref pEvalData);
 
-                if (attempt == null)
-                {
-                    attempt = EvalInfinitySpecialFunc(reduced);
-                }
-
-                if (attempt == null)
-                {
-                    int preHopitalsRuleStepCount = pEvalData.WorkMgr.WorkSteps.Count;
-                    attempt = AttemptLeHopitals(reduced, ref pEvalData);
-
-                    if (attempt == null)
-                    {
-                        _leHopitalCount = 0;
-                        pEvalData.WorkMgr.PopStepsCount(pEvalData.WorkMgr.WorkSteps.Count - preHopitalsRuleStepCount);
-                        return this;
-                    }
-                }
-
-                pEvalData.WorkMgr.FromFormatted("`" + _thisDispStr + "={0}`", attempt);
-
-                pEvalData.AttemptSetInputType(TermType.InputType.Limits);
-
-                return attempt;
+                infEval = true;
             }
 
-            ExComp plugIn = PlugIn(_reducedInner, ref pEvalData);
+            // Split the limit and evaluate each part independently.
+            List<ExComp[]> reducedGps = reduced.GetGroupsNoOps();
+
+            if (reducedGps.Count > 1)
+            {
+                string limStr = "";
+                for (int i = 0; i < reducedGps.Count; ++i)
+                {
+                    limStr += "lim_{" + _varFor.ToDispString() + " \\to " + _valTo.ToDispString() + "}(" + reducedGps[i].ToAlgTerm().FinalToDispStr() + ")";
+                    if (i + 1 < reducedGps.Count)
+                        limStr += "+";
+                }
+
+                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + limStr + WorkMgr.EDM, "Split the limit up and evaluate each part independently.");
+            }
+
+            ExComp overall = null;
+            for (int i = 0; i < reducedGps.Count; ++i)
+            {
+                AlgebraTerm reducedGpTerm = reducedGps[i].ToAlgTerm();
+
+                ExComp eval = infEval ? EvaluateLimGpInf(reducedGpTerm, ref pEvalData) : EvaluateLimGp(reducedGpTerm, ref pEvalData);
+
+                if (eval == null)
+                    eval = Limit.Create(reducedGpTerm, _varFor, _valTo);
+                if (overall == null)
+                    overall = eval;
+                else
+                    overall = AddOp.StaticCombine(overall, eval);
+            }
+            if (overall is AlgebraTerm)
+                overall = (overall as AlgebraTerm).RemoveRedundancies();
+
+            if (overall is Limit)
+            {
+                _evalFail = true;
+                pEvalData.WorkMgr.PopStepsCount(pEvalData.WorkMgr.WorkSteps.Count - stepCount);
+            }
+
+            return overall;
+        }
+
+        private ExComp EvaluateLimGpInf(AlgebraTerm eval, ref TermType.EvalData pEvalData)
+        {
+            if (!eval.Contains(_varFor))
+                return eval;
+
+            int stepCount = pEvalData.WorkMgr.WorkSteps.Count;
+
+            ExComp attempt = EvaluateInfinity(eval, ref pEvalData);
+            if (attempt == null)
+            {
+                pEvalData.WorkMgr.PopStepsCount(pEvalData.WorkMgr.WorkSteps.Count - stepCount);
+            }
+
+            if (attempt == null)
+            {
+                attempt = EvalInfinitySpecialFunc(eval);
+            }
+
+            if (attempt == null)
+            {
+                int preHopitalsRuleStepCount = pEvalData.WorkMgr.WorkSteps.Count;
+                attempt = AttemptLeHopitals(eval, ref pEvalData);
+
+                if (attempt == null)
+                {
+                    _leHopitalCount = 0;
+                    pEvalData.WorkMgr.PopStepsCount(pEvalData.WorkMgr.WorkSteps.Count - preHopitalsRuleStepCount);
+                    return this;
+                }
+            }
+
+            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + _thisDispStr + "={0}" + WorkMgr.EDM, attempt);
+
+            pEvalData.AttemptSetInputType(TermType.InputType.Limits);
+
+            return attempt;
+        }
+
+        private ExComp EvaluateLimGp(AlgebraTerm eval, ref TermType.EvalData pEvalData)
+        {
+            if (!eval.Contains(_varFor))
+                return eval;
+
+            ExComp plugIn = PlugIn(eval, ref pEvalData);
             if (plugIn != null)
             {
                 pEvalData.WorkMgr.FromFormatted("`" + _thisDispStr + "={0}`", plugIn);
@@ -116,7 +176,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 return plugIn;
             }
 
-            attempt = EvalSpecialFunc(reduced);
+            ExComp attempt = EvalSpecialFunc(eval);
             if (attempt != null)
             {
                 pEvalData.WorkMgr.FromFormatted("`" + _thisDispStr + "={0}`", attempt);
@@ -125,13 +185,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 return attempt;
             }
 
-            if (CheckForLimitDivergence(reduced, ref pEvalData))
+            if (CheckForLimitDivergence(eval, ref pEvalData))
             {
                 pEvalData.AddMsg("Limit Diverges");
                 return Number.Undefined;
             }
 
-            attempt = TryRadicalConjugate(reduced, ref pEvalData);
+            attempt = TryRadicalConjugate(eval, ref pEvalData);
             if (attempt != null)
             {
                 pEvalData.WorkMgr.FromFormatted("`" + _thisDispStr + "={0}`", attempt);
@@ -140,7 +200,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 return attempt;
             }
 
-            attempt = AttemptLeHopitals(reduced, ref pEvalData);
+            attempt = AttemptLeHopitals(eval, ref pEvalData);
 
             if (attempt != null)
             {
@@ -150,10 +210,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 return attempt;
             }
 
-
-            _evalFail = true;
-            pEvalData.WorkMgr.PopStepsCount(pEvalData.WorkMgr.WorkSteps.Count - stepCount);
-            return this;
+            return null;
         }
 
         private ExComp EvalInfinitySpecialFunc(ExComp ex)
@@ -581,11 +638,45 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
                 ExComp varToEx = varTo[0];
                 ExComp compDiv = ComponentWiseDiv(varToEx.ToAlgTerm(), dividend);
-                ExComp finalAdd = MulOp.StaticCombine(constTo.ToAlgTerm(), compDiv);
+                ExComp finalAdd = constTo.Length == 0 ? compDiv : MulOp.StaticCombine(constTo.ToAlgTerm(), compDiv);
                 finalTerm.Add(finalAdd);
             }
 
             return finalTerm;
+        }
+
+        private ExComp EvaluatePoly(PolynomialExt poly, ref TermType.EvalData pEvalData)
+        {
+            bool evenFunc = poly.MaxPow % 2 == 0;
+            ExComp leadingCoeffEx = poly.LeadingCoeff;
+            if (!(leadingCoeffEx is Number))
+                return null;
+            bool neg = (leadingCoeffEx as Number) < 0.0;
+
+            ExComp infRet = null;
+            if (Number.PosInfinity.IsEqualTo(_valTo))
+            {
+                infRet = Number.PosInfinity;
+            }
+            else if (Number.NegInfinity.IsEqualTo(_valTo))
+            {
+                infRet = evenFunc ? Number.PosInfinity : Number.NegInfinity;
+            }
+
+            if (infRet == null)
+                return this;
+
+            string explainStr = "The maximum power of the polynomial is " + (evenFunc ? "even" : "odd") + ", therefore, the function approaches `" + infRet.ToDispString() + "`.";
+
+            if (neg)
+            {
+                infRet = MulOp.Negate(infRet);
+                explainStr += " However the leading coefficient of the polynomial is negative so the function ends are reflected resulting in the limit becoming `" + infRet.ToDispString() + "`.";
+            }
+
+            pEvalData.WorkMgr.FromFormatted("`" + this.FinalToDispStr() + "`", explainStr);
+
+            return infRet;
         }
 
         private ExComp EvaluateInfinity(AlgebraTerm term, ref TermType.EvalData pEvalData)
@@ -594,40 +685,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (attempt != null)
                 return attempt;
 
-            PolynomialExt poly = new PolynomialExt();
-            if (poly.Init(term))
-            {
-                bool evenFunc = poly.MaxPow % 2 == 0;
-                ExComp leadingCoeffEx = poly.LeadingCoeff;
-                if (!(leadingCoeffEx is Number))
-                    return null;
-                bool neg = (leadingCoeffEx as Number) < 0.0;
-
-                ExComp infRet = null;
-                if (Number.PosInfinity.IsEqualTo(_valTo))
-                {
-                    infRet = Number.PosInfinity;
-                }
-                else if (Number.NegInfinity.IsEqualTo(_valTo))
-                {
-                    infRet = evenFunc ? Number.PosInfinity : Number.NegInfinity;
-                }
-
-                if (infRet == null)
-                    return null;
-
-                string explainStr = "The maximum power of the polynomial is " + (evenFunc ? "even" : "odd") + ", therefore, the function approaches `" + infRet.ToDispString() + "`.";
-
-                if (neg)
-                {
-                    infRet = MulOp.Negate(infRet);
-                    explainStr += " However the leading coefficient of the polynomial is negative so the function ends are reflected resulting in the limit becoming `" + infRet.ToDispString() + "`.";
-                }
-
-                pEvalData.WorkMgr.FromFormatted("`" + this.FinalToDispStr() + "`", explainStr);
-
-                return infRet;
-            }
             else if (Number.PosInfinity.IsEqualTo(_valTo))
             {
                 List<ExComp> varPowers = term.GetPowersOfVar(_varFor);

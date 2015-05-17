@@ -2567,7 +2567,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
 
             currentIndex++;
 
-            if (lt[currentIndex].Data1 == LexemeType.Operator && lt[currentIndex].Data2 == "*")
+            if (currentIndex < lt.Count - 1 && lt[currentIndex].Data1 == LexemeType.Operator && lt[currentIndex].Data2 == "*")
                 currentIndex++;
 
             ExComp innerEx;
