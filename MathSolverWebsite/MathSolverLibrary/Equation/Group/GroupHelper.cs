@@ -750,6 +750,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 if ((groupComp is Number && (groupComp as Number) == -1 && group.Length > 1) ||
                     (groupComp is Number && i < group.Length - 1 && group[i + 1] is Number))
                     finalStr += "*";
+                else if (groupComp is AlgebraComp || groupComp is Number)
+                    finalStr += " ";
             }
 
             return finalStr;
@@ -765,6 +767,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 if ((groupComp is Number && (groupComp as Number) == -1 && group.Length > 1) ||
                     (groupComp is Number && i < group.Length - 1 && group[i + 1] is Number))
                     finalStr += "*";
+                else if (groupComp is AlgebraComp)
+                    finalStr += " ";
             }
 
             return finalStr;

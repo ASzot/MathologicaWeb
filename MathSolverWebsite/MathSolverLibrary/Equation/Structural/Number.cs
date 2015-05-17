@@ -422,7 +422,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         public string FinalToDispString()
         {
             if (IsUndefined())
-                return "Undefined";
+                return "\\text{Undefined}";
             if (IsNegInfinity())
                 return "-oo";
             if (IsPosInfinity())
@@ -970,9 +970,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         }
 
         public override string ToTexString()
-        {
+        { 
             if (IsUndefined())
-                return "Undefined";
+                return "\\text{Undefined}";
             if (IsNegInfinity())
                 return "-oo";
             if (IsPosInfinity())
