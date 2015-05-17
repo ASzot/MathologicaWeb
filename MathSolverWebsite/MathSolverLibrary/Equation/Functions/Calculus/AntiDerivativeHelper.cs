@@ -119,17 +119,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (gp.Length == 1 && gp[0] is AlgebraFunction)
             {
                 if (gp[0] is PowerFunction)
-                {
-                    PowerFunction gpPf = gp[0] as PowerFunction;
-                    if (gpPf.Power.IsEqualTo(Number.NegOne) && gpPf.Base is PowerFunction)
-                    {
-                        PowerFunction baseGpPf = gpPf.Base as PowerFunction;
-                        baseGpPf.Power = MulOp.StaticCombine(baseGpPf.Power, gpPf.Power);
-                        if (baseGpPf.Power is AlgebraTerm)
-                            baseGpPf.Power = (baseGpPf.Power as AlgebraTerm).RemoveRedundancies();
-                        gp[0] = baseGpPf;
-                    }
-                }
+                    gp[0] = (gp[0] as PowerFunction).ForceCombineExponents();
 
                 atmpt = GetIsSingleFunc(gp[0], dVar, ref pEvalData);
                 if (atmpt != null)

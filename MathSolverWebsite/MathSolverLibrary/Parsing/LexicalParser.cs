@@ -219,7 +219,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
             List<TypePair<LexemeType, MatchTolken>> tolkensToRemove = new List<TypePair<LexemeType, MatchTolken>>();
             for (int i = 0; i < tolkenMatches.Count; ++i)
             {
-                var tolken = tolkenMatches[i];
+                TypePair<LexemeType, MatchTolken> tolken = tolkenMatches[i];
                 int length = tolken.Data2.Length;
                 int startIndex = tolken.Data2.Index;
 
@@ -239,7 +239,20 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                         {
                             if (k == i)
                                 continue;
-                            var compareTolken = tolkenMatches[k];
+
+                            TypePair<LexemeType, MatchTolken> compareTolken = tolkenMatches[k];
+
+                            if (tolken.Data1 == LexemeType.Integral && compareTolken.Data1 == LexemeType.Identifier && compareTolken.Data2.Value.Contains("t_"))
+                            {
+                                // This was a mismatched lexeme.
+                                string idenStr = compareTolken.Data2.Value.Split('_')[1];
+                                if (!Regex.IsMatch(idenStr, LexicalParser.NUM_MATCH))
+                                {
+                                    tolkenMatches[k] = new TypePair<LexemeType, MatchTolken>(LexemeType.Identifier, new MatchTolken(idenStr.Length, tolken.Data2.Index + 1, idenStr));
+                                    continue;
+                                }
+                            }
+
                             if (compareTolken.Data2.Index == index &&
                                 !((compareTolken.Data1 == LexemeType.FunctionDef || compareTolken.Data1 == LexemeType.Derivative) &&
                                 compareTolken.Data2.Value.StartsWith("g(")))

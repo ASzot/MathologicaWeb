@@ -223,7 +223,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 useLower = LowerLimit;
 
 
-            if (useUpper != UpperLimit && useLower != LowerLimit)
+            if (!useUpper.IsEqualTo(UpperLimit) && !useLower.IsEqualTo(LowerLimit))
             {
                 // Evaluating from infinity in both directions. 
                 // Split the integral up.
@@ -278,8 +278,32 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             }
             ExComp lowerEx = Simplifier.Simplify(new AlgebraTerm(lowerEval), ref pEvalData);
 
+
+            AlgebraComp subVar = null;
+            ExComp limVal = null;
+            if (!useUpper.IsEqualTo(UpperLimit))
+            {
+                subVar = useUpper as AlgebraComp;
+                limVal = Number.PosInfinity;
+            }
+            else if (!useLower.IsEqualTo(LowerLimit))
+            {
+                subVar = useLower as AlgebraComp;
+                limVal = Number.NegInfinity;
+            }
+
+            integralStr = "\\int_{" + WorkMgr.ToDisp(useLower) + "}^{" + WorkMgr.ToDisp(useUpper) + "}(" + InnerTerm.FinalToDispStr() + ")d" + _dVar.ToDispString(); 
+
+            if (subVar != null)
+            {
+                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + integralStr + "=\\lim_{" + subVar.ToDispString() +
+                    " \\to \\infty}" + integralStr + WorkMgr.EDM);
+                integralStr = "\\lim_{" + subVar.ToDispString() +
+                    " \\to \\infty}" + integralStr;
+            }
+
             pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + integralStr + "=F(" +
-                WorkMgr.ToDisp(UpperLimit) + ")-F(" + WorkMgr.ToDisp(LowerLimit) + ")" + WorkMgr.EDM,
+                WorkMgr.ToDisp(useUpper) + ")-F(" + WorkMgr.ToDisp(useLower) + ")" + WorkMgr.EDM,
                 "Evaluate the definite integral where F is the antiderivative.");
 
             string resultStr0 = SubOp.StaticWeakCombine(upperEx, lowerEx).ToAlgTerm().FinalToDispStr();
@@ -288,34 +312,17 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 resultStr0 + WorkMgr.EDM);
 
             ExComp result = SubOp.StaticCombine(upperEx, lowerEx);
-            AlgebraComp subVar = null;
-            ExComp limVal = null;
-            if (useUpper != UpperLimit)
-            {
-                subVar = useUpper as AlgebraComp;
-                limVal = Number.PosInfinity;
-            }
-            else if (useLower != LowerLimit)
-            {
-                subVar = useLower as AlgebraComp;
-                limVal = Number.NegInfinity;
-            }
-
             if (subVar != null)
             {
-                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + integralStr + "=\\lim_{" + subVar.ToDispString() +
-                    " \\to \\infty} \\int_{" + subVar.ToDispString() + "}^{" + WorkMgr.ToDisp(result) + "} + " +
-                    InnerTerm.FinalToDispStr() + "d" + _dVar.ToDispString() + WorkMgr.EDM);
-
                 pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\lim_{" + subVar.ToDispString() + " \\to \\infty}" +
                     WorkMgr.ToDisp(result) + WorkMgr.EDM, "Take the limit to infinity.");
-
                 result = Limit.TakeLim(result, subVar, limVal, ref pEvalData);
             }
 
             pEvalData.AddInputType(TermType.InputAddType.IntDef);
 
             string resultStr1 = WorkMgr.ToDisp(result);
+            integralStr = this.FinalToDispStr();
             if (resultStr0 != resultStr1)
                 pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + integralStr + "=" + resultStr1 + WorkMgr.EDM);
 

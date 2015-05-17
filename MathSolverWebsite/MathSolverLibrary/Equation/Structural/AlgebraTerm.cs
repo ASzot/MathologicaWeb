@@ -604,11 +604,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         {
             for (int i = 0; i < _subComps.Count; ++i)
             {
-                ExComp subComp = _subComps[i];
-                if (subComp is AlgebraFunction)
+                if (_subComps[i] is AlgebraFunction)
                 {
                     // Before evaluating anything check if a cancellation is possible.
-                    ExComp innerEx = (new AlgebraTerm((subComp as AlgebraFunction)._subComps.ToArray())).RemoveRedundancies();
+                    ExComp innerEx = (new AlgebraTerm((_subComps[i] as AlgebraFunction)._subComps.ToArray())).RemoveRedundancies();
                     ExComp cancelAtmpt = (_subComps[i] as AlgebraFunction).CancelWith(innerEx, ref pEvalData);
                     if (cancelAtmpt != null)
                     {
@@ -616,13 +615,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                         _subComps.Insert(i, cancelAtmpt);
                     }
                 }
-                if (subComp is AlgebraTerm)
+                if (_subComps[i] is AlgebraTerm)
                 {
                     (_subComps[i] as AlgebraTerm).EvaluateFunctions(harshEval, ref pEvalData);
                 }
-                if (subComp is AlgebraFunction)
+                if (_subComps[i] is AlgebraFunction)
                 {
-                    AlgebraFunction func = subComp as AlgebraFunction;
+                    AlgebraFunction func = _subComps[i] as AlgebraFunction;
                     _subComps.RemoveAt(i);
                     ExComp evaluated = func.Evaluate(harshEval, ref pEvalData);
                     _subComps.Insert(i, evaluated);

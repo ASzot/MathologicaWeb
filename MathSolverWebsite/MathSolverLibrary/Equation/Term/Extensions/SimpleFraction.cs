@@ -1,4 +1,5 @@
 ﻿using System;
+using MathSolverWebsite.MathSolverLibrary.Equation.Functions;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
 {
@@ -59,8 +60,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
 
             if (term.TermCount == 1)
             {
-                _num = term.ToAlgTerm();
-                _den = Number.One.ToAlgTerm();
+                if (term is PowerFunction && (term as PowerFunction).Power.IsEqualTo(Number.NegOne))
+                {
+                    _num = Number.One.ToAlgTerm();
+                    _den = (term as PowerFunction).Base.ToAlgTerm();
+                }
+                else
+                {
+                    _num = term.ToAlgTerm();
+                    _den = Number.One.ToAlgTerm();
+                }
 
                 return true;
             }

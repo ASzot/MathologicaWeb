@@ -178,12 +178,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (innerEx is Integral && _derivOf == null && order == 1)
             {
                 Integral finalInt = innerEx as Integral;
-                if (finalInt.DVar.IsEqualTo(_withRespectTo) && finalInt.IsDefinite)
+                if (finalInt.DVar.IsEqualTo(_withRespectTo) && !finalInt.IsDefinite)
                 {
                     pEvalData.WorkMgr.FromSides(this, null, "The derivative and the integral cancel.");
                     return finalInt.InnerTerm;
                 }
-                else if (!finalInt.IsDefinite)
+                else if (finalInt.IsDefinite)
                 {
                     bool upperContains = finalInt.UpperLimitTerm.ToAlgTerm().Contains(_withRespectTo);
                     bool lowerContains = finalInt.LowerLimitTerm.ToAlgTerm().Contains(_withRespectTo);
@@ -208,7 +208,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                         }
                         else if (lowerContains)
                         {
-                            ints = new Integral[] { Integral.ConstructIntegral(MulOp.Negate(finalInt.InnerEx), finalInt.DVar, finalInt.UpperLimit, finalInt.LowerLimit) };
+                            Integral tmpInt = Integral.ConstructIntegral(MulOp.Negate(finalInt.InnerEx), finalInt.DVar, finalInt.UpperLimit, finalInt.LowerLimit);
+                            pEvalData.WorkMgr.FromSides(tmpInt, null, "Switch the integral bounds.");
+                            ints = new Integral[] { tmpInt };
                         }
                         else
                             ints = new Integral[] { finalInt };
