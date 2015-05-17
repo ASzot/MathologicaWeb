@@ -28,6 +28,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                 "chi|psi|omega|Gamma|Theta|Lambda|Xi|Phsi|Psi|Omega|[a-zA-Z]";
 
         public const string NUM_MATCH = @"((?<![\d])\.[\d]+)|([\d]+([.][\d]+)?)";
+        public const string INF_MATCH = @"inf";
 
         public const string OPTIONAL_REALIMAG_NUM_PATTERN = @"^(-?[\d]+([.,][\d]+)?((\+|\-)i[0-9])?$";
         public const string REAL_NUM_PATTERN = @"-?[\d]+([.,][\d]+)?";
@@ -70,7 +71,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                                              LexemeType.Limit),
             new TypePair<string, LexemeType>(@"(int_)|(int)", LexemeType.Integral),
             new TypePair<string, LexemeType>(@"\$d(" + IDEN_MATCH + @")", LexemeType.Differential),
-            new TypePair<string, LexemeType>(@"inf", LexemeType.Infinity),
+            new TypePair<string, LexemeType>(INF_MATCH, LexemeType.Infinity),
             new TypePair<string, LexemeType>(@"(sum)|(lim)", LexemeType.ErrorType),
         };
 
@@ -246,7 +247,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                             {
                                 // This was a mismatched lexeme.
                                 string idenStr = compareTolken.Data2.Value.Split('_')[1];
-                                if (!Regex.IsMatch(idenStr, LexicalParser.NUM_MATCH))
+                                if (!Regex.IsMatch(idenStr, LexicalParser.NUM_MATCH) && !Regex.IsMatch(idenStr, LexicalParser.INF_MATCH))
                                 {
                                     tolkenMatches[k] = new TypePair<LexemeType, MatchTolken>(LexemeType.Identifier, new MatchTolken(idenStr.Length, tolken.Data2.Index + 1, idenStr));
                                     continue;
@@ -469,6 +470,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                     orderedTolkensList.RemoveAt(i + 1);
                 else if (tolken.Data1 == LexemeType.Derivative && i < orderedTolkensList.Count - 1 && orderedTolkensList[i + 1].Data1 == LexemeType.Differential && 
                     tolken.Data2.Contains(orderedTolkensList[i + 1].Data2))
+                {
+                    orderedTolkensList.RemoveAt(i + 1);
+                }
+                else if (tolken.Data1 == LexemeType.FuncDeriv && i < orderedTolkensList.Count - 1 && orderedTolkensList[i + 1].Data1 == LexemeType.FunctionDef &&
+                    tolken.Data2.EndsWith(orderedTolkensList[i + 1].Data2))
                 {
                     orderedTolkensList.RemoveAt(i + 1);
                 }

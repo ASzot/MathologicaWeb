@@ -229,12 +229,27 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 // Split the integral up.
                 Integral upperInt = Integral.ConstructIntegral(InnerTerm, _dVar, Number.Zero, Number.PosInfinity);
                 Integral lowerInt = Integral.ConstructIntegral(InnerTerm, _dVar, Number.NegInfinity, Number.Zero);
-                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + integralStr + "=" + lowerInt.FinalToDispStr() + "=" + 
-                    upperInt.FinalToDispStr() + WorkMgr.EDM,
+                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + integralStr + "=" + upperInt.FinalToDispStr() + "+" + 
+                    lowerInt.FinalToDispStr() + WorkMgr.EDM,
                     "Split the integral.");
 
+                pEvalData.WorkMgr.FromFormatted("", "Evaluate the upper integral.");
+                WorkStep lastStep = pEvalData.WorkMgr.GetLast();
+
+                lastStep.GoDown(ref pEvalData);
                 ExComp upperSideEval = upperInt.Evaluate(harshEval, ref pEvalData);
+                lastStep.GoUp(ref pEvalData);
+
+                lastStep.WorkHtml = WorkMgr.STM + upperInt.FinalToDispStr() + "=" + WorkMgr.ToDisp(upperSideEval) + WorkMgr.EDM;
+
+                pEvalData.WorkMgr.FromFormatted("", "Evaluate the lower integral.");
+                lastStep = pEvalData.WorkMgr.GetLast();
+
+                lastStep.GoDown(ref pEvalData);
                 ExComp lowerSideEval = lowerInt.Evaluate(harshEval, ref pEvalData);
+                lastStep.GoUp(ref pEvalData);
+
+                lastStep.WorkHtml = WorkMgr.STM + lowerInt.FinalToDispStr() + "=" + WorkMgr.ToDisp(lowerSideEval) + WorkMgr.EDM;
 
                 ExComp added = AddOp.StaticCombine(upperSideEval, lowerSideEval);
 

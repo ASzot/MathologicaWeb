@@ -188,8 +188,8 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
             if (tt_func != null && tt_solve != null)
             {
+                tmpCmds.AddRange(tt_func.GetCommands().ToList().GetRange(0, 3));
                 tmpCmds.AddRange(tt_solve.GetCommands());
-                tmpCmds.AddRange(tt_func.GetCommands().ToList().GetRange(0, 2));
             }
             else if (tt_func != null)
             {
