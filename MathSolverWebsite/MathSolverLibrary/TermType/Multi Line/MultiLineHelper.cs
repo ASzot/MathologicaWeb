@@ -14,6 +14,26 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
         private List<TypePair<FunctionDefinition, ExComp>> _funcDefs = new List<TypePair<FunctionDefinition, ExComp>>();
         private List<AndRestriction> _intervalDefs = new List<AndRestriction>();
         private List<List<WorkStep>> _intervalWorkSteps = new List<List<WorkStep>>();
+        private string[] _graphStrs = null;
+        private string _graphVar = null;
+
+        public bool ShouldGraph
+        {
+            get
+            {
+                return _graphVar != null && _graphStrs != null;
+            }
+        }
+
+        public string[] GraphStrs
+        {
+            get { return _graphStrs; }
+        }
+
+        public string GraphVar
+        {
+            get { return _graphVar; }
+        }
 
         public MultiLineHelper()
         {
@@ -55,6 +75,52 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             foreach (LexemeTable lt in lts)
             {
                 totalLt.AddRange(lt);
+            }
+
+            FunctionDefinition funcDef = null;
+            bool allEqual = true;
+            foreach (TypePair<FunctionDefinition, ExComp> searchFuncDef in _funcDefs)
+            {
+                if (funcDef == null)
+                    funcDef = searchFuncDef.Data1;
+                else
+                {
+                    if (funcDef.IsEqualTo(searchFuncDef.Data1))
+                    {
+                        allEqual = false;
+                        break;
+                    }
+                }
+            }
+
+            if (!allEqual && funcDef != null)
+            {
+                solveVars.Remove(funcDef.Iden.Var.Var);
+
+                if (solveVars.Count == 1)
+                {
+                    // There should only be one.
+                    foreach (string solveVar in solveVars.Keys)
+                        _graphVar = solveVar;
+
+                    _graphStrs = new string[_funcDefs.Count];
+                    bool allValid = true;
+                    for (int i = 0; i < _funcDefs.Count; ++i)
+                    {
+                        _graphStrs[i] = _funcDefs[i].Data2.ToJavaScriptString(pEvalData.UseRad);
+                        if (_graphStrs[i] == null)
+                        {
+                            allValid = false;
+                            break;
+                        }
+                    }
+
+                    if (!allValid)
+                    {
+                        _graphVar = null;
+                        _graphStrs = null;
+                    }
+                }
             }
 
             solveVars = AlgebraSolver.GetIdenOccurances(totalLt);
@@ -115,17 +181,27 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             }
             else if (eqSet.Left is AlgebraComp)
             {
-
+                funcDef = new FunctionDefinition(eqSet.Left as AlgebraComp, null, null, false);
+                assignTo = eqSet.Right;
             }
             else if (eqSet.Right is AlgebraComp)
             {
-
+                funcDef = new FunctionDefinition(eqSet.Right as AlgebraComp, null, null, false);
+                assignTo = eqSet.Left;
             }
             else
                 return false;
 
-            //_funcDefs.Add(new TypePair<FunctionDefinition, ExComp>(funcDef, assignTo));
-            pEvalData.FuncDefs.Define(funcDef, assignTo, ref pEvalData);
+            _funcDefs.Add(new TypePair<FunctionDefinition, ExComp>(funcDef, assignTo));
+            // Also call this function on every single other side.
+            for (int j = 0; j < eqs.Count; ++j)
+            {
+                if (j == i)
+                    continue;
+                eqs[j].CallFunction(funcDef, assignTo);
+            }
+
+            //pEvalData.FuncDefs.Define(funcDef, assignTo, ref pEvalData);
             return true;
         }
     }

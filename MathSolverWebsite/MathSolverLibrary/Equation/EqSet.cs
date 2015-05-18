@@ -281,6 +281,19 @@ namespace MathSolverWebsite.MathSolverLibrary
             return true;
         }
 
+        public void CallFunction(FunctionDefinition funcDef, ExComp def)
+        {
+            for (int i = 0; i < _sides.Count; ++i)
+            {
+                if (_sides[i] == null)
+                    continue;
+
+                AlgebraTerm term = _sides[i].ToAlgTerm();
+                term.CallFunction(funcDef, def);
+                _sides[i] = term;
+            }
+        }
+
         public void GetAdditionVarFors(ref Dictionary<string, int> varFors)
         {
             foreach (ExComp side in _sides)

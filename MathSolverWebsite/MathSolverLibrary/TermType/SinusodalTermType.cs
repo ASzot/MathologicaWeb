@@ -210,7 +210,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             {
                 _graphStr = overall.ToJavaScriptString(pEvalData.UseRad);
                 if (_graphStr != null)
-                    tmpCmds.Add("Graph");
+                    tmpCmds.Insert(0, "Graph");
             }
 
             _cmds = tmpCmds.ToArray();

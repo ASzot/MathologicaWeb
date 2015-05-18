@@ -232,7 +232,8 @@ h1 {
 .header {
    background:#ecf0f1;
    padding:10px;
-   height: 70px;
+   padding-top: 5px;
+   height: 50px;
 }
 .body {
    height: 100%;
@@ -432,13 +433,13 @@ h1 {
     background-color: #ffffff;
     right: 0px;
     /* Firefox */
-    height: -moz-calc(100% - 350px);
+    height: -moz-calc(100% - 330px);
     /* WebKit */
-    height: -webkit-calc(100% - 350px);
+    height: -webkit-calc(100% - 330px);
     /* Opera */
-    height: -o-calc(100% - 350px);
+    height: -o-calc(100% - 330px);
     /* Standard */
-    height: calc(100% - 350px);
+    height: calc(100% - 330px);
     overflow-y: auto;
 }
 
@@ -493,6 +494,10 @@ h1 {
     .gen-btn:hover {
         cursor: pointer;
         opacity: 0.2;
+    }
+
+    .gen-btn:focus {
+        outline: none;
     }
 
 .tool-bar-btn-space {
@@ -588,7 +593,7 @@ h1 {
 #title-block {
     float: left;
     margin-left: 5%;
-    margin-top: 10px;
+    margin-top: 0px;
 }
 
 .mathlogo {
@@ -611,7 +616,7 @@ h1 {
 }
 
 .click-area {
-    height: 70px;
+    height: 50px;
     width: 300px;
     position: absolute;
     z-index: 1001;

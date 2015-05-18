@@ -1,5 +1,6 @@
 ﻿using MathSolverWebsite.MathSolverLibrary.Equation.Functions;
 using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
+using MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -232,6 +233,37 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             _subComps = algebraTerm._subComps;
         }
 
+        public void CallFunction(FunctionDefinition funcDef, ExComp def)
+        {
+            for (int i = 0; i < _subComps.Count; ++i)
+            {
+                if (_subComps[i] is AlgebraComp && (_subComps[i] as AlgebraComp).IsEqualTo(funcDef.Iden) && !funcDef.HasValidInputArgs)
+                {
+                    _subComps[i] = def;
+                }
+
+                if (_subComps[i] is Derivative)
+                {
+                    Derivative deriv = _subComps[i] as Derivative;
+                    if (deriv.DerivOf != null && deriv.DerivOf.IsEqualTo(funcDef.Iden))
+                    {
+                        deriv = Derivative.ConstructDeriv(def, deriv.WithRespectTo, null, deriv.GetOrder());
+                        _subComps[i] = deriv;
+                    }
+                }
+
+                if (_subComps[i] is AlgebraTerm)
+                {
+                    (_subComps[i] as AlgebraTerm).CallFunction(funcDef, def);
+                }
+
+                if (_subComps[i] is FunctionDefinition && (_subComps[i] as FunctionDefinition).IsEqualTo(funcDef))
+                {
+                    _subComps[i] = def;
+                }
+            }
+        }
+
         public bool CallFunctions(ref TermType.EvalData pEvalData)
         {
             for (int i = 0; i < _subComps.Count; ++i)
@@ -244,6 +276,21 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                         continue;
                     _subComps[i] = definition;
                 }
+
+                if (_subComps[i] is Derivative)
+                {
+                    Derivative deriv = _subComps[i] as Derivative;
+                    if (deriv.DerivOf != null && pEvalData.FuncDefs.IsFuncDefined(deriv.DerivOf.Var.Var))
+                    {
+                        ExComp def = pEvalData.FuncDefs.GetDefinition(deriv.DerivOf).Value;
+                        if (def != null)
+                        {
+                            deriv = Derivative.ConstructDeriv(def, deriv.WithRespectTo, null, deriv.GetOrder());
+                            _subComps[i] = deriv;
+                        }
+                    }
+                }
+
                 if (_subComps[i] is AlgebraTerm)
                 {
                     if (!(_subComps[i] as AlgebraTerm).CallFunctions(ref pEvalData))

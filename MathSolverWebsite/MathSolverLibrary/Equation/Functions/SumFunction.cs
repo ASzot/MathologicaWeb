@@ -300,8 +300,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                     AlgebraTerm innerTerm = InnerTerm.Clone().ToAlgTerm();
 
                     innerTerm = innerTerm.Substitute(IterVar, iterVal);
+                    pEvalData.WorkMgr.FromFormatted("", "Evaluate the " + (i + 1).ToString() + (i + 1).GetCountingPrefix() + " term");
+                    WorkStep lastStep = pEvalData.WorkMgr.GetLast();
 
-                    ExComp simpInnerEx = TermType.SimplifyTermType.BasicSimplify(innerTerm.RemoveRedundancies(), ref pEvalData);
+                    lastStep.GoDown(ref pEvalData);
+                    ExComp simpInnerEx = TermType.SimplifyTermType.BasicSimplify(innerTerm.Clone().ToAlgTerm().RemoveRedundancies(), ref pEvalData);
+                    lastStep.GoUp(ref pEvalData);
+
+                    lastStep.WorkHtml = WorkMgr.STM + innerTerm.FinalToDispStr() + "=" + WorkMgr.ToDisp(simpInnerEx) + WorkMgr.EDM;
 
                     totalTerm = AddOp.StaticCombine(totalTerm, simpInnerEx).ToAlgTerm();
                 }

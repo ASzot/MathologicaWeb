@@ -109,6 +109,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
                 _defs.Remove(removeKey);
         }
 
+        public void SetFunctionState(Dictionary<FunctionDefinition, ExComp> defs)
+        {
+            _defs = defs;
+        }
+
         public List<FunctionDefinition> GetAllVecEquations(int dimen)
         {
             List<FunctionDefinition> funcs = new List<FunctionDefinition>();
@@ -188,6 +193,17 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
             foreach (KeyValuePair<FunctionDefinition, ExComp> def in _defs)
             {
                 if (def.Key.Iden.IsEqualTo(func.Iden))
+                    return def;
+            }
+
+            return new KeyValuePair<FunctionDefinition, ExComp>(null, null);
+        }
+
+        public KeyValuePair<FunctionDefinition, ExComp> GetDefinition(AlgebraComp searchFuncIden)
+        {
+            foreach (KeyValuePair<FunctionDefinition, ExComp> def in _defs)
+            {
+                if (def.Key.Iden.IsEqualTo(searchFuncIden))
                     return def;
             }
 

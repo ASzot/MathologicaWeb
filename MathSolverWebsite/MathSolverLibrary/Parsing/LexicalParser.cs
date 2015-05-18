@@ -23,6 +23,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
         private int _vecStoreIndex = 0;
         private bool _fixIntegrals = true;
         private const string MATH_EMPTY_GP = "EMPTYGP";
+        private bool _factorialsCorrected = false;
 
         public const string IDEN_MATCH = @"alpha|beta|gamma|delta|epsilon|varepsilon|zeta|eta|theta|vartheta|iota|kappa|lambda|mu|nu|xi|rho|sigma|tau|usilon|phi|varphi|" +
                 "chi|psi|omega|Gamma|Theta|Lambda|Xi|Phsi|Psi|Omega|[a-zA-Z]";
@@ -1300,8 +1301,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
             if (!CreateVectorStore(ref lexemeTable))
                 return null;
 
-            if (!CorrectFactorials(ref lexemeTable))
+            if (!CorrectFactorials(ref lexemeTable) && !_factorialsCorrected)
                 return null;
+
+            _factorialsCorrected = true;
 
             if (!CorrectFunctions(ref lexemeTable))
                 return null;
@@ -1563,7 +1566,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                         // This could be the partial derivative notation of F_x.
                         string[] split = lt[i].Data2.Split('_');
                         string funcIden = split[0];
-                        var funcDef = p_EvalData.FuncDefs.GetFuncDef(funcIden);
+                        FunctionDefinition funcDef = p_EvalData.FuncDefs.GetFuncDef(funcIden);
                         if (funcDef != null)
                         {
                             // The next part should be the variable with respect to.
@@ -2518,8 +2521,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                 }
             }
 
-            var deriv = Equation.Functions.Calculus.Derivative.Parse(funcMatch.Value, withRespectTo, order, false, 
-                ref p_EvalData, true);
+            Equation.Functions.Calculus.Derivative deriv = Equation.Functions.Calculus.Derivative.ConstructDeriv(Number.Zero, new AlgebraComp(withRespectTo), new AlgebraComp(funcMatch.Value), order);
 
             if (deriv == null)
                 pParseErrors.Add("Incorrect derivative notation for multivaraible functions.");

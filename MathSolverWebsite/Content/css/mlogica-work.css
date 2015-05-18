@@ -35,10 +35,10 @@
 }
 
 #work-space {
-    height: -moz-calc(100% - 284px);
-    height: -webkit-calc(100% - 284px);
-    height: -o-calc(100% - 284px);
-    height: calc(100% - 284px);
+    height: -moz-calc(100% - 264px);
+    height: -webkit-calc(100% - 264px);
+    height: -o-calc(100% - 264px);
+    height: calc(100% - 264px);
     overflow-y: auto;
     overflow-x: hidden;
 }
@@ -66,12 +66,10 @@
     }
 
 .toolbar-btn-dropdown {
-    position: absolute;
+    position: relative;
     z-index: 3000;
-    height: 40px;
-    line-height: 40px;
-    margin-left: 16px;
-    margin-top: -40px;
+    display: block;
+    padding-top: 8px;
 }
 
 .include-padding {

@@ -161,9 +161,23 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             _agSolver.CreateUSubTable(solveVars);
         }
 
+        public override void AttachMultiLineHelper(MultiLineHelper mlh)
+        {
+            base.AttachMultiLineHelper(mlh);
+
+            if (_term == null && mlh.ShouldGraph)
+            {
+                // Adjust to allow for graphing.
+                _cmds = new string[] { "Graph", KEY_SIMPLIFY };
+            }
+        }
+
         public static ExComp BasicSimplify(ExComp term, ref EvalData pEvalData)
         {
             AlgebraTerm tmpTerm = term.ToAlgTerm();
+            
+            // Surround in AlgebraTerm body to ensure that all of the functions are called.
+            tmpTerm = new AlgebraTerm(tmpTerm);
             tmpTerm.CallFunctions(ref pEvalData);
             term = tmpTerm.RemoveRedundancies();
 
@@ -335,6 +349,11 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             }
             else if (command == "Graph")
             {
+                if (_term == null && _multiLineHelper.ShouldGraph)
+                {
+                    pEvalData.AttemptSetGraphData(_multiLineHelper.GraphStrs, _multiLineHelper.GraphVar);
+                    return SolveResult.Solved();
+                }
                 string graphStr = _term.ToAlgTerm().GetAllAlgebraCompsStr()[0];
                 if (pEvalData.AttemptSetGraphData(_term, graphStr))
                     return SolveResult.Solved();

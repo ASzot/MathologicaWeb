@@ -8,7 +8,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 {
     internal class Derivative : AppliedFunction
     {
-        private const int MAX_DERIV = 3;
+        private const int MAX_DERIV = 7;
 
         private AlgebraComp _derivOf = null;
         private bool _isDefined = true;
@@ -77,6 +77,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             Derivative deriv = new Derivative(innerEx);
             deriv._withRespectTo = withRespect;
             deriv._derivOf = derivOf;
+
+            return deriv;
+        }
+
+        public static Derivative ConstructDeriv(ExComp innerEx, AlgebraComp withRespect, AlgebraComp derivOf, ExComp order)
+        {
+            Derivative deriv = new Derivative(innerEx);
+            deriv._withRespectTo = withRespect;
+            deriv._derivOf = derivOf;
+            deriv._order = order;
 
             return deriv;
         }
@@ -160,6 +170,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (ca_impDeriv == null)
                 ca_impDeriv = ConstructImplicitDerivAgCmp(_derivOf, _withRespectTo);
             return ca_impDeriv;
+        }
+
+        public ExComp GetOrder()
+        {
+            return _order;
+        }
+
+        public override bool Contains(AlgebraComp varFor)
+        {
+            return _order.ToAlgTerm().Contains(varFor) || base.Contains(varFor);
         }
 
         private static AlgebraComp ConstructImplicitDerivAgCmp(ExComp derivOf, ExComp withRespectTo, bool isPartial = false)

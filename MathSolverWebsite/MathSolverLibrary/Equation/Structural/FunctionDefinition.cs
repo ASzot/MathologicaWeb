@@ -34,6 +34,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         {
             get 
             {
+                if (_args == null)
+                    return false;
                 foreach (AlgebraComp arg in _args)
                 {
                     if (arg.IsTrash)
@@ -196,6 +198,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 FunctionDefinition funcDef = ex as FunctionDefinition;
                 if (!funcDef._iden.IsEqualTo(_iden))
                     return false;
+
+                if (funcDef._args == null || _args == null)
+                {
+                    return funcDef._args == null && _args == null;
+                }
 
                 if (funcDef._args.Length != _args.Length)
                     return false;

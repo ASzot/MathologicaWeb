@@ -38,7 +38,7 @@
 
         public override string ToAsciiString()
         {
-            return InnerEx.ToAsciiString() + "!";
+            return InnerEx.ToAsciiString() + "! ";
         }
 
         public override string ToJavaScriptString(bool useRad)
@@ -50,7 +50,7 @@
         {
             if (MathSolver.USE_TEX_DEBUG)
                 return ToTexString();
-            return InnerEx.ToString() + "!";
+            return InnerEx.ToString() + "! ";
         }
 
         public override string FinalToAsciiKeepFormatting()
@@ -75,7 +75,7 @@
 
         public override string ToTexString()
         {
-            return InnerEx.ToTexString() + "!";
+            return InnerEx.ToTexString() + "! ";
         }
     }
 }

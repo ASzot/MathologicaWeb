@@ -20,7 +20,7 @@ namespace MathSolverWebsite.MathSolverLibrary
             string probSolveVar = AlgebraSolver.GetProbableVar(solveVars);
 
             DiffEqTermType diffEqTT = new DiffEqTermType();
-            if (diffEqTT.Init(singularEqSet, solveVars, probSolveVar))
+            if (!singularEqSet.IsSingular && diffEqTT.Init(singularEqSet, solveVars, probSolveVar))
                 return diffEqTT;
 
             EquationInformation eqInfo = singularEqSet.IsSingular ? new EquationInformation(singularEqSet.LeftTerm, new AlgebraComp(probSolveVar)) :
@@ -96,7 +96,14 @@ namespace MathSolverWebsite.MathSolverLibrary
             List<TypePair<LexemeType, string>> completeLexemeTable = lexParser.CreateLexemeTable(input, ref pParseErrors);
             if (completeLexemeTable == null)
                 return null;
+            TermType.TermType result = ParseInput(completeLexemeTable, lexParser, input, ref pEvalData, ref pParseErrors);
 
+            return result;
+        }
+
+        public static TermType.TermType ParseInput(LexemeTable completeLexemeTable, LexicalParser lexParser, string input, ref TermType.EvalData pEvalData, ref List<string> pParseErrors)
+        {
+        
             List<LexemeTable> lexemeTables;
             List<EqSet> terms = lexParser.ParseInput(input, out lexemeTables, ref pParseErrors);
             if (terms == null)

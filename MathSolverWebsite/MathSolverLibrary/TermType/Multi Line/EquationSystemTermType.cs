@@ -95,6 +95,10 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
             _graphStrs = graphStrs;
 
+            // There is only one in the dictionary.
+            foreach (string iden in _allIdens.Keys)
+                _graphVarStr = iden;
+
             _cmds = new string[1] { "Graph" };
 
             return true;

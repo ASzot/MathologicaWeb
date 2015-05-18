@@ -56,9 +56,11 @@
                 }
             }
 
-            var latex = getLatexInput();
+            if (selectedTextBox != null) {
+                fixInput(selectedTextBox);
+            }
 
-            fixInput(latex);
+            var latex = getLatexInput();
 
             var encodedLatex = htmlEncode(latex);
 
@@ -73,10 +75,14 @@
             // Make sure there is not an error in the eval drop down.
             var dropDown = document.getElementById("<% = evalDropDownList.ClientID %>");
             var txt = dropDown.options[dropDown.selectedIndex].text;
-            if (txt == "Input is too long" ||
-                txt == "Invalid input" ||
-                txt == "Enter input above" ||
-                txt == "Please wait...")
+            if (txt.indexOf("Input is too long") != -1 ||
+                txt.indexOf("Invalid input") != -1 ||
+                txt.indexOf("Enter input above") != -1 ||
+                txt.indexOf("Please wait...") != -1)
+                return;
+
+            var latexInput = getLatexInput();
+            if (latexInput == "")
                 return;
 
             // Take the previous solve info and move it up a 'space'.
@@ -173,6 +179,9 @@
                 $("#work-list-disp").children().first().remove();
                 $("#work-list-disp").children().first().remove();
             }
+
+            // Remove all of the previous graphs.
+            $("#graphbox").remove();
 
             // Remove all of the existing graphs. (There can only be one graph at once).
             $("#work-list-disp").append("<div class='prev-output'>" + prevSolveOutput + "<div class='more-options-area'>" +

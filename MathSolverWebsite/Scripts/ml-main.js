@@ -284,6 +284,11 @@ function onToolBarEleClicked(clickedId, event) {
 }
 
 $(document).ready(function () {
+    $("body").click(function (e) {
+        if ($(e.target).closest(".sub-toolbar-btn-space").length == 0)
+            $(".sub-toolbar-btn-space").fadeOut();
+    });
+
     function onSubjectBarBtnClicked() {
         // Make the correct subject selected.
         $(this).attr('class', 'subject-bar-btn-clicked');
@@ -302,7 +307,14 @@ $(document).ready(function () {
         currentMenu = selectedMenu;
 
         var toolBoxHTML = selectedMenu.outputItems();
+
         $('#toolbar-btn-space').html(toolBoxHTML);
+
+        if (toolBoxHTML.indexOf("extra-space") != -1) {
+            $(".toolbar-btn").css("margin-top", "-4px");
+        }
+        else if (idIndex == 5)
+            $(".toolbar-btn").css("margin-top", "-3px");
 
         MathJax.Hub.Queue(["Typeset", MathJax.Hub], function () {
             $(".sub-toolbar-btn-space").each(function () {
@@ -310,17 +322,23 @@ $(document).ready(function () {
             });
             
             $(".toolbar-btn-dropdown").each(function () {
-                var subs = $(this).parent().children(".sub-toolbar-btn-space");
                 var parentHeight = $(this).parent().height();
                 var parentWidth = $(this).parent().width();
                 if ($(this).hasClass("extra-space")) {
-                    parentWidth += 47.0;
+                    parentWidth += 30.0;
                 }
-                $(this).css('height', parentHeight);
+                
+                var paddingHeight = ((parentHeight - 19.0) / 2.0);
+                //$(this).css('padding-top', paddingHeight + "px");
+                //$(this).css('padding-bottom', paddingHeight + "px");
+                $(this).css('height', parentHeight + "px");
                 $(this).css('line-height', parentHeight + "px");
-                $(this).css('margin-top', "-" + parentHeight + "px");
-                var factor = Math.pow(parentWidth, new Number(1.0)) / 4.5;
-                $(this).css('margin-left', (factor) + 'px');
+                $(this).css('top', "-" + parentHeight + "px");
+                $(this).css('margin-bottom', "-" + parentHeight + "px");
+                var factor = Math.pow(parentWidth, new Number(1.0)) / 1.4;
+                $(this).css('left', (factor) + 'px');
+                $(this).css('width', "20px");
+
 
                 $(this).click(function (e) {
                     var subBtns = $(this).parent().children(".sub-toolbar-btn-space");
@@ -400,6 +418,10 @@ function addInputBtn_Clicked() {
     updateInputBoxes();
 
     $("#mathInputSpan" + ni).focus();
+
+    selectedTextBox = $("#mathInputSpan" + ni);
+
+    mathInputChanged();
 }
 
 function setLatexInput(setInput) {
@@ -475,6 +497,8 @@ function clearInputBtn_Clicked() {
     inputBoxIds.splice(index, 1);
 
     updateInputBoxes();
+
+    mathInputChanged();
 }
 
 function inputBoxLostFocus() {
@@ -500,7 +524,8 @@ function createInputBox(index, hasInputQuery) {
     return inputBoxHtml;
 }
 
-function fixInput(latex) {
+function fixInput(selectedTxtBox) {
+    var latex = selectedTxtBox.mathquill('latex');
     var replaced = latex.replace(/(\\)?sqrt/g, function ($0, $1) { return $1 ? $0 : '\\sqrt{}'; });
     replaced = replaced.replace(/<=/g, function ($0, $1) { return $1 ? $0 : '\\le'; });
     replaced = replaced.replace(/>=/g, function ($0, $1) { return $1 ? $0 : '\\ge'; });
@@ -536,7 +561,7 @@ function fixInput(latex) {
     }
 
     if (replaced != latex) {
-        setLatexInput(replaced);
+        selectedTxtBox.mathquill('latex', replaced);
     }
 }
 
