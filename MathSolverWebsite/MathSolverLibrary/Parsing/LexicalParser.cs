@@ -23,7 +23,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
         private int _vecStoreIndex = 0;
         private bool _fixIntegrals = true;
         private const string MATH_EMPTY_GP = "EMPTYGP";
-        private bool _factorialsCorrected = false;
         private List<string> _definedFuncs = new List<string>();
 
         public const string IDEN_MATCH = @"alpha|beta|gamma|delta|epsilon|varepsilon|zeta|eta|theta|vartheta|iota|kappa|lambda|mu|nu|xi|rho|sigma|tau|usilon|phi|varphi|" +
@@ -554,7 +553,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
 
             foreach (string equationSet in equationSets)
             {
-                _factorialsCorrected = false;
                 LexemeTable setLexemeTable = CreateLexemeTable(equationSet, ref pParseErrors);
 
                 if (setLexemeTable == null || setLexemeTable.Count == 0)
@@ -1323,10 +1321,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
             if (!CreateVectorStore(ref lexemeTable))
                 return null;
 
-            if (!_factorialsCorrected && !CorrectFactorials(ref lexemeTable))
+            if (!CorrectFactorials(ref lexemeTable))
                 return null;
-
-            _factorialsCorrected = true;
 
             if (!CorrectFunctions(ref lexemeTable))
                 return null;
@@ -1485,6 +1481,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                     continue;
 
                 Lexeme lex = lt[i];
+                lt[i].Data2 = "FACT";
 
                 // Find the end of the group going in the opposite direction.
                 if (i == 0)
@@ -1815,7 +1812,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
 
                     if (depth != -1 || endIndex == -1)
                     {
-                        if ((lexeme.Data2 == "!" || lexeme.Data2.StartsWith("nabla")) && currentIndex != lexemeTable.Count - 1)
+                        if ((lexeme.Data2 == "FACT" || lexeme.Data2.StartsWith("nabla")) && currentIndex != lexemeTable.Count - 1)
                         {
                             // Just parse the next lexeme.
                             LexemeTable lt = new LexemeTable();
@@ -1825,7 +1822,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                             ExComp innerEx = LexemeToExComp(lt, ref tmpCurIndex, ref pParseErrors);
 
                             currentIndex = currentIndex + 1;
-                            if (lexeme.Data2 == "!")
+                            if (lexeme.Data2 == "FACT")
                                 return new FactorialFunction(innerEx);
                             else
                             {

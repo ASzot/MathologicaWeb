@@ -169,25 +169,33 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             FunctionDefinition funcDef = null;
             ExComp assignTo = null;
 
-            if (eqSet.Left is FunctionDefinition)
+            ExComp left = eqSet.Left;
+            if (left is AlgebraTerm)
+                left = (left as AlgebraTerm).RemoveRedundancies();
+
+            ExComp right = eqSet.Right;
+            if (right is AlgebraTerm)
+                right = (right as AlgebraTerm).RemoveRedundancies();
+
+            if (left is FunctionDefinition)
             {
-                funcDef = eqSet.Left as FunctionDefinition;
-                assignTo = eqSet.Right;
+                funcDef = left as FunctionDefinition;
+                assignTo = right;
             }
-            else if (eqSet.Right is FunctionDefinition)
+            else if (right is FunctionDefinition)
             {
-                funcDef = eqSet.Right as FunctionDefinition;
-                assignTo = eqSet.Left;
+                funcDef = right as FunctionDefinition;
+                assignTo = left;
             }
-            else if (eqSet.Left is AlgebraComp)
+            else if (left is AlgebraComp)
             {
-                funcDef = new FunctionDefinition(eqSet.Left as AlgebraComp, null, null, false);
-                assignTo = eqSet.Right;
+                funcDef = new FunctionDefinition(left as AlgebraComp, null, null, false);
+                assignTo = right;
             }
-            else if (eqSet.Right is AlgebraComp)
+            else if (right is AlgebraComp)
             {
-                funcDef = new FunctionDefinition(eqSet.Right as AlgebraComp, null, null, false);
-                assignTo = eqSet.Left;
+                funcDef = new FunctionDefinition(right as AlgebraComp, null, null, false);
+                assignTo = left;
             }
             else
                 return false;

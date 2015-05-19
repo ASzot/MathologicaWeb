@@ -344,6 +344,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                 InnerEx.ToTexString();
         }
 
+        public override AlgebraTerm Substitute(ExComp subOut, ExComp subIn)
+        {
+            return new SumFunction(InnerTerm.Substitute(subOut, subIn), 
+                IterVar.IsEqualTo(subOut) ? (AlgebraComp)subIn : IterVar, 
+                IterStart.ToAlgTerm().Substitute(subOut, subIn).RemoveRedundancies(),
+                IterStart.ToAlgTerm().Substitute(subOut, subIn).RemoveRedundancies());
+        }
+
         protected override AlgebraTerm CreateInstance(params ExComp[] args)
         {
             ExComp useArg1;
