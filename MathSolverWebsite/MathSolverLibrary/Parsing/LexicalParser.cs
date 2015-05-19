@@ -24,6 +24,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
         private bool _fixIntegrals = true;
         private const string MATH_EMPTY_GP = "EMPTYGP";
         private bool _factorialsCorrected = false;
+        private List<string> _definedFuncs = new List<string>();
 
         public const string IDEN_MATCH = @"alpha|beta|gamma|delta|epsilon|varepsilon|zeta|eta|theta|vartheta|iota|kappa|lambda|mu|nu|xi|rho|sigma|tau|usilon|phi|varphi|" +
                 "chi|psi|omega|Gamma|Theta|Lambda|Xi|Phsi|Psi|Omega|[a-zA-Z]";
@@ -444,6 +445,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                         }
                     }
                 }
+                if (i + 1 < orderedTolkensList.Count && orderedTolkensList[i].Data1 == LexemeType.FunctionDef && orderedTolkensList[i + 1].Data1 == LexemeType.EqualsOp 
+                    && (i == 0 || orderedTolkensList[i - 1].Data1 == LexemeType.EquationSeperator))
+                {
+                    _definedFuncs.Add(orderedTolkensList[i].Data2.Split('(')[0]);
+                }
             }
 
             for (int i = 0; i < orderedTolkensList.Count; ++i)
@@ -478,6 +484,21 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                     tolken.Data2.EndsWith(orderedTolkensList[i + 1].Data2))
                 {
                     orderedTolkensList.RemoveAt(i + 1);
+                }
+                else if (i >= 2 && tolken.Data1 == LexemeType.FuncIden && orderedTolkensList[i - 1].Data2 == "^" && orderedTolkensList[i - 2].Data1 == LexemeType.Identifier)
+                {
+                    string potentialFuncIden = orderedTolkensList[i - 2].Data2;
+
+                    // If the function is defined or if there is only one lexeme contained in between the parentheses then use.
+                    if ((i < orderedTolkensList.Count - 3 && orderedTolkensList[i + 3].Data1 == LexemeType.FuncArgEnd) || (_definedFuncs.Contains(potentialFuncIden) || p_EvalData.FuncDefs.IsFuncDefined(potentialFuncIden)))
+                    {
+                        orderedTolkensList[i - 2].Data1 = LexemeType.FuncDeriv;
+
+                        // Use the proper parsing notation.
+                        orderedTolkensList[i - 2].Data2 += orderedTolkensList[i - 1].Data2 += orderedTolkensList[i].Data2;
+                        orderedTolkensList.RemoveAt(i--);
+                        orderedTolkensList.RemoveAt(i--);
+                    }
                 }
             }
 
@@ -533,6 +554,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
 
             foreach (string equationSet in equationSets)
             {
+                _factorialsCorrected = false;
                 LexemeTable setLexemeTable = CreateLexemeTable(equationSet, ref pParseErrors);
 
                 if (setLexemeTable == null || setLexemeTable.Count == 0)
@@ -1301,7 +1323,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
             if (!CreateVectorStore(ref lexemeTable))
                 return null;
 
-            if (!CorrectFactorials(ref lexemeTable) && !_factorialsCorrected)
+            if (!_factorialsCorrected && !CorrectFactorials(ref lexemeTable))
                 return null;
 
             _factorialsCorrected = true;
@@ -1845,6 +1867,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                     FunctionDefinition funcDef = new FunctionDefinition();
                     if (!funcDef.Parse(lexeme.Data2))
                         return null;
+
                     return funcDef;
 
                 case LexemeType.FuncIden:
@@ -2509,19 +2532,59 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
 
             if (withRespectTo == null && currentIndex + 3 < lt.Count)
             {
-                if (lt[currentIndex + 1].Data1 == LexemeType.StartPara)
+                if (lt[currentIndex + 1].Data1 == LexemeType.StartPara || lt[currentIndex + 1].Data1 == LexemeType.FuncArgStart)
                 {
-                    if (lt[currentIndex + 2].Data1 != LexemeType.Identifier)
-                        return null;
-                    withRespectTo = lt[currentIndex + 2].Data2;
-                    if (lt[currentIndex + 3].Data1 != LexemeType.EndPara)
-                        return null;
+                    LexemeType lexType = lt[currentIndex + 1].Data1;
+                    LexemeType oppositeLt = LexemeTypeHelper.GetOpposite(lexType);
 
-                    currentIndex = currentIndex + 4;
+                    if (lt[currentIndex + 2].Data1 != LexemeType.Identifier)
+                    {
+                        // Trying to evaluate the function at a given value.
+                        int depth = 1;
+                        currentIndex += 2;
+                        int endIndex = -1;
+                        for (int i = currentIndex; i < lt.Count; ++i)
+                        {
+                            if (lt[i].Data1 == lexType)
+                                depth++;
+                            else if (lt[i].Data1 == oppositeLt)
+                            {
+                                depth--;
+                                if (depth == 0)
+                                {
+                                    endIndex = i;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (endIndex == -1)
+                            return null;
+
+                        LexemeTable inputValLt = lt.GetRange(currentIndex, endIndex - currentIndex);
+                        AlgebraTerm inputTerm = LexemeTableToAlgebraTerm(inputValLt, ref pParseErrors);
+                        if (inputTerm == null)
+                            return null;
+
+                        currentIndex = endIndex;
+
+                        inputTerm.ApplyOrderOfOperations();
+                        ExComp inputEx = inputTerm.MakeWorkable();
+
+                        return Equation.Functions.Calculus.Derivative.ConstructDeriv(new AlgebraComp(funcMatch.Value), inputEx, order);
+                    }
+                    else
+                    {
+                        withRespectTo = lt[currentIndex + 2].Data2;
+                        if (lt[currentIndex + 3].Data1 != oppositeLt)
+                            return null;
+
+                        currentIndex = currentIndex + 4;
+                    }
                 }
             }
 
-            Equation.Functions.Calculus.Derivative deriv = Equation.Functions.Calculus.Derivative.ConstructDeriv(Number.Zero, new AlgebraComp(withRespectTo), new AlgebraComp(funcMatch.Value), order);
+            Equation.Functions.Calculus.Derivative deriv = Equation.Functions.Calculus.Derivative.Parse(funcMatch.Value, withRespectTo, order, false, ref p_EvalData);
 
             if (deriv == null)
                 pParseErrors.Add("Incorrect derivative notation for multivaraible functions.");

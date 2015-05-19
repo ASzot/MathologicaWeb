@@ -85,6 +85,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         {
             if (!pf.Base.IsEqualTo(comp))
             {
+                if (Number.One.IsEqualTo(pf.Base))
+                    return comp;
+
                 AlgebraTerm term = new AlgebraTerm();
                 term.Add(pf, new MulOp(), comp);
 

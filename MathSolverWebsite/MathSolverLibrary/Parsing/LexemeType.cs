@@ -67,6 +67,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                     return LexemeType.StartPara;
                 case LexemeType.Bar:
                     return LexemeType.Bar;
+                case LexemeType.FuncArgStart:
+                    return LexemeType.FuncArgEnd;
+                case LexemeType.FuncArgEnd:
+                    return LexemeType.FuncArgStart;
                 default:
                     return LexemeType.ErrorType;
             }

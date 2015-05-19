@@ -233,6 +233,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             _subComps = algebraTerm._subComps;
         }
 
+        /// <summary>
+        /// Call given function.
+        /// </summary>
+        /// <param name="funcDef"></param>
+        /// <param name="def"></param>
         public void CallFunction(FunctionDefinition funcDef, ExComp def)
         {
             for (int i = 0; i < _subComps.Count; ++i)
@@ -245,10 +250,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 if (_subComps[i] is Derivative)
                 {
                     Derivative deriv = _subComps[i] as Derivative;
-                    if (deriv.DerivOf != null && deriv.DerivOf.IsEqualTo(funcDef.Iden))
+                    ExComp derivSubbed = deriv.GetDerivOfFunc(funcDef, def);
+                    if (derivSubbed != null)
                     {
-                        deriv = Derivative.ConstructDeriv(def, deriv.WithRespectTo, null, deriv.GetOrder());
-                        _subComps[i] = deriv;
+                        _subComps[i] = derivSubbed;
                     }
                 }
 
@@ -264,6 +269,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             }
         }
 
+        /// <summary>
+        /// Call the set of all defined functions.
+        /// </summary>
+        /// <param name="pEvalData"></param>
+        /// <returns></returns>
         public bool CallFunctions(ref TermType.EvalData pEvalData)
         {
             for (int i = 0; i < _subComps.Count; ++i)
@@ -282,11 +292,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                     Derivative deriv = _subComps[i] as Derivative;
                     if (deriv.DerivOf != null && pEvalData.FuncDefs.IsFuncDefined(deriv.DerivOf.Var.Var))
                     {
-                        ExComp def = pEvalData.FuncDefs.GetDefinition(deriv.DerivOf).Value;
-                        if (def != null)
+                        KeyValuePair<FunctionDefinition, ExComp> def = pEvalData.FuncDefs.GetDefinition(deriv.DerivOf);
+                        ExComp derivSubbed = deriv.GetDerivOfFunc(def.Key, def.Value);
+                        if (derivSubbed != null)
                         {
-                            deriv = Derivative.ConstructDeriv(def, deriv.WithRespectTo, null, deriv.GetOrder());
-                            _subComps[i] = deriv;
+                            _subComps[i] = derivSubbed;
                         }
                     }
                 }
