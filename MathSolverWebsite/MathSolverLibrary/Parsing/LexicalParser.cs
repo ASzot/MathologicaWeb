@@ -3005,7 +3005,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
             AlgebraTerm innerTerm = LexemeTableToAlgebraTerm(integralTerm, ref pParseErrors);
             if (innerTerm == null)
                 return null;
-            ExComp innerEx = innerTerm.RemoveRedundancies(true);
+            ExComp innerEx = innerTerm.WeakMakeWorkable(ref pParseErrors, ref p_EvalData);
+            if (innerEx == null)
+                return null;
+            if (innerEx is AlgebraTerm)
+                innerEx = (innerEx as AlgebraTerm).RemoveRedundancies();
 
             if (endIndex == -1)
             {

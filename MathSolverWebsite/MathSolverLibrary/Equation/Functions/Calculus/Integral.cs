@@ -17,6 +17,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         private IntegrationInfo _integralInfo = null;
         protected ExComp _upper = null;
         protected ExComp _lower = null;
+        private bool _isInnerIntegral = false;
 
 
         public AlgebraTerm UpperLimitTerm
@@ -73,10 +74,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         }
 
+        public Integral(ExComp innerEx, bool isInnerIntegral)
+            : this(innerEx)
+        {
+            _isInnerIntegral = isInnerIntegral;
+        }
+
 
         public override ExComp Clone()
         {
-            return ConstructIntegral(InnerTerm, _dVar, LowerLimit, UpperLimit);
+            return ConstructIntegral(InnerTerm, _dVar, LowerLimit, UpperLimit, _isInnerIntegral);
         }
 
         public static Integral ConstructIntegral(ExComp innerEx, AlgebraComp dVar)
@@ -111,6 +118,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             dict = GetIntegralDepths(inputIntegral, ref dict, out baseValue);
 
+            bool switched = false;
+
             foreach (KeyValuePair<string, Integral> kvPair in dict)
             {
                 Integral integral = kvPair.Value;
@@ -128,32 +137,42 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                         {
                             AlgebraComp tmp = kvPair.Value.DVar;
                             kvPair.Value.DVar = compareKvPair.Value.DVar;
+                            switched = true;
                             break;
                         }
                     }
                 }
             }
 
+            if (!switched)
+                return inputIntegral;
+
             // Go back to the regular integral form.
             ExComp overallIntegral = baseValue;
             foreach (Integral value in dict.Values)
             {
-                overallIntegral = ConstructIntegral(overallIntegral, value.DVar, value.LowerLimit, value.UpperLimit);
+                overallIntegral = ConstructIntegral(overallIntegral, value.DVar, value.LowerLimit, value.UpperLimit, false, false);
             }
 
             return overallIntegral;
         }
 
-        public static Integral ConstructIntegral(ExComp innerEx, AlgebraComp dVar, ExComp lower, ExComp upper)
+        public static Integral ConstructIntegral(ExComp innerEx, AlgebraComp dVar, ExComp lower, ExComp upper, bool isInner = false, bool rearrange = true)
         {
             Integral integral = new Integral(innerEx);
             integral._dVar = dVar;
             integral.LowerLimit = lower;
             integral.UpperLimit = upper;
+            integral._isInnerIntegral = isInner;
 
             // In the case of multidimensional integrals variable boundaries will potentially have to be rearranged.
             if (innerEx is Integral)
-                return RearrangeIntegral(integral) as Integral;
+            {
+                Integral innerInt = innerEx as Integral;
+                innerInt._isInnerIntegral = true;
+                if (lower != null && upper != null && rearrange)
+                    return RearrangeIntegral(integral) as Integral;
+            }
 
             return integral;
         }
@@ -223,7 +242,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 useLower = LowerLimit;
 
 
-            if (!useUpper.IsEqualTo(UpperLimit) && !useLower.IsEqualTo(LowerLimit))
+            if (useUpper != null && useLower != null && !useUpper.IsEqualTo(UpperLimit) && !useLower.IsEqualTo(LowerLimit))
             {
                 // Evaluating from infinity in both directions. 
                 // Split the integral up.
@@ -265,7 +284,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             if (LowerLimit == null || UpperLimit == null)
             {
-                if (_addConstant)
+                if (_addConstant && !_isInnerIntegral)
                 {
                     // Add the constant.
                     ExComp retEx = AddOp.StaticWeakCombine(indefinite, new CalcConstant());
