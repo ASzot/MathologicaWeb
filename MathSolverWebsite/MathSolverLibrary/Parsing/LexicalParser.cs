@@ -47,7 +47,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
             new TypePair<string, LexemeType>(@"pi|e", LexemeType.Constant),
             new TypePair<string, LexemeType>(@"\(", LexemeType.StartPara),
             new TypePair<string, LexemeType>(@"\)", LexemeType.EndPara),
-            new TypePair<string, LexemeType>("(?<!lo)((" + IDEN_MATCH + ")((_((" + IDEN_MATCH + ")|(" + NUM_MATCH + ")))|((_\\((.+?)\\))))?)", LexemeType.Identifier),
+            new TypePair<string, LexemeType>("(?<!lo)((" + IDEN_MATCH + ")((_((" + IDEN_MATCH + ")|(" + NUM_MATCH + ")))|)?)", LexemeType.Identifier),
             new TypePair<string, LexemeType>("(" + IDEN_MATCH + @")\((" + IDEN_MATCH + @")\)", LexemeType.FunctionDef),
             new TypePair<string, LexemeType>(NUM_MATCH, LexemeType.Number),
             new TypePair<string, LexemeType>(@"\!|asin|arcsin|acos|arccos|atan|arctan|acsc|arccsc|asec|arcsec|acot|arccot|sin|cos|tan|csc|sec|cot|log_|log|ln|" + 

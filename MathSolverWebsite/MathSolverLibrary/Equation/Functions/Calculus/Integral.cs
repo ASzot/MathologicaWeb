@@ -346,6 +346,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 resultStr0 + WorkMgr.EDM);
 
             ExComp result = SubOp.StaticCombine(upperEx, lowerEx);
+            if (result is AlgebraTerm)
+                result = (result as AlgebraTerm).CompoundFractions();
             if (subVar != null)
             {
                 pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\lim_{" + subVar.ToDispString() + " \\to \\infty}" +
