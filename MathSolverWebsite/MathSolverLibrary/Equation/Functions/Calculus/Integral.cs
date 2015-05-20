@@ -189,7 +189,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
                 // Take the anti derivative of each component seperately.
 
-                ExVector antiDerivVec = new ExVector(vec.Length);
+                ExVector antiDerivVec = vec.CreateEmptyBody();
 
                 // Work steps should go here.
 

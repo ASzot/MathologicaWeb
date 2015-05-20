@@ -2227,7 +2227,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
             }
             vecCompLts.Add(subsetLt.GetRange(prevIndex, subsetLt.Count - prevIndex));
 
-            if (vecCompLts.Count == 0 || vecCompLts.Count == 1)
+            if (vecCompLts.Count == 0)
                 return null;
 
             // Then parse each individual component.
@@ -2245,7 +2245,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                 vecCompExs.Add(term.RemoveRedundancies());
             }
 
-            var mat = Equation.Structural.LinearAlg.MatrixHelper.CreateMatrix(vecCompExs);
+            ExMatrix mat = Equation.Structural.LinearAlg.MatrixHelper.CreateMatrix(vecCompExs);
+            if (mat == null)
+                return null;
             string str = mat.ToTexString();
 
             return mat;

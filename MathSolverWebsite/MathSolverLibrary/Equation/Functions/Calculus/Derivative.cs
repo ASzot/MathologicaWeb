@@ -370,7 +370,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             {
                 ExVector vec = final as ExVector;
                 // Take the derivative of each component separately.
-                ExVector derivVec = new ExVector(vec.Length);
+                ExVector derivVec = vec.CreateEmptyBody();
 
                 // Work steps should go here.
 

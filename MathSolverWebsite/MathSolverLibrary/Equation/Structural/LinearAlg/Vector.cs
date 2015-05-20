@@ -13,19 +13,19 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
         public const string J = "\\bar{j}";
         public const string K = "\\bar{k}";
 
-        public int Length
+        public virtual int Length
         {
             get { return base.Cols; }
         }
 
         public ExComp X
         {
-            get { return Get(0); }
+            get { return 0 < Length ? Get(0) : Number.Zero; }
         }
 
         public ExComp Y
         {
-            get { return Get(1); }
+            get { return 1 < Length ? Get(1) : Number.Zero; }
         }
 
         public ExComp Z
@@ -58,12 +58,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
 
         }
 
-        public ExComp Get(int index)
+        public virtual ExComp Get(int index)
         {
             return Get(0, index);
         }
 
-        public void Set(int index, ExComp val)
+        public virtual void Set(int index, ExComp val)
         {
             Set(0, index, val);
         }
@@ -82,6 +82,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
             return totalSum;
         }
 
+        public virtual ExVector CreateEmptyBody()
+        {
+            return new ExVector(Length);
+        }
+
+        public virtual ExVector CreateVec(params ExComp[] exs)
+        {
+            return new ExVector(exs);
+        }
+
         public ExComp GetVecLength()
         {
             ExComp sum = Number.Zero;
@@ -95,7 +105,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
 
         public ExVector Normalize()
         {
-            ExVector vec = new ExVector(this.Length);
+            ExVector vec = this.CreateEmptyBody();
             ExComp vecLength = GetVecLength();
 
             for (int i = 0; i < this.Length; ++i)

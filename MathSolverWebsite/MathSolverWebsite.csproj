@@ -508,6 +508,7 @@
     <Compile Include="MathSolverLibrary\Equation\Structural\Constant.cs" />
     <Compile Include="MathSolverLibrary\Equation\Structural\FunctionDefinition.cs" />
     <Compile Include="MathSolverLibrary\Equation\Structural\GeneralSolution.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Structural\LinearAlg\ColumnVector.cs" />
     <Compile Include="MathSolverLibrary\Equation\Structural\LinearAlg\Determinant.cs" />
     <Compile Include="MathSolverLibrary\Equation\Structural\LinearAlg\Matrix.cs" />
     <Compile Include="MathSolverLibrary\Equation\Structural\LinearAlg\MatrixHelper.cs" />

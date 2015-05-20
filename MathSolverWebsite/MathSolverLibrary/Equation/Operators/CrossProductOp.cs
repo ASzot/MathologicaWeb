@@ -62,7 +62,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
             ExComp y = SubOp.StaticCombine(MulOp.StaticCombine(a3, b1), MulOp.StaticCombine(a1, b3));
             ExComp z = SubOp.StaticCombine(MulOp.StaticCombine(a1, b2), MulOp.StaticCombine(a2, b1));
 
-            return new ExVector(x, y, z);
+            return vec0.CreateVec(x, y, z);
         }
 
         public static ExComp StaticWeakCombine(ExComp ex1, ExComp ex2)

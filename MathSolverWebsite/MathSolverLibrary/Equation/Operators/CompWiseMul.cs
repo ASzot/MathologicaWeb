@@ -27,7 +27,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
             if (vec0.Length != vec1.Length)
                 return Number.Undefined;
 
-            ExVector vec = new ExVector(vec0.Length);
+            ExVector vec = vec0.CreateEmptyBody();
 
             for (int i = 0; i < vec0.Length; ++i)
             {

@@ -30,6 +30,24 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
             if (containsMatrix && !allMatrices)
                 return null;
 
+            // If each of the components is a 1D vector then we have a column vector not a matrix.
+            List<ExComp> transposedEles = new List<ExComp>();
+            foreach (ExComp ex in exs)
+            {
+                if (ex is ExVector && (ex as ExVector).Length == 1)
+                    transposedEles.Add((ex as ExVector).Get(0));
+                else
+                    break;
+            }
+
+            if (transposedEles.Count == exs.Count)
+            {
+                // Return the column vector.
+                if (transposedEles.Count < 2)
+                    return null;
+                return new ExColVec(transposedEles.ToArray());
+            }
+
             if (allMatrices)
             {
                 // Create a matrix.
@@ -42,6 +60,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
                     ExVector vec = exs[i] as ExVector;
                     if (i != 0 && vectors[i - 1].Length != vec.Length)
                         return null;
+
                     vectors[i] = vec.Components;
                 }
 

@@ -115,10 +115,14 @@ var calc = new TopicMenu(
             ]),
         new MenuItem("Indefinite integral", "\\int", "\\int", true, 
             [
-                new MenuItem("Indefinite integral", "\\int\\int", "\\int\\int", true),
-                new MenuItem("Indefinite integral", "\\int\\int\\int", "\\int\\int\\int", true),
+                new MenuItem("Double indefinite integral", "\\int\\int_{D}", "\\int\\int", true),
+                new MenuItem("Triple indefinite integral", "\\int\\int\\int_{V}", "\\int\\int\\int", true),
             ]),
-        new MenuItem("Definite integral", "\\int_{a}^{b}", "\\int_{}^{}", true),
+        new MenuItem("Definite integral", "\\int_{a}^{b}", "\\int_{}^{}", true,
+            [
+                new MenuItem("Double definite integral", "\\int\\int_{D}", "\\int_{}^{}\\int_{}^{}", true),
+                new MenuItem("Triple definite integral", "\\int\\int\\int_{V}", "\\int_{}^{}\\int_{}^{}\\int_{}^{}", true),
+            ]),
         new MenuItem("Limit", "\\lim_(x\\toh)", "\\lim_{x \\to \\EMPTYGP{} } \\left( \\right)", true),
         new MenuItem("Summation", "\\sum_(n=0)^N", "\\sum_{n= \\EMPTYGP{} }^{}", true),
         new MenuItem("Natural log (log base e)", "ln", "\\ln", false),
@@ -204,12 +208,17 @@ var prob = new TopicMenu(
 
 var linAlg = new TopicMenu(
     [
-        new MenuItem("Number zero", "[x,y]", "[\\EMPTYGP{},\\EMPTYGP{}]", false, 
+        new MenuItem("2D row vector", "[x,y]", "[\\EMPTYGP{},\\EMPTYGP{}]", true, 
             [
-                new MenuItem("3D vector", "[x,y,z]", "[\\EMPTYGP{}, \\EMPTYGP{}, \\EMPTYGP{}]", false),
-                new MenuItem("4D vector", "[x,y,z,w]", "[\\EMPTYGP{},\\EMPTYGP{},\\EMPTYGP{},\\EMPTYGP{}]", false),
+                new MenuItem("3D row vector", "[x,y,z]", "[\\EMPTYGP{}, \\EMPTYGP{}, \\EMPTYGP{}]", true),
+                new MenuItem("4D row vector", "[x,y,z,w]", "[\\EMPTYGP{},\\EMPTYGP{},\\EMPTYGP{},\\EMPTYGP{}]", true),
             ]),
-        new MenuItem("Number one", "[(a,b),(c,d)]", "\\vectora{\\EMPTYGP{}, \\EMPTYGP{}}{\\EMPTYGP{}, \\EMPTYGP{}}", true, 
+        new MenuItem("2D column vector", "[[x],[y]]", "\\vectora{}{}", true,
+            [
+                new MenuItem("3D column vector", "[[x],[y],[z]]", "\\vectorb{}{}{}", true),
+                new MenuItem("3D column vector", "[[x],[y],[z],[w]]", "\\vectorb{}{}{}{}", true),
+            ]),
+        new MenuItem("2x2 matrix", "[(a,b),(c,d)]", "\\vectora{\\EMPTYGP{}, \\EMPTYGP{}}{\\EMPTYGP{}, \\EMPTYGP{}}", true, 
             [
                 new MenuItem("3x3 matrix", "[[a, b, c], [d, e, f], [g, h, k]]", "\\vectorb{\\EMPTYGP{}, \\EMPTYGP{}, \\EMPTYGP{}}{\\EMPTYGP{}, \\EMPTYGP{}, \\EMPTYGP{}}{\\EMPTYGP{}, \\EMPTYGP{}, \\EMPTYGP{}}", true),
                 new MenuItem("4x4 matrix", "[[a, b, c, d], [e, f, g, h], [k, l, m, n], [p, q, r, s]]", "\\vectorc{\\EMPTYGP{}, \\EMPTYGP{}, \\EMPTYGP{}, \\EMPTYGP{}}{\\EMPTYGP{}, \\EMPTYGP{}, \\EMPTYGP{}, \\EMPTYGP{}}{\\EMPTYGP{}, \\EMPTYGP{}, \\EMPTYGP{}, \\EMPTYGP{}} {\\EMPTYGP{}, \\EMPTYGP{}, \\EMPTYGP{}, \\EMPTYGP{}}", true),

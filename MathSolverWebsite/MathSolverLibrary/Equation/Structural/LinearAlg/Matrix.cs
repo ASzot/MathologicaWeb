@@ -119,7 +119,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
                 data[i] = _exData[i][col];
             }
 
-            return new ExVector(data);
+            return new ExColVec(data);
         }
 
         public ExMatrix GetMatrixMinor(int cancelRow, int cancelCol)
