@@ -310,7 +310,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 pEvalData.AddFailureMsg("Internal error evaluating antiderivative");
                 return this;
             }
-            ExComp lowerEx = Simplifier.Simplify(new AlgebraTerm(lowerEval), ref pEvalData);
+            ExComp lowerEx = TermType.SimplifyTermType.BasicSimplify(lowerEval, ref pEvalData);
+            //ExComp lowerEx = Simplifier.Simplify(new AlgebraTerm(lowerEval), ref pEvalData);
 
 
             AlgebraComp subVar = null;

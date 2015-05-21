@@ -244,7 +244,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
 
                             TypePair<LexemeType, MatchTolken> compareTolken = tolkenMatches[k];
 
-                            if (tolken.Data1 == LexemeType.Integral && compareTolken.Data1 == LexemeType.Identifier && compareTolken.Data2.Value.Contains("t_"))
+                            if (tolken.Data2.Index + tolken.Data2.Length >= compareTolken.Data2.Index && tolken.Data1 == LexemeType.Integral && compareTolken.Data1 == LexemeType.Identifier && compareTolken.Data2.Value.Contains("t_"))
                             {
                                 // This was a mismatched lexeme.
                                 string idenStr = compareTolken.Data2.Value.Split('_')[1];
@@ -2932,12 +2932,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                     return null;
                 AlgebraTerm lowerTerm = lower.ToAlgTerm();
 
-                lowerTerm = lowerTerm.WeakMakeWorkable(ref p_EvalData).ToAlgTerm();
-                lowerTerm = lowerTerm.ApplyOrderOfOperations();
-                lowerTerm = lowerTerm.MakeWorkable().ToAlgTerm();
-                lowerTerm = lowerTerm.CompoundFractions();
-
-                lower = lowerTerm.RemoveRedundancies();
+                lower = lowerTerm.WeakMakeWorkable(ref p_EvalData).ToAlgTerm();
+                lower = TermType.SimplifyTermType.BasicSimplify(lower, ref p_EvalData);
 
 
                 if (currentIndex + 1 < lt.Count && (lt[currentIndex + 1].Data1 != LexemeType.Operator || lt[currentIndex + 1].Data2 != "^"))
@@ -2955,12 +2951,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                         return null;
 
                     AlgebraTerm upperTerm = upper.ToAlgTerm();
-                    upperTerm = upperTerm.WeakMakeWorkable(ref p_EvalData).ToAlgTerm();
-                    upperTerm = upperTerm.ApplyOrderOfOperations();
-                    upperTerm = upperTerm.MakeWorkable().ToAlgTerm();
-                    upperTerm = upperTerm.CompoundFractions();
 
-                    upper = upperTerm.RemoveRedundancies();
+                    upper = upperTerm.WeakMakeWorkable(ref p_EvalData).ToAlgTerm();
+                    upper = TermType.SimplifyTermType.BasicSimplify(upper, ref p_EvalData);
                 }
             }
 
