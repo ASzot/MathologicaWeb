@@ -1069,9 +1069,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                 ResetDiffParsing();
 
             // Another dirty technique that should probably be changed.
-            str = str.Replace("\\bar(i)", "[1,0,0]");
-            str = str.Replace("\\bar(j)", "[0,1,0]");
-            str = str.Replace("\\bar(k)", "[0,0,1]");
+            str = str.Replace("\\vec(i)", "[1,0,0]");
+            str = str.Replace("\\vec(j)", "[0,1,0]");
+            str = str.Replace("\\vec(k)", "[0,0,1]");
 
             str = str.Replace("\\", "");
             str = str.Replace("->", "to");

@@ -142,6 +142,11 @@ var calc = new TopicMenu(
             [
                 new MenuItem("Partial derivative of function", "\\frac{\\partial f}{\\partial x}", "\\frac{\\partial f}{\\partial x}", true),
             ]),
+        new MenuItem("x unit vector", "\\vec{i}", "\\vec{i}", false,
+            [
+                new MenuItem("y unit vector", "\\vec{j}", "\\vec{j}", false),
+                new MenuItem("z unit vector", "\\vec{k}", "\\vec{k}", false),
+            ]),
         new MenuItem("Nabla", "\\nabla", "\\nabla", false, 
             [
                 new MenuItem("Divergence", "\\nabla\\cdot", "\nabla\\cdot", false),
@@ -228,6 +233,11 @@ var linAlg = new TopicMenu(
         new MenuItem("Determinant", "det(A)", "det(\\EMPTYGP{})", false),
         new MenuItem("Transpose", "[(a,b),(c,d)]^{T}", "^{T}", true),
         new MenuItem("Inverse", "[(a,b),(c,d)]^{-1}", "^{-1}", true),
+        new MenuItem("x unit vector", "\\vec{i}", "\\vec{i}", false,
+            [
+                new MenuItem("y unit vector", "\\vec{j}", "\\vec{j}", false),
+                new MenuItem("z unit vector", "\\vec{k}", "\\vec{k}", false),
+            ]),
     ]);
 
 var menus = [basic, trig, calc, symb, prob, linAlg];
