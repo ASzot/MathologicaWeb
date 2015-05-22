@@ -12,7 +12,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
     class DivergenceFunc : FieldTransformation
     {
         public DivergenceFunc(ExComp innerEx)
-            : base(innerEx, "div", FunctionType.Divergence, typeof(DivergenceFunc))
+            : base(innerEx, "\\text{div}", FunctionType.Divergence, typeof(DivergenceFunc))
         {
 
         }

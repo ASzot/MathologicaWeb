@@ -534,7 +534,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
 
         public override ExComp RemoveRedundancies(bool postWorkable = false)
         {
-            if (Rows == 1 && Cols == 1)
+            if (!postWorkable && Rows == 1 && Cols == 1)
                 return _exData[0][0];
 
             for (int i = 0; i < Rows; ++i)
@@ -623,14 +623,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
             return 1.0;
         }
 
-        public override ExComp WeakMakeWorkable(ref List<string> pParseErrors, ref TermType.EvalData pEvalData)
+        public override ExComp WeakMakeWorkable(ref List<string> pParseErrors, ref TermType.EvalData pEvalData, bool postWorkable = false)
         {
             for (int i = 0; i < Rows; ++i)
             {
                 for (int j = 0; j < Cols; ++j)
                 {
                     if (_exData[i][j] is AlgebraTerm)
-                        _exData[i][j] = (_exData[i][j] as AlgebraTerm).WeakMakeWorkable(ref pParseErrors, ref pEvalData);
+                        _exData[i][j] = (_exData[i][j] as AlgebraTerm).WeakMakeWorkable(ref pParseErrors, ref pEvalData, postWorkable);
                 }
             }
 

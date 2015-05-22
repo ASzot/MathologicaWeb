@@ -221,8 +221,11 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
         {
             if (_msgs == null)
                 _msgs = new List<string>();
+            msg = MathSolver.FinalizeOutput(msg);
             if (!_msgs.Contains(msg))
+            {
                 _msgs.Add(msg);
+            }
         }
 
         public void AddPartialSol(ExComp ex)

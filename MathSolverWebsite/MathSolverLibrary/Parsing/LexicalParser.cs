@@ -1395,9 +1395,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                         // Change into a vector store.
                         if (prevIndex == -1)
                             return false;
-                        var vecStoreLt = lt.GetRange(prevIndex + 1, i - (prevIndex + 1));
-                        if (vecStoreLt.Count < 3)
-                            return false;
+                        LexemeTable vecStoreLt = lt.GetRange(prevIndex + 1, i - (prevIndex + 1));
 
                         _vectorStore.Add(_vecStoreIndex.ToString(), vecStoreLt);
                         // Also remove the brackets.
@@ -2240,9 +2238,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                     return null;
                 }
                 AlgebraTerm term = LexemeTableToAlgebraTerm(vecCompLt,  ref pParseErrors);
+
                 if (term == null)
                     return null;
-                vecCompExs.Add(term.RemoveRedundancies());
+                ExComp addEx = term.WeakMakeWorkable(ref pParseErrors, ref p_EvalData, true);
+                if (addEx == null)
+                    return null;
+                if (addEx is AlgebraTerm)
+                    addEx = (addEx as AlgebraTerm).RemoveRedundancies(true);
+
+                vecCompExs.Add(addEx);
             }
 
             ExMatrix mat = Equation.Structural.LinearAlg.MatrixHelper.CreateMatrix(vecCompExs);

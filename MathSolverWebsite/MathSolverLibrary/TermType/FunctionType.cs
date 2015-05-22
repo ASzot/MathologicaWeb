@@ -124,8 +124,8 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             if (_assignTo == null || Number.IsUndef(_assignTo))
                 return false;
 
-            if (_func.HasCallArgs)
-                return false;
+            //if (_func.HasCallArgs)
+            //    return false;
 
             _agSolver = new AlgebraSolver();
             _agSolver.CreateUSubTable(solveVars);

@@ -12,7 +12,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
     class CurlFunc : FieldTransformation
     {
         public CurlFunc(ExComp innerEx)
-            : base(innerEx, "curl", FunctionType.Curl, typeof(CurlFunc))
+            : base(innerEx, "\\text{curl}", FunctionType.Curl, typeof(CurlFunc))
         {
 
         }

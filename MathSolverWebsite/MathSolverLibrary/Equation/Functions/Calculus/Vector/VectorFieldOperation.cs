@@ -26,6 +26,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
                 if (def.Key != null && def.Key.InputArgCount > 1)
                 {
                     innerEx = def.Value;
+                    if (innerEx is AlgebraTerm)
+                        innerEx = (innerEx as AlgebraTerm).RemoveRedundancies();
                 }
             }
 
