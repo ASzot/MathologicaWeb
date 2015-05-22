@@ -150,7 +150,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                     // This used to be an || but I changed it. I really don't know what the consequences of doing this are.
                     if (!equalTerm && modGroupCount != i + 1)
                     {
-                        multiplyOut = false;
+                        //multiplyOut = false;
                         break;
                     }
                 }
@@ -168,7 +168,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                     }
 
                     AlgebraTerm multiplied = new AlgebraTerm(groups.ToArray());
-                    ExComp final = multiplied.MakeWorkable();
+                    ExComp final = multiplied;//.MakeWorkable();
 
                     return final;
                 }

@@ -28,6 +28,17 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
         {
             ExComp innerEx = InnerEx;
 
+            if (innerEx is AlgebraComp)
+            {
+                // There is a chance this is actually refering to a function.
+                AlgebraComp funcIden = innerEx as AlgebraComp;
+                KeyValuePair<FunctionDefinition, ExComp> def = pEvalData.FuncDefs.GetDefinition(funcIden);
+                if (def.Key != null && def.Key.InputArgCount > 1)
+                {
+                    innerEx = def.Value;
+                }
+            }
+
             AlgebraComp x, y, z;
             
             bool isFuncDeriv;
@@ -54,7 +65,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
             {
                 isFuncDeriv = false;
                 x = new AlgebraComp("x");
-                y = new AlgebraComp("z");
+                y = new AlgebraComp("y");
                 z = new AlgebraComp("z");
             }
 

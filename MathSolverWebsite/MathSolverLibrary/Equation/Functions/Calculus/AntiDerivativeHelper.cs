@@ -11,9 +11,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 {
     static class AntiDerivativeHelper
     {
-        public static ExComp TakeAntiDerivativeGp(ExComp[] gp, AlgebraComp dVar, ref IntegrationInfo pIntInfo, ref EvalData pEvalData)
+        public static ExComp TakeAntiDerivativeGp(ExComp[] gp, AlgebraComp dVar, ref IntegrationInfo pIntInfo, ref EvalData pEvalData,
+            string lowerStr = "", string upperStr = "")
         {
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\int(" + gp.ToAlgTerm().FinalToDispStr() + ")\\d" + dVar.ToDispString() + WorkMgr.EDM,
+            string boundaryStr = (lowerStr == "" ? "" : "_" + lowerStr) + (upperStr == "" ? "" : "^" + upperStr);
+            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\int" + boundaryStr + "(" + gp.ToAlgTerm().FinalToDispStr() + ")\\d" + dVar.ToDispString() + WorkMgr.EDM,
                 "Evaluate the integral.");
 
             // Take out all of the constants.
@@ -33,14 +35,17 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (varTo.Length == 1 && varTo[0] is AlgebraTerm)
             {
                 AlgebraTerm varToTerm = varTo[0] as AlgebraTerm;
-                var gps = varToTerm.GetGroups();
+                List<ExComp[]> gps = varToTerm.GetGroupsNoOps();
                 if (gps.Count > 1)
                 {
                     // This integral should be split up even further.
                     string overallStr = "";
+                    string[] gpsStrs = new string[gps.Count];
+
                     for (int i = 0; i < gps.Count; ++i)
                     {
-                        overallStr += "\\int" + gps[i].FinalToMathAsciiString() + "\\d" + dVar.ToDispString();
+                        gpsStrs[i] = "\\int" + gps[i].FinalToMathAsciiString() + "\\d" + dVar.ToDispString();
+                        overallStr += gpsStrs[i];
                         if (i != gps.Count - 1)
                             overallStr += "+";
                     }
@@ -54,7 +59,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                         IntegrationInfo integrationInfo = new IntegrationInfo();
                         int prevStepCount = pEvalData.WorkMgr.WorkSteps.Count;
 
+                        pEvalData.WorkMgr.FromFormatted("");
+                        WorkStep lastStep = pEvalData.WorkMgr.GetLast();
+
+                        lastStep.GoDown(ref pEvalData);
                         ExComp aderiv = AntiDerivativeHelper.TakeAntiDerivativeGp(gps[i], dVar, ref integrationInfo, ref pEvalData);
+                        lastStep.GoUp(ref pEvalData);
+
+                        lastStep.WorkHtml = WorkMgr.STM + gpsStrs[i] + "=" + WorkMgr.ToDisp(aderiv) + WorkMgr.EDM;
 
                         if (aderiv == null)
                         {
@@ -71,10 +83,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                         finalEx = AddOp.StaticCombine(finalEx, adGps[i].ToAlgTerm());
                     }
 
+                    if (adGps.Length > 1)
+                        pEvalData.WorkMgr.FromSides(finalEx, null, "Add back together.");
+
                     if (constTo.Length > 0)
                     {
                         finalEx = MulOp.StaticCombine(finalEx, constTo.ToAlgTerm());
-                        pEvalData.WorkMgr.FromSides(finalEx, null, "Multiply both sides by the constants");
+                        pEvalData.WorkMgr.FromSides(finalEx, null, "Multiply the constants back in.");
                     }
 
                     return finalEx;

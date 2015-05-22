@@ -9,6 +9,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
     {
         private const int MAX_BINOM_COMPLEXITY = 20;
         private const int MAX_COMPLEXITY = 1000;
+        private const int MIN_BINOM_COMPLEXITY = 3;
 
         /// <summary>
         /// Raises 'e' to the given power.
@@ -130,7 +131,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 List<ExComp[]> groups = (term as AlgebraTerm).GetGroups();
                 int groupCount = groups.Count;
 
-                if (groups.Count == 2)
+                if (groups.Count == 2 && powerInt > MIN_BINOM_COMPLEXITY)
                 {
                     if (powerInt > MAX_BINOM_COMPLEXITY)
                         return StaticWeakCombine(term, power).ToAlgTerm();
@@ -142,7 +143,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
 					AlgebraTerm group1 = groups[1].ToAlgTerm();
                     ExComp overallEx = MulOp.StaticWeakCombine(chooseFunc, PowOp.StaticWeakCombine(group0, SubOp.StaticWeakCombine(power, iterVar)));
                     overallEx = MulOp.StaticWeakCombine(overallEx, PowOp.StaticWeakCombine(group1, iterVar));
+
+                    // Don't display the work steps associated with this.
+                    int startingWorkSteps = pEvalData.WorkMgr.WorkSteps.Count;
                     SumFunction sumFunc = new SumFunction(overallEx, iterVar, Number.Zero, power);
+                    pEvalData.WorkMgr.PopSteps(startingWorkSteps);
 
                     return sumFunc.Evaluate(false, ref pEvalData);
                 }

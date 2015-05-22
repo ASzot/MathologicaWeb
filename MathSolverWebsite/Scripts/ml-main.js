@@ -146,10 +146,10 @@ var calc = new TopicMenu(
             [
                 new MenuItem("Divergence", "\\nabla\\cdot", "\nabla\\cdot", false),
                 new MenuItem("Curl", "\\nabla\\times", "\\nabla\\cdot", false),
+                //new MenuItem("Laplacian", "\\nabla^{2}", "\\nabla^{2}", false),
             ]),
         new MenuItem("Divergence", "\\text{div}(F)", "div(\\EMPTYGP{})", false),
         new MenuItem("Curl", "\\text{curl}(F)", "\\text{curl}(\\EMPTYGP{})", false),
-        new MenuItem("Laplacian", "\\nabla^{2}", "\\nabla^{2}", false),
         new MenuItem("Line integral", "\\int_{C}\\vec{F} \\cdot d\\vec{r}", "\\vec{F}=\\EMPTYGP{}\\vec{i}+\\EMPTYGP{}\\vec{j};x(t)=\\EMPTYGP{};y(t)=\\EMPTYGP{};\\EMPTYGP{} \\le t \\le \\EMPTYGP{};\\int_{c}F \\cdot dr", true,
             [
                 new MenuItem("Line Integral", "\\int_{C}f *\\ds", "f(x,y)=\\EMPTYGP{}; x(t)=\\EMPTYGP{};y(t)=\\EMPTYGP{}; \\EMPTYGP{} \\le t \\le \\EMPTYGP{}; \\int_{c}f*ds", true),

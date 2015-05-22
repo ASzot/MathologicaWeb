@@ -297,21 +297,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             }
 
             AlgebraTerm upperEval = indefinite.Clone().ToAlgTerm().Substitute(_dVar, useUpper);
-            if (upperEval.Contains(_dVar))
-            {
-                pEvalData.AddFailureMsg("Internal error evaluating antiderivative");
-                return this;
-            }
             ExComp upperEx = Simplifier.Simplify(new AlgebraTerm(upperEval), ref pEvalData);
 
             AlgebraTerm lowerEval = indefinite.Clone().ToAlgTerm().Substitute(_dVar, useLower);
-            if (lowerEval.Contains(_dVar))
-            {
-                pEvalData.AddFailureMsg("Internal error evaluating antiderivative");
-                return this;
-            }
-            ExComp lowerEx = TermType.SimplifyTermType.BasicSimplify(lowerEval, ref pEvalData);
-            //ExComp lowerEx = Simplifier.Simplify(new AlgebraTerm(lowerEval), ref pEvalData);
+            ExComp lowerEx = Simplifier.Simplify(new AlgebraTerm(lowerEval), ref pEvalData);
 
 
             AlgebraComp subVar = null;
@@ -349,6 +338,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             ExComp result = SubOp.StaticCombine(upperEx, lowerEx);
             if (result is AlgebraTerm)
                 result = (result as AlgebraTerm).CompoundFractions();
+
+            result = TermType.SimplifyTermType.BasicSimplify(result, ref pEvalData);
+
             if (subVar != null)
             {
                 pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\lim_{" + subVar.ToDispString() + " \\to \\infty}" +
@@ -399,6 +391,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             {
                 IntegrationInfo integrationInfo = _integralInfo ?? new IntegrationInfo();
                 int prevStepCount = pEvalData.WorkMgr.WorkSteps.Count;
+
+                string lowerStr = LowerLimit == null ? "" : LowerLimit.ToAlgTerm().FinalToDispStr();
+                string upperStr = UpperLimit == null ? "" : UpperLimit.ToAlgTerm().FinalToDispStr();
 
                 ExComp aderiv = AntiDerivativeHelper.TakeAntiDerivativeGp(gps[i], _dVar, ref integrationInfo, ref pEvalData);
 

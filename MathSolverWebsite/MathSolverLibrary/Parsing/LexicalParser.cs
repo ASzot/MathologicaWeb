@@ -435,7 +435,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                                 commaCount++;
                         }
 
-                        if (commaCount == 0) //p_EvalData.FuncDefs.IsValidFuncCall(orderedTolkensList[i].Data2, commaCount + 1))
+                        if (commaCount == 0 && (p_EvalData.FuncDefs.IsValidFuncCall(orderedTolkensList[i].Data2, commaCount + 1) || _definedFuncs.Contains(orderedTolkensList[i].Data2)))
                         {
                             // Replace with a function call.
                             orderedTolkensList[i].Data1 = LexemeType.FuncIden;
