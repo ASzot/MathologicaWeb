@@ -57,7 +57,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
             if (innerEx is FunctionDefinition)
             {
                 x = new AlgebraComp("x");
-                y = new AlgebraComp("z");
+                y = new AlgebraComp("y");
                 z = (innerEx as FunctionDefinition).InputArgCount == 3 ? new AlgebraComp("z") : null;
                 isFuncDeriv = true;
             }

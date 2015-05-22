@@ -234,9 +234,13 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                     tmpCmds.AddRange(tt_func.GetCommands());
             }
 
-            _graphStr = _eq.ToJavaScriptString(pEvalData.UseRad);
-            if (_graphStr != null)
-                tmpCmds.Add("Graph");
+
+            if (_eq.GetAllAlgebraCompsStr().Count == 1)
+            {
+                _graphStr = _eq.ToJavaScriptString(pEvalData.UseRad);
+                if (_graphStr != null)
+                    tmpCmds.Add("Graph");
+            }
 
             _cmds = tmpCmds.ToArray();
 
