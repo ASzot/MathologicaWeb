@@ -124,19 +124,19 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
             if (!(ex is ExMatrix))
             {
 
-                if (ex is AlgebraTerm)
-                {
-                    AlgebraTerm term = ex as AlgebraTerm;
-                    AlgebraTerm[] numDen = term.GetNumDenFrac();
-                    if (numDen == null)
-                        return null;
+                //if (ex is AlgebraTerm)
+                //{
+                //    AlgebraTerm term = ex as AlgebraTerm;
+                //    AlgebraTerm[] numDen = term.GetNumDenFrac();
+                //    if (numDen == null)
+                //        return null;
 
-                    if (!(numDen[0].RemoveRedundancies() is Number) ||
-                        !(numDen[1].RemoveRedundancies() is Number))
-                        return null;
-                }
-                else if (!(ex is Number))
-                    return null;
+                //    if (!(numDen[0].RemoveRedundancies() is Number) ||
+                //        !(numDen[1].RemoveRedundancies() is Number))
+                //        return null;
+                //}
+                //else if (!(ex is Number))
+                //    return null;
                 mat0.ModifyEach((ExComp ele) =>
                 {
                     return MulOp.StaticCombine(ele, ex);

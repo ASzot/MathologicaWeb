@@ -13,5 +13,23 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
         {
 
         }
+
+        protected ExComp GetCorrectedInnerEx(ref TermType.EvalData pEvalData)
+        {
+            ExComp innerEx = InnerEx;
+
+            if (innerEx is AlgebraComp)
+            {
+                // There is a chance this is actually refering to a function.
+                AlgebraComp funcIden = innerEx as AlgebraComp;
+                KeyValuePair<FunctionDefinition, ExComp> def = pEvalData.FuncDefs.GetDefinition(funcIden);
+                if (def.Key != null && def.Key.InputArgCount > 1)
+                {
+                    innerEx = def.Value;
+                }
+            }
+
+            return innerEx;
+        }
     }
 }

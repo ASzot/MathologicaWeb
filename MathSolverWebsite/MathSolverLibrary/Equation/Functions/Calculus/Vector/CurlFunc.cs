@@ -56,7 +56,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
                 return Number.Undefined;
 
             ExComp p, q, r;
-            ExComp innerEx = InnerEx;
+            ExComp innerEx = GetCorrectedInnerEx(ref pEvalData);
             
             AlgebraComp x = null;
             AlgebraComp y = null;

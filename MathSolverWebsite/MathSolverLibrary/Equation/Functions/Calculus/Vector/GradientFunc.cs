@@ -26,18 +26,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
 
         public override ExComp Evaluate(bool harshEval, ref TermType.EvalData pEvalData)
         {
-            ExComp innerEx = InnerEx;
-
-            if (innerEx is AlgebraComp)
-            {
-                // There is a chance this is actually refering to a function.
-                AlgebraComp funcIden = innerEx as AlgebraComp;
-                KeyValuePair<FunctionDefinition, ExComp> def = pEvalData.FuncDefs.GetDefinition(funcIden);
-                if (def.Key != null && def.Key.InputArgCount > 1)
-                {
-                    innerEx = def.Value;
-                }
-            }
+            ExComp innerEx = GetCorrectedInnerEx(ref pEvalData);
 
             AlgebraComp x, y, z;
             

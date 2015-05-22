@@ -534,6 +534,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
 
         public override ExComp RemoveRedundancies(bool postWorkable = false)
         {
+            if (Rows == 1 && Cols == 1)
+                return _exData[0][0];
+
             for (int i = 0; i < Rows; ++i)
             {
                 for (int j = 0; j < Cols; ++j)

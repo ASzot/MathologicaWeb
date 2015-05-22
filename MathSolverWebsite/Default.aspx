@@ -587,22 +587,18 @@
                     <p class="pob-title">Example Input:</p>
                     <input type="button" id="example-nav-backward" style="float: right;" class="example-nav-btn" value="&#x25B6" />
                     <div style="text-align: center;" class="pob-problem">
-                        <asp:UpdatePanel runat="server">
+                        <asp:UpdatePanel runat="server" UpdateMode="Conditional">
                             <ContentTemplate>
                                 <asp:Timer ID="updateExampleTimer" runat="server" Interval="10000" OnTick="updateExampleTimer_Tick"></asp:Timer> 
                                 <div id="exampleOutputContent" runat="server"></div>
+                                <asp:Button runat="server" ID="exampleNavBackBtn" CssClass="hidden" OnClick="exampleNavBackBtn_Click" />
+                                <asp:Button runat="server" ID="exampleNavForwardBtn" CssClass="hidden" OnClick="exampleNavForwardBtn_Click" />
                             </ContentTemplate>
                         </asp:UpdatePanel>
                     </div>
                 </div>
             </div>
 
-            <asp:UpdatePanel ID="exampleNavBtnUpdatePanel" runat="server" UpdateMode="Conditional">
-                <ContentTemplate>
-                    <asp:Button runat="server" ID="exampleNavBackBtn" CssClass="hidden" OnClick="exampleNavBackBtn_Click" />
-                    <asp:Button runat="server" ID="exampleNavForwardBtn" CssClass="hidden" OnClick="exampleNavForwardBtn_Click" />
-                </ContentTemplate>
-            </asp:UpdatePanel>
 
             <div id="account-space">
                 <section id="login">
