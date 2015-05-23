@@ -63,7 +63,14 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             int ltsCount = 0;
             for (int i = 0; i < eqs.Count; ++i)
             {
-                if (AttemptAddFuncDef(eqs, i, ref pEvalData) || AttemptAddIntervalDef(eqs[i], lts[i], ref pEvalData))
+                // Compound the lts for the number of sides there are.
+                LexemeTable eqLt = new LexemeTable();
+                for (int j = ltsCount; j < ltsCount + eqs[i].ValidComparisonOps.Count + 1; ++j)
+                {
+                    eqLt.AddRange(lts[j]);
+                }
+
+                if (AttemptAddFuncDef(eqs, i, ref pEvalData) || AttemptAddIntervalDef(eqs[i], eqLt, ref pEvalData))
                 {
                     lts.RemoveRange(ltsCount, eqs[i].ValidComparisonOps.Count + 1);
                     eqs.RemoveAt(i--);
@@ -141,7 +148,12 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             string solveVar = AlgebraSolver.GetProbableVar(solveVars);
 
             int workStepCount = pEvalData.WorkMgr.WorkSteps.Count;
-            bool addWork = eqSet.Sides[1].IsEqualTo(new AlgebraComp(solveVar));
+
+            ExComp centerEx = eqSet.Sides[1];
+            if (centerEx is AlgebraTerm)
+                centerEx = (centerEx as AlgebraTerm).RemoveRedundancies();
+
+            bool addWork = !centerEx.IsEqualTo(new AlgebraComp(solveVar));
 
             SolveResult result = algebraSolver.SolveEquationInequality(eqSet.Sides, eqSet.ComparisonOps, new AlgebraVar(solveVar), ref pEvalData);
 
@@ -151,7 +163,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 _intervalWorkSteps.Add(null);
             pEvalData.WorkMgr.WorkSteps.RemoveRange(workStepCount, pEvalData.WorkMgr.WorkSteps.Count - workStepCount);
 
-            if (!(result.Solutions != null && result.Solutions.Count != 0) ||
+            if ((result.Solutions != null && result.Solutions.Count != 0) ||
                 (result.Restrictions == null || result.Restrictions.Count != 1) ||
                 (!(result.Restrictions[0] is AndRestriction)))
                 return false;

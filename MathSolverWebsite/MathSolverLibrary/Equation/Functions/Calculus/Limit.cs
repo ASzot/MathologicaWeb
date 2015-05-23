@@ -518,11 +518,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             return !posEval.IsEqualTo(negEval);
         }
 
-        public override string FinalToAsciiKeepFormatting()
-        {
-            return "\\lim_(" + _varFor.ToAsciiString() + "\\to" + _valTo.ToAsciiString() + ")(" + InnerTerm.FinalToAsciiKeepFormatting() + ")";
-        }
-
         public override string FinalToAsciiString()
         {
             return "\\lim_(" + _varFor.ToAsciiString() + "\\to" + _valTo.ToAsciiString() + ")(" + InnerTerm.FinalToAsciiString() + ")";
@@ -533,11 +528,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (USE_TEX)
                 return FinalToTexString();
             return FinalToAsciiString();
-        }
-
-        public override string FinalToTexKeepFormatting()
-        {
-            return "\\lim_(" + _varFor.ToTexString() + "\\to" + _valTo.ToTexString() + ")(" + InnerTerm.FinalToTexKeepFormatting() + ")";
         }
 
         public override string FinalToTexString()

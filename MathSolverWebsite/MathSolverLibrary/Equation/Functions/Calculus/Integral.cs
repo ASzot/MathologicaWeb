@@ -430,28 +430,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             return ConstructIntegral(args[0], this._dVar, LowerLimit, UpperLimit);
         }
 
-        public override string FinalToAsciiKeepFormatting()
-        {
-            string boundariesStr = "";
-            if (IsDefinite)
-                boundariesStr = "_{" + LowerLimit.ToAsciiString() + "}^{" + UpperLimit.ToAsciiString() +"}";
-            return "\\int" + boundariesStr + "(" + InnerTerm.FinalToAsciiKeepFormatting() + ")\\d" + _dVar.ToAsciiString();
-        }
-
         public override string FinalToAsciiString()
         {
             string boundariesStr = "";
             if (IsDefinite)
                 boundariesStr = "_{" + LowerLimit.ToAsciiString() + "}^{" + UpperLimit.ToAsciiString() + "}";
-            return "\\int" + boundariesStr + "(" + InnerTerm.FinalToAsciiKeepFormatting() + ")\\d" + _dVar.ToAsciiString();
-        }
-
-        public override string FinalToTexKeepFormatting()
-        {
-            string boundariesStr = "";
-            if (IsDefinite)
-                boundariesStr = "_{" + LowerLimit.ToTexString() + "}^{" + UpperLimit.ToTexString() + "}";
-            return "\\int" + boundariesStr + "(" + InnerTerm.FinalToTexKeepFormatting() + ")\\d" + _dVar.ToTexString();
+            return "\\int" + boundariesStr + "(" + InnerTerm.FinalToAsciiString() + ")\\d" + _dVar.ToAsciiString();
         }
 
         public override string FinalToTexString()

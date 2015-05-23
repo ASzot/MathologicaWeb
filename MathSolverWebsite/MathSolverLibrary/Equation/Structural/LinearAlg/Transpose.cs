@@ -25,19 +25,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
             return mat.Transpose();
         }
 
-        public override string FinalToAsciiKeepFormatting()
-        {
-            return InnerTerm.FinalToAsciiKeepFormatting() + "^{T}";
-        }
-
         public override string FinalToAsciiString()
         {
             return InnerTerm.FinalToAsciiString() + "^{T}";
-        }
-
-        public override string FinalToTexKeepFormatting()
-        {
-            return InnerTerm.FinalToTexKeepFormatting() + "^{T}";
         }
 
         public override string FinalToTexString()

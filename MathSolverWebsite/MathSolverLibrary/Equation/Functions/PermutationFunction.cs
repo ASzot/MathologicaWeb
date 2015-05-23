@@ -98,22 +98,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             return "(_{" + Top.ToTexString() + "} " + IDEN + " _{" + Bottom.ToTexString() + "})";
         }
 
-        public override string FinalToAsciiKeepFormatting()
-        {
-            return "(_{" + TopTerm.FinalToAsciiKeepFormatting() + "} " + IDEN + 
-                " _{" + BottomTerm.FinalToAsciiKeepFormatting() + "})";
-        }
-
         public override string FinalToAsciiString()
         {
             return "(_{" + TopTerm.FinalToAsciiString() + "} " + IDEN +
                 " _{" + BottomTerm.FinalToAsciiString() + "})";
-        }
-
-        public override string FinalToTexKeepFormatting()
-        {
-            return "(_{" + TopTerm.FinalToTexKeepFormatting() + "} " + IDEN +
-                " _{" + BottomTerm.FinalToTexKeepFormatting() + "})";
         }
 
         public override string FinalToTexString()

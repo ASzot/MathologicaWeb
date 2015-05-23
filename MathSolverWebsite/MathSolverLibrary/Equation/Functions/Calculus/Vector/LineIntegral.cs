@@ -19,6 +19,21 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
 
         }
 
+        public override ExComp Clone()
+        {
+            return ConstructLineIntegral(InnerTerm, _lineIden, _dVar);
+        }
+
+        protected override AlgebraTerm CreateInstance(params ExComp[] args)
+        {
+            return ConstructLineIntegral(args[0], _lineIden, _dVar);
+        }
+
+        public override string FinalToTexString()
+        {
+            return base.FinalToTexString();
+        }
+
         public static LineIntegral ConstructLineIntegral(ExComp innerEx, AlgebraComp surfaceIden, AlgebraComp withRespectTo)
         {
             LineIntegral lineIntegral = new LineIntegral(innerEx);
@@ -107,9 +122,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
         {
             // Get the line.
             List<FunctionDefinition> vectorFuncs = pEvalData.FuncDefs.GetAllVecEquations(1);
+            if (vectorFuncs == null || vectorFuncs.Count == 0)
+                return this;
             FunctionDefinition vectorFunc = FuncDefHelper.GetMostCurrentDef(vectorFuncs, _lineIden);
 
             List<FunctionDefinition> paraFuncs = pEvalData.FuncDefs.GetProbableParametricEquations(1);
+            if (paraFuncs == null || paraFuncs.Count == 0)
+                return this;
             int maxIndex = FuncDefHelper.GetMostCurrentIndex(paraFuncs);
 
             if (vectorFunc == null && (paraFuncs == null || paraFuncs.Count == 0))

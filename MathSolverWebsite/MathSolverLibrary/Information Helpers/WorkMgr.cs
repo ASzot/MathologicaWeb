@@ -107,7 +107,7 @@ namespace MathSolverWebsite.MathSolverLibrary
             string algGpStr = "";
             for (int i = 0; i < groups.Count; ++i)
             {
-                algGpStr += groups[i].ToTerm().FinalDispKeepFormatting();
+                algGpStr += groups[i].ToTerm().FinalToDispStr();
                 if (i != groups.Count - 1)
                     algGpStr += "+";
             }
@@ -271,7 +271,7 @@ namespace MathSolverWebsite.MathSolverLibrary
 
             bool isNeg = false;
 
-            string subStr = sub is AlgebraTerm ? (sub as AlgebraTerm).FinalDispKeepFormatting() : sub.ToAsciiString();
+            string subStr = sub is AlgebraTerm ? (sub as AlgebraTerm).FinalToDispStr() : sub.ToDispString();
 
             if (sub is Number && (sub as Number) < 0.0)
                 isNeg = true;

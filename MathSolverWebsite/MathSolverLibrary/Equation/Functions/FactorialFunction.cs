@@ -53,19 +53,10 @@
             return InnerEx.ToString() + "! ";
         }
 
-        public override string FinalToAsciiKeepFormatting()
-        {
-            return ToAsciiString();
-        }
 
         public override string FinalToAsciiString()
         {
             return ToAsciiString();
-        }
-
-        public override string FinalToTexKeepFormatting()
-        {
-            return ToTexString();
         }
 
         public override string FinalToTexString()

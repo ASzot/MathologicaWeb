@@ -34,8 +34,8 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 // To vertex form.
                 ExComp vertexForm = ToVertexForm(_a, _b, _c, _solveFor.ToAlgebraComp(), ref pEvalData);
                 if (_funcIden != null)
-                    return SolveResult.SolvedForceFormatting(_funcIden, vertexForm);
-                return SolveResult.SimplifiedForceFormatting(vertexForm);
+                    return SolveResult.Solved(_funcIden, vertexForm, ref pEvalData);
+                return SolveResult.Simplified(vertexForm);
             }
             else if (command == "Find the vertex")
             {

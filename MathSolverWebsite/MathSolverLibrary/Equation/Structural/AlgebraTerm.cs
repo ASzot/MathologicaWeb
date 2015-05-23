@@ -708,45 +708,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             }
         }
 
-        public virtual string FinalDispKeepFormatting()
-        {
-            if (USE_TEX)
-                return FinalToTexKeepFormatting();
-            return FinalToAsciiKeepFormatting();
-        }
-
-        public virtual string FinalToAsciiKeepFormatting()
-        {
-            if (TermCount == 0)
-                return "0";
-
-            List<ExComp[]> groups = GetGroupsNoOps();
-
-            string finalStr = "";
-            for (int i = 0; i < groups.Count; ++i)
-            {
-                ExComp[] group = groups[i];
-                if (group.ContainsFrac())
-                {
-                    ExComp[] num = group.GetNumerator();
-                    ExComp[] den = group.GetDenominator();
-                    string numTexStr = num.ToAsciiString();
-                    string denTexStr = den.ToAsciiString();
-
-                    numTexStr = numTexStr.RemoveSurroundingParas();
-                    denTexStr = denTexStr.RemoveSurroundingParas();
-
-                    finalStr += @"\frac{" + numTexStr + "}{" + denTexStr + "}";
-                }
-                else
-                    finalStr += group.ToAsciiString();
-                if (i != groups.Count - 1)
-                    finalStr += "+";
-            }
-
-            return finalStr;
-        }
-
         public virtual string FinalToAsciiString()
         {
             if (TermCount == 0)
@@ -786,38 +747,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             if (USE_TEX)
                 return FinalToTexString();
             return FinalToAsciiString();
-        }
-
-        public virtual string FinalToTexKeepFormatting()
-        {
-            if (TermCount == 0)
-                return "0";
-
-            var groups = GetGroupsNoOps();
-
-            string finalStr = "";
-            for (int i = 0; i < groups.Count; ++i)
-            {
-                ExComp[] group = groups[i];
-                if (group.ContainsFrac())
-                {
-                    ExComp[] num = group.GetNumerator();
-                    ExComp[] den = group.GetDenominator();
-                    string numTexStr = num.ToTexString();
-                    string denTexStr = den.ToTexString();
-
-                    numTexStr = numTexStr.RemoveSurroundingParas();
-                    denTexStr = denTexStr.RemoveSurroundingParas();
-
-                    finalStr += @"\frac{" + numTexStr + "}{" + denTexStr + "}";
-                }
-                else
-                    finalStr += group.ToTexString();
-                if (i != groups.Count - 1)
-                    finalStr += "+";
-            }
-
-            return finalStr;
         }
 
         public virtual string FinalToTexString()

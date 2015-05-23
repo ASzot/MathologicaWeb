@@ -632,10 +632,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
 
                     EqSet singleEqSet = new EqSet(parsedTerms, solveTypes);
 
-                    eqSets = new List<EqSet>();
                     eqSets.Add(singleEqSet);
-
-                    return eqSets;
+                    continue;
                 }
 
                 ExComp[] parsedExs = new ExComp[2];

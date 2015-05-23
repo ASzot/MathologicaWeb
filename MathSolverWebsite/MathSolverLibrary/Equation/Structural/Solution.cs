@@ -134,34 +134,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return success;
         }
 
-        public static SolveResult SimplifiedForceFormatting(ExComp result)
-        {
-            SolveResult success;
-            success.Success = true;
-            success.Solutions = new List<Solution>();
-            success.Restrictions = null;
-
-            if (result is AlgebraTermArray)
-            {
-                AlgebraTermArray resultArray = result as AlgebraTermArray;
-
-                foreach (AlgebraTerm resultTerm in resultArray.Terms)
-                {
-                    Solution sol = new Solution(resultTerm);
-                    sol.ForceFormatting = true;
-                    success.Solutions.Add(sol);
-                }
-            }
-            else
-            {
-                Solution sol = new Solution(result);
-                sol.ForceFormatting = true;
-                success.Solutions.Add(sol);
-            }
-
-            return success;
-        }
-
         public static SolveResult Solved(AlgebraVar solveFor, ExComp result, ref TermType.EvalData pEvalData)
         {
             return Solved(solveFor.ToAlgebraComp(), result, ref pEvalData);
@@ -206,45 +178,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             success.Success = true;
             success.Solutions = null;
             success.Restrictions = null;
-
-            return success;
-        }
-
-        public static SolveResult SolvedForceFormatting(ExComp solveFor, ExComp result)
-        {
-            SolveResult success;
-            success.Success = true;
-            success.Solutions = new List<Solution>();
-            success.Restrictions = null;
-
-            if (result is AlgebraTermArray)
-            {
-                AlgebraTermArray resultArray = result as AlgebraTermArray;
-
-                foreach (AlgebraTerm resultTerm in resultArray.Terms)
-                {
-                    Solution addSol;
-                    if (resultTerm is GeneralSolution)
-                        addSol = Solution.FromGeneralSol(solveFor, resultTerm as GeneralSolution);
-                    else
-                        addSol = new Solution(solveFor, resultTerm);
-                    addSol.ForceFormatting = true;
-                    success.Solutions.Add(addSol);
-                }
-            }
-            else
-            {
-                Solution addSol;
-                if (result is GeneralSolution)
-                    addSol = Solution.FromGeneralSol(solveFor, result as GeneralSolution);
-                else
-                    addSol = new Solution(solveFor, result);
-
-                addSol.ForceFormatting = true;
-                success.Solutions.Add(addSol);
-            }
-
-            success.RemoveDuplicateSols();
 
             return success;
         }
@@ -1160,10 +1093,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
     internal class Solution
     {
-        public ExComp AlternateResult;
         public ExComp ApproximateResult;
         public Parsing.LexemeType ComparisonOp;
-        public bool ForceFormatting = false;
         public GeneralSolution GeneralResult;
         public int Multiplicity;
         public ExComp Result;
@@ -1174,7 +1105,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             Result = result;
             SolveFor = null;
             ApproximateResult = null;
-            AlternateResult = null;
             ComparisonOp = Parsing.LexemeType.EqualsOp;
             Multiplicity = 1;
             GeneralResult = null;
@@ -1185,7 +1115,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             Result = result;
             SolveFor = null;
             ApproximateResult = null;
-            AlternateResult = null;
             ComparisonOp = comparisonOp;
             Multiplicity = 1;
             GeneralResult = null;
@@ -1196,7 +1125,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             SolveFor = solveFor;
             Result = result;
             ApproximateResult = null;
-            AlternateResult = null;
             ComparisonOp = Parsing.LexemeType.EqualsOp;
             Multiplicity = 1;
             GeneralResult = null;
@@ -1207,7 +1135,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             SolveFor = solveFor;
             Result = result;
             ApproximateResult = approximateResult;
-            AlternateResult = null;
             ComparisonOp = Parsing.LexemeType.EqualsOp;
             Multiplicity = 1;
             GeneralResult = null;
@@ -1222,31 +1149,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return sol;
         }
 
-        public string AlternateToMathAsciiStr()
-        {
-            AlgebraTerm toTerm = AlternateResult.ToAlgTerm();
-            if (toTerm == null)
-                return Result.ToAsciiString();
-            if (ForceFormatting)
-                return toTerm.FinalDispKeepFormatting();
-            return toTerm.FinalToDispStr();
-        }
-
-        public string AlternateToTexStr()
-        {
-            AlgebraTerm toTerm = AlternateResult.ToAlgTerm();
-            if (toTerm == null)
-                return Result.ToTexString();
-            return toTerm.FinalToTexString();
-        }
 
         public string ApproximateToMathAsciiStr()
         {
             AlgebraTerm toTerm = ApproximateResult.ToAlgTerm();
             if (toTerm == null)
                 return Result.ToAsciiString();
-            if (ForceFormatting)
-                return toTerm.FinalDispKeepFormatting();
             return toTerm.FinalToDispStr();
         }
 
@@ -1321,8 +1229,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public string GeneralToMathAsciiStr()
         {
-            if (ForceFormatting)
-                return GeneralResult.FinalDispKeepFormatting();
             return GeneralResult.FinalToDispStr();
         }
 
@@ -1336,8 +1242,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             AlgebraTerm toTerm = Result.ToAlgTerm();
             if (toTerm == null)
                 return Result.ToAsciiString();
-            if (ForceFormatting)
-                return toTerm.FinalDispKeepFormatting();
             return toTerm.FinalToDispStr();
         }
 

@@ -323,62 +323,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
             return this;
         }
 
-        public override string FinalToAsciiKeepFormatting()
-        {
-            string totalStr = "[";
-            for (int i = 0; i < _exData.Length; ++i)
-            {
-                if (Rows != 1)
-                    totalStr += "[";
-                for (int j = 0; j < _exData[i].Length; ++j)
-                {
-                    if (_exData[i][j] is AlgebraTerm)
-                        totalStr += (_exData[i][j] as AlgebraTerm).FinalToAsciiKeepFormatting();
-                    else
-                        totalStr += _exData[i][j].ToAsciiString();
-
-                    if (j != _exData[i].Length - 1)
-                        totalStr += ",";
-                }
-
-                if (Rows != 1)
-                    totalStr += "]";
-                if (i != _exData.Length - 1)
-                    totalStr += ",";
-            }
-            totalStr += "]";
-
-            return totalStr;
-        }
-
-        public override string FinalToTexKeepFormatting()
-        {
-            string totalStr = "[";
-            for (int i = 0; i < _exData.Length; ++i)
-            {
-                if (Rows != 1)
-                    totalStr += "[";
-                for (int j = 0; j < _exData[i].Length; ++j)
-                {
-                    if (_exData[i][j] is AlgebraTerm)
-                        totalStr += (_exData[i][j] as AlgebraTerm).FinalToTexKeepFormatting();
-                    else
-                        totalStr += _exData[i][j].ToTexString();
-
-                    if (j != _exData[i].Length - 1)
-                        totalStr += ",";
-                }
-
-                if (Rows != 1)
-                    totalStr += "]";
-                if (i != _exData.Length - 1)
-                    totalStr += ",";
-            }
-            totalStr += "]";
-
-            return totalStr;
-        }
-
         public override AlgebraTerm ForceCombineExponents()
         {
             for (int i = 0; i < Rows; ++i)

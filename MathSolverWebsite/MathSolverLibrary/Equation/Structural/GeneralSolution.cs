@@ -107,63 +107,6 @@
             return finalStr;
         }
 
-        public override string FinalToAsciiKeepFormatting()
-        {
-            string finalStr = "";
-
-            if (Number.IsUndef(_result))
-                return Number.Undefined.ToAsciiString();
-
-            if (!Number.Zero.IsEqualTo(_result) && !(_result is AlgebraTerm && (_result as AlgebraTerm).IsZero()))
-            {
-                if (_result is AlgebraTerm)
-                    finalStr += (_result as AlgebraTerm).FinalToAsciiKeepFormatting();
-                else
-                    finalStr += _result.ToAsciiString();
-
-                finalStr += "+";
-            }
-
-            if (_interval is AlgebraTerm)
-                finalStr += (_interval as AlgebraTerm).FinalToAsciiKeepFormatting();
-            else
-                finalStr += _interval.ToAsciiString();
-
-            return finalStr;
-        }
-
-        public override string FinalToTexKeepFormatting()
-        {
-            string finalStr = "";
-
-            if (Number.IsUndef(_result))
-                return Number.Undefined.ToTexString();
-
-            if (!Number.Zero.IsEqualTo(_result) && !(_result is AlgebraTerm && (_result as AlgebraTerm).IsZero()))
-            {
-                if (_result is AlgebraTerm)
-                    finalStr += (_result as AlgebraTerm).FinalToTexKeepFormatting();
-                else
-                    finalStr += _result.ToTexString();
-
-                finalStr += "+";
-            }
-
-            if (_interval is AlgebraTerm)
-                finalStr += (_interval as AlgebraTerm).FinalToTexKeepFormatting();
-            else
-                finalStr += _interval.ToTexString();
-
-            return finalStr;
-        }
-
-        public override string FinalDispKeepFormatting()
-        {
-            if (USE_TEX)
-                return FinalToTexKeepFormatting();
-            return FinalToAsciiKeepFormatting();
-        }
-
         public override string FinalToTexString()
         {
             string finalStr = "";

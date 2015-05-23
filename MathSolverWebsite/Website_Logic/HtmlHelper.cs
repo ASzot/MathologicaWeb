@@ -78,8 +78,6 @@ namespace MathSolverWebsite.Website_Logic
                 final += "<div class='solutionData'>" + WorkMgr.STM + solSolveFor + sol.ResultToMathAsciiStr() + WorkMgr.EDM + "</div>";
             if (sol.GeneralResult != null)
                 final += "<div class='solutionData'>" + WorkMgr.STM + solSolveFor + sol.GeneralToMathAsciiStr() + WorkMgr.EDM + "</p>";
-            if (sol.AlternateResult != null)
-                final += "<div class='solutionData'>" + WorkMgr.STM + solSolveFor + sol.AlternateToMathAsciiStr() + WorkMgr.EDM + "</p>";
             if (sol.ApproximateResult != null)
             {
                 final += "<div class='solutionData'>" + WorkMgr.STM + solveForStr + "\\approx" + sol.ApproximateToMathAsciiStr() + WorkMgr.EDM + "</p>";

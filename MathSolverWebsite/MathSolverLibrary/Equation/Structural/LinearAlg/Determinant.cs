@@ -60,19 +60,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
             return TakeDeteriment(mat);
         }
 
-        public override string FinalToAsciiKeepFormatting()
-        {
-            return "\\text{det}" + InnerTerm.FinalToAsciiKeepFormatting();
-        }
-
         public override string FinalToAsciiString()
         {
             return "\\text{det}" + InnerTerm.FinalToAsciiString();
-        }
-
-        public override string FinalToTexKeepFormatting()
-        {
-            return "\\text{det}" + InnerTerm.FinalToTexKeepFormatting();
         }
 
         public override string FinalToTexString()

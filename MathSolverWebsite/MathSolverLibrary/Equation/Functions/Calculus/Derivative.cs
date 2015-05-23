@@ -416,41 +416,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             return final;
         }
 
-        public override string FinalToAsciiKeepFormatting()
-        {
-            string orderStr = IsOrderOne ? "" : "^{" + _order.ToAsciiString() + "}";
-            string followingStr = null;
-            if (_order is Number && (_order as Number).IsRealInteger())
-            {
-                int order = (int)(_order as Number).RealComp;
-                if (order < 3)
-                {
-                    followingStr = "";
-                    // Use prime notation.
-                    for (int i = 0; i < order; ++i)
-                        followingStr += "'";
-                }
-            }
-
-            if (_withRespectTo == null)
-            {
-                if (_inputVal == null)
-                    return _derivOf.ToAsciiString() + (followingStr == null ? orderStr : followingStr);
-                else
-                    return _derivOf.ToAsciiString() + (followingStr == null ? orderStr : followingStr) + "(" + _inputVal.ToAlgTerm().FinalToAsciiKeepFormatting() + ")";
-            }
-
-            if (!_isDefined)
-            {
-                if (_inputVal == null)
-                    return "(\\frac{" + NotationIden + orderStr + _derivOf.ToAsciiString() + "}{" + NotationIden + _withRespectTo.ToAsciiString() + orderStr + "})";
-                else
-                    return _derivOf.ToAsciiString() + (followingStr == null ? orderStr : followingStr) + "(" + _inputVal.ToAlgTerm().FinalToAsciiKeepFormatting() + ")";
-            }
-            return "(\\frac{" + NotationIden + orderStr + "}{" + NotationIden + _withRespectTo.ToAsciiString() + orderStr + "}[" +
-                InnerEx.ToAlgTerm().FinalToAsciiKeepFormatting() + "])";
-        }
-
         public override string FinalToAsciiString()
         {
             string orderStr = IsOrderOne ? "" : "^{" + _order.ToAsciiString() + "}";
@@ -484,41 +449,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             }
             return "(\\frac{" + NotationIden + orderStr + "}{" + NotationIden + _withRespectTo.ToAsciiString() + orderStr + "}[" +
                 InnerEx.ToAlgTerm().FinalToAsciiString() + "])";
-        }
-
-        public override string FinalToTexKeepFormatting()
-        {
-            string orderStr = IsOrderOne ? "" : "^{" + _order.ToTexString() + "}";
-            string followingStr = null;
-            if (_order is Number && (_order as Number).IsRealInteger())
-            {
-                int order = (int)(_order as Number).RealComp;
-                if (order < 3)
-                {
-                    followingStr = "";
-                    // Use prime notation.
-                    for (int i = 0; i < order; ++i)
-                        followingStr += "'";
-                }
-            }
-
-            if (_withRespectTo == null)
-            {
-                if (_inputVal == null)
-                    return _derivOf.ToTexString() + (followingStr == null ? orderStr : followingStr);
-                else
-                    return _derivOf.ToTexString() + (followingStr == null ? orderStr : followingStr) + "(" + _inputVal.ToAlgTerm().FinalToTexKeepFormatting() + ")";
-            }
-
-            if (!_isDefined || _inputVal != null)
-            {
-                if (_inputVal == null)
-                    return "(\\frac{" + NotationIden + orderStr + _derivOf.ToTexString() + "}{" + NotationIden + _withRespectTo.ToTexString() + orderStr + "})";
-                else
-                    return _derivOf.ToTexString() + (followingStr == null ? orderStr : followingStr) + "(" + _inputVal.ToAlgTerm().FinalToTexKeepFormatting() + ")";
-            }
-            return "(\\frac{" + NotationIden + orderStr + "}{" + NotationIden + _withRespectTo.ToTexString() + orderStr + "}[" +
-                InnerEx.ToAlgTerm().FinalToTexKeepFormatting() + "])";
         }
 
         public override string FinalToTexString()
