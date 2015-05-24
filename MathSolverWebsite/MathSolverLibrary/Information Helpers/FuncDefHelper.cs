@@ -23,7 +23,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
             List<FunctionDefinition> funcDefs = new List<FunctionDefinition>();
             foreach (KeyValuePair<FunctionDefinition, ExComp> func in _defs)
             {
-                if (func.Key.InputArgCount != dimen && !(func.Value is ExMatrix))
+                if (func.Key.InputArgCount == dimen && !(func.Value is ExMatrix))
                     funcDefs.Add(func.Key);
             }
 

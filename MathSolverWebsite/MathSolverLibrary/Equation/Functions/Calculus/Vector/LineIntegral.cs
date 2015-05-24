@@ -31,7 +31,22 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
 
         public override string FinalToTexString()
         {
-            return base.FinalToTexString();
+            return "\\oint_{" + _lineIden.ToTexString() + "}(" + InnerTerm.FinalToTexString() + ")d" + _dVar.ToTexString();
+        }
+
+        public override string FinalToAsciiString()
+        {
+            return "\\oint_{" + _lineIden.ToAsciiString() + "}(" + InnerTerm.FinalToAsciiString() + ")d" + _dVar.ToAsciiString();
+        }
+
+        public override string ToTexString()
+        {
+            return "\\oint_{" + _lineIden.ToTexString() + "}(" + InnerTerm.ToTexString() + ")d" + _dVar.ToTexString();
+        }
+
+        public override string ToAsciiString()
+        {
+            return "\\oint_{" + _lineIden.ToAsciiString() + "}(" + InnerTerm.ToAsciiString() + ")d" + _dVar.ToAsciiString();
         }
 
         public static LineIntegral ConstructLineIntegral(ExComp innerEx, AlgebraComp surfaceIden, AlgebraComp withRespectTo)
@@ -122,14 +137,17 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
         {
             // Get the line.
             List<FunctionDefinition> vectorFuncs = pEvalData.FuncDefs.GetAllVecEquations(1);
-            if (vectorFuncs == null || vectorFuncs.Count == 0)
-                return this;
-            FunctionDefinition vectorFunc = FuncDefHelper.GetMostCurrentDef(vectorFuncs, _lineIden);
+            FunctionDefinition vectorFunc = null;
+            if (vectorFuncs != null || vectorFuncs.Count == 0)
+            {
+                vectorFunc = FuncDefHelper.GetMostCurrentDef(vectorFuncs, _lineIden);
+            }
 
             List<FunctionDefinition> paraFuncs = pEvalData.FuncDefs.GetProbableParametricEquations(1);
-            if (paraFuncs == null || paraFuncs.Count == 0)
-                return this;
-            int maxIndex = FuncDefHelper.GetMostCurrentIndex(paraFuncs);
+
+            int maxIndex = int.MinValue;
+            if (paraFuncs == null)
+                maxIndex = FuncDefHelper.GetMostCurrentIndex(paraFuncs);
 
             if (vectorFunc == null && (paraFuncs == null || paraFuncs.Count == 0))
                 return this;

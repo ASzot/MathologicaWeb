@@ -70,7 +70,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                                              LexemeType.Summation),
 			new TypePair<string, LexemeType>(@"lim_\((" + IDEN_MATCH + @")to", 
                                              LexemeType.Limit),
-            new TypePair<string, LexemeType>(@"(int_)|(int)", LexemeType.Integral),
+            new TypePair<string, LexemeType>(@"(oint_)|(int_)|(int)", LexemeType.Integral),
             new TypePair<string, LexemeType>(@"\$d(" + IDEN_MATCH + @")", LexemeType.Differential),
             new TypePair<string, LexemeType>(INF_MATCH, LexemeType.Infinity),
             new TypePair<string, LexemeType>(@"(sum)|(lim)", LexemeType.ErrorType),
@@ -1056,7 +1056,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
             // Remove the empty group identifier.
             if (!MathSolver.PLAIN_TEXT)
                 str = str.Replace(LexicalParser.MATH_EMPTY_GP, "");
-            if (str.Contains("\\int"))
+            if (str.Contains("\\int") || str.Contains("\\oint"))
             {
                 _rulesets[DIFF_RULE_INDEX] = new TypePair<string, LexemeType>("d(" + IDEN_MATCH + ")", LexemeType.Differential);
                 // This is somewhat of a hack together but it should work.

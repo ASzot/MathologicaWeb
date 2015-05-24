@@ -57,7 +57,7 @@
             }
 
             if (selectedTextBox != null) {
-                //fixInput(selectedTextBox);
+                fixInput(selectedTextBox);
             }
 
             var latex = getLatexInput();

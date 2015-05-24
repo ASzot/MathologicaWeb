@@ -707,6 +707,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
                     group = groupList.ToArray();
 
+                    if (group.GroupContains(dVar))
+                        return null;
+
                     pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + mulInCostStr + 
                         "\\int (" + group.ToAlgTerm().FinalToDispStr() + ") d" + subInVar.ToDispString() + WorkMgr.EDM);
 

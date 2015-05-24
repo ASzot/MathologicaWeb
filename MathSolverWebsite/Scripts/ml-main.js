@@ -155,9 +155,9 @@ var calc = new TopicMenu(
             ]),
         new MenuItem("Divergence", "\\text{div}(F)", "div(\\EMPTYGP{})", false),
         new MenuItem("Curl", "\\text{curl}(F)", "\\text{curl}(\\EMPTYGP{})", false),
-        new MenuItem("Line integral", "\\int_{C}\\vec{F} \\cdot d\\vec{r}", "\\vec{F}=\\EMPTYGP{}\\vec{i}+\\EMPTYGP{}\\vec{j};x(t)=\\EMPTYGP{};y(t)=\\EMPTYGP{};\\EMPTYGP{} \\le t \\le \\EMPTYGP{};\\int_{c}F \\cdot dr", true,
+        new MenuItem("Line integral", "\\oint_{C}\\vec{F} \\cdot d\\vec{r}", "\\vec{F}=\\EMPTYGP{}\\vec{i}+\\EMPTYGP{}\\vec{j};x(t)=\\EMPTYGP{};y(t)=\\EMPTYGP{};\\EMPTYGP{} \\le t \\le \\EMPTYGP{};\\int_{c}F \\cdot dr", true,
             [
-                new MenuItem("Line Integral", "\\int_{C}f *\\ds", "f(x,y)=\\EMPTYGP{}; x(t)=\\EMPTYGP{};y(t)=\\EMPTYGP{}; \\EMPTYGP{} \\le t \\le \\EMPTYGP{}; \\int_{c}f*ds", true),
+                new MenuItem("Line Integral", "\\oint_{C}f(x,y)\\ds", "f(x,y)=\\EMPTYGP{}; x(t)=\\EMPTYGP{};y(t)=\\EMPTYGP{}; \\EMPTYGP{} \\le t \\le \\EMPTYGP{}; \\oint_{c}f(x,y)ds", true),
             ], true),
         new MenuItem("Surface integral", "\\int\\int_{\\Sigma}f*\\d \\sigma", "f=\\EMPTYGP{};x(t,s)=\\EMPTYGP{};y(t,s)=\\EMPTYGP{};z(t,s)=\\EMPTYGP{};\\EMPTYGP{}\\le t \\le \\EMPTYGP{};\\EMPTYGP{}\\le s \\le \\EMPTYGP{}; \\int\\int_{\\Sigma}f\\cdot d\\sigma", true),
     ]);
@@ -551,24 +551,24 @@ function fixInput(selectedTxtBox) {
 
     var fixSymbols =
         [
-            'arcsin',
-            'arccos',
-            'arctan',
+            //'arcsin',
+            //'arccos',
+            //'arctan',
 
-            'arccsc',
-            'arcsec',
-            'arccot',
+            //'arccsc',
+            //'arcsec',
+            //'arccot',
 
-            'sin',
-            'cos',
-            'tan',
+            //'sin',
+            //'cos',
+            //'tan',
 
-            'csc',
-            'sec',
-            'cot',
+            //'csc',
+            //'sec',
+            //'cot',
 
-            'ln',
-            'log',
+            //'ln',
+            //'log',
 
             'pi'
         ];
