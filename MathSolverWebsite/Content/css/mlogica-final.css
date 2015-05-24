@@ -183,6 +183,7 @@ legend {
     color: #3498db;
     position: relative;
     display: inline-block;
+    top: -8px;
 }
 
 #input-area {
@@ -475,7 +476,7 @@ h1 {
     position: fixed;
     bottom: 0px;
     margin-bottom: 40px;
-    background-color: #e2e2e2;
+    background-color: #F5F5F5;
     text-align: center;
     padding-top: 5px;
 }
@@ -651,8 +652,9 @@ h1 {
 }
 
 .w-nav-menu {
-  position: relative;
-  float: right;
+    position: relative;
+    float: right;
+    margin-top: -7px;
 }
 
 .w-nav {

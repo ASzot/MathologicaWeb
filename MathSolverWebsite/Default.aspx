@@ -206,9 +206,9 @@
             workSpaceEle.scrollTop(scrollToVal);
 
             if (workSpaceEle[0].scrollHeight - workSpaceEle.scrollTop() == workSpaceEle.outerHeight())
-                $("#to-bottom-btn").hide();
+                exitScrollMode();
             else {
-                $("#to-bottom-btn").show();
+                enterScrollMode();
             }
 
             $(".input-disp-area").each(function () {
@@ -233,7 +233,14 @@
             $(".workCollapseBtn").each(function () {
                 $(this).click(function () {
                     $(this).parent().next().toggle();
-                    evt.stopPropagation();
+
+
+                    var workSpaceEle = $("#work-space");
+                    if (workSpaceEle[0].scrollHeight - workSpaceEle.scrollTop() == workSpaceEle.outerHeight())
+                        exitScrollMode();
+                    else {
+                        enterScrollMode();
+                    }
                 });
             });
 
@@ -309,7 +316,7 @@
 
         function onClearBtnClicked() {
             $("#work-list-disp").html("");
-            $("#to-bottom-btn").hide();
+            exitScrollMode();
         }
 
         $(document).ready(function () {
@@ -361,9 +368,9 @@
             $("#work-space").on('scroll', function () {
                 var elem = $(this);
                 if (elem[0].scrollHeight - elem.scrollTop() == elem.outerHeight())
-                    $("#to-bottom-btn").hide();
+                    exitScrollMode();
                 else {
-                    $("#to-bottom-btn").show();
+                    enterScrollMode();
                 }
             });
 

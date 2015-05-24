@@ -34,9 +34,8 @@
   border-bottom: 2px solid #1592db;
   margin: 0px;
   padding: 10px;
-  padding-left: 14px;
-  padding-top: 15px;
-  width: 100%;
+  margin-left: 5px;
+  width: auto;
   overflow-x: hidden;
   overflow-y: hidden;
 }
@@ -84,8 +83,8 @@
   font-style: normal;
   font-size: 115%;
   line-height: 1;
-  display: inline;
-  margin-left: 10px;
+  display: -moz-inline-box;
+  display: inline-block;
 }
 .mathquill-rendered-math .non-leaf,
 .mathquill-rendered-math .scaled {
@@ -119,7 +118,7 @@
   font-size: 87%;
 }
 .mathquill-rendered-math .font {
-  font: 1em "Times New Roman", Symbola, serif !important;
+  font: 1em "Times New Roman", Symbola, serif;
 }
 .mathquill-rendered-math .font * {
   font-family: inherit;
@@ -144,10 +143,10 @@
   font-style: normal;
 }
 .mathquill-rendered-math .sans-serif {
-  font-family: sans-serif, Symbola, serif !important;
+  font-family: sans-serif, Symbola, serif;
 }
 .mathquill-rendered-math .monospace {
-  font-family: monospace, Symbola, serif !important;
+  font-family: monospace, Symbola, serif;
 }
 .mathquill-rendered-math .overline {
   border-top: 1px solid black;
@@ -232,7 +231,7 @@
   display: block;
 }
 .mathquill-rendered-math .non-italicized-function {
-  font-family: Symbola, "Times New Roman", serif !important;
+  font-family: Symbola, "Times New Roman", serif;
   line-height: .9;
   font-style: normal;
   padding-right: .2em;
@@ -299,7 +298,7 @@
 .mathquill-rendered-math,
 .mathquill-rendered-math .mathquill-editable {
   cursor: text;
-  font-family: Symbola, "Times New Roman", serif !important;
+  font-family: Symbola, "Times New Roman", serif;
 }
 .mathquill-rendered-math .selection,
 .mathquill-editable .selection,
@@ -362,4 +361,3 @@
   filter: progid:DXImageTransform.Microsoft.Chroma(color='white');
   margin-top: -0.1em;
 }
-

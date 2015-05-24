@@ -268,6 +268,9 @@ var linAlg = new TopicMenu(
 var menus = [basic, trig, calc, symb, prob, linAlg];
 var currentMenu = basic;
 
+var inputBoxIds = [];
+var selectedTextBox = null;
+
 /////////////////////////
 // Tool-bar
 ///////////////////////
@@ -314,12 +317,13 @@ function onToolBarEleClicked(clickedId, event) {
         return;
     }
 
+    if (selectedTextBox == null & inputBoxIds.length > 0) {
+        selectedTextBox = $("#mathInputSpan" + inputBoxIds[0]);
+    }
+
     selectedTextBox.mathquill('write', clickedItem.addStr);
 
-    //var emptyEle = $(".non-leaf").first();
-    //selectedTextBox.focus();
-    //if (typeof emptyEle !== 'undefined' && typeof emptyEle !== null) {
-    //}
+
     mathInputChanged();
 
     return true;
@@ -433,8 +437,6 @@ $(document).ready(function () {
     }
 });
 
-var inputBoxIds = [];
-var selectedTextBox = null;
 
 function getLatexInput() {
     var latex = "";
@@ -627,4 +629,26 @@ function htmlDecode(value) {
 function onMathInputSpan_Clicked(clickedId) {
     selectedTextBox = $("#" + clickedId);
     selectedTextBox.focus();
+}
+
+function enterScrollMode() {
+    $("#to-bottom-btn").show();
+    $("#eval-space").hide();
+    $("#parse-error-txt").hide();
+
+    $("#work-space").css('height', 'moz-calc(100% - 204px)');
+    $("#work-space").css('height', 'webkit-calc(100% - 204px)');
+    $("#work-space").css('height', '-o-calc(100% - 204px)');
+    $("#work-space").css('height', 'calc(100% - 204px)');
+}
+
+function exitScrollMode() {
+    $("#to-bottom-btn").hide();
+    $("#eval-space").show(200);
+    $("#parse-error-txt").show(200);
+
+    $("#work-space").css('height', 'moz-calc(100% - 264px)');
+    $("#work-space").css('height', 'webkit-calc(100% - 264px)');
+    $("#work-space").css('height', '-o-calc(100% - 264px)');
+    $("#work-space").css('height', 'calc(100% - 264px)');
 }

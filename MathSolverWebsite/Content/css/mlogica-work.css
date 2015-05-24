@@ -6,7 +6,7 @@
     border: 1px solid #adadad;
     text-align: center;
     line-height: 60px;
-    right: 31%;
+    right: 32%;
     display: none;
 }
 
@@ -34,7 +34,7 @@
 }
 
 .workCollapseBtn {
-    opacity: 0.0;
+    opacity: 1.0;
 
 }
 
@@ -112,7 +112,7 @@
 
 .more-options-area {
     margin-left: 3%;
-    opacity: 0.0;
+    opacity: 1.0;
 }
 
 .prev-output:hover .more-options-area {

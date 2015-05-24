@@ -13,9 +13,6 @@
           background-color: white;
         }
 
-        .w-container {
-            max-width: 920px;
-        }
     </style>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContent" runat="server">
