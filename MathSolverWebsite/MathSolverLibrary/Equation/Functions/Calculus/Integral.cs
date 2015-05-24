@@ -201,7 +201,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         public override ExComp Evaluate(bool harshEval, ref TermType.EvalData pEvalData)
         {
+            CallChildren(harshEval, ref pEvalData);
+
             ExComp innerEx = InnerEx;
+
             if (innerEx is ExVector && !IsDefinite)
             {
                 ExVector vec = innerEx as ExVector;
@@ -435,7 +438,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             string boundariesStr = "";
             if (IsDefinite)
                 boundariesStr = "_{" + LowerLimit.ToAsciiString() + "}^{" + UpperLimit.ToAsciiString() + "}";
-            return "\\int" + boundariesStr + "(" + InnerTerm.FinalToAsciiString() + ")\\d" + _dVar.ToAsciiString();
+
+            return "\\int" + boundariesStr + (InnerEx is Integral ? InnerTerm.FinalToAsciiString() : "(" + InnerTerm.FinalToAsciiString() + ")") + "\\d" + _dVar.ToAsciiString();
         }
 
         public override string FinalToTexString()
@@ -443,7 +447,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             string boundariesStr = "";
             if (IsDefinite)
                 boundariesStr = "_{" + LowerLimit.ToTexString() + "}^{" + UpperLimit.ToTexString() + "}";
-            return "\\int" + boundariesStr + "(" + InnerTerm.FinalToTexString() + ")\\d" + _dVar.ToTexString();
+            return "\\int" + boundariesStr + (InnerEx is Integral ? InnerTerm.FinalToTexString() : "(" + InnerTerm.FinalToTexString() + ")") + "\\d" + _dVar.ToTexString();
         }
         
         public override bool IsEqualTo(ExComp ex)

@@ -51,6 +51,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public override ExComp Evaluate(bool harshEval, ref TermType.EvalData pEvalData)
         {
+            CallChildren(harshEval, ref pEvalData);
+
             ExComp n = Top;
             ExComp k = Bottom;
 

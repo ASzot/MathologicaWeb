@@ -69,6 +69,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             return CreateInstance(InnerTerm.Clone());
         }
 
+        protected void CallChildren(bool harshEval, ref TermType.EvalData pEvalData)
+        {
+            for (int i = 0; i < _subComps.Count; ++i)
+            {
+                if (_subComps[i] is AlgebraFunction)
+                    _subComps[i] = (_subComps[i] as AlgebraFunction).Evaluate(harshEval, ref pEvalData);
+            }
+        }
+
         public override AlgebraTerm CompoundFractions()
         {
             AlgebraTerm compoundedFracs = InnerTerm.CompoundFractions();

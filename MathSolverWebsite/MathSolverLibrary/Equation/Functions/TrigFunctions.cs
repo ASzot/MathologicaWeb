@@ -21,6 +21,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public override ExComp Evaluate(bool harshEval, ref TermType.EvalData pEvalData)
         {
+            CallChildren(harshEval, ref pEvalData);
+
             if (!b_skipDomain && !InStandardDomain(ref pEvalData))
                 return Number.Undefined;
 
@@ -130,6 +132,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public override ExComp Evaluate(bool harshEval, ref TermType.EvalData pEvalData)
         {
+            CallChildren(harshEval, ref pEvalData);
+
             if (Number.Zero.IsEqualTo(InnerEx))
             {
                 return AlgebraTerm.FromFraction(Constant.Pi, new Number(2.0));
@@ -177,6 +181,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public override ExComp Evaluate(bool harshEval, ref TermType.EvalData pEvalData)
         {
+            CallChildren(harshEval, ref pEvalData);
+
             if (InStandardDomain(ref pEvalData) && InnerEx is Number)
                 return Number.Undefined;
 
@@ -225,6 +231,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public override ExComp Evaluate(bool harshEval, ref TermType.EvalData pEvalData)
         {
+            CallChildren(harshEval, ref pEvalData);
+
             if (InStandardDomain(ref pEvalData) && InnerEx is Number)
                 return Number.Undefined;
 
@@ -278,6 +286,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public override ExComp Evaluate(bool harshEval, ref TermType.EvalData pEvalData)
         {
+            CallChildren(harshEval, ref pEvalData);
+
             if (!b_skipDomain && !InStandardDomain(ref pEvalData))
                 return Number.Undefined;
 
@@ -388,6 +398,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public override ExComp Evaluate(bool harshEval, ref TermType.EvalData pEvalData)
         {
+            CallChildren(harshEval, ref pEvalData);
+
             ExComp innerEx = InnerEx;
 
             if (innerEx is AlgebraTerm)
@@ -485,6 +497,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public override ExComp Evaluate(bool harshEval, ref TermType.EvalData pEvalData)
         {
+            CallChildren(harshEval, ref pEvalData);
+
             if (harshEval)
             {
                 ExComp innerEx = GetInnerTerm(pEvalData.UseRad).RemoveRedundancies();
@@ -581,6 +595,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public override ExComp Evaluate(bool harshEval, ref TermType.EvalData pEvalData)
         {
+            CallChildren(harshEval, ref pEvalData);
+
             if (harshEval)
             {
                 ExComp innerEx = GetInnerTerm(pEvalData.UseRad).RemoveRedundancies();
@@ -708,6 +724,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public override ExComp Evaluate(bool harshEval, ref TermType.EvalData pEvalData)
         {
+            CallChildren(harshEval, ref pEvalData);
+
             if (harshEval)
             {
                 ExComp innerEx = GetInnerTerm(pEvalData.UseRad).RemoveRedundancies();
@@ -878,6 +896,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public override ExComp Evaluate(bool harshEval, ref TermType.EvalData pEvalData)
         {
+            CallChildren(harshEval, ref pEvalData);
+
             if (harshEval)
             {
                 ExComp innerEx = GetInnerTerm(pEvalData.UseRad).RemoveRedundancies();
@@ -1007,6 +1027,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public override ExComp Evaluate(bool harshEval, ref TermType.EvalData pEvalData)
         {
+            CallChildren(harshEval, ref pEvalData);
+
             if (harshEval)
             {
                 ExComp innerEx = GetInnerTerm(pEvalData.UseRad).RemoveRedundancies();
@@ -1103,6 +1125,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public override ExComp Evaluate(bool harshEval, ref TermType.EvalData pEvalData)
         {
+            CallChildren(harshEval, ref pEvalData);
+
             if (harshEval)
             {
                 ExComp innerEx = GetInnerTerm(pEvalData.UseRad).RemoveRedundancies();

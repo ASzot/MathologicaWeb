@@ -26,6 +26,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
 
         public override ExComp Evaluate(bool harshEval, ref TermType.EvalData pEvalData)
         {
+            CallChildren(harshEval, ref pEvalData);
+
             ExComp innerEx = GetCorrectedInnerEx(ref pEvalData);
 
             AlgebraComp x, y, z;

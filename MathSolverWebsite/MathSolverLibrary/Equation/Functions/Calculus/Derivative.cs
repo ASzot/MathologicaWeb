@@ -345,6 +345,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         /// <returns></returns>
         public override ExComp Evaluate(bool harshEval, ref TermType.EvalData pEvalData)
         {
+            CallChildren(harshEval, ref pEvalData);
+
             if (!_isDefined)
                 return this;
 

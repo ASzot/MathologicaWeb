@@ -107,6 +107,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public override ExComp Evaluate(bool harshEval, ref TermType.EvalData pEvalData)
         {
+            CallChildren(harshEval, ref pEvalData);
+
             double dInnerVal = double.NaN;
             double dBaseVal = double.NaN;
             double dLogVal = double.NaN;

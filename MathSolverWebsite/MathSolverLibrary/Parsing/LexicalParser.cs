@@ -26,7 +26,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
         private List<string> _definedFuncs = new List<string>();
 
         public const string IDEN_MATCH = @"alpha|beta|gamma|delta|epsilon|varepsilon|zeta|eta|theta|vartheta|iota|kappa|lambda|mu|nu|xi|rho|sigma|tau|usilon|phi|varphi|" +
-                "chi|psi|omega|Gamma|Theta|Lambda|Xi|Phsi|Psi|Omega|[a-zA-Z]";
+                "chi|psi|omega|Gamma|Theta|Lambda|Xi|Phsi|Psi|Omega|Sigma|[a-zA-Z]";
 
         public const string NUM_MATCH = @"((?<![\d])\.[\d]+)|([\d]+([.][\d]+)?)";
         public const string INF_MATCH = @"inf";
@@ -1292,7 +1292,21 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                     }
                     else if (lexemeTable[i].Data1 == LexemeType.Integral)
                     {
-                        depth++;
+                        bool nextIden = false;
+                        if (i + 1 < lexemeTable.Count && lexemeTable[i + 1].Data1 == LexemeType.Identifier)
+                            nextIden = true;
+                        else if (i + 3 < lexemeTable.Count &&
+                            lexemeTable[i + 1].Data1 == LexemeType.StartPara &&
+                            lexemeTable[i + 2].Data1 == LexemeType.Identifier &&
+                            lexemeTable[i + 3].Data1 == LexemeType.EndPara)
+                            nextIden = true;
+
+                        // Check for surface integrals which break the rule of one integral to one differential.
+                        if (!(i > 0 && i + 2 < lexemeTable.Count && lexemeTable[i - 1].Data1 == LexemeType.Integral && lexemeTable[i].Data2.Contains("_") &&
+                            !lexemeTable[i - 1].Data2.Contains("_") && nextIden && lexemeTable[i + 2].Data1 != LexemeType.Operator))
+                        {
+                            depth++;
+                        }
                     }
                 }
 
@@ -2988,16 +3002,17 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                 }
             }
 
-            if (endIndex == -1 && !(upper == null && lower != null))
-            {
-                // There is a chance this is a surface integral.
-                pParseErrors.Add("Couldn't find the variable of integration.");
-                return null;
-            }
 
-            currentIndex = endIndex == -1 ? lt.Count - 1 : endIndex;
+            currentIndex = endIndex == -1 ? lt.Count : endIndex;
 
             LexemeTable integralTerm = lt.GetRange(startIndex, currentIndex - startIndex);
+
+            // This could be in the line integral vector path notation.
+            if (integralTerm[integralTerm.Count - 1].Data2 == "*")
+            {
+                integralTerm.RemoveAt(integralTerm.Count - 1);
+            }
+
             AlgebraTerm innerTerm = LexemeTableToAlgebraTerm(integralTerm, ref pParseErrors);
             if (innerTerm == null)
                 return null;
@@ -3009,31 +3024,19 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
 
             if (endIndex == -1)
             {
-                if (lower != null && upper == null)
+                if (lower == null && upper == null && innerEx is LineIntegral)
                 {
-                    // 'With respect to' is purposefully left null.
-                    LineIntegral lineIntegral = LineIntegral.ConstructLineIntegral(innerEx, (AlgebraComp)lower, null);
-                    return lineIntegral;
+                    LineIntegral lineIntegral = innerEx as LineIntegral;
+
+                    return SurfaceIntegral.ConstructSurfaceIntegral(lineIntegral.InnerEx, lineIntegral.LineIden, lineIntegral.DVar);
                 }
+                pParseErrors.Add("Couldn't find the variable of integration.");
                 return null;
             }
 
-            string withRespectVar = lt[endIndex].Data2.Remove(0, lt[endIndex].Data2.Length - 1);
-
+            // Remove the first 'd' character from the differential.
+            string withRespectVar = lt[endIndex].Data2.Remove(0, 1);
             AlgebraComp dVar = new AlgebraComp(withRespectVar);
-
-
-            if (innerEx is LineIntegral)
-            {
-                // This has to be a surface integral.
-                if (lower != null || upper != null)
-                {
-                    pParseErrors.Add("Invalid integral");
-                    return null;
-                }
-                LineIntegral lineIntegral = innerEx as LineIntegral;
-                return SurfaceIntegral.ConstructSurfaceIntegral(lineIntegral.InnerEx, dVar, lineIntegral.DVar);
-            }
 
             if (upper == null && lower != null)
                 return LineIntegral.ConstructLineIntegral(innerTerm, (AlgebraComp)lower, dVar);

@@ -225,7 +225,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
             TypePair<string, ExComp>[] retVec = new TypePair<string, ExComp>[useVector.Length];
             for (int i = 0; i < retVec.Length; ++i)
             {
-                retVec[i] = new TypePair<string, ExComp>(null, useVector.Get(i));
+                retVec[i] = new TypePair<string, ExComp>(FunctionDefinition.GetDimenStr(i), useVector.Get(i));
             }
 
             return retVec;

@@ -350,6 +350,7 @@ namespace MathSolverWebsite.MathSolverLibrary
         public List<WorkStep> SubWorkSteps
         {
             get { return _subWorkSteps; }
+            set { _subWorkSteps = value; }
         }
 
         public WorkStep(string work, string workDesc)

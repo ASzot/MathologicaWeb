@@ -235,6 +235,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public override ExComp Evaluate(bool harshEval, ref TermType.EvalData pEvalData)
         {
+            CallChildren(harshEval, ref pEvalData);
+
             // No negative numbers with summations.
             if ((IterCount is Number && (IterCount as Number) < 0.0) ||
                 (IterStart is Number && (IterStart as Number) < 0.0))

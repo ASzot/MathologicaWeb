@@ -9,6 +9,8 @@
 
         public override ExComp Evaluate(bool harshEval, ref TermType.EvalData pEvalData)
         {
+            CallChildren(harshEval, ref pEvalData);
+
             ExComp innerEx = InnerEx;
 
             if (innerEx is Number && (innerEx as Number).IsRealInteger())

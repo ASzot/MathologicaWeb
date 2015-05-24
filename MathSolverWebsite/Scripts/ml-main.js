@@ -1,5 +1,4 @@
-﻿
-function MenuItem(name, displayTex, addStr, useLargerIcon, subItems, needsSpacing) {
+﻿function MenuItem(name, displayTex, addStr, useLargerIcon, subItems, needsSpacing) {
     this.SubItems = subItems;
     this.name = name;
     this.displayTex = displayTex;
@@ -16,6 +15,33 @@ var uniqueId = (function () {
 
     return function () { return id += 1; };
 })();
+
+setCookie = function (c_name, value, exdays) {
+    var exdate = new Date();
+    exdate.setDate(exdate.getDate() + exdays);
+    var expires = exdate.toUTCString();
+    var isIE8 = (document.documentMode !== undefined);
+    if (exdays == 0) {
+        expires = (isIE8 == true) ? "" : "0";
+    }
+    var c_value = escape(value) + ((exdays == null) ? "" : "; expires=" + expires);
+    document.cookie = c_name + "=" + c_value;
+}
+
+getCookie = function (cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') c = c.substring(1);
+        if (c.indexOf(name) != -1) return c.substring(name.length, c.length);
+    }
+    return "";
+}
+
+deleteCookie = function (name) {
+    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+}
 
 function TopicMenu(items) {
     this.items = items;
@@ -113,7 +139,7 @@ var calc = new TopicMenu(
             [
                 new MenuItem("Derivative of function", "(df)/(dx)", "\\frac{df}{dx}", true),
             ]),
-        new MenuItem("Indefinite integral", "\\int", "\\int", true, 
+        new MenuItem("Indefinite integral", "\\int", "\\int", true,
             [
                 new MenuItem("Double indefinite integral", "\\int\\int_{D}", "\\int\\int", true),
                 new MenuItem("Triple indefinite integral", "\\int\\int\\int_{V}", "\\int\\int\\int", true),
@@ -138,7 +164,7 @@ var calc = new TopicMenu(
         new MenuItem("Imaginary number.", "i", "i", false),
         new MenuItem("Infinity", "oo", "\\inf", false),
         new MenuItem("Lowercase theta", "theta", "\\theta", false),
-        new MenuItem("Partial Derivative", "\\frac{\\partial}{\\partial x}", "\\frac{\\partial}{\\partial x}", true, 
+        new MenuItem("Partial Derivative", "\\frac{\\partial}{\\partial x}", "\\frac{\\partial}{\\partial x}", true,
             [
                 new MenuItem("Partial derivative of function", "\\frac{\\partial f}{\\partial x}", "\\frac{\\partial f}{\\partial x}", true),
             ]),
@@ -147,7 +173,7 @@ var calc = new TopicMenu(
                 new MenuItem("y unit vector", "\\vec{j}", "\\vec{j}", false),
                 new MenuItem("z unit vector", "\\vec{k}", "\\vec{k}", false),
             ]),
-        new MenuItem("Nabla", "\\nabla", "\\nabla", false, 
+        new MenuItem("Nabla", "\\nabla", "\\nabla", false,
             [
                 new MenuItem("Divergence", "\\nabla\\cdot", "\nabla\\cdot", false),
                 new MenuItem("Curl", "\\nabla\\times", "\\nabla\\cdot", false),
@@ -155,11 +181,11 @@ var calc = new TopicMenu(
             ]),
         new MenuItem("Divergence", "\\text{div}(F)", "div(\\EMPTYGP{})", false),
         new MenuItem("Curl", "\\text{curl}(F)", "\\text{curl}(\\EMPTYGP{})", false),
-        new MenuItem("Line integral", "\\oint_{C}\\vec{F} \\cdot d\\vec{r}", "\\vec{F}=\\EMPTYGP{}\\vec{i}+\\EMPTYGP{}\\vec{j};x(t)=\\EMPTYGP{};y(t)=\\EMPTYGP{};\\EMPTYGP{} \\le t \\le \\EMPTYGP{};\\int_{c}F \\cdot dr", true,
+        new MenuItem("Line integral", "\\oint_{C}\\vec{F} \\cdot d\\vec{r}", "F(x,y)=\\EMPTYGP{}\\vec{i}+\\EMPTYGP{}\\vec{j};x(t)=\\EMPTYGP{};y(t)=\\EMPTYGP{};\\EMPTYGP{} \\le t \\le \\EMPTYGP{};\\oint_{c}F(x,y) \\cdot dr", true,
             [
                 new MenuItem("Line Integral", "\\oint_{C}f(x,y)\\ds", "f(x,y)=\\EMPTYGP{}; x(t)=\\EMPTYGP{};y(t)=\\EMPTYGP{}; \\EMPTYGP{} \\le t \\le \\EMPTYGP{}; \\oint_{c}f(x,y)ds", true),
             ], true),
-        new MenuItem("Surface integral", "\\int\\int_{\\Sigma}f*\\d \\sigma", "f=\\EMPTYGP{};x(t,s)=\\EMPTYGP{};y(t,s)=\\EMPTYGP{};z(t,s)=\\EMPTYGP{};\\EMPTYGP{}\\le t \\le \\EMPTYGP{};\\EMPTYGP{}\\le s \\le \\EMPTYGP{}; \\int\\int_{\\Sigma}f\\cdot d\\sigma", true),
+        new MenuItem("Surface integral", "\\int\\int_{\\Sigma}f(x,y,z)\\d \\sigma", "f(x,y,z)=\\EMPTYGP{};x(t,s)=\\EMPTYGP{};y(t,s)=\\EMPTYGP{};z(t,s)=\\EMPTYGP{};\\EMPTYGP{}\\le t \\le \\EMPTYGP{};\\EMPTYGP{}\\le s \\le \\EMPTYGP{}; \\int\\int_{\\Sigma}f(x,y,z)d\\sigma", true),
     ]);
 
 var symb = new TopicMenu(
@@ -201,7 +227,6 @@ var symb = new TopicMenu(
         new MenuItem("Nine", "9", "9", false),
     ]);
 
-
 var prob = new TopicMenu(
     [
         new MenuItem("Summation", "\\sum_(i=0)^N", "\\sum^{}_{i=}", true),
@@ -213,7 +238,7 @@ var prob = new TopicMenu(
 
 var linAlg = new TopicMenu(
     [
-        new MenuItem("2D row vector", "[x,y]", "[\\EMPTYGP{},\\EMPTYGP{}]", true, 
+        new MenuItem("2D row vector", "[x,y]", "[\\EMPTYGP{},\\EMPTYGP{}]", true,
             [
                 new MenuItem("3D row vector", "[x,y,z]", "[\\EMPTYGP{}, \\EMPTYGP{}, \\EMPTYGP{}]", true),
                 new MenuItem("4D row vector", "[x,y,z,w]", "[\\EMPTYGP{},\\EMPTYGP{},\\EMPTYGP{},\\EMPTYGP{}]", true),
@@ -223,7 +248,7 @@ var linAlg = new TopicMenu(
                 new MenuItem("3D column vector", "[[x],[y],[z]]", "\\vectorb{}{}{}", true),
                 new MenuItem("3D column vector", "[[x],[y],[z],[w]]", "\\vectorb{}{}{}{}", true),
             ]),
-        new MenuItem("2x2 matrix", "[(a,b),(c,d)]", "\\vectora{\\EMPTYGP{}, \\EMPTYGP{}}{\\EMPTYGP{}, \\EMPTYGP{}}", true, 
+        new MenuItem("2x2 matrix", "[(a,b),(c,d)]", "\\vectora{\\EMPTYGP{}, \\EMPTYGP{}}{\\EMPTYGP{}, \\EMPTYGP{}}", true,
             [
                 new MenuItem("3x3 matrix", "[[a, b, c], [d, e, f], [g, h, k]]", "\\vectorb{\\EMPTYGP{}, \\EMPTYGP{}, \\EMPTYGP{}}{\\EMPTYGP{}, \\EMPTYGP{}, \\EMPTYGP{}}{\\EMPTYGP{}, \\EMPTYGP{}, \\EMPTYGP{}}", true),
                 new MenuItem("4x4 matrix", "[[a, b, c, d], [e, f, g, h], [k, l, m, n], [p, q, r, s]]", "\\vectorc{\\EMPTYGP{}, \\EMPTYGP{}, \\EMPTYGP{}, \\EMPTYGP{}}{\\EMPTYGP{}, \\EMPTYGP{}, \\EMPTYGP{}, \\EMPTYGP{}}{\\EMPTYGP{}, \\EMPTYGP{}, \\EMPTYGP{}, \\EMPTYGP{}} {\\EMPTYGP{}, \\EMPTYGP{}, \\EMPTYGP{}, \\EMPTYGP{}}", true),
@@ -247,7 +272,6 @@ var currentMenu = basic;
 // Tool-bar
 ///////////////////////
 
-
 function onToolBarEleClicked(clickedId, event) {
     if (typeof clickedId.substring === 'undefined')
         return;
@@ -259,7 +283,7 @@ function onToolBarEleClicked(clickedId, event) {
         index = split[0];
         subIndex = split[1];
     }
-    
+
     var clickedItem = currentMenu.items[index];
     if (subIndex != -1) {
         clickedItem = clickedItem.SubItems[subIndex];
@@ -295,7 +319,6 @@ function onToolBarEleClicked(clickedId, event) {
     //var emptyEle = $(".non-leaf").first();
     //selectedTextBox.focus();
     //if (typeof emptyEle !== 'undefined' && typeof emptyEle !== null) {
-
     //}
     mathInputChanged();
 
@@ -339,14 +362,14 @@ $(document).ready(function () {
             $(".sub-toolbar-btn-space").each(function () {
                 $(this).hide();
             });
-            
+
             $(".toolbar-btn-dropdown").each(function () {
                 var parentHeight = $(this).parent().height();
                 var parentWidth = $(this).parent().width();
                 if ($(this).hasClass("extra-space")) {
                     parentWidth += 30.0;
                 }
-                
+
                 var paddingHeight = ((parentHeight - 19.0) / 2.0);
                 //$(this).css('padding-top', paddingHeight + "px");
                 //$(this).css('padding-bottom', paddingHeight + "px");
@@ -357,7 +380,6 @@ $(document).ready(function () {
                 var factor = Math.pow(parentWidth, new Number(1.0)) / 1.4;
                 $(this).css('left', (factor) + 'px');
                 $(this).css('width', "20px");
-
 
                 $(this).click(function (e) {
                     var subBtns = $(this).parent().children(".sub-toolbar-btn-space");
@@ -377,14 +399,11 @@ $(document).ready(function () {
                 setTimeout(function () {
                     $(".sub-toolbar-btn-space").fadeOut();
                 }, 2000);
-
-
             });
             $(".sub-toolbar-btn-space").mouseenter(function () {
                 $(this).stop(true, true).fadeIn();
             });
         });
-
     }
 
     for (var i = 0; i < 7; ++i) {
@@ -394,9 +413,25 @@ $(document).ready(function () {
     // Create the toolbar.
     var operatorsHTML = basic.outputItems();
     $("#toolbar-btn-space").html(operatorsHTML);
+
+    
+
+    // Create the multi-line help pop up.
+    if (getCookie('visited')) {
+        // The user has been to this page before.
+    }
+    else {
+        setCookie('visited', true, 999);
+        // This is the user's first time on this page.
+        alert("creawting");
+        $("<div class='small-popup pop'><p>Multi-line input is great. Check out <a href='#'>mathologica.com/multiline</a> for more.</p><a style='margin-top: 0px;' class='close' href='#'>Close</a></div>").insertAfter("#add-btn-id");
+
+        $(".close").live('click', function () {
+            $(".pop").remove();
+            return false;
+        });
+    }
 });
-
-
 
 var inputBoxIds = [];
 var selectedTextBox = null;
@@ -416,7 +451,6 @@ function getLatexInput() {
         }
         else
             lastAdded = false;
-
     }
 
     return latex;
@@ -462,7 +496,6 @@ function updateInputBoxes() {
         inputSpan.mathquill("editable");
     }
 }
-
 
 function clearInputBtn_Clicked() {
     if (inputBoxIds.length == 1) {
@@ -521,7 +554,6 @@ function clearInputBtn_Clicked() {
 }
 
 function inputBoxLostFocus() {
-        
 }
 
 function inputBoxGainedFocus() {

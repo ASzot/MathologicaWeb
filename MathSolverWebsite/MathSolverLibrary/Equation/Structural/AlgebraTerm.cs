@@ -672,16 +672,17 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                         _subComps.Insert(i, cancelAtmpt);
                     }
                 }
-                if (_subComps[i] is AlgebraTerm)
-                {
-                    (_subComps[i] as AlgebraTerm).EvaluateFunctions(harshEval, ref pEvalData);
-                }
+
                 if (_subComps[i] is AlgebraFunction)
                 {
                     AlgebraFunction func = _subComps[i] as AlgebraFunction;
                     _subComps.RemoveAt(i);
                     ExComp evaluated = func.Evaluate(harshEval, ref pEvalData);
                     _subComps.Insert(i, evaluated);
+                }
+                if (_subComps[i] is AlgebraTerm && !(_subComps[i] is AppliedFunction))       // AppliedFunction is in charge of calling all children functions.
+                {
+                    (_subComps[i] as AlgebraTerm).EvaluateFunctions(harshEval, ref pEvalData);
                 }
             }
         }

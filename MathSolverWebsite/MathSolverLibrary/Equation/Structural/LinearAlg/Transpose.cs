@@ -18,6 +18,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
 
         public override ExComp Evaluate(bool harshEval, ref TermType.EvalData pEvalData)
         {
+            CallChildren(harshEval, ref pEvalData);
+
             ExMatrix mat = InnerEx as ExMatrix;
             if (mat == null)
                 return Number.Undefined;

@@ -10,6 +10,14 @@
     display: none;
 }
 
+.small-popup {
+    background-color: #ecf0f1;
+    position: absolute;
+    bottom: 70px;
+    right: 8px;
+    padding: 10px;
+}
+
     #to-bottom-btn:hover {
         cursor: pointer;
         color: #3498db;

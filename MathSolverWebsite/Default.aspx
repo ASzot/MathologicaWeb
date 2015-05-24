@@ -1,19 +1,18 @@
 ﻿<%@ Page Title="Mathologica-Free Math Solver" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="MathSolverWebsite._Default" %>
 
 <asp:Content runat="server" ID="HeadContent" ContentPlaceHolderID="HeadContent">
-    
 </asp:Content>
 
 <asp:Content runat="server" ID="FeaturedContent" ContentPlaceHolderID="FeaturedContent">
 
     <!-- Meta description here. -->
     <meta name="description" content="" />
-    
+
     <!-- JSX graph include. -->
     <link rel="stylesheet" href="JSXGraph/jsxgraph.css" type="text/css" />
     <script async="async" type="text/javascript" src="JSXGraph/jsxgraphcore.js"></script>
 
-    <script type="text/javascript" src="Scripts/ml-main.js"></script> 
+    <script type="text/javascript" src="Scripts/ml-main.js"></script>
     <link rel="stylesheet" href="Content/css/mlogica-work.css" type="text/css" />
 
     <!-- MathJax include. -->
@@ -35,7 +34,7 @@
         ga('create', 'UA-56848508-1', 'auto');
         ga('send', 'pageview');
     </script>
-    
+
     <script>
         var prevWidth = 0;
         var btnDropDownTimeout = 0;
@@ -44,7 +43,6 @@
             var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
             return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
         }
-
 
         function mathInputChanged(event) {
 
@@ -56,6 +54,8 @@
                 }
             }
 
+            $(".more-popup").hide();
+
             if (selectedTextBox != null) {
                 fixInput(selectedTextBox);
             }
@@ -65,7 +65,6 @@
             var encodedLatex = htmlEncode(latex);
 
             $("#<%= hiddenUpdateTxtBox.ClientID %>").val(encodedLatex);
-
 
             $("#<%= hiddenUpdateBtn.ClientID %>").click();
             MathJax.Hub.Queue(["Typeset", MathJax.Hub, "funcDispList"]);
@@ -133,6 +132,16 @@
             });
         }
 
+        function addPobBtnCallback() {
+            $(".pob-problem").click(function (e) {
+                // Paste into the input.
+                var inputDisp = $(this).find(".hidden").html();
+                var inputDispSplit = inputDisp.split('|');
+                var inputDispEncoded = encodeURIComponent(inputDispSplit[0]);
+                window.location.replace("/Default?Index=0&InputDisp=" + inputDispEncoded + (inputDispSplit[1] == null ? "" : "&UseRad=" + inputDispSplit[1]));
+            });
+        }
+
         Sys.WebForms.PageRequestManager.getInstance().add_beginRequest(BeginRequestHandler);
         Sys.WebForms.PageRequestManager.getInstance().add_endRequest(EndRequestHandler);
         function BeginRequestHandler(sender, args) {
@@ -149,21 +158,19 @@
                 $("#parse-errors-id").hide();
             }
 
-
             if (senderId != "id-solve-btn" && senderId.indexOf("hiddenSolveBtn") == -1) {
-                if (senderId.indexOf("hiddenUpdateBtn") != -1 || senderId.indexOf("RadBtn") != -1) {
+                if (senderId.indexOf("hiddenUpdateBtn") != -1 || senderId.indexOf("RadBtn") != -1 || senderId.indexOf("functionDefsListView") != -1) {
                     MathJax.Hub.Queue(['Typeset', MathJax.Hub, 'funcDispList']);
                 }
                 else if (senderId.indexOf('updateExampleTimer') != -1 || senderId.indexOf('exampleNav') != -1) {
                     MathJax.Hub.Queue(['Typeset', MathJax.Hub, "pob-space"]);
+                    addPobBtnCallback();
                 }
 
                 return;
             }
 
-
             var prevSolveOutput = $("#<% = calcOutput.ClientID %>").html();
-
 
             $("#<% = calcOutput.ClientID %>").html("");
 
@@ -186,7 +193,10 @@
             // Remove all of the existing graphs. (There can only be one graph at once).
             $("#work-list-disp").append("<div class='prev-output'>" + prevSolveOutput + "<div class='more-options-area'>" +
                 "<div style='border-right: 1px solid #adadad' class='link-btn icon-btn'><img src='/Images/LinkIcon.png' />" +
-                "</div><div class='share-btn icon-btn'><img src='/Images/SaveIcon.png' /></div></div></div><div class='horiz-divide'></div>");
+                "</div><div class='share-btn icon-btn'><img src='/Images/SaveIcon.png' /></div>" +
+
+                "</div></div><div class='horiz-divide'></div>");
+
             MathJax.Hub.Queue(["Typeset", MathJax.Hub], function () {
             });
 
@@ -238,7 +248,6 @@
                 });
             });
 
-
             $(".link-btn").click(function () {
                 // Get the input.
                 var prevOutput = $(this).parent().parent();
@@ -265,7 +274,6 @@
                     var isAuthen = '<% = Request.IsAuthenticated  %>';
                     if (isAuthen == "True") {
                         var currentDate = new Date();
-
 
                         $("#<%= hiddenSavedProblemTxtBox.ClientID %>").val(htmlEncode(inputTxt));
                         var currentDate = currentDate.today();
@@ -296,7 +304,6 @@
                     }
                 });
             });
-
 
         }
 
@@ -351,14 +358,6 @@
                 return false;
             });
 
-            $(".pob-problem").click(function (e) {
-                // Paste into the input.
-                var inputDisp = $(this).find(".hidden").html();
-                var inputDispSplit = inputDisp.split('|');
-                var inputDispEncoded = encodeURIComponent(inputDispSplit[0]);
-                window.location.replace("/Default?Index=0&InputDisp=" + inputDispEncoded + (inputDispSplit[1] == null ? "" : "&UseRad=" + inputDispSplit[1]));
-            });
-
             $("#work-space").on('scroll', function () {
                 var elem = $(this);
                 if (elem[0].scrollHeight - elem.scrollTop() == elem.outerHeight())
@@ -382,6 +381,8 @@
                 $("#<% = exampleNavBackBtn.ClientID %>").click();
                 e.stopPropagation();
             });
+
+            addPobBtnCallback();
 
             prevWidth = $(window).width();
 
@@ -410,7 +411,6 @@
 
                 $("#input-list").html(html);
 
-
                 for (var i = 0; i < splitInput.length; ++i) {
                     $("#mathInputSpan" + i).mathquill('editable');
                     $("#mathInputSpan" + i).mathquill('latex', splitInput[i]);
@@ -429,6 +429,17 @@
                 inputBoxIds.push(0);
             }
 
+            $(".more-popup").mouseleave(function () {
+                setTimeout(function () {
+                    // Don't even think about using 'this' here.
+                    $(".more-popup").hide();
+                    $("#expand-more-popup").html("+");
+                }, 2000);
+
+            });
+            $(".more-popup").mouseenter(function () {
+                $(this).stop(true, true).show();
+            });
 
             $("#expand-more-popup").click(function (e) {
                 var html = $(this).html();
@@ -439,9 +450,7 @@
                 $(".more-popup").toggle();
             });
         });
-
     </script>
-
 </asp:Content>
 
 <asp:Content runat="server" ID="BodyContent" ContentPlaceHolderID="MainContent">
@@ -465,18 +474,15 @@
                         </div>
                     </a>
                     <div id="work-list-disp">
-
                     </div>
-                    <asp:UpdatePanel ID="resultUpdatePanel" runat="server" >
+                    <asp:UpdatePanel ID="resultUpdatePanel" runat="server">
                         <ContentTemplate>
-                                <div id="calcOutput" class="hidden" runat="server">
-
-                                </div>
+                            <div id="calcOutput" class="hidden" runat="server">
+                            </div>
                         </ContentTemplate>
                     </asp:UpdatePanel>
                     <div id="input-area">
                         <ul id="input-list">
-
                         </ul>
                     </div>
                 </div>
@@ -491,9 +497,7 @@
             <div class="parse-errors" id="parse-errors-id" style="display: none;">
                 <asp:UpdatePanel runat="server">
                     <ContentTemplate>
-                        <span id="parseErrorSpan" class="parse-error-txt" runat="server">
-
-                        </span>
+                        <span id="parseErrorSpan" class="parse-error-txt" runat="server"></span>
                     </ContentTemplate>
                 </asp:UpdatePanel>
             </div>
@@ -526,10 +530,10 @@
                 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
                 <!-- Lower Ad -->
                 <ins class="adsbygoogle"
-                     style="display:block"
-                     data-ad-client="ca-pub-3516117000150402"
-                     data-ad-slot="5259228574"
-                     data-ad-format="auto"></ins>
+                    style="display: block"
+                    data-ad-client="ca-pub-3516117000150402"
+                    data-ad-slot="5259228574"
+                    data-ad-format="auto"></ins>
                 <script>
                     (adsbygoogle = window.adsbygoogle || []).push({});
                 </script>
@@ -565,7 +569,7 @@
                                     <ItemTemplate>
                                         <li>
                                             <span>`<%# Eval("FuncName") %> = <%# Eval("FuncDef") %>`</span>
-                                            <asp:Button CssClass="del-span" runat="server" ID="SelectCategoryButton" CommandName="Delete" 
+                                            <asp:Button CssClass="del-span" runat="server" ID="SelectCategoryButton" CommandName="Delete"
                                                 CommandArgument='<%# Eval("FuncName") %>' Text="Delete" />
                                         </li>
                                     </ItemTemplate>
@@ -576,7 +580,6 @@
                             </ContentTemplate>
                         </asp:UpdatePanel>
                     </div>
-
                 </div>
             </div>
             <div id="expand-more-popup" class="noselect">+</div>
@@ -586,19 +589,18 @@
                     <input type="button" id="example-nav-forward" style="float: left;" class="example-nav-btn" value="&#x25C0" />
                     <p class="pob-title">Example Input:</p>
                     <input type="button" id="example-nav-backward" style="float: right;" class="example-nav-btn" value="&#x25B6" />
-                    <div style="text-align: center;" class="pob-problem">
-                        <asp:UpdatePanel runat="server" UpdateMode="Conditional">
-                            <ContentTemplate>
-                                <asp:Timer ID="updateExampleTimer" runat="server" Interval="10000" OnTick="updateExampleTimer_Tick"></asp:Timer> 
+                    <asp:UpdatePanel runat="server" UpdateMode="Conditional">
+                        <ContentTemplate>
+                            <asp:Timer ID="updateExampleTimer" runat="server" Interval="10000" OnTick="updateExampleTimer_Tick"></asp:Timer>
+                            <div style="text-align: center;" class="pob-problem">
                                 <div id="exampleOutputContent" runat="server"></div>
-                                <asp:Button runat="server" ID="exampleNavBackBtn" CssClass="hidden" OnClick="exampleNavBackBtn_Click" />
-                                <asp:Button runat="server" ID="exampleNavForwardBtn" CssClass="hidden" OnClick="exampleNavForwardBtn_Click" />
-                            </ContentTemplate>
-                        </asp:UpdatePanel>
-                    </div>
+                            </div>
+                            <asp:Button runat="server" ID="exampleNavBackBtn" CssClass="hidden" OnClick="exampleNavBackBtn_Click" />
+                            <asp:Button runat="server" ID="exampleNavForwardBtn" CssClass="hidden" OnClick="exampleNavForwardBtn_Click" />
+                        </ContentTemplate>
+                    </asp:UpdatePanel>
                 </div>
             </div>
-
 
             <div id="account-space">
                 <section id="login">
