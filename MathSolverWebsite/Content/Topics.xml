@@ -4,189 +4,2244 @@
   
   <!-- Algebra -->
   <topic>
-    <topicName>Finding Roots with DeMovire's Theorem</topicName>
-    <topicPath>Algebra/Equations/Power and Root Equations/DeMovire's Theorem</topicPath>
-    <topicDesc>
-      Find all the roots by using DeMovire's Theorem.
-    </topicDesc>
+    <topicName>Elementary Expressions</topicName>
+    <topicPath>Algebra/Pre Algebra/Elementary Expressions</topicPath>
+    <topicDesc>Perform basic operations with addition, subtraction, multiplication, and division</topicDesc>
     <info>
-      Using this theorem allows for the complex roots of an equation to also be found. Based on the fundamental theorem of algebra a polynomial
-      of degree <i>n</i> should have, including repeated roots, <i>n</i> roots. However, only one of the roots to an equation like `x^3` can be found
-      by taking the cube root of each side. In a situation like that it is necessary to use DeMovire's Theorem to find the rest of the roots to this equation.
+      Using Mathologica expressions can be entered and then easily simplified. The rules of order of operations always apply.
     </info>
     <exampleInput>
-      <input>x^3=1</input>
+      <input>221+4212</input>
     </exampleInput>
     <exampleInput>
-      <input>x^4=16</input>
+      <input>19291-283</input>
     </exampleInput>
-  </topic>
-  <topic>
-    <topicName>Elementary Expressions</topicName>
+    <exampleInput>
+      <input>2132*2822</input>
+    </exampleInput>
+    <exampleInput>
+      <input>19+4*3</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{22}{11}</input>
+    </exampleInput>
+    <exampleInput>-3*5</exampleInput>
   </topic>
   <topic>
     <topicName>Checking for Equality (Basic)</topicName>
+    <topicPath>Algebra/Pre Algebra/Checking for Equality</topicPath>
+    <topicDesc>Check if two expressions are equivalent.</topicDesc>
+    <info>
+      When there are two expressions that simplify to a numeric value, Mathologica can check to see if they are equal.
+    </info>
+    <exampleInput>
+      <input>4+2*4=\frac{72}{3}</input>
+    </exampleInput>
+    <exampleInput>
+      <input>18+2*3=(18+2)*3</input>
+    </exampleInput>
+    <exampleInput>
+      <input>109-19=9*10</input>
+    </exampleInput>
   </topic>
   <topic>
-    <topicName>Combining Fractions</topicName>
+    <topicName>Working with Fractions</topicName>
+    <topicPath>Algebra/Pre Algebra/Working with Fractions</topicPath>
+    <topicDesc>Simplify, add, subtract, multiply, and divide fractions.</topicDesc>
+    <info>
+      Fractions can be added, subtracted, multiplied, or divided. Fractions in unreduced form can be reduced.
+    </info>
+    <exampleInput>
+      <input>\frac{8}{24}</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{3}{4}*\frac{7}{4}</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{\frac{1}{2}}{\frac{3}{5}}</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{3}{7}+\frac{8}{3}</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{6}{2}-\frac{9}{8}</input>
+    </exampleInput>
   </topic>
   <topic>
     <topicName>Distributive Property</topicName>
+    <topicPath>Algebra/Pre Algebra/Distributive Property</topicPath>
+    <topicDesc>Distribute numbers or variables when parentheses are used.</topicDesc>
+    <info>
+      Multiply each of the terms inside by the term being distributed.
+    </info>
+    <exampleInput>
+      <input>2(32-3)</input>
+    </exampleInput>
+    <exampleInput>
+      <input>3(x-2)</input>
+    </exampleInput>
+    <exampleInput>
+      <input>12(x+2)</input>
+    </exampleInput>
+    <exampleInput>
+      <input>2(4x+9)</input>
+    </exampleInput>
+    <exampleInput>
+      <input>k(x-2)</input>
+    </exampleInput>
   </topic>
   <topic>
     <topicName>Combining Like Terms</topicName>
-  </topic>
-  <topic>
-    <topicName>Checking for Equality (Intermediate)</topicName>
+    <topicPath>Algebra/Pre Algebra/Collecting Like Terms</topicPath>
+    <topicDesc>Collect like terms to simplify the expression.</topicDesc>
+    <info>
+      For like terms add the coefficients of the variable together.
+    </info>
+    <exampleInput>
+      <input>3x+2x-9x+5x</input>
+    </exampleInput>
+    <exampleInput>
+      <input>5x+2a-9x+5a</input>
+    </exampleInput>
+    <exampleInput>
+      <input>3(x-3)+2(x+5)-6x</input>
+    </exampleInput>
   </topic>
   <topic>
     <topicName>One Step Equations</topicName>
+    <topicPath>Algebra/Linear Equations/One Step</topicPath>
+    <topicDesc>Solve linear equations in the form y=mx or y=x+b</topicDesc>
+    <info>
+      To obtain an answer you need to solve for the unknown. That means getting the 'x' (or whatever the letter is)
+      isolated on the left hand side. These types of equations require only one type of operation to isolate the 
+      unknown.
+    </info>
+    <exampleInput>
+      <input>3x=5</input>
+    </exampleInput>
+    <exampleInput>
+      <input>x-2=4</input>
+    </exampleInput>
+    <exampleInput>
+      <input>9x=54</input>
+    </exampleInput>
   </topic>
   <topic>
     <topicName>Two Step Equations</topicName>
+    <topicPath>Algebra/Linear Equations/Two Step</topicPath>
+    <topicDesc>Solve linear equations in the form y=mx+b</topicDesc>
+    <info>
+      With these types of equations two steps will be required to get the variable isolated on the left hand side.
+    </info>
+    <exampleInput>
+      <input>3x-4=5</input>
+    </exampleInput>
+    <exampleInput>
+      <input>2x+48=2</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{2}{5}x-\frac{5}{6}=\frac{1}{2}</input>
+    </exampleInput>
+    <exampleInput>
+      <input>5x+c=3</input>
+    </exampleInput>
+    <exampleInput>
+      <input>kx+p=2</input>
+    </exampleInput>
   </topic>
   <topic>
     <topicName>Linear Equations</topicName>
+    <topicPath>Algebra/Linear Equations/Linear Equations</topicPath>
+    <topicDesc>Solve linear equations of any form.</topicDesc>
+    <info>
+      Solving these equations requires a combination of simplifying terms, dividing by coefficients, and moving terms to the other side.
+    </info>
+    <exampleInput>
+      <input>3x+2x-9x+4=2x-9</input>
+    </exampleInput>
+    <exampleInput>
+      <input>x-4x+2=10</input>
+    </exampleInput>
+    <exampleInput>
+      <input>8x=18+2x</input>
+    </exampleInput>
   </topic>
   <topic>
     <topicName>Ratios and Proportions</topicName>
-  </topic>
-  <topic>
-    <topicName>Linear Inequalities</topicName>
+    <topicPath>Algebra/Linear Equations/Ratios and Proportions</topicPath>
+    <topicDesc>Solve equations involving ratios or proportions.</topicDesc>
+    <info>
+      When two things are related they can sometimes be described using ratios or proportions. Equations can then 
+      be set up to solve for the unknown.
+    </info>
+    <exampleInput>
+      <input>\frac{2}{x}=\frac{4}{9}</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{8}{3}=\frac{x}{4}</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{2}{3}=\frac{4}{x}</input>
+    </exampleInput>
   </topic>
   <topic>
     <topicName>Graphing Linear Equations</topicName>
+    <topicPath>Algebra/Linear Equations/Graphing Linear Equations</topicPath>
+    <topicDesc>Graph linear equations on the xy plane.</topicDesc>
+    <info>
+      Linear functions in the form y=mx+b can be graphed.
+    </info>
+    <exampleInput>
+      <input>y=\frac{3}{2}x-4</input>
+    </exampleInput>
+    <exampleInput>
+      <input>2x+4</input>
+    </exampleInput>
+    <exampleInput>
+      <input>f(x)=4x-3</input>
+    </exampleInput>
   </topic>
   <topic>
     <topicName>Graphing Multiple Equations (Basic)</topicName>
+    <topicPath>Algebra/System of Equations/Graphing Multiple Equations</topicPath>
+    <topicDesc>Graph multiple Functions at a time.</topicDesc>
+    <info>
+      Any number of functions can be graphed on the same xy plane at the same time. Simply use the add line button and enter the next equation on the 
+      new line.
+    </info>
+    <exampleInput>
+      <input>y = 3x-2; y = 2x+4</input>
+    </exampleInput>
+    <exampleInput>
+      <input>y = \frac{2}{5}x-3; y = \frac{9}{4}x+5</input>
+    </exampleInput>
+    <exampleInput>
+      <input>y = -3x+9; y = -2x+3; y = 4x-2</input>
+    </exampleInput>
   </topic>
   <topic>
     <topicName>System of Equations with Substitution (Basic)</topicName>
+    <topicPath>Algebra/System of Equations/Solving with Substitution</topicPath>
+    <topicDesc>Solve system of equations using the substitution technique.</topicDesc>
+    <info>
+      To use the substitution technique in a system of equations solve for a variable then substitute that result into the next equation until 
+      a result has been obtained.
+    </info>
+    <exampleInput>
+      <input>2x+y=9; 3x-y=16</input>
+    </exampleInput>
+    <exampleInput>
+      <input>2x-3y=-2; 4x+y=24</input>
+    </exampleInput>
+    <exampleInput>
+      <input>7x+2y=16; -21x-6y=24</input>
+    </exampleInput>
   </topic>
   <topic>
     <topicName>System of Equations with Elimination (Basic)</topicName>
-  </topic>
-  <topic>
-    <topicName>Exponent Properties</topicName>
-  </topic>
-  <topic>
-    <topicName>Multiplying Binomials</topicName>
-  </topic>
-  <topic>
-    <topicName>Factoring Quadratics</topicName>
-  </topic>
-  <topic>
-    <topicName>Solving Quadratic Equations (Factoring)</topicName>
-  </topic>
-  <topic>
-    <topicName>Solving Quadratic Equations (Completing the Square)</topicName>
-  </topic>
-  <topic>
-    <topicName>Solving Quadratic Equations (Quadratic Equation)</topicName>
-  </topic>
-  <topic>
-    <topicName>Graphing Quadratics</topicName>
-  </topic>
-  <topic>
-    <topicName>Quadratic Inequalities</topicName>
-  </topic>
-  <topic>
-    <topicName>Adding/Subtracting Polynomials</topicName>
-  </topic>
-  <topic>
-    <topicName>Assigning Functions</topicName>
-  </topic>
-  <topic>
-    <topicName>Working with Functions</topicName>
-  </topic>
-  <topic>
-    <topicName>Evaluating Functions</topicName>
-  </topic>
-  <topic>
-    <topicName>Domain of Functions</topicName>
-  </topic>
-  <topic>
-    <topicName>Function Composition</topicName>
-  </topic>
-  <topic>
-    <topicName>Function Transformations</topicName>
-  </topic>
-  <topic>
-    <topicName>Function Inverses</topicName>
+    <topicPath>Algebra/System of Equations/Solving with Elimination</topicPath>
+    <topicDesc>Solve a system of equations using the elimination technique.</topicDesc>
+    <info>
+      To use this technique combine two equations together through addition or subtraction.
+    </info>
+    <exampleInput>
+      <input>2x+y=9; 3x-y=16</input>
+    </exampleInput>
+    <exampleInput>
+      <input>2x-3y=-2; 4x+y=24</input>
+    </exampleInput>
+    <exampleInput>
+      <input>7x+2y=16; -21x-6y=24</input>
+    </exampleInput>
   </topic>
   <topic>
     <topicName>System of Equations (Advanced)</topicName>
+    <topicPath>Algebra/System of Equations/3 Variables</topicPath>
+    <topicDesc>Solve system of equations that have three variables.</topicDesc>
+    <info>
+      Use the techniques of substitution or elimination with system of equations that contain three 
+    </info>
+    <exampleInput>
+      <input>x+2y-z=4; 2x+y+z=-2; x+2y+z=2</input>
+    </exampleInput>
+    <exampleInput>
+      <input>x-2y+3z=7; 2x+y+z=4; -3x+2y-2z=-10</input>
+    </exampleInput>
+    <exampleInput>
+      <input>2x-4y+5z=-33; 4x-y=-5; -2x+2y-3z=19</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Exponent Properties</topicName>
+    <topicPath>Algebra/Exponents Properties</topicPath>
+    <topicDesc>Use the properties of exponents to simplify expressions.</topicDesc>
+    <info>
+    </info>
+    <exampleInput>
+      <input>x^2*x^4</input>
+    </exampleInput>
+    <exampleInput>
+      <input>x^5/x^2</input>
+    </exampleInput>
+    <exampleInput>
+      <input>(x^2)^3</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Multiplying Binomials</topicName>
+    <topicPath>Algebra/Quadratics/Multiplying Binomials</topicPath>
+    <topicDesc>Multiply two binomials together giving a quadratic.</topicDesc>
+    <info>
+      Multiply two terms in the form `ax+b` together giving a quadratic in the form `ax^2+bx+c`. It is important to remember to use the technique
+      of first, outside, inside, last (FOIL) here. 
+    </info>
+    <exampleInput>
+      <input>(2x+1)(-3x-4)</input>
+    </exampleInput>
+    <exampleInput>
+      <input>(5x-7)(-x+9)</input>
+    </exampleInput>
+    <exampleInput>
+      <input>(7x+12)^2</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Factoring Quadratics</topicName>
+    <topicPath>Algebra/Quadratics/Factoring</topicPath>
+    <topicDesc>Factor quadratics.</topicDesc>
+    <info>
+      This is the opposite of two binomials where starting at `ax^2+bx+c` the result of two binomials in the form `ax+b` is obtained.
+    </info>
+    <exampleInput>
+      <input>x^2-6x+9</input>
+    </exampleInput>
+    <exampleInput>
+      <input>x^2+5x+6</input>
+    </exampleInput>
+    <exampleInput>
+      <input>-6x^2-x+2</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Solving Quadratic Equations (Factoring)</topicName>
+    <topicPath>Algebra/Quadratics/Solving with Factoring</topicPath>
+    <topicDesc>Solve quadratic equations.</topicDesc>
+    <info>
+      Solve equations in the form `ax^2+bx+c=0`. Two solutions are obtained from this. Not all quadratics are factorable.
+    </info>
+    <exampleInput>
+      <input>x^2-6x+9=0</input>
+    </exampleInput>
+    <exampleInput>
+      <input>x^2+5x=-6</input>
+    </exampleInput>
+    <exampleInput>
+      <input>-x+2=-6x^2</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Solving Quadratic Equations (Complete the Square)</topicName>
+    <topicPath>Algebra/Quadratics/Solving with Complete the Square</topicPath>
+    <topicDesc>Solve quadratics using the technique of completing the square.</topicDesc>
+    <info>
+      Solve equations in the form `ax^2+bx+c=0`. All quadratics can be solved using the complete the square method.
+    </info>
+    <exampleInput>
+      <input>4x^2-2x-5=0</input>
+      <inputIndex>1</inputIndex>
+    </exampleInput>
+    <exampleInput>
+      <input>x^2+6x-7=0</input>
+      <inputIndex>1</inputIndex>
+    </exampleInput>
+    <exampleInput>
+      <input>-x+2=-6x^2</input>
+      <inputIndex>1</inputIndex>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Solving Quadratic Equations (Quadratic Equation)</topicName>
+    <topicPath>Algebra/Quadratics/Solving with Quadratic Equation</topicPath>
+    <topicDesc>Solve quadratics with the quadratic equation.</topicDesc>
+    <info>
+      Solve equations in the form `ax^2+bx+c=0`. The quadratic equation is a generalized form of completing the square. The quadratic equation is `x=\frac{-b \pm \sqrt{b^2-4ac}}{2a}`.
+    </info>
+    <exampleInput>
+      <input>2(x^2-2x)=5</input>
+    </exampleInput>
+    <exampleInput>
+      <input>5x^2+6x+1=0</input>
+    </exampleInput>
+    <exampleInput>
+      <input>x^2-x-3=0</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Find the Vertex</topicName>
+    <topicPath>Algebra/Quadratics/Finding the Vertex</topicPath>
+    <topicDesc>Find the vertex of a quadratic equation.</topicDesc>
+    <info>
+      The vertex of a quadratic equation in the form `ax^2+bx+c` is given by `\frac{-b}{2a}`. The equation is also symmetrical across the vertex.
+    </info>
+    <exampleInput>
+      <input>5x^2+2x+1</input>
+    </exampleInput>
+    <exampleInput>
+      <input>x^2-x-3</input>
+    </exampleInput>
+    <exampleInput>
+      <input>x^2+6x-7</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Find the Discriminant of a Quadratic</topicName>
+    <topicPath>Algebra/Quadratics/Finding the Discriminant</topicPath>
+    <topicDesc>Find the discriminant of a quadratic equation.</topicDesc>
+    <info>
+      The discriminant for an equation in the form `ax^2+bx+c` is given by `b^2-4ac`. If the discriminant is negative there will be no solutions to the quadratic, if it is zero there will be one, and 
+      if it is positive there will be two.
+    </info>
+    <exampleInput>
+      <input>5x^2+2x+1</input>
+    </exampleInput>
+    <exampleInput>
+      <input>x^2-x-3</input>
+    </exampleInput>
+    <exampleInput>
+      <input>x^2+6x-7</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Graphing Quadratics</topicName>
+    <topicPath>Algebra/Quadratics/Graphing Quadratics</topicPath>
+    <topicDesc>Graph quadratic equations on the xy plane.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>y=5x^2+2x+1</input>
+    </exampleInput>
+    <exampleInput>
+      <input>x^2+6x-7</input>
+    </exampleInput>
+    <exampleInput>
+      <input>f(x)=4x^2-2x-5</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Radical Term Domain</topicName>
+    <topicPath>Algebra/Radicals/Radical Domain</topicPath>
+    <topicDesc>Get the domain of radical expression.</topicDesc>
+    <info>
+      The domain of a radical function must always be such that the inside of the radical is greater or equal to zero. A radical is anything with a fractional exponent (roots).
+    </info>
+    <exampleInput>
+      <input>\sqrt{x}</input>
+      <inputIndex>1</inputIndex>
+    </exampleInput>
+    <exampleInput>
+      <input>\sqrt{3x-2}</input>
+      <inputIndex>1</inputIndex>
+    </exampleInput>
+    <exampleInput>
+      <input>\sqrt{2x^2-4}</input>
+      <inputIndex>1</inputIndex>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Solving Radical Equations</topicName>
+    <topicPath>Algebra/Radicals/Solving Radical Equations</topicPath>
+    <topicDesc>Solve a radical equation for an unknown.</topicDesc>
+    <info>
+      Use exponents to cancel the radicals. Remember the radicals have fractional powers. Not all of these equations have solutions.
+      A radical of any index can be used.
+    </info>
+    <exampleInput>
+      <input>\sqrt{x}=2</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\sqrt{2x-4}=3</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\sqrt{x^2+4}=3</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\root{3}{x-2}=5</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Solving Radical Equations</topicName>
+    <topicPath>Algebra/Radicals/Solving Radical Equations</topicPath>
+    <topicDesc>Solve a radical equation for an unknown.</topicDesc>
+    <info>
+      Use exponents to cancel the radicals. Remember the radicals have fractional powers. Not all of these equations have solutions.
+      These types of equations can involve radicals and other terms.
+    </info>
+    <exampleInput>
+      <input>\sqrt{x+2}=4x</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\sqrt{2x-4}=3</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\sqrt{x-2}+3=3x</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Graphing Radical Equations</topicName>
+    <topicPath>Algebra/Radicals/Solving Radical Equations</topicPath>
+    <topicDesc>Graph radical equation on the xy plane.</topicDesc>
+    <info>
+      Keep the domain of the expression in mind when graphing the function. For radical expressions the inside of even root can never be negative.
+    </info>
+    <exampleInput>
+      <input>y=3\sqrt{x-2}-2</input>
+    </exampleInput>
+    <exampleInput>
+      <input>y=2\root{3}{-x}</input>
+    </exampleInput>
+    <exampleInput>
+      <input>g(x)=\sqrt{x+3}+3x</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Adding/Subtracting Polynomials</topicName>
+    <topicPath>Algebra/Polynomial Operations</topicPath>
+    <topicDesc>Apply operations to groups of polynomials.</topicDesc>
+    <info>
+      Apply the principles of combining like terms to add and subtract polynomials.
+    </info>
+    <exampleInput>
+      <input>(4x^9-3x^7+3x^5-7x^4+2x-8)-(2x^7-x^5+7x^3+2)</input>
+    </exampleInput>
+    <exampleInput>
+      <input>(7x^2-x-4)+(x^2-2x-3)+(-2x^2+3x+5)</input>
+    </exampleInput>
+    <exampleInput>
+      <input>(6x^3-2x^2+8x)-(4x^3-11x+10)</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Linear Inequalities</topicName>
+    <topicPath>Algebra/Inequalities/Linear Inequalities</topicPath>
+    <topicDesc>Solve linear inequalities.</topicDesc>
+    <info>
+      When solving linear inequalities a solution domain rather than a single solution is obtained.
+    </info>
+    <exampleInput>
+      <input>3x-2&lt;4</input>
+    </exampleInput>
+    <exampleInput>
+      <input>-9x-3&gt;8</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{2}{3}x-4&gt;5x-2</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Quadratic Inequalities</topicName>
+    <topicPath>Algebra/Inequalities/Quadratic Inequalities</topicPath>
+    <topicDesc>Solve quadratic inequalities.</topicDesc>
+    <info>
+      Solving quadratic inequalities produces a solution domain rather than a single solution.
+    </info>
+    <exampleInput>
+      <input>2(x^2-2x)&gt;5</input>
+    </exampleInput>
+    <exampleInput>
+      <input>5x^2+6x+1&lt;=0</input>
+    </exampleInput>
+    <exampleInput>
+      <input>x^2-x-3&gt;=0</input>
+    </exampleInput>
   </topic>
   <topic>
     <topicName>Non-linear Inequalities</topicName>
+    <topicPath>Algebra/Inequalities/Non-Linear Inequalities</topicPath>
+    <topicDesc>Solve inequalities containing non linear inequalities.</topicDesc>
+    <info>
+    </info>
+    <exampleInput>
+      <input>(x+2)^2>\frac{h}{2}+4</input>
+    </exampleInput>
+    <exampleInput>
+      <input>x^3>2</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\sqrt{x}>3</input>
+    </exampleInput>
   </topic>
   <topic>
     <topicName>Compound Inequalities</topicName>
-  </topic>
-  <topic>
-    <topicName>Imaginary Numbers</topicName>
-  </topic>
-  <topic>
-    <topicName>Complex Number Operations</topicName>
-  </topic>
-  <topic>
-    <topicName>Equations with Complex Solutions</topicName>
-  </topic>
-  <topic>
-    <topicName>DeMovire's Theorem (Advanced)</topicName>
-  </topic>
-  <topic>
-    <topicName>Simplifying Rational Expressions</topicName>
-  </topic>
-  <topic>
-    <topicName>Solving Rational Equations</topicName>
+    <topicPath>Algebra/Inequalities/Compound Inequalities</topicPath>
+    <topicDesc>Solve compound inequalities.</topicDesc>
+    <info>
+      When solving compound inequalities each case must be solved for separately.
+    </info>
+    <exampleInput>
+      <input>4&lt;(x^2-1)&lt;9</input>
+    </exampleInput>
+    <exampleInput>
+      <input>-2&lt;\frac{6-2x}{3}&lt;4</input>
+    </exampleInput>
+    <exampleInput>
+      <input>0&lt;\ln(x)&lt;1</input>
+    </exampleInput>
   </topic>
   <topic>
     <topicName>Rational Inequalities</topicName>
-  </topic>
-  <topic>
-    <topicName>Graphing Rational Expressions</topicName>
-  </topic>
-  <topic>
-    <topicName>Multiplying Polynomials</topicName>
-  </topic>
-  <topic>
-    <topicName>Dividing Polynomials</topicName>
-  </topic>
-  <topic>
-    <topicName>Synthetic Division</topicName>
-  </topic>
-  <topic>
-    <topicName>Solving Polynomial Equations</topicName>
+    <topicPath>Algebra/Inequalities/Rational Inequalities</topicPath>
+    <topicDesc>Solve inequalities involving rational expressions.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>\frac{5x}{x-1}\gt0</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{2+x-5x^2+2x^3}{x^2-6x+9}\gt0</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{x^2-2x-15}{x-2}\ge0</input>
+    </exampleInput>
   </topic>
   <topic>
     <topicName>Polynomial Inequalities</topicName>
+    <topicPath>Algebra/Inequalities/Polynomial Inequalites</topicPath>
+    <topicDesc>Solve inequalites involving polynomials.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>-2(x-5)^4+32\gt0</input>
+    </exampleInput>
+    <exampleInput>
+      <input>-(1/4000)(x-5)^2(2x+7)^2(3x-1)^2\lt0</input>
+    </exampleInput>
+    <exampleInput>
+      <input>(x-5)^3(2x+7)(3x-1)^2\gt0</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Working with Imaginary Numbers</topicName>
+    <topicPath>Algebra/Imaginary Numbers/Imaginary Number Operations</topicPath>
+    <topicDesc>Use and simplify expressions involving imaginary numbers.</topicDesc>
+    <info>
+      The imaginary number `i` is defined as `i = \sqrt{-1}`.
+    </info>
+    <exampleInput>
+      <input>\sqrt{-64}</input>
+    </exampleInput>
+    <exampleInput>
+      <input>i^3</input>
+    </exampleInput>
+    <exampleInput>
+      <input>i^{73}</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Complex Number Operations</topicName>
+    <topicPath>Algebra/Imaginary Numbers/Complex Number Operations</topicPath>
+    <topicDesc>Perform operations on complex numbers.</topicDesc>
+    <info>
+      A complex number is a combination of a real and a complex number. To simplify complex number expressions the principles of imaginary numbers must be used.
+    </info>
+    <exampleInput>
+      <input>(3-2i)+(5+4i)</input>
+    </exampleInput>
+    <exampleInput>
+      <input>(4-5i)*(1-3i)</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{9-i}{4+3i}</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Equations with Complex Solutions</topicName>
+    <topicPath>Algebra/Imaginary Numbers/Equations with Complex Solutions</topicPath>
+    <topicDesc>Equations that have complex solutions as answers.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>x^2=-4</input>
+    </exampleInput>
+    <exampleInput>
+      <input>5x^2+3x+1=0</input>
+    </exampleInput>
+    <exampleInput>
+      <input>x^2+2x+2=0</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>DeMovire's Theorem (Advanced)</topicName>
+    <topicPath></topicPath>
+    <topicDesc>Use DeMovire's Theorem to find all the roots of an equation.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>x^3=8</input>
+    </exampleInput>
+    <exampleInput>
+      <input>x^4=81</input>
+    </exampleInput>
+    <exampleInput>
+      <input>x^5=5</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Simplifying Rational Expressions</topicName>
+    <topicPath>Algebra/Rational Expressions/Simplifying Rational Expressions</topicPath>
+    <topicDesc>Simplify rational expressions using canceling or factoring.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>\frac{2x}{x^2}</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{(x-3)(x-2)}{(x-3)(x+2)}</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{2x^2+13x+20}{2x^2+17x+30}</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Solving Rational Equations</topicName>
+    <topicPath>Algebra/Rational Expressions/Solve Rational Equations</topicPath>
+    <topicDesc>Solve rational equations.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>\frac{3}{x+2}-\frac{1}{x}=\frac{1}{5x}</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{x^2-8}{x^2-4}+\frac{2}{x+2}=\frac{5}{x-2}</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{34}{x^2-3x+7}+5-2x=-3</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Graphing Rational Expressions</topicName>
+    <topicPath>Algebra/Rational Expressions/Graphing Rational Expressions</topicPath>
+    <topicDesc>Graph rational equations.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>y=\frac{2x+5}{x-1}</input>
+    </exampleInput>
+    <exampleInput>
+      <input>y=\frac{x+2}{x^2+1}</input>
+    </exampleInput>
+    <exampleInput>
+      <input>f(x)=\frac{x^3-8}{x^2+5x+6}</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Multiplying Polynomials</topicName>
+    <topicPath>Algebra/Polynomials/Multiplying Polynomials</topicPath>
+    <topicDesc>Multiply polynomials together.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>(4x^2-4x-7)(x-3)</input>
+    </exampleInput>
+    <exampleInput>
+      <input>(3x^2-9x+5)(2x^2+4x-7)</input>
+    </exampleInput>
+    <exampleInput>
+      <input></input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Dividing Polynomials</topicName>
+    <topicPath>Algebra/Polynomials/Dividing Polynomials</topicPath>
+    <topicDesc>Divide two polynomials.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>\frac{x^2-9x-10}{x+1}</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{3x^3-5x^2+10x-3}{3x+1}</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{4x^4+3x^3+2x+1}{x^2+x+2}</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Solving Polynomial Equations</topicName>
+    <topicPath>Algebra/Polynomials/Solving Polynomial Equations</topicPath>
+    <topicDesc>Solve polynomial equations using factoring.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>2x^3-x^2-7x+2=0</input>
+    </exampleInput>
+    <exampleInput>
+      <input>15x^4+x^3-52x^2+20x+16=0</input>
+    </exampleInput>
+    <exampleInput>
+      <input>x^5-x^4+4x^3-13x^2-5x+14</input>
+    </exampleInput>
   </topic>
   <topic>
     <topicName>Evaluating Logarithms</topicName>
+    <topicPath>Algebra/Logarithms/Evaluating Logs</topicPath>
+    <topicDesc>Evaluate logarithms.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>\log_{5}{625}</input>
+    </exampleInput>
+    <exampleInput>
+      <input>log_{6}{36}</input>
+    </exampleInput>
+    <exampleInput>
+      <input>ln(e^3)</input>
+    </exampleInput>
   </topic>
   <topic>
     <topicName>Logarithm Properties</topicName>
+    <topicPath>Algebra/Logarithms/Log Properties</topicPath>
+    <topicDesc>Use the properties of logarithms to simplify expressions.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>\log(x)+\log(y)</input>
+      <inputIndex>6</inputIndex>
+    </exampleInput>
+    <exampleInput>
+      <input>\log(3)-\log(x)</input>
+      <inputIndex>6</inputIndex>
+    </exampleInput>
+    <exampleInput>
+      <input>2\ln(x)</input>
+      <inputIndex>6</inputIndex>
+    </exampleInput>
+    <exampleInput>
+      <input>\log_{b}(b^x)</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Domain of Log Equations</topicName>
+    <topicPath>Algebra/Logarithms/Log Domain</topicPath>
+    <topicDesc>Find the domain of log functions</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>\ln(x-2)</input>
+      <inputIndex>1</inputIndex>
+    </exampleInput>
+    <exampleInput>
+      <input>\log(3x+4)</input>
+      <inputIndex>1</inputIndex>
+    </exampleInput>
+    <exampleInput>
+      <input>\log(x)</input>
+      <inputIndex>1</inputIndex>
+    </exampleInput>
   </topic>
   <topic>
     <topicName>Logarithmic Equations (Basic)</topicName>
+    <topicPath>Algebra/Logarithms/Log Equations (Basic)</topicPath>
+    <topicDesc>Solve equations with a single logarithm</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>\log(x-2)=\frac{1}{2}</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\ln(x)=4</input>
+    </exampleInput>
+    <exampleInput>
+      <input>2\ln(2x)-3=6</input>
+    </exampleInput>
   </topic>
   <topic>
     <topicName>Logarithmic Equations (Advanced)</topicName>
+    <topicPath>Algebra/Logarithms/Log Equations (Advanced)</topicPath>
+    <topicDesc>Solve equations with multiple logarithms using the properties of logarithms</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>\ln(x)+ln(x-2)=3</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\ln(x^2-6x+9)-\ln(x-3)-3=1</input>
+    </exampleInput>
+    <exampleInput>
+      <input>ln(ax)+2ln(x)=2</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Exponent Equations (Basic)</topicName>
+    <topicPath>Algebra/Exponents/Exponent Equations (Basic)</topicPath>
+    <topicDesc>Solve equations where the variable is in the exponent.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>e^x=72</input>
+    </exampleInput>
+    <exampleInput>
+      <input>100^{x^2-6x+1}+5=10</input>
+    </exampleInput>
+    <exampleInput>
+      <input>a(b^{2x+1})+k=c</input>
+    </exampleInput>
+  </topic>
+  <topicName>
+    <topicName>Exponent Equations (Advanced)</topicName>
+    <topicPath>Algebra/Exponents/Exponent Equations (Advanced)</topicPath>
+    <topicDesc>Solve equations where the variable is in the exponent.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>14*3^{x+4}-14*7^{xy}=0</input>
+    </exampleInput>
+    <exampleInput>
+      <input>4^{x+2}=8^{2x-3}</input>
+    </exampleInput>
+    <exampleInput>
+      <input>9^{2x-1}=16^{4x+1}</input>
+    </exampleInput>
+  </topicName>
+  <topic>
+    <topicName>Assigning Values</topicName>
+    <topicPath>Algebra/Functions/Assigning Values</topicPath>
+    <topicDesc>Assign values to be used later.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>a=3; b=2; a*b+\frac{a}{b}</input>
+    </exampleInput>
+    <exampleInput>
+      <input>m=\frac{2}{7}-3; b=\frac{2}{3}; 0=mx+b</input>
+    </exampleInput>
+    <exampleInput>
+      <input>k=3; k\ln(kx)=2</input>
+    </exampleInput>
+  
+  </topic>
+  <topic>
+    <topicName>Assigning Functions</topicName>
+    <topicPath>Algebra/Functions/Assigning Functions</topicPath>
+    <topicDesc>Assign functions to be used later.</topicDesc>
+    <info>
+      With Mathologica assigning functions is easy. Just select the option 'Assign Function' under the evaluation drop down and the function will be saved for use at a later time.
+      The function can even be used in the same input.
+    </info>
+    <exampleInput>
+      <input>f(x)=3(x-4)^2+4</input>
+      <inputIndex>2</inputIndex>
+    </exampleInput>
+    <exampleInput>
+      <input>g(x)=\sqrt{3x-4}</input>
+      <inputIndex>2</inputIndex>
+    </exampleInput>
+    <exampleInput>
+      <input>k(y)=2y-4</input>
+      <inputIndex>2</inputIndex>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Working with Functions</topicName>
+    <topicPath>Algebra/Functions/Using Functions</topicPath>
+    <topicDesc>After a function has been assigned it can be manipulated in a later expression.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>f(x)=3(x-4)^2+4; \frac{f(x)}{3}+x</input>
+    </exampleInput>
+    <exampleInput>
+      <input>g(x)=\sqrt{3x-4}; p(x)=x^3; g(x)+p(x)</input>
+    </exampleInput>
+    <exampleInput>
+      <input>k(y)=2y-4; 2k(y)-3</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Evaluating Functions</topicName>
+    <topicPath>Algebra/Functions/Evaluating Functions</topicPath>
+    <topicDesc>Evaluate functions with a given input.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>f(x)=x^2-4x+3; f(3)</input>
+    </exampleInput>
+    <exampleInput>
+      <input>g(k)=ln(k); g(2)</input>
+    </exampleInput>
+    <exampleInput>
+      <input>p(x)=\sqrt{2x-4}; p(-2)</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Domain of Functions</topicName>
+    <topicPath>Algebra/Functions/Domain of Functions</topicPath>
+    <topicDesc>Find the domain of any function.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>f(x)=ln(3x-3)</input>
+      <inputIndex>3</inputIndex>
+    </exampleInput>
+    <exampleInput>
+      <input>f(x)=\sqrt{x-3}</input>
+    </exampleInput>
+    <exampleInput>
+      <input>g(x)=\frac{x-2}{x^2-3}</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Function Composition</topicName>
+    <topicPath>Algebra/Functions/Function Composition</topicPath>
+    <topicDesc>Compose functions where one function is the input to another function.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>f(x)=x^2; g(x)=\sqrt{x}; f(g(x))</input>
+    </exampleInput>
+    <exampleInput>
+      <input>h(x)=\ln(x); n(x)=3x-2; n(h(x))</input>
+    </exampleInput>
+    <exampleInput>
+      <input>f(x)=3^{x}; g(x)=\log_{3}(x); g(f(2))</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Function Transformations</topicName>
+    <topicPath>Algebra/Functions/Function Transformations</topicPath>
+    <topicDesc>Transform functions.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>f(x)=x^2; 3f(2x-4)+9</input>
+    </exampleInput>
+    <exampleInput>
+      <input>g(x)=\ln(x); \frac{1}{2}g(4x-1)+3</input>
+    </exampleInput>
+    <exampleInput>
+      <input>z(n)=\sqrt{n}; -3z(-n)</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Function Inverses</topicName>
+    <topicPath></topicPath>
+    <topicDesc></topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>f(x)=\sqrt{2x-3}</input>
+    </exampleInput>
+    <exampleInput>
+      <input></input>
+    </exampleInput>
+    <exampleInput>
+      <input></input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>U-Substitution to Solve</topicName>
+    <topicPath>Algebra/U-Substitution</topicPath>
+    <topicDesc>Solve algebraic equations with u-substitution.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>x^4=13x^2-36</input>
+    </exampleInput>
+    <exampleInput>
+      <input>ln(x)^2-6ln(x)+9=0</input>
+    </exampleInput>
   </topic>
   
   
   <!--Trig-->
   <topic>
     <topicName>Pythagorean Theorem</topicName>
+    <topicPath>Trigonometry/Pythagorean Theorem</topicPath>
+    <topicDesc>Use the Pythagorean theorem to find the unknown side of triangle.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>x^2+6^2=9^2</input>
+    </exampleInput>
+    <exampleInput>
+      <input>3^2+2^2=x^2</input>
+    </exampleInput>
+    <exampleInput>
+      <input>x^2+4^2=5^2</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Basic Trig Functions (Degrees)</topicName>
+    <topicPath>Trigonometry/Trig Functions/Evaluating Trig Functions</topicPath>
+    <topicDesc>Evaluate trigonometric functions in degrees.</topicDesc>
+    <info>
+      
+    </info>
+    <useRad>false</useRad>
+    <exampleInput>
+      <input>\sin(30)</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\cos(45)</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\tan(330)</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Reciprocal Trig Functions (Degrees)</topicName>
+    <topicPath>Trigonometry/TrigFunctions/Reciprocal Trig Functions</topicPath>
+    <topicDesc>Evaluate reciprocal trigonometric functions in degrees.</topicDesc>
+    <info>
+      
+    </info>
+    <useRad>true</useRad>
+    <exampleInput>
+      <input>\csc(225)</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\cot(180)</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\sec(30)</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Trig Functions (Radians)</topicName>
+    <topicPath>Trigonometry/Trig/Trig Functions (Radians)</topicPath>
+    <topicDesc>Evaluate trigonometric functions in radians.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>\sin(\frac{\pi}{3})</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\tan(\frac{11\pi}{6})</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\csc(\frac{4\pi}{3})</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Trig Function Properties</topicName>
+    <topicPath>Trigonometry/Trig Functions/Trig Function Properties</topicPath>
+    <topicDesc>Find the properties of trig functions such as the period and amplitude.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>y=\sin(3x)+3</input>
+      <inputIndex>1</inputIndex>
+    </exampleInput>
+    <exampleInput>
+      <input>y=2\cos(\pi x)</input>
+      <inputIndex>2</inputIndex>
+    </exampleInput>
+    <exampleInput>
+      <input>f(x)=\tan(x-\frac{\pi}{2})</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Trig Function Domain</topicName>
+    <topicPath>Trigonometry/Trig Functions/Function Domain</topicPath>
+    <topicDesc>Find the domain of trig functions.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>tan(x)</input>
+      <inputIndex>5</inputIndex>
+    </exampleInput>
+    <exampleInput>
+      <input>csc(x)</input>
+      <inputIndex>5</inputIndex>
+    </exampleInput>
+    <exampleInput>
+      <input>sec(x)</input>
+      <inputIndex>5</inputIndex>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Graphing Trig Functions</topicName>
+    <topicPath>Trigonometry/Trig Functions/Graphing Trig Functions</topicPath>
+    <topicDesc>Graph trig functions.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>y=\sin(3x+2)</input>
+    </exampleInput>
+    <exampleInput>
+      <input>y=2\tan(x-\frac{\pi}{2})</input>
+    </exampleInput>
+    <exampleInput>
+      <input>f(x)=\csc(\pi x)</input>
+      <inputIndex>3</inputIndex>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Evaluating Inverse Trig Functions</topicName>
+    <topicPath>Trigonometry/Inverse Trig Functions/Evaluating Trig Functions</topicPath>
+    <topicDesc>Evaluate inverse trig functions.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>\arccos(\frac{\sqrt{2}}{2}))</input>
+      <inputIndex>1</inputIndex>
+    </exampleInput>
+    <exampleInput>
+      <input>\arcsin(\frac{-1}{2})</input>
+      <inputIndex>1</inputIndex>
+    </exampleInput>
+    <exampleInput>
+      <input>\arcsec(\frac{2\sqrt{3}}{3})</input>
+      <inputIndex>1</inputIndex>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Inverse Trig Function Domain</topicName>
+    <topicPath>Trigonometry/Inverse Trig Functions/Inverse Trig Function Domain</topicPath>
+    <topicDesc>Find the domain of inverse trig functions.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>\arcsin(x)</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\arccos(\pi x)</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\arcsin(2x-3)</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Solving Trig Equations (Basic)</topicName>
+    <topicPath>Trigonometry/Trig Equations/Solving Trig Equations (Basic)</topicPath>
+    <topicDesc>Solve basic trig equations.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>2\sin(3x)-1=0</input>
+    </exampleInput>
+    <exampleInput>
+      <input>2\sin(x)+\sqrt{2}=0</input>
+    </exampleInput>
+    <exampleInput>
+      <input>3\tan^{2}(x)-1=0</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Solving Trig Equations (Advanced)</topicName>
+    <topicPath>Trigonometry/Trig Equations/Solving Trig Equations (Advanced0</topicPath>
+    <topicDesc>Solve equations that involve trigonometric functions. Solving this equations will require simplifications first.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>cot(x)cos^2(x)=2cot(x)</input>
+    </exampleInput>
+    <exampleInput>
+      <input>2sin^2(x)+3cos(x)-3=0</input>
+    </exampleInput>
+    <exampleInput>
+      <input>cos(x)=sin(x)</input>
+    </exampleInput>
   </topic>
   
   <!--Pre-Calc-->
+  <topic>
+    <topicName>Permutations</topicName>
+    <topicPath>Pre-Calc/Probability/Permutations</topicPath>
+    <topicDesc>Use the permutation function.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>5 C 2</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\binom{4}{1}</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\binom{3}{2}</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Combinations</topicName>
+    <topicPath>Pre-Calc/Probability/Combinations</topicPath>
+    <topicDesc>Use the combination function.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>5 P 2</input>
+    </exampleInput>
+    <exampleInput>
+      <input>4 P 1</input>
+    </exampleInput>
+    <exampleInput>
+      <input>3 P 2</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Parametric Equations</topicName>
+    <topicPath>Pre-Calc/Parametric Equations</topicPath>
+    <topicDesc>Define and use parametric equations.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>x(t)=t-3; y(t)=2t+3; [x(2), y(2)]</input>
+    </exampleInput>
+    <exampleInput>
+      <input>x(t)=t^2; y(t)=\sqrt{t}; [x(4), y(4)]</input>
+    </exampleInput>
+    <exampleInput>
+      <input>x(t)=\frac{1}{t}; y(t)=\frac{2t}{3}+2; z(t)=2t^2; P(t)=[x(t), y(t), z(t)]; P(3)</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Exponential Form of Complex Numbers</topicName>
+    <topicPath>Pre-Calc/Complex Numbers/Complex Numbers Exponential Form</topicPath>
+    <topicDesc>Convert complex numbers to exponential form</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>-1+5i</input>
+      <inputIndex>2</inputIndex>
+    </exampleInput>
+    <exampleInput>
+      <input>2+3i</input>
+      <inputIndex>2</inputIndex>
+    </exampleInput>
+    <exampleInput>
+      <input>7-i</input>
+      <inputIndex>2</inputIndex>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Polar Form of Complex Numbers</topicName>
+    <topicPath>Pre-Calc/Complex Numbers/Complex Numbers Polar Form</topicPath>
+    <topicDesc>Convert complex numbers to polar form.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>-1+5i</input>
+      <inputIndex>1</inputIndex>
+    </exampleInput>
+    <exampleInput>
+      <input>2+3i</input>
+      <inputIndex>1</inputIndex>
+    </exampleInput>
+    <exampleInput>
+      <input>7-i</input>
+      <inputIndex>1</inputIndex>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Evaluating Limits</topicName>
+    <topicPath>Pre-Calc/Limits/Basic Limits</topicPath>
+    <topicDesc>Evaluate limits that can be evaluate using basic simplifications. This can involve factoring to cancel terms or multiplying the top and bottom by the conjugate.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>\lim_{x \to 0}(\frac{x^2-x}{x})</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\lim_{x \to -1}(\frac{3x^2+x-2}{x+1})</input>
+    </exampleInput>
+    <exampleInput>
+      <input>lim_{h \to 7}(\frac{2(-3+h)^2-18}{h})</input>
+    </exampleInput>
+    <exampleInput>
+      <input>lim_{t \to 4}\frac{t-\sqrt{3t+4}}{4-t}</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Special Limits</topicName>
+    <topicPath>Pre-Calc/Limits/Limits of Special Functions</topicPath>
+    <topicDesc>Evaluate limits of a wide variety of functions.</topicDesc>
+    <info>
+
+    </info>
+    <exampleInput>
+      <input>\lim_{x \to 0}(\frac{1}{x^2})</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\lim_{x \to 0}(ln(x))</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Undefined Limits</topicName>
+    <topicPath>Pre-Calc/Limits/Undefined Limits</topicPath>
+    <topicDesc>Evaluate limits that are undefined.</topicDesc>
+    <info>
+
+    </info>
+    <exampleInput>
+      <input>\lim_{x \to 0}(\frac{x}{|x|})</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\lim_{x \to 0}(\frac{1}{x})</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Limits of Polynomials to Infinity</topicName>
+    <topicPath>Pre-Calc/Limits/Infinite Limits of Polynomials</topicPath>
+    <topicDesc>Take the limits of polynomials to infinity.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>\lim_{x \to \infty}(2x^4-x^2-8x)</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\lim_{t \to \infty}(\frac{1}{5}t^5+2t^3-t^2+8)</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\lim_{x \to -\infty}(x^5-10x^3+21x)</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Limits of Rational Expressions to Infinity</topicName>
+    <topicPath>Pre-Calc/Limits/Infinite Limits of Rational Expressions</topicPath>
+    <topicDesc>Take the limits of rational expressions to infinity.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>\lim_{x \to \infty}(\frac{2x^4-x^2+8x}{-5x^4+7})</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\lim_{x \to -\infty}(\frac{4x^2+x^6}{1-5x^3}</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\lim_{x \to \infty}(\frac{x^2-5x-9}{2x^4+3x^3})</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Limits to Infinity of Special Functions</topicName>
+    <topicPath>Pre-Calc/Limits/Infinite Limits of Special Functions</topicPath>
+    <topicDesc>Limits to infinity of various functions.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>\lim_{x \to -\infty}e^x</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\lim_{x \to \infty}(\ln(x))</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\lim_{x \to \infty}(sin(x))</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Limit Definition of a Derivative</topicName>
+    <topicPath>Pre-Calc/Limits/Limit Definition of a Derivative</topicPath>
+    <topicDesc>Use the limit definition of a derivative to find the derivative for functions.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>\lim_{h \to 0}(\frac{(x+h)^2+x^2}{h})</input>
+    </exampleInput>
+    <exampleInput>
+      <input>f(x)=x^3; \lim_{h \to 0}(\frac{f(x+h)-f(x)}{h})</input>
+    </exampleInput>
+  </topic>
   
-  <!--Linear Algebra-->
-  
-  <!--Probability-->
   
   <!--Calculus-->
+  <topic>
+    <topicName>Derivative Power Rule</topicName>
+    <topicPath>Calculus/Derivatives/Power Rule</topicPath>
+    <topicDesc>Use the power rule to find the derivatives of polynomials.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>\frac{d}{dx}x^2</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{d}{dx}3x^4+x^3-8x^2+\frac{1}{2}x+192</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{d}{dx}\frac{1}{\sqrt{x}}</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Derivatives of Trig Functions</topicName>
+    <topicPath>Calculus/Derivatives/Derivatives of Trig Functions</topicPath>
+    <topicDesc>Find the derivatives of trig functions.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>\frac{d}{dx}\sin(x)</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{d}{dx}\cos(x)</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{d}{dx}\tan(x)</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Derivative Chain Rule (Basic)</topicName>
+    <topicPath>Calculus/Derivatives/Chain Rule</topicPath>
+    <topicDesc>Use the chain rule to find the derivatives of a composition of functions.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>\frac{d}{dx}(2x^2+x)^10</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{d}{dx}\cos(3x)</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{d}{dx}\sqrt{sin(x)}</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Derivatives of Exponents</topicName>
+    <topicPath>Calculus/Derivatives/Derivatives of Exponents</topicPath>
+    <topicDesc>Take the derivative of an expression where the variable is in the exponent.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>\frac{d}{dx}e^x</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{d}{da}3^{2a}</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{d}{dx}b^x</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Derivatives of Logarithmic Functions</topicName>
+    <topicPath>Calculus/Derivatives/Derivatives of Logs</topicPath>
+    <topicDesc>Take the derivative of an expression involving logarithms.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>\frac{d}{dx}2\ln(x^2)</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{d}{dx}\log(cos(x))</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{d}{dx}3ln(x)+log_{b}(x)</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Chain Rule (Advanced)</topicName>
+    <topicPath>Calculus/Derivatives/Chain Rule (Advanced)</topicPath>
+    <topicDesc>Use the chain rule on a composition of numerous functions.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>\frac{d}{dx}\cos(\sin(\tan(x)))</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{d}{dx}\frac{1}{\ln(x^2)}</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{d}{dx}7e^{\cos(\ln(x))}</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Product Rule</topicName>
+    <topicPath>Calculus/Derivatives/Product Rule</topicPath>
+    <topicDesc>Use the product rule to find the derivative of a product of two functions.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>\frac{d}{dx}2\cos(x)\sin(x)</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{d}{dx}x\ln(x)</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{d}{dq}8q^3\log(q)</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Quotient Rule</topicName>
+    <topicPath>Calculus/Derivatives/Quotient Rule</topicPath>
+    <topicDesc>Use the quotient rule to find the derivative of the quotient of two functions.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>\frac{d}{dx}\frac{\cos(x)}{\sin(x)}</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{d}{dx}\frac{\ln(x)}{x}</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{d}{dx}\frac{\sin(x)}{\cos(x)}</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Derivatives of Reciprocal Trig Functions</topicName>
+    <topicPath>Calculus/Derivatives/Derivatives of Reciprocal Trig Functions</topicPath>
+    <topicDesc>Find the derivatives of reciprocal trig functions.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>\frac{d}{dx}2\csc(2x)</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{d}{dx}\frac{1}{2}\sec(x^2)</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{d}{dx}\frac{3}{5}\cot(\frac{x}{2})</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Implicit Differentiation</topicName>
+    <topicPath>Calculus/Derivatives/Implicit Differentiation</topicPath>
+    <topicDesc>Calculate derivatives of terms of an implicit expression involving both the function and the variable.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>\frac{x-y^3}{y+x^2}=x+2</input>
+    </exampleInput>
+    <exampleInput>
+      <input>y=x^2y^3+x^3y^2</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\cos^2(x)+\cos^2(y)=\cos(2x+2y)</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Finding Critical Points of Functions</topicName>
+    <topicPath>Calculus/Derivatives/Critical Points</topicPath>
+    <topicDesc>Using derivatives find the critical points of a function.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>f(x)=x^2-6x+9; f'(x)=0</input>
+    </exampleInput>
+    <exampleInput>
+      <input>f(x)=6x^5+33x^4-30x^3+100; f'(x)=0</input>
+    </exampleInput>
+    <exampleInput>
+      <input>g(t)=\root{3}{t^2}(2t-1); g'(t)=0</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Finding Points of Inflection</topicName>
+    <topicPath>Calculus/Derivatives/Points of Inflection</topicPath>
+    <topicDesc>Find a function's points of inflection using derivatives.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>f(x)=\frac{1}{2}x^3+\frac{3}{2}x^2+1; f''(x)=0</input>
+    </exampleInput>
+    <exampleInput>
+      <input>f(x)=6x^5+33x^4-30x^3+100; f''(x)=0</input>
+    </exampleInput>
+    <exampleInput>
+      <input>g(t)=\root{3}{t^2}(2t-1); g''(t)=0</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Linearizion</topicName>
+    <topicPath>Calculus/Derivatives/Linearizion</topicPath>
+    <topicDesc>Linearize a function to obtain an approximate linear function.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>f(x)=x^3-5x^2+3x-1; a = 1; f(a)+f'(a)(x-a)</input>
+    </exampleInput>
+    <exampleInput>
+      <input>g(x)=x^3\sin(\pix); a = 2; f(a)+f'(a)(x-a)</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>L'Hopital's Rule</topicName>
+    <topicPath>Calculus/Limits/L'Hopital's Rule</topicPath>
+    <topicDesc>Apply L'Hopital's Rule to solve limit problems.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>\lim_{x \to 0}(\frac{\sin(x)}{x})</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\lim_{t \to 1}(\frac{5t^4-4t^2-1}{10-t-9t^3})</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\lim_{x \to \infty}(\frac{e^x}{x^2})</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Anti-Derivatives of Polynomials</topicName>
+    <topicPath>Calculus/Integration/Polynomial Anti-Derivatives</topicPath>
+    <topicDesc>Find the anti-derivatives of polynomials.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>\int(3x^4 + 5x^3 + 2x^2 - 8x + 9)dx</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\int(-3t^2+2t-5)dt</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\int(-3x+20)dx</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Anti-Derivatives of Trig Functions</topicName>
+    <topicPath>Calculus/Integration/Trig Function Anti-Derivatives</topicPath>
+    <topicDesc>Find the anti-derivatives of trig functions.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>\int (sin(x)) dx</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\int (cos(x)) dx</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\int (sec^2(x)) dx</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Definite Integrals</topicName>
+    <topicPath>Calculus/Integration/Definite Integrals</topicPath>
+    <topicDesc>Calculate definite integrals.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>\int_{0}^{2} (x^2+1) dx</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\int_{-3}^{1}(\sqrt{t}(t-2)) dt</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\int_{1}{2}(\frac{2w^5-w+3}{w^2})dw</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Functions Defined by Integrals</topicName>
+    <topicPath>Calculus/Integration/Functions defined by Integrals</topicPath>
+    <topicDesc>Calculate functions defined by the boundaries on a definite integral.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>F(x)=\int_{0}^{x} (t^2) dt; F(4)</input>
+    </exampleInput>
+    <exampleInput>
+      <input>F(X)=\int_{x}^{3} (\sin(w)) dw; F(-2)</input>
+    </exampleInput>
+    <exampleInput>
+      <input>R(n)=\int_{3}^{n} (\ln(x)) dx; R(10)</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>U-Substitution</topicName>
+    <topicPath>Calculus/Integration/U-Substitution</topicPath>
+    <topicDesc>Evaluate integrals using u-substitution.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>\int (\frac{2^{\ln(x)}}{x})dx</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\int (\frac{x^2+1}{x^3+3x}) dx</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\int_{0}^{\sqrt{\pi}} (x\sin(x^2)) dx</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Integration by Parts</topicName>
+    <topicPath>Calculus/Integration/Integration by Parts</topicPath>
+    <topicDesc>Evaluate integrals using integration by parts.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>\int (xe^x) dx</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\int (x\cos(x)) dx</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\int ln(x) dx</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Fundamental Theorem of Calculus</topicName>
+    <topicPath>Calculus/Integration/Fundamental Theorem of Calculus</topicPath>
+    <topicDesc>Apply the fundamental theorem of calculus to solve tricky definite integral problems.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>\frac{d}{dx}\int_{0}^{x^2}(\cos(t^2))dt</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{d}{dx}\int_{x}^{x^2}(e^{-t^2})dt</input>
+    </exampleInput>
+    <exampleInput>
+      <input>F(x)=\int_{\pi}{x^2} (\cot^2(t)) dt; \frac{dF}{dx}</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Improper Integrals</topicName>
+    <topicPath>Calculus/Integration/Improper Integrals</topicPath>
+    <topicDesc>Evaluate improper integrals where the boundaries of the integral are to infinity.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>\int_{1}^{\infty} (\frac{1}{x^2}) dx</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\int_{-\infty}^{0}(\frac{1}{\sqrt{3-x}}) dx</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\int_{-\infty}^{\infty}(xe^{-x^2}) dx</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Integration using Trig Identities</topicName>
+    <topicPath>Calculus/Integration/Integration using Trig Identities</topicPath>
+    <topicDesc>Evaluate integrals using trig identities.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>\int \sin^3(x)\cos^3(x) \dx</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\int \cos^4(2t) dt</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\int \tan(x)\sec^3(x) dx</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Arc-Length</topicName>
+    <topicPath>Calculus/Integration/Arc Length</topicPath>
+    <topicDesc>Find the arc length of a line using integration.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>y=\tan^2(x); \int_{0}^{\frac{\pi}{4}} \sqrt{1+(\frac{dy}{dx})^2} dx</input>
+    </exampleInput>
+    <exampleInput>
+      <input>f(y)=\frac{2}{3}(y-1)^{\frac{2}{3}}; \int_{1}{4}\sqrt{1+(\frac{df}{dy})^2} dy</input>
+    </exampleInput>
+    <exampleInput>
+      <input>x(t)=-cos(t); y(t)=sin(t); \int_{0}{\pi} \sqrt{(x'(t))^2+(y'(t))^2}</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Sequences (Using Summations)</topicName>
+    <topicPath>Calculus/Series/Sequences with Summations</topicPath>
+    <topicDesc>Use summations to add up all the elements of a sequence.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>\sum_{i=0}^5i^2</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\sum_{k=1}^5\sin(\frac{\pi}{k})</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\sum_{k=4}^{20}2^k</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Series Divergence / Convergence</topicName>
+    <topicPath>Calculus/Series/Series Divergence</topicPath>
+    <topicDesc>Check if a sequence diverges or converges when summed to infinity.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>\sum_{n=0}^{\infty}\frac{4n^2-n^3}{10+2n^3}</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\sum_{n=1}^{\infty}2*4^{n-1}</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\sum_{n=1}^{\infty}\frac{3}{n^3}</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Maclaurin and Taylor Series</topicName>
+    <topicPath>Calculus/Series/Maclaurin and Taylor Series</topicPath>
+    <topicDesc>Compute the Maclaurin and Taylor series approximations for functions.</topicDesc>
+    <info>
+      
+    </info>  
+    <exampleInput>
+      <input>f(x)=\sin(x); a=3; \sum_{n=0}^{4}\frac{f^n(a)}{n!}(x-a)^n</input>
+    </exampleInput>
+    <exampleInput>
+      <input>f(x)=\cos(x); T(q)=\sum_{n=0}^{q}\frac{f^n(0)}{n!}x^n; T(3)</input>
+    </exampleInput>
+  </topic>
+  
+  <!--Linear Algebra-->
+  <topic>
+    <topicName>Basic Vector Operations</topicName>
+    <topicPath>Linear Algebra/Vectors/Vector Operations</topicPath>
+    <topicDesc>Add and subtract.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>[2,4]+[4,3]</input>
+    </exampleInput>
+    <exampleInput>
+      <input>3[3,5]-[5,6]</input>
+    </exampleInput>
+    <exampleInput>
+      <input>A=[6,7,2]; B=[2,9,1]; A+2B</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Normalizing a Vector</topicName>
+    <topicPath>Linear Algebra/Vectors/Normalizing a Vector</topicPath>
+    <topicDesc>Normalize a vector.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>[4,3,2]</input>
+    </exampleInput>
+    <exampleInput>
+      <input>[3x, 4, 8]</input>
+    </exampleInput>
+    <exampleInput>
+      <input>[a,b,c]</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Dot Product</topicName>
+    <topicPath>Linear Algebra/Vectors/Dot Product</topicPath>
+    <topicDesc>Find the dot product of two vectors.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>[3,5,3]*[9,6,2]</input>
+    </exampleInput>
+    <exampleInput>
+      <input>[17, 2, 3]*[\frac{1/2}, 0, 1]</input>
+    </exampleInput>
+    <exampleInput>
+      <input>A=3\vec{i}+8\vec{j}+6\vec{k}; B=2\vec{i}+7\vec{k}; A*B</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Cross Product</topicName>
+    <topicPath>Linear Algebra/Vectors/Cross Product</topicPath>
+    <topicDesc>Take the cross product of two vectors.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>\vec{i} \times \vec{j}</input>
+    </exampleInput>
+    <exampleInput>
+      <input>[8,3,5]\times[3,6,2]</input>
+    </exampleInput>
+    <exampleInput>
+      <input>[1,0,3]\times[7,4,5]</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Basic Matrix Operations</topicName>
+    <topicPath>Linear Algebra/Matrices/Basic Matrix Operations</topicPath>
+    <topicDesc>Add and subtract matrices.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>2[[3,2],[4,6]]</input>
+    </exampleInput>
+    <exampleInput>
+      <input>[[4, 6, 2],[3, 9, 1],[2, 0, 7]]+[[6, 3, 8],[8, 2, 1],[4, 0, 0]]</input>
+    </exampleInput>
+    <exampleInput>
+      <input>A=[[a, b],[c, d]]; B=[[2, 9], [1, 0]]; 2A-B</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Matrix Multiplication</topicName>
+    <topicPath>Linear Algebra/Matrices/Matrix Multiplication</topicPath>
+    <topicDesc>Multiply two matrices together.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>((1, 2),(3, 4))((2, 0),(1, 2))</input>
+      <inputDisp>\vectora{1, 2}{3, 4}\vectora{2, 0}{1, 2}</inputDisp>
+    </exampleInput>
+    <exampleInput>
+      <inputDisp>B=((4, 4), (1, 0), (-2, 1)); F=((0, 3),(0, 1)); BF</inputDisp>
+      <input>B=\vectorb{4, 4}{1, 0}{-2, 1}; F=\vectora{0, 3}{0, 1}; BF</input>
+    </exampleInput>
+    <exampleInput>
+      <inputDisp>((1, 2, 3),(4, 5, 6),(7, 8, 9))((2, 0, 0),(0, 2, 0),)0, 0, 2))</inputDisp>
+      <input>\vectorb{1, 2, 3}{4, 5, 6}{7, 8, 9}\vectorb{2, 0, 0}{0, 2, 0}{0, 0, 2}</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Matrix Determinant</topicName>
+    <topicPath>Linear Algebra/Matrices/Determinant</topicPath>
+    <topicDesc>Find the determinant of a matrix.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <inputDisp>\text{det}(((3, 8),(4, 6)))</inputDisp>
+      <input>det(\vectora{3, 8}{4, 6})</input>
+    </exampleInput>
+    <exampleInput>
+      <inputDisp>C=\vectorb{6, 1, 1}{4, -2, 5}{2, 8, 7}; \text{det}(C)</inputDisp>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Transposing Matrices</topicName>
+    <topicPath>Linear Algebra/Matrices/Transposing a Matrix</topicPath>
+    <topicDesc>Transpose matrices.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>((1, 2),(3, 4))^{T}</input>
+      <inputDisp>\vectora{1, 2}{3, 4}^{T}</inputDisp>
+    </exampleInput>
+    <exampleInput>
+      <inputDisp>B=((4, 4), (1, 0), (-2, 1)); B^T</inputDisp>
+      <input>B=\vectorb{4, 4}{1, 0}{-2, 1}; B^T</input>
+    </exampleInput>
+    <exampleInput>
+      <inputDisp>((1, 2, 3),(4, 5, 6),(7, 8, 9))^T</inputDisp>
+      <input>\vectorb{1, 2, 3}{4, 5, 6}{7, 8, 9}^T</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Inverse Matrices</topicName>
+    <topicPath>Linear Algebra/Matrices/Inverse Matrices</topicPath>
+    <topicDesc>Find the inverses of matrices.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <inputDisp>((4, 3),(3, 2))^{-1}</inputDisp>
+      <input>\vectora{4, 3}{3, 2}^{-1}</input>
+    </exampleInput>
+    <exampleInput>
+      <inputDisp>A=((1, 3, 3),(1, 4, 3),(1, 3, 4)); A^{-1}</inputDisp>
+      <input>A=\vectorb{1, 3, 3}{1, 4, 3}{1, 3, 4}; A^{-1}</input>
+    </exampleInput>
+    <exampleInput>
+      <inputDisp>M=((1, 2, 3),(0, 1, 4),(5, 6, 0)); M^{-1}</inputDisp>
+      <input>M=\vectorb{1, 2, 3}{0, 1, 4}{5, 6, 0}; M^{-1}</input>
+    </exampleInput>
+  </topic>
+  
+  <!--Adv Calculus-->
+  <topic>
+    <topicName>Double Integrals</topicName>
+    <topicPath>Advanced Calculus/Integration/Double Integrals</topicPath>
+    <topicDesc>Calculate double integrals.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>\int_{0}^{1}\int_{0}^{2}xy^2dydx</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\int_{0}^{1}\int_{\sqrt{y}}^{1}xy^2dxdy</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Triple Integrals</topicName>
+    <topicPath>Advanced Calculus/Integration/Triple Integrals</topicPath>
+    <topicDesc>Calculate triple integrals.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>\int_{0}^{6}\int_{0}^{3-\frac{y}{2}}\int_{2-\frac{2}{3}x-\frac{y}{3}}^{2} x^2yz dzdydx</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\int_{0}^{3}\int_{0}^{4}\int_{0}^{2} dxdydz</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\int_{0}^{4}\int_{0}^{2}\int_{0}^{3} xyz dxdydz</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Partial Derivatives</topicName>
+    <topicPath>Advanced Calculus/Partial Derivatives</topicPath>
+    <topicDesc>Take partial derivatives of functions.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>\frac{\partial}{\partial x} x^2+y</input>
+    </exampleInput>
+    <exampleInput>
+      <input>f(x,y)=x\sin(x)\cos(y); \frac{\partial f}{\partial y}</input>
+    </exampleInput>
+    <exampleInput>
+      <input>h(s,t)=t^7\ln(s^2)+\frac{9}{t^3}-\root{7}{s^4}; \frac{\partial h}{\partial t}</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Gradient</topicName>
+    <topicPath>Advanced Calculus/Gradient</topicPath>
+    <topicDesc>Apply the gradient function to a scalar field.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>f(x,y)=x^2+xy+y^2; \nabla f</input>
+    </exampleInput>
+    <exampleInput>
+      <input>g(x,y,z)=10e^{-(x^2+y^2+z^2)}; \nabla g</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Divergence</topicName>
+    <topicPath>Advanced Calculus/Divergence</topicPath>
+    <topicDesc>Find the divergence of a vector field.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>v(x,y)=x^2y\vec{i}+3y\vec{j}; div(v)</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\nabla * (\cos(y)\vec{i}+e^{xy}\vec{j})</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Curl</topicName>
+    <topicPath>Advanced Calculus/Curl</topicPath>
+    <topicDesc>Find the curl of a vector field.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>v(x,y,z)=\vectorb{x^2y\sin(z)}{x^2xz}{\cos(x)\cos(y)}; \nabla \times v(x,y,z)</input>
+    </exampleInput>
+    <exampleInput>
+      <input>curl(-y\vec{i}+x\vec{j})</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Line Integrals with Scalar Functions</topicName>
+    <topicPath>Advanced Calculus/Line Integrals/With Scalar Functions</topicPath>
+    <topicDesc>Use line integrals with scalar functions.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>f(x,y)=xy; x(t)=\cos(t); y(t)=\sin(t); 0 \lt t \lt \frac{\pi}{2}; \oint_{C}f(x,y)ds</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Vector Functions</topicName>
+    <topicPath>Advanced Calculus/Derivatives of Vector Functions</topicPath>
+    <topicDesc>Take the derivatives of vector functions.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>v(x,y)=\vectora{x^2y}{y\ln(x)}; \frac{\partial v}{\partial y}</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{\partial}{\partial x}[\sec(x^2), \tan(y/x)]</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Line Integrals with Vector Functions</topicName>
+    <topicPath>Advanced Calculus/Line Integrals with Vector Functions</topicPath>
+    <topicDesc>Use line integrals with vector functions.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>f(x,y)=y\vec{i}-x\vec{j}; x(t)=\cos(t); y(t)=\sin(t); 0 \lt t \lt 2\pi; \oint_{C}f*dr</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Surface Integrals</topicName>
+    <topicPath>Advanced Calculus/Surface Integrals</topicPath>
+    <topicDesc>Evaluate surface integrals.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>f(x,y,z)=y; x(u,v)=u; y(u,v)=v; z(u,v)=u+v^2; 0 \lt u \lt 1; 0 \lt v \lt 2; \int\int f(x,y,z) d\sigma </input>
+    </exampleInput>
+    <exampleInput>
+      <input>f(x,y,z)=y; v(u,v)=u\vec{i}+v\vec{j}+(u+v^2)\vec{k}; 0 \lt u \lt 1; 0 \lt v \lt 2; \int\int f(x,y,z) d\sigma </input>
+    </exampleInput>
+  </topic>
 
 </topics>

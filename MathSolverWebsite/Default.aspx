@@ -245,7 +245,7 @@
             });
 
             $(".sub-work-list-toggle-btn").each(function () {
-                $(this).click(function () {
+               $(this).click(function () {
                     var htmlVal = $(this).val();
                     if (htmlVal.indexOf('+') != -1)
                         $(this).val('- Hide Work Steps');
@@ -376,6 +376,7 @@
 
             $("#to-bottom-btn").click(function (e) {
                 var objDiv = document.getElementById("work-space");
+                exitScrollMode();
                 objDiv.scrollTop = objDiv.scrollHeight;
             });
 
