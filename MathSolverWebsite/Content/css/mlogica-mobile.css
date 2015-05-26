@@ -263,4 +263,13 @@
     .parse-errors {
         width: 81%;
     }
+
+    
+    .hlep-larger {
+        padding-top: 20px !important;
+    }
+
+        .hlep-larger div div a {
+            font-size: 45px !important;
+        } 
 }

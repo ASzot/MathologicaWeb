@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Formatting" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="formatting.aspx.cs" Inherits="MathSolverWebsite.help.FormattingPage" %>
+﻿<%@ Page Title="MultiLine" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="multiline.aspx.cs" Inherits="MathSolverWebsite.multiline" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="FeaturedContent" runat="server">
@@ -8,7 +8,7 @@
     <div class="w-section">
         <div class="w-container" style="max-width: 920px;">
             <div class="sample">
-                <h1 class="heading-1">Topic Name Here</h1>
+                <h1 class="heading-1">Multiline</h1>
                 <p>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat. Aenean faucibus nibh et justo cursus id rutrum lorem imperdiet. Nunc ut sem vitae risus tristique posuere.
                 </p>

@@ -60,7 +60,7 @@
           </div>
         </div>
         <div class="w-col w-col-4 link-practice">
-          <div class="hlep" style="padding-top: 60px;">
+          <div class="hlep hlep-larger">
             <div>
               <div><a class="wordlink-help" href="topics?tn=Advanced+Calculus">Adv Calculus</a>
               </div>

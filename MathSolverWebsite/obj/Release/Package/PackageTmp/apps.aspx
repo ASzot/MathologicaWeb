@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="apps.aspx.cs" Inherits="MathSolverWebsite.AppsPage" %>
+﻿<%@ Page Title="Apps" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="apps.aspx.cs" Inherits="MathSolverWebsite.AppsPage" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="FeaturedContent" runat="server">
@@ -13,9 +13,6 @@
           background-color: white;
         }
 
-        .w-container {
-            max-width: 920px;
-        }
     </style>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContent" runat="server">

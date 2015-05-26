@@ -2,9 +2,14 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="FeaturedContent" runat="server">
+    <style>
+        .body {
+            overflow-y: auto;
+        }
+    </style>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContent" runat="server">    
-    <div class="ws-container">
+    <div class="ws-container size-crit">
         <hgroup class="title">
             <div class="heading-1">Log In</div>
         </hgroup>

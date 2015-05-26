@@ -1,19 +1,18 @@
 ﻿<%@ Page Title="Mathologica-Free Math Solver" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="MathSolverWebsite._Default" %>
 
 <asp:Content runat="server" ID="HeadContent" ContentPlaceHolderID="HeadContent">
-    
 </asp:Content>
 
 <asp:Content runat="server" ID="FeaturedContent" ContentPlaceHolderID="FeaturedContent">
 
     <!-- Meta description here. -->
     <meta name="description" content="" />
-    
+
     <!-- JSX graph include. -->
     <link rel="stylesheet" href="JSXGraph/jsxgraph.css" type="text/css" />
     <script async="async" type="text/javascript" src="JSXGraph/jsxgraphcore.js"></script>
 
-    <script type="text/javascript" src="Scripts/ml-main.js"></script> 
+    <script type="text/javascript" src="Scripts/ml-main.js"></script>
     <link rel="stylesheet" href="Content/css/mlogica-work.css" type="text/css" />
 
     <!-- MathJax include. -->
@@ -35,17 +34,15 @@
         ga('create', 'UA-56848508-1', 'auto');
         ga('send', 'pageview');
     </script>
-    
-    <script>
-        // Basic styling stuff.
 
+    <script>
         var prevWidth = 0;
+        var btnDropDownTimeout = 0;
 
         function getParameterByName(name) {
             var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
             return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
         }
-
 
         function mathInputChanged(event) {
 
@@ -57,14 +54,17 @@
                 }
             }
 
-            var latex = getLatexInput();
+            $(".more-popup").hide();
 
-            fixInput(latex);
+            if (selectedTextBox != null) {
+                fixInput(selectedTextBox);
+            }
+
+            var latex = getLatexInput();
 
             var encodedLatex = htmlEncode(latex);
 
             $("#<%= hiddenUpdateTxtBox.ClientID %>").val(encodedLatex);
-
 
             $("#<%= hiddenUpdateBtn.ClientID %>").click();
             MathJax.Hub.Queue(["Typeset", MathJax.Hub, "funcDispList"]);
@@ -74,10 +74,14 @@
             // Make sure there is not an error in the eval drop down.
             var dropDown = document.getElementById("<% = evalDropDownList.ClientID %>");
             var txt = dropDown.options[dropDown.selectedIndex].text;
-            if (txt == "Input is too long" ||
-                txt == "Invalid input" ||
-                txt == "Enter input above" ||
-                txt == "Please wait...")
+            if (txt.indexOf("Input is too long") != -1 ||
+                txt.indexOf("Invalid input") != -1 ||
+                txt.indexOf("Enter input above") != -1 ||
+                txt.indexOf("Please wait...") != -1)
+                return;
+
+            var latexInput = getLatexInput();
+            if (latexInput == "")
                 return;
 
             // Take the previous solve info and move it up a 'space'.
@@ -85,7 +89,7 @@
 
         }
 
-        Date.prototype.today = function () { 
+        Date.prototype.today = function () {
             return (((this.getMonth() + 1) < 10) ? "0" : "") + (this.getMonth() + 1) + "/" + ((this.getDate() < 10) ? "0" : "") + this.getDate() + "/" + this.getFullYear();
         }
 
@@ -101,7 +105,7 @@
 
             $("#input-list").html(totalHtml);
             selectedTextBox = $("#mathInputSpan0");
-            
+
             for (var i = 0; i < inputs.length; ++i) {
                 $("#mathInputSpan" + i).mathquill('editable');
                 $("#mathInputSpan" + i).mathquill('latex', inputs[i]);
@@ -128,6 +132,16 @@
             });
         }
 
+        function addPobBtnCallback() {
+            $(".pob-problem").click(function (e) {
+                // Paste into the input.
+                var inputDisp = $(this).find(".hidden").html();
+                var inputDispSplit = inputDisp.split('|');
+                var inputDispEncoded = encodeURIComponent(inputDispSplit[0]);
+                window.location.replace("/Default?Index=" + inputDispSplit[1] + "&InputDisp=" + inputDispEncoded + ((inputDispSplit[2] == null || inputDispSplit[2] == "") ? "" : "&UseRad=" + inputDispSplit[1]));
+            });
+        }
+
         Sys.WebForms.PageRequestManager.getInstance().add_beginRequest(BeginRequestHandler);
         Sys.WebForms.PageRequestManager.getInstance().add_endRequest(EndRequestHandler);
         function BeginRequestHandler(sender, args) {
@@ -137,22 +151,26 @@
             if (typeof sender._postBackSettings.sourceElement == 'object' && sender._postBackSettings.sourceElement !== null)
                 senderId = sender._postBackSettings.sourceElement.id;
             var errorTxt = $("#<%= parseErrorSpan.ClientID %>").html();
-            if (errorTxt == "") {
-                $("#parse-errors-id").hide();
-            }
-            else {
+            if (/\S/.test(errorTxt)) {
                 $("#parse-errors-id").show();
             }
+            else {
+                $("#parse-errors-id").hide();
+            }
+
             if (senderId != "id-solve-btn" && senderId.indexOf("hiddenSolveBtn") == -1) {
-                if (senderId.indexOf("hiddenUpdateBtn") != -1 || senderId.indexOf("RadBtn") != -1) {
+                if (senderId.indexOf("hiddenUpdateBtn") != -1 || senderId.indexOf("RadBtn") != -1 || senderId.indexOf("functionDefsListView") != -1) {
                     MathJax.Hub.Queue(['Typeset', MathJax.Hub, 'funcDispList']);
                 }
+                else if (senderId.indexOf('updateExampleTimer') != -1 || senderId.indexOf('exampleNav') != -1) {
+                    MathJax.Hub.Queue(['Typeset', MathJax.Hub, "pob-space"]);
+                    addPobBtnCallback();
+                }
+
                 return;
             }
 
-
             var prevSolveOutput = $("#<% = calcOutput.ClientID %>").html();
-
 
             $("#<% = calcOutput.ClientID %>").html("");
 
@@ -161,11 +179,37 @@
                 $(this).parent().next().hide();
             });
 
+            var resultListCount = $("#work-list-disp").children().length / 2;
+
+            // Have a max count of results to be displayed.
+            if (resultListCount > 4) {
+                $("#work-list-disp").children().first().remove();
+                $("#work-list-disp").children().first().remove();
+            }
+
+            // Remove all of the previous graphs.
+            $("#graphbox").remove();
+
             // Remove all of the existing graphs. (There can only be one graph at once).
             $("#work-list-disp").append("<div class='prev-output'>" + prevSolveOutput + "<div class='more-options-area'>" +
                 "<div style='border-right: 1px solid #adadad' class='link-btn icon-btn'><img src='/Images/LinkIcon.png' />" +
-                "</div><div class='share-btn icon-btn'><img src='/Images/SaveIcon.png' /></div></div></div><div class='horiz-divide'></div>");
-            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+                "</div><div class='share-btn icon-btn'><img src='/Images/SaveIcon.png' /></div>" +
+
+                "</div></div><div class='horiz-divide'></div>");
+
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub], function () {
+            });
+
+            var workSpaceEle = $("#work-space");
+            // Scroll to the solution.
+            var scrollToVal = workSpaceEle.scrollTop() + $("#work-list-disp").children().last().prev().offset().top;
+            workSpaceEle.scrollTop(scrollToVal);
+
+            if (workSpaceEle[0].scrollHeight - workSpaceEle.scrollTop() == workSpaceEle.outerHeight())
+                exitScrollMode();
+            else {
+                enterScrollMode();
+            }
 
             $(".input-disp-area").each(function () {
                 $(this).click(function () {
@@ -175,6 +219,10 @@
                     var inputTxts = inputTxt.split(",");
 
                     setInputs(inputTxts);
+
+                    // Scroll to the bottom.
+                    var objDiv = document.getElementById("work-space");
+                    objDiv.scrollTop = objDiv.scrollHeight;
                 });
             });
 
@@ -185,10 +233,27 @@
             $(".workCollapseBtn").each(function () {
                 $(this).click(function () {
                     $(this).parent().next().toggle();
-                    evt.stopPropagation();
+
+
+                    var workSpaceEle = $("#work-space");
+                    if (workSpaceEle[0].scrollHeight - workSpaceEle.scrollTop() == workSpaceEle.outerHeight())
+                        exitScrollMode();
+                    else {
+                        enterScrollMode();
+                    }
                 });
             });
 
+            $(".sub-work-list-toggle-btn").each(function () {
+               $(this).click(function () {
+                    var htmlVal = $(this).val();
+                    if (htmlVal.indexOf('+') != -1)
+                        $(this).val('- Hide Work Steps');
+                    else
+                        $(this).val("+ Show Work Steps");
+                    $(this).next().toggle();
+                });
+            });
 
             $(".link-btn").click(function () {
                 // Get the input.
@@ -199,7 +264,7 @@
                 // Create the link to the input.
                 var linkStr = "mathologica.com/Default?Index=0&InputDisp=" + htmlEncode(inputTxt);
                 $(this).parent().parent().parent().parent().prepend(createPopUp(
-                    "<p>Copy and past the link to share this problem.</p>" + 
+                    "<p>Copy and past the link to share this problem.</p>" +
                     "<input class='copy-past-link' type='text' value='" + linkStr + "' />"
                         ));
                 showPopUp();
@@ -216,7 +281,6 @@
                     var isAuthen = '<% = Request.IsAuthenticated  %>';
                     if (isAuthen == "True") {
                         var currentDate = new Date();
-
 
                         $("#<%= hiddenSavedProblemTxtBox.ClientID %>").val(htmlEncode(inputTxt));
                         var currentDate = currentDate.today();
@@ -248,12 +312,11 @@
                 });
             });
 
-
         }
 
         function onClearBtnClicked() {
             $("#work-list-disp").html("");
-            $("#to-bottom-btn").hide();
+            exitScrollMode();
         }
 
         $(document).ready(function () {
@@ -302,27 +365,32 @@
                 return false;
             });
 
-            $(".pob-problem").click(function (e) {
-                // Paste into the input.
-                var inputDisp = $(this).children("span").html();
-                var inputDispEncoded = encodeURIComponent(inputDisp);
-                window.location.replace("/Default?Index=0&InputDisp=" + inputDispEncoded);
-            });
-
             $("#work-space").on('scroll', function () {
                 var elem = $(this);
                 if (elem[0].scrollHeight - elem.scrollTop() == elem.outerHeight())
-                    $("#to-bottom-btn").hide();
+                    exitScrollMode();
                 else {
-                    $("#to-bottom-btn").show();
+                    enterScrollMode();
                 }
             });
 
             $("#to-bottom-btn").click(function (e) {
                 var objDiv = document.getElementById("work-space");
+                exitScrollMode();
                 objDiv.scrollTop = objDiv.scrollHeight;
             });
 
+            $("#example-nav-forward").click(function (e) {
+                $("#<% = exampleNavForwardBtn.ClientID %>").click();
+                e.stopPropagation();
+            });
+
+            $("#example-nav-backward").click(function (e) {
+                $("#<% = exampleNavBackBtn.ClientID %>").click();
+                e.stopPropagation();
+            });
+
+            addPobBtnCallback();
 
             prevWidth = $(window).width();
 
@@ -351,7 +419,6 @@
 
                 $("#input-list").html(html);
 
-
                 for (var i = 0; i < splitInput.length; ++i) {
                     $("#mathInputSpan" + i).mathquill('editable');
                     $("#mathInputSpan" + i).mathquill('latex', splitInput[i]);
@@ -370,6 +437,17 @@
                 inputBoxIds.push(0);
             }
 
+            $(".more-popup").mouseleave(function () {
+                setTimeout(function () {
+                    // Don't even think about using 'this' here.
+                    $(".more-popup").hide();
+                    $("#expand-more-popup").html("+");
+                }, 2000);
+
+            });
+            $(".more-popup").mouseenter(function () {
+                $(this).stop(true, true).show();
+            });
 
             $("#expand-more-popup").click(function (e) {
                 var html = $(this).html();
@@ -380,9 +458,7 @@
                 $(".more-popup").toggle();
             });
         });
-
     </script>
-
 </asp:Content>
 
 <asp:Content runat="server" ID="BodyContent" ContentPlaceHolderID="MainContent">
@@ -406,18 +482,15 @@
                         </div>
                     </a>
                     <div id="work-list-disp">
-
                     </div>
-                    <asp:UpdatePanel ID="resultUpdatePanel" runat="server" >
+                    <asp:UpdatePanel ID="resultUpdatePanel" runat="server">
                         <ContentTemplate>
-                                <div id="calcOutput" class="hidden" runat="server">
-
-                                </div>
+                            <div id="calcOutput" class="hidden" runat="server">
+                            </div>
                         </ContentTemplate>
                     </asp:UpdatePanel>
                     <div id="input-area">
                         <ul id="input-list">
-
                         </ul>
                     </div>
                 </div>
@@ -432,9 +505,7 @@
             <div class="parse-errors" id="parse-errors-id" style="display: none;">
                 <asp:UpdatePanel runat="server">
                     <ContentTemplate>
-                        <span id="parseErrorSpan" class="parse-error-txt" runat="server">
-
-                        </span>
+                        <span id="parseErrorSpan" class="parse-error-txt" runat="server"></span>
                     </ContentTemplate>
                 </asp:UpdatePanel>
             </div>
@@ -467,10 +538,10 @@
                 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
                 <!-- Lower Ad -->
                 <ins class="adsbygoogle"
-                     style="display:block"
-                     data-ad-client="ca-pub-3516117000150402"
-                     data-ad-slot="5259228574"
-                     data-ad-format="auto"></ins>
+                    style="display: block"
+                    data-ad-client="ca-pub-3516117000150402"
+                    data-ad-slot="5259228574"
+                    data-ad-format="auto"></ins>
                 <script>
                     (adsbygoogle = window.adsbygoogle || []).push({});
                 </script>
@@ -506,7 +577,7 @@
                                     <ItemTemplate>
                                         <li>
                                             <span>`<%# Eval("FuncName") %> = <%# Eval("FuncDef") %>`</span>
-                                            <asp:Button CssClass="del-span" runat="server" ID="SelectCategoryButton" CommandName="Delete" 
+                                            <asp:Button CssClass="del-span" runat="server" ID="SelectCategoryButton" CommandName="Delete"
                                                 CommandArgument='<%# Eval("FuncName") %>' Text="Delete" />
                                         </li>
                                     </ItemTemplate>
@@ -517,21 +588,25 @@
                             </ContentTemplate>
                         </asp:UpdatePanel>
                     </div>
-
                 </div>
             </div>
             <div id="expand-more-popup" class="noselect">+</div>
 
             <div id="pod-space">
                 <div style="margin-left: 10px;">
-                    <p class="pob-title">Problem of the Day:</p>
-                    <div style="text-align: center;" class="pob-problem">
-                        <p class="pob-sub-title">Volume Integral</p>
-                        <span class="hidden">\int\int\int_V \frac{\cos(xy)x^2}{\ln(z)} dV</span>
-                        <div>
-                            <span class="mathquill-rendered-math noselect pointable">`\int\int\int_V \frac{\cos(xy)x^2}{\ln(z)} dV`</span>
-                        </div>
-                    </div>
+                    <input type="button" id="example-nav-backward" style="float: left;" class="example-nav-btn" value="&#x25C0" />
+                    <p class="pob-title"></p>
+                    <input type="button" id="example-nav-forward" style="float: right;" class="example-nav-btn" value="&#x25B6" />
+                    <asp:UpdatePanel runat="server" UpdateMode="Conditional">
+                        <ContentTemplate>
+                            <asp:Timer ID="updateExampleTimer" runat="server" Interval="10000" OnTick="updateExampleTimer_Tick"></asp:Timer>
+                            <div style="text-align: center;" class="pob-problem">
+                                <div id="exampleOutputContent" runat="server"></div>
+                            </div>
+                            <asp:Button runat="server" ID="exampleNavBackBtn" CssClass="hidden" OnClick="exampleNavBackBtn_Click" />
+                            <asp:Button runat="server" ID="exampleNavForwardBtn" CssClass="hidden" OnClick="exampleNavForwardBtn_Click" />
+                        </ContentTemplate>
+                    </asp:UpdatePanel>
                 </div>
             </div>
 

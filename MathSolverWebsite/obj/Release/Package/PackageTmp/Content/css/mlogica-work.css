@@ -6,8 +6,16 @@
     border: 1px solid #adadad;
     text-align: center;
     line-height: 60px;
-    right: 31%;
+    right: 32%;
     display: none;
+}
+
+.small-popup {
+    background-color: #ecf0f1;
+    position: absolute;
+    bottom: 70px;
+    right: 8px;
+    padding: 10px;
 }
 
     #to-bottom-btn:hover {
@@ -26,7 +34,7 @@
 }
 
 .workCollapseBtn {
-    opacity: 0.0;
+    opacity: 1.0;
 
 }
 
@@ -35,17 +43,22 @@
 }
 
 #work-space {
-    height: -moz-calc(100% - 284px);
-    height: -webkit-calc(100% - 284px);
-    height: -o-calc(100% - 284px);
-    height: calc(100% - 284px);
+    height: -moz-calc(100% - 264px);
+    height: -webkit-calc(100% - 264px);
+    height: -o-calc(100% - 264px);
+    height: calc(100% - 264px);
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .pob-sub-title {
     margin-top: 0px;
     margin-bottom: 20px;
 }
+
+    .pob-sub-title:hover {
+        cursor: pointer;
+    }
 
 .toolbar-btn {
     width: 34px;
@@ -61,12 +74,10 @@
     }
 
 .toolbar-btn-dropdown {
-    position: absolute;
+    position: relative;
     z-index: 3000;
-    height: 40px;
-    line-height: 40px;
-    margin-left: 16px;
-    margin-top: -40px;
+    display: block;
+    padding-top: 8px;
 }
 
 .include-padding {
@@ -101,7 +112,7 @@
 
 .more-options-area {
     margin-left: 3%;
-    opacity: 0.0;
+    opacity: 1.0;
 }
 
 .prev-output:hover .more-options-area {
@@ -204,4 +215,26 @@
 
 #graphbox_navigationbar span  {
     font-size: 26px;
+}
+
+.sub-work-list-toggle-btn {
+    border: 0px;
+    margin-bottom: 5px;
+    padding: 0px 13px;
+    font-size: 18px;
+}
+
+    .sub-work-list-toggle-btn:hover {
+        cursor: pointer;
+    }
+
+.sub-work-list {
+
+}
+
+.example-nav-btn {
+    margin-top: 20px;
+    margin-right: 20px;
+    padding: 2px 10px;
+    font-size: 23px;
 }

@@ -9,6 +9,11 @@ body {
     height: 60px; /* Height of the footer */
     background: #ecf0f1;
     position: inherit;
+   box-sizing: content-box;
+}
+
+.header {
+   box-sizing: content-box;
 }
 
 .body {

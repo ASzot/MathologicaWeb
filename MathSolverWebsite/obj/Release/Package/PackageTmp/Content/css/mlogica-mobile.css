@@ -13,7 +13,22 @@
     }
 
     .header {
-        height: 65px !important;
+        height: 55px !important;
+    }
+
+    .heading-1 {
+        font-size: 40px;
+    }
+
+    .ws-container {
+        margin-bottom: 60px;
+    }
+
+    #to-bottom-btn {
+        width: 40px !important;
+        height: 40px !important;
+        line-height: 40px !important;
+        right: 0% !important;
     }
 
     .navbar {
@@ -30,7 +45,7 @@
 
     .click-area {
         width: 200px;
-        height: 60px;
+        height: 50px;
     }
 
     #left-paneling {
@@ -42,7 +57,7 @@
         height: 100px !important;
         width: 100% !important;
         position: fixed !important;
-        top: 69px !important;
+        top: 59px !important;
         border-bottom: 1px solid #adadad;
     }
 
@@ -74,68 +89,125 @@
         padding: 0px !important;
     }
 
-    .toolbar-icon {
-        font-size: 28px !important;
+    .subject-bar-btn-clicked {
+        padding: 0px !important;
     }
 
-    .toolbar-icon-large {
-        font-size: 18px !important;
+    .toolbar-icon {
+        font-size: 20px !important;
+    }
+
+    .extra-space {
+        margin-left: -10px !important;
+    }
+
+    .toolbar-icon-larger {
+        font-size: 16px !important;
+    }
+
+    .toolbar-btn {
+        padding-top: 0px !important;
+        padding-bottom: 0px !important;
     }
 
     #toolbar-btn-space {
-        white-space: nowrap;
-        overflow-x: auto;
+        white-space: nowrap !important;
+        overflow-x: auto !important;
+        min-height: 60px;
     }
 
     .ad-space {
-        display: none;
+        display: none !important;
     }
 
     .footer {
-        height: 10px;
+        height: 10px !important;
+        position: fixed !important;
     }
 
     .nav-login-area {
-        display: block;
+        display: block !important;
     }
 
     .branding-images {
-        display: none;
+        display: none !important;
     }
 
     #eval-space {
-        margin-bottom: 30px;
-        width: 100%;
+        margin-bottom: 30px !important;
+        width: 100% !important;
     }
 
     .centered-col {
-        display: block;
-        width: 100%;
+        display: block !important;
+        width: 100% !important;
     }
 
     .footer-links {
-        margin-right: 0px;
-        margin-top: -3px;
-        font-size: 13px;
+        margin-right: 0px !important;
+        margin-top: -3px !important;
+        font-size: 13px !important;
     }
 
+    .body {
+        height: -moz-calc(100% - 85px) !important;
+        height: -webkit-calc(100% - 85px) !important;
+        height: -o-calc(100% - 85px) !important;
+        height: calc(100% - 85px) !important;
+        overflow-y: hidden;
+        overflow-x: hidden;
+    }
+
+    .register-info-list li input[type='text'] {
+        width: 280px !important;
+    }
+    .register-info-list li input[type='password'] {
+        width: 280px !important;
+    }
+
+    .to-register {
+        padding: 0px !important;
+        margin-left: 0px !important;
+    }
+
+
+
     .copy-right {
-        margin-top: 2px;
-        display: inline;
-        font-size: 10px;
-        float: right;
-        padding-right: 10px;
+        margin-top: 2px !important;
+        font-size: 10px !important;
+        float: right !important;
+        padding-right: 10px !important;
+        position: absolute;
+        right: 15px;
+        top: 7px;
+    }
+
+    .size-crit {
+        padding: 0px !important;
+    }
+
+    fieldset {
+        padding: 6px;
+    }
+
+    fieldset ol {
+        padding: 0px;
     }
 
     .solve-btn {
     }
 
     #work-space {
-        height: -moz-calc(100% - 260px);
-        height: -webkit-calc(100% - 260px);
-        height: -o-calc(100% - 260px);
-        height: calc(100% - 260px);
-        margin-top: 100px;
+        height: -moz-calc(100% - 165px) !important;
+        height: -webkit-calc(100% - 165px) !important;
+        height: -o-calc(100% - 165px) !important;
+        height: calc(100% - 165px) !important;
+        margin-top: 100px !important;
+        width: 105%;
+    }
+
+    #input-list {
+        margin: 0px;
     }
 
     .input-txt-box-area {
@@ -147,38 +219,57 @@
     }
 
     .text-notice {
-        position: relative;
-        top: 5px;
+        position: relative !important;
+        top: 5px !important;
     }
 
     .gen-drop-down {
-        font-size: 12pt;
+        font-size: 12pt !important;
     }
 
     .input-disp-area {
-        font-size: 16px;
+        font-size: 16px !important;
     }
 
     .solutionData {
-        font-size: 17px;
+        font-size: 17px !important;
     }
 
     .workListItem {
-        font-size: 14px;
+        font-size: 14px !important;
     }
 
     .workDescText {
-        font-size: 16px; 
+        font-size: 16px !important; 
+        padding-right: 20px;
     }
 
     .workCollapseBtn {
-        width: 200px;
-        font-size: 22px;
+        width: 200px !important;
+        font-size: 22px !important;
+        opacity: 1.0 !important;
     }
 
     .graph-disp {
-        min-width: 240px;
-        width: 80%;
-        height: 250px;
+        min-width: 240px !important;
+        width: 80% !important;
+        height: 250px !important;
     }
+
+    #title-block {
+       margin-top: 7px;
+    }
+
+    .parse-errors {
+        width: 81%;
+    }
+
+    
+    .hlep-larger {
+        padding-top: 20px !important;
+    }
+
+        .hlep-larger div div a {
+            font-size: 45px !important;
+        } 
 }

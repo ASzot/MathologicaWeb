@@ -233,9 +233,9 @@
     <Content Include="Images\Branding\en_app_rgb_wo_60.png" />
     <Content Include="Images\Branding\facebook.png" />
     <Content Include="Images\LinkIcon.png" />
-    <Content Include="Images\loading.gif" />
     <Content Include="Images\Branding\mail.png" />
     <Content Include="Images\Branding\twitter.png" />
+    <Content Include="Images\loading.gif" />
     <Content Include="Images\MathologicaLogo.png" />
     <Content Include="Images\SaveIcon.png" />
     <Content Include="JSXGraph\jsxgraph.css" />
@@ -249,6 +249,7 @@
     <Content Include="mathquill\mathquill.css" />
     <Content Include="mathquill\mathquill.js" />
     <Content Include="mathquill\mathquill.min.js" />
+    <Content Include="multiline.aspx" />
     <Content Include="packages.config" />
     <Content Include="mathquill\font\stixgeneral-bundle\stixgeneral-webfont.eot" />
     <Content Include="mathquill\font\stixgeneral-bundle\stixgeneral-webfont.ttf" />
@@ -565,6 +566,13 @@
     <Compile Include="MathSolverLibrary\TermType\SinusodalTermType.cs" />
     <Compile Include="MathSolverLibrary\TermType\SolveTermType.cs" />
     <Compile Include="MathSolverLibrary\TermType\TermType.cs" />
+    <Compile Include="multiline.aspx.cs">
+      <DependentUpon>multiline.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="multiline.aspx.designer.cs">
+      <DependentUpon>multiline.aspx</DependentUpon>
+    </Compile>
     <Compile Include="practice.aspx.cs">
       <DependentUpon>practice.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

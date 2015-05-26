@@ -183,6 +183,7 @@ legend {
     color: #3498db;
     position: relative;
     display: inline-block;
+    top: -8px;
 }
 
 #input-area {
@@ -232,7 +233,8 @@ h1 {
 .header {
    background:#ecf0f1;
    padding:10px;
-   height: 70px;
+   padding-top: 5px;
+   height: 50px;
 }
 .body {
    height: 100%;
@@ -275,7 +277,7 @@ h1 {
 .pob-problem div {
     display: inline-block;
     transition: all 0.5s ease;
-    font-size: 22px;
+    font-size: 18px;
 }
 
     .pob-problem:hover div {
@@ -366,7 +368,7 @@ h1 {
 
 .subject-bar-btn {
     display: inline-block;
-    padding: 12px;
+    padding: 4px;
     padding-bottom: 5px;
     margin-bottom: 7px;
     margin-top: 7px;
@@ -383,11 +385,10 @@ h1 {
 
 .subject-bar-btn-clicked {
     display: inline-block;
-    padding: 12px;
+    padding: 4px;
     padding-bottom: 5px;
     margin-bottom: 7px;
     margin-top: 7px;
-    font-size: 30px;
     border-bottom: 2px solid #1abc9c;
 }
 
@@ -433,13 +434,13 @@ h1 {
     background-color: #ffffff;
     right: 0px;
     /* Firefox */
-    height: -moz-calc(100% - 350px);
+    height: -moz-calc(100% - 330px);
     /* WebKit */
-    height: -webkit-calc(100% - 350px);
+    height: -webkit-calc(100% - 330px);
     /* Opera */
-    height: -o-calc(100% - 350px);
+    height: -o-calc(100% - 330px);
     /* Standard */
-    height: calc(100% - 350px);
+    height: calc(100% - 330px);
     overflow-y: auto;
 }
 
@@ -475,7 +476,7 @@ h1 {
     position: fixed;
     bottom: 0px;
     margin-bottom: 40px;
-    background-color: #e2e2e2;
+    background-color: #F5F5F5;
     text-align: center;
     padding-top: 5px;
 }
@@ -494,6 +495,10 @@ h1 {
     .gen-btn:hover {
         cursor: pointer;
         opacity: 0.2;
+    }
+
+    .gen-btn:focus {
+        outline: none;
     }
 
 .tool-bar-btn-space {
@@ -589,7 +594,7 @@ h1 {
 #title-block {
     float: left;
     margin-left: 5%;
-    margin-top: 10px;
+    margin-top: 0px;
 }
 
 .mathlogo {
@@ -612,7 +617,7 @@ h1 {
 }
 
 .click-area {
-    height: 70px;
+    height: 50px;
     width: 300px;
     position: absolute;
     z-index: 1001;
@@ -647,8 +652,9 @@ h1 {
 }
 
 .w-nav-menu {
-  position: relative;
-  float: right;
+    position: relative;
+    float: right;
+    margin-top: -7px;
 }
 
 .w-nav {
@@ -1094,11 +1100,16 @@ img {
 
 .workDescText {
     font-size: 18px;
+    color: rgb(127, 127, 127);
 }
 
 .input-disp-txt {
    
 }
+
+    .input-disp-txt:hover {
+        cursor: pointer;
+    }
 
 .selected-cmd-txt {
 

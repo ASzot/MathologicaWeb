@@ -70,7 +70,7 @@
                 <div class="click-area">
                     <div id="title-block">
                         <a href="~" runat="server"><img class="mathlogo" src="/Images/MathologicaLogo.png" width="263" alt="Mathologica" /></a>
-                        <a href="~" runat="server"><div class="moto">Computation, simplified</div></a>
+                        <%--<a href="~" runat="server"><div class="moto">Computation, simplified</div></a>--%>
                     </div>
                 </div>
                     
@@ -78,18 +78,18 @@
                     <div class="w-container noselect">
                         <nav class="w-nav-menu" role="navigation">
                             <a runat="server" class="w-nav-link nav-link" style="max-width: 940px;" href="~/">Calculator</a>
-                            <a runat="server" class="w-nav-link nav-link" style="max-width: 940px;" href="/practice.aspx">Practice</a>
-                            <a runat="server" class="w-nav-link nav-link" style="max-width: 940px;" href="~/helptopics.aspx">Help</a>
+                            <a runat="server" class="w-nav-link nav-link" style="max-width: 940px;" href="/practice">Practice</a>
+                            <a runat="server" class="w-nav-link nav-link" style="max-width: 940px;" href="~/helptopics">Help</a>
                             <div class="nav-login-area">
                                 <asp:LoginView ID="NavLogIn" runat="server" ViewStateMode="Disabled">
                                     <AnonymousTemplate>
-                                        <a class="w-nav-link nav-link" href="account/register.aspx">Sign Up</a>
-                                        <a class="w-nav-link nav-link" href="account/login.aspx">Log In</a>
+                                        <a class="w-nav-link nav-link" href="/account/register">Sign Up</a>
+                                        <a class="w-nav-link nav-link" href="/account/login">Log In</a>
                                     </AnonymousTemplate>
                                     <LoggedInTemplate>
-                                        <a class="w-nav-link nav-link" href="account/you">You</a>
+                                        <a class="w-nav-link nav-link" href="/account/you">You</a>
                                         <asp:LoginStatus CssClass="w-nav-link nav-link logout-btn" ID="LoginStatus1" runat="server" LogoutAction="Redirect" LogoutText="Log off" LogoutPageUrl="~/" />
-                                        <a class="w-nav-link nav-link" href="account/manage.aspx">Settings</a>
+                                        <a class="w-nav-link nav-link" href="/account/manage">Settings</a>
                                     </LoggedInTemplate>
                                 </asp:LoginView>
                             </div>
@@ -110,10 +110,10 @@
             <div class="footer">
                 <div class="centered-col">
                     <div class="footer-links noselect">
-                        <a href="/terms.aspx">Terms |</a>
-                        <a href="/privacy.aspx">Privacy |</a>
-                        <a href="/about.aspx">About |</a>
-                        <a href="/apps.aspx">Apps</a>
+                        <a href="/terms">Terms |</a>
+                        <a href="/privacy">Privacy |</a>
+                        <a href="/about">About |</a>
+                        <a href="/apps">Apps</a>
                     </div>
 
                     <div class="branding-images" style="float: right;">
@@ -123,7 +123,7 @@
                         <a class="img-disp" href="https://www.facebook.com/pages/Mathologica/388128111363690">
                             <img class="fb" src="/Images/Branding/facebook.png" width="89" alt="Mathologica Facebook" />
                         </a>
-                        <a class="img-disp" href="asdf.aspx">
+                        <a class="img-disp" href="mailto:contact@mathologica.com">
                             <img class="mail" src="/Images/Branding/mail.png" width="89" alt="Mathologica Mail" />
                         </a>
                     </div>

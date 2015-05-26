@@ -427,8 +427,7 @@ $(document).ready(function () {
     else {
         setCookie('visited', true, 999);
         // This is the user's first time on this page.
-        alert("creawting");
-        $("<div class='small-popup pop'><p>Multi-line input is great. Check out <a href='#'>mathologica.com/multiline</a> for more.</p><a style='margin-top: 0px;' class='close' href='#'>Close</a></div>").insertAfter("#add-btn-id");
+        $("<div class='small-popup pop'><p>Multi-line input is great. Check out <a href='/multiline'>mathologica.com/multiline</a> for more.</p><a style='margin-top: 0px;' class='close' href='#'>Close</a></div>").insertAfter("#add-btn-id");
 
         $(".close").live('click', function () {
             $(".pop").remove();
