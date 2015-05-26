@@ -49,6 +49,8 @@ namespace MathSolverWebsite.Website_Logic
 
         public ExampleInputData GetExample(int index)
         {
+            if (_exampleTxts == null || _exampleTxts.Count == 0)
+                return new ExampleInputData("Solving Power Equations", new TopicExample(0, "x^{2}=4", "x^{2}=4", null));
             return _exampleTxts[index];
         }
 

@@ -625,10 +625,12 @@
     </Compile>
     <Compile Include="Website_Logic\DataMgr.cs" />
     <Compile Include="Website_Logic\ExampleInputMgr.cs" />
+    <Compile Include="Website_Logic\ExampleMgr.cs" />
     <Compile Include="Website_Logic\HtmlHelper.cs" />
     <Compile Include="Website_Logic\SqlHelper.cs" />
     <Compile Include="Website_Logic\TopicData.cs" />
-    <Compile Include="Website_Logic\TopicMgr.cs" />
+    <Compile Include="Website_Logic\TopicDatas.cs" />
+    <Compile Include="Website_Logic\TopicExample.cs" />
     <Compile Include="Website_Logic\TopicPath.cs" />
   </ItemGroup>
   <ItemGroup>

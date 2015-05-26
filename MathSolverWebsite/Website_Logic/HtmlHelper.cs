@@ -287,6 +287,8 @@ namespace MathSolverWebsite.Website_Logic
             foreach (TopicPath topicData in topicDatas)
             {
                 string[] branch = topicData.Path.Split('/');
+                if (currentBranch >= branch.Length)
+                    continue;
                 string currentBranchStr = branch[currentBranch];
                 if (!topicDataTree.ContainsKey(currentBranchStr))
                     topicDataTree.Add(currentBranchStr, new List<TopicPath>());

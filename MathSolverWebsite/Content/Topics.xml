@@ -25,7 +25,9 @@
     <exampleInput>
       <input>\frac{22}{11}</input>
     </exampleInput>
-    <exampleInput>-3*5</exampleInput>
+    <exampleInput>
+      <input>-3*5</input>
+    </exampleInput>
   </topic>
   <topic>
     <topicName>Checking for Equality (Basic)</topicName>
@@ -1116,7 +1118,7 @@
   </topic>
   <topic>
     <topicName>Reciprocal Trig Functions (Degrees)</topicName>
-    <topicPath>Trigonometry/TrigFunctions/Reciprocal Trig Functions</topicPath>
+    <topicPath>Trigonometry/Trig Functions/Reciprocal Trig Functions</topicPath>
     <topicDesc>Evaluate reciprocal trigonometric functions in degrees.</topicDesc>
     <info>
       
@@ -2058,7 +2060,8 @@
       <input>det(\vectora{3, 8}{4, 6})</input>
     </exampleInput>
     <exampleInput>
-      <inputDisp>C=\vectorb{6, 1, 1}{4, -2, 5}{2, 8, 7}; \text{det}(C)</inputDisp>
+      <input>C=\vectorb{6, 1, 1}{4, -2, 5}{2, 8, 7}; det(C)</input>
+      <inputDisp>C=((6, 1, 1),(4, -2, 5),(2, 8, 7)); \text{det}(C)</inputDisp>
     </exampleInput>
   </topic>
   <topic>

@@ -28,7 +28,7 @@
         <div class="w-col w-col-4 link-practice">
           <div class="hlep">
             <div>
-              <div><a class="wordlink-help" href="topics?tn=Trig">Trig</a>
+              <div><a class="wordlink-help" href="topics?tn=Trigonometry">Trig</a>
               </div>
             </div>
           </div>
@@ -36,7 +36,7 @@
         <div class="w-col w-col-4 link-practice">
           <div class="hlep">
             <div>
-              <div><a class="wordlink-help" href="topics?tn=Pre+Calc">Pre-Calc</a>
+              <div><a class="wordlink-help" href="topics?tn=Pre-Calc">Pre-Calc</a>
               </div>
             </div>
           </div>
@@ -46,15 +46,7 @@
         <div class="w-col w-col-4 link-practice">
           <div class="hlep">
             <div>
-              <div><a class="wordlink-help" href="topics?tn=Lin+Alg">Lin Alg</a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="w-col w-col-4 link-practice">
-          <div class="hlep">
-            <div>
-              <div><a class="wordlink-help" href="topics?tn=Prob">Prob</a>
+              <div><a class="wordlink-help" href="topics?tn=Linear+Algebra">Lin Alg</a>
               </div>
             </div>
           </div>
@@ -63,6 +55,14 @@
           <div class="hlep">
             <div>
               <div><a class="wordlink-help" href="topics?tn=Calculus">Calculus</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="w-col w-col-4 link-practice">
+          <div class="hlep" style="padding-top: 60px;">
+            <div>
+              <div><a class="wordlink-help" href="topics?tn=Advanced+Calculus">Adv Calculus</a>
               </div>
             </div>
           </div>
