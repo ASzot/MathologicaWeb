@@ -472,8 +472,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
 
                 if (tolken.Data1 == LexemeType.Summation && i < orderedTolkensList.Count - 1 && orderedTolkensList[i + 1].Data2 == "sum")
                     orderedTolkensList.RemoveAt(i + 1);
-                else if (tolken.Data1 == LexemeType.Limit && i < orderedTolkensList.Count - 1 && orderedTolkensList[i + 1].Data2 == "inf")
-                    orderedTolkensList.RemoveAt(i + 1);
                 else if (tolken.Data1 == LexemeType.Derivative && i < orderedTolkensList.Count - 1 && orderedTolkensList[i + 1].Data1 == LexemeType.Differential && 
                     tolken.Data2.Contains(orderedTolkensList[i + 1].Data2))
                 {
@@ -1072,6 +1070,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
             str = str.Replace("\\vec(k)", "[0,0,1]");
 
             str = str.Replace("\\", "");
+            str = str.Replace(" ", "");
             str = str.Replace("->", "to");
 
             str = str.Replace("sin^(-1)", "asin");
@@ -2268,7 +2267,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
 
                 if (term == null)
                     return null;
-                ExComp addEx = term.WeakMakeWorkable(ref pParseErrors, ref p_EvalData, true);
+                ExComp addEx = term.WeakMakeWorkable(ref pParseErrors, ref p_EvalData);
                 if (addEx == null)
                     return null;
                 if (addEx is AlgebraTerm)
@@ -2662,8 +2661,17 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
             if (limTo == null)
                 return null;
 
-            limTo.ApplyOrderOfOperations();
-            limTo = limTo.MakeWorkable().ToAlgTerm();
+            ExComp tmpLimTo = limTo.WeakMakeWorkable(ref pParseErrors, ref p_EvalData);
+            if (tmpLimTo == null)
+                return null;
+            if (tmpLimTo is AlgebraTerm)
+            {
+                limTo = tmpLimTo as AlgebraTerm;
+                limTo.ApplyOrderOfOperations();
+                limTo = limTo.MakeWorkable().ToAlgTerm();
+            }
+            else 
+                limTo = tmpLimTo.ToAlgTerm();
 
             currentIndex = endIndex;
 

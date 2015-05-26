@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="practice.aspx.cs" Inherits="MathSolverWebsite.PracticePage" %>
+﻿<%@ Page Title="Practice" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="practice.aspx.cs" Inherits="MathSolverWebsite.PracticePage" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="FeaturedContent" runat="server">
@@ -42,19 +42,19 @@
           </div>
         </div>
       </div>
+        <div class="w-col w-col-4 link-practice">
+          <div class="hlep">
+            <div>
+              <div><a class="wordlink-help" href="topics?tn=Calculus">Calculus</a>
+              </div>
+            </div>
+          </div>
+        </div>
       <div class="w-row">
         <div class="w-col w-col-4 link-practice">
           <div class="hlep">
             <div>
               <div><a class="wordlink-help" href="topics?tn=Linear+Algebra">Lin Alg</a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="w-col w-col-4 link-practice">
-          <div class="hlep">
-            <div>
-              <div><a class="wordlink-help" href="topics?tn=Calculus">Calculus</a>
               </div>
             </div>
           </div>

@@ -531,13 +531,13 @@
       When solving linear inequalities a solution domain rather than a single solution is obtained.
     </info>
     <exampleInput>
-      <input>3x-2&lt;4</input>
+      <input>3x-2 \lt 4</input>
     </exampleInput>
     <exampleInput>
-      <input>-9x-3&gt;8</input>
+      <input>-9x-3 \gt 8</input>
     </exampleInput>
     <exampleInput>
-      <input>\frac{2}{3}x-4&gt;5x-2</input>
+      <input>\frac{2}{3}x-4 \gt 5x-2</input>
     </exampleInput>
   </topic>
   <topic>
@@ -548,13 +548,13 @@
       Solving quadratic inequalities produces a solution domain rather than a single solution.
     </info>
     <exampleInput>
-      <input>2(x^2-2x)&gt;5</input>
+      <input>2(x^2-2x) \gt 5</input>
     </exampleInput>
     <exampleInput>
-      <input>5x^2+6x+1&lt;=0</input>
+      <input>5x^2+6x+1 \lt =0</input>
     </exampleInput>
     <exampleInput>
-      <input>x^2-x-3&gt;=0</input>
+      <input>x^2-x-3 \gt =0</input>
     </exampleInput>
   </topic>
   <topic>
@@ -581,13 +581,13 @@
       When solving compound inequalities each case must be solved for separately.
     </info>
     <exampleInput>
-      <input>4&lt;(x^2-1)&lt;9</input>
+      <input>4 \lt (x^2-1) \lt 9</input>
     </exampleInput>
     <exampleInput>
-      <input>-2&lt;\frac{6-2x}{3}&lt;4</input>
+      <input>-2 \lt \frac{6-2x}{3} \lt 4</input>
     </exampleInput>
     <exampleInput>
-      <input>0&lt;\ln(x)&lt;1</input>
+      <input>0 \lt \ln(x) \lt 1</input>
     </exampleInput>
   </topic>
   <topic>
@@ -757,7 +757,7 @@
       <input>(3x^2-9x+5)(2x^2+4x-7)</input>
     </exampleInput>
     <exampleInput>
-      <input></input>
+      <input>(4x^4+3x^3+2x+1)(x^2+x+2)</input>
     </exampleInput>
   </topic>
   <topic>
@@ -802,13 +802,13 @@
       
     </info>
     <exampleInput>
-      <input>\log_{5}{625}</input>
+      <input>\log_{5}(625)</input>
     </exampleInput>
     <exampleInput>
-      <input>log_{6}{36}</input>
+      <input>\log_{6}(36)</input>
     </exampleInput>
     <exampleInput>
-      <input>ln(e^3)</input>
+      <input>\ln(e^3)</input>
     </exampleInput>
   </topic>
   <topic>
@@ -1055,13 +1055,16 @@
       
     </info>
     <exampleInput>
+      <input>f(x)=3x-2</input>
+      <inputIndex>1</inputIndex>
+    </exampleInput>
+    <exampleInput>
       <input>f(x)=\sqrt{2x-3}</input>
+      <inputIndex>1</inputIndex>
     </exampleInput>
     <exampleInput>
-      <input></input>
-    </exampleInput>
-    <exampleInput>
-      <input></input>
+      <input>g(x)=x^2-4</input>
+      <inputIndex>1</inputIndex>
     </exampleInput>
   </topic>
   <topic>
@@ -1216,15 +1219,18 @@
       
     </info>
     <exampleInput>
-      <input>\arccos(\frac{\sqrt{2}}{2}))</input>
+      <inputDisp>\text{arccos}(\frac{\sqrt{2}}{2}))</inputDisp>
+      <input>arccos(\frac{\sqrt{2}}{2}))</input>
       <inputIndex>1</inputIndex>
     </exampleInput>
     <exampleInput>
-      <input>\arcsin(\frac{-1}{2})</input>
+      <inputDisp>\text{arcsin}(\frac{-1}{2})</inputDisp>
+      <input>arcsin(\frac{-1}{2})</input>
       <inputIndex>1</inputIndex>
     </exampleInput>
     <exampleInput>
-      <input>\arcsec(\frac{2\sqrt{3}}{3})</input>
+      <inputDisp>\text{arcsec}(\frac{2\sqrt{3}}{3})</inputDisp>
+      <input>arcsec(\frac{2\sqrt{3}}{3})</input>
       <inputIndex>1</inputIndex>
     </exampleInput>
   </topic>
@@ -1289,7 +1295,7 @@
       
     </info>
     <exampleInput>
-      <input>5 C 2</input>
+      <input>5 \text{C} 2</input>
     </exampleInput>
     <exampleInput>
       <input>\binom{4}{1}</input>
@@ -1306,13 +1312,13 @@
       
     </info>
     <exampleInput>
-      <input>5 P 2</input>
+      <input>5 \text{P} 2</input>
     </exampleInput>
     <exampleInput>
-      <input>4 P 1</input>
+      <input>4 \text{P} 1</input>
     </exampleInput>
     <exampleInput>
-      <input>3 P 2</input>
+      <input>3 \text{P} 2</input>
     </exampleInput>
   </topic>
   <topic>
@@ -1445,13 +1451,13 @@
       
     </info>
     <exampleInput>
-      <input>\lim_{x \to \infty}(\frac{2x^4-x^2+8x}{-5x^4+7})</input>
+      <input>\lim_{x\to \infty}(\frac{2x^4-x^2+8x}{-5x^4+7})</input>
     </exampleInput>
     <exampleInput>
-      <input>\lim_{x \to -\infty}(\frac{4x^2+x^6}{1-5x^3}</input>
+      <input>\lim_{x\to -\infty}(\frac{4x^2+x^6}{1-5x^3})</input>
     </exampleInput>
     <exampleInput>
-      <input>\lim_{x \to \infty}(\frac{x^2-5x-9}{2x^4+3x^3})</input>
+      <input>\lim_{x\to \infty}(\frac{x^2-5x-9}{2x^4+3x^3})</input>
     </exampleInput>
   </topic>
   <topic>
@@ -1785,7 +1791,7 @@
       <input>F(x)=\int_{0}^{x} (t^2) dt; F(4)</input>
     </exampleInput>
     <exampleInput>
-      <input>F(X)=\int_{x}^{3} (\sin(w)) dw; F(-2)</input>
+      <input>F(x)=\int_{x}^{3} (\sin(w)) dw; F(-2)</input>
     </exampleInput>
     <exampleInput>
       <input>R(n)=\int_{3}^{n} (\ln(x)) dx; R(10)</input>
@@ -2072,8 +2078,8 @@
       
     </info>
     <exampleInput>
-      <input>((1, 2),(3, 4))^{T}</input>
-      <inputDisp>\vectora{1, 2}{3, 4}^{T}</inputDisp>
+      <inputDisp>((1, 2),(3, 4))^{T}</inputDisp>
+      <input>\vectora{1, 2}{3, 4}^{T}</input>
     </exampleInput>
     <exampleInput>
       <inputDisp>B=((4, 4), (1, 0), (-2, 1)); B^T</inputDisp>

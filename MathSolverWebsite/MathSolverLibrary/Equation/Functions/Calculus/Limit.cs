@@ -104,6 +104,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             for (int i = 0; i < reducedGps.Count; ++i)
             {
                 AlgebraTerm reducedGpTerm = reducedGps[i].ToAlgTerm();
+                _reducedInner = reducedGpTerm;
 
                 ExComp eval = infEval ? EvaluateLimGpInf(reducedGpTerm, ref pEvalData) : EvaluateLimGp(reducedGpTerm, ref pEvalData);
 

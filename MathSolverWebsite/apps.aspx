@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="apps.aspx.cs" Inherits="MathSolverWebsite.AppsPage" %>
+﻿<%@ Page Title="Apps" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="apps.aspx.cs" Inherits="MathSolverWebsite.AppsPage" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="FeaturedContent" runat="server">

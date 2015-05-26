@@ -16,13 +16,8 @@ namespace MathSolverWebsite.Website_Logic
         {
             if (input != null)
             {
-                input = input.Replace("&gt;", "\\gt");
-                input = input.Replace("&lt;", "\\lt");
-            }
-            if (inputDisp != null)
-            {
-                inputDisp = inputDisp.Replace("&gt;", "\\gt");
-                inputDisp = inputDisp.Replace("&lt;", "\\lt");
+                input = input.Replace("(", "\\left(");
+                input = input.Replace(")", "\\right)");
             }
 
             CommandIndex = commandIndex;

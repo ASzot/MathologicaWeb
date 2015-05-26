@@ -1416,14 +1416,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return finalStr;
         }
 
-        public virtual ExComp WeakMakeWorkable(ref List<string> pParseErrors, ref TermType.EvalData pEvalData, bool postWorkable = false)
+        public virtual ExComp WeakMakeWorkable(ref List<string> pParseErrors, ref TermType.EvalData pEvalData)
         {
             for (int i = 0; i < _subComps.Count; ++i)
             {
                 ExComp comp = _subComps[i];
                 if (comp is AlgebraTerm)
                 {
-                    ExComp weakWorkable = (comp as AlgebraTerm).WeakMakeWorkable(ref pParseErrors, ref pEvalData, postWorkable);
+                    ExComp weakWorkable = (comp as AlgebraTerm).WeakMakeWorkable(ref pParseErrors, ref pEvalData);
                     if (weakWorkable == null)
                         return null;
                     if (Number.IsUndef(weakWorkable))
@@ -1512,7 +1512,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 }
             }
 
-            ExComp finalEx = RemoveRedundancies(postWorkable);
+            ExComp finalEx = RemoveRedundancies(true);
             return finalEx;
         }
 
