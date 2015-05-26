@@ -1878,7 +1878,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                     return funcDef;
 
                 case LexemeType.FuncIden:
-                    FunctionDefinition callFunc = new FunctionDefinition();
 
                     List<LexemeTable> args = new List<LexemeTable>();
 
@@ -1931,13 +1930,29 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                     }
 
                     FunctionDefinition tmp = p_EvalData.FuncDefs.GetFuncDef(lexeme.Data2);
-                    if (tmp == null)
-                        return null;
+                    if (tmp == null )
+                    {
+                        if (!_definedFuncs.Contains(lexeme.Data2))
+                        {
+                            pParseErrors.Add("Function is not defined.");
+                            return null;
+                        }
+
+                        AlgebraComp[] inputArgs = new AlgebraComp[argExs.Length];
+                        for (int i = 0; i < inputArgs.Length; ++i)
+                        {
+                            inputArgs[i] = new AlgebraComp("$x");
+                        }
+                        return new FunctionDefinition(new AlgebraComp(lexeme.Data2), inputArgs, argExs);
+                    }
 
                     FunctionDefinition funcCall = (FunctionDefinition)tmp.Clone();
 
                     if (funcCall.InputArgCount != argExs.Length)
+                    {
+                        pParseErrors.Add("Invalid number of input arguments for defined function.");
                         return null;
+                    }
 
                     funcCall.CallArgs = argExs;
                     return funcCall;

@@ -139,12 +139,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
             AlgebraTerm thisDefTerm = thisDef.ToAlgTerm();
 
-            if (_callArgs.Length != _args.Length)
+            if (_callArgs.Length != def.Key._args.Length)
                 return null;
 
             for (int i = 0; i < _args.Length; ++i)
             {
-                AlgebraComp varParameter = _args[i];
+                AlgebraComp varParameter = def.Key._args[i];
                 AlgebraTerm input = _callArgs[i].ToAlgTerm();
                 // The input for some reason isn't weak workable most of the time.
                 ExComp inputEx = input.WeakMakeWorkable(ref pEvalData);

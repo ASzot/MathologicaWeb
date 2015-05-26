@@ -48,7 +48,6 @@ namespace MathSolverWebsite
                 if (topicStr.Contains("."))
                     topicStr = topicStr.Split('.')[0];
                 topicStr = HttpUtility.HtmlDecode(topicStr);
-                _topics = null;
                 if (LoadTopics())
                 {
                     var dispTopics = _topics.GetTopics(topicStr);

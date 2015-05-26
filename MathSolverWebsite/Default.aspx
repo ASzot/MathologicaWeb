@@ -138,7 +138,7 @@
                 var inputDisp = $(this).find(".hidden").html();
                 var inputDispSplit = inputDisp.split('|');
                 var inputDispEncoded = encodeURIComponent(inputDispSplit[0]);
-                window.location.replace("/Default?Index=0&InputDisp=" + inputDispEncoded + (inputDispSplit[1] == null ? "" : "&UseRad=" + inputDispSplit[1]));
+                window.location.replace("/Default?Index=" + inputDispSplit[1] + "&InputDisp=" + inputDispEncoded + ((inputDispSplit[2] == null || inputDispSplit[2] == "") ? "" : "&UseRad=" + inputDispSplit[1]));
             });
         }
 
@@ -594,9 +594,9 @@
 
             <div id="pod-space">
                 <div style="margin-left: 10px;">
-                    <input type="button" id="example-nav-forward" style="float: left;" class="example-nav-btn" value="&#x25C0" />
-                    <p class="pob-title">Example Input:</p>
-                    <input type="button" id="example-nav-backward" style="float: right;" class="example-nav-btn" value="&#x25B6" />
+                    <input type="button" id="example-nav-backward" style="float: left;" class="example-nav-btn" value="&#x25C0" />
+                    <p class="pob-title"></p>
+                    <input type="button" id="example-nav-forward" style="float: right;" class="example-nav-btn" value="&#x25B6" />
                     <asp:UpdatePanel runat="server" UpdateMode="Conditional">
                         <ContentTemplate>
                             <asp:Timer ID="updateExampleTimer" runat="server" Interval="10000" OnTick="updateExampleTimer_Tick"></asp:Timer>

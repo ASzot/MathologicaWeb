@@ -810,7 +810,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 if (_subComps[i] is FunctionDefinition)
                 {
                     FunctionDefinition funcDef = (_subComps[i] as FunctionDefinition);
-                    _subComps[i] = new AlgebraComp(funcDef.ToString());
+                    if (funcDef.CallArgs == null)
+                        _subComps[i] = new AlgebraComp(funcDef.ToString());
                 }
             }
         }

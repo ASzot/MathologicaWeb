@@ -261,7 +261,7 @@
     <topicPath>Algebra/System of Equations/3 Variables</topicPath>
     <topicDesc>Solve system of equations that have three variables.</topicDesc>
     <info>
-      Use the techniques of substitution or elimination with system of equations that contain three 
+      Use the techniques of substitution or elimination with system of equations that contain three variables.
     </info>
     <exampleInput>
       <input>x+2y-z=4; 2x+y+z=-2; x+2y+z=2</input>
@@ -2044,7 +2044,7 @@
       <input>B=\vectorb{4, 4}{1, 0}{-2, 1}; F=\vectora{0, 3}{0, 1}; BF</input>
     </exampleInput>
     <exampleInput>
-      <inputDisp>((1, 2, 3),(4, 5, 6),(7, 8, 9))((2, 0, 0),(0, 2, 0),)0, 0, 2))</inputDisp>
+      <inputDisp>((1, 2, 3),(4, 5, 6),(7, 8, 9))((2, 0, 0),(0, 2, 0),(0, 0, 2))</inputDisp>
       <input>\vectorb{1, 2, 3}{4, 5, 6}{7, 8, 9}\vectorb{2, 0, 0}{0, 2, 0}{0, 0, 2}</input>
     </exampleInput>
   </topic>
@@ -2204,7 +2204,7 @@
       
     </info>
     <exampleInput>
-      <input>f(x,y)=xy; x(t)=\cos(t); y(t)=\sin(t); 0 \lt t \lt \frac{\pi}{2}; \oint_{C}f(x,y)ds</input>
+      <input>f(x,y)=xy; x(t)=\cos(t); y(t)=\sin(t); 0 \lt t \lt \frac{\pi}{2}; \oint_{c}f(x,y)ds</input>
     </exampleInput>
   </topic>
   <topic>
@@ -2229,7 +2229,7 @@
       
     </info>
     <exampleInput>
-      <input>f(x,y)=y\vec{i}-x\vec{j}; x(t)=\cos(t); y(t)=\sin(t); 0 \lt t \lt 2\pi; \oint_{C}f*dr</input>
+      <input>f(x,y)=y\vec{i}-x\vec{j}; x(t)=\cos(t); y(t)=\sin(t); 0 \lt t \lt 2\pi; \oint_{c}f(x,y)*dr</input>
     </exampleInput>
   </topic>
   <topic>
@@ -2240,10 +2240,10 @@
       
     </info>
     <exampleInput>
-      <input>f(x,y,z)=y; x(u,v)=u; y(u,v)=v; z(u,v)=u+v^2; 0 \lt u \lt 1; 0 \lt v \lt 2; \int\int f(x,y,z) d\sigma </input>
+      <input>f(x,y,z)=y; x(u,v)=u; y(u,v)=v; z(u,v)=u+v^2; 0 \lt u \lt 1; 0 \lt v \lt 2; \int\int_{\Sigma} f(x,y,z) d\sigma </input>
     </exampleInput>
     <exampleInput>
-      <input>f(x,y,z)=y; v(u,v)=u\vec{i}+v\vec{j}+(u+v^2)\vec{k}; 0 \lt u \lt 1; 0 \lt v \lt 2; \int\int f(x,y,z) d\sigma </input>
+      <input>f(x,y,z)=y; v(u,v)=u\vec{i}+v\vec{j}+(u+v^2)\vec{k}; 0 \lt u \lt 1; 0 \lt v \lt 2; \int\int_{\Sigma} f(x,y,z) d\sigma </input>
     </exampleInput>
   </topic>
 
