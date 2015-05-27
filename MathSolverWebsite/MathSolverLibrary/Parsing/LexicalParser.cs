@@ -2598,7 +2598,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
 
                         currentIndex = endIndex;
 
-                        inputTerm.ApplyOrderOfOperations();
+                        inputTerm = inputTerm.ApplyOrderOfOperations();
                         ExComp inputEx = inputTerm.MakeWorkable();
 
                         return Equation.Functions.Calculus.Derivative.ConstructDeriv(new AlgebraComp(funcMatch.Value), inputEx, order);
@@ -2667,7 +2667,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
             if (tmpLimTo is AlgebraTerm)
             {
                 limTo = tmpLimTo as AlgebraTerm;
-                limTo.ApplyOrderOfOperations();
+                limTo = limTo.ApplyOrderOfOperations();
                 limTo = limTo.MakeWorkable().ToAlgTerm();
             }
             else 
@@ -2946,12 +2946,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
 
             if (startVal is AlgebraTerm)
             {
-                (startVal as AlgebraTerm).ApplyOrderOfOperations();
+                startVal = (startVal as AlgebraTerm).ApplyOrderOfOperations();
                 startVal = (startVal as AlgebraTerm).MakeWorkable();
             }
             if (endVal is AlgebraTerm)
             {
-                (endVal as AlgebraTerm).ApplyOrderOfOperations();
+                endVal = (endVal as AlgebraTerm).ApplyOrderOfOperations();
                 endVal = (endVal as AlgebraTerm).MakeWorkable();
             }
 
@@ -3039,11 +3039,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
             AlgebraTerm innerTerm = LexemeTableToAlgebraTerm(integralTerm, ref pParseErrors);
             if (innerTerm == null)
                 return null;
-            ExComp innerEx = innerTerm.WeakMakeWorkable(ref pParseErrors, ref p_EvalData);
-            if (innerEx == null)
-                return null;
-            if (innerEx is AlgebraTerm)
-                innerEx = (innerEx as AlgebraTerm).RemoveRedundancies();
+            ExComp innerEx = innerTerm.RemoveRedundancies(true);
 
             if (endIndex == -1)
             {

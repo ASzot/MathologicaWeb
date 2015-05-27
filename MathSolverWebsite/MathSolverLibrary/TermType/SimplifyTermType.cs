@@ -338,7 +338,10 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             else if (command == "Divide" && _numPolyInfo != null && _denPolyInfo != null)
             {
                 ExComp divided = Equation.Operators.DivOp.AttemptPolyDiv(_numPolyInfo.Clone(), _denPolyInfo.Clone(), ref pEvalData);
-                return SolveResult.Simplified(divided);
+                if (divided != null)
+                    return SolveResult.Simplified(divided);
+                else
+                    return SolveResult.Failure();
             }
             else if (command.StartsWith("Domain of "))
             {

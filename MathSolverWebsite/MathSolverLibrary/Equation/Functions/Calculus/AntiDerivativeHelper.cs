@@ -28,7 +28,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             {
                 constOutStr = constToStr + "\\int(" +
                     (varTo.Length == 0 ? "1" : varTo.ToAlgTerm().FinalToDispStr()) + ")\\d" + dVar.ToDispString();
-                if (constToStr != "1")
+                if (constToStr.Trim() != "1")
                     pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + constOutStr + WorkMgr.EDM, "Take out the constants.");
             }
 
@@ -44,7 +44,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
                     for (int i = 0; i < gps.Count; ++i)
                     {
-                        gpsStrs[i] = "\\int" + gps[i].FinalToMathAsciiString() + "\\d" + dVar.ToDispString();
+                        gpsStrs[i] = "\\int" + gps[i].ToAlgTerm().FinalToDispStr() + "\\d" + dVar.ToDispString();
                         overallStr += gpsStrs[i];
                         if (i != gps.Count - 1)
                             overallStr += "+";
@@ -199,25 +199,28 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 }
             }
 
-            if (gp.Length == 2)
+            if (gp.Length == 1 || gp.Length == 2)
             {
                 ExComp[] den = gp.GetDenominator();
                 if (den != null && den.Length == 1)
                 {
-                    //ExComp[] num = gp.GetNumerator();
-                    //if (num.Length == 1)
-                    //{
-                    //    atmpt = AttemptPartialFractions(num[0], den[0], dVar, ref pIntInfo, ref pEvalData);
-                    //    if (atmpt != null)
-                    //        return atmpt;
-                    //}
+                    ExComp[] num = gp.GetNumerator();
+                    if (num.Length == 1)
+                    {
+                        int prePFWorkStepCount = pEvalData.WorkMgr.WorkSteps.Count;
+                        atmpt = AttemptPartialFractions(num[0], den[0], dVar, ref pIntInfo, ref pEvalData);
+                        if (atmpt != null)
+                            return atmpt;
+                        pEvalData.WorkMgr.PopStepsCount(prePFWorkStepCount);
+                    }
                 }
-                else
-                {
-                    atmpt = TrigFuncIntegration(gp[0], gp[1], dVar, ref pIntInfo, ref pEvalData);
-                    if (atmpt != null)
-                        return atmpt;
-                }
+            }
+
+            if (gp.Length == 2)
+            {
+                atmpt = TrigFuncIntegration(gp[0], gp[1], dVar, ref pIntInfo, ref pEvalData);
+                if (atmpt != null)
+                    return atmpt;
 
                 if (pIntInfo.ByPartsCount < IntegrationInfo.MAX_BY_PARTS_COUNT)
                 {
@@ -477,11 +480,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         private static ExComp AttemptPartialFractions(ExComp num, ExComp den, AlgebraComp dVar, ref IntegrationInfo pIntInfo, ref EvalData pEvalData)
         {
-            if (!(num is AlgebraTerm) || !(den is AlgebraTerm))
+            if (!(den is AlgebraTerm))
                 return null;
 
-            AlgebraTerm numTerm = num as AlgebraTerm;
-            AlgebraTerm denTerm = den as AlgebraTerm;
+            AlgebraTerm numTerm = num.ToAlgTerm();
+            AlgebraTerm denTerm = den.ToAlgTerm();
 
             PolynomialExt numPoly = new PolynomialExt();
             PolynomialExt denPoly = new PolynomialExt();
@@ -489,14 +492,24 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (!numPoly.Init(numTerm) || !denPoly.Init(denTerm))
                 return null;
 
-            if (denPoly.MaxPow < 2 || numPoly.MaxPow >= denPoly.MaxPow)
+            if (denPoly.MaxPow < 2)
                 return null;
 
-            ExComp atmpt = PartialFracs.Evaluate(numTerm, denTerm, numPoly, dVar, ref pIntInfo, ref pEvalData);
+            if (numPoly.MaxPow > denPoly.MaxPow)
+            {
+                // First do a synthetic division.
+                ExComp synthDivResult = DivOp.AttemptPolyDiv(numPoly.Clone(), denPoly.Clone(), ref pEvalData);
+                if (synthDivResult == null)
+                    return null;
+
+                return Integral.TakeAntiDeriv(synthDivResult, dVar, ref pEvalData);
+            }
+
+            ExComp atmpt = PartialFracs.Split(numTerm, denTerm, numPoly, dVar, ref pEvalData);
             if (atmpt == null)
                 return null;
 
-            return atmpt;
+            return Integral.TakeAntiDeriv(atmpt, dVar, ref pEvalData);
         }
 
         private static List<ExComp> GetPotentialU(ExComp[] group, AlgebraComp dVar)

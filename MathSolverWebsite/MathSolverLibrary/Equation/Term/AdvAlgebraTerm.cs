@@ -1161,7 +1161,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
 
         public static AlgebraTerm PythagTrigSimplify(AlgebraTerm term)
         {
-            var groups = term.GetGroupsNoOps();
+            List<ExComp[]> groups = term.GetGroupsNoOps();
 
             Func<ExComp[], List<TypePair<PowerFunction, ExComp[]>>> getTrigFuncAndCoeff = (ExComp[] gp) =>
                 {

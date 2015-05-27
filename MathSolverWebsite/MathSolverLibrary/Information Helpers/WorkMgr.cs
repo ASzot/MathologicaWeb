@@ -318,9 +318,13 @@ namespace MathSolverWebsite.MathSolverLibrary
                 PopStep();
         }
 
-        public void PopSteps(int count)
+        /// <summary>
+        /// Pop the steps from the start index to the current index.
+        /// </summary>
+        /// <param name="count"></param>
+        public void PopSteps(int startIndex)
         {
-            PopStepsCount(WorkSteps.Count - count);
+            PopStepsCount(WorkSteps.Count - startIndex);
         }
     }
 

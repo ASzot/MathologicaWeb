@@ -204,6 +204,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             CallChildren(harshEval, ref pEvalData);
 
             ExComp innerEx = InnerEx;
+            if (innerEx is AlgebraTerm)
+                innerEx = Term.AdvAlgebraTerm.PythagTrigSimplify(innerEx as AlgebraTerm);
 
             if (innerEx is ExVector && !IsDefinite)
             {
@@ -375,12 +377,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 return _dVar.ToAlgTerm();
             }
 
+            string[] intStrs = new string[gps.Count];
+
             if (gps.Count > 1)
             {
                 string overallStr = "";
                 for (int i = 0; i < gps.Count; ++i)
                 {
-                    overallStr += "\\int" + gps[i].FinalToMathAsciiString() + "\\d" + _dVar.ToDispString();
+                    intStrs[i] = "\\int" + gps[i].ToAlgTerm().FinalToDispStr() + "\\d" + _dVar.ToDispString();
+                    overallStr += intStrs[i];
                     if (i != gps.Count - 1)
                         overallStr += "+";
                 }
@@ -398,7 +403,18 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 string lowerStr = LowerLimit == null ? "" : LowerLimit.ToAlgTerm().FinalToDispStr();
                 string upperStr = UpperLimit == null ? "" : UpperLimit.ToAlgTerm().FinalToDispStr();
 
+                WorkStep last = null;
+                if (gps.Count > 1)
+                {
+                    pEvalData.WorkMgr.FromFormatted("");
+                    last = pEvalData.WorkMgr.GetLast();
+                    last.GoDown(ref pEvalData);
+                }
+
                 ExComp aderiv = AntiDerivativeHelper.TakeAntiDerivativeGp(gps[i], _dVar, ref integrationInfo, ref pEvalData);
+
+                if (gps.Count > 1)
+                    last.GoUp(ref pEvalData);
 
                 if (aderiv == null)
                 {
@@ -406,6 +422,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     _failure = true;
                     return this;
                 }
+
+                if (gps.Count > 1)
+                    last.WorkHtml = WorkMgr.STM + intStrs[i] + "=" + WorkMgr.ToDisp(aderiv) + WorkMgr.EDM;
                 adGps[i] = aderiv;
             }
 

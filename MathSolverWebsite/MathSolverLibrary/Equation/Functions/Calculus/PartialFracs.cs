@@ -3,93 +3,129 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using MathSolverWebsite.MathSolverLibrary.Equation.Term;
+using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
 using MathSolverWebsite.MathSolverLibrary.Equation.Structural.Polynomial;
+
+using LexemeTable = System.Collections.Generic.List<
+MathSolverWebsite.MathSolverLibrary.TypePair<MathSolverWebsite.MathSolverLibrary.Parsing.LexemeType, string>>;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 {
     class PartialFracs
     {
-        public static ExComp Evaluate(AlgebraTerm num, AlgebraTerm den, PolynomialExt numPoly, AlgebraComp dVar, 
-            ref IntegrationInfo pIntInfo, ref TermType.EvalData pEvalData)
+        public static ExComp Split(AlgebraTerm num, AlgebraTerm den, PolynomialExt numPoly, AlgebraComp dVar, ref TermType.EvalData pEvalData)
         {
-            // Be sure that something like (x-2)(x^2-1) already in factored form works.
+            den = den.RemoveRedundancies().ToAlgTerm();
             AlgebraTerm[] factors = den.GetFactors(ref pEvalData);
-
-            if (factors == null || factors.Length == 0)
+            if (factors == null || factors.Length < 2)
                 return null;
 
-            List<AlgebraTerm[]> decomNumDens = new List<AlgebraTerm[]>();
-
-            int startAlphaChar = (int)'A';
-            List<AlgebraComp> usedVars = new List<AlgebraComp>();
+            List<ExComp> bottomFactors = new List<ExComp>();
             for (int i = 0; i < factors.Length; ++i)
             {
-                ExComp factor = factors[i].RemoveRedundancies();
-                ExComp useEx;
-                if (factor is PowerFunction)
-                    useEx = (factor as PowerFunction).Base;
-                else
-                    useEx = factor;
-
-                int maxPow = 1;
-                if (factor is AlgebraTerm)
+                ExComp factorEx = factors[i].RemoveRedundancies();
+                if (factorEx is PowerFunction)
                 {
-                    PolynomialExt polyFactor = new PolynomialExt();
-                    if (polyFactor.Init(factor as AlgebraTerm))
-                        maxPow = polyFactor.MaxPow;
-                }
-
-                for (int j = 0; j < maxPow; ++j)
-                {
-                    AlgebraTerm decomNum = PolynomialGen.GenGenericOfDegree(maxPow - 1, dVar, startAlphaChar, usedVars);
-                    if (decomNum == null)
+                    ExComp pow = (factorEx as PowerFunction).Power;
+                    if (!(pow is Number) || !(pow as Number).IsRealInteger())
                         return null;
-                    startAlphaChar += maxPow;
 
-                    decomNumDens.Add(new AlgebraTerm[] 
-                    { 
-                        decomNum, 
-                        j == 1 ? useEx.ToAlgTerm() : Operators.PowOp.StaticWeakCombine(useEx, new Number(j + 1)).ToAlgTerm()
-                    });
+                    int iPow = (int)(pow as Number).RealComp;
+
+                    if (iPow < 0)
+                        return null;
+
+                    ExComp baseEx = (factorEx as PowerFunction).Base;
+                    for (int j = 1; j <= iPow; ++j)
+                    {
+                        bottomFactors.Add(PowOp.StaticCombine(baseEx, new Number(j)));
+                    }
                 }
-            }
-
-            // Multiply the numerators by every single other denominator that isn't that numerator.
-            ExComp finalEx = null;
-            for (int i = 0; i < decomNumDens.Count; ++i)
-            {
-                AlgebraTerm[] decomNumDen = decomNumDens[i];
-
-                ExComp combined = decomNumDen[0];
-                for (int j = 0; j < decomNumDens.Count; ++j)
-                {
-                    if (j == i)
-                        continue;
-                    combined = Operators.MulOp.StaticCombine(combined, decomNumDens[j][1]);
-                }
-
-                if (finalEx == null)
-                    finalEx = combined;
                 else
-                    finalEx = Operators.AddOp.StaticCombine(finalEx, combined);
+                    bottomFactors.Add(factorEx);
             }
-            if (finalEx is AlgebraTerm)
-                finalEx = (finalEx as AlgebraTerm).RemoveRedundancies();
 
-            AlgebraTerm finalTerm = finalEx.ToAlgTerm();
+            // Then convert over to the expanded fractions with the unknowns in the numerator.
+            int alphaNumericChar = (int)'A';
 
-            Number nMaxPow = GetMaxPow(finalTerm, dVar);
-            if (nMaxPow.IsRealInteger())
-                return null;
+            ExComp[] nums = new ExComp[bottomFactors.Count];
+            string[][] usedVars = new string[nums.Length][];
 
-            int max = (int)nMaxPow.RealComp;
-
-            List<ExComp> decomCoeffs = new List<ExComp>();
-            for (int i = max; i >= 0; --i)
+            for (int i = 0; i < bottomFactors.Count; ++i)
             {
-                List<ExComp[]> decomVarGroups = finalTerm.GetGroupContainingTerm(dVar.ToPow(i));
+                int denGpCount = 1;
+                if (bottomFactors[i] is AlgebraTerm)
+                    denGpCount = (bottomFactors[i] as AlgebraTerm).GroupCount;
+
+                int startChar = alphaNumericChar;
+                AlgebraTerm decomNum = PolynomialGen.GenGenericOfDegree(Math.Max(denGpCount - 2, 0), dVar, ref alphaNumericChar);
+                if (decomNum == null)
+                    return null;
+                
+                usedVars[i] = new string[alphaNumericChar - startChar];
+                for (int k = startChar, j = 0; k < alphaNumericChar; ++k, ++j)
+                    usedVars[i][j] = ((char)k).ToString();
+
+                nums[i] = decomNum;
+            }
+
+            string numsDisp = "";
+            for (int i = 0; i < nums.Length; ++i)
+            {
+                numsDisp += "\\frac{" + WorkMgr.ToDisp(nums[i]) + "}{" + WorkMgr.ToDisp(bottomFactors[i]) + "}";
+                if (i != nums.Length - 1)
+                    numsDisp += "+";
+            }
+
+            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\frac{" + num.FinalToDispStr() + "}{" + den.FinalToDispStr() + "}=" + numsDisp + WorkMgr.EDM,
+                "Split the fraction up.");
+
+            // Now multiply the numerator by each of the other denominators.
+            ExComp left = null;
+            for (int i = 0; i < nums.Length; ++i)
+            {
+                ExComp multipliedNumEx = nums[i];
+                for (int j = 0; j < bottomFactors.Count; ++j)
+                {
+                    if (i == j)
+                        continue;
+
+                    multipliedNumEx = MulOp.StaticCombine(multipliedNumEx, bottomFactors[j].Clone());
+                }
+
+                if (left == null)
+                    left = multipliedNumEx;
+                else
+                    left = AddOp.StaticCombine(left, multipliedNumEx);
+            }
+
+            AlgebraTerm leftTerm = left.ToAlgTerm();
+
+            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + leftTerm.FinalToDispStr() + "=" + num.FinalToDispStr() + WorkMgr.EDM,
+                "Cross multiply the fractions.");
+
+            List<ExComp> pows = leftTerm.GetPowersOfVar(dVar);
+            List<ExComp> decomCoeffs = new List<ExComp>();
+
+            List<int> iPows = new List<int>();
+            for (int i = 0; i < pows.Count; ++i)
+            {
+                ExComp pow = pows[i];
+                if (!(pow is Number) || !(pow as Number).IsRealInteger())
+                    return null;
+                int powInt = (int)(pow as Number).RealComp;
+                iPows.Add(powInt);
+            }
+
+            iPows.Sort();
+
+            for (int i = 0; i < iPows.Count; ++i)
+            {
+                int pow = iPows[i];
+
+                List<ExComp[]> decomVarGroups = leftTerm.GetGroupContainingTerm(PowOp.StaticCombine(dVar, new Number(pow)));
                 IEnumerable<AlgebraTerm> decomVarTerms = from decomVarGroup in decomVarGroups
-														 select decomVarGroup.GetUnrelatableTermsOfGroup(dVar).ToAlgTerm();
+                                                         select decomVarGroup.GetUnrelatableTermsOfGroup(dVar).ToAlgTerm();
 
                 AlgebraTerm decomCoeff = new AlgebraTerm();
                 foreach (AlgebraTerm aTerm in decomVarTerms)
@@ -100,79 +136,77 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 decomCoeffs.Add(decomCoeff);
             }
 
+            // Also add in the constant term.
+            List<AlgebraGroup> constantGps = leftTerm.GetGroupsConstantTo(dVar);
+            if (constantGps.Count != 0)
+            {
+                AlgebraTerm constantCoeff = new AlgebraTerm();
+                foreach (AlgebraGroup constantGp in constantGps)
+                {
+                    constantCoeff = constantCoeff + constantGp;
+                }
+
+                decomCoeffs.Add(constantCoeff);
+                iPows.Add(0);
+            }
+
             // Solve the system of equations for the decomposition coefficients.
             List<EqSet> equations = new List<EqSet>();
             for (int i = 0; i < decomCoeffs.Count; ++i)
             {
-                ExComp coeffForPow = numPoly.Info.GetCoeffForPow(i);
+                int pow = iPows[i];
+                ExComp coeffForPow = numPoly.Info.GetCoeffForPow(pow);
                 ExComp right = coeffForPow ?? Number.Zero;
 
                 equations.Add(new EqSet(decomCoeffs[i], right, Parsing.LexemeType.EqualsOp));
             }
-
             AlgebraSolver agSolver = new AlgebraSolver();
 
             Solving.EquationSystemSolve soe = new Solving.EquationSystemSolve(agSolver);
 
             List<List<TypePair<Parsing.LexemeType, string>>> lts = new List<List<TypePair<Parsing.LexemeType,string>>>();
-            List<TypePair<Parsing.LexemeType, string>> lt = new List<TypePair<Parsing.LexemeType, string>>();
             Dictionary<string, int> allIdens = new Dictionary<string,int>();
 
-            foreach (AlgebraComp usedVar in usedVars)
+            for (int i = 0; i < usedVars.Length; ++i)
             {
-                allIdens.Add(usedVar.Var.Var, 1);
-                lt.Add(new TypePair<Parsing.LexemeType,string>(Parsing.LexemeType.Identifier, usedVar.Var.Var));
+                LexemeTable lt = new LexemeTable();
+                for (int j = 0; j < usedVars[i].Length; ++j)
+                {
+                    lt.Add(new TypePair<Parsing.LexemeType, string>(Parsing.LexemeType.Identifier, usedVars[i][j]));
+                    allIdens.Add(usedVars[i][j], 1);
+                }
+
+                lts.Add(lt);
+                // Add nothing for the other side of the equation.
+                // It doesn't matter as they will be compounded upon solving anyways.
+                lts.Add(new LexemeTable());
             }
 
-            lts.Add(lt);
 
             SolveResult solveResult = soe.SolveEquationArray(equations, lts, allIdens, ref pEvalData);
             if (!solveResult.Success)
                 return null;
 
-            AlgebraTerm overall = new AlgebraTerm();
-
-            // Each of the fraction is integrated seperately.
-            for (int i = 0; i < decomNumDens.Count; ++i)
+            ExComp overall = null;
+            for (int i = 0; i < nums.Length; ++i)
             {
-                AlgebraTerm[] numDen = decomNumDens[i];
                 foreach (Solution sol in solveResult.Solutions)
                 {
                     if (!(sol.SolveFor is AlgebraComp))
                         return null;
-                    AlgebraComp solved = (AlgebraComp)sol.SolveFor;
-                    numDen[0] = numDen[0].Substitute(solved, sol.Result);
+                    AlgebraComp solvedFor = sol.SolveFor as AlgebraComp;
+                    nums[i] = nums[i].ToAlgTerm().Substitute(solvedFor, sol.Result);
                 }
 
-                overall.Add(AlgebraTerm.FromFraction(numDen[0], numDen[1]));
-                if (i != decomNumDens.Count - 1)
-                    overall.Add(new Operators.AddOp());
+                AlgebraTerm addFrac = AlgebraTerm.FromFraction(nums[i], bottomFactors[i]);
+
+                if (overall == null)
+                    overall = addFrac;
+                else
+                    overall = AddOp.StaticCombine(overall, addFrac);
             }
 
-            Integral integral = Integral.ConstructIntegral(overall, dVar);
-            integral.AddConstant = false;
-
-            finalEx = integral.Evaluate(false, ref pEvalData);
-            if (finalEx is Integral)
-                return null;
-
-            return finalEx;
-        }
-
-        private static Number GetMaxPow(AlgebraTerm term, AlgebraComp varFor)
-        {
-            Number maxPow = new Number(double.MinValue);
-            foreach (ExComp subComp in term.SubComps)
-            {
-                if (subComp is PowerFunction)
-                {
-                    PowerFunction pf = subComp as PowerFunction;
-                    if (pf.Base.IsEqualTo(varFor) && pf.Power is Number)
-                        maxPow = Number.Maximum(maxPow, pf.Power as Number);
-                }
-            }
-
-            return maxPow;
+            return overall;
         }
     }
 }
