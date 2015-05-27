@@ -48,9 +48,9 @@
       </div>
       <div class="w-row">
         <div class="w-col w-col-4 link-practice">
-          <div class="hlep hlep-larger">
+          <div class="hlep">
             <div>
-              <div><a class="wordlink-help" href="/help/changelog">Change Log</a>
+              <div><a class="wordlink-help" href="/multiline">Multi-line</a>
               </div>
             </div>
           </div>

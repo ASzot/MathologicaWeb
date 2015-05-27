@@ -10,7 +10,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
 {
     class Transpose : AppliedFunction
     {
-        public Transpose(ExMatrix exMat)
+        public Transpose(ExComp exMat)
             : base(exMat, FunctionType.Transpose, typeof(Transpose))
         {
 

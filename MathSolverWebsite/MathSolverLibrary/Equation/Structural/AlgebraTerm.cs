@@ -1462,7 +1462,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                         pParseErrors.Add("Mismatched operators.");
                         return null;
                     }
-                    ExComp resultant;
+                    ExComp resultant = null;
 
                     bool isMultiGroup = false;
                     if (beforeComp is AlgebraTerm)
@@ -1494,7 +1494,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                     {
                         resultant = algebraOp.WeakCombine(beforeComp, afterComp);
                     }
-                    else
+                    else if (!(resultant is Structural.LinearAlg.Transpose))
                     {
                         resultant = algebraOp.Combine(beforeComp, afterComp);
                     }

@@ -101,8 +101,12 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 }
                 else
                 {
-                    tmpCmds.Add("Find inverse");
-                    tmpCmds.Add("Find determinant");
+                    ExMatrix mat = _term as ExMatrix;
+                    if (mat.IsSquare)
+                    {
+                        tmpCmds.Add("Find inverse");
+                        tmpCmds.Add("Find determinant");
+                    }
                     tmpCmds.Add("Transpose");
                 }
             }

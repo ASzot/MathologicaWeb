@@ -307,10 +307,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 else if ((ex2 as Number) == 1.0)
                     return ex1;
             }
-            if (ex1 is ExMatrix && ex2 is AlgebraComp && (ex2 as AlgebraComp).Var.Var == "T")
+            if ((ex1 is ExMatrix || ex1 is FunctionDefinition || ex1 is AlgebraComp) && ex2 is AlgebraComp && (ex2 as AlgebraComp).Var.Var == "T")
             {
                 // This is the transpose operation.
-                return new Transpose(ex1 as ExMatrix);
+                return new Transpose(ex1);
             }
             return new PowerFunction(ex1, ex2);
         }
