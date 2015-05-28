@@ -416,7 +416,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
                     overallTerm = new AlgebraTerm(gp0, new AddOp(), gp1);
 
-                    overallTerm = overallTerm.TrigSimplify();
+                    overallTerm = overallTerm.TrigSimplify(ref pEvalData);
                     overallTerm = overallTerm.ApplyOrderOfOperations();
                     overallTerm = overallTerm.MakeWorkable().ToAlgTerm();
 

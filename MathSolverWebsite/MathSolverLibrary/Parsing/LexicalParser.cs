@@ -558,7 +558,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
 
                 if (!MathSolver.PLAIN_TEXT && !CheckCoeffCorrectness(setLexemeTable))
                 {
-                    pParseErrors.Add("Invalid number placement.");
+                    pParseErrors.Add("A number cannot follow a definite integral, put parentheses.");
                     return null;
                 }
                 if (setLexemeTable == null)

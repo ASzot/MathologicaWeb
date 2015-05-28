@@ -205,7 +205,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             ExComp innerEx = InnerEx;
             if (innerEx is AlgebraTerm)
-                innerEx = Term.AdvAlgebraTerm.PythagTrigSimplify(innerEx as AlgebraTerm);
+                innerEx = Term.AdvAlgebraTerm.PythagTrigSimplify(innerEx as AlgebraTerm, ref pEvalData);
 
             if (innerEx is ExVector && !IsDefinite)
             {

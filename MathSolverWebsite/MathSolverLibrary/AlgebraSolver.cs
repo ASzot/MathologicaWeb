@@ -379,6 +379,16 @@ namespace MathSolverWebsite.MathSolverLibrary
             return result;
         }
 
+        /// <summary>
+        /// Solves the equation in addition to cleaning up the formatting.
+        /// </summary>
+        /// <param name="solveFor"></param>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <param name="pEvalData"></param>
+        /// <param name="showFinalStep"></param>
+        /// <param name="stayIterLevel"></param>
+        /// <returns></returns>
         public ExComp SolveEq(AlgebraVar solveFor, AlgebraTerm left, AlgebraTerm right, ref TermType.EvalData pEvalData, bool showFinalStep = false, bool stayIterLevel = false)
         {
             if (!stayIterLevel)

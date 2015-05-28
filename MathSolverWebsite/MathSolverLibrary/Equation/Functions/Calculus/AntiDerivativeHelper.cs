@@ -102,7 +102,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             if (constTo.Length != 0)
             {
-                if (constToStr != "1")
+                if (constToStr.Trim() != "1")
                 {
                     pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + constOutStr + "=" + WorkMgr.ToDisp(constTo.ToAlgTerm()) +
                         WorkMgr.ToDisp(antiDeriv) + WorkMgr.EDM, "Multiply the constants back in.");

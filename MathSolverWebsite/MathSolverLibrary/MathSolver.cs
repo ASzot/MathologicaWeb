@@ -70,7 +70,7 @@ namespace MathSolverWebsite.MathSolverLibrary
 
                 if (singularEqSet.IsLinearAlgebraTerm())
                 {
-                    return new LinearAlgebraSolve(singularEqSet, probSolveVar);
+                    return new LinearAlgebraSolve(singularEqSet, probSolveVar, ref pEvalData);
                 }
 
                 return new SolveTermType(singularEqSet, completeLexemeTable, solveVars, probSolveVar);
@@ -103,7 +103,6 @@ namespace MathSolverWebsite.MathSolverLibrary
 
         public static TermType.TermType ParseInput(LexemeTable completeLexemeTable, LexicalParser lexParser, string input, ref TermType.EvalData pEvalData, ref List<string> pParseErrors)
         {
-        
             List<LexemeTable> lexemeTables;
             List<EqSet> terms = lexParser.ParseInput(input, out lexemeTables, ref pParseErrors);
             if (terms == null)

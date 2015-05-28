@@ -98,7 +98,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             if (term.HasTrigFunctions())
             {
                 // There are trig functions in this expression.
-                term = term.TrigSimplify();
+                term = term.TrigSimplify(ref pEvalData);
             }
 
             term = term.Order();

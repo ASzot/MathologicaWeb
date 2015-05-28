@@ -1132,7 +1132,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                         "As the above is a fraction use the quotient rule which states `d/(dx)[u/v]=(u'v-uv')/(v^2)`. In this case `u=" + numEx.ToDispString() + "`, `v=" + denEx.ToDispString() + "`");
 
                     // Use the quotient rule.
-                    pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[" + varToStr + "]`",
+                    pEvalData.WorkMgr.FromFormatted("",
                         "First find the derivative of the numerator.");
                     WorkStep last0 = pEvalData.WorkMgr.GetLast();
 
@@ -1140,13 +1140,17 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     ExComp numDeriv = TakeDerivativeOfGp(num, ref pEvalData);
                     last0.GoUp(ref pEvalData);
 
-                    pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[" + varToStr + "]`",
+                    last0.WorkHtml = WorkMgr.STM + ca_derivSymb + "[" + num.ToAlgTerm().FinalToDispStr() + "]=" + WorkMgr.ToDisp(numDeriv) + WorkMgr.EDM;
+
+                    pEvalData.WorkMgr.FromFormatted("",
                         "Find the derivative of the denominator.");
                     WorkStep last1 = pEvalData.WorkMgr.GetLast();
 
                     last1.GoDown(ref pEvalData);
                     ExComp denDeriv = TakeDerivativeOfGp(den, ref pEvalData);
                     last1.GoUp(ref pEvalData);
+
+                    last1.WorkHtml = WorkMgr.STM + ca_derivSymb + "[" + den.ToAlgTerm().FinalToDispStr() + "]=" + WorkMgr.ToDisp(denDeriv) + WorkMgr.EDM;
 
                     pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[" + varToStr + "]=(({0})({1})-({2})({3}))/(({1})^2)`",
                         "Plug the values back into the equation for the quotient rule `d/(dx)[u/v]=(u'v-uv')/(v^2)`. In the above case `u={2}`, `u'={0}`, `v={1}`, `v'={3}`", numDeriv, denEx, numEx, denDeriv);

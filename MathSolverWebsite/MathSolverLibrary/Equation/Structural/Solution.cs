@@ -828,11 +828,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 {
                     if (i == j || rests[j] is NotRestriction)
                         continue;
-                    wasCompared = true;
                     Restriction compareRest = rests[j];
                     Restriction intersection = IntersectRestrictions(rest, compareRest, ref pEvalData);
                     if (intersection != null)
                     {
+                        wasCompared = true;
                         // Ensure final restrictions doesn't already contain the same thing.
                         bool add = true;
                         foreach (var finalRest in finalRestrictions)

@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
 
+using LexemeTable = System.Collections.Generic.List<
+MathSolverWebsite.MathSolverLibrary.TypePair<MathSolverWebsite.MathSolverLibrary.Parsing.LexemeType, string>>;
+
 namespace MathSolverWebsite.MathSolverLibrary.TermType
 {
     class LinearAlgebraSolve : TermType
@@ -20,20 +23,20 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
         private AlgebraComp _x;
         private ExMatrix _X;
         private ExMatrix _A;
-        private EquationSystemTermType _systemType = null;
+        private List<EqSet> _eqSets = null;
 
-        public LinearAlgebraSolve(EqSet eqSet, string probSolveVar)
+        public LinearAlgebraSolve(EqSet eqSet, string probSolveVar, ref EvalData pEvalData)
         {
             // In the form Ax=b
             ExComp left = eqSet.Left;
             ExComp right = eqSet.Right;
             const string errorMsg = "Cannot solve";
 
-            if (AttemptInit(left, right, probSolveVar))
+            if (AttemptInit(left, right, probSolveVar, ref pEvalData))
             {
                 if (_cmds != null && _cmds.Length > 0)
                     return;
-                if (_A.IsSquare && AreMultiplicationsValid())
+                if (_A != null && _A.IsSquare && AreMultiplicationsValid())
                     _cmds = new string[] { INVERSE_SOLVE };
             }
 
@@ -53,11 +56,11 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             }
         }
 
-        private bool AttemptInit(ExComp left, ExComp right, string probSolveVar)
+        private bool AttemptInit(ExComp left, ExComp right, string probSolveVar, ref EvalData pEvalData)
         {
             AlgebraTerm leftTerm = left.ToAlgTerm();
             AlgebraTerm rightTerm = right.ToAlgTerm();
-            if (AttemptInitLinearCombination(leftTerm, rightTerm))
+            if (AttemptInitLinearCombination(leftTerm, rightTerm, ref pEvalData))
                 return true;
             if (AttemptInitVectorEq(left, right, probSolveVar))
                 return true;
@@ -90,7 +93,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             // AX=B
 
             List<ExComp[]> groups = term.GetGroupsNoOps();
-            if (groups.Count != 1 && groups[0].Length == 2)
+            if (groups.Count != 1 || groups[0].Length != 2)
                 return false;
 
             ExComp ex0 = groups[0][0];
@@ -142,7 +145,13 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             return true;
         }
 
-        private bool AttemptInitLinearCombination(AlgebraTerm leftTerm, AlgebraTerm rightTerm)
+        /// <summary>
+        /// These are the vector equations where the variable is a scalar quantity.
+        /// </summary>
+        /// <param name="leftTerm"></param>
+        /// <param name="rightTerm"></param>
+        /// <returns></returns>
+        private bool AttemptInitLinearCombination(AlgebraTerm leftTerm, AlgebraTerm rightTerm, ref EvalData pEvalData)
         {
             List<ExComp[]> leftGroups = leftTerm.GetGroupsNoOps();
             List<ExComp[]> rightGroups = rightTerm.GetGroupsNoOps();
@@ -154,18 +163,80 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             if (rightCompacted == null)
                 return false;
 
-            if (leftCompacted.Length != rightCompacted.Length)
+            if (leftCompacted.Length != rightCompacted.Length || leftCompacted.Length < 2)
                 return false;
 
-            List<EqSet> eqSets = new List<EqSet>();
+            _eqSets = new List<EqSet>();
 
+            List<string> solveVarsLeft = new List<string>();
+            List<string> solveVarsRight = new List<string>();
             for (int i = 0; i < leftCompacted.Length; ++i)
             {
-                eqSets.Add(new EqSet(leftCompacted[i], rightCompacted[i], LexemeType.EqualsOp));
+                ExComp leftEx = leftCompacted.Get(i);
+                ExComp rightEx = rightCompacted.Get(i);
+
+                List<string> leftVars = leftEx.ToAlgTerm().GetAllAlgebraCompsStr();
+                List<string> rightVars = rightEx.ToAlgTerm().GetAllAlgebraCompsStr();
+
+                for (int j = 0; j < solveVarsLeft.Count; ++j)
+                {
+                    if (!leftVars.Contains(solveVarsLeft[j]))
+                        solveVarsLeft.RemoveAt(j--);
+                }
+
+                for (int j = 0; j < solveVarsRight.Count; ++j)
+                {
+                    if (!rightVars.Contains(solveVarsRight[j]))
+                        solveVarsRight.RemoveAt(j--);
+                }
+
+                foreach (string leftVar in leftVars)
+                {
+                    if (!solveVarsLeft.Contains(leftVar))
+                        solveVarsLeft.Add(leftVar);
+                }
+
+                foreach (string rightVar in rightVars)
+                {
+                    if (!solveVarsRight.Contains(rightVar))
+                        solveVarsRight.Add(rightVar);
+                }
+
+                _eqSets.Add(new EqSet(leftEx, rightEx, LexemeType.EqualsOp));
             }
 
-            _systemType = new EquationSystemTermType(eqSets);
-            _cmds = _systemType.GetCommands();
+            List<string> cmdsList = new List<string>();
+            // Remove any intersection.
+            for (int i = 0; i < solveVarsLeft.Count; ++i)
+            {
+                if (solveVarsRight.Contains(solveVarsLeft[i]))
+                {
+                    solveVarsRight.Remove(solveVarsLeft[i]);
+                    solveVarsLeft.RemoveAt(i--);
+                }
+            }
+
+            List<string> cmds = new List<string>();
+            if (solveVarsLeft.Count != 0 && solveVarsRight.Count != 0)
+            {
+                for (int i = 0; i < solveVarsLeft.Count; ++i)
+                {
+                    for (int j = 0; j < solveVarsRight.Count; ++j)
+                    {
+                        cmds.Add("Solve for " + solveVarsLeft[i] + "," + solveVarsRight[i]);
+                    }
+                }
+            }
+
+            // Compound as if there is only one variable term and the rest are constants.
+            solveVarsLeft.AddRange(solveVarsRight);
+
+            for (int i = 0; i < solveVarsLeft.Count; ++i)
+            {
+                cmds.Add("Solve for " + solveVarsLeft[i]);
+            }
+
+            _cmds = cmds.ToArray();
 
             return true;
         }
@@ -199,23 +270,121 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
         private SolveResult SolveInverse(ref EvalData pEvalData)
         {
-            ExMatrix bInverse = _B.GetInverse();
-            if (bInverse == null)
+            ExMatrix aInverse = _A.GetInverse();
+            if (aInverse == null)
             {
                 return SolveResult.Failure("No inverse exists.", ref pEvalData);
             }
 
-            ExComp result = _aFirst ? MulOp.StaticCombine(bInverse, _B) : MulOp.StaticCombine(_B, bInverse);
+            ExComp result = _aFirst ? MulOp.StaticCombine(aInverse, _B) : MulOp.StaticCombine(_B, aInverse);
 
             return SolveResult.Solved(_x == null ? (ExComp)_X : _x, result, ref pEvalData);
+        }
+
+        private SolveResult SolveVectorEquation(string solveForStr, ref EvalData pEvalData)
+        {
+            AlgebraSolver agSolver = new AlgebraSolver();
+
+            if (solveForStr.Contains(","))
+            {
+                string[] solveVars = solveForStr.Split(',');
+                
+                // First do a system of equations.
+                EqSet eq0 = _eqSets[0];
+                EqSet eq1 = _eqSets[1];
+
+                List<LexemeTable> lts = new List<LexemeTable>();
+
+                LexemeTable lt0 = new LexemeTable();
+                lt0.Add(new TypePair<LexemeType,string>(LexemeType.Identifier, solveVars[0]));
+                lt0.Add(new TypePair<LexemeType,string>(LexemeType.Identifier, solveVars[1]));
+
+                lts.Add(lt0);
+                lts.Add(new LexemeTable());
+
+                LexemeTable lt1 = new LexemeTable();
+                lt1.Add(new TypePair<LexemeType,string>(LexemeType.Identifier, solveVars[0]));
+                lt1.Add(new TypePair<LexemeType,string>(LexemeType.Identifier, solveVars[1]));
+
+                lts.Add(lt1);
+                lts.Add(new LexemeTable());
+
+                Dictionary<string, int> allVars = new Dictionary<string,int>();
+                allVars.Add(solveVars[0], 1);
+                allVars.Add(solveVars[1], 1);
+
+                Solving.EquationSystemSolve solveMethod = new Solving.EquationSystemSolve(agSolver);
+                SolveResult sysSolveResult = solveMethod.SolveEquationArray(_eqSets.GetRange(0, 2), lts, allVars, ref pEvalData);
+
+                // Check that the results hold in the other equations. 
+                for (int i = 2; i < _eqSets.Count; ++i)
+                {
+                    AlgebraTerm leftSubbed = _eqSets[i].LeftTerm;
+                    AlgebraTerm rightSubbed = _eqSets[i].RightTerm;
+                    foreach (Solution sol in sysSolveResult.Solutions)
+                    {
+                        if (sol.Result is NoSolutions)
+                            return SolveResult.Failure();
+                        if (sol.Result is AllSolutions)
+                            continue;
+                        leftSubbed = leftSubbed.Substitute(sol.SolveFor, sol.Result);
+                        rightSubbed = rightSubbed.Substitute(sol.SolveFor, sol.Result);
+                    }
+
+                    ExComp leftEx = leftSubbed.MakeWorkable();
+                    ExComp rightEx = rightSubbed.MakeWorkable();
+
+                    if (leftEx is AlgebraTerm)
+                        leftEx = (leftEx as AlgebraTerm).RemoveRedundancies();
+                    if (rightEx is AlgebraTerm)
+                        rightEx = (rightEx as AlgebraTerm).RemoveRedundancies();
+
+                    if (!leftEx.IsEqualTo(rightEx))
+                    {
+                        return SolveResult.Simplified(Number.Undefined);
+                    }
+                }
+
+                return sysSolveResult;
+            }
+
+            AlgebraVar solveForVar = new AlgebraVar(solveForStr);
+            ExComp solveResult = null;
+            int end = -1;
+
+            for (int i = 0; i < _eqSets.Count; ++i)
+            {
+                ExComp tmpResult = agSolver.SolveEq(solveForVar, _eqSets[i].LeftTerm, _eqSets[i].RightTerm, ref pEvalData);
+                if (i == 0)
+                    end = pEvalData.WorkMgr.WorkSteps.Count;
+                if (tmpResult is AlgebraTerm)
+                    tmpResult = (tmpResult as AlgebraTerm).RemoveRedundancies();
+
+                if (tmpResult is AllSolutions)
+                    continue;
+
+                if (solveResult == null)
+                    solveResult = tmpResult;
+                else if (!solveResult.IsEqualTo(tmpResult))
+                {
+                    return SolveResult.Solved(solveForVar, Number.Undefined, ref pEvalData);
+                }
+            }
+
+            pEvalData.WorkMgr.PopSteps(end);
+
+            return SolveResult.Solved(solveForVar, solveResult, ref pEvalData);
         }
 
         public override SolveResult ExecuteCommand(string command, ref EvalData pEvalData)
         {
             base.ExecuteCommand(command, ref pEvalData);
 
-            if (_systemType != null)
-                return _systemType.ExecuteCommand(command, ref pEvalData);
+            if (command.StartsWith("Solve for ") && _eqSets != null)
+            {
+                string solveForStr = command.Remove(0, "Solve for ".Length);
+                return SolveVectorEquation(solveForStr, ref pEvalData);
+            }
             else if (command.StartsWith(GAUSSIAN_SOLVE))
             {
                 return SolveResult.Failure();

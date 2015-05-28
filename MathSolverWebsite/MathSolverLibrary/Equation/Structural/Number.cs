@@ -10,6 +10,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
     {
         private const double EPSILON_ACCEPT = 1E-7;
         private const int ROUND_COUNT = 9;
+        private const int DISP_ROUND = 5;
         private double d_imagComp;
         private double d_realComp;
 
@@ -427,23 +428,25 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 return "-oo";
             if (IsPosInfinity())
                 return "oo";
+            double realRounded = Math.Round(d_realComp, DISP_ROUND);
+            double imagRounded = Math.Round(d_imagComp, DISP_ROUND);
             if (HasImaginaryComp())
             {
                 string str = "";
-                if (d_realComp != 0.0)
-                    str += d_realComp.ToString() + "+";
+                if (realRounded != 0.0)
+                    str += realRounded.ToString() + "+";
 
-                if (d_imagComp == -1.0)
+                if (imagRounded == -1.0)
                     str += "-";
-                else if (d_imagComp != 1.0)
-                    str += d_imagComp.ToString();
+                else if (imagRounded != 1.0)
+                    str += imagRounded.ToString();
 
                 str += "i";
 
                 return str;
             }
 
-            return d_realComp.ToString();
+            return realRounded.ToString();
         }
 
         public override double GetCompareVal()
@@ -921,20 +924,22 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 return "-oo";
             if (IsPosInfinity())
                 return "oo";
+            double realRounded = Math.Round(d_realComp, DISP_ROUND);
+            double imagRounded = Math.Round(d_imagComp, DISP_ROUND);
             if (HasImaginaryComp())
             {
                 string str = "";
                 bool useParas = false;
-                if (d_realComp != 0.0)
+                if (realRounded != 0.0)
                 {
                     useParas = true;
-                    str += d_realComp.ToString() + "+";
+                    str += realRounded.ToString() + "+";
                 }
 
-                if (d_imagComp == -1.0)
+                if (imagRounded == -1.0)
                     str += "-";
-                else if (d_imagComp != 1.0)
-                    str += d_imagComp.ToString();
+                else if (imagRounded != 1.0)
+                    str += imagRounded.ToString();
 
                 str += "i";
 
@@ -944,7 +949,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 return str;
             }
 
-            return d_realComp.ToString();
+            return realRounded.ToString();
         }
 
         public override string ToJavaScriptString(bool useRad)

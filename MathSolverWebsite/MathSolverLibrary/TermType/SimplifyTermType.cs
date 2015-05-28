@@ -201,7 +201,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                     if ((term as AlgebraTerm).HasTrigFunctions())
                     {
                         // There are trig functions in this expression.
-                        term = (term as AlgebraTerm).TrigSimplify();
+                        term = (term as AlgebraTerm).TrigSimplify(ref pEvalData);
                     }
                     term = (term as AlgebraTerm).CompoundFractions();
                 }

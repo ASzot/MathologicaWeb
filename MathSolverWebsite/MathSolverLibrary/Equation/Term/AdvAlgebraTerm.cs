@@ -826,9 +826,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
             Restriction compounded = Restriction.CompoundDomains(restrictions, varFor, ref pEvalData);
             if (compounded == null)
             {
-                restrictions.Clear();
+                //restrictions.Clear();
 
-                restrictions.Add(OrRestriction.GetNoRealNumsRestriction(varFor.ToAlgebraComp(), ref pEvalData));
+                //restrictions.Add(OrRestriction.GetNoRealNumsRestriction(varFor.ToAlgebraComp(), ref pEvalData));
+                return;
             }
 
             var notRests = (from rest in restrictions
@@ -1159,8 +1160,22 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
             return false;
         }
 
-        public static AlgebraTerm PythagTrigSimplify(AlgebraTerm term)
+        public static AlgebraTerm PythagTrigSimplify(AlgebraTerm term, ref TermType.EvalData pEvalData)
         {
+            AlgebraTerm origTerm = term;
+            if (term is PowerFunction)
+                term = (term as PowerFunction).Base.ToAlgTerm();
+            else if (term is AppliedFunction)
+                term = (term as AppliedFunction).InnerTerm;
+
+
+            // Apply to all subterms.
+            for (int i = 0; i < term.SubComps.Count; ++i)
+            {
+                if (term.SubComps[i] is AlgebraTerm)
+                    term.SubComps[i] = PythagTrigSimplify(term.SubComps[i] as AlgebraTerm, ref pEvalData);
+            }
+
             List<ExComp[]> groups = term.GetGroupsNoOps();
 
             Func<ExComp[], List<TypePair<PowerFunction, ExComp[]>>> getTrigFuncAndCoeff = (ExComp[] gp) =>
@@ -1168,7 +1183,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
                     List<TypePair<PowerFunction, ExComp[]>> trigCoeffPairs = new List<TypePair<PowerFunction, ExComp[]>>();
                     for (int i = 0; i < gp.Length; ++i)
                     {
-                        if (gp[i] is PowerFunction && (gp[i] as PowerFunction).Power is Number && ((gp[i] as PowerFunction).Power as Number) % 2 == 0)
+                        if (gp[i] is PowerFunction && (gp[i] as PowerFunction).Power is Number && ((gp[i] as PowerFunction).Power as Number) == 2.0)
                         {
                             PowerFunction fnPow = gp[i] as PowerFunction;
                             if (!(fnPow.Base is SinFunction) && !(fnPow.Base is CosFunction))
@@ -1216,6 +1231,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
                 return null;
             };
 
+            bool someMatch = false;
+
             // Replace sin^2(x)+cos^2(x) with 1
 
             for (int i = 0; i < groups.Count; ++i)
@@ -1246,6 +1263,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
                         groups[i] = trigCoeffPair.Data2;
 
                         groups.RemoveAt(k);
+                        someMatch = true;
                         breakLoop = true;
                         break;
                     }
@@ -1259,7 +1277,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
 
             // Replace cos^2(x)-1 with sin^2(x)
 
-            return new AlgebraTerm(groups.ToArray());
+
+            if (origTerm is PowerFunction)
+                return PowOp.StaticCombine(new AlgebraTerm(groups.ToArray()), (origTerm as PowerFunction).Power).ToAlgTerm();
+
+            origTerm.SetSubComps(groups);
+
+            return origTerm;
         }
 
         public static ExComp RaiseToPow(this ExComp term, Number power, ref TermType.EvalData pEvalData)
@@ -1267,22 +1291,22 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
             return PowOp.RaiseToPower(term, power, ref pEvalData);
         }
 
-        public static AlgebraTerm TrigSimplify(this AlgebraTerm term)
+        public static AlgebraTerm TrigSimplify(this AlgebraTerm term, ref TermType.EvalData pEvalData)
         {
-            term = TrigSimplifyCombine(term);
-            term = PythagTrigSimplify(term);
+            term = TrigSimplifyCombine(term, ref pEvalData);
+            term = PythagTrigSimplify(term, ref pEvalData);
 
             return term;
         }
 
-        private static ExComp[] CancelTrigTerms(ExComp[] group)
+        private static ExComp[] CancelTrigTerms(ExComp[] group, ref TermType.EvalData pEvalData)
         {
             ExComp[] den = group.GetDenominator();
             if (den != null && den.Length != 0)
             {
                 // There is a denominator in this group.
                 ExComp[] num = group.GetNumerator();
-                AlgebraTerm numDenResult = AlgebraTerm.FromFraction(num.ToAlgTerm(), den.ToAlgTerm()).TrigSimplify();
+                AlgebraTerm numDenResult = AlgebraTerm.FromFraction(num.ToAlgTerm(), den.ToAlgTerm()).TrigSimplify(ref pEvalData);
                 var numDenResultGroups = numDenResult.GetGroups();
                 if (numDenResultGroups.Count == 1)
                     return numDenResultGroups[0];
@@ -1452,7 +1476,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
             return true;
         }
 
-        private static AlgebraTerm TrigSimplifyCombine(AlgebraTerm term)
+        private static AlgebraTerm TrigSimplifyCombine(AlgebraTerm term, ref TermType.EvalData pEvalData)
         {
             AlgebraTerm numTerm;
 
@@ -1468,7 +1492,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
 
             for (int i = 0; i < numGroups.Count; ++i)
             {
-                numGroups[i] = CancelTrigTerms(numGroups[i]);
+                numGroups[i] = CancelTrigTerms(numGroups[i], ref pEvalData);
             }
 
             if (numDen != null)
@@ -1477,7 +1501,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
 
                 for (int i = 0; i < denGroups.Count; ++i)
                 {
-                    denGroups[i] = CancelTrigTerms(denGroups[i]);
+                    denGroups[i] = CancelTrigTerms(denGroups[i], ref pEvalData);
                 }
 
                 if (denGroups.Count == 1)
@@ -1523,7 +1547,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
 
                     for (int i = 0; i < numGroups.Count; ++i)
                     {
-                        numGroups[i] = CancelTrigTerms(numGroups[i]);
+                        numGroups[i] = CancelTrigTerms(numGroups[i], ref pEvalData);
                     }
 
                     // Some of the denominators might have been modified.
@@ -1666,7 +1690,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
                     if (!(den is AlgebraTerm && (den as AlgebraTerm).GroupCount != 1) &&
                         !(num is AlgebraTerm && (num as AlgebraTerm).GroupCount != 1))
                     {
-                        return AlgebraTerm.FromFraction(num, den).TrigSimplify();
+                        return AlgebraTerm.FromFraction(num, den).TrigSimplify(ref pEvalData);
                     }
                 }
 

@@ -228,6 +228,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return PushGroups(groups);
         }
 
+        public void SetSubComps(List<ExComp[]> gps)
+        {
+            _subComps.Clear();
+            foreach (ExComp[] gp in gps)
+                AddGroup(gp);
+        }
+
         public virtual void AssignTo(AlgebraTerm algebraTerm)
         {
             _subComps = algebraTerm._subComps;
@@ -1466,9 +1473,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
                     bool isMultiGroup = false;
                     if (beforeComp is AlgebraTerm)
-                        isMultiGroup = (beforeComp as AlgebraTerm).GroupCount > 1;
+                        isMultiGroup = (beforeComp as AlgebraTerm).GroupCount > 1 || afterComp is Structural.LinearAlg.ExMatrix;
                     if (!isMultiGroup && afterComp is AlgebraTerm)
-                        isMultiGroup = (afterComp as AlgebraTerm).GroupCount > 1;
+                        isMultiGroup = (afterComp as AlgebraTerm).GroupCount > 1 || afterComp is Structural.LinearAlg.ExMatrix;
 
                     AgOp algebraOp = comp as AgOp;
 
@@ -1482,10 +1489,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                             afterComp = tmpEval;
                     }
 
-                    if (comp is Operators.PowOp)
-                    {
-                        resultant = algebraOp.WeakCombine(beforeComp, afterComp);
-                    }
                     if (beforeComp is FunctionDefinition || afterComp is FunctionDefinition)
                     {
                         resultant = algebraOp.WeakCombine(beforeComp, afterComp);
@@ -1496,6 +1499,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                     }
                     else if (!(resultant is Structural.LinearAlg.Transpose))
                     {
+                        if (comp is Operators.PowOp)
+                            resultant = algebraOp.WeakCombine(beforeComp, afterComp);
                         resultant = algebraOp.Combine(beforeComp, afterComp);
                     }
 
