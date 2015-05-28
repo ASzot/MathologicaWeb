@@ -896,6 +896,7 @@ h1 {
 
 .footer-links {
     margin-right: 30px;
+    display: inline-table;
 }
 
 .copy-right {
@@ -912,7 +913,6 @@ h1 {
 .centered-col {
     width: 640px;
     margin-left: auto;
-    display: -webkit-box;
     margin-right: auto;
 }
 
