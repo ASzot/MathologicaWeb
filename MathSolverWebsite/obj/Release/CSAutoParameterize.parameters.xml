@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <parameters>
   <parameter name="DefaultConnection-Web.config Connection String" description="DefaultConnection Connection String used in web.config by the application to access the database." defaultValue="Server=tcp:gbvy6jzn3z.database.windows.net,1433;Database=mldatabase;User ID=mladmin@gbvy6jzn3z;Password=m092fg543bcDEkl?;Trusted_Connection=False;Encrypt=True;Connection Timeout=30;" tags="SqlConnectionString">
-    <parameterEntry kind="XmlFile" scope="C:\\Users\\Andrew\\Desktop\\Mathologica\\mathologica-web\\MathSolverWebsite\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='DefaultConnection']/@connectionString" />
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\728812\\Desktop\\mathologica-web\\MathSolverWebsite\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='DefaultConnection']/@connectionString" />
   </parameter>
   <parameter name="StorageConnection-Web.config Connection String" description="StorageConnection Connection String used in web.config by the application to access the database." defaultValue="DefaultEndpointsProtocol=https;AccountName=mlogica;AccountKey=+0IXUQqWNC2K7IDshm/tVd8HGksnVk8Qa5dVZsY2iILA2+7wpnqQZqbnjHHBU0zoVroL8gE6+tj5Xa3rOxc7+Q==" tags="SqlConnectionString">
-    <parameterEntry kind="XmlFile" scope="C:\\Users\\Andrew\\Desktop\\Mathologica\\mathologica-web\\MathSolverWebsite\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='StorageConnection']/@connectionString" />
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\728812\\Desktop\\mathologica-web\\MathSolverWebsite\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='StorageConnection']/@connectionString" />
   </parameter>
 </parameters>

@@ -10,7 +10,7 @@
 
     .header {
         height: 55px !important;
-        /*overflow-y: hidden;*/
+        overflow-y: hidden;
         padding: 0px !important;
     }
 
@@ -21,6 +21,10 @@
     .ws-container {
         margin-bottom: 60px;
     }
+
+    /*.w-nav {
+        overflow-y: hidden;
+    }*/
 
     /*.container {
         overflow-y: hidden;
@@ -102,6 +106,7 @@
         padding: 0px !important;
         text-align: initial !important;
         margin-bottom: 0px !important;
+        overflow-y: hidden !important;
     }
 
     .subject-bar-btn {
@@ -133,6 +138,7 @@
         white-space: nowrap !important;
         overflow-x: auto !important;
         min-height: 60px;
+        overflow-y: hidden !important;
     }
 
     .ad-space {
@@ -173,7 +179,7 @@
         height: -webkit-calc(100% - 85px) !important;
         height: -o-calc(100% - 85px) !important;
         height: calc(100% - 85px) !important;
-        /*overflow-y: hidden;*/
+        overflow-y: hidden;
         overflow-x: hidden;
     }
 

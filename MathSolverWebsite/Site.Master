@@ -84,7 +84,7 @@
 
 
         <div class="container">
-            <div class="header">
+            <div data-role="header" class="header">
                 <div class="click-area">
                     <div id="title-block">
                         <a href="~" runat="server"><img class="mathlogo" src="/Images/MathologicaLogo.png" width="263" alt="Mathologica" /></a>

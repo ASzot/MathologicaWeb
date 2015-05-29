@@ -282,7 +282,9 @@
     <None Include="Properties\PublishProfiles\mathologica - Web Deploy %286%29.pubxml" />
     <None Include="Properties\PublishProfiles\mathologica - Web Deploy %287%29.pubxml" />
     <None Include="Properties\PublishProfiles\mathologica - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\mathologicabeta - FTP %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\mathologicabeta - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\mathologicabeta - Web Deploy %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\mathologicabeta - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\ml - FTP %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\ml - FTP %283%29.pubxml" />
@@ -291,6 +293,7 @@
     <None Include="Properties\PublishProfiles\ml - FTP %286%29.pubxml" />
     <None Include="Properties\PublishProfiles\ml - FTP %287%29.pubxml" />
     <None Include="Properties\PublishProfiles\ml - FTP %288%29.pubxml" />
+    <None Include="Properties\PublishProfiles\ml - FTP %289%29.pubxml" />
     <None Include="Properties\PublishProfiles\ml - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\ml - Web Deploy %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\ml - Web Deploy %283%29.pubxml" />
@@ -299,6 +302,7 @@
     <None Include="Properties\PublishProfiles\ml - Web Deploy %286%29.pubxml" />
     <None Include="Properties\PublishProfiles\ml - Web Deploy %287%29.pubxml" />
     <None Include="Properties\PublishProfiles\ml - Web Deploy %288%29.pubxml" />
+    <None Include="Properties\PublishProfiles\ml - Web Deploy %289%29.pubxml" />
     <None Include="Properties\PublishProfiles\ml - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="practice.aspx" />

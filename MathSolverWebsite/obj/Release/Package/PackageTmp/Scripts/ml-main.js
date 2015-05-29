@@ -428,7 +428,7 @@ $(document).ready(function () {
         // This is the user's first time on this page.
 
         setTimeout(function () {
-            $("<div class='small-popup pop'><p>Multi-line input is great. Check out <a href='/multiline'>mathologica.com/multiline</a> for more.</p><a style='margin-top: 0px;' class='close' href='#'>Close</a></div>").insertAfter("#add-btn-id");
+            $("<div class='small-popup pop'><p>Multi-line input is very useful. Check out <a href='/multiline'>mathologica.com/multiline</a> for more.</p><a style='margin-top: 0px;' class='close' href='#'>Close</a></div>").insertAfter("#add-btn-id");
 
             $(".close").live('click', function () {
                 $(".pop").remove();
