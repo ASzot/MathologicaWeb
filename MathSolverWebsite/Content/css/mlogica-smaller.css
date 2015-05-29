@@ -1,0 +1,11 @@
+﻿
+@media screen and (max-height: 760px) {
+    .hlep {
+        height: 155px;
+        padding-top: 50px;
+    }
+
+    .hlep-larger {
+        padding-top: 18px;
+    }
+}

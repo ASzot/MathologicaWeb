@@ -40,6 +40,17 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
         }
 
+        public bool IsPreDefined(AlgebraComp funcDefVar)
+        {
+            foreach (TypePair<FunctionDefinition, ExComp> funcDef in _funcDefs)
+            {
+                if (funcDef.Data1.Iden.IsEqualTo(funcDefVar))
+                    return true;
+            }
+
+            return false;
+        }
+
         public void DoAssigns(ref EvalData pEvalData)
         {
             foreach (TypePair<FunctionDefinition, ExComp> funcDef in _funcDefs)

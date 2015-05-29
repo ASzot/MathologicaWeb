@@ -15,12 +15,13 @@ namespace MathSolverWebsite.MathSolverLibrary
         public const bool PLAIN_TEXT = false;
 
         public static TermType.TermType DetermineSingularEqSet(EqSet singularEqSet, List<TypePair<LexemeType, string>> completeLexemeTable,
-            Dictionary<string, int> solveVars, ref TermType.EvalData pEvalData)
+            Dictionary<string, int> solveVars, MultiLineHelper mlh, ref TermType.EvalData pEvalData)
         {
             string probSolveVar = AlgebraSolver.GetProbableVar(solveVars);
 
             DiffEqTermType diffEqTT = new DiffEqTermType();
-            if (!singularEqSet.IsSingular && diffEqTT.Init(singularEqSet, solveVars, probSolveVar))
+            diffEqTT.AttachMultiLineHelper(mlh);
+            if (!singularEqSet.IsSingular && diffEqTT.Init(singularEqSet, solveVars, probSolveVar, ref pEvalData))
                 return diffEqTT;
 
             EquationInformation eqInfo = singularEqSet.IsSingular ? new EquationInformation(singularEqSet.LeftTerm, new AlgebraComp(probSolveVar)) :
@@ -123,7 +124,7 @@ namespace MathSolverWebsite.MathSolverLibrary
             {
                 EqSet singularEqSet = terms[0];
 
-                return DetermineSingularEqSet(singularEqSet, completeLexemeTable, solveVars, ref pEvalData);
+                return DetermineSingularEqSet(singularEqSet, completeLexemeTable, solveVars, null, ref pEvalData);
             }
             else
             {
@@ -145,7 +146,7 @@ namespace MathSolverWebsite.MathSolverLibrary
 
                 if (terms.Count == 1)
                 {
-                    TermType.TermType singularTermType = DetermineSingularEqSet(terms[0], completeLexemeTable, solveVars, ref pEvalData);
+                    TermType.TermType singularTermType = DetermineSingularEqSet(terms[0], completeLexemeTable, solveVars, mlh, ref pEvalData);
                     singularTermType.AttachMultiLineHelper(mlh);
                     return singularTermType;
                 }

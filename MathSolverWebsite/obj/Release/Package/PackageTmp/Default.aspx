@@ -6,7 +6,7 @@
 <asp:Content runat="server" ID="FeaturedContent" ContentPlaceHolderID="FeaturedContent">
 
     <!-- Meta description here. -->
-    <meta name="description" content="" />
+    <meta name="description" content="Free math problem solver that answers questions ranging from algebra to higher level calculus, showing step by step work with explanations for free." />
 
     <!-- JSX graph include. -->
     <link rel="stylesheet" href="JSXGraph/jsxgraph.css" type="text/css" />
@@ -87,6 +87,7 @@
             // Take the previous solve info and move it up a 'space'.
             $("#<% = hiddenSolveBtn.ClientID %>").click();
 
+            $("#<% = loadingArea.ClientID %>").show();
         }
 
         Date.prototype.today = function () {
@@ -320,6 +321,7 @@
         }
 
         $(document).ready(function () {
+
             $("#tool-bar-overlay").mouseenter(function () {
                 $("#tool-bar-space").show(200);
             });
@@ -500,6 +502,10 @@
                     <asp:TextBox runat="server" ID="hiddenSavedProblemTxtBox" CssClass="hidden" />
                     <asp:TextBox runat="server" ID="hiddenTimeTxtBox" CssClass="hidden" />
                     <asp:Button runat="server" ID="hiddenSaveProbBtn" CssClass="hidden" OnClick="hiddenSaveProbBtn_Click" />
+                    <div runat="server" class="loading-area" style="display: none;" id="loadingArea">
+                        <p>Loading</p>
+                        <img src="Images/loading.gif" />
+                    </div>
                 </ContentTemplate>
             </asp:UpdatePanel>
             <div class="parse-errors" id="parse-errors-id" style="display: none;">

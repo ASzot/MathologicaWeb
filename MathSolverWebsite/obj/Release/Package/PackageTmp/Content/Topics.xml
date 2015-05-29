@@ -491,7 +491,7 @@
   </topic>
   <topic>
     <topicName>Graphing Radical Equations</topicName>
-    <topicPath>Algebra/Radicals/Solving Radical Equations</topicPath>
+    <topicPath>Algebra/Radicals/Graphing Radical Equations</topicPath>
     <topicDesc>Graph radical equation on the xy plane.</topicDesc>
     <info>
       Keep the domain of the expression in mind when graphing the function. For radical expressions the inside of even root can never be negative.
@@ -618,7 +618,7 @@
       <input>-2(x-5)^4+32\gt0</input>
     </exampleInput>
     <exampleInput>
-      <input>-(1/4000)(x-5)^2(2x+7)^2(3x-1)^2\lt0</input>
+      <input>-\frac{1}{4000}(x-5)^2(2x+7)^2(3x-1)^2\lt0</input>
     </exampleInput>
     <exampleInput>
       <input>(x-5)^3(2x+7)(3x-1)^2\gt0</input>
@@ -1656,15 +1656,18 @@
     </info>
     <exampleInput>
       <input>\frac{x-y^3}{y+x^2}=x+2</input>
+      <inputIndex>5</inputIndex>
     </exampleInput>
     <exampleInput>
       <input>y=x^2y^3+x^3y^2</input>
+      <inputIndex>5</inputIndex>
     </exampleInput>
     <exampleInput>
       <input>\cos^2(x)+\cos^2(y)=\cos(2x+2y)</input>
+      <inputIndex>5</inputIndex>
     </exampleInput>
   </topic>
-  <topic>
+  <!--<topic>
     <topicName>Finding Critical Points of Functions</topicName>
     <topicPath>Calculus/Derivatives/Critical Points</topicPath>
     <topicDesc>Using derivatives find the critical points of a function.</topicDesc>
@@ -1680,8 +1683,8 @@
     <exampleInput>
       <input>g(t)=\root{3}{t^2}(2t-1); g'(t)=0</input>
     </exampleInput>
-  </topic>
-  <topic>
+  </topic>-->
+  <!--<topic>
     <topicName>Finding Points of Inflection</topicName>
     <topicPath>Calculus/Derivatives/Points of Inflection</topicPath>
     <topicDesc>Find a function's points of inflection using derivatives.</topicDesc>
@@ -1711,7 +1714,7 @@
     <exampleInput>
       <input>g(x)=x^3\sin(\pix); a = 2; f(a)+f'(a)(x-a)</input>
     </exampleInput>
-  </topic>
+  </topic>-->
   <topic>
     <topicName>L'Hopital's Rule</topicName>
     <topicPath>Calculus/Limits/L'Hopital's Rule</topicPath>
@@ -1831,7 +1834,7 @@
       <input>\int ln(x) dx</input>
     </exampleInput>
   </topic>
-  <topic>
+  <!--<topic>
     <topicName>Fundamental Theorem of Calculus</topicName>
     <topicPath>Calculus/Integration/Fundamental Theorem of Calculus</topicPath>
     <topicDesc>Apply the fundamental theorem of calculus to solve tricky definite integral problems.</topicDesc>
@@ -1847,7 +1850,7 @@
     <exampleInput>
       <input>F(x)=\int_{\pi}{x^2} (\cot^2(t)) dt; \frac{dF}{dx}</input>
     </exampleInput>
-  </topic>
+  </topic>-->
   <topic>
     <topicName>Improper Integrals</topicName>
     <topicPath>Calculus/Integration/Improper Integrals</topicPath>
@@ -2183,6 +2186,7 @@
     </info>
     <exampleInput>
       <input>v(x,y)=x^2y\vec{i}+3y\vec{j}; div(v)</input>
+      <inputDisp>v(x,y)=x^2y\vec{i}+3y\vec{j}; \\text{div}(v)</inputDisp>
     </exampleInput>
     <exampleInput>
       <input>\nabla * (\cos(y)\vec{i}+e^{xy}\vec{j})</input>

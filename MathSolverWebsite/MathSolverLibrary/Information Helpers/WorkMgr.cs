@@ -185,14 +185,14 @@ namespace MathSolverWebsite.MathSolverLibrary
             {
                 ExComp tmpleft = Equation.Operators.MulOp.StaticWeakCombine(left, numDen[1]);
                 ExComp tmpright = Equation.Operators.MulOp.StaticWeakCombine(right, numDen[1]);
-                _workSteps.Add(WorkStep.Formatted(WorkMgr.STM + "{0}" + _useComparison + "{1}" + WorkMgr.EDM, "Multiply both sides by " + WorkMgr.STM + WorkMgr.ToDisp(numDen[1]) + WorkMgr.EDM + WorkLabel,
+                _workSteps.Add(WorkStep.Formatted(WorkMgr.STM + "{0} " + _useComparison + " {1}" + WorkMgr.EDM, "Multiply both sides by " + WorkMgr.STM + WorkMgr.ToDisp(numDen[1]) + WorkMgr.EDM + WorkLabel,
                     tmpleft, tmpright));
             }
             else
             {
                 //string divStr = CG_TXT_TG("{1}");
                 string divStr = "{1}";
-                _workSteps.Add(WorkStep.Formatted(WorkMgr.STM + "({0})/(" + divStr + ")" + _useComparison + "({2})/(" + divStr + ")" + WorkMgr.EDM, "Divide both sides by " + WorkMgr.STM +
+                _workSteps.Add(WorkStep.Formatted(WorkMgr.STM + "({0})/(" + divStr + ") " + _useComparison + " ({2})/(" + divStr + ")" + WorkMgr.EDM, "Divide both sides by " + WorkMgr.STM +
                     WorkMgr.ToDisp(divBy) + WorkMgr.EDM + WorkLabel, left, divBy, right));
             }
         }
@@ -223,7 +223,7 @@ namespace MathSolverWebsite.MathSolverLibrary
             if (!AllowWork)
                 return;
 
-            _workSteps.Add(WorkStep.Formatted(STM + "{0}" + ((left == null || right == null) ? "" : _useComparison) + "{1}" + EDM, null, (left == null ? (object)"" : left), (right == null ? (object)"" : right)));
+            _workSteps.Add(WorkStep.Formatted(STM + "{0} " + ((left == null || right == null) ? "" : _useComparison) + " {1}" + EDM, null, (left == null ? (object)"" : left), (right == null ? (object)"" : right)));
         }
 
         public void FromSides(ExComp left, ExComp right, string desc)
@@ -231,7 +231,7 @@ namespace MathSolverWebsite.MathSolverLibrary
             if (!AllowWork)
                 return;
 
-            _workSteps.Add(WorkStep.Formatted(STM + "{0}" + ((left == null || right == null) ? "" : _useComparison) + "{1}" + EDM, desc + WorkLabel, 
+            _workSteps.Add(WorkStep.Formatted(STM + "{0} " + ((left == null || right == null) ? "" : _useComparison) + " {1}" + EDM, desc + WorkLabel, 
                 (left == null ? (object)"" : left), 
                 (right == null ? (object)"" : right)));
         }

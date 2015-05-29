@@ -325,8 +325,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 AlgebraVar solveFor = GetLowestComplexityVar(eqSet.LeftTerm, eqSet.RightTerm);
                 if (solveFor.IsGarbage())
                 {
-                    pEvalData.AddFailureMsg("Error with solving system of equations.");
-                    return SolveResult.Failure();
+                    return SolveResult.Simplified(new NoSolutions());
                 }
 
                 pEvalData.WorkMgr.FromSides(eqSet.Left, eqSet.Right, "Solve for " + WorkMgr.STM + solveFor.ToMathAsciiString() + WorkMgr.EDM + " in this equation.");
@@ -447,8 +446,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 AlgebraVar solveFor = GetLowestComplexityVar(term0, term1);
                 if (solveFor.IsGarbage() && ascending)
                 {
-                    pEvalData.AddFailureMsg("Couldn't solve system of equations.");
-                    return SolveResult.Failure();
+                    return SolveResult.Simplified(new NoSolutions());
                 }
 
                 string eqIdStr = " <i>(EQ" + (i + 1).ToString() + ")</i>";

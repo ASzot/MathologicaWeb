@@ -46,14 +46,14 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             return SolveResult.InvalidCmd(ref pEvalData);
         }
 
-        public bool Init(EqSet eqSet, Dictionary<string, int> solveVars, string probSolveVar)
+        public bool Init(EqSet eqSet, Dictionary<string, int> solveVars, string probSolveVar, ref EvalData pEvalData)
         {
             _left = eqSet.Left;
             _right = eqSet.Right;
 
             List<Derivative> totalDerivs = new List<Derivative>();
-            totalDerivs.AddRange(GetDerivs(_left));
-            totalDerivs.AddRange(GetDerivs(_right));
+            totalDerivs.AddRange(GetDerivs(_left, ref pEvalData));
+            totalDerivs.AddRange(GetDerivs(_right, ref pEvalData));
 
             if (totalDerivs.Count == 0)
                 return false;
@@ -175,13 +175,20 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             return false;
         }
 
-        private static List<Derivative> GetDerivs(ExComp ex)
+        private List<Derivative> GetDerivs(ExComp ex, ref EvalData pEvalData)
         {
             List<Derivative> derivs = new List<Derivative>();
             if (ex is Derivative)
             {
                 Derivative deriv = ex as Derivative;
-                if (deriv.DerivOf != null)
+
+                bool isAlreadyDefined = false;
+                if (deriv.DerivOf != null && pEvalData.FuncDefs.IsFuncDefined(deriv.DerivOf.Var.Var))
+                    isAlreadyDefined = true;
+                else if (_multiLineHelper != null && deriv.DerivOf != null && _multiLineHelper.IsPreDefined(deriv.DerivOf))
+                    isAlreadyDefined = true;
+
+                if (!isAlreadyDefined && deriv.DerivOf != null)
                     derivs.Add(deriv);
             }
             else if (ex is AlgebraTerm)
@@ -189,7 +196,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 AlgebraTerm term = ex as AlgebraTerm;
                 foreach (ExComp termEx in term.SubComps)
                 {
-                    List<Derivative> subDerivs = GetDerivs(termEx);
+                    List<Derivative> subDerivs = GetDerivs(termEx, ref pEvalData);
                     derivs.AddRange(subDerivs);
                 }
             }

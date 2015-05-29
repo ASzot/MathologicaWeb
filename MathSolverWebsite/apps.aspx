@@ -21,9 +21,21 @@
     <div class="w-section">
         <div class="w-container" style="max-width: 920px;">
             <div class="sample">
-                <h1>Topic Name Here</h1>
+                <h1>Take Mathologica on the Go!</h1>
                 <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat. Aenean faucibus nibh et justo cursus id rutrum lorem imperdiet. Nunc ut sem vitae risus tristique posuere.
+                    Download the free Mathologica app for Windows/Android devices and compute problems on the 
+
+                    move, anywhere and everywhere. IOS coming soon!
+                </p>
+                <h1>Free and Instant Access</h1>
+                <p>
+                    Get immediate access to solutions and step-by-step work to math problems on your mobile 
+
+                    devices. Utilization of Mathologica does not require network and is free and easy to use. 
+
+                    Mathologica has been specifically optimized to perform on all platforms, from desktop, to tablet 
+
+                    and mobile devices.
                 </p>
                 <asp:ImageButton CssClass="promote-image" ID="ImageButton1" runat="server" ImageUrl="~/Images/Branding/en_app_rgb_wo_60.png" />
                 <asp:ImageButton CssClass="promote-image" ID="ImageButton2" runat="server" ImageUrl="~/Images/Branding/258x67_WP_Store_cyan.png" />

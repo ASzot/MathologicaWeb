@@ -499,6 +499,42 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                 }
             }
 
+            for (int i = 0; i < orderedTolkensList.Count; ++i)
+            {
+                // Sallow up the next lexemes.
+                var tolken = orderedTolkensList[i];
+                if (tolken.Data1 == LexemeType.Limit)
+                {
+                    int depth = 1;
+                    int endIndex = -1;
+                    string totalStr = "";
+                    for (int j = i + 1; j < orderedTolkensList.Count; ++j)
+                    {
+                        totalStr += orderedTolkensList[j].Data2;
+                        if (orderedTolkensList[j].Data1 == LexemeType.StartPara)
+                        {
+                            depth++;
+                        }
+                        else if (orderedTolkensList[j].Data1 == LexemeType.EndPara)
+                        {
+                            depth--;
+                            if (depth == 0)
+                            {
+                                endIndex = j;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (endIndex == -1)
+                        return null;
+                    orderedTolkensList[i].Data2 += totalStr;
+                    i++;
+                    orderedTolkensList.RemoveRange(i, endIndex + 1 - i);
+                    i = endIndex;
+                }
+            }
+
             // Make sure there are no lone summations.
             foreach (var tolken in orderedTolkensList)
             {
@@ -2631,32 +2667,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                 return null;
 
             AlgebraComp varFor = new AlgebraComp(limitStr.Substring(0, index));
+            string valToStr = limitStr.Substring(index + 2, limitStr.Length - (index + 2));
 
-            int startIndex = currentIndex + 1;
-            int depth = 1;
-            int endIndex = -1;
-            for (int i = currentIndex; i < lt.Count; ++i)
-            {
-                if (lt[i].Data1 == LexemeType.EndPara)
-                {
-                    depth--;
-                    if (depth == 0)
-                    {
-                        endIndex = i;
-                        break;
-                    }
-                }
-                else if (lt[i].Data1 == LexemeType.StartPara)
-                    depth++;
-            }
 
-            if (endIndex == -1)
+            LexemeTable limToLt = CreateLexemeTable(valToStr, ref pParseErrors);
+            if (limToLt == null || limToLt.Count == 0)
                 return null;
 
-            LexemeTable limToLt = lt.GetRange(startIndex, endIndex - startIndex);
-            if (limToLt.Count == 0)
-                return null;
-
+            limToLt.Insert(0, new Lexeme(LexemeType.StartPara, "("));
             AlgebraTerm limTo = LexemeTableToAlgebraTerm(limToLt, ref pParseErrors);
             if (limTo == null)
                 return null;
@@ -2673,16 +2691,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
             else 
                 limTo = tmpLimTo.ToAlgTerm();
 
-            currentIndex = endIndex;
-
             currentIndex++;
 
             if (currentIndex < lt.Count - 1 && lt[currentIndex].Data1 == LexemeType.Operator && lt[currentIndex].Data2 == "*")
                 currentIndex++;
 
             ExComp innerEx;
-            endIndex = lt.Count;
-            depth = 0;
+            int endIndex = lt.Count;
+            int depth = 0;
             int prevOp = -1;
             for (int i = currentIndex; i < lt.Count; ++i)
             {

@@ -1,8 +1,4 @@
 ﻿@media only screen and (max-device-width: 480px) {
-    .header {
-        padding: 0px !important;
-    }
-
     .mathlogo {
         width: 190px !important;
         float: left !important;
@@ -14,6 +10,8 @@
 
     .header {
         height: 55px !important;
+        /*overflow-y: hidden;*/
+        padding: 0px !important;
     }
 
     .heading-1 {
@@ -22,6 +20,22 @@
 
     .ws-container {
         margin-bottom: 60px;
+    }
+
+    /*.container {
+        overflow-y: hidden;
+    }
+
+    form {
+        overflow-y: hidden;
+    }
+
+    body {
+        overflow-y: hidden;
+    }*/
+
+    html {
+        -webkit-overflow-scrolling: touch;
     }
 
     #to-bottom-btn {
@@ -51,7 +65,12 @@
     #left-paneling {
         width: 100%;
         float: none;
+        overflow-y: hidden;
     }
+
+    /*#panel-container {
+        overflow-y: hidden;
+    }*/
 
     #right-paneling {
         height: 100px !important;
@@ -154,7 +173,7 @@
         height: -webkit-calc(100% - 85px) !important;
         height: -o-calc(100% - 85px) !important;
         height: calc(100% - 85px) !important;
-        overflow-y: hidden;
+        /*overflow-y: hidden;*/
         overflow-x: hidden;
     }
 
@@ -262,6 +281,7 @@
 
     .parse-errors {
         width: 81%;
+        margin-top: 0px;
     }
 
     

@@ -160,6 +160,7 @@
     <Content Include="Content\css\mlogica-final.css" />
     <Content Include="Content\css\mlogica-mobile.css" />
     <Content Include="Content\css\mlogica-practice.css" />
+    <Content Include="Content\css\mlogica-smaller.css" />
     <Content Include="Content\css\mlogica-work.css" />
     <Content Include="Content\css\mlogica-you.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -223,7 +224,6 @@
     <Content Include="google8728d16f96719a44.html" />
     <Content Include="helptopics.aspx" />
     <Content Include="help\account.aspx" />
-    <Content Include="help\changelog.aspx" />
     <Content Include="help\faq.aspx" />
     <Content Include="help\formatting.aspx" />
     <Content Include="help\general.aspx" />
@@ -232,6 +232,7 @@
     <Content Include="Images\Branding\258x67_WP_Store_cyan.png" />
     <Content Include="Images\Branding\en_app_rgb_wo_60.png" />
     <Content Include="Images\Branding\facebook.png" />
+    <Content Include="Images\ErrorIcon.jpg" />
     <Content Include="Images\LinkIcon.png" />
     <Content Include="Images\Branding\mail.png" />
     <Content Include="Images\Branding\twitter.png" />
@@ -289,6 +290,7 @@
     <None Include="Properties\PublishProfiles\ml - FTP %285%29.pubxml" />
     <None Include="Properties\PublishProfiles\ml - FTP %286%29.pubxml" />
     <None Include="Properties\PublishProfiles\ml - FTP %287%29.pubxml" />
+    <None Include="Properties\PublishProfiles\ml - FTP %288%29.pubxml" />
     <None Include="Properties\PublishProfiles\ml - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\ml - Web Deploy %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\ml - Web Deploy %283%29.pubxml" />
@@ -296,6 +298,7 @@
     <None Include="Properties\PublishProfiles\ml - Web Deploy %285%29.pubxml" />
     <None Include="Properties\PublishProfiles\ml - Web Deploy %286%29.pubxml" />
     <None Include="Properties\PublishProfiles\ml - Web Deploy %287%29.pubxml" />
+    <None Include="Properties\PublishProfiles\ml - Web Deploy %288%29.pubxml" />
     <None Include="Properties\PublishProfiles\ml - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="practice.aspx" />
@@ -417,13 +420,6 @@
     </Compile>
     <Compile Include="help\account.aspx.designer.cs">
       <DependentUpon>account.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="help\changelog.aspx.cs">
-      <DependentUpon>changelog.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="help\changelog.aspx.designer.cs">
-      <DependentUpon>changelog.aspx</DependentUpon>
     </Compile>
     <Compile Include="help\faq.aspx.cs">
       <DependentUpon>faq.aspx</DependentUpon>

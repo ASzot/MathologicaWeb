@@ -2,6 +2,9 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="FeaturedContent" runat="server">
+
+    <meta name="description" content="Practice problems ranging from algebra to higher level calculus, provides the question, answer, process, and learning for free." />
+
     <link rel="stylesheet" type="text/css" href="Content/css/mlogica-practice.css" />
     <style type="text/css">
         .w-col-4 {
@@ -42,6 +45,7 @@
           </div>
         </div>
       </div>
+      <div class="w-row">
         <div class="w-col w-col-4 link-practice">
           <div class="hlep">
             <div>
@@ -50,7 +54,6 @@
             </div>
           </div>
         </div>
-      <div class="w-row">
         <div class="w-col w-col-4 link-practice">
           <div class="hlep">
             <div>

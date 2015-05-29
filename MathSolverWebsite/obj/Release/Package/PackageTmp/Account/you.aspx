@@ -1,10 +1,24 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="you.aspx.cs" Inherits="MathSolverWebsite.Account.You" %>
+﻿<%@ Page Title="You" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="you.aspx.cs" Inherits="MathSolverWebsite.Account.You" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="FeaturedContent" runat="server">
     <!-- MathJax include. -->
     <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=AM_HTMLorMML"></script>
     <link rel="stylesheet" type="text/css" href="../Content/css/mlogica-you.css" />
+
+    
+    <script>
+        $(document).ready(function () {
+
+            $(".pob-problem").click(function (e) {
+                // Paste into the input.
+                var inputDisp = $(this).find(".hidden").html();
+                var inputDispSplit = inputDisp.split('|');
+                var inputDispEncoded = encodeURIComponent(inputDispSplit[0]);
+                window.location.href = ("/Default?Index=" + inputDispSplit[1] + "&InputDisp=" + inputDispEncoded + ((inputDispSplit[2] == null || inputDispSplit[2] == "") ? "" : "&UseRad=" + inputDispSplit[1]));
+            });
+        });
+    </script>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContent" runat="server">
     <div class="ws-container">
@@ -30,7 +44,12 @@
             <ItemTemplate>
                 <div class="prob-div">
                     <div class="noselect pointable prob-disp">
-                        <%# START_MATH + Eval("problem") + END_MATH %>
+                        <div class="pob-problem">
+                            <span class="hidden"><%# Eval("problem")%>|0</span>
+                            <div>
+                                <%# START_MATH + Eval("problem") + END_MATH %>
+                            </div>
+                        </div>
                     </div>
                     <div class="prob-date">
                         <%# Eval("entry_time") %>

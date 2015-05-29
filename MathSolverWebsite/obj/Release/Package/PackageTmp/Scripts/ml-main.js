@@ -83,7 +83,6 @@ var basic = new TopicMenu(
         new MenuItem("Plus", "+", "+", false),
         new MenuItem("Multiply", "*", "*", false),
         new MenuItem("Fraction", "\\frac{x}{y}", "\\frac{}{}", true),
-        new MenuItem("Divide", "-:", "\\div", false),
         new MenuItem("Divide", "/", "/", false),
         new MenuItem("Variable x", "x", "x", false),
         new MenuItem("Variable y", "y", "y", false),

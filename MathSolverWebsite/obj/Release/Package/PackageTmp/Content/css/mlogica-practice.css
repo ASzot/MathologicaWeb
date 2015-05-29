@@ -30,13 +30,13 @@
 
 .body {
     /* Firefox */
-    height: -moz-calc(100% - 130px);
+    height: -moz-calc(100% - 70px);
     /* WebKit */
-    height: -webkit-calc(100% - 130px);
+    height: -webkit-calc(100% - 70px);
     /* Opera */
-    height: -o-calc(100% - 130px);
+    height: -o-calc(100% - 70px);
     /* Standard */
-    height: calc(100% - 130px);
+    height: calc(100% - 70px);
 
     overflow-y: auto;
 }
@@ -149,14 +149,14 @@ h4 {
 
 @media screen and (max-width: 767px) {
   .w-col {
-    width: 100%;
-    left: auto;
-    right: auto;
+    width: 100% !important;
+    left: auto !important;
+    right: auto !important;
   }
 
     .hlep {
-        padding-top: 20px;
-        padding-bottom: 20px;
+        padding-top: 20px !important;
+        padding-bottom: 20px !important;
         height: 100px !important;
     }
 

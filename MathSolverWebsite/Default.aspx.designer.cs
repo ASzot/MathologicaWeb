@@ -58,6 +58,15 @@ namespace MathSolverWebsite {
         protected global::System.Web.UI.WebControls.Button hiddenSaveProbBtn;
         
         /// <summary>
+        /// loadingArea control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl loadingArea;
+        
+        /// <summary>
         /// parseErrorSpan control.
         /// </summary>
         /// <remarks>

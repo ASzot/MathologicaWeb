@@ -7,8 +7,26 @@
     <meta charset="utf-8" />
     <title><%: Page.Title %></title>
 
-    <link href="Images/favlogo.ico" rel="shortcut icon" type="image/x-icon" />
-    <link href="Images/favlogo.ico" rel="icon" type="images/ico" />
+    <!--Fav Icons-->
+    <link rel="apple-touch-icon" sizes="57x57" href="/Images/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/Images/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/Images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/Images/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/Images/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/Images/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/Images/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/Images/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/Images/apple-touch-icon-180x180.png">
+    <link rel="icon" type="image/png" href="/Images/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="/Images/android-chrome-192x192.png" sizes="192x192">
+    <link rel="icon" type="image/png" href="/Images/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="/Images/favicon-16x16.png" sizes="16x16">
+    <link rel="manifest" href="/Images/manifest.json">
+    <link rel="shortcut icon" href="/Images/favicon.ico">
+    <meta name="msapplication-TileColor" content="#2b5797">
+    <meta name="msapplication-TileImage" content="/Images/mstile-144x144.png">
+    <meta name="msapplication-config" content="/Images/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
 
     <asp:PlaceHolder runat="server">     
           <%: Scripts.Render("~/bundles/modernizr") %>
@@ -111,9 +129,9 @@
                 <div class="centered-col">
                     <div class="footer-links noselect">
                         <a href="/terms">Terms |</a>
-                        <a href="/privacy">Privacy |</a>
-                        <a href="/about">About |</a>
-                        <a href="/apps">Apps</a>
+                        <a href="/privacy"> Privacy |</a>
+                        <a href="/about"> About |</a>
+                        <a href="/apps"> Apps</a>
                     </div>
 
                     <div class="branding-images" style="float: right;">
@@ -136,6 +154,7 @@
         </div>
         
         <script src="/Scripts/mainscript.js"></script>
+        <link rel="stylesheet" type="text/css" href="/Content/css/mlogica-smaller.css" />
     </form>
 </body>
 </html>

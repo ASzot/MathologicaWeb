@@ -2,6 +2,9 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="FeaturedContent" runat="server">
+
+    <meta name="description" content="Learn to use the wide range of features of mathologica, the free online math solver for any student." />
+
     <link rel="stylesheet" type="text/css" href="Content/css/mlogica-practice.css" />
     <style type="text/css">
         .w-col-4 {
