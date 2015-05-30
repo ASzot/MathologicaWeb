@@ -203,19 +203,19 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         {
             CallChildren(harshEval, ref pEvalData);
 
-            ExComp innerEx = InnerEx;
-            if (innerEx is AlgebraTerm)
-                innerEx = Term.AdvAlgebraTerm.PythagTrigSimplify(innerEx as AlgebraTerm, ref pEvalData);
+            AlgebraTerm innerTerm = InnerTerm;
+            ExComp innerEx = Simplifier.Simplify(innerTerm, ref pEvalData);
+
+            if (Number.IsUndef(innerEx))
+                return Number.Undefined;
 
             if (innerEx is ExVector && !IsDefinite)
             {
                 ExVector vec = innerEx as ExVector;
 
-                // Take the anti derivative of each component seperately.
+                // Take the anti derivative of each component separately.
 
                 ExVector antiDerivVec = vec.CreateEmptyBody();
-
-                // Work steps should go here.
 
                 for (int i = 0; i < vec.Length; ++i)
                 {
@@ -283,13 +283,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 return added;
             }
 
-            AlgebraTerm indefinite = Indefinite(InnerTerm, ref pEvalData);
+            AlgebraTerm indefinite = Indefinite(innerEx, ref pEvalData);
             if (_failure)
                 return indefinite;      // Just 'this'
 
+            ExComp indefiniteEx = indefinite.RemoveRedundancies();
+
             if (LowerLimit == null || UpperLimit == null)
             {
-                if (_addConstant && !_isInnerIntegral)
+                if (_addConstant && !_isInnerIntegral && !(indefiniteEx is Integral))
                 {
                     // Add the constant.
                     ExComp retEx = AddOp.StaticWeakCombine(indefinite, new CalcConstant());

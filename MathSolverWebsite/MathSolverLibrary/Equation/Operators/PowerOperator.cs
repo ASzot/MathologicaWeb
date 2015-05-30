@@ -131,7 +131,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 List<ExComp[]> groups = (term as AlgebraTerm).GetGroups();
                 int groupCount = groups.Count;
 
-                if (groups.Count == 2 && powerInt > MIN_BINOM_COMPLEXITY)
+                if (groups.Count == 1)
+                {
+                    return StaticCombine(term, power);
+                }
+                else if (groups.Count == 2 && powerInt > MIN_BINOM_COMPLEXITY)
                 {
                     if (powerInt > MAX_BINOM_COMPLEXITY)
                         return StaticWeakCombine(term, power).ToAlgTerm();

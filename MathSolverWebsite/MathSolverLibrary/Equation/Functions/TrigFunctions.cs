@@ -1426,6 +1426,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                 if (pf.Base is TrigFunction)
                 {
                     ExComp cancelResult = (pf.Base as TrigFunction).CancelWith(this);
+                    if (cancelResult == null)
+                        return null;
                     pf.Power = Operators.SubOp.StaticCombine(pf.Power, Number.One);
 
                     if (Number.One.IsEqualTo(cancelResult))

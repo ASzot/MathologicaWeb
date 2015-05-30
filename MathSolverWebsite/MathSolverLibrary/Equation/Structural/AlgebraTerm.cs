@@ -1497,11 +1497,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                     {
                         resultant = algebraOp.WeakCombine(beforeComp, afterComp);
                     }
-                    else if (!(resultant is Structural.LinearAlg.Transpose))
+                    else
                     {
                         if (comp is Operators.PowOp)
                             resultant = algebraOp.WeakCombine(beforeComp, afterComp);
-                        resultant = algebraOp.Combine(beforeComp, afterComp);
+
+                        if (!(resultant is Structural.LinearAlg.Transpose))
+                            resultant = algebraOp.Combine(beforeComp, afterComp);
                     }
 
                     if (resultant == null)

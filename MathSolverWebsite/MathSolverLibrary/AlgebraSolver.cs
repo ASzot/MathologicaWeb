@@ -175,9 +175,26 @@ namespace MathSolverWebsite.MathSolverLibrary
         public ExComp Solve(AlgebraVar solveFor, AlgebraTerm left, AlgebraTerm right, ref TermType.EvalData pEvalData, bool showFinalStep = false)
         {
             SolveMethod solveMethod;
+
+            left = new AlgebraTerm(left);
+            right = new AlgebraTerm(right);
+
+            // All functions must be called.
+            if (!left.CallFunctions(ref pEvalData))
+            {
+                pEvalData.AddMsg("Invalid function call.");
+                return Number.Undefined;
+            }
+            if (!right.CallFunctions(ref pEvalData))
+            {
+                pEvalData.AddMsg("Invalid function call.");
+                return Number.Undefined;
+            }
+
             ExComp leftEx = left.RemoveRedundancies();
             ExComp rightEx = right.RemoveRedundancies();
             AlgebraComp solveForComp = solveFor.ToAlgebraComp();
+
 
             if (left is AlgebraFunction)
                 left = (left as AlgebraFunction).Evaluate(false, ref pEvalData).ToAlgTerm();

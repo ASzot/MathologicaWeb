@@ -3047,7 +3047,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
             LexemeTable integralTerm = lt.GetRange(startIndex, currentIndex - startIndex);
 
             // This could be in the line integral vector path notation.
-            if (integralTerm[integralTerm.Count - 1].Data2 == "*")
+            if (integralTerm.Count > 0 && integralTerm[integralTerm.Count - 1].Data2 == "*")
             {
                 integralTerm.RemoveAt(integralTerm.Count - 1);
             }
