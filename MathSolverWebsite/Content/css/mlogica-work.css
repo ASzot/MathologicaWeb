@@ -55,7 +55,7 @@
 .sub-toolbar-btn-space {
     position: absolute;
     background: #D5E9F7;
-    z-index: 20000;
+    z-index: 1004;
     padding: 5px 10px;
 }
 
@@ -101,7 +101,7 @@
 
 .toolbar-btn-dropdown {
     position: relative;
-    z-index: 3000;
+    z-index: 1003;
     display: block;
     padding-top: 8px;
 }
@@ -133,7 +133,7 @@
     font-size: 20px;
     bottom: 0px;
     height: 100%;
-    z-index: 10000000;
+    z-index: 1005;
 }
 
 .more-options-area {

@@ -8,6 +8,11 @@
         * {
             box-sizing: border-box;
         }
+        @media only screen and (max-device-width: 480px) {
+            .header {
+                margin-top: -50px;
+            }
+        }
     </style>
     <link rel="stylesheet" type="text/css" href="Content/css/mlogica-def.css" />
 

@@ -154,6 +154,20 @@
         </div>
         
         <script src="/Scripts/mainscript.js"></script>
+        <script>
+            var navBarOpen = false;
+
+            $(document).ready(function () {
+                $(".w-nav-button").click(function () {
+                    navBarOpen = !navBarOpen;
+
+                    if (navBarOpen)
+                        $(".body").css("z-index", -1);
+                    else
+                        $(".body").css("z-index", 0);
+                });
+            });
+        </script>
         <link rel="stylesheet" type="text/css" href="/Content/css/mlogica-smaller.css" />
     </form>
 </body>

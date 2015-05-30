@@ -167,7 +167,7 @@ legend {
 
 .parse-errors {
     position: absolute;
-    z-index: 2000;
+    z-index: 1002;
     width: 57%;
     height: 63px;
     background-color: #e74c3c;

@@ -10,8 +10,9 @@
 
     .header {
         height: 55px !important;
-        overflow-y: hidden;
+        position: fixed;
         padding: 0px !important;
+        width: 100%;
     }
 
     .heading-1 {
@@ -21,22 +22,6 @@
     .ws-container {
         margin-bottom: 60px;
     }
-
-    /*.w-nav {
-        overflow-y: hidden;
-    }*/
-
-    /*.container {
-        overflow-y: hidden;
-    }
-
-    form {
-        overflow-y: hidden;
-    }
-
-    body {
-        overflow-y: hidden;
-    }*/
 
     html {
         -webkit-overflow-scrolling: touch;
@@ -69,12 +54,7 @@
     #left-paneling {
         width: 100%;
         float: none;
-        overflow-y: hidden;
     }
-
-    /*#panel-container {
-        overflow-y: hidden;
-    }*/
 
     #right-paneling {
         height: 100px !important;
@@ -174,6 +154,19 @@
         font-size: 13px !important;
     }
 
+    .w-container {  
+        padding-left: 10px;
+        padding-right: 2px;
+    }
+
+    .topic-section {
+        display: none;
+    }
+
+    .more-options-area {
+        display: none !important;
+    }
+
     .body {
         height: -moz-calc(100% - 85px) !important;
         height: -webkit-calc(100% - 85px) !important;
@@ -181,6 +174,7 @@
         height: calc(100% - 85px) !important;
         overflow-y: hidden;
         overflow-x: hidden;
+        margin-top: 55px;
     }
 
     .register-info-list li input[type='text'] {

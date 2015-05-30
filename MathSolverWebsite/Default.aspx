@@ -320,6 +320,7 @@
             exitScrollMode();
         }
 
+
         $(document).ready(function () {
 
             $("#tool-bar-overlay").mouseenter(function () {
