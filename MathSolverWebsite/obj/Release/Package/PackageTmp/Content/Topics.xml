@@ -1667,7 +1667,7 @@
       <inputIndex>5</inputIndex>
     </exampleInput>
   </topic>
-  <!--<topic>
+  <topic>
     <topicName>Finding Critical Points of Functions</topicName>
     <topicPath>Calculus/Derivatives/Critical Points</topicPath>
     <topicDesc>Using derivatives find the critical points of a function.</topicDesc>
@@ -1683,7 +1683,7 @@
     <exampleInput>
       <input>g(t)=\root{3}{t^2}(2t-1); g'(t)=0</input>
     </exampleInput>
-  </topic>-->
+  </topic>
   <!--<topic>
     <topicName>Finding Points of Inflection</topicName>
     <topicPath>Calculus/Derivatives/Points of Inflection</topicPath>
@@ -1834,7 +1834,7 @@
       <input>\int ln(x) dx</input>
     </exampleInput>
   </topic>
-  <!--<topic>
+  <topic>
     <topicName>Fundamental Theorem of Calculus</topicName>
     <topicPath>Calculus/Integration/Fundamental Theorem of Calculus</topicPath>
     <topicDesc>Apply the fundamental theorem of calculus to solve tricky definite integral problems.</topicDesc>
@@ -1850,7 +1850,7 @@
     <exampleInput>
       <input>F(x)=\int_{\pi}{x^2} (\cot^2(t)) dt; \frac{dF}{dx}</input>
     </exampleInput>
-  </topic>-->
+  </topic>
   <topic>
     <topicName>Improper Integrals</topicName>
     <topicPath>Calculus/Integration/Improper Integrals</topicPath>
@@ -1885,7 +1885,7 @@
       <input>\int \tan(x)\sec^3(x) dx</input>
     </exampleInput>
   </topic>
-  <topic>
+  <!--<topic>
     <topicName>Arc-Length</topicName>
     <topicPath>Calculus/Integration/Arc Length</topicPath>
     <topicDesc>Find the arc length of a line using integration.</topicDesc>
@@ -1901,7 +1901,7 @@
     <exampleInput>
       <input>x(t)=-cos(t); y(t)=sin(t); \int_{0}{\pi} \sqrt{(x'(t))^2+(y'(t))^2}</input>
     </exampleInput>
-  </topic>
+  </topic>-->
   <topic>
     <topicName>Sequences (Using Summations)</topicName>
     <topicPath>Calculus/Series/Sequences with Summations</topicPath>

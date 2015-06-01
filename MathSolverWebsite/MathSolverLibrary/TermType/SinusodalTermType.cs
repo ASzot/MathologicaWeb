@@ -209,7 +209,8 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             if (!tmpCmds.Contains("Graph"))
             {
                 _graphStr = overall.ToJavaScriptString(pEvalData.UseRad);
-                if (_graphStr != null)
+                int varCount = solveVars.Count - (_funcIden == null ? 0 : 1);
+                if (_graphStr != null && varCount == 1)
                     tmpCmds.Insert(0, "Graph");
             }
 

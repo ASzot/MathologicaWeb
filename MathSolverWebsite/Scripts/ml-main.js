@@ -87,10 +87,10 @@ var basic = new TopicMenu(
         new MenuItem("Variable x", "x", "x", false),
         new MenuItem("Variable y", "y", "y", false),
         new MenuItem("Variable z", "z", "z", false),
-        new MenuItem("Raise to power", "x^n", "^", false),
+        new MenuItem("Raise to power", "x^n", "^{}", false),
         new MenuItem("Square root", "sqrt(x)", "\\sqrt{}", false),
         new MenuItem("nth root", "root(n)(x)", "\\nthroot{}{}", false),
-        new MenuItem("Absolute value", "|x|", "|x|", false),
+        new MenuItem("Absolute value", "|x|", "|\\EMPTYGP{}|", false),
         new MenuItem("Equals", "=", "=", false),
         new MenuItem("Greater than", ">", "\\gt", false),
         new MenuItem("Less than", "<", "\\lt", false),
@@ -635,7 +635,7 @@ function onMathInputSpan_Clicked(clickedId) {
 function enterScrollMode() {
     $("#to-bottom-btn").show();
     $("#eval-space").hide();
-    $("#parse-error-txt").hide();
+    //$("#parse-errors-id").hide();
 
     $("#work-space").css('height', 'moz-calc(100% - 204px)');
     $("#work-space").css('height', 'webkit-calc(100% - 204px)');
@@ -646,7 +646,7 @@ function enterScrollMode() {
 function exitScrollMode() {
     $("#to-bottom-btn").hide();
     $("#eval-space").show(200);
-    $("#parse-error-txt").show(200);
+    //$("#parse-errors-id").show(200);
 
     $("#work-space").css('height', 'moz-calc(100% - 264px)');
     $("#work-space").css('height', 'webkit-calc(100% - 264px)');

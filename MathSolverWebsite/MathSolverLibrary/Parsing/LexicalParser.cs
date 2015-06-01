@@ -907,7 +907,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                         // find the start of the group on the left and the end of the group on the
                         // left. Then insert a paranthese on either side.
                         // This problem with order of operations only seems to happen with multiplication.
-                        if (opToOrder != "*" && (beforeLexeme.Data1 == LexemeType.EndPara))
+                        if ((opToOrder != "*" && opToOrder != "^") && (beforeLexeme.Data1 == LexemeType.EndPara))
                             continue;
 
                         // Search backwards.
@@ -2848,11 +2848,41 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
             if (lexemeTable[currentIndex].Data1 != LexemeType.StartPara)
                 return null;
 
-            ExComp rootEx = LexemeToExComp(lexemeTable, ref currentIndex, ref pParseErrors);
-            if (rootEx == null || rootEx is AgOp)
+            currentIndex++;
+            // For the first starting para.
+            int depth = 1;
+            int endIndex = -1;
+            for (int i = currentIndex; i < lexemeTable.Count; ++i)
+            {
+                if (lexemeTable[i].Data1 == LexemeType.StartBracket)
+                    depth++;
+                else if (lexemeTable[i].Data1 == LexemeType.EndBracket)
+                {
+                    depth--;
+                    if (depth == 0)
+                    {
+                        endIndex = i;
+                        break;
+                    }
+                }
+            }
+
+            if (endIndex == -1)
                 return null;
 
-            currentIndex += 2;
+            
+            LexemeTable rootIndexLt = lexemeTable.GetRange(currentIndex, endIndex - currentIndex);
+            if (rootIndexLt.Count == 0)
+                return null;
+            AlgebraTerm rootTerm = LexemeTableToAlgebraTerm(rootIndexLt, ref pParseErrors);
+            if (rootTerm == null)
+                return null;
+
+            ExComp rootEx = rootTerm.RemoveRedundancies();
+            if (rootEx is AgOp)
+                return null;
+
+            currentIndex = endIndex + 2;
 
             if (currentIndex > lexemeTable.Count - 1)
                 return null;
