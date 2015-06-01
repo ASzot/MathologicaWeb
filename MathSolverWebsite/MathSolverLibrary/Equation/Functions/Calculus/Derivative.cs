@@ -152,40 +152,38 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         public ExComp GetDerivOfFunc(FunctionDefinition funcDef, ExComp def)
         {
-            if (_derivOf == null || !funcDef.Iden.IsEqualTo(_derivOf))
-                return null;
-
-            if (!funcDef.HasValidInputArgs)
-                return null;
+			if (_derivOf == null || !funcDef.Iden.IsEqualTo(_derivOf))
+				return null;
 
             if (_withRespectTo == null)
             {
-                if (funcDef.InputArgCount != 1)
+                if (!funcDef.HasValidInputArgs || funcDef.InputArgCount != 1)
                     return null;
             }
-            else if (_isPartial)
-            {
-                bool contains = false;
-                for (int i = 0; i < funcDef.InputArgCount; ++i)
-                {
-                    if (_withRespectTo.IsEqualTo(funcDef.InputArgs[i]))
-                    {
-                        contains = true;
-                        break;
-                    }
-                }
 
-                if (!contains)
-                    return null;
-            }
-            else if (!_isPartial)
-            {
-                if (funcDef.InputArgCount != 1)
-                    return null;
+			//else if (_isPartial)
+			//{
+			//	bool contains = false;
+			//	for (int i = 0; i < funcDef.InputArgCount; ++i)
+			//	{
+			//		if (_withRespectTo.IsEqualTo(funcDef.InputArgs[i]))
+			//		{
+			//			contains = true;
+			//			break;
+			//		}
+			//	}
 
-                if (!_withRespectTo.IsEqualTo(funcDef.InputArgs[0]))
-                    return null;
-            }
+			//	if (!contains)
+			//		return null;
+			//}
+			//else if (!_isPartial)
+			//{
+			//	if (funcDef.InputArgCount != 1)
+			//		return null;
+
+			//	if (!_withRespectTo.IsEqualTo(funcDef.InputArgs[0]))
+			//		return null;
+			//}
 
             return Derivative.ConstructDeriv(_inputVal == null ? null : _derivOf, def, _inputVal, _withRespectTo == null ? funcDef.InputArgs[0] : _withRespectTo, _order);
         }

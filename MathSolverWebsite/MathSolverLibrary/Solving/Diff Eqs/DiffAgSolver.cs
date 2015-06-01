@@ -162,8 +162,28 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
 
             if (leftRight != null)
             {
+				string leftIntStr = "\\int " + WorkMgr.ToDisp(leftRight[0]) + " d" + solveForFunc.ToDispString();
+				string rightIntStr = "\\int " + WorkMgr.ToDisp(leftRight[1]) + " d" + withRespect.ToDispString();
+				pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + leftIntStr + "=" + rightIntStr  + WorkMgr.EDM,
+					"Take the anti-derivative of both sides.");
+
+				pEvalData.WorkMgr.FromFormatted("", "Integrate with respect to " + WorkMgr.STM + solveForFunc.ToDispString() + WorkMgr.EDM);
+				WorkStep last = pEvalData.WorkMgr.GetLast();
+
+				last.GoDown(ref pEvalData);
                 leftRight[0] = Integral.TakeAntiDeriv(leftRight[0], solveForFunc, ref pEvalData);
+				last.GoUp(ref pEvalData);
+
+				last.WorkHtml = WorkMgr.STM + leftIntStr + "=" + WorkMgr.ToDisp(leftRight[0]) + WorkMgr.EDM;
+
+				pEvalData.WorkMgr.FromFormatted("", "Integrate with respect to " + WorkMgr.STM + withRespect.ToDispString() + WorkMgr.EDM);
+				last = pEvalData.WorkMgr.GetLast();
+
+				last.GoDown(ref pEvalData);
                 leftRight[1] = Integral.TakeAntiDeriv(leftRight[1], withRespect, ref pEvalData);
+				last.GoUp(ref pEvalData);
+
+				last.WorkHtml = WorkMgr.STM + rightIntStr + "=" + WorkMgr.ToDisp(leftRight[1]) + WorkMgr.EDM;
 
                 return leftRight;
             }

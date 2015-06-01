@@ -462,7 +462,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                         {
                             orderedTolkensList.RemoveAt(i - 1);
                         }
-                        if (i < orderedTolkensList.Count && !tolken.Data2.Contains("^"))
+                        if (i < orderedTolkensList.Count && !tolken.Data2.Contains("^") && orderedTolkensList[i].Data1 == LexemeType.FunctionDef)
                             orderedTolkensList.RemoveAt(i--);
                     }
                 }
