@@ -19,7 +19,7 @@
                     <fieldset>
                         <ol class="register-info-list">
                             <li>
-                                <asp:Label ID="Label1" runat="server" AssociatedControlID="UserName">User name</asp:Label>
+                                <asp:Label ID="Label1" runat="server" AssociatedControlID="UserName">Email</asp:Label>
                                 <asp:TextBox runat="server" ID="UserName" />
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="UserName" CssClass="field-validation-error" ErrorMessage="A username is required." />
                             </li>

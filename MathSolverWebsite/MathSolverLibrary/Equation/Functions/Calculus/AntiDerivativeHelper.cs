@@ -22,6 +22,33 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             ExComp[] varTo, constTo;
             gp.GetConstVarTo(out varTo, out constTo, dVar);
 
+            if (varTo.Length == 1 && varTo[0] is PowerFunction && (varTo[0] as PowerFunction).Power.IsEqualTo(Number.NegOne))
+            {
+                PowerFunction pf = varTo[0] as PowerFunction;
+
+                List<ExComp[]> denGps = pf.Base.ToAlgTerm().GetGroupsNoOps();
+                if (denGps.Count == 1)
+                {
+                    ExComp[] denGp = denGps[0];
+                    ExComp[] denVarTo, denConstTo;
+
+                    denGp.GetConstVarTo(out denVarTo, out denConstTo, dVar);
+
+                    if (denConstTo.Length != 0 && !(denConstTo.Length == 1 && denConstTo[0].IsEqualTo(Number.One)))
+                    {
+                        ExComp[] tmpConstTo = new ExComp[constTo.Length + 1];
+                        for (int i = 0; i < constTo.Length; ++i)
+                        {
+                            tmpConstTo[i] = constTo[i]; 
+                        }
+
+                        tmpConstTo[tmpConstTo.Length - 1] = new PowerFunction(denConstTo.ToAlgTerm(), Number.NegOne);
+                        constTo = tmpConstTo;
+                        varTo = new ExComp[] { new PowerFunction(denVarTo.ToAlgTerm(), Number.NegOne) };
+                    }
+                }
+            }
+
             string constOutStr = "";
             string constToStr = constTo.ToAlgTerm().FinalToDispStr();
             if (constTo.Length > 0)

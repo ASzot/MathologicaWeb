@@ -53,6 +53,11 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 _graphEqStrs = new string[value.Length];
                 for (int i = 0; i < value.Length; ++i)
                 {
+                    if (value[i] == null)
+                    {
+                        _graphEqStrs = null;
+                        break;
+                    }
                     _graphEqStrs[i] = value[i].Replace("+-", "-");
                 }
             }

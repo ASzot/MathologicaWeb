@@ -17,16 +17,16 @@
       <input>19291-283</input>
     </exampleInput>
     <exampleInput>
-      <input>2132*2822</input>
+      <input>2132 \cdot 2822</input>
     </exampleInput>
     <exampleInput>
-      <input>19+4*3</input>
+      <input>19+4 \cdot 3</input>
     </exampleInput>
     <exampleInput>
       <input>\frac{22}{11}</input>
     </exampleInput>
     <exampleInput>
-      <input>-3*5</input>
+      <input>-3 \cdot 5</input>
     </exampleInput>
   </topic>
   <topic>
@@ -37,13 +37,13 @@
       When there are two expressions that simplify to a numeric value, Mathologica can check to see if they are equal.
     </info>
     <exampleInput>
-      <input>4+2*4=\frac{72}{3}</input>
+      <input>4+2 \cdot 4=\frac{72}{3}</input>
     </exampleInput>
     <exampleInput>
-      <input>18+2*3=(18+2)*3</input>
+      <input>18+2 \cdot 3=(18+2) \cdot 3</input>
     </exampleInput>
     <exampleInput>
-      <input>109-19=9*10</input>
+      <input>109-19=9 \cdot 10</input>
     </exampleInput>
   </topic>
   <topic>
@@ -57,7 +57,7 @@
       <input>\frac{8}{24}</input>
     </exampleInput>
     <exampleInput>
-      <input>\frac{3}{4}*\frac{7}{4}</input>
+      <input>\frac{3}{4} \cdot \frac{7}{4}</input>
     </exampleInput>
     <exampleInput>
       <input>\frac{\frac{1}{2}}{\frac{3}{5}}</input>
@@ -280,7 +280,7 @@
     <info>
     </info>
     <exampleInput>
-      <input>x^2*x^4</input>
+      <input>x^2 \cdot x^4</input>
     </exampleInput>
     <exampleInput>
       <input>x^5/x^2</input>
@@ -652,7 +652,7 @@
       <input>(3-2i)+(5+4i)</input>
     </exampleInput>
     <exampleInput>
-      <input>(4-5i)*(1-3i)</input>
+      <input>(4-5i) \cdot (1-3i)</input>
     </exampleInput>
     <exampleInput>
       <input>\frac{9-i}{4+3i}</input>
@@ -913,7 +913,7 @@
       
     </info>
     <exampleInput>
-      <input>14*3^{x+4}-14*7^{xy}=0</input>
+      <input>14 \cdot 3^{x+4}-14 \cdot 7^{xy}=0</input>
     </exampleInput>
     <exampleInput>
       <input>4^{x+2}=8^{2x-3}</input>
@@ -930,7 +930,7 @@
       
     </info>
     <exampleInput>
-      <input>a=3; b=2; a*b+\frac{a}{b}</input>
+      <input>a=3; b=2; a \cdot b+\frac{a}{b}</input>
     </exampleInput>
     <exampleInput>
       <input>m=\frac{2}{7}-3; b=\frac{2}{3}; 0=mx+b</input>
@@ -1930,7 +1930,7 @@
       <input>\sum_{n=0}^{\infty}\frac{4n^2-n^3}{10+2n^3}</input>
     </exampleInput>
     <exampleInput>
-      <input>\sum_{n=1}^{\infty}2*4^{n-1}</input>
+      <input>\sum_{n=1}^{\infty}2 \cdot 4^{n-1}</input>
     </exampleInput>
     <exampleInput>
       <input>\sum_{n=1}^{\infty}\frac{3}{n^3}</input>
@@ -1994,13 +1994,13 @@
       
     </info>
     <exampleInput>
-      <input>[3,5,3]*[9,6,2]</input>
+      <input>[3,5,3] \cdot [9,6,2]</input>
     </exampleInput>
     <exampleInput>
-      <input>[17, 2, 3]*[\frac{1/2}, 0, 1]</input>
+      <input>[17, 2, 3] \cdot [\frac{1/2}, 0, 1]</input>
     </exampleInput>
     <exampleInput>
-      <input>A=3\vec{i}+8\vec{j}+6\vec{k}; B=2\vec{i}+7\vec{k}; A*B</input>
+      <input>A=3\vec{i}+8\vec{j}+6\vec{k}; B=2\vec{i}+7\vec{k}; A \cdot B</input>
     </exampleInput>
   </topic>
   <topic>
@@ -2189,7 +2189,7 @@
       <inputDisp>v(x,y)=x^2y\vec{i}+3y\vec{j}; \\text{div}(v)</inputDisp>
     </exampleInput>
     <exampleInput>
-      <input>\nabla * (\cos(y)\vec{i}+e^{xy}\vec{j})</input>
+      <input>\nabla  \cdot  (\cos(y)\vec{i}+e^{xy}\vec{j})</input>
     </exampleInput>
   </topic>
   <topic>
@@ -2239,7 +2239,7 @@
       
     </info>
     <exampleInput>
-      <input>f(x,y)=y\vec{i}-x\vec{j}; x(t)=\cos(t); y(t)=\sin(t); 0 \lt t \lt 2\pi; \oint_{c}f(x,y)*dr</input>
+      <input>f(x,y)=y\vec{i}-x\vec{j}; x(t)=\cos(t); y(t)=\sin(t); 0 \lt t \lt 2\pi; \oint_{c}f(x,y) \cdot dr</input>
     </exampleInput>
   </topic>
   <topic>

@@ -317,6 +317,7 @@
 
         function onClearBtnClicked() {
             $("#work-list-disp").html("");
+            removeInput();
             exitScrollMode();
         }
 
@@ -383,6 +384,10 @@
                 objDiv.scrollTop = objDiv.scrollHeight;
             });
 
+            $("#nav-clear-btn").click(function (e) {
+                onClearBtnClicked();
+            });
+
             $("#example-nav-forward").click(function (e) {
                 $("#<% = exampleNavForwardBtn.ClientID %>").click();
                 e.stopPropagation();
@@ -440,16 +445,19 @@
                 inputBoxIds.push(0);
             }
 
+            var popUpTiming = 0;
+
             $(".more-popup").mouseleave(function () {
                 setTimeout(function () {
                     // Don't even think about using 'this' here.
-                    $(".more-popup").hide();
+                    $(".more-popup").hide(1000);
                     $("#expand-more-popup").html("+");
                 }, 2000);
 
             });
             $(".more-popup").mouseenter(function () {
                 $(this).stop(true, true).show();
+                $("#expand-more-popup").html("-");
             });
 
             $("#expand-more-popup").click(function (e) {
@@ -479,11 +487,18 @@
         <div id="left-paneling">
             <div id="work-space">
                 <div id="inner-work-space-id" class="inner-work-space">
-                    <a class="btn-link">
-                        <div id="to-bottom-btn">
-                            &#x25BC;
-                        </div>
-                    </a>
+                    <div id="work-nav-space">
+                        <a class="btn-link">
+                            <div class="work-nav-btn" id="nav-clear-btn">
+                                CLR
+                            </div>
+                        </a>
+                        <a class="btn-link">
+                            <div class="work-nav-btn" id="to-bottom-btn">
+                                &#x25BC;
+                            </div>
+                        </a>
+                    </div>
                     <div id="work-list-disp">
                     </div>
                     <asp:UpdatePanel ID="resultUpdatePanel" runat="server">

@@ -108,7 +108,7 @@ var trig = new TopicMenu(
     [
         new MenuItem("Logarithm", "log", "\\log \\left( \\right)", false,
             [
-                new MenuItem("Logarithm base n", "\\log_n", "log_{} \\left( \\right)", false),
+                new MenuItem("Logarithm base n", "\\log_n", "\\log_{} \\left( \\right)", false),
             ]),
         new MenuItem("Natural log (log base e)", "ln", "\\ln", false),
         new MenuItem("Sine", "sin", "\\sin \\left( \\right)", false,
@@ -500,156 +500,158 @@ function updateInputBoxes() {
     }
 }
 
-function clearInputBtn_Clicked() {
-    if (inputBoxIds.length == 1) {
-        // Clear the final text box.
-
-        var createdBoxHtml = createInputBox(0, true);
-        $("#input-list").html(createdBoxHtml);
-        updateInputBoxes();
-
-        mathInputChanged(null);
-
-        return;
-    }
-
-    var index = Number(inputBoxIds.length - 1);
-
-    var html = $("#input-list").html();
-
-    var removeIndex = -1;
-    for (var i = 0; i < inputBoxIds.length; ++i) {
-        if (inputBoxIds[i] == index) {
-            removeIndex = i;
-            break;
-        }
-    }
-
-    var listEles = html.split("</li>");
-
-    for (var i = 0; i < listEles.length; ++i) {
-        if (listEles[i] == "") {
-            listEles.splice(i--, 1);
-            continue;
-        }
-
-        listEles[i] = listEles[i] + "</li>";
-    }
-
-    if (removeIndex == -1) {
-        // Some error message thing goes here.
-    }
-
-    listEles.splice(removeIndex, 1);
-
-    html = "";
-    for (var i = 0; i < listEles.length; ++i) {
-        html += listEles[i];
-    }
-
-    $("#input-list").html(html);
-
-    inputBoxIds.splice(index, 1);
-
+function removeInput() {
+    var createdBoxHtml = createInputBox(0, true);
+    $("#input-list").html(createdBoxHtml);
     updateInputBoxes();
 
-    mathInputChanged();
+    mathInputChanged(null);
 }
 
-function inputBoxLostFocus() {
-}
+    function clearInputBtn_Clicked() {
+        if (inputBoxIds.length == 1) {
+            // Clear the final text box.
+            removeInput();
+            return;
+        }
 
-function inputBoxGainedFocus() {
-}
+        var index = Number(inputBoxIds.length - 1);
 
-function createInputBox(index, hasInputQuery) {
-    var inputBoxHtml;
-    inputBoxHtml = "<li id='inputEle" + index + "'>";
-    inputBoxHtml += "<div class='input-txt-box-area'>";
-    if (hasInputQuery)
-        inputBoxHtml += "<div class='text-notice'>&gt;</div>";
-    else {
-        inputBoxHtml += "<div style='visibility: hidden' class='text-notice'>&gt;</div>";
-    }
-    inputBoxHtml += "<span runat='server' onPaste='return false' id='mathInputSpan" + index + "' onkeyup='mathInputChanged(event);' class='mathquill-editable' onclick='onMathInputSpan_Clicked(this.id);'></span>";
-    inputBoxHtml += "</div>";
-    inputBoxHtml += "</li>";
+        var html = $("#input-list").html();
 
-    return inputBoxHtml;
-}
+        var removeIndex = -1;
+        for (var i = 0; i < inputBoxIds.length; ++i) {
+            if (inputBoxIds[i] == index) {
+                removeIndex = i;
+                break;
+            }
+        }
 
-function fixInput(selectedTxtBox) {
-    var latex = selectedTxtBox.mathquill('latex');
-    var replaced = latex.replace(/(\\)?sqrt/g, function ($0, $1) { return $1 ? $0 : '\\sqrt{}'; });
-    replaced = replaced.replace(/<=/g, function ($0, $1) { return $1 ? $0 : '\\le'; });
-    replaced = replaced.replace(/>=/g, function ($0, $1) { return $1 ? $0 : '\\ge'; });
+        var listEles = html.split("</li>");
 
-    var fixSymbols =
-        [
-            //'arcsin',
-            //'arccos',
-            //'arctan',
+        for (var i = 0; i < listEles.length; ++i) {
+            if (listEles[i] == "") {
+                listEles.splice(i--, 1);
+                continue;
+            }
 
-            //'arccsc',
-            //'arcsec',
-            //'arccot',
+            listEles[i] = listEles[i] + "</li>";
+        }
 
-            //'sin',
-            //'cos',
-            //'tan',
+        if (removeIndex == -1) {
+            // Some error message thing goes here.
+        }
 
-            //'csc',
-            //'sec',
-            //'cot',
+        listEles.splice(removeIndex, 1);
 
-            //'ln',
-            //'log',
+        html = "";
+        for (var i = 0; i < listEles.length; ++i) {
+            html += listEles[i];
+        }
 
-            'pi'
-        ];
+        $("#input-list").html(html);
 
-    for (var i = 0; i < fixSymbols.length; ++i) {
-        var fixSymbol = fixSymbols[i];
-        replaced = replaced.replace(new RegExp("(\\\\|arc)?" + fixSymbol, 'g'),
-            function ($0, $1) { return $1 ? $0 : '\\' + fixSymbol; });
+        inputBoxIds.splice(index, 1);
+
+        updateInputBoxes();
+
+        mathInputChanged();
     }
 
-    if (replaced != latex) {
-        selectedTxtBox.mathquill('latex', replaced);
+    function inputBoxLostFocus() {
     }
-}
 
-function htmlEncode(value) {
-    return $('<div/>').text(value).html();
-}
+    function inputBoxGainedFocus() {
+    }
 
-function htmlDecode(value) {
-    return $('<div/>').html(value).text();
-}
+    function createInputBox(index, hasInputQuery) {
+        var inputBoxHtml;
+        inputBoxHtml = "<li id='inputEle" + index + "'>";
+        inputBoxHtml += "<div class='input-txt-box-area'>";
+        if (hasInputQuery)
+            inputBoxHtml += "<div class='text-notice'>&gt;</div>";
+        else {
+            inputBoxHtml += "<div style='visibility: hidden' class='text-notice'>&gt;</div>";
+        }
+        inputBoxHtml += "<span runat='server' onPaste='return false' id='mathInputSpan" + index + "' onkeyup='mathInputChanged(event);' class='mathquill-editable' onclick='onMathInputSpan_Clicked(this.id);'></span>";
+        inputBoxHtml += "</div>";
+        inputBoxHtml += "</li>";
 
-function onMathInputSpan_Clicked(clickedId) {
-    selectedTextBox = $("#" + clickedId);
-    selectedTextBox.focus();
-}
+        return inputBoxHtml;
+    }
 
-function enterScrollMode() {
-    $("#to-bottom-btn").show();
-    $("#eval-space").hide();
-    //$("#parse-errors-id").hide();
+    function fixInput(selectedTxtBox) {
+        var latex = selectedTxtBox.mathquill('latex');
+        var replaced = latex.replace(/(\\)?sqrt/g, function ($0, $1) { return $1 ? $0 : '\\sqrt{}'; });
+        replaced = replaced.replace(/<=/g, function ($0, $1) { return $1 ? $0 : '\\le'; });
+        replaced = replaced.replace(/>=/g, function ($0, $1) { return $1 ? $0 : '\\ge'; });
 
-    $("#work-space").css('height', 'moz-calc(100% - 204px)');
-    $("#work-space").css('height', 'webkit-calc(100% - 204px)');
-    $("#work-space").css('height', '-o-calc(100% - 204px)');
-    $("#work-space").css('height', 'calc(100% - 204px)');
-}
+        var fixSymbols =
+            [
+                //'arcsin',
+                //'arccos',
+                //'arctan',
 
-function exitScrollMode() {
-    $("#to-bottom-btn").hide();
-    $("#eval-space").show(200);
-    //$("#parse-errors-id").show(200);
+                //'arccsc',
+                //'arcsec',
+                //'arccot',
 
-    $("#work-space").css('height', 'moz-calc(100% - 264px)');
-    $("#work-space").css('height', 'webkit-calc(100% - 264px)');
-    $("#work-space").css('height', '-o-calc(100% - 264px)');
-    $("#work-space").css('height', 'calc(100% - 264px)');
-}
+                //'sin',
+                //'cos',
+                //'tan',
+
+                //'csc',
+                //'sec',
+                //'cot',
+
+                //'ln',
+                //'log',
+
+                'pi'
+            ];
+
+        for (var i = 0; i < fixSymbols.length; ++i) {
+            var fixSymbol = fixSymbols[i];
+            replaced = replaced.replace(new RegExp("(\\\\|arc)?" + fixSymbol, 'g'),
+                function ($0, $1) { return $1 ? $0 : '\\' + fixSymbol; });
+        }
+
+        if (replaced != latex) {
+            selectedTxtBox.mathquill('latex', replaced);
+        }
+    }
+
+    function htmlEncode(value) {
+        return $('<div/>').text(value).html();
+    }
+
+    function htmlDecode(value) {
+        return $('<div/>').html(value).text();
+    }
+
+    function onMathInputSpan_Clicked(clickedId) {
+        selectedTextBox = $("#" + clickedId);
+        selectedTextBox.focus();
+    }
+
+    function enterScrollMode() {
+        $("#work-nav-space").show();
+        $("#eval-space").hide();
+        //$("#parse-errors-id").hide();
+
+        $("#work-space").css('height', 'moz-calc(100% - 204px)');
+        $("#work-space").css('height', 'webkit-calc(100% - 204px)');
+        $("#work-space").css('height', '-o-calc(100% - 204px)');
+        $("#work-space").css('height', 'calc(100% - 204px)');
+    }
+
+    function exitScrollMode() {
+        $("#work-nav-space").hide();
+        $("#eval-space").show(200);
+        //$("#parse-errors-id").show(200);
+
+        $("#work-space").css('height', 'moz-calc(100% - 264px)');
+        $("#work-space").css('height', 'webkit-calc(100% - 264px)');
+        $("#work-space").css('height', '-o-calc(100% - 264px)');
+        $("#work-space").css('height', 'calc(100% - 264px)');
+    }

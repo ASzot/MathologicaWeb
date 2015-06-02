@@ -992,8 +992,8 @@ body {
 a {
     width: 100%;
     background-color: transparent;
-    -webkit-transition: all 750ms ease;
-    transition: all 750ms ease;
+    -webkit-transition: all 250ms ease;
+    transition: all 250ms ease;
     text-decoration: none;
 }
 

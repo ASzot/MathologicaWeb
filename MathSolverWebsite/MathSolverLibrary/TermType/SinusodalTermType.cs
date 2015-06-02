@@ -18,7 +18,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
         private FunctionTermType tt_func = null;
         private SimplifyTermType tt_simp = null;
         private SolveTermType tt_solve = null;
-        private string _graphStr;
+        private string _graphStr = null;
 
         public SinusodalTermType()
         {
@@ -56,7 +56,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 }
                 return SolveResult.Simplified(_period);
             }
-            else if (command == "Graph")
+            else if (command == "Graph" && _graphStr != null)
             {
                 if (pEvalData.AttemptSetGraphData(_graphStr, _solveFor.Var))
                     return SolveResult.Solved();
@@ -209,8 +209,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             if (!tmpCmds.Contains("Graph"))
             {
                 _graphStr = overall.ToJavaScriptString(pEvalData.UseRad);
-                int varCount = solveVars.Count - (_funcIden == null ? 0 : 1);
-                if (_graphStr != null && varCount == 1)
+                if (_graphStr != null && solveVars.Count == 1)
                     tmpCmds.Insert(0, "Graph");
             }
 

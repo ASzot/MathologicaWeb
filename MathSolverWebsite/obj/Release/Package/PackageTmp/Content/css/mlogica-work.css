@@ -1,13 +1,21 @@
-﻿#to-bottom-btn {
+﻿.work-nav-btn {
     width: 60px;
     height: 60px;
-    position: absolute;
     background-color: #F5F5F5;
     border: 1px solid #adadad;
     text-align: center;
     line-height: 60px;
-    right: 32%;
+}
+
+    .work-nav-btn:hover {
+        cursor: pointer;
+        color: #3498db;
+    }
+
+#work-nav-space {
     display: none;
+    right: 32%;
+    position: absolute;
 }
 
 .not-hidden {
@@ -43,11 +51,6 @@
     right: 8px;
     padding: 10px;
 }
-
-    #to-bottom-btn:hover {
-        cursor: pointer;
-        color: #3498db;
-    }
 
 .sub-toolbar-btn {
 }
@@ -220,6 +223,8 @@
     .angle-rad-btn input {
         width: 30px;
         height: 30px;
+        -webkit-appearance: radio;
+        border-radius: initial;
     }
 
 .del-span {
