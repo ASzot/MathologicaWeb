@@ -143,6 +143,7 @@ legend {
             display: inline;
             position: relative;
             top: 5px;
+            -webkit-appearance: checkbox;
         }
 
 .message-info {

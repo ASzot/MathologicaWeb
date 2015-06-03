@@ -544,6 +544,8 @@
     <Compile Include="MathSolverLibrary\Solving\AbsoluteValueSolve.cs" />
     <Compile Include="MathSolverLibrary\Solving\CubicSolve.cs" />
     <Compile Include="MathSolverLibrary\Solving\Diff Eqs\DiffAgSolver.cs" />
+    <Compile Include="MathSolverLibrary\Solving\Diff Eqs\DiffSolve.cs" />
+    <Compile Include="MathSolverLibrary\Solving\Diff Eqs\SeperableSolve.cs" />
     <Compile Include="MathSolverLibrary\Solving\ExponentSolve.cs" />
     <Compile Include="MathSolverLibrary\Solving\FactorSolve.cs" />
     <Compile Include="MathSolverLibrary\Solving\FractionalSolve.cs" />

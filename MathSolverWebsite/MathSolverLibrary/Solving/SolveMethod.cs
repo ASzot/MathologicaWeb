@@ -58,6 +58,17 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 pEvalData.WorkMgr.FromSides(left, right, "Simplify");
         }
 
+        /// <summary>
+        /// Divide by the coefficients of a variable.
+        /// Factoring is performed automatically.
+        /// Strong divide refers the breaking an exponent up to divide by the exponent.
+        /// For instance, e^(xy) will be split to e^y*e^x with strong divide.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <param name="solveForComp"></param>
+        /// <param name="pEvalData"></param>
+        /// <param name="strongDivide"></param>
         public static void DivideByVariableCoeffs(ref AlgebraTerm left, ref AlgebraTerm right, AlgebraComp solveForComp, ref TermType.EvalData pEvalData, 
             bool strongDivide = false)
         {
