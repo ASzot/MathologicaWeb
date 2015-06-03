@@ -22,6 +22,15 @@
         h3 {
             margin-bottom: 10px;
         }
+
+        .mathEquationLink {
+
+        }
+
+            .mathEquationLink:hover {
+                color: #3498db;
+                opacity: 0.8;
+            }
     </style>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContent" runat="server">
