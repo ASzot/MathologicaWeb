@@ -11,7 +11,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
     {
 
 
-        public static ExComp[] SolveSeperable(AlgebraTerm left, AlgebraTerm right, AlgebraComp funcVar, AlgebraComp dVar,
+        public static ExComp[] Solve(AlgebraTerm left, AlgebraTerm right, AlgebraComp funcVar, AlgebraComp dVar,
             ref TermType.EvalData pEvalData)
         {
             // In the form N(x)dy/dx = M(x)
@@ -42,13 +42,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             // The 'dx' on the left is implied.
             // The 'dy' on the right is implied.
 
-            if (!numDen[0].Contains(dVar) && !numDen[1].Contains(funcVar))
+            if (!numDen[1].Contains(dVar) && !numDen[0].Contains(funcVar))
             {
                 // Just cross multiply.
                 left = numDen[0];
                 right = numDen[1];
             }
-            else if (!numDen[0].Contains(funcVar) && !numDen[1].Contains(dVar))
+            else if (!numDen[1].Contains(funcVar) && !numDen[0].Contains(dVar))
             {
                 left = AlgebraTerm.FromFraction(Number.One, left);
                 right = AlgebraTerm.FromFraction(Number.One, right);

@@ -44,7 +44,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
 
             // Try separable differential equations.
             prevWorkStepCount = pEvalData.WorkMgr.WorkSteps.Count;
-            atmpt = SeperableSolve.SolveSeperable(ex0Term, ex1Term, solveForFunc, withRespect, ref pEvalData);
+            atmpt = SeperableSolve.Solve(ex0Term, ex1Term, solveForFunc, withRespect, ref pEvalData);
             if (atmpt != null)
                 return atmpt;
             else

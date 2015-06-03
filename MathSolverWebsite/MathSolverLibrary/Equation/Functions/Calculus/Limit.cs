@@ -581,16 +581,21 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         private ExComp ComponentWiseDiv(AlgebraTerm term, ExComp dividend)
         {
+            return ComponentWiseDiv(term, dividend, _varFor);
+        }
+
+        public static ExComp ComponentWiseDiv(AlgebraTerm term, ExComp dividend, AlgebraComp varFor)
+        {
             if (term is PowerFunction)
             {
-                if ((term as PowerFunction).Base.IsEqualTo(_varFor))
+                if ((term as PowerFunction).Base.IsEqualTo(varFor))
                     return DivOp.StaticCombine(term, dividend);
 
                 PowerFunction pf = term as PowerFunction;
                 ExComp root = DivOp.StaticCombine(Number.One, pf.Power);
 
                 return new PowerFunction(ComponentWiseDiv((term as PowerFunction).Base.ToAlgTerm(),
-                    PowOp.StaticCombine(dividend, root)), pf.Power);
+                    PowOp.StaticCombine(dividend, root), varFor), pf.Power);
             }
 
             if (term.TermCount == 1)
@@ -598,11 +603,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 ExComp singular = term[0];
                 if (singular is PowerFunction)
                 {
-                    if ((term as PowerFunction).Base.IsEqualTo(_varFor))
+                    if ((term as PowerFunction).Base.IsEqualTo(varFor))
                         return DivOp.StaticCombine(term, dividend);
 
                     return ComponentWiseDiv((term as PowerFunction).Base.ToAlgTerm(),
-                        PowOp.StaticCombine(dividend, (term as PowerFunction).Power));
+                        PowOp.StaticCombine(dividend, (term as PowerFunction).Power), varFor);
                 }
                 else
                     return DivOp.StaticCombine(singular, dividend);
@@ -618,7 +623,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
                 ExComp[] group = groups[i];
                 ExComp[] constTo, varTo;
-                group.GetConstVarTo(out varTo, out constTo, _varFor);
+                group.GetConstVarTo(out varTo, out constTo, varFor);
                 if (varTo.Length == 0)
                 {
                     finalTerm.Add(DivOp.StaticCombine(group.ToAlgTerm(), dividend));
@@ -630,7 +635,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     return null;
 
                 ExComp varToEx = varTo[0];
-                ExComp compDiv = ComponentWiseDiv(varToEx.ToAlgTerm(), dividend);
+                ExComp compDiv = ComponentWiseDiv(varToEx.ToAlgTerm(), dividend, varFor);
                 ExComp finalAdd = constTo.Length == 0 ? compDiv : MulOp.StaticCombine(constTo.ToAlgTerm(), compDiv);
                 finalTerm.Add(finalAdd);
             }

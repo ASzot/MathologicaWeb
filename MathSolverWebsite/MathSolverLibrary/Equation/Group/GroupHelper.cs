@@ -648,6 +648,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return groupList.ToArray();
         }
 
+        public static ExComp[] RemoveEx(this ExComp[] group, int indexToRemove)
+        {
+            List<ExComp> groupList = group.ToList();
+
+            groupList.RemoveAt(indexToRemove);
+
+            return groupList.ToArray();
+        }
+
         public static ExComp[] RemoveExTerms(this ExComp[] group, IEnumerable<ExComp> termsToRemove)
         {
             foreach (ExComp term in termsToRemove)

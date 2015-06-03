@@ -11,7 +11,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
         protected static AlgebraTerm ConvertDerivsToAlgebraComps(AlgebraTerm term, AlgebraComp funcDeriv, AlgebraComp dVar, ref AlgebraComp replaceCmp)
         {
             if (replaceCmp == null)
-                replaceCmp = new AlgebraComp("\\frac{" + funcDeriv.ToDispString() + "}{" + dVar.ToDispString() + "}");
+                replaceCmp = new AlgebraComp("\\frac{d" + funcDeriv.ToDispString() + "}{d" + dVar.ToDispString() + "}");
+
+            if (term is Derivative && (term as Derivative).DerivOf != null && (term as Derivative).DerivOf.IsEqualTo(funcDeriv))
+                return replaceCmp.ToAlgTerm();
+
             for (int i = 0; i < term.TermCount; ++i)
             {
                 if (term[i] is AlgebraTerm)
