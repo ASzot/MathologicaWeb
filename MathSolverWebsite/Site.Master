@@ -141,7 +141,7 @@
                         <a class="img-disp" href="https://www.facebook.com/pages/Mathologica/388128111363690">
                             <img class="fb" src="/Images/Branding/facebook.png" width="89" alt="Mathologica Facebook" />
                         </a>
-                        <a class="img-disp" href="mailto:contact@mathologica.com">
+                        <a class="img-disp" href="/contact">
                             <img class="mail" src="/Images/Branding/mail.png" width="89" alt="Mathologica Mail" />
                         </a>
                     </div>

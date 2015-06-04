@@ -281,7 +281,7 @@ namespace MathSolverWebsite.MathSolverLibrary
             return true;
         }
 
-        public void CallFunction(FunctionDefinition funcDef, ExComp def)
+        public void CallFunction(FunctionDefinition funcDef, ExComp def, ref TermType.EvalData pEvalData)
         {
             for (int i = 0; i < _sides.Count; ++i)
             {
@@ -289,7 +289,7 @@ namespace MathSolverWebsite.MathSolverLibrary
                     continue;
 
                 AlgebraTerm term = _sides[i].ToAlgTerm();
-                term.CallFunction(funcDef, def);
+                term.CallFunction(funcDef, def, ref pEvalData);
                 _sides[i] = term;
             }
         }

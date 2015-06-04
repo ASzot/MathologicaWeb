@@ -2717,7 +2717,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
             }
 
 
-            var remainingLt = lt.GetRange(currentIndex, endIndex - currentIndex);
+            LexemeTable remainingLt = lt.GetRange(currentIndex, endIndex - currentIndex);
             if (remainingLt.Count == 0)
                 return null;
             innerEx = LexemeTableToAlgebraTerm(remainingLt, ref pParseErrors);

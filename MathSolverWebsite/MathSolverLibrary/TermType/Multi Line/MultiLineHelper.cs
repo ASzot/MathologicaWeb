@@ -229,7 +229,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             {
                 if (j == i)
                     continue;
-                eqs[j].CallFunction(funcDef, assignTo);
+                eqs[j].CallFunction(funcDef, assignTo, ref pEvalData);
             }
 
             //pEvalData.FuncDefs.Define(funcDef, assignTo, ref pEvalData);

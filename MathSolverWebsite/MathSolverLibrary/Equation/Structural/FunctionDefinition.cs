@@ -117,9 +117,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             _funcNotation = funcNotation;
         }
 
-        public ExComp CallFunc(ref TermType.EvalData pEvalData)
+        public ExComp CallFunc(KeyValuePair<FunctionDefinition, ExComp> def, ref TermType.EvalData pEvalData)
         {
-            KeyValuePair<FunctionDefinition, ExComp> def = pEvalData.FuncDefs.GetDefinition(this);
             if (def.Value == null)
             {
                 if (CallArgs != null && InputArgs == null)
@@ -168,6 +167,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             if (workable == null)
                 return null;
             return workable;
+        }
+
+        public ExComp CallFunc(ref TermType.EvalData pEvalData)
+        {
+            KeyValuePair<FunctionDefinition, ExComp> def = pEvalData.FuncDefs.GetDefinition(this);
+            return CallFunc(def, ref pEvalData);
         }
 
         public override ExComp Clone()

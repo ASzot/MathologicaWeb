@@ -245,7 +245,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         /// </summary>
         /// <param name="funcDef"></param>
         /// <param name="def"></param>
-        public void CallFunction(FunctionDefinition funcDef, ExComp def)
+        public void CallFunction(FunctionDefinition funcDef, ExComp def, ref TermType.EvalData pEvalData)
         {
             for (int i = 0; i < _subComps.Count; ++i)
             {
@@ -266,12 +266,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
                 if (_subComps[i] is AlgebraTerm)
                 {
-                    (_subComps[i] as AlgebraTerm).CallFunction(funcDef, def);
+                    (_subComps[i] as AlgebraTerm).CallFunction(funcDef, def, ref pEvalData);
                 }
 
                 if (_subComps[i] is FunctionDefinition && (_subComps[i] as FunctionDefinition).IsEqualTo(funcDef))
                 {
-                    _subComps[i] = def;
+                    KeyValuePair<FunctionDefinition, ExComp> keyValDef = new KeyValuePair<FunctionDefinition, ExComp>(funcDef, def);
+                    ExComp tmpVal = (_subComps[i] as FunctionDefinition).CallFunc(keyValDef, ref pEvalData);
+                    if (tmpVal != null)
+                        _subComps[i] = tmpVal;
                 }
             }
         }

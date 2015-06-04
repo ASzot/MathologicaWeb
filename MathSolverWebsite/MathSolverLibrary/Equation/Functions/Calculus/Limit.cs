@@ -78,7 +78,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (Number.NegInfinity.IsEqualTo(_valTo) || Number.PosInfinity.IsEqualTo(_valTo))
             {
                 PolynomialExt poly = new PolynomialExt();
-                if (poly.Init(reduced))
+                ExComp harshSimp = Simplifier.HarshSimplify(reduced, ref pEvalData);
+                if (poly.Init(reduced) || poly.Init(harshSimp.ToAlgTerm()))
                     return EvaluatePoly(poly, ref pEvalData);
 
                 infEval = true;
@@ -219,6 +220,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         private ExComp EvalInfinitySpecialFunc(ExComp ex)
         {
             bool posInfinity = Number.PosInfinity.IsEqualTo(_valTo);
+
+            if (ex is AlgebraTerm)
+                ex = (ex as AlgebraTerm).RemoveRedundancies();
+
             if (ex is PowerFunction)
             {
                 PowerFunction pf = ex as PowerFunction;
@@ -238,6 +243,37 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             else if (ex is TrigFunction)
             {
                 return Number.Undefined;
+            }
+            else if (ex is AlgebraTerm && !(ex is AlgebraFunction))
+            {
+                AlgebraTerm term = ex as AlgebraTerm;
+                List<ExComp[]> gps = term.GetGroupsNoOps();
+                if (gps.Count == 1)
+                {
+                    // Remove the constants
+                    ExComp[] gp = gps[0];
+                    ExComp[] varTo, constTo;
+                    gp.GetConstVarTo(out varTo, out constTo, _varFor);
+
+                    if (varTo.Length != 1)
+                        return null;
+
+                    Number coeff = null;
+                    if (constTo.Length == 1 && constTo[0] is Number && !(constTo[0] as Number).HasImaginaryComp())
+                        coeff = constTo[0] as Number;
+                    else if (constTo.Length == 0)
+                        coeff = Number.One;
+                    else
+                        return null;
+
+                    ExComp tmpEval = EvalInfinitySpecialFunc(varTo[0]);
+                    if (tmpEval == null)
+                        return null;
+
+                    if (coeff < 0.0)
+                        return MulOp.Negate(tmpEval);
+                    return tmpEval;
+                }
             }
 
             return null;
@@ -672,7 +708,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 explainStr += " However the leading coefficient of the polynomial is negative so the function ends are reflected resulting in the limit becoming `" + infRet.ToDispString() + "`.";
             }
 
-            pEvalData.WorkMgr.FromFormatted("`" + this.FinalToDispStr() + "`", explainStr);
+            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + this.FinalToDispStr() + "=" + WorkMgr.ToDisp(infRet) + WorkMgr.EDM, explainStr);
 
             return infRet;
         }
@@ -683,14 +719,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (attempt != null)
                 return attempt;
 
-            else if (Number.PosInfinity.IsEqualTo(_valTo))
-            {
-                List<ExComp> varPowers = term.GetPowersOfVar(_varFor);
-                if (varPowers.Count == 1 && varPowers[0] is Number)
-                {
-                    return (varPowers[0] as Number) > 0.0 ? Number.PosInfinity : Number.Zero;
-                }
-            }
+            //else if (Number.PosInfinity.IsEqualTo(_valTo))
+            //{
+            //    List<ExComp> varPowers = term.GetPowersOfVar(_varFor);
+            //    if (varPowers.Count == 1 && varPowers[0] is Number)
+            //    {
+            //        return (varPowers[0] as Number) > 0.0 ? Number.PosInfinity : Number.Zero;
+            //    }
+            //}
 
             return null;
         }

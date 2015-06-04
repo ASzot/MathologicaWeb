@@ -1479,7 +1479,7 @@
       <input>\lim_{x \to \infty}(sin(x))</input>
     </exampleInput>
   </topic>
-  <topic>
+  <!--<topic>
     <topicName>Limit Definition of a Derivative</topicName>
     <topicPath>Pre-Calc/Limits/Limit Definition of a Derivative</topicPath>
     <topicDesc>Use the limit definition of a derivative to find the derivative for functions.</topicDesc>
@@ -1492,7 +1492,7 @@
     <exampleInput>
       <input>f(x)=x^3; \lim_{h \to 0}(\frac{f(x+h)-f(x)}{h})</input>
     </exampleInput>
-  </topic>
+  </topic>-->
   
   
   <!--Calculus-->

@@ -156,6 +156,7 @@
     <Content Include="account\register.aspx" />
     <Content Include="account\you.aspx" />
     <Content Include="apps.aspx" />
+    <Content Include="contact.aspx" />
     <Content Include="Content\css\mlogica-def.css" />
     <Content Include="Content\css\mlogica-final.css" />
     <Content Include="Content\css\mlogica-mobile.css" />
@@ -400,6 +401,13 @@
     </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="contact.aspx.cs">
+      <DependentUpon>contact.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="contact.aspx.designer.cs">
+      <DependentUpon>contact.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
