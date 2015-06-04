@@ -53,11 +53,17 @@
                             <div>`y=3x+5`</div>
                         </div>
                     </li>
+                    <li style="text-align: center">
+                        or
+                    </li>
                     <li>
                         <div style="text-align: center;" class="pob-problem">
                             <span class='hidden'>f(x)=3x+5|0</span>
                             <div>`f(x)=3x+5`</div>
                         </div>
+                    </li>
+                    <li style="text-align: center">
+                        or
                     </li>
                     <li>
                         <div style="text-align: center;" class="pob-problem">

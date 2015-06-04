@@ -25,54 +25,48 @@
       <h1 class="heading-1" style="margin-bottom: 20px">Help</h1>
       <div class="w-row">
         <div class="w-col w-col-4 link-practice">
-          <div class="hlep">
-            <div>
-              <div><a class="wordlink-help" href="/help/general">General</a>
-              </div>
-            </div>
-          </div>
+            <a class="wordlink-help" href="/help/general">
+                <div class="hlep">
+                    <div>General</div>
+                </div>
+            </a>
         </div>
         <div class="w-col w-col-4 link-practice">
-          <div class="hlep">
-            <div>
-              <div><a class="wordlink-help" href="/help/faq">FAQ</a>
-              </div>
-            </div>
-          </div>
+            <a class="wordlink-help" href="/help/faq">
+                <div class="hlep">
+                    <div>FAQ</div>
+                </div>
+            </a>
         </div>
         <div class="w-col w-col-4 link-practice">
-          <div class="hlep">
-            <div>
-              <div><a class="wordlink-help" href="/help/formatting">Formatting</a>
-              </div>
-            </div>
-          </div>
+            <a class="wordlink-help" href="/help/formatting">
+                <div class="hlep">
+                    <div>Formatting</div>
+                </div>
+            </a>
         </div>
       </div>
       <div class="w-row">
         <div class="w-col w-col-4 link-practice">
-          <div class="hlep">
-            <div>
-              <div><a class="wordlink-help" href="/multiline">Multi-line</a>
-              </div>
-            </div>
-          </div>
+            <a class="wordlink-help" href="/multiline">
+                <div class="hlep">
+                    <div>Multi-line</div>
+                </div>
+            </a>
         </div>
         <div class="w-col w-col-4 link-practice">
-          <div class="hlep">
-            <div>
-              <div><a class="wordlink-help" href="/help/account">Account</a>
-              </div>
-            </div>
-          </div>
+            <a class="wordlink-help" href="/help/account">
+                <div class="hlep">
+                    <div>Account</div>
+                </div>
+            </a>
         </div>
         <div class="w-col w-col-4 link-practice">
-          <div class="hlep">
-            <div>
-              <div><a class="wordlink-help" href="/help/graphing">Graphing</a>
-              </div>
-            </div>
-          </div>
+            <a class="wordlink-help" href="/help/graphing">
+                <div class="hlep">
+                    <div>Graphing</div>
+                </div>
+            </a>
         </div>
       </div>
     </div>

@@ -21,54 +21,59 @@
       <h1 class="heading-1" style="margin-bottom: 20px">Practice</h1>
       <div class="w-row">
         <div class="w-col w-col-4 link-practice">
-          <div class="hlep">
-            <div>
-              <div><a class="wordlink-help" href="topics?tn=Algebra">Algebra</a>
-              </div>
-            </div>
-          </div>
+            <a class="wordlink-help" href="topics?tn=Algebra">  
+                <div class="hlep">
+                    <div>
+                        Algebra
+                    </div>
+                </div>
+            </a>
         </div>
         <div class="w-col w-col-4 link-practice">
-          <div class="hlep">
-            <div>
-              <div><a class="wordlink-help" href="topics?tn=Trigonometry">Trig</a>
+            <a class="wordlink-help" href="topics?tn=Trigonometry">
+              <div class="hlep">
+                <div>
+                    Trig
+                </div>
               </div>
-            </div>
-          </div>
+            </a>
         </div>
         <div class="w-col w-col-4 link-practice">
-          <div class="hlep">
-            <div>
-              <div><a class="wordlink-help" href="topics?tn=Pre-Calc">Pre-Calc</a>
-              </div>
-            </div>
-          </div>
+            <a class="wordlink-help" href="topics?tn=Pre-Calc">  
+                <div class="hlep">
+                    <div>
+                        Pre-Calc
+                    </div>
+                </div>
+            </a>
         </div>
-      </div>
       <div class="w-row">
         <div class="w-col w-col-4 link-practice">
-          <div class="hlep">
-            <div>
-              <div><a class="wordlink-help" href="topics?tn=Calculus">Calculus</a>
-              </div>
-            </div>
-          </div>
+            <a class="wordlink-help" href="topics?tn=Calculus">  
+                <div class="hlep">
+                    <div>
+                        Calculus
+                    </div>
+                </div>
+            </a>
         </div>
         <div class="w-col w-col-4 link-practice">
-          <div class="hlep">
-            <div>
-              <div><a class="wordlink-help" href="topics?tn=Linear+Algebra">Lin Alg</a>
-              </div>
-            </div>
-          </div>
+            <a class="wordlink-help" href="topics?tn=Linear+Algebra">  
+                <div class="hlep">
+                    <div>
+                        Lin Alg
+                    </div>
+                </div>
+            </a>
         </div>
         <div class="w-col w-col-4 link-practice">
-          <div class="hlep hlep-larger">
-            <div>
-              <div><a class="wordlink-help" href="topics?tn=Advanced+Calculus">Adv Calculus</a>
-              </div>
-            </div>
-          </div>
+            <a class="wordlink-help" href="topics?tn=Advanced+Calculus">  
+                <div class="hlep hlep-larger">
+                    <div>
+                        Adv Calculus
+                    </div>
+                </div>
+            </a>
         </div>
       </div>
     </div>

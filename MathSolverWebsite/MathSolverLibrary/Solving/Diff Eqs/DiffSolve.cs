@@ -8,6 +8,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
 {
     abstract class DiffSolve
     {
+        public abstract ExComp[] Solve(AlgebraTerm left, AlgebraTerm right, AlgebraComp funcVar, AlgebraComp dVar,
+            ref TermType.EvalData pEvalData);
+
+
         protected static AlgebraTerm ConvertDerivsToAlgebraComps(AlgebraTerm term, AlgebraComp funcDeriv, AlgebraComp dVar, ref AlgebraComp replaceCmp)
         {
             if (replaceCmp == null)

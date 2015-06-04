@@ -31,7 +31,45 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
         public static void ConstantsToRight(ref AlgebraTerm left, ref AlgebraTerm right, AlgebraComp solveForComp, ref TermType.EvalData pEvalData)
         {
-            List<AlgebraGroup> constantGroupsLeft = left.GetGroupsConstantTo(solveForComp);
+            ConstantsToRight(ref left, ref right, new AlgebraComp[] { solveForComp }, ref pEvalData);
+        }
+
+        public static void ConstantsToRight(ref AlgebraTerm left, ref AlgebraTerm right, AlgebraComp[] solveForComps, ref TermType.EvalData pEvalData)
+        {
+            // Only find the groups that are constant to all the comps.
+            List<AlgebraGroup> constantGroupsLeft = null;
+            for (int i = 0; i < solveForComps.Length; ++i)
+            {
+                List<AlgebraGroup> gps = left.GetGroupsConstantTo(solveForComps[i]);
+                if (constantGroupsLeft == null)
+                    constantGroupsLeft = gps;
+                else
+                {
+                    // Intersect with all of the gps.
+                    for (int j = 0; j < constantGroupsLeft.Count; ++j)
+                    {
+                        AlgebraGroup gp = constantGroupsLeft[j];
+                        bool matchFound = false;
+                        for (int k = 0; k < gps.Count; ++k)
+                        {
+                            if (gp.IsEqualTo(gps[k]))
+                            {
+                                matchFound = true;
+                                break;
+                            }
+                        }
+
+                        if (!matchFound)
+                            constantGroupsLeft.RemoveAt(j--);
+                    }
+                }
+
+                if (constantGroupsLeft.Count == 0)
+                    break;
+            }
+
+            if (constantGroupsLeft == null)
+                return;
 
             if (constantGroupsLeft.Count != 0)
                 pEvalData.WorkMgr.FromAlgGpSubtraction(constantGroupsLeft, left, right);

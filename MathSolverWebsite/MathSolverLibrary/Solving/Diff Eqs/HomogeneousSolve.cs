@@ -11,7 +11,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
 {
     class HomogeneousSolve : DiffSolve
     {
-        public static ExComp[] Solve(AlgebraTerm left, AlgebraTerm right, AlgebraComp funcVar, AlgebraComp dVar,
+        public override ExComp[] Solve(AlgebraTerm left, AlgebraTerm right, AlgebraComp funcVar, AlgebraComp dVar,
             ref TermType.EvalData pEvalData)
         {
             // In the form dy/dx=f(y/x)
@@ -95,6 +95,18 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             // Make the substitution 'y/x -> v'
             AlgebraComp subVar = new AlgebraComp("$v");
 
+            numDen[0] = MakeVSub(numDen[0], funcVar, dVar, subVar);
+            if (numDen[0].Contains(dVar) || numDen[0].Contains(funcVar))
+                return null;
+
+            numDen[1] = MakeVSub(numDen[1], funcVar, dVar, subVar);
+            if (numDen[1].Contains(dVar) || numDen[1].Contains(funcVar))
+                return null;
+
+            left = AddOp.StaticCombine(subVar, MulOp.StaticCombine(dVar, Derivative.ConstructDeriv(Number.Zero, dVar, funcVar))).ToAlgTerm();
+            right = AlgebraTerm.FromFraction(numDen[0], numDen[1]);
+
+            return (new SeperableSolve()).Solve(left, right, funcVar, dVar, ref pEvalData);
         }
 
         private static AlgebraTerm MakeVSub(AlgebraTerm term, AlgebraComp funcVar, AlgebraComp dVar, AlgebraComp subInVar)
@@ -103,6 +115,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             for (int i = 0; i < gps.Count; ++i)
             {
                 ExComp[] gp = gps[i];
+                for (int j = 0; j < gp.Length; ++j)
+                {
+                    if (gp[j] is AlgebraTerm)
+                        gp[j] = MakeVSub(gp[j] as AlgebraTerm, funcVar, dVar, subInVar);
+                }
 
                 ExComp[] num = gp.GetNumerator();
                 ExComp[] den = gp.GetDenominator();
@@ -120,7 +137,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
                     return null;
                 powDiff = Math.Abs(powDiff);
 
-                ExComp vSubIn = PowOp.StaticCombine(subInVar, new Number(Math.Max(numPowAndIndex[0], denPowAndIndex[0])));
+                ExComp vSubIn = PowOp.StaticCombine(subInVar, new Number(Math.Min(numPowAndIndex[0], denPowAndIndex[0])));
 
                 if (powDiff != 0)
                 {
@@ -136,8 +153,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
                     num[numPowAndIndex[1]] = vSubIn;
 
                 den = den.RemoveEx(denPowAndIndex[1]);
-                gps[i] = 
+                gps[i] = new ExComp[num.Length + 1];
+                for (int j = 0; j < num.Length; ++j)
+                {
+                    gps[i][j] = num[j];
+                }
+
+                gps[i][gps[i].Length - 1] = new PowerFunction(den.ToAlgTerm(), Number.NegOne);
             }
+
+            return new AlgebraTerm(gps.ToArray());
         }
 
         private static int[] SearchPowIndex(ExComp[] gp, AlgebraComp searchVar)

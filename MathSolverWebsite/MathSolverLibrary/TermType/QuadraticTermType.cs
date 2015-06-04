@@ -175,9 +175,9 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
             _eq = _eq.RemoveRedundancies().ToAlgTerm();
 
-            var squaredGroups = _eq.GetGroupContainingTerm(solveForComp.ToPow(2.0));
-            var linearGroups = _eq.GetGroupContainingTerm(solveForComp);
-            var constantGroup = _eq.GetGroupsConstantTo(solveForComp);
+            List<ExComp[]> squaredGroups = _eq.GetGroupContainingTerm(solveForComp.ToPow(2.0));
+            List<ExComp[]> linearGroups = _eq.GetGroupContainingTerm(solveForComp);
+            List<AlgebraGroup> constantGroup = _eq.GetGroupsConstantTo(solveForComp);
 
             var aTerms = from squaredGroup in squaredGroups
                          select squaredGroup.GetUnrelatableTermsOfGroup(solveForComp).ToAlgTerm();

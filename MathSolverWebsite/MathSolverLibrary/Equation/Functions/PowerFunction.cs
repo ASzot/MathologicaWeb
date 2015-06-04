@@ -308,10 +308,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public override ExComp CancelWith(ExComp innerEx, ref TermType.EvalData evalData)
         {
-            LogFunction log = innerEx as LogFunction;
+            LogFunction log = _power as LogFunction;
             if (log == null)
                 return null;
-            if (log.Base.IsEqualTo(Base))
+            if (log.Base.IsEqualTo(innerEx))
                 return log.InnerEx;
 
             return null;

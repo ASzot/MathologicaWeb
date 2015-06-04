@@ -19,7 +19,12 @@ namespace MathSolverWebsite.MathSolverLibrary
 
         public AlgebraComp IterationVar
         {
-            get { return _iterationVar; }
+            get 
+            {
+                if (_iterationVar == null)
+                    CreateUSubTable(new List<TypePair<LexemeType, string>>());
+                return _iterationVar; 
+            }
         }
 
         public AlgebraSolver()

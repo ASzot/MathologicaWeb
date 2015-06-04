@@ -1298,9 +1298,11 @@
       <input>5 \text{C} 2</input>
     </exampleInput>
     <exampleInput>
+      <inputDisp>((4), (1))</inputDisp>
       <input>\binom{4}{1}</input>
     </exampleInput>
     <exampleInput>
+      <inputDisp>((3), (2))</inputDisp>
       <input>\binom{3}{2}</input>
     </exampleInput>
   </topic>
@@ -2208,7 +2210,7 @@
   </topic>
   <topic>
     <topicName>Line Integrals with Scalar Functions</topicName>
-    <topicPath>Advanced Calculus/Line Integrals/With Scalar Functions</topicPath>
+    <topicPath>Advanced Calculus/Line Integrals with Scalar Functions</topicPath>
     <topicDesc>Use line integrals with scalar functions.</topicDesc>
     <info>
       

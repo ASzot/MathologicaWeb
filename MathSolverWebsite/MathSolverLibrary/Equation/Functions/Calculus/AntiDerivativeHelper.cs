@@ -1190,7 +1190,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 if (ad == null)
                     return null;
 
-                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\int(" + (single as TrigFunction).FinalToDispStr() + ")\\d" + dVar.ToDispString() + 
+                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\int(" + (single as TrigFunction).FinalToDispStr() + ")\\d" + dVar.ToDispString() + "=" + WorkMgr.ToDisp(ad) + 
                     WorkMgr.EDM, 
                     "Use the common antiderivative.");
 

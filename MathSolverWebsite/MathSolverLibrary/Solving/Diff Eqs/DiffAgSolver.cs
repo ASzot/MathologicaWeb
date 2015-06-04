@@ -42,13 +42,26 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             ExComp[] atmpt = null;
             int prevWorkStepCount;
 
-            // Try separable differential equations.
-            prevWorkStepCount = pEvalData.WorkMgr.WorkSteps.Count;
-            atmpt = SeperableSolve.Solve(ex0Term, ex1Term, solveForFunc, withRespect, ref pEvalData);
-            if (atmpt != null)
-                return atmpt;
-            else
-                pEvalData.WorkMgr.PopSteps(prevWorkStepCount);
+            DiffSolve[] diffSolves = new DiffSolve[] { new SeperableSolve(), new HomogeneousSolve() };
+
+            for (int i = 0; i < diffSolves.Length; ++i)
+            {
+                // Try separable differential equations.
+                prevWorkStepCount = pEvalData.WorkMgr.WorkSteps.Count;
+                atmpt = diffSolves[i].Solve(ex0Term, ex1Term, solveForFunc, withRespect, ref pEvalData);
+                if (atmpt != null)
+                {
+                    // Add on a constant that will have the properties of a variable.
+                    AlgebraComp varConstant = new AlgebraComp("$C");
+                    atmpt[1] = Equation.Operators.AddOp.StaticCombine(atmpt[1], varConstant);
+
+                    pEvalData.WorkMgr.FromSides(atmpt[0], atmpt[1], "Add the constant of integration.");
+
+                    return atmpt;
+                }
+                else
+                    pEvalData.WorkMgr.PopSteps(prevWorkStepCount);
+            }
 
             return null;
         }
@@ -63,9 +76,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
                 return SolveResult.Failure();
 
             AlgebraSolver agSolver = new AlgebraSolver();
+
+            int startStepCount = pEvalData.WorkMgr.WorkSteps.Count;
             ExComp solved = agSolver.SolveEq(solveForFunc.Var, leftRight[0].Clone().ToAlgTerm(), leftRight[1].Clone().ToAlgTerm(), ref pEvalData);
             if (solved == null)
+            {
+                pEvalData.WorkMgr.PopSteps(startStepCount);
                 return SolveResult.Solved(leftRight[0], leftRight[1], ref pEvalData);
+            }
 
             return SolveResult.Solved(solveForFunc, solved, ref pEvalData);
         }

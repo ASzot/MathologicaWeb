@@ -55,6 +55,42 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return finalStr;
         }
 
+        public static AlgebraTerm ToTerm(List<AlgebraGroup> gps)
+        {
+            AlgebraTerm term = new AlgebraTerm();
+            foreach (AlgebraGroup gp in gps)
+                term = term + gp;
+
+            return term;
+        }
+
+        public static AlgebraTerm GetConstantTo(List<AlgebraGroup> gps, AlgebraComp cmp)
+        {
+            IEnumerable<AlgebraTerm> terms = from squaredGroup in gps
+                                              select squaredGroup.Group.GetUnrelatableTermsOfGroup(cmp).ToAlgTerm();
+
+            AlgebraTerm totalTerm = new AlgebraTerm();
+            foreach (AlgebraTerm term in terms)
+            {
+                totalTerm = totalTerm + term;
+            }
+
+            return totalTerm;
+        }
+
+        public bool IsEqualTo(AlgebraGroup ag)
+        {
+            if (this.GroupCount != ag.GroupCount)
+                return false;
+            for (int i = 0; i < ag.GroupCount; ++i)
+            {
+                if (!this[i].IsEqualTo(ag[i]))
+                    return false;
+            }
+
+            return true;
+        }
+
         public AlgebraTerm ToTerm()
         {
             AlgebraTerm term = new AlgebraTerm();
