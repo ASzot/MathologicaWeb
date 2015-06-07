@@ -42,13 +42,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             ExComp[] atmpt = null;
             int prevWorkStepCount;
 
-            DiffSolve[] diffSolves = new DiffSolve[] { new SeperableSolve(), };
+            DiffSolve[] diffSolves = new DiffSolve[] { new SeperableSolve(), new HomogeneousSolve(), new IntegratingFactorSolve() };
 
             for (int i = 0; i < diffSolves.Length; ++i)
             {
                 // Try separable differential equations.
                 prevWorkStepCount = pEvalData.WorkMgr.WorkSteps.Count;
-                atmpt = diffSolves[i].Solve(ex0Term, ex1Term, solveForFunc, withRespect, ref pEvalData);
+                atmpt = diffSolves[i].Solve((AlgebraTerm)ex0Term.Clone(), (AlgebraTerm)ex1Term.Clone(), solveForFunc, withRespect, ref pEvalData);
                 if (atmpt != null)
                 {
                     // Add on a constant that will have the properties of a variable.

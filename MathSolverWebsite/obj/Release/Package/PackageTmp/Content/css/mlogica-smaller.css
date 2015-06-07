@@ -8,4 +8,8 @@
     .hlep-larger {
         padding-top: 18px;
     }
+
+    .msg-body {
+        height: 100px;
+    }
 }

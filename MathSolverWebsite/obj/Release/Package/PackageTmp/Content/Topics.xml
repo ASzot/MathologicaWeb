@@ -1298,9 +1298,11 @@
       <input>5 \text{C} 2</input>
     </exampleInput>
     <exampleInput>
+      <inputDisp>((4), (1))</inputDisp>
       <input>\binom{4}{1}</input>
     </exampleInput>
     <exampleInput>
+      <inputDisp>((3), (2))</inputDisp>
       <input>\binom{3}{2}</input>
     </exampleInput>
   </topic>
@@ -1477,7 +1479,7 @@
       <input>\lim_{x \to \infty}(sin(x))</input>
     </exampleInput>
   </topic>
-  <topic>
+  <!--<topic>
     <topicName>Limit Definition of a Derivative</topicName>
     <topicPath>Pre-Calc/Limits/Limit Definition of a Derivative</topicPath>
     <topicDesc>Use the limit definition of a derivative to find the derivative for functions.</topicDesc>
@@ -1490,7 +1492,7 @@
     <exampleInput>
       <input>f(x)=x^3; \lim_{h \to 0}(\frac{f(x+h)-f(x)}{h})</input>
     </exampleInput>
-  </topic>
+  </topic>-->
   
   
   <!--Calculus-->
@@ -2208,7 +2210,7 @@
   </topic>
   <topic>
     <topicName>Line Integrals with Scalar Functions</topicName>
-    <topicPath>Advanced Calculus/Line Integrals/With Scalar Functions</topicPath>
+    <topicPath>Advanced Calculus/Line Integrals with Scalar Functions</topicPath>
     <topicDesc>Use line integrals with scalar functions.</topicDesc>
     <info>
       

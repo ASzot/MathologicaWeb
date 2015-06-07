@@ -235,6 +235,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 AddGroup(gp);
         }
 
+        public void SetSubComps(List<ExComp> subComps)
+        {
+            _subComps = subComps;
+        }
+
         public virtual void AssignTo(AlgebraTerm algebraTerm)
         {
             _subComps = algebraTerm._subComps;

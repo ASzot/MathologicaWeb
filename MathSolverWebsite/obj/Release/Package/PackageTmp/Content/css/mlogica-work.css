@@ -166,12 +166,18 @@
     right: 0px;
     margin-left: 8%;
     width: 35px;
+    height: 35px;
     padding: 5px;
     display: table-cell;
 }
 
     .icon-btn:hover {
         cursor: pointer;
+    }
+
+    .icon-btn img {
+        height: 35px;
+        width: 35px;
     }
 
 .copy-past-link {

@@ -36,14 +36,28 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             if (numDen == null)
                 return null;
 
-            List<ExComp> xPowers = right.GetPowersOfVar(dVar);
-            List<ExComp> yPowers = right.GetPowersOfVar(funcVar);
+            List<ExComp> xNumPowers = numDen[0].GetPowersOfVar(dVar);
+            List<ExComp> yNumPowers = numDen[0].GetPowersOfVar(funcVar);
+            List<ExComp> xDenPowers = numDen[1].GetPowersOfVar(dVar);
+            List<ExComp> yDenPowers = numDen[1].GetPowersOfVar(funcVar);
+
+            foreach (ExComp xDenPower in xDenPowers)
+            {
+                if (!xNumPowers.ContainsEx(xDenPower))
+                    xNumPowers.Add(xDenPower);
+            }
+
+            foreach (ExComp yDenPower in yDenPowers)
+            {
+                if (!yNumPowers.ContainsEx(yDenPower))
+                    yNumPowers.Add(yDenPower);
+            }
 
             // Ensure all powers are real integers greater than or equal to 1.
             List<int> ixPows = new List<int>();
             List<int> iyPows = new List<int>();
 
-            foreach (ExComp xPow in xPowers)
+            foreach (ExComp xPow in xNumPowers)
             {
                 if (!(xPow is Number) || !(xPow as Number).IsRealInteger())
                     return null;
@@ -55,7 +69,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
                 ixPows.Add(iPow);
             }
 
-            foreach (ExComp yPow in yPowers)
+            foreach (ExComp yPow in yNumPowers)
             {
                 if (!(yPow is Number) || !(yPow as Number).IsRealInteger())
                     return null;
@@ -87,7 +101,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
                 return null;
 
             // Divide each group by the maximum power of x.
-            PowerFunction xPf = dVar.ToPow((double)xPowMax);
+            ExComp xPf = xPowMax == 1 ? dVar : (ExComp)dVar.ToPow((double)xPowMax);
+
+            numDen[0] = numDen[0].RemoveRedundancies().ToAlgTerm();
+            numDen[1] = numDen[1].RemoveRedundancies().ToAlgTerm();
 
             numDen[0] = Limit.ComponentWiseDiv(numDen[0], xPf, dVar).ToAlgTerm();
             numDen[1] = Limit.ComponentWiseDiv(numDen[1], xPf, dVar).ToAlgTerm();
@@ -96,22 +113,56 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             AlgebraComp subVar = new AlgebraComp("$v");
 
             numDen[0] = MakeVSub(numDen[0], funcVar, dVar, subVar);
-            if (numDen[0].Contains(dVar) || numDen[0].Contains(funcVar))
+            if (numDen[0] == null || numDen[0].Contains(dVar) || numDen[0].Contains(funcVar))
                 return null;
 
             numDen[1] = MakeVSub(numDen[1], funcVar, dVar, subVar);
-            if (numDen[1].Contains(dVar) || numDen[1].Contains(funcVar))
+            if (numDen[1] == null || numDen[1].Contains(dVar) || numDen[1].Contains(funcVar))
                 return null;
 
-            left = AddOp.StaticCombine(subVar, MulOp.StaticCombine(dVar, Derivative.ConstructDeriv(Number.Zero, dVar, funcVar))).ToAlgTerm();
-            right = AlgebraTerm.FromFraction(numDen[0], numDen[1]);
+            left = AddOp.StaticCombine(subVar, MulOp.StaticCombine(dVar, Derivative.ConstructDeriv(Number.Zero, dVar, subVar))).ToAlgTerm();
+            right = DivOp.StaticCombine(numDen[0], numDen[1]).ToAlgTerm();
 
-            return (new SeperableSolve()).Solve(left, right, funcVar, dVar, ref pEvalData);
+            ExComp[] solved = (new SeperableSolve()).Solve(left, right, subVar, dVar, ref pEvalData);
+            if (solved == null)
+                return null;
+
+            // Substitute back in.
+            for (int i = 0; i < solved.Length; ++i)
+            {
+                AlgebraTerm subbed = solved[i].ToAlgTerm().Substitute(subVar, AlgebraTerm.FromFraction(funcVar, dVar));
+                subbed = subbed.ApplyOrderOfOperations();
+                solved[i] = subbed.MakeWorkable();
+            }
+
+            pEvalData.WorkMgr.FromSides(solved[0], solved[1], "Substitute back in " + WorkMgr.STM + subVar.ToDispString() + "=\\frac{" + funcVar.ToDispString() + "}{" + dVar.ToDispString() + "}");
+
+            return solved;
         }
 
         private static AlgebraTerm MakeVSub(AlgebraTerm term, AlgebraComp funcVar, AlgebraComp dVar, AlgebraComp subInVar)
         {
+            //if (term is AppliedFunction)
+            //{
+            //    AppliedFunction af = term as AppliedFunction;
+            //    AlgebraTerm innerTerm = MakeVSub(af.InnerTerm, funcVar, dVar, subInVar);
+
+            //    af.SetSubComps(innerTerm.SubComps);
+            //    return af;
+            //}
+            //else if (term is PowerFunction)
+            //{
+            //    PowerFunction pf = term as PowerFunction;
+            //    AlgebraTerm baseEx = MakeVSub(pf.Base.ToAlgTerm(), funcVar, dVar, subInVar);
+            //    AlgebraTerm powEx = MakeVSub(pf.Power.ToAlgTerm(), funcVar, dVar, subInVar);
+
+            //    return new PowerFunction(baseEx, powEx);
+            //}
+
             List<ExComp[]> gps = term.GetGroupsNoOps();
+            if (gps.Count == 1 && gps[0].Length == 1 && gps[0][0] == term)
+                return term;
+
             for (int i = 0; i < gps.Count; ++i)
             {
                 ExComp[] gp = gps[i];
@@ -124,13 +175,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
                 ExComp[] num = gp.GetNumerator();
                 ExComp[] den = gp.GetDenominator();
 
+                if (den.Length == 0)
+                    continue;
+
                 // Check for y^n in the numerator.
                 int[] numPowAndIndex = SearchPowIndex(num, funcVar);
                 if (numPowAndIndex == null)
-                    return null;
+                    continue;
                 int[] denPowAndIndex = SearchPowIndex(den, dVar);
                 if (denPowAndIndex == null)
-                    return null;
+                    continue;
 
                 int powDiff = numPowAndIndex[0] - denPowAndIndex[0];
                 if (powDiff < 0)
@@ -153,13 +207,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
                     num[numPowAndIndex[1]] = vSubIn;
 
                 den = den.RemoveEx(denPowAndIndex[1]);
-                gps[i] = new ExComp[num.Length + 1];
+
+
+                gps[i] = new ExComp[num.Length + (den.Length == 0 ? 0 : 1)];
                 for (int j = 0; j < num.Length; ++j)
                 {
                     gps[i][j] = num[j];
                 }
-
-                gps[i][gps[i].Length - 1] = new PowerFunction(den.ToAlgTerm(), Number.NegOne);
+                
+                if (den.Length != 0)
+                    gps[i][gps[i].Length - 1] = new PowerFunction(den.ToAlgTerm(), Number.NegOne);
             }
 
             return new AlgebraTerm(gps.ToArray());

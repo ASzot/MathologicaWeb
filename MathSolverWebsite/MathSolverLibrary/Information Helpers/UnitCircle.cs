@@ -7,7 +7,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
 {
     internal class UnitCircle
     {
-        public static List<UnitCirclePoint> UnitCirclePoints = new List<UnitCirclePoint>();
+        public static List<UnitCirclePoint> UnitCirclePoints = new List<UnitCirclePoint>(16);
 
         public static UnitCirclePoint GetAngleForPoint_X(ExComp x)
         {

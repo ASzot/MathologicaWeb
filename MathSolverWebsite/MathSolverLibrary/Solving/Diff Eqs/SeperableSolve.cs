@@ -110,7 +110,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             ExComp leftIntegrated = Integral.TakeAntiDeriv(left, funcVar, ref pEvalData);
             lastWorkStep.GoUp(ref pEvalData);
 
-            lastWorkStep.WorkHtml = WorkMgr.STM + "\\int (" + leftStr + ")d" + dVar.ToDispString() + "=" + WorkMgr.ToDisp(leftIntegrated) + WorkMgr.EDM;
+            lastWorkStep.WorkHtml = WorkMgr.STM + "\\int (" + leftStr + ")d" + funcVar.ToDispString() + "=" + WorkMgr.ToDisp(leftIntegrated) + WorkMgr.EDM;
 
             pEvalData.WorkMgr.FromFormatted("", "Integrate.");
             lastWorkStep = pEvalData.WorkMgr.GetLast();
@@ -119,7 +119,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             ExComp rightIntegrated = Integral.TakeAntiDeriv(right, dVar, ref pEvalData);
             lastWorkStep.GoUp(ref pEvalData);
 
-            lastWorkStep.WorkHtml = WorkMgr.STM + "\\int (" + rightStr + ")d" + funcVar.ToDispString() + "=" + WorkMgr.ToDisp(rightIntegrated) + WorkMgr.EDM;
+            lastWorkStep.WorkHtml = WorkMgr.STM + "\\int (" + rightStr + ")d" + dVar.ToDispString() + "=" + WorkMgr.ToDisp(rightIntegrated) + WorkMgr.EDM;
 
             return new ExComp[] { leftIntegrated, rightIntegrated };
         }
