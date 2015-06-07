@@ -75,17 +75,32 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             if (leftRight == null)
                 return SolveResult.Failure();
 
+            Solution genSol = new Solution(leftRight[0], leftRight[1]);
+            genSol.IsGeneral = true;
+
             AlgebraSolver agSolver = new AlgebraSolver();
 
             int startStepCount = pEvalData.WorkMgr.WorkSteps.Count;
+
+            pEvalData.WorkMgr.FromFormatted("", "Solve for " + WorkMgr.STM + solveForFunc.ToDispString() + WorkMgr.EDM);
+            WorkStep lastStep = pEvalData.WorkMgr.GetLast();
+
+            lastStep.GoDown(ref pEvalData);
             ExComp solved = agSolver.SolveEq(solveForFunc.Var, leftRight[0].Clone().ToAlgTerm(), leftRight[1].Clone().ToAlgTerm(), ref pEvalData);
+            lastStep.GoUp(ref pEvalData);
+
             if (solved == null)
             {
                 pEvalData.WorkMgr.PopSteps(startStepCount);
                 return SolveResult.Solved(leftRight[0], leftRight[1], ref pEvalData);
             }
 
-            return SolveResult.Solved(solveForFunc, solved, ref pEvalData);
+            lastStep.WorkHtml = WorkMgr.STM + solveForFunc.ToDispString() + " = " + WorkMgr.ToDisp(solved) + WorkMgr.EDM;
+
+            SolveResult solveResult = SolveResult.Solved(solveForFunc, solved, ref pEvalData);
+            solveResult.Solutions.Insert(0, genSol);
+
+            return solveResult;
         }
     }
 }

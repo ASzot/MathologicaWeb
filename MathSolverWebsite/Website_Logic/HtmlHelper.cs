@@ -69,7 +69,10 @@ namespace MathSolverWebsite.Website_Logic
         private static string SolutionToHtml(Solution sol)
         {
             string final = "";
-            final += "<p class='solutionHeader'>Solution</p>";
+            if (sol.IsGeneral)
+                final += "<p class='solutionHeader'>General Solution</p>";
+            else
+                final += "<p class='solutionHeader'>Solution</p>";
 
             string solSolveFor = SolSolveForToHtml(sol);
             string solveForStr = sol.SolveFor != null ? sol.SolveFor.ToDispString() : "";

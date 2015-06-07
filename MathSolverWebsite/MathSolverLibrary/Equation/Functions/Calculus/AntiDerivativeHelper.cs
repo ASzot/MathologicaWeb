@@ -1057,7 +1057,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                         pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\int(" + pf.FinalToDispStr() + ")\\d" + dVar.ToDispString() +
                             "=ln(|" + dVar + "|)" + WorkMgr.EDM, "This comes from the known derivative " + WorkMgr.STM + 
                             "\\frac{d}{dx}ln(x)=\\frac{1}{x}" + WorkMgr.EDM);
-                        return LogFunction.Ln(new AbsValFunction(dVar));
+
+                        // The absolute value function was removed here.
+                        return LogFunction.Ln(dVar);
                     }
 
                     ExComp powChange = AddOp.StaticCombine(pf.Power, Number.One);

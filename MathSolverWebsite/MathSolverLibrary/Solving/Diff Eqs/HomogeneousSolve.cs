@@ -109,6 +109,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             numDen[0] = Limit.ComponentWiseDiv(numDen[0], xPf, dVar).ToAlgTerm();
             numDen[1] = Limit.ComponentWiseDiv(numDen[1], xPf, dVar).ToAlgTerm();
 
+            pEvalData.WorkMgr.FromSides(left, AlgebraTerm.FromFraction(numDen[0], numDen[1]), "Divide the numerator and denominator by " + WorkMgr.STM + WorkMgr.ToDisp(xPf) + WorkMgr.EDM);
+
             // Make the substitution 'y/x -> v'
             AlgebraComp subVar = new AlgebraComp("$v");
 
@@ -123,9 +125,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             left = AddOp.StaticCombine(subVar, MulOp.StaticCombine(dVar, Derivative.ConstructDeriv(Number.Zero, dVar, subVar))).ToAlgTerm();
             right = DivOp.StaticCombine(numDen[0], numDen[1]).ToAlgTerm();
 
+            pEvalData.WorkMgr.FromSides(left, right, "Make the substitution " + WorkMgr.STM + "v=\\frac{d" + funcVar.ToDispString() + "}{d" + dVar.ToDispString() + "}" + WorkMgr.EDM);
+
             ExComp[] solved = (new SeperableSolve()).Solve(left, right, subVar, dVar, ref pEvalData);
             if (solved == null)
                 return null;
+
+            pEvalData.WorkMgr.FromSides(solved[0], solved[1]);
 
             // Substitute back in.
             for (int i = 0; i < solved.Length; ++i)
@@ -135,7 +141,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
                 solved[i] = subbed.MakeWorkable();
             }
 
-            pEvalData.WorkMgr.FromSides(solved[0], solved[1], "Substitute back in " + WorkMgr.STM + subVar.ToDispString() + "=\\frac{" + funcVar.ToDispString() + "}{" + dVar.ToDispString() + "}");
+            pEvalData.WorkMgr.FromSides(solved[0], solved[1], "Substitute back in " + WorkMgr.STM + subVar.ToDispString() + "=\\frac{" + funcVar.ToDispString() + "}{" + dVar.ToDispString() + "}" + WorkMgr.EDM);
 
             return solved;
         }

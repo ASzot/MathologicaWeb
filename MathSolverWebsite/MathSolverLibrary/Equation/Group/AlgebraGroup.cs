@@ -75,6 +75,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 totalTerm = totalTerm + term;
             }
 
+            if (totalTerm.SubComps.Count == 0)
+                return Number.One.ToAlgTerm();
+
             return totalTerm;
         }
 

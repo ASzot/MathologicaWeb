@@ -68,8 +68,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             else
             {
                 int gpCount = left.GroupCount;
-                List<AlgebraGroup> yVarTo = right.GetGroupsVariableTo(funcVar);
-                List<AlgebraGroup> xVarTo = right.GetGroupsVariableTo(dVar);
+                List<AlgebraGroup> yVarTo = right.GetGroupsVariableToNoOps(funcVar);
+                List<AlgebraGroup> xVarTo = right.GetGroupsVariableToNoOps(dVar);
 
                 if (yVarTo.Count == gpCount)
                 {

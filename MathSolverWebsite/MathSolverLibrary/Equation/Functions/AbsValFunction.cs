@@ -73,9 +73,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                 {
                     ExComp[] gp = groups[0];
                     Number coeff = gp.GetCoeff();
-                    coeff = Number.Abs(coeff);
-                    gp.AssignCoeff(coeff);
-                    return new AbsValFunction(gp.ToAlgTerm());
+                    if (coeff != null)
+                    {
+                        coeff = Number.Abs(coeff);
+                        gp.AssignCoeff(coeff);
+                        return new AbsValFunction(gp.ToAlgTerm());
+                    }
                 }
             }
 

@@ -1093,6 +1093,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
     internal class Solution
     {
+        public bool IsGeneral = false;
         public ExComp ApproximateResult;
         public Parsing.LexemeType ComparisonOp;
         public GeneralSolution GeneralResult;
