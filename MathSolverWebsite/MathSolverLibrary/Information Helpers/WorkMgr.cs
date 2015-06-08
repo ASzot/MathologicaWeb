@@ -357,10 +357,16 @@ namespace MathSolverWebsite.MathSolverLibrary
             set { _subWorkSteps = value; }
         }
 
-        public WorkStep(string work, string workDesc)
+        public WorkStep(string work, string workDesc, bool correctOutput = false)
         {
             _work = work;
             _workDesc = workDesc;
+
+            if (correctOutput)
+            {
+                _work = MathSolver.FinalizeOutput(_work);
+                _workDesc = MathSolver.FinalizeOutput(_workDesc);
+            }
         }
 
         public void GoDown(ref TermType.EvalData pEvalData)

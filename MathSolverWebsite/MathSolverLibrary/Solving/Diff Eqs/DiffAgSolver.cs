@@ -42,7 +42,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             ExComp[] atmpt = null;
             int prevWorkStepCount;
 
-            DiffSolve[] diffSolves = new DiffSolve[] { new SeperableSolve(), new HomogeneousSolve(), new IntegratingFactorSolve() };
+            DiffSolve[] diffSolves = new DiffSolve[] { new SeperableSolve(), new HomogeneousSolve(), new IntegratingFactorSolve(), new ExactEqsSolve() };
 
             for (int i = 0; i < diffSolves.Length; ++i)
             {

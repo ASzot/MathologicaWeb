@@ -464,6 +464,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             return this;
         }
 
+        /// <summary>
+        /// Multiplies exponents to exponents. A common use is for combining the denominator -1 with the denominator exponent so (x^3)^-1 will turn into x^-3.
+        /// </summary>
+        /// <returns></returns>
         public override AlgebraTerm ForceCombineExponents()
         {
             ExComp baseEx = Base;

@@ -207,6 +207,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 {
                     return Number.One;
                 }
+                else if (numDen != null)
+                {
+                    ExComp num = MulOp.StaticCombine(comp, numDen[0]);
+                    return DivOp.StaticCombine(num, numDen[1]);
+                }
 
                 List<ExComp[]> groups = term.PopGroups();
                 List<ExComp[]> combinedGroups = new List<ExComp[]>();
@@ -218,7 +223,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                     {
                         ExComp groupComp = group[j];
 
-                        if (GroupHelper.CompsRelatable(groupComp, comp))
+                        bool matchFound = GroupHelper.CompsRelatable(groupComp, comp);
+
+                        if (matchFound)
                         {
                             matchingFound = true;
                             group[j] = StaticCombine(groupComp, comp);

@@ -596,6 +596,33 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
             return null;    // There was no common factor.
         }
 
+        public static AlgebraTerm GroupDivide(AlgebraTerm term, ExComp div)
+        {
+            List<ExComp[]> gps = term.GetGroupsNoOps();
+
+            AlgebraTerm dividedTerm = null;
+            for (int i = 0; i < gps.Count; ++i)
+            {
+                ExComp[] gp = gps[i];
+
+                ExComp divided = StaticCombine(gp.ToAlgTerm(), div);
+                if (dividedTerm == null)
+                    dividedTerm = divided.ToAlgTerm();
+                else
+                {
+                    if (dividedTerm is AlgebraTerm)
+                        dividedTerm.Add((divided as AlgebraTerm).SubComps.ToArray());
+                    else
+                        dividedTerm.Add(divided);
+                }
+
+                if (i != gps.Count - 1)
+                    dividedTerm.Add(new AddOp());
+            }
+
+            return dividedTerm;
+        }
+
         public static ExComp StaticCombine(ExComp ex1, ExComp ex2)
         {
             if (ex1 is AlgebraTerm)

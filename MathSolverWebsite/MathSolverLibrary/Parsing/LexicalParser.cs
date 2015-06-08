@@ -1187,7 +1187,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
             bool operatorPreceeding = true;
             for (int i = 0; i < lexemeTable.Count; ++i)
             {
-                var lexeme = lexemeTable[i];
+                Lexeme lexeme = lexemeTable[i];
                 if (operatorPreceeding && lexeme.Data1 == LexemeType.Operator && lexeme.Data2 == "-")
                 {
                     if (i == lexemeTable.Count - 1)
@@ -1295,7 +1295,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
         {
             foreach (Lexeme lex in lt)
             {
-                var tp = lex.Data1;
+                LexemeType tp = lex.Data1;
                 if (tp == LexemeType.EqualsOp || tp == LexemeType.Less || tp == LexemeType.LessEqual ||
                     tp == LexemeType.Greater || tp == LexemeType.GreaterEqual)
                 {

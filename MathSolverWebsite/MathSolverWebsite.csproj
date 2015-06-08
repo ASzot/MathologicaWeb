@@ -554,6 +554,7 @@
     <Compile Include="MathSolverLibrary\Solving\Diff Eqs\DiffAgSolver.cs" />
     <Compile Include="MathSolverLibrary\Solving\Diff Eqs\DiffSolve.cs" />
     <Compile Include="MathSolverLibrary\Solving\Diff Eqs\HomogeneousSolve.cs" />
+    <Compile Include="MathSolverLibrary\Solving\Diff Eqs\ExactEquations.cs" />
     <Compile Include="MathSolverLibrary\Solving\Diff Eqs\IntegratingFactorSolve.cs" />
     <Compile Include="MathSolverLibrary\Solving\Diff Eqs\SeperableSolve.cs" />
     <Compile Include="MathSolverLibrary\Solving\ExponentSolve.cs" />

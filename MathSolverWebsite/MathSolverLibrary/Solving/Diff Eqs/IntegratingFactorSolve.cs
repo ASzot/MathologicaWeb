@@ -41,8 +41,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
                 pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\frac{" + WorkMgr.ToDisp(left) + "}{" + WorkMgr.ToDisp(constantTo) + 
                     "}=\\frac{" + WorkMgr.ToDisp(right) + "}{" + WorkMgr.ToDisp(constantTo) + "}" + WorkMgr.EDM);
 
-                left = DivOp.StaticCombine(left, constantTo).ToAlgTerm();
-                right = DivOp.StaticCombine(right, constantTo).ToAlgTerm();
+
+                // Divide each group by the constant.
+                left = DivOp.GroupDivide(left, constantTo);
+                right = DivOp.GroupDivide(right, constantTo);
 
                 pEvalData.WorkMgr.FromSides(left, right);
             }
@@ -51,7 +53,17 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
                 "\\frac{d" + funcVar.ToDispString() + "}{d" + dVar.ToDispString() + "}+p(" + dVar.ToDispString() + ")" + funcVar.ToDispString() + "=g(" + dVar.ToDispString() + ")" + WorkMgr.EDM);
 
             List<AlgebraGroup> ags = left.GetGroupsVariableToNoOps(funcVar);
+            AlgebraTerm fullNFunc = AlgebraGroup.ToTerm(ags);
             AlgebraTerm nx = AlgebraGroup.GetConstantTo(ags, funcVar);
+
+            ExComp divCheck = DivOp.StaticCombine(fullNFunc, nx);
+            if (divCheck is AlgebraTerm)
+                divCheck = (divCheck as AlgebraTerm).RemoveRedundancies();
+
+            if (!divCheck.IsEqualTo(funcVar))
+                return null;
+
+            string nxStr = WorkMgr.ToDisp(nx);
 
             if (nx.Contains(funcVar))
                 return null;
@@ -69,23 +81,29 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             lastStep.GoUp(ref pEvalData);
 
             lastStep.WorkHtml = WorkMgr.STM + "I(" + dVar.ToDispString() + ")=e^{\\int " + WorkMgr.ToDisp(nx) + "d" + dVar.ToDispString() + "}=" + WorkMgr.ToDisp(ix) + WorkMgr.EDM;
+            
+            string ixStr = WorkMgr.ToDisp(ix);
+            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "(" + ixStr + ")" + "\\frac{d" + funcVar.ToDispString() + "}{d" + dVar.ToDispString() + "}+(" + ixStr + ")(" + nxStr + ")" +
+                funcVar.ToDispString() + "=(" + ixStr + ")" + WorkMgr.ToDisp(right) + WorkMgr.EDM, "Multiply everything by the integrating factor.");
 
             left = MulOp.StaticCombine(ix, funcVar).ToAlgTerm();
             right = MulOp.StaticCombine(ix, right).ToAlgTerm();
 
+            string rightDispStr = WorkMgr.ToDisp(right);
+
             pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\frac{d}{d" + dVar.ToDispString() + "}[" + WorkMgr.ToDisp(left) +
-                "]= " + WorkMgr.ToDisp(right) + WorkMgr.EDM,
+                "]= " + rightDispStr + WorkMgr.EDM,
                 "Use the backwards product rule.");
 
             pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\int \\frac{d}{d" + dVar.ToDispString() + "}[" + WorkMgr.ToDisp(left) + "]d" + dVar.ToDispString() + 
-                "= \\int" + WorkMgr.ToDisp(right) + "d" + dVar.ToDispString() + WorkMgr.EDM, 
+                "= \\int (" + rightDispStr + ") d" + dVar.ToDispString() + WorkMgr.EDM, 
                 "Take the antiderivative of both sides.");
 
             pEvalData.WorkMgr.FromFormatted("");
             lastStep = pEvalData.WorkMgr.GetLast();
 
             lastStep.GoDown(ref pEvalData);
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\int \\frac{d}{d" + dVar.ToDispString() + "}" + WorkMgr.ToDisp(left) + "d" + dVar.ToDispString() + WorkMgr.EDM,
+            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\int \\frac{d}{d" + dVar.ToDispString() + "}[" + WorkMgr.ToDisp(left) + "] d" + dVar.ToDispString() + WorkMgr.EDM,
                 "The integral and the derivative cancel on the left hand side.");
 
             right = Integral.TakeAntiDeriv(right, dVar, ref pEvalData).ToAlgTerm();
