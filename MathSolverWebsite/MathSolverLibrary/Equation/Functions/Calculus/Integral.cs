@@ -205,6 +205,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             AlgebraTerm innerTerm = InnerTerm;
             ExComp innerEx = Simplifier.Simplify(innerTerm, ref pEvalData);
+            if (innerEx is AlgebraTerm)
+                innerEx = (innerEx as AlgebraTerm).RemoveRedundancies();
 
             if (Number.IsUndef(innerEx))
                 return Number.Undefined;

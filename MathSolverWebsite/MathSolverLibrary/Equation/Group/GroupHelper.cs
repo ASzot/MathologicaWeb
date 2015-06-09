@@ -30,6 +30,17 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return term;
         }
 
+        public static List<ExComp[]> CloneGpList(this List<ExComp[]> gps)
+        {
+            List<ExComp[]> cloned = new List<ExComp[]>();
+            for (int i = 0; i < gps.Count; ++i)
+            {
+                cloned.Add(gps[i].CloneGroup());
+            }
+
+            return cloned;
+        }
+
         public static bool CompsRelatable(ExComp ex1, ExComp ex2)
         {
             if (ex1 is Number && ex2 is Number)
@@ -148,6 +159,31 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
             varGp = varGpList.ToArray();
             constGp = constGpList.ToArray();
+        }
+
+        public static ExComp[] ForceDistributeExponent(this ExComp[] group)
+        {
+            if (group.Length == 1 && group[0] is PowerFunction && !(group[0] as PowerFunction).Power.IsEqualTo(Number.NegOne))
+            {
+                PowerFunction pf = group[0] as PowerFunction;
+                if (pf.Base is AlgebraTerm)
+                {
+                    AlgebraTerm baseTerm = pf.Base as AlgebraTerm;
+                    List<ExComp[]> baseTermGps = baseTerm.GetGroupsNoOps();
+                    if (baseTermGps.Count == 1)
+                    {
+                        // Raise each term to the power.
+                        ExComp[] singularGp = baseTermGps[0];
+                        for (int i = 0; i < singularGp.Length; ++i)
+                        {
+                            singularGp[i] = Operators.PowOp.StaticCombine(singularGp[i], pf.Power);
+                        }
+                        return singularGp;
+                    }
+                }
+            }
+
+            return group;
         }
 
         public static ExComp[] GetDenominator(this ExComp[] group, bool force = false)
@@ -669,7 +705,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public static ExComp[] RemoveOneCoeffs(this ExComp[] group)
         {
-            if (group.ContainsFrac())
+            bool hasDen = group.ContainsFrac();
+            if (hasDen)
             {
                 ExComp[] num = group.GetNumerator();
                 ExComp[] den = group.GetDenominator();
@@ -694,7 +731,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 removedList.Add(groupComp);
             }
 
-            return removedList.ToArray();
+            ExComp[] retVal = removedList.ToArray();
+
+            //// If there this is a denominator ensure there is at least one term in the numerator.
+            //if (hasDen && retVal.GetDenominator().Length == retVal.Length)
+            //{
+            //    removedList.Insert(0, Number.One);
+            //    retVal = removedList.ToArray();
+            //}
+
+            return retVal;
         }
 
         public static ExComp[] RemoveOperators(this ExComp[] group)

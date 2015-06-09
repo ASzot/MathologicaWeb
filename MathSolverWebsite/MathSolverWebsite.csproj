@@ -493,6 +493,7 @@
     <Compile Include="MathSolverLibrary\Equation\Functions\Calculus\Vector\GradientFunc.cs" />
     <Compile Include="MathSolverLibrary\Equation\Functions\Calculus\Vector\LineIntegral.cs" />
     <Compile Include="MathSolverLibrary\Equation\Functions\Calculus\Vector\SurfaceIntegral.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Functions\Calculus\TrigSubstitution.cs" />
     <Compile Include="MathSolverLibrary\Equation\Functions\Calculus\Vector\VectorFieldOperation.cs" />
     <Compile Include="MathSolverLibrary\Equation\Functions\ChooseFunction.cs" />
     <Compile Include="MathSolverLibrary\Equation\Functions\FactorialFunction.cs" />

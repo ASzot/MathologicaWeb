@@ -898,72 +898,72 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                         return false;
                     Lexeme afterLexeme = lexemeTable[i + 1];
 
-                    if ((beforeLexeme.Data1 == LexemeType.EndPara
-                        && afterLexeme.Data1 == LexemeType.StartPara) ||
-                        (beforeLexeme.Data1 == LexemeType.Bar
-                        && afterLexeme.Data1 == LexemeType.Bar))
-                    {
-                        // This is surrounded by a group on either side.
-                        // find the start of the group on the left and the end of the group on the
-                        // left. Then insert a paranthese on either side.
-                        // This problem with order of operations only seems to happen with multiplication.
-                        if ((opToOrder != "*" && opToOrder != "^") && (beforeLexeme.Data1 == LexemeType.EndPara))
-                            continue;
+                    //if ((beforeLexeme.Data1 == LexemeType.EndPara
+                    //    && afterLexeme.Data1 == LexemeType.StartPara) ||
+                    //    (beforeLexeme.Data1 == LexemeType.Bar
+                    //    && afterLexeme.Data1 == LexemeType.Bar))
+                    //{
+                    //    // This is surrounded by a group on either side.
+                    //    // find the start of the group on the left and the end of the group on the
+                    //    // left. Then insert a paranthese on either side.
+                    //    // This problem with order of operations only seems to happen with multiplication.
+                    //    if ((opToOrder != "*" && opToOrder != "^") && (beforeLexeme.Data1 == LexemeType.EndPara))
+                    //        continue;
 
-                        // Search backwards.
-                        int depth = 0;
-                        int startIndex = -1;
-                        for (int j = i; j >= 0; --j)
-                        {
-                            if (lexemeTable[j].Data1 == LexemeType.EndPara)
-                            {
-                                depth++;
-                            }
-                            else if (lexemeTable[j].Data1 == LexemeType.StartPara)
-                            {
-                                depth--;
+                    //    // Search backwards.
+                    //    int depth = 0;
+                    //    int startIndex = -1;
+                    //    for (int j = i; j >= 0; --j)
+                    //    {
+                    //        if (lexemeTable[j].Data1 == LexemeType.EndPara)
+                    //        {
+                    //            depth++;
+                    //        }
+                    //        else if (lexemeTable[j].Data1 == LexemeType.StartPara)
+                    //        {
+                    //            depth--;
 
-                                if (depth == 0)
-                                {
-                                    startIndex = j;
-                                    break;
-                                }
-                            }
-                        }
+                    //            if (depth == 0)
+                    //            {
+                    //                startIndex = j;
+                    //                break;
+                    //            }
+                    //        }
+                    //    }
 
-                        if (startIndex == -1)
-                            continue;
+                    //    if (startIndex == -1)
+                    //        continue;
 
-                        depth = 0;
-                        int endIndex = -1;
-                        for (int j = i; j < lexemeTable.Count; ++j)
-                        {
-                            if (lexemeTable[j].Data1 == LexemeType.StartPara)
-                                depth++;
-                            else if (lexemeTable[j].Data1 == LexemeType.EndPara)
-                            {
-                                depth--;
+                    //    depth = 0;
+                    //    int endIndex = -1;
+                    //    for (int j = i; j < lexemeTable.Count; ++j)
+                    //    {
+                    //        if (lexemeTable[j].Data1 == LexemeType.StartPara)
+                    //            depth++;
+                    //        else if (lexemeTable[j].Data1 == LexemeType.EndPara)
+                    //        {
+                    //            depth--;
 
-                                if (depth == 0)
-                                {
-                                    endIndex = j;
-                                    break;
-                                }
-                            }
-                        }
+                    //            if (depth == 0)
+                    //            {
+                    //                endIndex = j;
+                    //                break;
+                    //            }
+                    //        }
+                    //    }
 
-                        if (endIndex == -1)
-                            continue;
+                    //    if (endIndex == -1)
+                    //        continue;
 
-                        if (i > 0 && lexemeTable[startIndex - 1].Data2 == "frac")
-                            continue;
-                        lexemeTable.Insert(startIndex, new Lexeme(LexemeType.StartPara, "("));
-                        lexemeTable.Insert(endIndex + 1, new Lexeme(LexemeType.EndPara, ")"));
+                    //    if (i > 0 && lexemeTable[startIndex - 1].Data2 == "frac")
+                    //        continue;
+                    //    lexemeTable.Insert(startIndex, new Lexeme(LexemeType.StartPara, "("));
+                    //    lexemeTable.Insert(endIndex + 1, new Lexeme(LexemeType.EndPara, ")"));
 
-                        i++;
+                    //    i++;
 
-                        continue;
-                    }
+                    //    continue;
+                    //}
 
                     int startPos = -1;
                     // Navigate backwards.
@@ -1030,9 +1030,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                     if (endPos == -1 || startPos == -1)
                         continue;
 
-                    if (i > 0 && lexemeTable[startPos].Data2 == "frac")
-                        continue;
+                    //if (i > 0 && lexemeTable[startPos].Data2 == "frac")
+                    //    continue;
                     lexemeTable.Insert(startPos, new Lexeme(LexemeType.StartPara, "("));
+
+                    if (endPos > 0 && lexemeTable[endPos - 1].Data1 == LexemeType.Differential)
+                        endPos--;
 
                     lexemeTable.Insert(lexemeTable[endPos - 1].Data2 == "|" ? endPos - 1 : endPos, new Lexeme(LexemeType.EndPara, ")"));
 
@@ -1157,7 +1160,35 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                     lexeme.Data1 == LexemeType.FuncIden)
                     && multipliablePreceeding)
                 {
-                    lexemeTable.Insert(i++, new Lexeme(LexemeType.Operator, "*"));
+                    //// Ensure that a multiplcation symbol does not get placed between fraction groups.
+                    //bool prevFracGroup = false;
+                    //if (i > 0 && lexemeTable[i - 1].Data1 == LexemeType.EndPara && lexeme.Data1 == LexemeType.StartPara)
+                    //{
+                    //    int depth = 1;
+                    //    for (int j = i - 2; j >= 0; --j)
+                    //    {
+                    //        if (lexemeTable[j].Data1 == LexemeType.EndPara)
+                    //            depth++;
+                    //        else if (lexemeTable[j].Data1 == LexemeType.StartPara)
+                    //        {
+                    //            depth--;
+                    //            if (depth == 0)
+                    //            {
+                    //                if (i > 0 && lexemeTable[j - 1].Data1 == LexemeType.Function && lexemeTable[j - 1].Data2 == "frac")
+                    //                {
+                    //                    lexemeTable.RemoveAt(j - 1);
+                    //                    i--;
+                    //                    lexemeTable.Insert(i, new Lexeme(LexemeType.Operator, "/"));
+                    //                    prevFracGroup = true;
+                    //                }
+                    //                break;
+                    //            }
+                    //        }
+                    //    }
+                    //}
+
+                    //if (!prevFracGroup)
+                        lexemeTable.Insert(i++, new Lexeme(LexemeType.Operator, "*"));
 
                     if (lexeme.Data1 == LexemeType.StartPara ||
                         lexeme.Data1 == LexemeType.Function ||
@@ -2544,7 +2575,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
             if (numEx == null || numEx is AgOp)
                 return null;
 
-            currentIndex += 2;
+            currentIndex++;
+
+            if (lt[currentIndex].Data1 == LexemeType.Operator && lt[currentIndex].Data2 == "*")
+                currentIndex++;
 
             if (currentIndex > lt.Count - 1)
                 return null;

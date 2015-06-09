@@ -1782,7 +1782,7 @@
       <input>\int_{-3}^{1}(\sqrt{t}(t-2)) dt</input>
     </exampleInput>
     <exampleInput>
-      <input>\int_{1}{2}(\frac{2w^5-w+3}{w^2})dw</input>
+      <input>\int_{1}^{2}(\frac{2w^5-w+3}{w^2})dw</input>
     </exampleInput>
   </topic>
   <topic>
@@ -1887,23 +1887,6 @@
       <input>\int \tan(x)\sec^3(x) dx</input>
     </exampleInput>
   </topic>
-  <!--<topic>
-    <topicName>Arc-Length</topicName>
-    <topicPath>Calculus/Integration/Arc Length</topicPath>
-    <topicDesc>Find the arc length of a line using integration.</topicDesc>
-    <info>
-      
-    </info>
-    <exampleInput>
-      <input>y=\tan^2(x); \int_{0}^{\frac{\pi}{4}} \sqrt{1+(\frac{dy}{dx})^2} dx</input>
-    </exampleInput>
-    <exampleInput>
-      <input>f(y)=\frac{2}{3}(y-1)^{\frac{2}{3}}; \int_{1}{4}\sqrt{1+(\frac{df}{dy})^2} dy</input>
-    </exampleInput>
-    <exampleInput>
-      <input>x(t)=-cos(t); y(t)=sin(t); \int_{0}{\pi} \sqrt{(x'(t))^2+(y'(t))^2}</input>
-    </exampleInput>
-  </topic>-->
   <topic>
     <topicName>Sequences (Using Summations)</topicName>
     <topicPath>Calculus/Series/Sequences with Summations</topicPath>

@@ -216,6 +216,10 @@
     .solve-btn {
     }
 
+    #work-nav-space {
+        display: none;
+    }
+
     #work-space {
         height: -moz-calc(100% - 165px) !important;
         height: -webkit-calc(100% - 165px) !important;
