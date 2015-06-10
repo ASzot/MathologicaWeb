@@ -1682,9 +1682,6 @@
     <exampleInput>
       <input>f(x)=6x^5+33x^4-30x^3+100; f'(x)=0</input>
     </exampleInput>
-    <exampleInput>
-      <input>g(t)=\root{3}{t^2}(2t-1); g'(t)=0</input>
-    </exampleInput>
   </topic>
   <!--<topic>
     <topicName>Finding Points of Inflection</topicName>
@@ -1888,6 +1885,23 @@
     </exampleInput>
   </topic>
   <topic>
+    <topicName>Trig Substitution</topicName>
+    <topicPath>Calculus/Integration/Trig Substitution</topicPath>
+    <topicDesc>Evaluate integrals using trig substitutions.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>\int \frac{\sqrt{25x^2-4}}{x} dx</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\int \frac{1}{x^4\sqrt{9-x^4}} dx</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\int_{0}^{1} x^3 \sqrt{1-x^2} dx</input>
+    </exampleInput>
+  </topic>
+  <topic>
     <topicName>Sequences (Using Summations)</topicName>
     <topicPath>Calculus/Series/Sequences with Summations</topicPath>
     <topicDesc>Use summations to add up all the elements of a sequence.</topicDesc>
@@ -1982,7 +1996,7 @@
       <input>[3,5,3] \cdot [9,6,2]</input>
     </exampleInput>
     <exampleInput>
-      <input>[17, 2, 3] \cdot [\frac{1/2}, 0, 1]</input>
+      <input>[17, 2, 3] \cdot [\frac{1}{2}, 0, 1]</input>
     </exampleInput>
     <exampleInput>
       <input>A=3\vec{i}+8\vec{j}+6\vec{k}; B=2\vec{i}+7\vec{k}; A \cdot B</input>
@@ -2213,7 +2227,7 @@
       <input>v(x,y)=\vectora{x^2y}{y\ln(x)}; \frac{\partial v}{\partial y}</input>
     </exampleInput>
     <exampleInput>
-      <input>\frac{\partial}{\partial x}[\sec(x^2), \tan(y/x)]</input>
+      <input>\frac{\partial}{\partial x}[\sec(x^2), \tan(\frac{y}{x})]</input>
     </exampleInput>
   </topic>
   <topic>

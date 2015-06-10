@@ -19,9 +19,11 @@ namespace MathSolverWebsite.Website_Logic
         {
             return
                 "<p class='pob-sub-title'>" + Title + "</p>" +
-                "<span class='hidden'>" + Example.Input + "|" + Example.CommandIndex.ToString() + "|" + Example.UseRad.ToString() + "</span>" +
-                "<div>" + 
-                    "<span class='noselect pointable'>`" + Example.InputDisp + "`</span>" +  
+                "<div style='text-align: center;' class='pob-problem'>" +
+                    "<span class='hidden'>" + Example.Input + "|" + Example.CommandIndex.ToString() + "|" + Example.UseRad.ToString() + "</span>" +
+                    "<div>" +
+                        "<span class='noselect pointable'>`" + Example.InputDisp + "`</span>" +
+                    "</div>" +
                 "</div>";
         }
 

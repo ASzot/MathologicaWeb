@@ -85,7 +85,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public override string ToAsciiString()
         {
-            return "(_{" + Top.ToAsciiString() + "} " + IDEN + " _{" + Bottom.ToAsciiString() + "})";
+            return "((" + Top.ToAsciiString() + "), (" + Bottom.ToAsciiString() + "))";
         }
 
         public override string ToJavaScriptString(bool useRad)
@@ -100,18 +100,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public override string ToTexString()
         {
-            return "(_{" + Top.ToTexString() + "} " + IDEN + " _{" + Bottom.ToTexString() + "})";
+            return "((" + Top.ToTexString() + "), (" + Bottom.ToTexString() + "))";
         }
         public override string FinalToAsciiString()
         {
-            return "_{" + TopTerm.FinalToAsciiString() + "} " + IDEN +
-                " _{" + BottomTerm.FinalToAsciiString() + "}";
+            return "((" + TopTerm.FinalToAsciiString() + "), (" + BottomTerm.FinalToAsciiString() + "))";
         }
 
         public override string FinalToTexString()
         {
-            return "_{" + TopTerm.FinalToTexString() + "} " + IDEN +
-                " _{" + BottomTerm.FinalToTexString() + "}";
+            return "((" + TopTerm.FinalToTexString() + "), (" + BottomTerm.FinalToTexString() + "))";
         }
     }
 }

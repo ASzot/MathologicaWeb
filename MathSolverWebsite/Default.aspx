@@ -622,9 +622,7 @@
                     <asp:UpdatePanel runat="server" UpdateMode="Conditional">
                         <ContentTemplate>
                             <asp:Timer ID="updateExampleTimer" runat="server" Interval="10000" OnTick="updateExampleTimer_Tick"></asp:Timer>
-                            <div style="text-align: center;" class="pob-problem">
                                 <div id="exampleOutputContent" runat="server"></div>
-                            </div>
                             <asp:Button runat="server" ID="exampleNavBackBtn" CssClass="hidden" OnClick="exampleNavBackBtn_Click" />
                             <asp:Button runat="server" ID="exampleNavForwardBtn" CssClass="hidden" OnClick="exampleNavForwardBtn_Click" />
                         </ContentTemplate>

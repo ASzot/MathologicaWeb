@@ -103,6 +103,17 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
             return PowOp.StaticCombine(sum, AlgebraTerm.FromFraction(Number.One, new Number(2.0)));
         }
 
+        public override ExComp Clone()
+        {
+            ExVector vec = new ExVector(this.Length);
+            for (int i = 0; i < this.Length; ++i)
+            {
+                vec.Set(i, this.Get(i).Clone());
+            }
+
+            return vec;
+        }
+
         public ExVector Normalize()
         {
             ExVector vec = this.CreateEmptyBody();

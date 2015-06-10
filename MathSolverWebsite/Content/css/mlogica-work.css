@@ -83,6 +83,8 @@
 .pob-sub-title {
     margin-top: 0px;
     margin-bottom: 20px;
+    font-size: 16px;
+    text-align: center;
 }
 
     .pob-sub-title:hover {

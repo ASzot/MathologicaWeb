@@ -11,9 +11,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         Exponential,
         AbsoluteValue,
         Logarithm,
-        LogarithmBase,      // This is only used in detecting the solve method.
+        LogarithmBase,      
         Summation,
         ChooseFunction,
+        Permutation,
         Factorial,
         Derivative,
         AntiDerivative,

@@ -839,25 +839,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
 
         private static bool ApplyOrderingToOp(string opToOrder, string[] breakingOps, LexemeTable lexemeTable)
         {
-            int numBreakingOps = breakingOps.Count();
-            List<int>[] indicesOfBreakingOps = new List<int>[numBreakingOps];
-            for (int i = 0; i < numBreakingOps; ++i)
-            {
-                indicesOfBreakingOps[i] = GetIndicesOfValueInLexemeTable(lexemeTable, breakingOps[i], false);
-            }
-
-            bool allZero = true;
-            foreach (var indicesOfBreakingOp in indicesOfBreakingOps)
-            {
-                if (indicesOfBreakingOp.Count != 0)
-                {
-                    allZero = false;
-                    break;
-                }
-            }
-
-            if (allZero)
-                return true;
+            List<string> breakingOpsList = breakingOps.ToList();
 
             for (int i = 0; i < lexemeTable.Count; ++i)
             {
@@ -865,7 +847,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
 
                 if (lexeme.Data2 == opToOrder)
                 {
-                    bool after = false;
+                    if (i == 0)
+                        return false;
 
                     if (i > 0)
                     {
@@ -875,95 +858,34 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                             continue;
                     }
 
-                    // Does this instance occur before any of the breaking operators?
-                    foreach (List<int> indicesOfBreakingOp in indicesOfBreakingOps)
+                    bool after = false;
+
+                    int depth = 0;
+
+                    // Does this instance occur after any of the breaking operators?
+                    for (int j = 0; j < i; ++j)
                     {
-                        foreach (int index in indicesOfBreakingOp)
+                        Lexeme lex = lexemeTable[j];
+                        if (lex.Data1 == LexemeType.StartPara)
+                            depth++;
+                        else if (lex.Data1 == LexemeType.EndPara)
+                            depth--;
+
+
+                        if (depth == 0 && breakingOpsList.Contains(lexemeTable[j].Data2))
                         {
-                            if (i > index)
-                            {
-                                after = true;
-                                break;
-                            }
+                            after = true;
+                            break;
                         }
                     }
 
                     if (!after)
                         continue;
 
-                    if (i == 0)
-                        return false;
                     Lexeme beforeLexeme = lexemeTable[i - 1];
                     if (i + 1 > lexemeTable.Count - 1)
                         return false;
                     Lexeme afterLexeme = lexemeTable[i + 1];
-
-                    //if ((beforeLexeme.Data1 == LexemeType.EndPara
-                    //    && afterLexeme.Data1 == LexemeType.StartPara) ||
-                    //    (beforeLexeme.Data1 == LexemeType.Bar
-                    //    && afterLexeme.Data1 == LexemeType.Bar))
-                    //{
-                    //    // This is surrounded by a group on either side.
-                    //    // find the start of the group on the left and the end of the group on the
-                    //    // left. Then insert a paranthese on either side.
-                    //    // This problem with order of operations only seems to happen with multiplication.
-                    //    if ((opToOrder != "*" && opToOrder != "^") && (beforeLexeme.Data1 == LexemeType.EndPara))
-                    //        continue;
-
-                    //    // Search backwards.
-                    //    int depth = 0;
-                    //    int startIndex = -1;
-                    //    for (int j = i; j >= 0; --j)
-                    //    {
-                    //        if (lexemeTable[j].Data1 == LexemeType.EndPara)
-                    //        {
-                    //            depth++;
-                    //        }
-                    //        else if (lexemeTable[j].Data1 == LexemeType.StartPara)
-                    //        {
-                    //            depth--;
-
-                    //            if (depth == 0)
-                    //            {
-                    //                startIndex = j;
-                    //                break;
-                    //            }
-                    //        }
-                    //    }
-
-                    //    if (startIndex == -1)
-                    //        continue;
-
-                    //    depth = 0;
-                    //    int endIndex = -1;
-                    //    for (int j = i; j < lexemeTable.Count; ++j)
-                    //    {
-                    //        if (lexemeTable[j].Data1 == LexemeType.StartPara)
-                    //            depth++;
-                    //        else if (lexemeTable[j].Data1 == LexemeType.EndPara)
-                    //        {
-                    //            depth--;
-
-                    //            if (depth == 0)
-                    //            {
-                    //                endIndex = j;
-                    //                break;
-                    //            }
-                    //        }
-                    //    }
-
-                    //    if (endIndex == -1)
-                    //        continue;
-
-                    //    if (i > 0 && lexemeTable[startIndex - 1].Data2 == "frac")
-                    //        continue;
-                    //    lexemeTable.Insert(startIndex, new Lexeme(LexemeType.StartPara, "("));
-                    //    lexemeTable.Insert(endIndex + 1, new Lexeme(LexemeType.EndPara, ")"));
-
-                    //    i++;
-
-                    //    continue;
-                    //}
 
                     int startPos = -1;
                     // Navigate backwards.
@@ -972,24 +894,21 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                         Lexeme searchLexeme = lexemeTable[j];
                         LexemeType type = searchLexeme.Data1;
 
-                        bool validBreakingOp = false;
-                        foreach (var indicesOfBreakingOp in indicesOfBreakingOps)
-                        {
-                            foreach (var indexOfBreakingOp in indicesOfBreakingOp)
-                            {
-                                if (indexOfBreakingOp == j)
-                                    validBreakingOp = true;
-                            }
-                        }
+                        if (type == LexemeType.StartPara)
+                            depth++;
+                        else if (type == LexemeType.EndPara)
+                            depth--;
 
-                        if (validBreakingOp)
+                        bool validBreakingOp = type == LexemeType.Operator ? breakingOpsList.Contains(searchLexeme.Data2) : false;
+
+                        if ((depth == 0 && validBreakingOp) || depth > 0)
                         {
                             startPos = j + 1;
                             i++;
                             j++;
                             break;
                         }
-                        else if (j == 0)
+                        else if (depth == 0 && j == 0)
                         {
                             startPos = j;
                             i++;
@@ -998,6 +917,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                         }
                     }
 
+                    depth = 0;
+
                     int endPos = -1;
                     // Navigate forward.
                     for (int j = i; j < lexemeTable.Count; ++j)
@@ -1005,22 +926,19 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                         Lexeme searchLexeme = lexemeTable[j];
                         LexemeType type = searchLexeme.Data1;
 
-                        bool validBreakingOp = false;
-                        foreach (var indicesOfBreakingOp in indicesOfBreakingOps)
-                        {
-                            foreach (var indexOfBreakingOp in indicesOfBreakingOp)
-                            {
-                                if (indexOfBreakingOp == j)
-                                    validBreakingOp = true;
-                            }
-                        }
+                        bool validBreakingOp = type == LexemeType.Operator ? breakingOpsList.Contains(searchLexeme.Data2) : false;
 
-                        if (validBreakingOp)
+                        if (type == LexemeType.StartPara)
+                            depth++;
+                        else if (type == LexemeType.EndPara)
+                            depth--;
+
+                        if ((depth == 0  && validBreakingOp) || depth < 0)
                         {
                             endPos = j + 1;
                             break;
                         }
-                        else if (j == lexemeTable.Count - 1)
+                        else if (depth == 0 && j == lexemeTable.Count - 1)
                         {
                             endPos = j + 2;
                             break;
@@ -1030,23 +948,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                     if (endPos == -1 || startPos == -1)
                         continue;
 
-                    //if (i > 0 && lexemeTable[startPos].Data2 == "frac")
-                    //    continue;
                     lexemeTable.Insert(startPos, new Lexeme(LexemeType.StartPara, "("));
 
                     if (endPos > 0 && lexemeTable[endPos - 1].Data1 == LexemeType.Differential)
                         endPos--;
 
                     lexemeTable.Insert(lexemeTable[endPos - 1].Data2 == "|" ? endPos - 1 : endPos, new Lexeme(LexemeType.EndPara, ")"));
-
-                    // Recalculate the positions of indices as everything has been shifted.
-                    // this could probably be optimized.
-
-                    indicesOfBreakingOps = new List<int>[numBreakingOps];
-                    for (int j = 0; j < numBreakingOps; ++j)
-                    {
-                        indicesOfBreakingOps[j] = GetIndicesOfValueInLexemeTable(lexemeTable, breakingOps[j], false);
-                    }
                 }
             }
 

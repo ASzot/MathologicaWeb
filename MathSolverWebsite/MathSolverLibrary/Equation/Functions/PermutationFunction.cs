@@ -8,7 +8,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 {
     class PermutationFunction : AppliedFunction_NArgs
     {
-        private const string IDEN = "C";
+        private const string IDEN = "P";
         public ExComp Bottom
         {
             get { return _args[1]; }
@@ -32,7 +32,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         }
 
         public PermutationFunction(ExComp top, ExComp bottom)
-            : base(FunctionType.ChooseFunction, typeof(ChooseFunction),
+            : base(FunctionType.Permutation, typeof(PermutationFunction),
             top is AlgebraTerm ? (top as AlgebraTerm).RemoveRedundancies() : top,
             bottom is AlgebraTerm ? (bottom as AlgebraTerm).RemoveRedundancies() : bottom)
         {
@@ -82,7 +82,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public override string ToAsciiString()
         {
-            return "(_{" + Top.ToAsciiString() + "} " + IDEN + " _{" + Bottom.ToAsciiString() + "})";
+            return IDEN + "(" + Top.ToAsciiString() + ", " + Bottom.ToAsciiString() + ")";
         }
 
         public override string ToJavaScriptString(bool useRad)
@@ -97,19 +97,17 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public override string ToTexString()
         {
-            return "(_{" + Top.ToTexString() + "} " + IDEN + " _{" + Bottom.ToTexString() + "})";
+            return IDEN + "(" + Top.ToTexString() + ", " + Bottom.ToTexString() + ")";
         }
 
         public override string FinalToAsciiString()
         {
-            return "(_{" + TopTerm.FinalToAsciiString() + "} " + IDEN +
-                " _{" + BottomTerm.FinalToAsciiString() + "})";
+            return IDEN + "(" + TopTerm.FinalToAsciiString() + ", " + BottomTerm.FinalToAsciiString() + ")";
         }
 
         public override string FinalToTexString()
         {
-            return "(_{" + TopTerm.FinalToTexString() + "} " + IDEN +
-                " _{" + BottomTerm.FinalToTexString() + "})";
+            return IDEN + "( " + TopTerm.FinalToTexString() + ", " + BottomTerm.FinalToTexString() + ")";
         }
     }
 }
