@@ -26,6 +26,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
             Number n1 = ex1 as Number;
             Number n2 = ex2 as Number;
 
+            if (n1 == null || n2 == null)
+                return PowOp.StaticWeakCombine(ex1, ex2);
+
             if (!n1.HasImaginaryComp() && !n2.HasImaginaryComp())
             {
                 double dBase = n1.RealComp;
@@ -315,6 +318,18 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
             {
                 // This is the transpose operation.
                 return new Transpose(ex1);
+            } 
+            if ((ex1 is ExMatrix || ex1 is FunctionDefinition || ex1 is AlgebraComp))
+            {
+                if (ex1 is AlgebraComp)
+                {
+                    AlgebraComp cmp = ex1 as AlgebraComp;
+                    if (cmp.Var.Var.Length != 1 || !Char.IsUpper(cmp.Var.Var[0]))
+                        return new PowerFunction(ex1, ex2);
+                }
+
+                // This is the inverse operation.
+                return new MatrixInverse(ex1);
             }
             return new PowerFunction(ex1, ex2);
         }

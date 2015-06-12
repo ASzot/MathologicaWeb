@@ -60,7 +60,7 @@
       <input>\frac{3}{4} \cdot \frac{7}{4}</input>
     </exampleInput>
     <exampleInput>
-      <input>\frac{\frac{1}{2}}{\frac{3}{5}}</input>
+      <input>\frac{(\frac{1}{2})}{(\frac{3}{5})}</input>
     </exampleInput>
     <exampleInput>
       <input>\frac{3}{7}+\frac{8}{3}</input>
@@ -387,12 +387,15 @@
     </info>
     <exampleInput>
       <input>5x^2+2x+1</input>
+      <inputIndex>4</inputIndex>
     </exampleInput>
     <exampleInput>
       <input>x^2-x-3</input>
+      <inputIndex>4</inputIndex>
     </exampleInput>
     <exampleInput>
       <input>x^2+6x-7</input>
+      <inputIndex>4</inputIndex>
     </exampleInput>
   </topic>
   <topic>
@@ -405,12 +408,15 @@
     </info>
     <exampleInput>
       <input>5x^2+2x+1</input>
+      <inputIndex>7</inputIndex>
     </exampleInput>
     <exampleInput>
       <input>x^2-x-3</input>
+      <inputIndex>7</inputIndex>
     </exampleInput>
     <exampleInput>
       <input>x^2+6x-7</input>
+      <inputIndex>7</inputIndex>
     </exampleInput>
   </topic>
   <topic>
@@ -1270,7 +1276,7 @@
   </topic>
   <topic>
     <topicName>Solving Trig Equations (Advanced)</topicName>
-    <topicPath>Trigonometry/Trig Equations/Solving Trig Equations (Advanced0</topicPath>
+    <topicPath>Trigonometry/Trig Equations/Solving Trig Equations (Advanced)</topicPath>
     <topicDesc>Solve equations that involve trigonometric functions. Solving this equations will require simplifications first.</topicDesc>
     <info>
       
@@ -1538,7 +1544,7 @@
       
     </info>
     <exampleInput>
-      <input>\frac{d}{dx}(2x^2+x)^10</input>
+      <input>\frac{d}{dx}(2x^2+x)^{10}</input>
     </exampleInput>
     <exampleInput>
       <input>\frac{d}{dx}\cos(3x)</input>

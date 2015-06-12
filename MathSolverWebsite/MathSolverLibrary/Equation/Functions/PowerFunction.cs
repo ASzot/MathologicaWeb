@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using MathSolverWebsite.MathSolverLibrary.Equation.Term;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 {
@@ -308,7 +309,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public override ExComp CancelWith(ExComp innerEx, ref TermType.EvalData evalData)
         {
-            LogFunction log = _power as LogFunction;
+            AlgebraTerm power = _power.ToAlgTerm().CompoundLogs();
+            power = power.ForceLogCoeffToPow();
+            ExComp powerEx = power.RemoveRedundancies();
+
+            LogFunction log = powerEx as LogFunction;
             if (log == null)
                 return null;
             if (log.Base.IsEqualTo(innerEx))
@@ -457,6 +462,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         {
             AlgebraTerm powTerm = new AlgebraTerm(Number.NegOne, new MulOp(), _power);
             _power = powTerm.MakeWorkable();
+
+            if (_power is AlgebraTerm)
+                _power = (_power as AlgebraTerm).RemoveRedundancies();
 
             if (_power is Number && (_power as Number) == 1.0)
                 return Base;
@@ -690,7 +698,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             if (_power is Number)
             {
                 Number powNum = _power as Number;
-                return (powNum < 0.0);
+                return powNum == -1.0;
+                //return (powNum < 0.0);
             }
 
             return false;
@@ -1100,7 +1109,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         public override string ToAsciiString()
         {
             string powerAsciiStr = _power.ToAsciiString();
-            if (powerAsciiStr.StartsWith("-1") && !powerAsciiStr.StartsWith("-1*"))
+            if (powerAsciiStr.StartsWith("-1") && !powerAsciiStr.StartsWith("-1*") && !powerAsciiStr.StartsWith("-1."))
                 powerAsciiStr = powerAsciiStr.Remove(0, 2);
 
             ExComp baseNoRedun = Base is AlgebraTerm ? (Base as AlgebraTerm).RemoveRedundancies() : Base;
@@ -1180,7 +1189,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         public override string ToTexString()
         {
             string powerTexStr = _power.ToTexString();
-            if (powerTexStr.StartsWith("-1") && !powerTexStr.StartsWith("-1*"))
+            if (powerTexStr.StartsWith("-1") && !powerTexStr.StartsWith("-1*") && !powerTexStr.StartsWith("-1."))
                 powerTexStr = powerTexStr.Remove(0, 2);
 
             ExComp baseNoRedun = Base is AlgebraTerm ? (Base as AlgebraTerm).RemoveRedundancies() : Base;

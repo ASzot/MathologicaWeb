@@ -21,6 +21,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         Limit,
         Deteriment, 
         Transpose,
+        MatInverse,
         Gradient,
         Curl,
         Divergence,

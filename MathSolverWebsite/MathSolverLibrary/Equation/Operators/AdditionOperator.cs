@@ -20,6 +20,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
             if (Number.Zero.IsEqualTo(ex2))
                 return ex1;
 
+            if ((Number.PosInfinity.IsEqualTo(ex1) && Number.NegInfinity.IsEqualTo(ex2)) ||
+                (Number.PosInfinity.IsEqualTo(ex2) && Number.NegInfinity.IsEqualTo(ex1)))
+                return Number.Zero;
+            if (Number.NegInfinity.IsEqualTo(ex1) || Number.NegInfinity.IsEqualTo(ex2))
+                return Number.NegInfinity;
+            if (Number.PosInfinity.IsEqualTo(ex1) || Number.PosInfinity.IsEqualTo(ex2))
+                return Number.PosInfinity;
+
             if (ex1 is ExMatrix || ex2 is ExMatrix)
             {
                 ExMatrix mat;

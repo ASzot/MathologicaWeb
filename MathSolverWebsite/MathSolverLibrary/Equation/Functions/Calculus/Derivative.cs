@@ -510,8 +510,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             deriv._derivOf = this._derivOf;
             deriv._isDefined = this._isDefined;
             deriv._isPartial = this._isPartial;
-            deriv._inputVal = this._inputVal;
-            if (this._order.IsEqualTo(subOut) && subIn is AlgebraComp || subIn is Number)
+            deriv._inputVal = this._inputVal.IsEqualTo(subOut) ? subIn : this._inputVal;
+            if (this._order.IsEqualTo(subOut) && (subIn is AlgebraComp || subIn is Number))
                 deriv._order = subIn;
             else
                 deriv._order = this._order;

@@ -563,14 +563,25 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
         /// 4x^(2)y will pass x^(2)4y will not.
         /// </summary>
         /// <returns></returns>
-        private static bool CheckCoeffCorrectness(LexemeTable lexTable)
+        private static bool CheckCoeffCorrectness(LexemeTable lexTable, ref List<string> pParseErrors)
         {
+            LexemeType lexType = LexemeType.ErrorType;
             for (int i = 0; i < lexTable.Count; ++i)
             {
-                if (lexTable[i].Data1 == LexemeType.Operator && lexTable[i].Data2 == "^" &&
+                if (lexTable[i].Data1 == LexemeType.Integral)
+                    lexType = LexemeType.Integral;
+                else if (lexTable[i].Data1 == LexemeType.Summation)
+                    lexType = LexemeType.Summation;
+                else if (lexTable[i].Data1 == LexemeType.Operator && lexTable[i].Data2 == "^" &&
                     i < lexTable.Count - 1 &&
                     lexTable[i + 1].Data1 == LexemeType.Number && lexTable[i + 1].Data2.Length > 1)
+                {
+                    if (lexType == LexemeType.Summation)
+                        pParseErrors.Add("A number cannot follow a summation, put parentheses.");
+                    else if (lexType == LexemeType.Integral)
+                        pParseErrors.Add("A number cannot follow an integral, put parentheses.");
                     return false;
+                }
             }
 
             return true;
@@ -592,9 +603,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                 if (setLexemeTable == null || setLexemeTable.Count == 0)
                     return null;
 
-                if (!MathSolver.PLAIN_TEXT && !CheckCoeffCorrectness(setLexemeTable))
+                if (!MathSolver.PLAIN_TEXT && !CheckCoeffCorrectness(setLexemeTable, ref pParseErrors))
                 {
-                    pParseErrors.Add("A number cannot follow a definite integral, put parentheses.");
                     return null;
                 }
                 if (setLexemeTable == null)
@@ -2587,14 +2597,17 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                             return null;
 
                         currentIndex = currentIndex + 4;
+
+                        return Equation.Functions.Calculus.Derivative.ConstructDeriv(new AlgebraComp(funcMatch.Value), new AlgebraComp(withRespectTo), order);
                     }
                 }
             }
 
-            Equation.Functions.Calculus.Derivative deriv = Equation.Functions.Calculus.Derivative.Parse(funcMatch.Value, withRespectTo, order, false, ref p_EvalData);
+            Equation.Functions.Calculus.Derivative deriv = Equation.Functions.Calculus.Derivative.ConstructDeriv(new AlgebraComp(funcMatch.Value), new AlgebraComp(withRespectTo), order);
+            //Equation.Functions.Calculus.Derivative deriv = Equation.Functions.Calculus.Derivative.Parse(funcMatch.Value, withRespectTo, order, false, ref p_EvalData);
 
             if (deriv == null)
-                pParseErrors.Add("Incorrect derivative notation for multivaraible functions.");
+                pParseErrors.Add("Incorrect derivative notation for multivariable functions.");
 
             return deriv;
         }
@@ -2819,7 +2832,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
             if (rootTerm == null)
                 return null;
 
-            ExComp rootEx = rootTerm.RemoveRedundancies();
+            ExComp rootEx = rootTerm.RemoveRedundancies(true);
             if (rootEx is AgOp)
                 return null;
 
@@ -2835,7 +2848,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
             if (innerEx == null || innerEx is AgOp)
                 return null;
 
-            return new AlgebraTerm(innerEx, new Equation.Operators.PowOp(), Equation.Operators.DivOp.StaticCombine(Number.One, rootEx));
+            AlgebraTerm retVal = new AlgebraTerm(innerEx, new Equation.Operators.PowOp(), new AlgebraTerm(Number.One, new DivOp(), rootEx));
+
+            return retVal;
         }
 
         private AlgebraTerm ParseSummation(ref int currentIndex, LexemeTable lt, ref List<string> pParseErrors)

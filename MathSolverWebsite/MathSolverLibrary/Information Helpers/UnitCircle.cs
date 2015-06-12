@@ -120,7 +120,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
         {
             foreach (UnitCirclePoint unitCirclePoint in UnitCirclePoints)
             {
-                if (unitCirclePoint.AngleNum == angleNum && unitCirclePoint.AngleDen == angleDen)
+                if (unitCirclePoint != null && unitCirclePoint.AngleNum == angleNum && unitCirclePoint.AngleDen == angleDen)
                     return unitCirclePoint;
             }
 

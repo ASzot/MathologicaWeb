@@ -7,6 +7,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
     internal class SumFunction : AppliedFunction_NArgs
     {
         private const int MAX_SUM_COUNT = 50;
+        private const int MAX_WORK_STEP_COUNT = 5;
 
         public ExComp IterCount
         {
@@ -302,14 +303,24 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                     AlgebraTerm innerTerm = InnerTerm.Clone().ToAlgTerm();
 
                     innerTerm = innerTerm.Substitute(IterVar, iterVal);
-                    pEvalData.WorkMgr.FromFormatted("", "Evaluate the " + (i + 1).ToString() + (i + 1).GetCountingPrefix() + " term");
-                    WorkStep lastStep = pEvalData.WorkMgr.GetLast();
 
-                    lastStep.GoDown(ref pEvalData);
+                    WorkStep lastStep = null;
+                    if (count < MAX_WORK_STEP_COUNT)
+                    {
+                        pEvalData.WorkMgr.FromFormatted("", "Evaluate the " + (i + 1).ToString() + (i + 1).GetCountingPrefix() + " term");
+                        lastStep = pEvalData.WorkMgr.GetLast();
+                    }
+
+                    if (lastStep != null)
+                        lastStep.GoDown(ref pEvalData);
+
                     ExComp simpInnerEx = TermType.SimplifyTermType.BasicSimplify(innerTerm.Clone().ToAlgTerm().RemoveRedundancies(), ref pEvalData);
-                    lastStep.GoUp(ref pEvalData);
 
-                    lastStep.WorkHtml = WorkMgr.STM + innerTerm.FinalToDispStr() + "=" + WorkMgr.ToDisp(simpInnerEx) + WorkMgr.EDM;
+                    if (lastStep != null)
+                        lastStep.GoUp(ref pEvalData);
+
+                    if (lastStep != null)
+                        lastStep.WorkHtml = WorkMgr.STM + innerTerm.FinalToDispStr() + "=" + WorkMgr.ToDisp(simpInnerEx) + WorkMgr.EDM;
 
                     totalTerm = AddOp.StaticCombine(totalTerm, simpInnerEx).ToAlgTerm();
                 }
@@ -351,7 +362,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             return new SumFunction(InnerTerm.Substitute(subOut, subIn), 
                 IterVar.IsEqualTo(subOut) ? (AlgebraComp)subIn : IterVar, 
                 IterStart.ToAlgTerm().Substitute(subOut, subIn).RemoveRedundancies(),
-                IterStart.ToAlgTerm().Substitute(subOut, subIn).RemoveRedundancies());
+                IterCount.ToAlgTerm().Substitute(subOut, subIn).RemoveRedundancies());
         }
 
         protected override AlgebraTerm CreateInstance(params ExComp[] args)

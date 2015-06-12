@@ -1510,7 +1510,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                         if (comp is Operators.PowOp)
                             resultant = algebraOp.WeakCombine(beforeComp, afterComp);
 
-                        if (!(resultant is Structural.LinearAlg.Transpose))
+                        if (!(resultant is Structural.LinearAlg.Transpose) && !(resultant is Structural.LinearAlg.MatrixInverse))
                             resultant = algebraOp.Combine(beforeComp, afterComp);
                     }
 

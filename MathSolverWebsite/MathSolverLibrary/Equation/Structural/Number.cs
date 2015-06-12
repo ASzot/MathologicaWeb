@@ -1016,7 +1016,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             bool origRadVal = pEvalData.UseRad;
             pEvalData.TmpSetUseRad(true);
 
-            ExComp result = MulOp.StaticCombine(mag,
+            ExComp result = MulOp.StaticWeakCombine(mag,
                 SubOp.StaticCombine(new CosFunction(angle), 
                 MulOp.StaticCombine(Number.ImagOne, new SinFunction(angle))));
 

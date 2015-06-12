@@ -133,6 +133,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return appliedFuncs;
         }
 
+        /// <summary>
+        /// Gets the coefficient of the variable in the expression. 
+        /// Will not return null.
+        /// </summary>
+        /// <param name="varFor"></param>
+        /// <returns></returns>
         public ExComp GetCoeffOfVar(AlgebraComp varFor)
         {
             if (!Contains(varFor))

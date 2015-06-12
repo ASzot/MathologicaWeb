@@ -616,9 +616,9 @@
 
             <div id="pod-space">
                 <div style="margin-left: 10px;">
-                    <input type="button" id="example-nav-backward" style="float: left;" class="example-nav-btn" value="&#x25C0" />
+                    <input type="button" id="example-nav-backward" style="float: left;" class="example-nav-btn" value="&#x25C0;" />
                     <p class="pob-title"></p>
-                    <input type="button" id="example-nav-forward" style="float: right;" class="example-nav-btn" value="&#x25B6" />
+                    <input type="button" id="example-nav-forward" style="float: right;" class="example-nav-btn" value="&#x25B6;" />
                     <asp:UpdatePanel runat="server" UpdateMode="Conditional">
                         <ContentTemplate>
                             <asp:Timer ID="updateExampleTimer" runat="server" Interval="10000" OnTick="updateExampleTimer_Tick"></asp:Timer>

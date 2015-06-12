@@ -460,6 +460,10 @@ function getLatexInput() {
 }
 
 function addInputBtn_Clicked() {
+    // The max number of input lines is 7.
+    if (inputBoxIds.length > 7)
+        return;
+
     var html = $("#input-list").html();
 
     var ni = inputBoxIds.length;
@@ -631,7 +635,7 @@ function removeInput() {
 
     function onMathInputSpan_Clicked(clickedId) {
         selectedTextBox = $("#" + clickedId);
-        selectedTextBox.focus();
+        console.log("clickeda");
     }
 
     function enterScrollMode() {

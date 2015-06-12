@@ -78,7 +78,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (Number.NegInfinity.IsEqualTo(_valTo) || Number.PosInfinity.IsEqualTo(_valTo))
             {
                 PolynomialExt poly = new PolynomialExt();
-                ExComp harshSimp = Simplifier.HarshSimplify(reduced, ref pEvalData);
+                ExComp harshSimp = Simplifier.HarshSimplify(reduced.Clone().ToAlgTerm(), ref pEvalData);
                 if (poly.Init(reduced) || poly.Init(harshSimp.ToAlgTerm()))
                     return EvaluatePoly(poly, ref pEvalData);
 
@@ -143,7 +143,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             if (attempt == null)
             {
-                attempt = EvalInfinitySpecialFunc(eval);
+                attempt = EvalInfinitySpecialFunc(eval, ref pEvalData);
             }
 
             if (attempt == null)
@@ -155,7 +155,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 {
                     _leHopitalCount = 0;
                     pEvalData.WorkMgr.PopStepsCount(pEvalData.WorkMgr.WorkSteps.Count - preHopitalsRuleStepCount);
-                    return this;
+                    return attempt;
                 }
             }
 
@@ -217,7 +217,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             return null;
         }
 
-        private ExComp EvalInfinitySpecialFunc(ExComp ex)
+        private ExComp EvalInfinitySpecialFunc(ExComp ex, ref TermType.EvalData pEvalData)
         {
             bool posInfinity = Number.PosInfinity.IsEqualTo(_valTo);
 
@@ -234,10 +234,73 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     if (Number.One.IsEqualTo(baseNum))
                         return Number.One;
                     bool ltOne = baseNum < 1.0;
+
+                    // Get the coefficient of the power.
+                    AlgebraTerm power = pf.Power.ToAlgTerm();
+                    ExComp powCoeff = power.GetCoeffOfVar(_varFor);
+
+                    if (powCoeff is AlgebraTerm)
+                        powCoeff = (powCoeff as AlgebraTerm).RemoveRedundancies();
+
+                    if (!(powCoeff is Number) || (powCoeff as Number).HasImaginaryComp())
+                        return null;
+
+                    Number nPowCoeff = powCoeff as Number;
+
+                    ExComp result;
+
+                    if (nPowCoeff < 0.0)
+                        posInfinity = !posInfinity;
+
                     if (posInfinity)
-                        return ltOne ? Number.Zero : Number.PosInfinity;
+                        result = ltOne ? Number.Zero : Number.PosInfinity;
                     else
-                        return ltOne ? Number.PosInfinity : Number.Zero;
+                        result = ltOne ? Number.PosInfinity : Number.Zero;
+
+                    return result;
+                }
+                else if (baseVal is AlgebraTerm || baseVal is AlgebraComp)
+                {
+                    ExComp flippedPow = DivOp.StaticCombine(Number.One, pf.Power);
+                    if (!(flippedPow is Number))
+                        return null;
+
+                    Number rootIndex = flippedPow as Number;
+
+                    if (!rootIndex.IsRealInteger())
+                        return null;
+
+                    int iRootIndex = (int)(rootIndex.RealComp);
+
+                    AlgebraTerm baseTerm = baseVal.ToAlgTerm();
+                    List<ExComp> varPows = baseTerm.GetPowersOfVar(_varFor);
+                    if (varPows.Count != 1 || !(varPows[0] is Number))
+                        return null;
+
+                    List<ExComp[]> gps = baseTerm.GetGroupsNoOps();
+                    ExComp coeff = baseTerm.GetCoeffOfVar(_varFor);
+
+                    if (coeff is AlgebraTerm)
+                        coeff = (coeff as AlgebraTerm).RemoveRedundancies();
+
+                    if (!(coeff is Number) || (coeff as Number).HasImaginaryComp())
+                        return null;
+
+                    Number nCoeff = coeff as Number;
+
+                    if (nCoeff < 0)
+                        posInfinity = !posInfinity;
+
+                    bool isEven = iRootIndex % 2 == 0;
+
+                    if (posInfinity && isEven)
+                        return Number.PosInfinity;
+                    else if (posInfinity && !isEven)
+                        return Number.PosInfinity;
+                    else if (!posInfinity && isEven)
+                        return Number.Undefined;
+                    else if (!posInfinity && !isEven)
+                        return Number.NegInfinity;
                 }
             }
             else if (ex is TrigFunction)
@@ -263,10 +326,59 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                         coeff = constTo[0] as Number;
                     else if (constTo.Length == 0)
                         coeff = Number.One;
+                    else if (constTo.Length == 1)
+                    {
+                        ExComp harshEvalAtmpt = Simplifier.HarshSimplify(constTo[0].ToAlgTerm(), ref pEvalData, false);
+                        if (!(harshEvalAtmpt is Number))
+                            return null;
+                        coeff = harshEvalAtmpt as Number;
+                    }
                     else
                         return null;
 
-                    ExComp tmpEval = EvalInfinitySpecialFunc(varTo[0]);
+                    List<Number> imaginaryNumbers = new List<Number>();
+                    foreach (ExComp exConst in constTo)
+                    {
+                        if (exConst is Number && (exConst as Number).RealComp == 0.0 && (exConst as Number).ImagComp != 0.0)
+                        {
+                            imaginaryNumbers.Add(exConst as Number);
+                            constTo.RemoveEx(exConst);
+                        }
+                    }
+
+                    // Put all of the imaginary numbers back under the radical.
+                    if (varTo.Length == 1 && varTo[0] is PowerFunction && (varTo[0] as PowerFunction).IsRadical())
+                    {
+
+                        if (imaginaryNumbers.Count != 0)
+                        {
+                            PowerFunction innerPf = varTo[0] as PowerFunction;
+                            ExComp flipped = DivOp.StaticCombine(Number.One, innerPf.Power.Clone());
+
+                            if (flipped is Number)
+                            {
+                                ExComp[] raised = new ExComp[imaginaryNumbers.Count];
+                                for (int i = 0; i < raised.Length; ++i)
+                                {
+                                    raised[i] = PowOp.StaticCombine(imaginaryNumbers[i], flipped);
+                                }
+
+                                foreach (ExComp raisedEx in raised)
+                                {
+                                    innerPf = new PowerFunction(MulOp.StaticCombine(innerPf.Base, raisedEx), innerPf.Power);
+                                }
+
+                                varTo[0] = innerPf;
+
+                                imaginaryNumbers.Clear();
+                            }
+                        }
+                    }
+
+                    if (imaginaryNumbers.Count != 0)
+                        return null;
+
+                    ExComp tmpEval = EvalInfinitySpecialFunc(varTo[0], ref pEvalData);
                     if (tmpEval == null)
                         return null;
 
