@@ -72,8 +72,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "{0}={1}" + WorkMgr.EDM, "Raise both sides to the " + WorkMgr.STM + "{2}" + WorkMgr.EDM + " power.",
                 PowOp.StaticWeakCombine(left, rootEx), PowOp.StaticWeakCombine(right, rootEx), rootEx);
 
-            left = PowOp.RaiseToPower(left, rootEx as Number, ref pEvalData).ToAlgTerm();
-            right = PowOp.RaiseToPower(right, rootEx as Number, ref pEvalData).ToAlgTerm();
+            left = PowOp.RaiseToPower(left, rootEx as Number, ref pEvalData, true).ToAlgTerm();
+            right = PowOp.RaiseToPower(right, rootEx as Number, ref pEvalData, true).ToAlgTerm();
+
+            if (right is Equation.Functions.PowerFunction)
+                return null;
 
             pEvalData.WorkMgr.FromSides(left, right, "Simplify.");
 

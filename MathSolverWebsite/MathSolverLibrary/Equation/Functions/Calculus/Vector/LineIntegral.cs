@@ -160,10 +160,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
             lastStep = pEvalData.WorkMgr.GetLast();
 
             lastStep.GoDown(ref pEvalData);
+
             Integral integral = Integral.ConstructIntegral(totalInner, pathVar, pathRestriction.GetLower(), pathRestriction.GetUpper());
-            lastStep.GoUp(ref pEvalData);
-            
             ExComp integralEval = integral.Evaluate(false, ref pEvalData);
+
+            lastStep.GoUp(ref pEvalData);
 
             lastStep.WorkHtml = WorkMgr.STM + integral.FinalToDispStr() + (integralEval is Integral ? "" : "=" + WorkMgr.ToDisp(integralEval)) + WorkMgr.EDM;
 

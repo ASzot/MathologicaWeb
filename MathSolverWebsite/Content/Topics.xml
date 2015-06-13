@@ -198,6 +198,7 @@
     </exampleInput>
     <exampleInput>
       <input>2x+4</input>
+      <inputIndex>4</inputIndex>
     </exampleInput>
     <exampleInput>
       <input>f(x)=4x-3</input>
@@ -283,7 +284,7 @@
       <input>x^2 \cdot x^4</input>
     </exampleInput>
     <exampleInput>
-      <input>x^5/x^2</input>
+      <input>\frac{x^5}{x^2}</input>
     </exampleInput>
     <exampleInput>
       <input>(x^2)^3</input>
@@ -316,12 +317,15 @@
     </info>
     <exampleInput>
       <input>x^2-6x+9</input>
+      <inputIndex>6</inputIndex>
     </exampleInput>
     <exampleInput>
       <input>x^2+5x+6</input>
+      <inputIndex>6</inputIndex>
     </exampleInput>
     <exampleInput>
       <input>-6x^2-x+2</input>
+      <inputIndex>6</inputIndex>
     </exampleInput>
   </topic>
   <topic>
@@ -338,7 +342,7 @@
       <input>x^2+5x=-6</input>
     </exampleInput>
     <exampleInput>
-      <input>-x+2=-6x^2</input>
+      <input>-x-2=-6x^2</input>
     </exampleInput>
   </topic>
   <topic>
@@ -370,12 +374,15 @@
     </info>
     <exampleInput>
       <input>2(x^2-2x)=5</input>
+      <inputIndex>2</inputIndex>
     </exampleInput>
     <exampleInput>
       <input>5x^2+6x+1=0</input>
+      <inputIndex>2</inputIndex>
     </exampleInput>
     <exampleInput>
       <input>x^2-x-3=0</input>
+      <inputIndex>2</inputIndex>
     </exampleInput>
   </topic>
   <topic>
@@ -428,12 +435,15 @@
     </info>
     <exampleInput>
       <input>y=5x^2+2x+1</input>
+      <inputIndex>9</inputIndex>
     </exampleInput>
     <exampleInput>
       <input>x^2+6x-7</input>
+      <inputIndex>9</inputIndex>
     </exampleInput>
     <exampleInput>
       <input>f(x)=4x^2-2x-5</input>
+      <inputIndex>9</inputIndex>
     </exampleInput>
   </topic>
   <topic>
@@ -474,12 +484,13 @@
       <input>\sqrt{x^2+4}=3</input>
     </exampleInput>
     <exampleInput>
-      <input>\root{3}{x-2}=5</input>
+      <input>\sqrt[3]{x-2}=5</input>
+      <inputDisp>\root{3}{x-2}=5</inputDisp>
     </exampleInput>
   </topic>
   <topic>
-    <topicName>Solving Radical Equations</topicName>
-    <topicPath>Algebra/Radicals/Solving Radical Equations</topicPath>
+    <topicName>Solving Radical Equations (Advanced)</topicName>
+    <topicPath>Algebra/Radicals/Radical Equations (Advanced)</topicPath>
     <topicDesc>Solve a radical equation for an unknown.</topicDesc>
     <info>
       Use exponents to cancel the radicals. Remember the radicals have fractional powers. Not all of these equations have solutions.
@@ -492,7 +503,7 @@
       <input>\sqrt{2x-4}=3</input>
     </exampleInput>
     <exampleInput>
-      <input>\sqrt{x-2}+3=3x</input>
+      <input>\sqrt{x+2}+3=3x</input>
     </exampleInput>
   </topic>
   <topic>
@@ -506,7 +517,8 @@
       <input>y=3\sqrt{x-2}-2</input>
     </exampleInput>
     <exampleInput>
-      <input>y=2\root{3}{-x}</input>
+      <input>y=\sqrt[3]{-x}</input>
+      <inputDisp>y=2\root{3}{-x}</inputDisp>
     </exampleInput>
     <exampleInput>
       <input>g(x)=\sqrt{x+3}+3x</input>
@@ -1225,7 +1237,7 @@
       
     </info>
     <exampleInput>
-      <inputDisp>\text{arccos}(\frac{\sqrt{2}}{2}))</inputDisp>
+      <inputDisp>\text{arccos}(\frac{\sqrt{2}}{2})</inputDisp>
       <input>arccos(\frac{\sqrt{2}}{2}))</input>
       <inputIndex>1</inputIndex>
     </exampleInput>
@@ -2231,6 +2243,7 @@
     </info>
     <exampleInput>
       <input>v(x,y)=\vectora{x^2y}{y\ln(x)}; \frac{\partial v}{\partial y}</input>
+      <inputDisp>\vec{v}(x,y)=((x^2y),(y\ln(x))); \frac{\partial \vec{v}}{\partial y}</inputDisp>
     </exampleInput>
     <exampleInput>
       <input>\frac{\partial}{\partial x}[\sec(x^2), \tan(\frac{y}{x})]</input>

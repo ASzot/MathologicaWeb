@@ -510,6 +510,8 @@ function removeInput() {
     updateInputBoxes();
 
     mathInputChanged(null);
+
+    selectedTextBox = $("#mathInputSpan" + inputBoxIds[0]);
 }
 
     function clearInputBtn_Clicked() {
@@ -635,7 +637,6 @@ function removeInput() {
 
     function onMathInputSpan_Clicked(clickedId) {
         selectedTextBox = $("#" + clickedId);
-        console.log("clickeda");
     }
 
     function enterScrollMode() {

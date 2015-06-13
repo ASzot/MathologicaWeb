@@ -16,7 +16,6 @@ namespace MathSolverWebsite
 
         protected void submitBtn_Click(object sender, EventArgs e)
         {
-
             string msgStr = messageBody.Value;
             if (msgStr.Trim().Replace("\t", "").Replace("\n", "") == "")
             {
@@ -25,7 +24,11 @@ namespace MathSolverWebsite
             else
             {
                 outputDisp.InnerHtml = "<p class='success-msg'>Thank you for the feedback.</p><a href='/'>Go Back to the Homepage.</a>";
+                string emailStr = emailTxtBox.Text;
+
+                _Default.DataMgr.CreateBlobData(emailStr, msgStr);
             }
+
         }
     }
 }

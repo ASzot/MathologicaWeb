@@ -223,6 +223,24 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             else
                 return false;
 
+            bool allEqual = eqs.Count != 1;
+            // Check that the rest of the input is not using the same function.
+            for (int j = 0; j < eqs.Count; ++j)
+            {
+                if (j == i)
+                    continue;
+                ExComp leftEx = eqs[j].Left;
+                ExComp rightEx = eqs[j].Right;
+
+                if ((leftEx != null && leftEx.IsEqualTo(funcDef.Iden)) || (rightEx != null && rightEx.IsEqualTo(funcDef.Iden)))
+                    continue;
+                allEqual = false;
+                break;
+            }
+
+            if (allEqual)
+                return false;
+
             _funcDefs.Add(new TypePair<FunctionDefinition, ExComp>(funcDef, assignTo));
             // Also call this function on every single other side.
             for (int j = 0; j < eqs.Count; ++j)

@@ -60,7 +60,17 @@ namespace MathSolverWebsite
 
         private const int MAX_INPUT_LEN = 200;
         private static ExampleInputMgr _exampleInputMgr = null;
+        private static DataMgr _dataMgr = null;
 
+        public static DataMgr DataMgr
+        {
+            get 
+            {
+                if (_dataMgr == null)
+                    CreateDataMgr();
+                return _dataMgr; 
+            }
+        }
 
         private FuncDefHelper FuncDefHelper
         {
@@ -122,6 +132,15 @@ namespace MathSolverWebsite
             }
         }
 
+        private static void CreateDataMgr()
+        {
+            if (_dataMgr == null)
+            {
+                _dataMgr = new DataMgr();
+                _dataMgr.Init();
+            }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             MathSolver.Init();
@@ -129,7 +148,9 @@ namespace MathSolverWebsite
 
             if (!Page.IsPostBack)
             {
+                CreateDataMgr();
                 CreateExamples();
+
                 updateExampleTimer_Tick(null, null);
 
                 string eqQueryStr = Request.QueryString["InputDisp"];
@@ -206,8 +227,7 @@ namespace MathSolverWebsite
 
         private void DisplaySolveResult()
         {
-            // Store it, just to be safe. (The session variable could potentially change in the amount of the time 
-            // the variable is accessed again, if the user is crafty.
+            // Store it, just to be safe.
             bool useRad = UseRad;
 
             if (FuncDefHelper == null)
@@ -232,6 +252,7 @@ namespace MathSolverWebsite
             }
 
             int selectedIndex = evalDropDownList.SelectedIndex;
+            string selectedValue = evalDropDownList.SelectedValue;
 
             evalData = new MathSolverLibrary.TermType.EvalData(useRad, new WorkMgr(), FuncDefHelper);
             solveResult = termEval.ExecuteCommandIndex(selectedIndex, ref evalData);
@@ -256,6 +277,11 @@ namespace MathSolverWebsite
             inputHtml = "<div class='input-disp-area'>" + inputHtml + "</div>";
 
             calcOutput.InnerHtml = inputHtml + solveResultHtml + workHtml;
+
+            if (_dataMgr != null)
+            {
+                _dataMgr.CreateBlobData(inputTxt, selectedValue, inputHtml, User.Identity.IsAuthenticated);
+            }
 
             BindListView();
         }

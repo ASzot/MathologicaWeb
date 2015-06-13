@@ -31,6 +31,19 @@
             });
         });
     </script>
+
+    <!-- Google analytics -->
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-56848508-1', 'auto');
+        ga('send', 'pageview');
+    </script>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContent" runat="server">
     <div class="w-section">
@@ -138,13 +151,13 @@ solution:
                 <p><i>Vector field `\vec{F}(x,y,z)` is given by  `x\vec{j}-y\vec{j}`. A particles position with respect to time is given by `x(t)=\cos(t), y(t)=\sin(t)` find `\oint \vec{F}*d\vec{r}` from `t=-\frac{\pi}{2}` to `t=\frac{\pi}{2}`</i></p>
                 
                 <div style="text-align: center" class="pob-problem">
-                    <span class="hidden"></span>
+                    <span class="hidden">f(x,y)=xy; x(t)=\cos(t); y(t)=\sin(t); 0 \lt t \lt \frac{\pi}{2}; \oint_{c}f(x,y)ds</span>
                     <div>
                         <ul>
-                            <li>`\vec{F}(x,y,z)=x\vec{j}-y\vec{j}`</li>
-                            <li>`-\frac{\pi}{2} \lt t \lt -\frac{\pi}{2}`</li>
+                            <li>`\vec{F}(x,y,z)=y\vec{j}-x\vec{j}`</li>
                             <li>`x(t)=\cos(t)`</li>
                             <li>`y(t)=\sin(t)`</li>
+                            <li>`0 \lt t \lt 2\pi`</li>
                             <li>`\oint \vec{F}*d\vec{r}`</li>
                         </ul>
                     </div>

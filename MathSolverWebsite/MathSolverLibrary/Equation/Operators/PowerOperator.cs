@@ -10,6 +10,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
         private const int MAX_BINOM_COMPLEXITY = 20;
         private const int MAX_COMPLEXITY = 1000;
         private const int MIN_BINOM_COMPLEXITY = 3;
+        private const int MAX_COMBINE_COUNT = 10;
 
         /// <summary>
         /// Raises 'e' to the given power.
@@ -122,7 +123,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
             return null;
         }
 
-        public static ExComp RaiseToPower(ExComp term, Number power, ref TermType.EvalData pEvalData)
+        public static ExComp RaiseToPower(ExComp term, Number power, ref TermType.EvalData pEvalData, bool forceCombine = false)
         {
             if (!power.IsRealInteger())
                 return StaticWeakCombine(term, power).ToAlgTerm();
@@ -134,7 +135,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 List<ExComp[]> groups = (term as AlgebraTerm).GetGroups();
                 int groupCount = groups.Count;
 
-                if (groups.Count == 1)
+                if (groups.Count == 1 && !forceCombine)
                 {
                     return StaticCombine(term, power);
                 }
@@ -164,6 +165,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 if (complexityRating > MAX_COMPLEXITY)
                     return StaticWeakCombine(term, power).ToAlgTerm();
             }
+
+            if (powerInt >= MAX_COMBINE_COUNT)
+                return StaticCombine(term, power);
 
             ExComp acumTerm = term.Clone();
             for (int i = 1; i < powerInt; ++i)
@@ -264,6 +268,24 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                         return AlgebraTerm.FromFraction(num, den);
                     }
                 }
+
+                if (ex2 is Number)
+                {
+                    Number nPow = ex2 as Number;
+                    AlgebraTerm ex1Term = ex1 as AlgebraTerm;
+                    List<ExComp[]> gps = ex1Term.GetGroupsNoOps();
+                    if (gps.Count == 1)
+                    {
+                        ExComp[] gp = gps[0];
+                        Number coeff = gp.GetCoeff();
+                        
+                        if (coeff != null && coeff < 0.0 && nPow.IsEven())
+                        {
+                            gp.AssignCoeff(Number.Abs(coeff));
+                            ex1 = gp.ToAlgTerm();
+                        }
+                    }
+                }
             }
             else if (ex1 is Number && ex2 is AlgebraTerm)
             {
@@ -300,6 +322,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                     }
                 }
             }
+
 
             PowerFunction powFunc = new PowerFunction(ex1, ex2);
             return powFunc.SimplifyRadical();

@@ -232,9 +232,14 @@
             });
 
             $(".workCollapseBtn").each(function () {
-                $(this).click(function () {
-                    $(this).parent().next().toggle();
+                $(this).unbind("click").click(function () {
+                    // Close all of the other work panels.
 
+                    $(".workCollapseBtn").each(function () {
+                        $(this).parent().next().hide();
+                    });
+
+                    $(this).parent().next().toggle();
 
                     var workSpaceEle = $("#work-space");
                     if (workSpaceEle[0].scrollHeight - workSpaceEle.scrollTop() == workSpaceEle.outerHeight())

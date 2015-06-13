@@ -63,10 +63,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
             pEvalData.AddMsg(valid ? "True" : "False");
 
-            if (valid)
-                return SolveResult.Solved();
-            else
-                return SolveResult.Failure();
+            return SolveResult.Solved();
         }
 
         private ExComp SimpTerm(ExComp side, ref EvalData pEvalData)

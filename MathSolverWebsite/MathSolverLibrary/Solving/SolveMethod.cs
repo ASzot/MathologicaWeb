@@ -68,7 +68,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                     break;
             }
 
-            if (constantGroupsLeft == null)
+            if (constantGroupsLeft == null || (constantGroupsLeft.Count == 1 && constantGroupsLeft[0].IsZero()))
                 return;
 
             if (constantGroupsLeft.Count != 0)

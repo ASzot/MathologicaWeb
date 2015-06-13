@@ -204,7 +204,14 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             }
 
             if (options == null || options.Count == 0)
+            {
+                if (tmpCmds.Count != 0)
+                {
+                    _cmds = tmpCmds.ToArray();
+                    return true;
+                }
                 return false;
+            }
 
 
             foreach (string option in options)

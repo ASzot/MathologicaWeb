@@ -14,7 +14,8 @@ namespace MathSolverWebsite.Website_Logic
     {
         private CloudStorageAccount _storageAccount = null;
         private CloudBlobClient _client = null;
-        private CloudBlobContainer _container = null;
+        private CloudBlobContainer _inputsContainer = null;
+        private CloudBlobContainer _messageContainer = null;
 
         public void Init()
         {
@@ -23,34 +24,49 @@ namespace MathSolverWebsite.Website_Logic
             {
                 _storageAccount = CloudStorageAccount.Parse(ConfigurationManager.ConnectionStrings["StorageConnection"].ConnectionString);
                 _client = _storageAccount.CreateCloudBlobClient();
-                _container = _client.GetContainerReference("userinputs");
+                _inputsContainer = _client.GetContainerReference("userinputs");
+                _messageContainer = _client.GetContainerReference("messages");
 
-                if (_container.CreateIfNotExists())
+                if (_inputsContainer.CreateIfNotExists())
                 {
                     // Configure the container for access.
-                    var permissions = _container.GetPermissions();
+                    var permissions = _inputsContainer.GetPermissions();
                     permissions.PublicAccess = BlobContainerPublicAccessType.Container;
-                    _container.SetPermissions(permissions);
+                    _inputsContainer.SetPermissions(permissions);
                 }
             }
             catch (Exception e)
             {
                 _storageAccount = null;
                 _client = null;
-                _container = null;
+                _inputsContainer = null;
             }
         }
 
-        public void CreateBlobData(string input, string selectedEval, string solveResult)
+        public void CreateBlobData(string input, string selectedEval, string solveResult, bool isLoggedIn)
         {
-            if (_container == null)
+            if (_inputsContainer == null)
                 return;
 
-            String finalDataStr = String.Format("At {0}: \n\n Input was {1} \n Selected command was {2} \n Output was: {3}", DateTime.Now.ToString(),
-                input, selectedEval, solveResult);
+            CreateBlobData(String.Format("At {0}: \n\n Input was {1} \n Selected command was {2} \n Output was: {3} \n Logged in: " + isLoggedIn.ToString(), DateTime.Now.ToString(),
+                input, selectedEval, solveResult), _inputsContainer);
+        }
 
-            CloudBlockBlob blobData = _container.GetBlockBlobReference(DateTime.Now.ToString() + ":" + Guid.NewGuid().ToString());
-            blobData.UploadTextAsync(finalDataStr);
+        public void CreateBlobData(string email, string message)
+        {
+            if (_inputsContainer == null)
+                return;
+
+            CreateBlobData(String.Format("Email: {0} \n Message: {1}", email, message), _messageContainer);
+        }
+
+        private void CreateBlobData(string data, CloudBlobContainer container)
+        {
+            if (_inputsContainer == null)
+                return;
+
+            CloudBlockBlob blobData = container.GetBlockBlobReference(DateTime.Now.ToString() + ":" + Guid.NewGuid().ToString());
+            blobData.UploadTextAsync(data);
         }
     }
 }
