@@ -729,6 +729,35 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
             return totalStr;
         }
 
+        public override void CallFunction(FunctionDefinition funcDef, ExComp def, ref TermType.EvalData pEvalData, bool callSubTerms = true)
+        {
+            for (int i = 0; i < Rows; ++i)
+            {
+                for (int j = 0; j < Cols; ++j)
+                {
+                    AlgebraTerm data = _exData[i][j].ToAlgTerm();
+                    data.CallFunction(funcDef, def, ref pEvalData, callSubTerms);
+                    _exData[i][j] = data;
+                }
+            }
+        }
+
+        public override bool CallFunctions(ref TermType.EvalData pEvalData)
+        {
+            for (int i = 0; i < Rows; ++i)
+            {
+                for (int j = 0; j < Cols; ++j)
+                {
+                    AlgebraTerm data = _exData[i][j].ToAlgTerm();
+                    if (!data.CallFunctions(ref pEvalData))
+                        return false;
+                    _exData[i][j] = data;
+                }
+            }
+
+            return true;
+        }
+
         public override List<Restriction> GetDomain(AlgebraVar varFor, AlgebraSolver agSolver, ref TermType.EvalData pEvalData)
         {
             List<Restriction> allDomain = new List<Restriction>();

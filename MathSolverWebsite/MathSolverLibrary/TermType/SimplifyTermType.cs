@@ -176,7 +176,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             }
         }
 
-        public static ExComp BasicSimplify(ExComp term, ref EvalData pEvalData)
+        public static ExComp BasicSimplify(ExComp term, ref EvalData pEvalData, bool factor = true)
         {
             AlgebraTerm tmpTerm = term.ToAlgTerm();
             
@@ -192,7 +192,8 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
                 agTerm = agTerm.ApplyOrderOfOperations();
                 agTerm = agTerm.WeakMakeWorkable(ref pEvalData).ToAlgTerm();
-                agTerm = Simplifier.AttemptCancelations(agTerm, ref pEvalData).ToAlgTerm();
+                if (factor)
+                    agTerm = Simplifier.AttemptCancelations(agTerm, ref pEvalData).ToAlgTerm();
 
                 agTerm = agTerm.ApplyOrderOfOperations();
                 term = agTerm.MakeWorkable();
@@ -316,7 +317,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             }
             else if (command == "Factor")
             {
-                ExComp factorized = _term.Clone().ToAlgTerm().FactorizeTerm(ref pEvalData);
+                ExComp factorized = _term.Clone().ToAlgTerm().FactorizeTerm(ref pEvalData, true);
                 if (factorized is AlgebraTerm)
                     factorized = (factorized as AlgebraTerm).RemoveRedundancies();
 

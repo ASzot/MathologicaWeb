@@ -222,6 +222,33 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         #endregion Operators
 
+        public override void CallFunction(FunctionDefinition funcDef, ExComp def, ref TermType.EvalData pEvalData, bool callSubTerms = true)
+        {
+            AlgebraTerm baseTerm = Base.ToAlgTerm();
+            AlgebraTerm powTerm = Power.ToAlgTerm();
+
+            baseTerm.CallFunction(funcDef, def, ref pEvalData, callSubTerms);
+            powTerm.CallFunction(funcDef, def, ref pEvalData, callSubTerms);
+
+            _power = powTerm;
+            SetSubComps(baseTerm.SubComps);
+        }
+
+        public override bool CallFunctions(ref TermType.EvalData pEvalData)
+        {
+            AlgebraTerm baseTerm = Base.ToAlgTerm();
+            AlgebraTerm powTerm = Power.ToAlgTerm();
+            
+            if (!baseTerm.CallFunctions(ref pEvalData) || !powTerm.CallFunctions(ref pEvalData))
+                return false;
+
+            _power = powTerm;
+            _subComps = new List<ExComp>();
+            _subComps.Add(baseTerm);
+
+            return true;
+        }
+
         public static ExComp FixFraction(ExComp power)
         {
             if (power is AlgebraTerm)
@@ -1154,9 +1181,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             }
             else
             {
-                surrounded = true;
                 if ((!Regex.IsMatch(baseAsciiStr, @"^\d$") && baseAsciiStr.Length > 1 && !(baseAsciiStr.StartsWith("(") && baseAsciiStr.EndsWith(")"))))
+                {
+                    surrounded = true;
                     baseAsciiStr = baseAsciiStr.SurroundWithParas();
+                }
             }
 
             if (!surrounded && Base is Number)

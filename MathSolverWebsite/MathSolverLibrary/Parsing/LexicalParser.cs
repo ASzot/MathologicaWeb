@@ -1730,24 +1730,24 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                         return ParseVectorNotation(ref currentIndex, lexemeTable, ref pParseErrors);
                     else if (lexeme.Data2.StartsWith("binom")) 
                         return ParseBinomNotation(ref currentIndex, lexemeTable, ref pParseErrors);
-                    else if (lexeme.Data2 == "det")
-                    {
-                        currentIndex++;
-                        // If the next element is not a matrix then return null.
-                        if (currentIndex < lexemeTable.Count && 
-                            (lexemeTable[currentIndex].Data1 == LexemeType.VectorStore ||
-                            (lexemeTable[currentIndex].Data1 == LexemeType.Function && lexemeTable[currentIndex].Data2.StartsWith("vector"))))
-                        {
-                            ExComp vectorEle = LexemeToExComp(lexemeTable, ref currentIndex, ref pParseErrors);
-                            if (!(vectorEle is ExMatrix))
-                            {
-                                pParseErrors.Add("Matrix must follow determinant");
-                                return null;
-                            }
+                    //else if (lexeme.Data2 == "det")
+                    //{
+                    //    currentIndex++;
+                    //    // If the next element is not a matrix then return null.
+                    //    if (currentIndex < lexemeTable.Count && 
+                    //        (lexemeTable[currentIndex].Data1 == LexemeType.VectorStore ||
+                    //        (lexemeTable[currentIndex].Data1 == LexemeType.Function && lexemeTable[currentIndex].Data2.StartsWith("vector"))))
+                    //    {
+                    //        ExComp vectorEle = LexemeToExComp(lexemeTable, ref currentIndex, ref pParseErrors);
+                    //        if (!(vectorEle is ExMatrix))
+                    //        {
+                    //            pParseErrors.Add("Matrix must follow determinant");
+                    //            return null;
+                    //        }
 
-                            return new Determinant(vectorEle);
-                        }
-                    }
+                    //        return new Determinant(vectorEle);
+                    //    }
+                    //}
 
                     if (TrigFunction.IsValidType(lexeme.Data2) ||
                         InverseTrigFunction.IsValidType(lexeme.Data2))
@@ -1807,12 +1807,21 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                     {
                         if ((lexeme.Data2 == "FACT" || lexeme.Data2.StartsWith("nabla")) && currentIndex != lexemeTable.Count - 1)
                         {
-                            // Just parse the next lexeme.
-                            LexemeTable lt = new LexemeTable();
 
-                            lt.Add(lexemeTable[currentIndex + 1]);
-                            int tmpCurIndex = 0;
-                            ExComp innerEx = LexemeToExComp(lt, ref tmpCurIndex, ref pParseErrors);
+                            currentIndex++;
+                            if (lexemeTable[currentIndex].Data1 == LexemeType.Operator)
+                            {
+                                if (lexemeTable[currentIndex].Data2 == "*" || lexemeTable[currentIndex].Data2 == CrossProductOp.IDEN)
+                                {
+                                    lexeme.Data2 += lexemeTable[currentIndex].Data2;
+                                    currentIndex++;
+                                }
+                                else
+                                    return null;
+                            }
+
+                            // Just parse the next lexeme.
+                            ExComp innerEx = LexemeToExComp(lexemeTable, ref currentIndex, ref pParseErrors);
 
                             currentIndex = currentIndex + 1;
                             if (lexeme.Data2 == "FACT")
@@ -2975,6 +2984,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                 AlgebraTerm lowerTerm = lower.ToAlgTerm();
 
                 lower = lowerTerm.WeakMakeWorkable(ref p_EvalData).ToAlgTerm();
+                if (lower == null)
+                    return null;
                 lower = TermType.SimplifyTermType.BasicSimplify(lower, ref p_EvalData);
 
 
@@ -2995,6 +3006,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                     AlgebraTerm upperTerm = upper.ToAlgTerm();
 
                     upper = upperTerm.WeakMakeWorkable(ref p_EvalData).ToAlgTerm();
+                    if (upper == null)
+                        return null;
                     upper = TermType.SimplifyTermType.BasicSimplify(upper, ref p_EvalData);
                 }
             }

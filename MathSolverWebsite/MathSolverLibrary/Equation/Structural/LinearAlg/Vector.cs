@@ -121,7 +121,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
 
             for (int i = 0; i < this.Length; ++i)
             {
-                ExComp setVal = DivOp.StaticCombine(this.Get(i), vecLength);
+                ExComp setVal = DivOp.StaticCombine(this.Get(i), vecLength.Clone());
                 vec.Set(i, setVal);
             }
 

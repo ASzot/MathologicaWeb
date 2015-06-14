@@ -103,7 +103,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                     funcDef = searchFuncDef.Data1;
                 else
                 {
-                    if (funcDef.IsEqualTo(searchFuncDef.Data1))
+                    if (!funcDef.IsEqualTo(searchFuncDef.Data1))
                     {
                         allEqual = false;
                         break;
@@ -141,7 +141,20 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 }
             }
 
-            solveVars = AlgebraSolver.GetIdenOccurances(totalLt);
+            //solveVars = new Dictionary<string, int>();
+
+            //foreach (EqSet eqSet in eqs)
+            //{
+            //    List<string> comps = eqSet.LeftTerm.GetAllAlgebraCompsStr();
+
+            //    if (eqSet.Right != null)
+            //        comps.AddRange(eqSet.RightTerm.GetAllAlgebraCompsStr());
+
+            //    foreach (string comp in comps)
+            //    {
+            //        solveVars[comp] = 1;
+            //    }
+            //}
 
             return eqs;
         }
@@ -240,6 +253,12 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
             if (allEqual)
                 return false;
+
+            if (assignTo is AlgebraTerm)
+            {
+                (assignTo as AlgebraTerm).ApplyOrderOfOperations();
+                assignTo = (assignTo as AlgebraTerm).MakeWorkable();
+            }
 
             _funcDefs.Add(new TypePair<FunctionDefinition, ExComp>(funcDef, assignTo));
             // Also call this function on every single other side.

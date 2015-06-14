@@ -6,12 +6,21 @@ namespace MathSolverWebsite.MathSolverLibrary
 {
     internal static class MathHelper
     {
+        // The max decimal place where the GCF will be calculated in terms of a whole number.
+        private const int MAX_GCF_ZERO_DIST = 5;
+
         public static double GCFDouble(double n1, double n2)
         {
             n1 = Equation.Number.EpsilonCorrect(n1);
             n2 = Equation.Number.EpsilonCorrect(n2);
             if (n1 == 0.0 || n2 == 0.0)
                 return 0.0;
+
+            if (double.IsNaN(n1) || double.IsNaN(n2))
+                return double.NaN;
+
+            if (double.IsInfinity(n1) || double.IsInfinity(n2))
+                return double.PositiveInfinity;
 
             double an1 = Math.Abs(n1);
             double an2 = Math.Abs(n2);
@@ -43,7 +52,11 @@ namespace MathSolverWebsite.MathSolverLibrary
                     distanceFromZero2 = afterPointStr.Length - 1;
                 }
 
-                multiple *= Math.Pow(10, Math.Max(distanceFromZero1, distanceFromZero2));
+                int maxDistanceFromZero = Math.Max(distanceFromZero1, distanceFromZero2);
+                //if (maxDistanceFromZero > MAX_GCF_ZERO_DIST)
+                //    return n1 * n2;
+
+                multiple *= Math.Pow(10, maxDistanceFromZero);
                 an1 *= multiple;
                 an2 *= multiple;
             }

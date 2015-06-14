@@ -753,12 +753,25 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 if (ex1GcfGroup != null)
                 {
                     ExComp ex1Gcf = ex1GcfGroup.ToAlgTerm().RemoveRedundancies();
-                    ExComp remainder = FactorOutTerm(ex1.Clone(), ex1Gcf);
+                    if (ex1Gcf is AlgebraTerm)
+                    {
+                        (ex1Gcf as AlgebraTerm).ApplyOrderOfOperations();
+                        ex1Gcf = (ex1Gcf as AlgebraTerm).MakeWorkable();
+                    }
 
-                    if (ex1Gcf.IsEqualTo(ex2))
-                        return remainder;
-                    if (remainder.IsEqualTo(ex2))
-                        return ex1Gcf;
+                    if (ex1Gcf is AlgebraTerm)
+                        ex1Gcf = (ex1Gcf as AlgebraTerm).RemoveRedundancies();
+
+                    if (!Number.Zero.IsEqualTo(ex1Gcf))
+                    {
+                        ExComp remainder = FactorOutTerm(ex1.Clone(), ex1Gcf);
+
+                        if (ex1Gcf.IsEqualTo(ex2))
+                            return remainder;
+                        if (remainder.IsEqualTo(ex2))
+                            return ex1Gcf;
+                    }
+
                 }
             }
 

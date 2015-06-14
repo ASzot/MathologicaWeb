@@ -487,12 +487,29 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
             return factors;
         }
 
-        public static AlgebraTerm FactorizeTerm(this AlgebraTerm term, ref TermType.EvalData pEvalData)
+        public static AlgebraTerm FactorizeTerm(this AlgebraTerm term, ref TermType.EvalData pEvalData, bool allowComplex = false)
         {
+            if (term.GetAllAlgebraCompsStr().Count == 0)
+                return term;
+
+            int startWorkSteps = pEvalData.WorkMgr.WorkSteps.Count;
             AlgebraTerm[] factors = term.GetFactors(ref pEvalData);
+
 
             if (factors != null)
             {
+                if (!allowComplex)
+                {
+                    foreach (AlgebraTerm factor in factors)
+                    {
+                        if (factor.IsComplex())
+                        {
+                            pEvalData.WorkMgr.PopSteps(startWorkSteps);
+                            return term;
+                        }
+                    }
+                }
+
                 if (factors.Length > 2)
                     pEvalData.AttemptSetInputType(TermType.InputType.PolyFactor);
                 AlgebraTerm finalTerm = new AlgebraTerm();
@@ -506,6 +523,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
                 return finalTerm;
             }
 
+            pEvalData.WorkMgr.PopSteps(startWorkSteps);
             return term;
         }
 

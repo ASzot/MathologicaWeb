@@ -235,7 +235,7 @@
                 $(this).unbind("click").click(function () {
                     // Close all of the other work panels.
 
-                    $(".workCollapseBtn").each(function () {
+                    $(".workCollapseBtn").not(this).each(function () {
                         $(this).parent().next().hide();
                     });
 

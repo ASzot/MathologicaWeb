@@ -250,7 +250,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         /// </summary>
         /// <param name="funcDef"></param>
         /// <param name="def"></param>
-        public void CallFunction(FunctionDefinition funcDef, ExComp def, ref TermType.EvalData pEvalData)
+        public virtual void CallFunction(FunctionDefinition funcDef, ExComp def, ref TermType.EvalData pEvalData, bool callSubTerms = true)
         {
             for (int i = 0; i < _subComps.Count; ++i)
             {
@@ -277,7 +277,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 if (_subComps[i] is FunctionDefinition && (_subComps[i] as FunctionDefinition).IsEqualTo(funcDef))
                 {
                     KeyValuePair<FunctionDefinition, ExComp> keyValDef = new KeyValuePair<FunctionDefinition, ExComp>(funcDef, def);
-                    ExComp tmpVal = (_subComps[i] as FunctionDefinition).CallFunc(keyValDef, ref pEvalData);
+                    ExComp tmpVal = (_subComps[i] as FunctionDefinition).CallFunc(keyValDef, ref pEvalData, callSubTerms);
                     if (tmpVal != null)
                         _subComps[i] = tmpVal;
                 }
@@ -289,7 +289,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         /// </summary>
         /// <param name="pEvalData"></param>
         /// <returns></returns>
-        public bool CallFunctions(ref TermType.EvalData pEvalData)
+        public virtual bool CallFunctions(ref TermType.EvalData pEvalData)
         {
             for (int i = 0; i < _subComps.Count; ++i)
             {
@@ -559,6 +559,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
             ExComp[] lcfDen = GroupHelper.LCF(denFracGroups);
             AlgebraTerm lcfTerm = lcfDen.ToAlgTerm();
+            lcfTerm.ApplyOrderOfOperations();
+            lcfTerm = lcfTerm.MakeWorkable().ToAlgTerm();
 
             List<ExComp> numMulTerms = new List<ExComp>();
 
@@ -601,7 +603,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             ExComp finalNum = finalNumTerm.MakeWorkable();
             // This might end in a stack overflow exception.
             if (finalNum is AlgebraTerm)
-                finalNum = (finalNum as AlgebraTerm).CompoundFractions();
+            {
+                //finalNum = (finalNum as AlgebraTerm).CompoundFractions();
+            }
 
             ExComp finalFrac = DivOp.StaticCombine(finalNum, lcfTerm);
 

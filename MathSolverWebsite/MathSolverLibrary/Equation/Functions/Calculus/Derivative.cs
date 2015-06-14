@@ -253,11 +253,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                             Integral otherInt = Integral.ConstructIntegral(finalInt.InnerTerm, finalInt.DVar, finalInt.LowerLimit, tmpBoundryVar);
                             finalInt.LowerLimit = tmpBoundryVar;
 
-                            pEvalData.WorkMgr.FromFormatted(ca_derivSymb + "[" + finalInt.FinalToDispStr() + "+" + otherInt.FinalToDispStr() + "]", "Split the integral");
+                            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + ca_derivSymb + "[" + finalInt.FinalToDispStr() + "+" + otherInt.FinalToDispStr() + "]" + WorkMgr.EDM, "Split the integral");
                             ExComp tmp = otherInt.UpperLimit;
                             otherInt.UpperLimit = otherInt.LowerLimit;
                             otherInt.LowerLimit = tmp;
-                            pEvalData.WorkMgr.FromFormatted(ca_derivSymb + "[" + finalInt.FinalToDispStr() + "-" + otherInt.FinalToDispStr() + "]", "Switch the integral bounds");
+                            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + ca_derivSymb + "[" + finalInt.FinalToDispStr() + "-" + otherInt.FinalToDispStr() + "]" + WorkMgr.EDM, "Switch the integral bounds");
 
                             ints = new Integral[] { finalInt, otherInt };
                         }
@@ -510,7 +510,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             deriv._derivOf = this._derivOf;
             deriv._isDefined = this._isDefined;
             deriv._isPartial = this._isPartial;
-            deriv._inputVal = this._inputVal.IsEqualTo(subOut) ? subIn : this._inputVal;
+            if (this._inputVal != null)
+                deriv._inputVal = this._inputVal.IsEqualTo(subOut) ? subIn : this._inputVal;
             if (this._order.IsEqualTo(subOut) && (subIn is AlgebraComp || subIn is Number))
                 deriv._order = subIn;
             else

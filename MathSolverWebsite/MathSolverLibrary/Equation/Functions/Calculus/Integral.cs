@@ -199,6 +199,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             return null;
         }
 
+        public override AlgebraTerm Substitute(ExComp subOut, ExComp subIn)
+        {
+            AlgebraTerm upperLim = UpperLimit == null ? null : UpperLimitTerm.Substitute(subOut, subIn);
+            AlgebraTerm lowerLim = LowerLimit == null ? null : LowerLimitTerm.Substitute(subOut, subIn);
+            AlgebraTerm innerTerm = InnerTerm.Substitute(subOut, subIn);
+
+            return ConstructIntegral(innerTerm, _dVar, lowerLim, upperLim, _isInnerIntegral);
+        }
+
         public override ExComp Evaluate(bool harshEval, ref TermType.EvalData pEvalData)
         {
             CallChildren(harshEval, ref pEvalData);

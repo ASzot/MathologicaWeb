@@ -144,7 +144,6 @@ namespace MathSolverWebsite
         protected void Page_Load(object sender, EventArgs e)
         {
             MathSolver.Init();
-            UseRad = true;
 
             if (!Page.IsPostBack)
             {
@@ -178,12 +177,15 @@ namespace MathSolverWebsite
                             UseRad = tmpUseRad;
                         }
                     }
+                    else
+                        UseRad = true;
 
                     if (UpdateUI(eqQueryStr, selIndex))
                         DisplaySolveResult();
                 }
                 else
                 {
+                    UseRad = true;
                     evalDropDownList.Items.Clear();
                     evalDropDownList.Items.Add("Enter input above.");
                 }

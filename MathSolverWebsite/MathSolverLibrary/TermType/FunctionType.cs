@@ -48,6 +48,12 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             else if (command.StartsWith("Assign"))
             {
                 // Assign the function.
+                if (_assignTo is AlgebraTerm)
+                {
+                    (_assignTo as AlgebraTerm).ApplyOrderOfOperations();
+                    _assignTo = (_assignTo as AlgebraTerm).MakeWorkable();
+                }
+
                 pEvalData.FuncDefs.Define(_func, _assignTo, ref pEvalData);
                 return SolveResult.Solved();
             }
@@ -67,6 +73,30 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             }
 
             return SolveResult.InvalidCmd(ref pEvalData);
+        }
+
+        private bool ContainsSpecialFuncs(AlgebraTerm term)
+        {
+            foreach (ExComp subTerm in term.SubComps)
+            {
+                if ((subTerm is Equation.Functions.Calculus.Derivative) ||
+                    (subTerm is Equation.Functions.Calculus.Integral) ||
+                    (subTerm is Equation.Functions.Calculus.Vector.FieldTransformation) ||
+                    (subTerm is Equation.Functions.ChooseFunction) ||
+                    (subTerm is Equation.Functions.PermutationFunction) ||
+                    (subTerm is Equation.Functions.Calculus.Limit) ||
+                    (subTerm is Equation.Structural.LinearAlg.ExMatrix) ||
+                    (subTerm is Equation.Structural.LinearAlg.Determinant) ||
+                    (subTerm is Equation.Structural.LinearAlg.MatrixInverse))
+                {
+                    return true;
+                }
+
+                if (subTerm is AlgebraTerm && ContainsSpecialFuncs(subTerm as AlgebraTerm))
+                    return true;
+            }
+
+            return false;
         }
 
         public bool Init(EqSet eqSet, List<TypePair<LexemeType, string>> lt, Dictionary<string, int> solveVars, string probSolveVar)
@@ -153,8 +183,14 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 if (graphStr != null)
                     tmpCmds.Add("Graph");
             }
-            if (!_func.IsMultiValued && _assignTo.ToAlgTerm().Contains(_func.InputArgs[0]) && !(_assignTo is Equation.Structural.LinearAlg.ExMatrix))
+
+            if (!ContainsSpecialFuncs(new AlgebraTerm(_assignTo)) &&
+                !_func.IsMultiValued &&
+                _assignTo.ToAlgTerm().Contains(_func.InputArgs[0]))
+            {
                 tmpCmds.Add("Find inverse");
+            }
+
             tmpCmds.Add(_func.HasValidInputArgs ? "Assign function" : "Assign value");
             for (int i = 0; i < solveVarKeys.Count; ++i)
             {

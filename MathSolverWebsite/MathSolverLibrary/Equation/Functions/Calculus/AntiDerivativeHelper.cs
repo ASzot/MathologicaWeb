@@ -246,6 +246,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 }
             }
 
+
+            // Trig substitutions.
+            int prevTrigSubWorkCount = pEvalData.WorkMgr.WorkSteps.Count;
+            atmpt = (new TrigSubTech()).TrigSubstitution(gp, dVar, ref pEvalData);
+            if (atmpt != null)
+                return atmpt;
+            else
+                pEvalData.WorkMgr.PopSteps(prevTrigSubWorkCount);
+
             if (gp.Length == 2)
             {
                 // Using trig identities to make substitutions.
@@ -260,7 +269,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     string thisStr = gp.ToAlgTerm().FinalToDispStr();
                     pIntInfo.IncPartsCount();
                     // Is one of these a denominator because if so don't do integration by parts.
-                    if (gp[0] is PowerFunction && !(gp[0] as PowerFunction).IsDenominator() && gp[1] is PowerFunction && !(gp[1] as PowerFunction).IsDenominator())
+                    if (!(gp[0] is PowerFunction && (gp[0] as PowerFunction).IsDenominator()) && !(gp[1] is PowerFunction && (gp[1] as PowerFunction).IsDenominator()))
                     {
                         atmpt = IntByParts(gp[0], gp[1], dVar, thisStr, ref pIntInfo, ref pEvalData);
                         if (atmpt != null)
@@ -274,13 +283,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 }
             }
 
-            // Trig substitutions.
-            int prevTrigSubWorkCount = pEvalData.WorkMgr.WorkSteps.Count;
-            atmpt = (new TrigSubTech()).TrigSubstitution(gp, dVar, ref pEvalData);
-            if (atmpt != null)
-                return atmpt;
-            else
-                pEvalData.WorkMgr.PopSteps(prevTrigSubWorkCount);
 
             return null;
         }
@@ -399,19 +401,46 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             bool tpEven = tp % 2 == 0;
             if (!spEven && tp == 1)
             {
-                ExComp[] gp = new ExComp[] { PowOp.StaticCombine(sf, new Number(sp - 1)), sf, tf };
-                return AttemptUSub(gp, dVar, ref pIntInfo, ref pEvalData);
+                //ExComp[] gp = new ExComp[] { PowOp.StaticCombine(sf, new Number(sp - 1)), new AlgebraTerm(sf, new MulOp(), tf) };
+                //return AttemptUSub(gp, dVar, ref pIntInfo, ref pEvalData);
+
+                AlgebraComp subInVar = null;
+
+                if (sf.Contains(new AlgebraComp("u")) || tf.Contains(new AlgebraComp("u")))
+                {
+                    if (sf.Contains(new AlgebraComp("w")) || tf.Contains(new AlgebraComp("u")))
+                        subInVar = new AlgebraComp("v");
+                    else
+                        subInVar = new AlgebraComp("w");
+                }
+                else
+                    subInVar = new AlgebraComp("u");
+
+                string innerStr = "(" + WorkMgr.ToDisp(sf.InnerTerm) +")";
+                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\int \\sec^{" + (sp - 1).ToString() + "}" + innerStr +
+                    "sec" + innerStr + "tan" + innerStr + " d" + dVar.ToDispString() + WorkMgr.EDM, "Split the term up.");
+
+                ExComp subbedIn = PowOp.StaticCombine(subInVar, new Number(sp - 1));
+                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\int " + subInVar.ToDispString() + "^{" + (sp - 1).ToString() + "} d" + subInVar.ToDispString() + WorkMgr.EDM,
+                    "Make the substitution " + WorkMgr.STM + subInVar.ToDispString() + "=\\sec" + innerStr + ", d" + subInVar.ToDispString() + 
+                    "=sec" + innerStr + "tan" + innerStr + "d" + subInVar.ToDispString());
+                ExComp antiDeriv = TakeAntiDerivativeVarGp(new ExComp[] { subbedIn }, subInVar, ref pIntInfo, ref pEvalData);
+
+                AlgebraTerm subbedBack = antiDeriv.ToAlgTerm().Substitute(subInVar, sf);
+                pEvalData.WorkMgr.FromSides(subbedBack, null, "Sub back in.");
+
+                return subbedBack;
             }
-            else if (!spEven && tpEven && sp > 2)
-            {
-                ExComp secSubed = PowOp.StaticCombine(
-                    AddOp.StaticCombine(
-                    Number.One, 
-                    PowOp.StaticCombine(new TanFunction(sf.InnerEx), new Number(2.0))),
-                    new Number((sp - 2) / 2));
-                ExComp[] gp = new ExComp[] { PowOp.StaticCombine(tf, new Number(tp)), secSubed, PowOp.StaticCombine(sf, new Number(2.0)) };
-                return AttemptUSub(gp, dVar, ref pIntInfo, ref pEvalData);
-            }
+            //else if (!spEven && tpEven && sp > 2)
+            //{
+            //    ExComp secSubed = PowOp.StaticCombine(
+            //        AddOp.StaticCombine(
+            //            Number.One,
+            //            PowOp.StaticCombine(new TanFunction(sf.InnerEx), new Number(2.0))),
+            //        new Number((sp - 2) / 2));
+            //    ExComp[] gp = new ExComp[] { PowOp.StaticCombine(tf, new Number(tp)), secSubed, PowOp.StaticCombine(sf, new Number(2.0)) };
+            //    return AttemptUSub(gp, dVar, ref pIntInfo, ref pEvalData);
+            //}
 
             return null;
         }

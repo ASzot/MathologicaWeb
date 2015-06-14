@@ -60,9 +60,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
                 z = new AlgebraComp("z");
             }
 
-            ExComp derivX = Derivative.TakeDeriv(innerEx, x, ref pEvalData, true, isFuncDeriv);
-            ExComp derivY = Derivative.TakeDeriv(innerEx, y, ref pEvalData, true, isFuncDeriv);
-            ExComp derivZ = Derivative.TakeDeriv(innerEx, z, ref pEvalData, true, isFuncDeriv);
+            ExComp derivX = Derivative.TakeDeriv(innerEx.Clone(), x, ref pEvalData, true, isFuncDeriv);
+            ExComp derivY = Derivative.TakeDeriv(innerEx.Clone(), y, ref pEvalData, true, isFuncDeriv);
+            ExComp derivZ = Derivative.TakeDeriv(innerEx.Clone(), z, ref pEvalData, true, isFuncDeriv);
 
             return new ExVector(derivX, derivY, derivZ);
         }

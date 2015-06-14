@@ -117,7 +117,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             _funcNotation = funcNotation;
         }
 
-        public ExComp CallFunc(KeyValuePair<FunctionDefinition, ExComp> def, ref TermType.EvalData pEvalData)
+        public ExComp CallFunc(KeyValuePair<FunctionDefinition, ExComp> def, ref TermType.EvalData pEvalData, bool callSubFuncs = true)
         {
             if (def.Value == null)
             {
@@ -141,24 +141,27 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             if (_callArgs.Length != def.Key._args.Length)
                 return null;
 
-            for (int i = 0; i < _args.Length; ++i)
-            {
-                AlgebraComp varParameter = def.Key._args[i];
-                AlgebraTerm input = _callArgs[i].ToAlgTerm();
-                // The input for some reason isn't weak workable most of the time.
-                ExComp inputEx = input.WeakMakeWorkable(ref pEvalData);
-                if (inputEx == null)
-                    return null;
-                if (inputEx is AlgebraTerm)
+                for (int i = 0; i < _args.Length; ++i)
                 {
-                    if (!(inputEx as AlgebraTerm).CallFunctions(ref pEvalData))
+                    AlgebraComp varParameter = def.Key._args[i];
+                    AlgebraTerm input = _callArgs[i].ToAlgTerm();
+                    // The input for some reason isn't weak workable most of the time.
+                    ExComp inputEx = input.WeakMakeWorkable(ref pEvalData);
+                    if (inputEx == null)
                         return null;
-                }
-                else if (inputEx is FunctionDefinition)
-                    inputEx = (inputEx as FunctionDefinition).CallFunc(ref pEvalData);
+                    if (callSubFuncs)
+                    {
+                        if (inputEx is AlgebraTerm)
+                        {
+                            if (!(inputEx as AlgebraTerm).CallFunctions(ref pEvalData))
+                                return null;
+                        }
+                        else if (inputEx is FunctionDefinition)
+                            inputEx = (inputEx as FunctionDefinition).CallFunc(ref pEvalData);
+                    }
 
-                thisDefTerm = thisDefTerm.Substitute(varParameter, inputEx);
-            }
+                    thisDefTerm = thisDefTerm.Substitute(varParameter, inputEx);
+                }
 
             thisDefTerm.EvaluateFunctions(false, ref pEvalData);
             thisDefTerm = thisDefTerm.EvaluatePowers(ref pEvalData);

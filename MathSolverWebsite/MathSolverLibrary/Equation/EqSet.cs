@@ -288,8 +288,8 @@ namespace MathSolverWebsite.MathSolverLibrary
                 if (_sides[i] == null)
                     continue;
 
-                AlgebraTerm term = _sides[i].ToAlgTerm();
-                term.CallFunction(funcDef, def, ref pEvalData);
+                AlgebraTerm term = new AlgebraTerm(_sides[i]);
+                term.CallFunction(funcDef, def, ref pEvalData, false);
                 _sides[i] = term;
             }
         }

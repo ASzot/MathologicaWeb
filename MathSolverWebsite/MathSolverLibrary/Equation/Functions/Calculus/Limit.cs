@@ -68,7 +68,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             // Is the point defined?
             if (_reducedInner == null)
-                _reducedInner = TermType.SimplifyTermType.BasicSimplify(InnerTerm, ref pEvalData);
+                _reducedInner = TermType.SimplifyTermType.BasicSimplify(InnerTerm, ref pEvalData, false);
 
             AlgebraTerm reduced = _reducedInner.ToAlgTerm();
             if (!reduced.Contains(_varFor))
@@ -237,7 +237,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
                     // Get the coefficient of the power.
                     AlgebraTerm power = pf.Power.ToAlgTerm();
+                    List<ExComp> powers = power.GetPowersOfVar(_varFor);
+                    if (powers.Count != 1 || !powers[0].ToAlgTerm().RemoveRedundancies().IsEqualTo(Number.One))
+                        return null;
+
                     ExComp powCoeff = power.GetCoeffOfVar(_varFor);
+                    if (powCoeff == null)
+                        return null;
 
                     if (powCoeff is AlgebraTerm)
                         powCoeff = (powCoeff as AlgebraTerm).RemoveRedundancies();
@@ -302,6 +308,32 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     else if (!posInfinity && !isEven)
                         return Number.NegInfinity;
                 }
+            }
+            else if (ex is LogFunction)
+            {
+                AlgebraTerm innerTerm = (ex as LogFunction).InnerTerm;
+                List<ExComp> powers = innerTerm.GetPowersOfVar(_varFor);
+                if (powers.Count != 1 || !Number.One.IsEqualTo(powers[0]))
+                    return null;
+                ExComp coeff = innerTerm.GetCoeffOfVar(_varFor);
+
+                if (coeff is AlgebraTerm)
+                    coeff = (coeff as AlgebraTerm).RemoveRedundancies();
+
+                if (coeff == null || !(coeff is Number) || (coeff as Number).HasImaginaryComp())
+                    return null;
+
+                Number nCoeff = coeff as Number;
+                bool isNeg = nCoeff < 0.0;
+
+                if (posInfinity && isNeg)
+                    return Number.Undefined;
+                else if (posInfinity && !isNeg)
+                    return Number.PosInfinity;
+                else if (!posInfinity && isNeg)
+                    return Number.PosInfinity;
+                else
+                    return Number.Undefined;
             }
             else if (ex is TrigFunction)
             {

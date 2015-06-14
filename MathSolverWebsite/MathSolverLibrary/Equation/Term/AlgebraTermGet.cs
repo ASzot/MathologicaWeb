@@ -13,7 +13,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
             foreach (var subComp in _subComps)
             {
-                if (subComp is AlgebraComp)
+                if (subComp is AlgebraComp && !(subComp is Constant))
                 {
                     varStrs.Add((subComp as AlgebraComp).Var.Var);
                 }

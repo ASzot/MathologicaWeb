@@ -842,11 +842,11 @@
     </exampleInput>
     <exampleInput>
       <input>\log(3)-\log(x)</input>
-      <inputIndex>6</inputIndex>
+      <inputIndex>4</inputIndex>
     </exampleInput>
     <exampleInput>
       <input>2\ln(x)</input>
-      <inputIndex>6</inputIndex>
+      <inputIndex>4</inputIndex>
     </exampleInput>
     <exampleInput>
       <input>\log_{b}(b^x)</input>
@@ -897,13 +897,13 @@
       
     </info>
     <exampleInput>
-      <input>\ln(x)+ln(x-2)=3</input>
+      <input>\ln(x)+\ln(x-2)=3</input>
     </exampleInput>
     <exampleInput>
-      <input>\ln(x^2-6x+9)-\ln(x-3)-3=1</input>
+      <input>\ln(x^2-6x+9)- \ln(x-3)-3=1</input>
     </exampleInput>
     <exampleInput>
-      <input>ln(ax)+2ln(x)=2</input>
+      <input>\ln(ax)+2 \ln(x)=2</input>
     </exampleInput>
   </topic>
   <topic>
@@ -920,7 +920,7 @@
       <input>100^{x^2-6x+1}+5=10</input>
     </exampleInput>
     <exampleInput>
-      <input>a(b^{2x+1})+k=c</input>
+      <input>a(b^{2x+1})+k=2c</input>
     </exampleInput>
   </topic>
   <topicName>
@@ -1021,14 +1021,16 @@
       
     </info>
     <exampleInput>
-      <input>f(x)=ln(3x-3)</input>
+      <input>f(x)=\ln(3x-3)</input>
       <inputIndex>3</inputIndex>
     </exampleInput>
     <exampleInput>
       <input>f(x)=\sqrt{x-3}</input>
+      <inputIndex>3</inputIndex>
     </exampleInput>
     <exampleInput>
       <input>g(x)=\frac{x-2}{x^2-3}</input>
+      <inputIndex>3</inputIndex>
     </exampleInput>
   </topic>
   <topic>
@@ -1138,13 +1140,13 @@
     </exampleInput>
   </topic>
   <topic>
-    <topicName>Reciprocal Trig Functions (Degrees)</topicName>
+    <topicName>Reciprocal Trig Functions</topicName>
     <topicPath>Trigonometry/Trig Functions/Reciprocal Trig Functions</topicPath>
     <topicDesc>Evaluate reciprocal trigonometric functions in degrees.</topicDesc>
     <info>
       
     </info>
-    <useRad>true</useRad>
+    <useRad>false</useRad>
     <exampleInput>
       <input>\csc(225)</input>
     </exampleInput>
@@ -1157,7 +1159,7 @@
   </topic>
   <topic>
     <topicName>Trig Functions (Radians)</topicName>
-    <topicPath>Trigonometry/Trig/Trig Functions (Radians)</topicPath>
+    <topicPath>Trigonometry/Trig Functions/Trig Functions (Radians)</topicPath>
     <topicDesc>Evaluate trigonometric functions in radians.</topicDesc>
     <info>
       
@@ -1238,18 +1240,15 @@
     </info>
     <exampleInput>
       <inputDisp>\text{arccos}(\frac{\sqrt{2}}{2})</inputDisp>
-      <input>arccos(\frac{\sqrt{2}}{2}))</input>
-      <inputIndex>1</inputIndex>
+      <input>arccos(\frac{\sqrt{2}}{2})</input>
     </exampleInput>
     <exampleInput>
       <inputDisp>\text{arcsin}(\frac{-1}{2})</inputDisp>
       <input>arcsin(\frac{-1}{2})</input>
-      <inputIndex>1</inputIndex>
     </exampleInput>
     <exampleInput>
-      <inputDisp>\text{arcsec}(\frac{2\sqrt{3}}{3})</inputDisp>
-      <input>arcsec(\frac{2\sqrt{3}}{3})</input>
-      <inputIndex>1</inputIndex>
+      <inputDisp>\text{arctan}(1)</inputDisp>
+      <input>arctan(1)</input>
     </exampleInput>
   </topic>
   <topic>
@@ -1261,12 +1260,15 @@
     </info>
     <exampleInput>
       <input>\arcsin(x)</input>
+      <inputIndex>1</inputIndex>
     </exampleInput>
     <exampleInput>
       <input>\arccos(\pi x)</input>
+      <inputIndex>1</inputIndex>
     </exampleInput>
     <exampleInput>
       <input>\arcsin(2x-3)</input>
+      <inputIndex>1</inputIndex>
     </exampleInput>
   </topic>
   <topic>
@@ -1414,9 +1416,6 @@
     <exampleInput>
       <input>lim_{h \to 7}(\frac{2(-3+h)^2-18}{h})</input>
     </exampleInput>
-    <exampleInput>
-      <input>lim_{t \to 4}\frac{t-\sqrt{3t+4}}{4-t}</input>
-    </exampleInput>
   </topic>
   <topic>
     <topicName>Special Limits</topicName>
@@ -1429,7 +1428,7 @@
       <input>\lim_{x \to 0}(\frac{1}{x^2})</input>
     </exampleInput>
     <exampleInput>
-      <input>\lim_{x \to 0}(ln(x))</input>
+      <input>\lim_{x \to 0}(\ln(x))</input>
     </exampleInput>
   </topic>
   <topic>
@@ -1695,10 +1694,10 @@
       
     </info>
     <exampleInput>
-      <input>f(x)=x^2-6x+9; f'(x)=0</input>
+      <input>f(x)=x^2-6x+9; \frac{df}{dx}=0</input>
     </exampleInput>
     <exampleInput>
-      <input>f(x)=6x^5+33x^4-30x^3+100; f'(x)=0</input>
+      <input>f(x)=6x^5+33x^4-30x^3+100; \frac{df}{dx}=0</input>
     </exampleInput>
   </topic>
   <!--<topic>
@@ -1794,7 +1793,7 @@
       <input>\int_{0}^{2} (x^2+1) dx</input>
     </exampleInput>
     <exampleInput>
-      <input>\int_{-3}^{1}(\sqrt{t}(t-2)) dt</input>
+      <input>\int_{0}^{2}(\sqrt{t}(t-2)) dt</input>
     </exampleInput>
     <exampleInput>
       <input>\int_{1}^{2}(\frac{2w^5-w+3}{w^2})dw</input>
@@ -1865,7 +1864,7 @@
       <input>\frac{d}{dx}\int_{x}^{x^2}(e^{-t^2})dt</input>
     </exampleInput>
     <exampleInput>
-      <input>F(x)=\int_{\pi}{x^2} (\cot^2(t)) dt; \frac{dF}{dx}</input>
+      <input>F(x)=\int_{\pi}^{x^2} (\cot^2(t)) dt; \frac{dF}{dx}</input>
     </exampleInput>
   </topic>
   <topic>
@@ -1953,7 +1952,7 @@
       <input>\sum_{n=1}^{\infty}\frac{3}{n^3}</input>
     </exampleInput>
   </topic>
-  <topic>
+  <!--<topic>
     <topicName>Maclaurin and Taylor Series</topicName>
     <topicPath>Calculus/Series/Maclaurin and Taylor Series</topicPath>
     <topicDesc>Compute the Maclaurin and Taylor series approximations for functions.</topicDesc>
@@ -1966,7 +1965,7 @@
     <exampleInput>
       <input>f(x)=\cos(x); T(q)=\sum_{n=0}^{q}\frac{f^n(0)}{n!}x^n; T(3)</input>
     </exampleInput>
-  </topic>
+  </topic>-->
   
   <!--Linear Algebra-->
   <topic>
@@ -2045,13 +2044,16 @@
       
     </info>
     <exampleInput>
-      <input>2[[3,2],[4,6]]</input>
+      <input>2\vectora{3,2}{4,6}</input>
+      <inputDisp>2[[3,2],[4,6]]</inputDisp>
     </exampleInput>
     <exampleInput>
-      <input>[[4, 6, 2],[3, 9, 1],[2, 0, 7]]+[[6, 3, 8],[8, 2, 1],[4, 0, 0]]</input>
+      <input>\vectorb{4, 6, 2}{3, 9, 1}{2, 0, 7}+\vectorb{6, 3, 8}{8, 2, 1}{4, 0, 0}</input>
+      <inputDisp>[[4, 6, 2],[3, 9, 1],[2, 0, 7]]+[[6, 3, 8],[8, 2, 1],[4, 0, 0]]</inputDisp>
     </exampleInput>
     <exampleInput>
-      <input>A=[[a, b],[c, d]]; B=[[2, 9], [1, 0]]; 2A-B</input>
+      <input>A=\vectora{a, b}{c, d}; B=\vectora{2, 9}{1, 0}; 2A-B</input>
+      <inputDisp>A=[[a, b],[c, d]]; B=[[2, 9], [1, 0]]; 2A-B</inputDisp>
     </exampleInput>
   </topic>
   <topic>
@@ -2062,8 +2064,8 @@
       
     </info>
     <exampleInput>
-      <input>((1, 2),(3, 4))((2, 0),(1, 2))</input>
-      <inputDisp>\vectora{1, 2}{3, 4}\vectora{2, 0}{1, 2}</inputDisp>
+      <inputDisp>((1, 2),(3, 4))((2, 0),(1, 2))</inputDisp>
+      <input>\vectora{1, 2}{3, 4}\vectora{2, 0}{1, 2}</input>
     </exampleInput>
     <exampleInput>
       <inputDisp>B=((4, 4), (1, 0), (-2, 1)); F=((0, 3),(0, 1)); BF</inputDisp>
@@ -2153,9 +2155,7 @@
     <info>
       
     </info>
-    <exampleInput>
-      <input>\int_{0}^{6}\int_{0}^{3-\frac{y}{2}}\int_{2-\frac{2}{3}x-\frac{y}{3}}^{2} x^2yz dzdydx</input>
-    </exampleInput>
+
     <exampleInput>
       <input>\int_{0}^{3}\int_{0}^{4}\int_{0}^{2} dxdydz</input>
     </exampleInput>
@@ -2177,7 +2177,8 @@
       <input>f(x,y)=x\sin(x)\cos(y); \frac{\partial f}{\partial y}</input>
     </exampleInput>
     <exampleInput>
-      <input>h(s,t)=t^7\ln(s^2)+\frac{9}{t^3}-\root{7}{s^4}; \frac{\partial h}{\partial t}</input>
+      <inputDisp>h(s,t)=t^7\ln(s^2)+\frac{9}{t^3}-\root{7}{s^4}; \frac{\partial h}{\partial t}</inputDisp>
+      <input>h(s,t)=t^7\ln(s^2)+\frac{9}{t^3}-\sqrt{7}{s^4}; \frac{\partial h}{\partial t}</input>
     </exampleInput>
   </topic>
   <topic>
@@ -2203,7 +2204,7 @@
     </info>
     <exampleInput>
       <input>v(x,y)=x^2y\vec{i}+3y\vec{j}; div(v)</input>
-      <inputDisp>v(x,y)=x^2y\vec{i}+3y\vec{j}; \\text{div}(v)</inputDisp>
+      <inputDisp>v(x,y)=x^2y\vec{i}+3y\vec{j}; \text{div}(v)</inputDisp>
     </exampleInput>
     <exampleInput>
       <input>\nabla  \cdot  (\cos(y)\vec{i}+e^{xy}\vec{j})</input>
@@ -2218,6 +2219,7 @@
     </info>
     <exampleInput>
       <input>v(x,y,z)=\vectorb{x^2y\sin(z)}{x^2xz}{\cos(x)\cos(y)}; \nabla \times v(x,y,z)</input>
+      <inputDisp>v(x,y,z)=[(x^2y\sin(z)),(x^2xz),(\cos(x)\cos(y))]; \nabla \times v(x,y,z)</inputDisp>
     </exampleInput>
     <exampleInput>
       <input>curl(-y\vec{i}+x\vec{j})</input>
