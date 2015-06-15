@@ -1069,8 +1069,8 @@
   </topic>
   <topic>
     <topicName>Function Inverses</topicName>
-    <topicPath></topicPath>
-    <topicDesc></topicDesc>
+    <topicPath>Algebra/Functions/Function Inverses</topicPath>
+    <topicDesc>Find the inverse of functions.</topicDesc>
     <info>
       
     </info>
@@ -1354,7 +1354,7 @@
       <input>x(t)=t-3; y(t)=2t+3; [x(2), y(2)]</input>
     </exampleInput>
     <exampleInput>
-      <input>x(t)=t^2; y(t)=\sqrt{t}; [x(4), y(4)]</input>
+      <input>x(t)=t^2; y(t)=\sqrt{t}; [x(3), y(3)]</input>
     </exampleInput>
     <exampleInput>
       <input>x(t)=\frac{1}{t}; y(t)=\frac{2t}{3}+2; z(t)=2t^2; P(t)=[x(t), y(t), z(t)]; P(3)</input>
@@ -2037,6 +2037,20 @@
     </exampleInput>
   </topic>
   <topic>
+    <topicName>Vector Equations</topicName>
+    <topicPath>Linear Algebra/Vectors/Vector Equations</topicPath>
+    <topicDesc>Solve vector equations.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>[2,0,-2]t+[3,2,1]=[1,2,3]</input>
+    </exampleInput>
+    <exampleInput>
+      <input>[-15,-3]x+[18,5]=[-12,-1]</input>
+    </exampleInput>
+  </topic>
+  <topic>
     <topicName>Basic Matrix Operations</topicName>
     <topicPath>Linear Algebra/Matrices/Basic Matrix Operations</topicPath>
     <topicDesc>Add and subtract matrices.</topicDesc>
@@ -2130,6 +2144,96 @@
     <exampleInput>
       <inputDisp>M=((1, 2, 3),(0, 1, 4),(5, 6, 0)); M^{-1}</inputDisp>
       <input>M=\vectorb{1, 2, 3}{0, 1, 4}{5, 6, 0}; M^{-1}</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Matrix Equations</topicName>
+    <topicPath>Linear Algebra/Matrices/Matrix Equations</topicPath>
+    <topicDesc>Solve equations of matrices.</topicDesc>
+    <info>
+
+    </info>
+    <exampleInput>
+      <inputDisp>[(2,1),(3,-2)][(s),(t)]=[(2),(5)]</inputDisp>
+      <input>\vectora{2, 1}{3, -2}\vectora{s}{t}=\vectora{2}{5}</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\vectorb{1, 1, 1}{0, 2, 5}{2, 5, -1}\vectorb{x}{y}{z}=\vectorb{6}{-4}{27}</input>
+      <inputDisp>[(1, 1, 1), (0, 2, 5), (2, 5, -1)][(x), (y), (z)]=[(6),(-4),(27)]</inputDisp>
+    </exampleInput>
+    <exampleInput>
+      <input>[x,y,z]\vectorb{1, 0, 2}{1, 2, 5}{1, 5, -1}=[6, -4, 27]</input>
+      <inputDisp>[x,y,z][(1, 0, 2), (1, 2, 5), (1, 5, -1)]=[6, -4, 27]</inputDisp>
+    </exampleInput>
+  </topic>
+
+  <!--Differential Equations-->
+  <topic>
+    <topicName>Separable Differential Equations</topicName>
+    <topicPath>Advanced Calculus/Differential Equations/Separable</topicPath>
+    <topicDesc>Solve separable differential equations.</topicDesc>
+    <info>
+      These types of differential equations are in the form `N(y)\frac{dy}{dx}=M(x)`
+    </info>
+    <exampleInput>
+      <input>\frac{dy}{dx}=\frac{2x^2}{3y}</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{dy}{dx}=\frac{4y}{x}</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{dy}{dx}=\frac{\sin(x)}{\cos(y)}</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Homogeneous Differential Equations</topicName>
+    <topicPath>Advanced Calculus/Differential Equations/Homogeneous</topicPath>
+    <topicDesc>Solve homogeneous differential equations.</topicDesc>
+    <info>
+
+    </info>
+    <exampleInput>
+      <input>x\frac{dy}{dx}=3x-4y</input>
+    </exampleInput>
+    <exampleInput>
+      <input>x^2\frac{dy}{dx}=2xy+y^2</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{dy}{dx}=\frac{y^2-x^2}{yx}</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Integrating Factor</topicName>
+    <topicPath>Advanced Calculus/Differential Equations/Integrating Factor</topicPath>
+    <topicDesc>Solve differential equations using the integrating factor.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>\frac{dy}{dx}+\frac{y}{x}=\frac{1}{x^2}</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{dy}{dx}-4y=e^x</input>
+    </exampleInput>
+    <exampleInput>
+      <input>cos(x)\frac{dy}{dx}+y\sin(x)=\cos^2(x)</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Exact Equations</topicName>
+    <topicPath>Advanced Calculus/Differential Equations/Exact Equations</topicPath>
+    <topicDesc>Solve differential equations using the exact equations method.</topicDesc>
+    <info>
+      An exact equation is in the form. `M(x,y)+N(x,y)\frac{dy}{dx}=0`
+    </info>
+    <exampleInput>
+      <input>(y\cos(x)+2xe^y)+(\sin(x)+x^2e^y-1)\frac{dy}{dx}=0</input>
+    </exampleInput>
+    <exampleInput>
+      <input>2xy-9x^2+(2y+x^2-1)\frac{dy}{dx}=0</input>
+    </exampleInput>
+    <exampleInput>
+      <input>(2x^2-2xy+2)+(6y^2-x^2+3)\frac{dy}{dx}=0</input>
     </exampleInput>
   </topic>
   

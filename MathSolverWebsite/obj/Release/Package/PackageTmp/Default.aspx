@@ -232,9 +232,14 @@
             });
 
             $(".workCollapseBtn").each(function () {
-                $(this).click(function () {
-                    $(this).parent().next().toggle();
+                $(this).unbind("click").click(function () {
+                    // Close all of the other work panels.
 
+                    $(".workCollapseBtn").not(this).each(function () {
+                        $(this).parent().next().hide();
+                    });
+
+                    $(this).parent().next().toggle();
 
                     var workSpaceEle = $("#work-space");
                     if (workSpaceEle[0].scrollHeight - workSpaceEle.scrollTop() == workSpaceEle.outerHeight())
@@ -297,12 +302,12 @@
                     else {
                         $(this).parent().parent().parent().parent().prepend(createPopUp(
                             "<p>Create an account to save problems and access them anywhere at anytime!</p>" +
-                            "<a class='btn-link' href='account/register.aspx'>" +
+                            "<a class='btn-link' href='/account/register'>" +
                                 "<div class='signup-space account-division'>" +
                                     "Sign Up" +
                                 "</div>" +
                             "</a>" +
-                            "<a class='btn-link' href='account/login'>" +
+                            "<a class='btn-link' href='/account/login'>" +
                                 "<div class='login-space account-division' style='margin-right: 29px; width: 198px;'>" +
                                     "Log In" +
                                 "</div>" +
@@ -634,19 +639,19 @@
                 <section id="login">
                     <asp:LoginView ID="LoginView1" runat="server" ViewStateMode="Disabled">
                         <AnonymousTemplate>
-                            <a class="btn-link" href="account/register.aspx">
+                            <a class="btn-link" href="/account/register">
                                 <div class="signup-space account-division">
                                     Sign Up
                                 </div>
                             </a>
-                            <a class="btn-link" href="account/login.aspx">
+                            <a class="btn-link" href="/account/login">
                                 <div class="login-space account-division">
                                     Log In
                                 </div>
                             </a>
                         </AnonymousTemplate>
                         <LoggedInTemplate>
-                            <a class="btn-link" href="account/you">
+                            <a class="btn-link" href="/account/you">
                                 <div class="you-space account-division noselect">
                                     You
                                 </div>
@@ -662,7 +667,7 @@
                                         <asp:LoginStatus CssClass="logout-btn" ID="LoginStatus1" runat="server" LogoutAction="Redirect" LogoutText="Log off" LogoutPageUrl="~/" />
                                     </div>
                                 </a>
-                                <a class="btn-link" href="account/manage.aspx">
+                                <a class="btn-link" href="/account/manage">
                                     <div class="account-popup-item noselect">
                                         Settings
                                     </div>

@@ -16,6 +16,7 @@
             font-size: 20px;
             font-family: Roboto, sans-serif;
             height: 250px;
+            border: 1px solid black;
         }
 
         .msg-optional-notice {
@@ -27,6 +28,7 @@
             width: 300px;
             height: 30px;
             font-size: 20px;
+            border: 1px solid black;
         }
 
         input {
@@ -82,6 +84,19 @@
         }
 
     </style>
+
+    <!-- Google analytics -->
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-56848508-1', 'auto');
+        ga('send', 'pageview');
+    </script>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContent" runat="server">
     <div class="ws-container">
@@ -91,7 +106,7 @@
 
             </div>
             <p class="msg-prompt">Email</p>
-            <asp:TextBox MaxLength="100" CssClass="email-enter" ID="TextBox1" placeholder="Email" runat="server"></asp:TextBox>
+            <asp:TextBox MaxLength="100" CssClass="email-enter" ID="emailTxtBox" placeholder="Email" runat="server"></asp:TextBox>
             <asp:Label ID="Label2" CssClass="msg-optional-notice" runat="server" Text="(Optional)" />
         
             <p class="msg-prompt">Message</p>

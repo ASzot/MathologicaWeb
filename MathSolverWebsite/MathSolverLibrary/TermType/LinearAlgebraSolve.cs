@@ -277,6 +277,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             }
 
             ExComp result = _aFirst ? MulOp.StaticCombine(aInverse, _B) : MulOp.StaticCombine(_B, aInverse);
+            result = Simplifier.Simplify(result.ToAlgTerm(), ref pEvalData);
 
             return SolveResult.Solved(_x == null ? (ExComp)_X : _x, result, ref pEvalData);
         }

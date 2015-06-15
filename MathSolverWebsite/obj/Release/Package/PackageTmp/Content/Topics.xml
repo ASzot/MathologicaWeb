@@ -198,6 +198,7 @@
     </exampleInput>
     <exampleInput>
       <input>2x+4</input>
+      <inputIndex>4</inputIndex>
     </exampleInput>
     <exampleInput>
       <input>f(x)=4x-3</input>
@@ -283,7 +284,7 @@
       <input>x^2 \cdot x^4</input>
     </exampleInput>
     <exampleInput>
-      <input>x^5/x^2</input>
+      <input>\frac{x^5}{x^2}</input>
     </exampleInput>
     <exampleInput>
       <input>(x^2)^3</input>
@@ -316,12 +317,15 @@
     </info>
     <exampleInput>
       <input>x^2-6x+9</input>
+      <inputIndex>6</inputIndex>
     </exampleInput>
     <exampleInput>
       <input>x^2+5x+6</input>
+      <inputIndex>6</inputIndex>
     </exampleInput>
     <exampleInput>
       <input>-6x^2-x+2</input>
+      <inputIndex>6</inputIndex>
     </exampleInput>
   </topic>
   <topic>
@@ -338,7 +342,7 @@
       <input>x^2+5x=-6</input>
     </exampleInput>
     <exampleInput>
-      <input>-x+2=-6x^2</input>
+      <input>-x-2=-6x^2</input>
     </exampleInput>
   </topic>
   <topic>
@@ -370,12 +374,15 @@
     </info>
     <exampleInput>
       <input>2(x^2-2x)=5</input>
+      <inputIndex>2</inputIndex>
     </exampleInput>
     <exampleInput>
       <input>5x^2+6x+1=0</input>
+      <inputIndex>2</inputIndex>
     </exampleInput>
     <exampleInput>
       <input>x^2-x-3=0</input>
+      <inputIndex>2</inputIndex>
     </exampleInput>
   </topic>
   <topic>
@@ -428,12 +435,15 @@
     </info>
     <exampleInput>
       <input>y=5x^2+2x+1</input>
+      <inputIndex>9</inputIndex>
     </exampleInput>
     <exampleInput>
       <input>x^2+6x-7</input>
+      <inputIndex>9</inputIndex>
     </exampleInput>
     <exampleInput>
       <input>f(x)=4x^2-2x-5</input>
+      <inputIndex>9</inputIndex>
     </exampleInput>
   </topic>
   <topic>
@@ -474,12 +484,13 @@
       <input>\sqrt{x^2+4}=3</input>
     </exampleInput>
     <exampleInput>
-      <input>\root{3}{x-2}=5</input>
+      <input>\sqrt[3]{x-2}=5</input>
+      <inputDisp>\root{3}{x-2}=5</inputDisp>
     </exampleInput>
   </topic>
   <topic>
-    <topicName>Solving Radical Equations</topicName>
-    <topicPath>Algebra/Radicals/Solving Radical Equations</topicPath>
+    <topicName>Solving Radical Equations (Advanced)</topicName>
+    <topicPath>Algebra/Radicals/Radical Equations (Advanced)</topicPath>
     <topicDesc>Solve a radical equation for an unknown.</topicDesc>
     <info>
       Use exponents to cancel the radicals. Remember the radicals have fractional powers. Not all of these equations have solutions.
@@ -492,7 +503,7 @@
       <input>\sqrt{2x-4}=3</input>
     </exampleInput>
     <exampleInput>
-      <input>\sqrt{x-2}+3=3x</input>
+      <input>\sqrt{x+2}+3=3x</input>
     </exampleInput>
   </topic>
   <topic>
@@ -506,7 +517,8 @@
       <input>y=3\sqrt{x-2}-2</input>
     </exampleInput>
     <exampleInput>
-      <input>y=2\root{3}{-x}</input>
+      <input>y=\sqrt[3]{-x}</input>
+      <inputDisp>y=2\root{3}{-x}</inputDisp>
     </exampleInput>
     <exampleInput>
       <input>g(x)=\sqrt{x+3}+3x</input>
@@ -830,11 +842,11 @@
     </exampleInput>
     <exampleInput>
       <input>\log(3)-\log(x)</input>
-      <inputIndex>6</inputIndex>
+      <inputIndex>4</inputIndex>
     </exampleInput>
     <exampleInput>
       <input>2\ln(x)</input>
-      <inputIndex>6</inputIndex>
+      <inputIndex>4</inputIndex>
     </exampleInput>
     <exampleInput>
       <input>\log_{b}(b^x)</input>
@@ -885,13 +897,13 @@
       
     </info>
     <exampleInput>
-      <input>\ln(x)+ln(x-2)=3</input>
+      <input>\ln(x)+\ln(x-2)=3</input>
     </exampleInput>
     <exampleInput>
-      <input>\ln(x^2-6x+9)-\ln(x-3)-3=1</input>
+      <input>\ln(x^2-6x+9)- \ln(x-3)-3=1</input>
     </exampleInput>
     <exampleInput>
-      <input>ln(ax)+2ln(x)=2</input>
+      <input>\ln(ax)+2 \ln(x)=2</input>
     </exampleInput>
   </topic>
   <topic>
@@ -908,7 +920,7 @@
       <input>100^{x^2-6x+1}+5=10</input>
     </exampleInput>
     <exampleInput>
-      <input>a(b^{2x+1})+k=c</input>
+      <input>a(b^{2x+1})+k=2c</input>
     </exampleInput>
   </topic>
   <topicName>
@@ -1009,14 +1021,16 @@
       
     </info>
     <exampleInput>
-      <input>f(x)=ln(3x-3)</input>
+      <input>f(x)=\ln(3x-3)</input>
       <inputIndex>3</inputIndex>
     </exampleInput>
     <exampleInput>
       <input>f(x)=\sqrt{x-3}</input>
+      <inputIndex>3</inputIndex>
     </exampleInput>
     <exampleInput>
       <input>g(x)=\frac{x-2}{x^2-3}</input>
+      <inputIndex>3</inputIndex>
     </exampleInput>
   </topic>
   <topic>
@@ -1055,8 +1069,8 @@
   </topic>
   <topic>
     <topicName>Function Inverses</topicName>
-    <topicPath></topicPath>
-    <topicDesc></topicDesc>
+    <topicPath>Algebra/Functions/Function Inverses</topicPath>
+    <topicDesc>Find the inverse of functions.</topicDesc>
     <info>
       
     </info>
@@ -1126,13 +1140,13 @@
     </exampleInput>
   </topic>
   <topic>
-    <topicName>Reciprocal Trig Functions (Degrees)</topicName>
+    <topicName>Reciprocal Trig Functions</topicName>
     <topicPath>Trigonometry/Trig Functions/Reciprocal Trig Functions</topicPath>
     <topicDesc>Evaluate reciprocal trigonometric functions in degrees.</topicDesc>
     <info>
       
     </info>
-    <useRad>true</useRad>
+    <useRad>false</useRad>
     <exampleInput>
       <input>\csc(225)</input>
     </exampleInput>
@@ -1145,7 +1159,7 @@
   </topic>
   <topic>
     <topicName>Trig Functions (Radians)</topicName>
-    <topicPath>Trigonometry/Trig/Trig Functions (Radians)</topicPath>
+    <topicPath>Trigonometry/Trig Functions/Trig Functions (Radians)</topicPath>
     <topicDesc>Evaluate trigonometric functions in radians.</topicDesc>
     <info>
       
@@ -1225,19 +1239,16 @@
       
     </info>
     <exampleInput>
-      <inputDisp>\text{arccos}(\frac{\sqrt{2}}{2}))</inputDisp>
-      <input>arccos(\frac{\sqrt{2}}{2}))</input>
-      <inputIndex>1</inputIndex>
+      <inputDisp>\text{arccos}(\frac{\sqrt{2}}{2})</inputDisp>
+      <input>arccos(\frac{\sqrt{2}}{2})</input>
     </exampleInput>
     <exampleInput>
       <inputDisp>\text{arcsin}(\frac{-1}{2})</inputDisp>
       <input>arcsin(\frac{-1}{2})</input>
-      <inputIndex>1</inputIndex>
     </exampleInput>
     <exampleInput>
-      <inputDisp>\text{arcsec}(\frac{2\sqrt{3}}{3})</inputDisp>
-      <input>arcsec(\frac{2\sqrt{3}}{3})</input>
-      <inputIndex>1</inputIndex>
+      <inputDisp>\text{arctan}(1)</inputDisp>
+      <input>arctan(1)</input>
     </exampleInput>
   </topic>
   <topic>
@@ -1249,12 +1260,15 @@
     </info>
     <exampleInput>
       <input>\arcsin(x)</input>
+      <inputIndex>1</inputIndex>
     </exampleInput>
     <exampleInput>
       <input>\arccos(\pi x)</input>
+      <inputIndex>1</inputIndex>
     </exampleInput>
     <exampleInput>
       <input>\arcsin(2x-3)</input>
+      <inputIndex>1</inputIndex>
     </exampleInput>
   </topic>
   <topic>
@@ -1340,7 +1354,7 @@
       <input>x(t)=t-3; y(t)=2t+3; [x(2), y(2)]</input>
     </exampleInput>
     <exampleInput>
-      <input>x(t)=t^2; y(t)=\sqrt{t}; [x(4), y(4)]</input>
+      <input>x(t)=t^2; y(t)=\sqrt{t}; [x(3), y(3)]</input>
     </exampleInput>
     <exampleInput>
       <input>x(t)=\frac{1}{t}; y(t)=\frac{2t}{3}+2; z(t)=2t^2; P(t)=[x(t), y(t), z(t)]; P(3)</input>
@@ -1402,9 +1416,6 @@
     <exampleInput>
       <input>lim_{h \to 7}(\frac{2(-3+h)^2-18}{h})</input>
     </exampleInput>
-    <exampleInput>
-      <input>lim_{t \to 4}\frac{t-\sqrt{3t+4}}{4-t}</input>
-    </exampleInput>
   </topic>
   <topic>
     <topicName>Special Limits</topicName>
@@ -1417,7 +1428,7 @@
       <input>\lim_{x \to 0}(\frac{1}{x^2})</input>
     </exampleInput>
     <exampleInput>
-      <input>\lim_{x \to 0}(ln(x))</input>
+      <input>\lim_{x \to 0}(\ln(x))</input>
     </exampleInput>
   </topic>
   <topic>
@@ -1683,10 +1694,10 @@
       
     </info>
     <exampleInput>
-      <input>f(x)=x^2-6x+9; f'(x)=0</input>
+      <input>f(x)=x^2-6x+9; \frac{df}{dx}=0</input>
     </exampleInput>
     <exampleInput>
-      <input>f(x)=6x^5+33x^4-30x^3+100; f'(x)=0</input>
+      <input>f(x)=6x^5+33x^4-30x^3+100; \frac{df}{dx}=0</input>
     </exampleInput>
   </topic>
   <!--<topic>
@@ -1782,7 +1793,7 @@
       <input>\int_{0}^{2} (x^2+1) dx</input>
     </exampleInput>
     <exampleInput>
-      <input>\int_{-3}^{1}(\sqrt{t}(t-2)) dt</input>
+      <input>\int_{0}^{2}(\sqrt{t}(t-2)) dt</input>
     </exampleInput>
     <exampleInput>
       <input>\int_{1}^{2}(\frac{2w^5-w+3}{w^2})dw</input>
@@ -1853,7 +1864,7 @@
       <input>\frac{d}{dx}\int_{x}^{x^2}(e^{-t^2})dt</input>
     </exampleInput>
     <exampleInput>
-      <input>F(x)=\int_{\pi}{x^2} (\cot^2(t)) dt; \frac{dF}{dx}</input>
+      <input>F(x)=\int_{\pi}^{x^2} (\cot^2(t)) dt; \frac{dF}{dx}</input>
     </exampleInput>
   </topic>
   <topic>
@@ -1941,7 +1952,7 @@
       <input>\sum_{n=1}^{\infty}\frac{3}{n^3}</input>
     </exampleInput>
   </topic>
-  <topic>
+  <!--<topic>
     <topicName>Maclaurin and Taylor Series</topicName>
     <topicPath>Calculus/Series/Maclaurin and Taylor Series</topicPath>
     <topicDesc>Compute the Maclaurin and Taylor series approximations for functions.</topicDesc>
@@ -1954,7 +1965,7 @@
     <exampleInput>
       <input>f(x)=\cos(x); T(q)=\sum_{n=0}^{q}\frac{f^n(0)}{n!}x^n; T(3)</input>
     </exampleInput>
-  </topic>
+  </topic>-->
   
   <!--Linear Algebra-->
   <topic>
@@ -2026,6 +2037,20 @@
     </exampleInput>
   </topic>
   <topic>
+    <topicName>Vector Equations</topicName>
+    <topicPath>Linear Algebra/Vectors/Vector Equations</topicPath>
+    <topicDesc>Solve vector equations.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>[2,0,-2]t+[3,2,1]=[1,2,3]</input>
+    </exampleInput>
+    <exampleInput>
+      <input>[-15,-3]x+[18,5]=[-12,-1]</input>
+    </exampleInput>
+  </topic>
+  <topic>
     <topicName>Basic Matrix Operations</topicName>
     <topicPath>Linear Algebra/Matrices/Basic Matrix Operations</topicPath>
     <topicDesc>Add and subtract matrices.</topicDesc>
@@ -2033,13 +2058,16 @@
       
     </info>
     <exampleInput>
-      <input>2[[3,2],[4,6]]</input>
+      <input>2\vectora{3,2}{4,6}</input>
+      <inputDisp>2[[3,2],[4,6]]</inputDisp>
     </exampleInput>
     <exampleInput>
-      <input>[[4, 6, 2],[3, 9, 1],[2, 0, 7]]+[[6, 3, 8],[8, 2, 1],[4, 0, 0]]</input>
+      <input>\vectorb{4, 6, 2}{3, 9, 1}{2, 0, 7}+\vectorb{6, 3, 8}{8, 2, 1}{4, 0, 0}</input>
+      <inputDisp>[[4, 6, 2],[3, 9, 1],[2, 0, 7]]+[[6, 3, 8],[8, 2, 1],[4, 0, 0]]</inputDisp>
     </exampleInput>
     <exampleInput>
-      <input>A=[[a, b],[c, d]]; B=[[2, 9], [1, 0]]; 2A-B</input>
+      <input>A=\vectora{a, b}{c, d}; B=\vectora{2, 9}{1, 0}; 2A-B</input>
+      <inputDisp>A=[[a, b],[c, d]]; B=[[2, 9], [1, 0]]; 2A-B</inputDisp>
     </exampleInput>
   </topic>
   <topic>
@@ -2050,8 +2078,8 @@
       
     </info>
     <exampleInput>
-      <input>((1, 2),(3, 4))((2, 0),(1, 2))</input>
-      <inputDisp>\vectora{1, 2}{3, 4}\vectora{2, 0}{1, 2}</inputDisp>
+      <inputDisp>((1, 2),(3, 4))((2, 0),(1, 2))</inputDisp>
+      <input>\vectora{1, 2}{3, 4}\vectora{2, 0}{1, 2}</input>
     </exampleInput>
     <exampleInput>
       <inputDisp>B=((4, 4), (1, 0), (-2, 1)); F=((0, 3),(0, 1)); BF</inputDisp>
@@ -2118,6 +2146,96 @@
       <input>M=\vectorb{1, 2, 3}{0, 1, 4}{5, 6, 0}; M^{-1}</input>
     </exampleInput>
   </topic>
+  <topic>
+    <topicName>Matrix Equations</topicName>
+    <topicPath>Linear Algebra/Matrices/Matrix Equations</topicPath>
+    <topicDesc>Solve equations of matrices.</topicDesc>
+    <info>
+
+    </info>
+    <exampleInput>
+      <inputDisp>[(2,1),(3,-2)][(s),(t)]=[(2),(5)]</inputDisp>
+      <input>\vectora{2, 1}{3, -2}\vectora{s}{t}=\vectora{2}{5}</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\vectorb{1, 1, 1}{0, 2, 5}{2, 5, -1}\vectorb{x}{y}{z}=\vectorb{6}{-4}{27}</input>
+      <inputDisp>[(1, 1, 1), (0, 2, 5), (2, 5, -1)][(x), (y), (z)]=[(6),(-4),(27)]</inputDisp>
+    </exampleInput>
+    <exampleInput>
+      <input>[x,y,z]\vectorb{1, 0, 2}{1, 2, 5}{1, 5, -1}=[6, -4, 27]</input>
+      <inputDisp>[x,y,z][(1, 0, 2), (1, 2, 5), (1, 5, -1)]=[6, -4, 27]</inputDisp>
+    </exampleInput>
+  </topic>
+
+  <!--Differential Equations-->
+  <topic>
+    <topicName>Separable Differential Equations</topicName>
+    <topicPath>Advanced Calculus/Differential Equations/Separable</topicPath>
+    <topicDesc>Solve separable differential equations.</topicDesc>
+    <info>
+      These types of differential equations are in the form `N(y)\frac{dy}{dx}=M(x)`
+    </info>
+    <exampleInput>
+      <input>\frac{dy}{dx}=\frac{2x^2}{3y}</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{dy}{dx}=\frac{4y}{x}</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{dy}{dx}=\frac{\sin(x)}{\cos(y)}</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Homogeneous Differential Equations</topicName>
+    <topicPath>Advanced Calculus/Differential Equations/Homogeneous</topicPath>
+    <topicDesc>Solve homogeneous differential equations.</topicDesc>
+    <info>
+
+    </info>
+    <exampleInput>
+      <input>x\frac{dy}{dx}=3x-4y</input>
+    </exampleInput>
+    <exampleInput>
+      <input>x^2\frac{dy}{dx}=2xy+y^2</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{dy}{dx}=\frac{y^2-x^2}{yx}</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Integrating Factor</topicName>
+    <topicPath>Advanced Calculus/Differential Equations/Integrating Factor</topicPath>
+    <topicDesc>Solve differential equations using the integrating factor.</topicDesc>
+    <info>
+      
+    </info>
+    <exampleInput>
+      <input>\frac{dy}{dx}+\frac{y}{x}=\frac{1}{x^2}</input>
+    </exampleInput>
+    <exampleInput>
+      <input>\frac{dy}{dx}-4y=e^x</input>
+    </exampleInput>
+    <exampleInput>
+      <input>cos(x)\frac{dy}{dx}+y\sin(x)=\cos^2(x)</input>
+    </exampleInput>
+  </topic>
+  <topic>
+    <topicName>Exact Equations</topicName>
+    <topicPath>Advanced Calculus/Differential Equations/Exact Equations</topicPath>
+    <topicDesc>Solve differential equations using the exact equations method.</topicDesc>
+    <info>
+      An exact equation is in the form. `M(x,y)+N(x,y)\frac{dy}{dx}=0`
+    </info>
+    <exampleInput>
+      <input>(y\cos(x)+2xe^y)+(\sin(x)+x^2e^y-1)\frac{dy}{dx}=0</input>
+    </exampleInput>
+    <exampleInput>
+      <input>2xy-9x^2+(2y+x^2-1)\frac{dy}{dx}=0</input>
+    </exampleInput>
+    <exampleInput>
+      <input>(2x^2-2xy+2)+(6y^2-x^2+3)\frac{dy}{dx}=0</input>
+    </exampleInput>
+  </topic>
   
   <!--Adv Calculus-->
   <topic>
@@ -2141,9 +2259,7 @@
     <info>
       
     </info>
-    <exampleInput>
-      <input>\int_{0}^{6}\int_{0}^{3-\frac{y}{2}}\int_{2-\frac{2}{3}x-\frac{y}{3}}^{2} x^2yz dzdydx</input>
-    </exampleInput>
+
     <exampleInput>
       <input>\int_{0}^{3}\int_{0}^{4}\int_{0}^{2} dxdydz</input>
     </exampleInput>
@@ -2165,7 +2281,8 @@
       <input>f(x,y)=x\sin(x)\cos(y); \frac{\partial f}{\partial y}</input>
     </exampleInput>
     <exampleInput>
-      <input>h(s,t)=t^7\ln(s^2)+\frac{9}{t^3}-\root{7}{s^4}; \frac{\partial h}{\partial t}</input>
+      <inputDisp>h(s,t)=t^7\ln(s^2)+\frac{9}{t^3}-\root{7}{s^4}; \frac{\partial h}{\partial t}</inputDisp>
+      <input>h(s,t)=t^7\ln(s^2)+\frac{9}{t^3}-\sqrt{7}{s^4}; \frac{\partial h}{\partial t}</input>
     </exampleInput>
   </topic>
   <topic>
@@ -2191,7 +2308,7 @@
     </info>
     <exampleInput>
       <input>v(x,y)=x^2y\vec{i}+3y\vec{j}; div(v)</input>
-      <inputDisp>v(x,y)=x^2y\vec{i}+3y\vec{j}; \\text{div}(v)</inputDisp>
+      <inputDisp>v(x,y)=x^2y\vec{i}+3y\vec{j}; \text{div}(v)</inputDisp>
     </exampleInput>
     <exampleInput>
       <input>\nabla  \cdot  (\cos(y)\vec{i}+e^{xy}\vec{j})</input>
@@ -2206,6 +2323,7 @@
     </info>
     <exampleInput>
       <input>v(x,y,z)=\vectorb{x^2y\sin(z)}{x^2xz}{\cos(x)\cos(y)}; \nabla \times v(x,y,z)</input>
+      <inputDisp>v(x,y,z)=[(x^2y\sin(z)),(x^2xz),(\cos(x)\cos(y))]; \nabla \times v(x,y,z)</inputDisp>
     </exampleInput>
     <exampleInput>
       <input>curl(-y\vec{i}+x\vec{j})</input>
@@ -2231,6 +2349,7 @@
     </info>
     <exampleInput>
       <input>v(x,y)=\vectora{x^2y}{y\ln(x)}; \frac{\partial v}{\partial y}</input>
+      <inputDisp>\vec{v}(x,y)=((x^2y),(y\ln(x))); \frac{\partial \vec{v}}{\partial y}</inputDisp>
     </exampleInput>
     <exampleInput>
       <input>\frac{\partial}{\partial x}[\sec(x^2), \tan(\frac{y}{x})]</input>

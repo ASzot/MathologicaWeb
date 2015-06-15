@@ -510,6 +510,8 @@ function removeInput() {
     updateInputBoxes();
 
     mathInputChanged(null);
+
+    selectedTextBox = $("#mathInputSpan" + inputBoxIds[0]);
 }
 
     function clearInputBtn_Clicked() {
@@ -577,7 +579,8 @@ function removeInput() {
         else {
             inputBoxHtml += "<div style='visibility: hidden' class='text-notice'>&gt;</div>";
         }
-        inputBoxHtml += "<span runat='server' onPaste='return false' id='mathInputSpan" + index + "' onkeyup='mathInputChanged(event);' class='mathquill-editable' onclick='onMathInputSpan_Clicked(this.id);'></span>";
+        //onPaste='return false'
+        inputBoxHtml += "<span runat='server'  id='mathInputSpan" + index + "' onkeyup='mathInputChanged(event);' class='mathquill-editable' onclick='onMathInputSpan_Clicked(this.id);'></span>";
         inputBoxHtml += "</div>";
         inputBoxHtml += "</li>";
 
@@ -635,7 +638,6 @@ function removeInput() {
 
     function onMathInputSpan_Clicked(clickedId) {
         selectedTextBox = $("#" + clickedId);
-        console.log("clickeda");
     }
 
     function enterScrollMode() {

@@ -84,9 +84,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             return ConstructDeriv(derivOf, innerEx, null, withRespect, Number.One);
         }
 
-        public static Derivative ConstructDeriv(ExComp innerEx, AlgebraComp withRespect, AlgebraComp derivOf, ExComp order)
+        public static Derivative ConstructDeriv(AlgebraComp withRespect, AlgebraComp derivOf)
         {
-            return ConstructDeriv(derivOf, innerEx, null, withRespect, order);
+            Derivative deriv = ConstructDeriv(derivOf, Number.Zero, null, withRespect, Number.One);
+            deriv._isDefined = false;
+
+            return deriv;
         }
 
         public static Derivative ConstructDeriv(AlgebraComp funcIden, ExComp inputVal, ExComp order)

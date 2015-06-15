@@ -157,6 +157,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                         ExComp tmpRight = right;
 
                         left = Equation.Operators.DivOp.StaticCombine(left, factoredOutUnrelatedTerm.Clone()).ToAlgTerm();
+
                         right = Equation.Operators.DivOp.StaticCombine(right, factoredOutUnrelatedTerm.Clone()).ToAlgTerm();
 
                         //string divStr = WorkMgr.CG_TXT_TG("{0}");
@@ -173,6 +174,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 }
 
                 left = Equation.Operators.DivOp.StaticCombine(left, factoredOutUnrelatedTerm.Clone()).ToAlgTerm();
+
                 right = Equation.Operators.DivOp.StaticCombine(right, factoredOutUnrelatedTerm.Clone()).ToAlgTerm();
 
                 pEvalData.WorkMgr.FromSides(left, right, "Cancel and simplify");

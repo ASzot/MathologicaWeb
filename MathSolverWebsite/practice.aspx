@@ -83,7 +83,7 @@
             <a class="wordlink-help" href="topics?tn=Advanced+Calculus">  
                 <div class="hlep hlep-larger">
                     <div>
-                        Adv Calculus
+                        Adv Calculus & Differential Equations
                     </div>
                 </div>
             </a>

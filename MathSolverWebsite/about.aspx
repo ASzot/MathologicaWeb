@@ -27,7 +27,7 @@
         <div class="heading-1">ABOUT</div>
         <div>
             <p>
-                Mathologica began with one idea: knowledge and understanding should be free, period. This, as 
+                Mathologica began with the idea that knowledge and understanding should be free, period. This, as 
 
                 well as a passion for mathematics throughout high school, inspired the idea of creating a math 
 

@@ -122,7 +122,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             if (numDen[1] == null || numDen[1].Contains(dVar) || numDen[1].Contains(funcVar))
                 return null;
 
-            left = AddOp.StaticCombine(subVar, MulOp.StaticCombine(dVar, Derivative.ConstructDeriv(Number.Zero, dVar, subVar))).ToAlgTerm();
+            left = AddOp.StaticCombine(subVar, MulOp.StaticCombine(dVar, Derivative.ConstructDeriv(dVar, subVar))).ToAlgTerm();
             right = DivOp.StaticCombine(numDen[0], numDen[1]).ToAlgTerm();
 
             pEvalData.WorkMgr.FromSides(left, right, "Make the substitution " + WorkMgr.STM + "v=\\frac{d" + funcVar.ToDispString() + "}{d" + dVar.ToDispString() + "}" + WorkMgr.EDM);
@@ -130,6 +130,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             ExComp[] solved = (new SeperableSolve()).Solve(left, right, subVar, dVar, ref pEvalData);
             if (solved == null)
                 return null;
+
+            if (solved[0] is Integral || solved[1] is Integral)
+                return solved;
 
             pEvalData.WorkMgr.FromSides(solved[0], solved[1]);
 

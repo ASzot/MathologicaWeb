@@ -8,13 +8,26 @@
             font-size: 20px;
         }
     </style>
+
+    <!-- Google analytics -->
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-56848508-1', 'auto');
+        ga('send', 'pageview');
+    </script>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContent" runat="server">
     <div class="ws-container">
         <div class="heading-1">ABOUT</div>
         <div>
             <p>
-                Mathologica began with one idea: knowledge and understanding should be free, period. This, as 
+                Mathologica began with the idea that knowledge and understanding should be free, period. This, as 
 
                 well as a passion for mathematics throughout high school, inspired the idea of creating a math 
 

@@ -4,12 +4,43 @@ using MathSolverWebsite.MathSolverLibrary.Equation.Term;
 using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
 {
     class SeperableSolve : DiffSolve
     {
+        private static AlgebraTerm FromFractionFix(ExComp num, ExComp den)
+        {
+            ExComp finalNum = Number.One;
+            ExComp finalDen = Number.One;
 
+            if (num is AlgebraTerm)
+            {
+                AlgebraTerm[] numNumDen = (num as AlgebraTerm).GetNumDenFrac();
+                if (numNumDen != null)
+                {
+                    finalNum = MulOp.StaticCombine(finalNum, numNumDen[0]);
+                    finalDen = MulOp.StaticCombine(finalDen, numNumDen[1]);
+                }
+                else
+                    finalNum = num;
+            }
+
+            if (den is AlgebraTerm)
+            {
+                AlgebraTerm[] denNumDen = (den as AlgebraTerm).GetNumDenFrac();
+                if (denNumDen != null)
+                {
+                    finalNum = MulOp.StaticCombine(finalNum, denNumDen[1]);
+                    finalDen = MulOp.StaticCombine(finalDen, denNumDen[0]);
+                }
+                else
+                    finalDen = den;
+            }
+
+            return AlgebraTerm.FromFraction(finalNum, finalDen);
+        }
 
         public override ExComp[] Solve(AlgebraTerm left, AlgebraTerm right, AlgebraComp funcVar, AlgebraComp dVar,
             ref TermType.EvalData pEvalData)
@@ -32,9 +63,36 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             // Combine the fractions.
             SolveMethod.CombineFractions(ref left, ref right, ref pEvalData);
 
-            SolveMethod.DivideByVariableCoeffs(ref left, ref right, derivVar, ref pEvalData);
+            AlgebraTerm[] numDen = null;
 
-            AlgebraTerm[] numDen = right.GetNumDenFrac();
+            if ((left.Contains(funcVar) && !left.Contains(dVar) && right.Contains(dVar) && !right.Contains(funcVar)) || 
+                (left.Contains(dVar) && !left.Contains(funcVar) && right.Contains(funcVar) && !right.Contains(dVar)))
+            {
+                var groups = left.GetGroupsNoOps();
+                var unrelatedGroups = from gp in groups
+                                      select gp.GetUnrelatableTermsOfGroup(derivVar);
+
+                // Combine all of the unrelated terms.
+                AlgebraTerm leftDivideOut = new AlgebraTerm(unrelatedGroups.ToArray());
+
+                if (leftDivideOut.GroupCount > 1)
+                {
+                    leftDivideOut = leftDivideOut.ApplyOrderOfOperations();
+                    leftDivideOut = leftDivideOut.MakeWorkable().ToAlgTerm();
+                }
+
+                if (!leftDivideOut.IsZero() && !leftDivideOut.IsOne())
+                {
+                    numDen = new AlgebraTerm[] { right, leftDivideOut };
+                }
+            }
+            else
+            {
+                SolveMethod.DivideByVariableCoeffs(ref left, ref right, derivVar, ref pEvalData);
+            }
+
+            if (numDen == null)
+                numDen = right.GetNumDenFrac();
 
             if (numDen == null)
             {
@@ -52,17 +110,17 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             }
             else if (!numDen[1].Contains(funcVar) && !numDen[0].Contains(dVar))
             {
-                left = AlgebraTerm.FromFraction(Number.One, numDen[0]);
-                right = AlgebraTerm.FromFraction(Number.One, numDen[1]);
+                left = FromFractionFix(Number.One, numDen[0]);
+                right = FromFractionFix(Number.One, numDen[1]);
             }
             else if (!numDen[0].Contains(funcVar) && !numDen[1].Contains(funcVar))
             {
                 left = Number.One.ToAlgTerm();
-                right = AlgebraTerm.FromFraction(numDen[0], numDen[1]);
+                right = FromFractionFix(numDen[0], numDen[1]);
             }
             else if (!numDen[0].Contains(dVar) && !numDen[1].Contains(dVar))
             {
-                left = AlgebraTerm.FromFraction(numDen[1], numDen[2]);
+                left = FromFractionFix(numDen[1], numDen[2]);
                 right = Number.One.ToAlgTerm();
             }
             else

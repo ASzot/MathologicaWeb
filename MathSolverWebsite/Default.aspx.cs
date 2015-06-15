@@ -150,6 +150,8 @@ namespace MathSolverWebsite
                 CreateDataMgr();
                 CreateExamples();
 
+                this.FuncDefHelper = new MathSolverLibrary.Information_Helpers.FuncDefHelper();
+
                 updateExampleTimer_Tick(null, null);
 
                 string eqQueryStr = Request.QueryString["InputDisp"];

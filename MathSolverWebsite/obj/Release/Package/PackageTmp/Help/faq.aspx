@@ -17,8 +17,8 @@
                 <h1 class="heading-1">FAQ</h1>
                 <p><b>Problem: Math has ` characters around it like `x^2`</b></p>
                 <p>
-                    This is due to the math not rendering correctly. 
-                    If the math continues to not render even after several seconds then there is a problem with the hardware or the Internet connection being used.
+                    This is the math taking time to render.
+                    If the math continues to not render even after several seconds then there is a problem with the data connection.
                 </p>
                 <p><b>Problem: Invalid input always being Displayed</b></p>
                 <p>

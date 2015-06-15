@@ -24,7 +24,7 @@
                 </p>
 
                 <p>
-                    After you have your math inputted into the input box, select from the various operations from the dropdown menu at the bottom of the screen. For example, if you have imputed a quadratic expression, you can select whether you want Mathologica to factor by using the quadratic formula or by completing the square. For more information about how to input more advanced functions such as systems of equations, check the multi-line help page here. 
+                    After you have your math inputted into the input box, select from the various operations from the dropdown menu at the bottom of the screen. For example, if you have inputed a quadratic expression, you can select whether you want Mathologica to factor by using the quadratic formula or by completing the square. For more information about how to input more advanced functions such as systems of equations, check the <a href="/multiline">multi-line help page</a>. 
                 </p>
                 
                 <p>

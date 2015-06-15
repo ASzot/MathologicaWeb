@@ -51,11 +51,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
                 atmpt = diffSolves[i].Solve((AlgebraTerm)ex0Term.Clone(), (AlgebraTerm)ex1Term.Clone(), solveForFunc, withRespect, ref pEvalData);
                 if (atmpt != null)
                 {
-                    // Add on a constant that will have the properties of a variable.
-                    AlgebraComp varConstant = new AlgebraComp("$C");
-                    atmpt[1] = Equation.Operators.AddOp.StaticCombine(atmpt[1], varConstant);
+                    if (!(atmpt[0] is Integral || atmpt[1] is Integral))
+                    {
+                        // Add on a constant that will have the properties of a variable.
+                        AlgebraComp varConstant = new AlgebraComp("$C");
+                        atmpt[1] = Equation.Operators.AddOp.StaticCombine(atmpt[1], varConstant);
 
-                    pEvalData.WorkMgr.FromSides(atmpt[0], atmpt[1], "Add the constant of integration.");
+                        pEvalData.WorkMgr.FromSides(atmpt[0], atmpt[1], "Add the constant of integration.");
+                    }
 
                     return atmpt;
                 }
@@ -77,6 +80,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
 
             Solution genSol = new Solution(leftRight[0], leftRight[1]);
             genSol.IsGeneral = true;
+
+            if (leftRight[0] is Integral || leftRight[1] is Integral)
+            {
+                return SolveResult.Solved(leftRight[0], leftRight[1], ref pEvalData);
+            }
 
             AlgebraSolver agSolver = new AlgebraSolver();
 

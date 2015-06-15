@@ -145,6 +145,7 @@ h4 {
 
 .hlep-larger {
     padding-top: 60px;
+    font-size: 40px;
 }
 
 @media screen and (max-width: 767px) {
@@ -160,4 +161,7 @@ h4 {
         height: 100px !important;
     }
 
+    .hlep-larger {
+        padding-top: 5px !important;
+    }
 }
