@@ -1,18 +1,15 @@
 ﻿using MathSolverWebsite.MathSolverLibrary.Equation;
-using MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus;
 using MathSolverWebsite.MathSolverLibrary.Equation.Functions;
-using MathSolverWebsite.MathSolverLibrary.Equation.Term;
+using MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus;
 using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
-using System;
 using System.Collections.Generic;
 
 namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
 {
-    class IntegratingFactorSolve : DiffSolve
+    internal class IntegratingFactorSolve : DiffSolve
     {
         public IntegratingFactorSolve()
         {
-
         }
 
         public override Equation.ExComp[] Solve(Equation.AlgebraTerm left, Equation.AlgebraTerm right, Equation.AlgebraComp funcVar, Equation.AlgebraComp dVar, ref TermType.EvalData pEvalData)
@@ -38,9 +35,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
 
             if (!constantTo.IsOne())
             {
-                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\frac{" + WorkMgr.ToDisp(left) + "}{" + WorkMgr.ToDisp(constantTo) + 
+                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\frac{" + WorkMgr.ToDisp(left) + "}{" + WorkMgr.ToDisp(constantTo) +
                     "}=\\frac{" + WorkMgr.ToDisp(right) + "}{" + WorkMgr.ToDisp(constantTo) + "}" + WorkMgr.EDM);
-
 
                 // Divide each group by the constant.
                 left = DivOp.GroupDivide(left, constantTo);
@@ -81,7 +77,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             lastStep.GoUp(ref pEvalData);
 
             lastStep.WorkHtml = WorkMgr.STM + "I(" + dVar.ToDispString() + ")=e^{\\int " + WorkMgr.ToDisp(nx) + "d" + dVar.ToDispString() + "}=" + WorkMgr.ToDisp(ix) + WorkMgr.EDM;
-            
+
             string ixStr = WorkMgr.ToDisp(ix);
             pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "(" + ixStr + ")" + "\\frac{d" + funcVar.ToDispString() + "}{d" + dVar.ToDispString() + "}+(" + ixStr + ")(" + nxStr + ")" +
                 funcVar.ToDispString() + "=(" + ixStr + ")" + WorkMgr.ToDisp(right) + WorkMgr.EDM, "Multiply everything by the integrating factor.");
@@ -95,8 +91,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
                 "]= " + rightDispStr + WorkMgr.EDM,
                 "Use the backwards product rule.");
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\int \\frac{d}{d" + dVar.ToDispString() + "}[" + WorkMgr.ToDisp(left) + "]d" + dVar.ToDispString() + 
-                "= \\int (" + rightDispStr + ") d" + dVar.ToDispString() + WorkMgr.EDM, 
+            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\int \\frac{d}{d" + dVar.ToDispString() + "}[" + WorkMgr.ToDisp(left) + "]d" + dVar.ToDispString() +
+                "= \\int (" + rightDispStr + ") d" + dVar.ToDispString() + WorkMgr.EDM,
                 "Take the antiderivative of both sides.");
 
             pEvalData.WorkMgr.FromFormatted("");

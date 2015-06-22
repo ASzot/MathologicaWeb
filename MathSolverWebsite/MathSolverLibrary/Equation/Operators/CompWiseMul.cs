@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg;
+﻿using MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
 {
-    class CompWiseMul : AgOp
+    internal class CompWiseMul : AgOp
     {
         public const string IDEN = "CompWiseMul";
 

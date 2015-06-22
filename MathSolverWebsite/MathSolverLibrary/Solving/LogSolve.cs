@@ -47,8 +47,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             if (leftLogsCombined || rightLogsCombined)
                 pEvalData.WorkMgr.FromSides(left, right, "Combine logarithms.");
 
-            var leftGroups = left.GetGroups();
-            var rightGroups = right.GetGroups();
+            System.Collections.Generic.List<ExComp[]> leftGroups = left.GetGroups();
+            System.Collections.Generic.List<ExComp[]> rightGroups = right.GetGroups();
             if (leftGroups.Count == 1 && rightGroups.Count == 1 && left.Contains(solveForComp) && right.Contains(solveForComp))
             {
                 left = left.ForceLogCoeffToPow();

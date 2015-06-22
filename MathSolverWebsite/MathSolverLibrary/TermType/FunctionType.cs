@@ -11,7 +11,6 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
         private ExComp _assignTo;
         private FunctionDefinition _func;
 
-
         public FunctionTermType()
             : base()
         {
@@ -171,7 +170,6 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                     break;
                 }
             }
-
 
             solveVarKeys.Insert(0, probSolveVar);
 

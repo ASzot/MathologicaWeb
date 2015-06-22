@@ -1,20 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
-using MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg;
+﻿using MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
 {
-    class GradientFunc : FieldTransformation
+    internal class GradientFunc : FieldTransformation
     {
         public GradientFunc(ExComp ex)
             : base(ex, "\\nabla", FunctionType.Gradient, typeof(GradientFunc))
         {
-
         }
 
         public static bool IsSuitableField(ExComp ex)
@@ -31,17 +23,17 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
             ExComp innerEx = GetCorrectedInnerEx(ref pEvalData);
 
             AlgebraComp x, y, z;
-            
+
             bool isFuncDeriv;
 
             if (innerEx is AlgebraComp)
             {
                 innerEx = new FunctionDefinition(innerEx as AlgebraComp,
-                    new AlgebraComp[] 
-                    { 
-                        new AlgebraComp("x"), 
-                        new AlgebraComp("y"), 
-                        new AlgebraComp("z") 
+                    new AlgebraComp[]
+                    {
+                        new AlgebraComp("x"),
+                        new AlgebraComp("y"),
+                        new AlgebraComp("z")
                     }, null);
             }
 

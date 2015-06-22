@@ -1,11 +1,11 @@
 ﻿using MathSolverWebsite.MathSolverLibrary.Equation;
+using MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus;
+using MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg;
 using MathSolverWebsite.MathSolverLibrary.Equation.Term;
 using MathSolverWebsite.MathSolverLibrary.Parsing;
-using MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System;
-using MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus;
 using LexemeTable = System.Collections.Generic.List<
 MathSolverWebsite.MathSolverLibrary.TypePair<MathSolverWebsite.MathSolverLibrary.Parsing.LexemeType, string>>;
 
@@ -233,7 +233,7 @@ namespace MathSolverWebsite.MathSolverLibrary
 
         /// <summary>
         /// Calls all functions.
-        /// False will be returned if the function is in the 
+        /// False will be returned if the function is in the
         /// form f(2) where f is not defined.
         /// </summary>
         /// <param name="pEvalData"></param>
@@ -334,7 +334,7 @@ namespace MathSolverWebsite.MathSolverLibrary
             AlgebraComp derivOf = new AlgebraComp(derivativeOfStr);
 
             Derivative derivLeft = Derivative.ConstructDeriv(Left, withRespectTo, derivOf);
-			Derivative derivRight = Derivative.ConstructDeriv(Right, withRespectTo, derivOf);
+            Derivative derivRight = Derivative.ConstructDeriv(Right, withRespectTo, derivOf);
 
             pEvalData.WorkMgr.FromSides(derivLeft, derivRight, "Take the implicit derivative of each side.");
             pEvalData.WorkMgr.FromFormatted("`{0}`", "First take the derivative of the left side.", Left);

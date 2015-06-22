@@ -1,20 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
+﻿using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
 using MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
 {
-    class DivergenceFunc : FieldTransformation
+    internal class DivergenceFunc : FieldTransformation
     {
         public DivergenceFunc(ExComp innerEx)
             : base(innerEx, "\\text{div}", FunctionType.Divergence, typeof(DivergenceFunc))
         {
-
         }
 
         public static bool IsSuitableField(ExComp innerEx)
@@ -65,11 +58,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
             if (innerEx is AlgebraComp)
             {
                 innerEx = new FunctionDefinition(innerEx as AlgebraComp,
-                    new AlgebraComp[] 
-                    { 
-                        new AlgebraComp("x"), 
-                        new AlgebraComp("y"), 
-                        new AlgebraComp("z") 
+                    new AlgebraComp[]
+                    {
+                        new AlgebraComp("x"),
+                        new AlgebraComp("y"),
+                        new AlgebraComp("z")
                     }, null);
             }
 

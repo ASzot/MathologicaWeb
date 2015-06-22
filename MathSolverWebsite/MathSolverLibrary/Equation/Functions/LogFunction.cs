@@ -117,7 +117,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             if (Number.IsUndef(innerEx))
                 return Number.Undefined;
 
-
             if ((innerEx is Number && !(innerEx as Number).HasImaginaryComp()) ||
                 (innerEx is Constant && !(innerEx as Constant).Value.HasImaginaryComp()))
             {

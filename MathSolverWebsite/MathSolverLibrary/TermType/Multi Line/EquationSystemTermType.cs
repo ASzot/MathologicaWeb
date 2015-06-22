@@ -1,6 +1,5 @@
 ﻿using MathSolverWebsite.MathSolverLibrary.Equation;
 using MathSolverWebsite.MathSolverLibrary.Parsing;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -28,7 +27,6 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
         /// <param name="eqSets"></param>
         public EquationSystemTermType(List<EqSet> eqSets)
         {
-            
         }
 
         public override SolveResult ExecuteCommand(string command, ref EvalData pEvalData)
@@ -44,7 +42,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
                 solveMethod.SolveFors = solveVars.ToList();
 
-                var clonedEqSet = from eqSet in _eqSets
+                IEnumerable<EqSet> clonedEqSet = from eqSet in _eqSets
                                   select eqSet.Clone();
                 solveMethod.SolvingMethod = Solving.EquationSystemSolveMethod.Substitution;
                 return solveMethod.SolveEquationArray(clonedEqSet.ToList(), _lts, _allIdens, ref pEvalData);
@@ -60,7 +58,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
                 solveMethod.SolveFors = solveVars.ToList();
 
-                var clonedEqSet = from eqSet in _eqSets
+                IEnumerable<EqSet> clonedEqSet = from eqSet in _eqSets
                                   select eqSet.Clone();
                 solveMethod.SolvingMethod = Solving.EquationSystemSolveMethod.Elimination;
                 return solveMethod.SolveEquationArray(clonedEqSet.ToList(), _lts, _allIdens, ref pEvalData);
@@ -123,7 +121,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                     if (funcDef != null)
                     {
                         AlgebraTerm term = funcDef[1].ToAlgTerm();
-                        var vars = term.GetAllAlgebraCompsStr();
+                        List<string> vars = term.GetAllAlgebraCompsStr();
                         if (vars.Count == 1 && (_graphVarStr == null || vars[0] == _graphVarStr))
                         {
                             _graphVarStr = vars[0];
@@ -139,7 +137,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 else
                 {
                     AlgebraTerm term = eqSet.LeftTerm;
-                    var vars = term.GetAllAlgebraCompsStr();
+                    List<string> vars = term.GetAllAlgebraCompsStr();
                     if (vars.Count == 1 && (_graphVarStr == null || vars[0] == _graphVarStr))
                     {
                         _graphVarStr = vars[0];
@@ -161,7 +159,6 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             else
                 tmpCmds.Add("Graph");
 
-
             List<Dictionary<string, int>> idenOccurs = new List<Dictionary<string, int>>();
             for (int i = 0, j = 0; i < _eqSets.Count; i++, j++)
             {
@@ -171,10 +168,10 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                     break;
                 }
 
-                var lt0 = _lts[j];
+                List<TypePair<LexemeType, string>> lt0 = _lts[j];
                 if (_eqSets[i].Right != null)
                 {
-                    var lt1 = _lts[j + 1];
+                    List<TypePair<LexemeType, string>> lt1 = _lts[j + 1];
                     j++;
 
                     lt0.AddRange(lt1);
@@ -186,17 +183,17 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             List<string> options = null;
             if (idenOccurs != null)
             {
-                var solveVars = new List<string>();
-                foreach (var idenOccur in idenOccurs)
+                List<string> solveVars = new List<string>();
+                foreach (Dictionary<string, int> idenOccur in idenOccurs)
                 {
-                    foreach (var iden in idenOccur)
+                    foreach (KeyValuePair<string, int> iden in idenOccur)
                     {
                         if (!solveVars.Contains(iden.Key))
                             solveVars.Add(iden.Key);
                     }
                 }
 
-                var combinations = Combination(solveVars);
+                List<string> combinations = Combination(solveVars);
 
                 options = (from comb in combinations
                            where (comb.Split(',').Length == _eqSets.Count)
@@ -212,7 +209,6 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 }
                 return false;
             }
-
 
             foreach (string option in options)
             {

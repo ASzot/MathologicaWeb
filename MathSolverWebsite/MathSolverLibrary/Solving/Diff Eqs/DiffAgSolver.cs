@@ -1,12 +1,9 @@
 ﻿using MathSolverWebsite.MathSolverLibrary.Equation;
 using MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus;
-using MathSolverWebsite.MathSolverLibrary.Equation.Term;
-using System;
-using System.Collections.Generic;
 
 namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
 {
-    class DiffAgSolver
+    internal class DiffAgSolver
     {
         public static bool ContainsDerivative(ExComp ex)
         {

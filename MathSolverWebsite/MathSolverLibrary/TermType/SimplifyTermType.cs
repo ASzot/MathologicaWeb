@@ -1,11 +1,11 @@
 ﻿using MathSolverWebsite.MathSolverLibrary.Equation;
+using MathSolverWebsite.MathSolverLibrary.Equation.Functions;
+using MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg;
 using MathSolverWebsite.MathSolverLibrary.Equation.Term;
 using MathSolverWebsite.MathSolverLibrary.Parsing;
-using MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg;
-using MathSolverWebsite.MathSolverLibrary.Equation.Functions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System;
 
 namespace MathSolverWebsite.MathSolverLibrary.TermType
 {
@@ -114,7 +114,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             if (!tmpCmds.Contains(KEY_SIMPLIFY))
                 tmpCmds.Add(KEY_SIMPLIFY);
 
-            if (!(_term is ExMatrix) && _numPolyInfo == null && _denPolyInfo == null && !(term is AlgebraFunction) && 
+            if (!(_term is ExMatrix) && _numPolyInfo == null && _denPolyInfo == null && !(term is AlgebraFunction) &&
                 solveVarKeys.Count != 0)
                 tmpCmds.Add("Factor");
 
@@ -142,7 +142,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                         tmpCmds.Add("Domain of " + solveVarKeys[i - 1]);
                 }
 
-                foreach (var solveKey in solveVarKeys)
+                foreach (string solveKey in solveVarKeys)
                 {
                     if (solveKey != null)
                         tmpCmds.Add("Derivative d/d" + solveKey);
@@ -179,7 +179,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
         public static ExComp BasicSimplify(ExComp term, ref EvalData pEvalData, bool factor = true)
         {
             AlgebraTerm tmpTerm = term.ToAlgTerm();
-            
+
             // Surround in AlgebraTerm body to ensure that all of the functions are called.
             tmpTerm = new AlgebraTerm(tmpTerm);
             tmpTerm.CallFunctions(ref pEvalData);

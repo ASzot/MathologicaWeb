@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation
 {
@@ -67,7 +66,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         public static AlgebraTerm GetConstantTo(List<AlgebraGroup> gps, AlgebraComp cmp)
         {
             IEnumerable<AlgebraTerm> terms = from squaredGroup in gps
-                                              select squaredGroup.Group.GetUnrelatableTermsOfGroup(cmp).ToAlgTerm();
+                                             select squaredGroup.Group.GetUnrelatableTermsOfGroup(cmp).ToAlgTerm();
 
             AlgebraTerm totalTerm = new AlgebraTerm();
             foreach (AlgebraTerm term in terms)

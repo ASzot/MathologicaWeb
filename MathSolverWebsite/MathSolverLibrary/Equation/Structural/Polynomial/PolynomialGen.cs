@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.Polynomial
+﻿namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.Polynomial
 {
-    class PolynomialGen
+    internal class PolynomialGen
     {
         public static AlgebraTerm GenGenericOfDegree(int deg, AlgebraComp varFor, ref int alphaNumChar)
         {

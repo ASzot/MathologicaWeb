@@ -1,8 +1,7 @@
 ﻿using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
 using MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg;
-
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 {
@@ -19,7 +18,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         private AlgebraComp ca_impDeriv = null;
 
         /// <summary>
-        /// Used for notation like f'(2) where a value is to be 
+        /// Used for notation like f'(2) where a value is to be
         /// evaluated after the derivative has been taken.
         /// No input value is null.
         /// </summary>
@@ -155,8 +154,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         public ExComp GetDerivOfFunc(FunctionDefinition funcDef, ExComp def)
         {
-			if (_derivOf == null || !funcDef.Iden.IsEqualTo(_derivOf))
-				return null;
+            if (_derivOf == null || !funcDef.Iden.IsEqualTo(_derivOf))
+                return null;
 
             if (_withRespectTo == null)
             {
@@ -164,29 +163,29 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     return null;
             }
 
-			//else if (_isPartial)
-			//{
-			//	bool contains = false;
-			//	for (int i = 0; i < funcDef.InputArgCount; ++i)
-			//	{
-			//		if (_withRespectTo.IsEqualTo(funcDef.InputArgs[i]))
-			//		{
-			//			contains = true;
-			//			break;
-			//		}
-			//	}
+            //else if (_isPartial)
+            //{
+            //	bool contains = false;
+            //	for (int i = 0; i < funcDef.InputArgCount; ++i)
+            //	{
+            //		if (_withRespectTo.IsEqualTo(funcDef.InputArgs[i]))
+            //		{
+            //			contains = true;
+            //			break;
+            //		}
+            //	}
 
-			//	if (!contains)
-			//		return null;
-			//}
-			//else if (!_isPartial)
-			//{
-			//	if (funcDef.InputArgCount != 1)
-			//		return null;
+            //	if (!contains)
+            //		return null;
+            //}
+            //else if (!_isPartial)
+            //{
+            //	if (funcDef.InputArgCount != 1)
+            //		return null;
 
-			//	if (!_withRespectTo.IsEqualTo(funcDef.InputArgs[0]))
-			//		return null;
-			//}
+            //	if (!_withRespectTo.IsEqualTo(funcDef.InputArgs[0]))
+            //		return null;
+            //}
 
             return Derivative.ConstructDeriv(_inputVal == null ? null : _derivOf, def, _inputVal, _withRespectTo == null ? funcDef.InputArgs[0] : _withRespectTo, _order);
         }
@@ -272,7 +271,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                         }
                         else
                             ints = new Integral[] { finalInt };
-
 
                         ExComp[] modified = new ExComp[ints.Length];
                         Derivative[] chainRules = new Derivative[ints.Length];

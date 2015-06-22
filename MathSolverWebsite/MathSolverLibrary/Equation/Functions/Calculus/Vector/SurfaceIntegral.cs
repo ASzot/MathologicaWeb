@@ -1,22 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MathSolverWebsite.MathSolverLibrary.Information_Helpers;
+﻿using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
 using MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg;
-using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
+using MathSolverWebsite.MathSolverLibrary.Information_Helpers;
+using System.Collections.Generic;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
 {
-    class SurfaceIntegral : Integral
+    internal class SurfaceIntegral : Integral
     {
         private AlgebraComp _surface;
 
         public SurfaceIntegral(ExComp innerEx)
             : base(innerEx)
         {
-            
         }
 
         public override bool IsEqualTo(ExComp ex)
@@ -24,7 +19,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
             if (!(ex is SurfaceIntegral))
                 return false;
             SurfaceIntegral other = ex as SurfaceIntegral;
-            
+
             return other._surface.IsEqualTo(this._surface) && base.IsEqualTo(ex);
         }
 
@@ -180,7 +175,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
             // Sub the parameterization of the surface into the function.
             AlgebraTerm innerTerm = InnerTerm;
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + integralStr + innerStr + surfaceDiffIdenStr + WorkMgr.EDM, 
+            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + integralStr + innerStr + surfaceDiffIdenStr + WorkMgr.EDM,
                 "Change to terms of " + WorkMgr.STM + withRespect0Str + WorkMgr.EDM + " and " + WorkMgr.STM + withRespect1Str + WorkMgr.EDM);
 
             // X, Y, and Z have to be assumed for this.

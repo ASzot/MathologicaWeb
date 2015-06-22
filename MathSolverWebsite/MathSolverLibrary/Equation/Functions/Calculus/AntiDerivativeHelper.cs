@@ -1,15 +1,12 @@
-﻿using System;
+﻿using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
+using MathSolverWebsite.MathSolverLibrary.Equation.Term;
+using MathSolverWebsite.MathSolverLibrary.TermType;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
-using MathSolverWebsite.MathSolverLibrary.TermType;
-using MathSolverWebsite.MathSolverLibrary.Equation.Term;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 {
-    static class AntiDerivativeHelper
+    internal static class AntiDerivativeHelper
     {
         public static ExComp TakeAntiDerivativeGp(ExComp[] gp, AlgebraComp dVar, ref IntegrationInfo pIntInfo, ref EvalData pEvalData,
             string lowerStr = "", string upperStr = "")
@@ -41,7 +38,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                         ExComp[] tmpConstTo = new ExComp[constTo.Length + 1];
                         for (int i = 0; i < constTo.Length; ++i)
                         {
-                            tmpConstTo[i] = constTo[i]; 
+                            tmpConstTo[i] = constTo[i];
                         }
 
                         tmpConstTo[tmpConstTo.Length - 1] = new PowerFunction(denConstTo.ToAlgTerm(), Number.NegOne);
@@ -127,7 +124,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             }
 
             ExComp antiDeriv = TakeAntiDerivativeVarGp(varTo, dVar, ref pIntInfo, ref pEvalData);
-            if (antiDeriv == null) 
+            if (antiDeriv == null)
                 return null;
 
             if (constTo.Length != 0)
@@ -147,8 +144,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         {
             // For later make a method that makes the appropriate substitutions.
             // If the inside of a function isn't just a variable and the derivative
-            // isn't variable, make the substitution. 
-
+            // isn't variable, make the substitution.
 
             // Derivative of nothing is just the variable being integrated with respect to.
             if (gp.Length == 0)
@@ -193,9 +189,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             }
             else if (gp.Length == 2)      // Is this two functions multiplied together?
             {
-				ExComp ad = null;
+                ExComp ad = null;
                 // Are they two of the common antiderivatives?
-                if (gp[0] is TrigFunction && gp[1] is TrigFunction && (gp[0] as TrigFunction).InnerEx.IsEqualTo(dVar) && 
+                if (gp[0] is TrigFunction && gp[1] is TrigFunction && (gp[0] as TrigFunction).InnerEx.IsEqualTo(dVar) &&
                     (gp[0] as TrigFunction).InnerEx.IsEqualTo(dVar))
                 {
                     if ((gp[0] is SecFunction && gp[1] is TanFunction) ||
@@ -246,7 +242,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 }
             }
 
-
             // Trig substitutions.
             int prevTrigSubWorkCount = pEvalData.WorkMgr.WorkSteps.Count;
             atmpt = (new TrigSubTech()).TrigSubstitution(gp, dVar, ref pEvalData);
@@ -261,7 +256,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 atmpt = TrigFuncIntegration(gp[0], gp[1], dVar, ref pIntInfo, ref pEvalData);
                 if (atmpt != null)
                     return atmpt;
-                
+
                 // Integration by parts.
                 if (pIntInfo.ByPartsCount < IntegrationInfo.MAX_BY_PARTS_COUNT)
                 {
@@ -282,7 +277,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     }
                 }
             }
-
 
             return null;
         }
@@ -391,7 +385,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             return null;
         }
 
-        private static ExComp SecTanTrig(SecFunction sf, TanFunction tf, int sp, int tp, AlgebraComp dVar, 
+        private static ExComp SecTanTrig(SecFunction sf, TanFunction tf, int sp, int tp, AlgebraComp dVar,
             ref IntegrationInfo pIntInfo, ref EvalData pEvalData)
         {
             if (!sf.InnerEx.IsEqualTo(tf.InnerEx))
@@ -416,13 +410,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 else
                     subInVar = new AlgebraComp("u");
 
-                string innerStr = "(" + WorkMgr.ToDisp(sf.InnerTerm) +")";
+                string innerStr = "(" + WorkMgr.ToDisp(sf.InnerTerm) + ")";
                 pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\int \\sec^{" + (sp - 1).ToString() + "}" + innerStr +
                     "sec" + innerStr + "tan" + innerStr + " d" + dVar.ToDispString() + WorkMgr.EDM, "Split the term up.");
 
                 ExComp subbedIn = PowOp.StaticCombine(subInVar, new Number(sp - 1));
                 pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\int " + subInVar.ToDispString() + "^{" + (sp - 1).ToString() + "} d" + subInVar.ToDispString() + WorkMgr.EDM,
-                    "Make the substitution " + WorkMgr.STM + subInVar.ToDispString() + "=\\sec" + innerStr + ", d" + subInVar.ToDispString() + 
+                    "Make the substitution " + WorkMgr.STM + subInVar.ToDispString() + "=\\sec" + innerStr + ", d" + subInVar.ToDispString() +
                     "=sec" + innerStr + "tan" + innerStr + "d" + subInVar.ToDispString());
                 ExComp antiDeriv = TakeAntiDerivativeVarGp(new ExComp[] { subbedIn }, subInVar, ref pIntInfo, ref pEvalData);
 
@@ -446,7 +440,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="sf">sin function</param>
         /// <param name="cf">cos function</param>
@@ -476,7 +470,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
                 return subbedCos;
             }
-
             else if (!spEven && cpEven)
             {
                 // Using sin^2(x) = 1 - cos^2(x)
@@ -493,15 +486,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
                 return subbedCos;
             }
-
             else if (spEven && cpEven)
             {
                 // Using sin^2(x) = (1/2)(1-cos(2x))
                 // Using cos^2(x) = (1/2)(1+cos(2x))
                 ExComp sinSub = MulOp.StaticCombine(
-                    AlgebraTerm.FromFraction(Number.One, new Number(2.0)), 
+                    AlgebraTerm.FromFraction(Number.One, new Number(2.0)),
                     SubOp.StaticCombine(Number.One, new CosFunction(MulOp.StaticCombine(new Number(2.0), sf.InnerEx))));
-                ExComp cosSub=  MulOp.StaticCombine(
+                ExComp cosSub = MulOp.StaticCombine(
                     AlgebraTerm.FromFraction(Number.One, new Number(2.0)),
                     AddOp.StaticCombine(Number.One, new CosFunction(MulOp.StaticCombine(new Number(2.0), sf.InnerEx))));
                 ExComp finalEx = MulOp.StaticCombine(
@@ -521,7 +513,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         private static ExComp SingularPowTrig(TrigFunction tf0, TrigFunction tf1)
         {
             ExComp a = tf0.InnerEx;
-            ExComp b=  tf1.InnerEx;
+            ExComp b = tf1.InnerEx;
             AlgebraTerm half = AlgebraTerm.FromFraction(Number.One, new Number(2.0));
             if (tf0 is SinFunction && tf1 is SinFunction)
                 return MulOp.StaticCombine(half,
@@ -680,7 +672,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             string thisStr = "\\int(" + groupStr + ")" + dVar.ToDispString();
             string atmptStr = uatmpt.ToAlgTerm().FinalToDispStr();
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\int (" + groupStr + ") \\d" + dVar.ToDispString() + WorkMgr.EDM, 
+            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\int (" + groupStr + ") \\d" + dVar.ToDispString() + WorkMgr.EDM,
                 "Use u-substitution.");
 
             AlgebraTerm term = group.ToAlgNoRedunTerm();
@@ -704,13 +696,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             // The group count started as one and should not have been altered by substitutions.
             if (updatedGroups.Count != 1)
                 return null;
-            
+
             Derivative derivative = Derivative.ConstructDeriv(uatmpt, dVar, null);
 
             pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + thisStr + WorkMgr.EDM,
                 "Substitute " + WorkMgr.STM + subInVar.ToDispString() + "=" + uatmpt.ToAlgTerm().FinalToDispStr() + WorkMgr.EDM);
 
-            pEvalData.WorkMgr.FromFormatted("", 
+            pEvalData.WorkMgr.FromFormatted("",
                 "Find " + WorkMgr.STM + "d" + subInVar.ToDispString() + WorkMgr.EDM);
             WorkStep last = pEvalData.WorkMgr.GetLast();
 
@@ -742,11 +734,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                         return null;
 
                     pEvalData.WorkMgr.WorkSteps.Add(new WorkStep(WorkMgr.STM + thisStr +
-                        WorkMgr.EDM, "Make the substitution " + WorkMgr.STM + subInVar.ToDispString() + "=" + 
-                        atmptStr + WorkMgr.EDM + " and " + WorkMgr.STM + "d" + subInVar.ToDispString() + "=" + 
+                        WorkMgr.EDM, "Make the substitution " + WorkMgr.STM + subInVar.ToDispString() + "=" +
+                        atmptStr + WorkMgr.EDM + " and " + WorkMgr.STM + "d" + subInVar.ToDispString() + "=" +
                         evaluated.ToAlgTerm().FinalToDispStr() + WorkMgr.EDM, true));
 
-                    
                     pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + constEx.ToAlgTerm().FinalToDispStr() + "\\int (" + group.ToArray().ToAlgTerm().FinalToDispStr() + ") d" + subInVar.ToDispString() + WorkMgr.EDM);
 
                     ExComp innerAntiDeriv = TakeAntiDerivativeGp(group.ToArray(), subInVar, ref pIntInfo, ref pEvalData);
@@ -797,7 +788,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     if (group.GroupContains(dVar))
                         return null;
 
-                    pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + mulInCostStr + 
+                    pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + mulInCostStr +
                         "\\int (" + group.ToAlgTerm().FinalToDispStr() + ") d" + subInVar.ToDispString() + WorkMgr.EDM);
 
                     ExComp innerAntiDeriv = TakeAntiDerivativeGp(group, subInVar, ref pIntInfo, ref pEvalData);
@@ -828,7 +819,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     List<ExComp[]> baseGps = groupPf.Base.ToAlgTerm().GetGroupsNoOps();
                     if (baseGps.Count == 1)
                     {
-                        // Search the base for like terms. 
+                        // Search the base for like terms.
                         for (int k = 0; k < baseGps[0].Length; ++k)
                         {
                             if (baseGps[0][k].IsEqualTo(evaluatedPf.Base))
@@ -871,7 +862,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                             }
                         }
                     }
-
                 }
             }
 
@@ -913,11 +903,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 u = ex0;
                 dv = ex1;
             }
-            else if ((ex0 is PowerFunction && (ex0 as PowerFunction).Power is Number && 
-                !((ex0 as PowerFunction).Base is PowerFunction && !(((ex0 as PowerFunction).Base as PowerFunction).Power is Number))) || 
+            else if ((ex0 is PowerFunction && (ex0 as PowerFunction).Power is Number &&
+                !((ex0 as PowerFunction).Base is PowerFunction && !(((ex0 as PowerFunction).Base as PowerFunction).Power is Number))) ||
                 ex0 is AlgebraComp)
             {
-
                 u = ex0;
                 dv = ex1;
             }
@@ -985,7 +974,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (du is Derivative)
                 return null;
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "v=" + antiderivativeOfDV.FinalToDispStr() + "=" + WorkMgr.ToDisp(v) + WorkMgr.EDM, 
+            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "v=" + antiderivativeOfDV.FinalToDispStr() + "=" + WorkMgr.ToDisp(v) + WorkMgr.EDM,
             "Find " + WorkMgr.STM +
                 "v" + WorkMgr.EDM);
             lastStep = pEvalData.WorkMgr.GetLast();
@@ -994,7 +983,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             pEvalData.WorkMgr.WorkSteps.AddRange(stepRange);
             lastStep.GoUp(ref pEvalData);
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "({0})({1})-\\int ({1}) ({2}) d" + dVar.ToDispString() + WorkMgr.EDM, 
+            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "({0})({1})-\\int ({1}) ({2}) d" + dVar.ToDispString() + WorkMgr.EDM,
                 "Substitute the values into the integration by parts formula.", u, v, du);
 
             ExComp uv = MulOp.StaticCombine(u, v.Clone());
@@ -1030,25 +1019,23 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 // Add one to the power and then divide by the power.
                 PowerFunction pf = single as PowerFunction;
 
+                if (pf.Power.IsEqualTo(Number.NegOne))
+                {
+                    ExComp pfBase = pf.Base;
 
-				if (pf.Power.IsEqualTo(Number.NegOne))
-				{
-					ExComp pfBase = pf.Base;
-
-					if (pfBase is PowerFunction)
-					{
-						PowerFunction pfBasePf = pfBase as PowerFunction;
-						if (pfBasePf.Power.Equals(new Number(0.5)) || pfBasePf.Power.Equals(AlgebraTerm.FromFraction(Number.One, new Number(2.0))))
-						{
-							// Is this arcsin or arccos?
+                    if (pfBase is PowerFunction)
+                    {
+                        PowerFunction pfBasePf = pfBase as PowerFunction;
+                        if (pfBasePf.Power.Equals(new Number(0.5)) || pfBasePf.Power.Equals(AlgebraTerm.FromFraction(Number.One, new Number(2.0))))
+                        {
+                            // Is this arcsin or arccos?
                             ExComp compare = AddOp.StaticCombine(MulOp.Negate(PowOp.StaticCombine(dVar, new Number(2.0))), Number.One).ToAlgTerm().RemoveRedundancies();
 
-
-							ExComp useBase;
-							if (pfBasePf.Base is AlgebraTerm)
-								useBase = (pfBasePf.Base as AlgebraTerm).RemoveRedundancies();
-							else
-								useBase = pfBasePf.Base;
+                            ExComp useBase;
+                            if (pfBasePf.Base is AlgebraTerm)
+                                useBase = (pfBasePf.Base as AlgebraTerm).RemoveRedundancies();
+                            else
+                                useBase = pfBasePf.Base;
 
                             if (useBase.IsEqualTo(compare))
                             {
@@ -1057,7 +1044,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                                     "=" + asin.FinalToDispStr() + WorkMgr.EDM, "Use the common antiderivative.");
                                 return asin;
                             }
-						}
+                        }
 
                         // See if it is just the regular (1/x^(1/2)) or something like that.
                         if (IsDerivAcceptable(pfBasePf, dVar) && !pfBasePf.Power.ToAlgTerm().Contains(dVar))
@@ -1070,7 +1057,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                             pfBasePf.Power = powChange;
                             return DivOp.StaticCombine(pfBasePf, powChange);
                         }
-					}
+                    }
 
                     if (pfBase.IsEqualTo(AddOp.StaticCombine(Number.One, PowOp.StaticCombine(dVar, new Number(2.0)))))
                     {
@@ -1079,7 +1066,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                             "=" + atan.FinalToDispStr() + WorkMgr.EDM, "Use the common antiderivative.");
                         return atan;
                     }
-				}
+                }
 
                 if (pf.Base.IsEqualTo(Constant.E) && pf.Power.IsEqualTo(dVar))
                 {
@@ -1112,7 +1099,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     if (Number.NegOne.Equals(pf.Power))
                     {
                         pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\int(" + pf.FinalToDispStr() + ")\\d" + dVar.ToDispString() +
-                            "=ln(|" + dVar + "|)" + WorkMgr.EDM, "This comes from the known derivative " + WorkMgr.STM + 
+                            "=ln(|" + dVar + "|)" + WorkMgr.EDM, "This comes from the known derivative " + WorkMgr.STM +
                             "\\frac{d}{dx}ln(x)=\\frac{1}{x}" + WorkMgr.EDM);
 
                         // The absolute value function was removed here.
@@ -1164,7 +1151,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
                     return Integral.TakeAntiDeriv(subbed, dVar, ref pEvalData);
                 }
-                else if (pf.Base is SinFunction && pf.Power is Number && (pf.Power as Number).IsRealInteger() && 
+                else if (pf.Base is SinFunction && pf.Power is Number && (pf.Power as Number).IsRealInteger() &&
                     (int)((pf.Power as Number).RealComp) > 1 && (int)((pf.Power as Number).RealComp) % 2 != 0)
                 {
                     int iPow = (int)(pf.Power as Number).RealComp;
@@ -1298,8 +1285,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 if (ad == null)
                     return null;
 
-                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\int(" + (single as TrigFunction).FinalToDispStr() + ")\\d" + dVar.ToDispString() + "=" + WorkMgr.ToDisp(ad) + 
-                    WorkMgr.EDM, 
+                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\int(" + (single as TrigFunction).FinalToDispStr() + ")\\d" + dVar.ToDispString() + "=" + WorkMgr.ToDisp(ad) +
+                    WorkMgr.EDM,
                     "Use the common antiderivative.");
 
                 return ad;
@@ -1307,6 +1294,5 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             return null;
         }
-
     }
 }

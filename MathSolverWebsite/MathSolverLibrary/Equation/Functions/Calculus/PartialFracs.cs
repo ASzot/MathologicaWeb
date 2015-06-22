@@ -1,17 +1,15 @@
-﻿using System;
+﻿using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
+using MathSolverWebsite.MathSolverLibrary.Equation.Structural.Polynomial;
+using MathSolverWebsite.MathSolverLibrary.Equation.Term;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using MathSolverWebsite.MathSolverLibrary.Equation.Term;
-using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
-using MathSolverWebsite.MathSolverLibrary.Equation.Structural.Polynomial;
-
 using LexemeTable = System.Collections.Generic.List<
 MathSolverWebsite.MathSolverLibrary.TypePair<MathSolverWebsite.MathSolverLibrary.Parsing.LexemeType, string>>;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 {
-    class PartialFracs
+    internal class PartialFracs
     {
         public static ExComp Split(AlgebraTerm num, AlgebraTerm den, PolynomialExt numPoly, AlgebraComp dVar, ref TermType.EvalData pEvalData)
         {
@@ -61,7 +59,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 AlgebraTerm decomNum = PolynomialGen.GenGenericOfDegree(Math.Max(denGpCount - 2, 0), dVar, ref alphaNumericChar);
                 if (decomNum == null)
                     return null;
-                
+
                 usedVars[i] = new string[alphaNumericChar - startChar];
                 for (int k = startChar, j = 0; k < alphaNumericChar; ++k, ++j)
                     usedVars[i][j] = ((char)k).ToString();
@@ -164,8 +162,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             Solving.EquationSystemSolve soe = new Solving.EquationSystemSolve(agSolver);
 
-            List<List<TypePair<Parsing.LexemeType, string>>> lts = new List<List<TypePair<Parsing.LexemeType,string>>>();
-            Dictionary<string, int> allIdens = new Dictionary<string,int>();
+            List<List<TypePair<Parsing.LexemeType, string>>> lts = new List<List<TypePair<Parsing.LexemeType, string>>>();
+            Dictionary<string, int> allIdens = new Dictionary<string, int>();
 
             for (int i = 0; i < usedVars.Length; ++i)
             {
@@ -181,7 +179,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 // It doesn't matter as they will be compounded upon solving anyways.
                 lts.Add(new LexemeTable());
             }
-
 
             SolveResult solveResult = soe.SolveEquationArray(equations, lts, allIdens, ref pEvalData);
             if (!solveResult.Success)

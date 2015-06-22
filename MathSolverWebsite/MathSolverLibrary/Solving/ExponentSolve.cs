@@ -2,6 +2,7 @@
 using MathSolverWebsite.MathSolverLibrary.Equation.Functions;
 using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
 using MathSolverWebsite.MathSolverLibrary.Equation.Term;
+using System.Collections.Generic;
 
 namespace MathSolverWebsite.MathSolverLibrary.Solving
 {
@@ -32,12 +33,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
             pEvalData.AttemptSetInputType(TermType.InputType.ExponentSolve);
 
-            var leftGroups = left.GetGroups();
-            var rightGroups = right.GetGroups();
+            List<ExComp[]> leftGroups = left.GetGroups();
+            List<ExComp[]> rightGroups = right.GetGroups();
             if (leftGroups.Count == 1 && rightGroups.Count == 1 && left.Contains(solveForComp) && right.Contains(solveForComp))
             {
-                var leftGroup = leftGroups[0];
-                var rightGroup = rightGroups[0];
+                ExComp[] leftGroup = leftGroups[0];
+                ExComp[] rightGroup = rightGroups[0];
                 ExComp gcf = DivOp.GetCommonFactor(left, right);
 
                 // Took out because logs are used to solve some of these equations so there is no base converting.

@@ -1,7 +1,5 @@
 ﻿using MathSolverWebsite.MathSolverLibrary.Equation;
-using System.Collections.Generic;
 using System.Linq;
-using System;
 
 namespace MathSolverWebsite.MathSolverLibrary.TermType
 {

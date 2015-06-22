@@ -74,7 +74,7 @@ namespace MathSolverWebsite.MathSolverLibrary
             string finalHtml = "";
             finalHtml += "<table>";
 
-            finalHtml += "<tr>"; 
+            finalHtml += "<tr>";
             finalHtml += "<td><span class='changeText'>" + STM + WorkMgr.ToDisp(root) + EDM + "</span></td>";
             foreach (ExComp polyEx in poly)
                 finalHtml += "<td>" + STM + WorkMgr.ToDisp(polyEx) + EDM + "</td>";
@@ -231,8 +231,8 @@ namespace MathSolverWebsite.MathSolverLibrary
             if (!AllowWork)
                 return;
 
-            _workSteps.Add(WorkStep.Formatted(STM + "{0} " + ((left == null || right == null) ? "" : _useComparison) + " {1}" + EDM, desc + WorkLabel, 
-                (left == null ? (object)"" : left), 
+            _workSteps.Add(WorkStep.Formatted(STM + "{0} " + ((left == null || right == null) ? "" : _useComparison) + " {1}" + EDM, desc + WorkLabel,
+                (left == null ? (object)"" : left),
                 (right == null ? (object)"" : right)));
         }
 
@@ -344,8 +344,8 @@ namespace MathSolverWebsite.MathSolverLibrary
         public string WorkHtml
         {
             get { return _work; }
-            set 
-            { 
+            set
+            {
                 _work = value;
                 _work = CorrectString(_work);
             }

@@ -531,7 +531,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             List<ExComp> lcmComps = new List<ExComp>();
 
             List<TypePair<ExComp, bool>> group2Checks = (from gpCmp in group2
-														select new TypePair<ExComp, bool>(gpCmp, false)).ToList();
+                                                         select new TypePair<ExComp, bool>(gpCmp, false)).ToList();
 
             foreach (ExComp group1Comp in group1)
             {
@@ -566,7 +566,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         {
             matchIndices = new List<TypePair<int, int>>();
             List<TypePair<ExComp, bool>> checkedGroup2 = (from group2Comp in group2
-														  select new TypePair<ExComp, bool>(group2Comp, false)).ToList();
+                                                          select new TypePair<ExComp, bool>(group2Comp, false)).ToList();
 
             List<TypePair<ExComp, ExComp>> corresponding = new List<TypePair<ExComp, ExComp>>();
 

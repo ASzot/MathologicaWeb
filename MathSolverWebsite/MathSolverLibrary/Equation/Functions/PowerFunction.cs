@@ -1,9 +1,9 @@
 ﻿using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
+using MathSolverWebsite.MathSolverLibrary.Equation.Term;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using MathSolverWebsite.MathSolverLibrary.Equation.Term;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 {
@@ -238,7 +238,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         {
             AlgebraTerm baseTerm = Base.ToAlgTerm();
             AlgebraTerm powTerm = Power.ToAlgTerm();
-            
+
             if (!baseTerm.CallFunctions(ref pEvalData) || !powTerm.CallFunctions(ref pEvalData))
                 return false;
 
@@ -941,12 +941,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             {
                 ExComp subComp = baseTerm[i];
 
-
                 if (subComp is Number && (subComp as Number).IsRealInteger())
                 {
                     Number nSubComp = subComp as Number;
                     int n = (int)nSubComp.RealComp;
-
 
                     if (root % 2 == 0)
                     {

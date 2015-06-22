@@ -83,7 +83,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             if (power is AlgebraTerm && (power as AlgebraTerm).ContainsOnlyFractions())
             {
                 AlgebraTerm powerTerm = power as AlgebraTerm;
-                var numDen = powerTerm.GetNumDenFrac();
+                AlgebraTerm[] numDen = powerTerm.GetNumDenFrac();
                 if (numDen == null)
                     return null;
                 reciprocalPow = AlgebraTerm.FromFraction(numDen[1], numDen[0]);
@@ -165,9 +165,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
         private ExComp Solve_N_Group_2_Root_Eq(AlgebraTerm left, AlgebraTerm right, AlgebraVar solveFor,
             SimpleFraction solveForPowFrac, ref TermType.EvalData pEvalData)
         {
-            var groups = left.GetGroups();
+            System.Collections.Generic.List<ExComp[]> groups = left.GetGroups();
 
-            var subGroup = groups[1].ToAlgTerm();
+            AlgebraTerm subGroup = groups[1].ToAlgTerm();
 
             pEvalData.WorkMgr.FromSubtraction(subGroup, left, right);
 

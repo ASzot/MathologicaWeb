@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
+﻿namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 {
-    class PermutationFunction : AppliedFunction_NArgs
+    internal class PermutationFunction : AppliedFunction_NArgs
     {
         private const string IDEN = "P";
+
         public ExComp Bottom
         {
             get { return _args[1]; }

@@ -1,5 +1,4 @@
 ﻿using MathSolverWebsite.MathSolverLibrary.Equation;
-using MathSolverWebsite.MathSolverLibrary.Equation.Functions;
 using MathSolverWebsite.MathSolverLibrary.Parsing;
 using MathSolverWebsite.MathSolverLibrary.Solving;
 using System;
@@ -8,7 +7,6 @@ using System.Linq;
 
 namespace MathSolverWebsite.MathSolverLibrary
 {
-
     internal class AlgebraSolver
     {
         private int _iterationCount = 0;
@@ -19,11 +17,11 @@ namespace MathSolverWebsite.MathSolverLibrary
 
         public AlgebraComp IterationVar
         {
-            get 
+            get
             {
                 if (_iterationVar == null)
                     CreateUSubTable(new List<TypePair<LexemeType, string>>());
-                return _iterationVar; 
+                return _iterationVar;
             }
         }
 
@@ -200,7 +198,6 @@ namespace MathSolverWebsite.MathSolverLibrary
             ExComp rightEx = right.RemoveRedundancies();
             AlgebraComp solveForComp = solveFor.ToAlgebraComp();
 
-
             if (left is AlgebraFunction)
                 left = (left as AlgebraFunction).Evaluate(false, ref pEvalData).ToAlgTerm();
             else
@@ -209,7 +206,6 @@ namespace MathSolverWebsite.MathSolverLibrary
                 right = (right as AlgebraFunction).Evaluate(false, ref pEvalData).ToAlgTerm();
             else
                 right.EvaluateFunctions(false, ref pEvalData);
-
 
             if (left.IsUndefined() || right.IsUndefined())
                 return Number.Undefined;
@@ -706,7 +702,7 @@ namespace MathSolverWebsite.MathSolverLibrary
                     else
                         return SolveResult.InequalitySolved(Restriction.AllNumbers(solveForComp, ref pEvalData));
                 }
-                else 
+                else
                 {
                     if (Restriction.IsEqualTo(comparison))
                         return SolveResult.InequalitySolved(Restriction.FromOnly(result.Solutions[0].Result, solveForComp, ref pEvalData));
@@ -862,7 +858,7 @@ namespace MathSolverWebsite.MathSolverLibrary
 
                 return SolveResult.InequalitySolved(ranges.ToArray());
             }
-           
+
             pEvalData.AddFailureMsg("Couldn't solve inequality.");
             return SolveResult.Failure();
         }

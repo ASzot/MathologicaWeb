@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg;
+﻿using MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
 {
-    class CrossProductOp : AgOp
+    internal class CrossProductOp : AgOp
     {
         public const string IDEN = "times";
 
@@ -84,7 +79,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
             ExVector vec1 = ex2 as ExVector;
             if (vec0.Length != vec1.Length)
                 return null;
-            
+
             return StaticWeakCombine(ex1, ex2);
         }
     }

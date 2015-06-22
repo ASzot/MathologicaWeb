@@ -1,8 +1,5 @@
 ﻿using MathSolverWebsite.MathSolverLibrary.Equation;
 using MathSolverWebsite.MathSolverLibrary.Equation.Functions;
-using MathSolverWebsite.MathSolverLibrary.Parsing;
-using MathSolverWebsite.MathSolverLibrary.Solving;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -193,15 +190,15 @@ namespace MathSolverWebsite.MathSolverLibrary
 
             totalTerm = Equation.Operators.SubOp.StaticCombine(clonedLeft, clonedRight).ToAlgTerm();
 
-            var totalGroups = totalTerm.GetGroups();
+            List<ExComp[]> totalGroups = totalTerm.GetGroups();
             int totalGpCnt = totalGroups.Count;
 
-            var groupsVarTo = totalTerm.GetGroupsVariableTo(varFor);
+            List<AlgebraGroup> groupsVarTo = totalTerm.GetGroupsVariableTo(varFor);
 
             // Check for a quadratic substitution.
             if (totalGpCnt == 3)
             {
-                var groupsConstTo = totalTerm.GetGroupsConstantTo(varFor);
+                List<AlgebraGroup> groupsConstTo = totalTerm.GetGroupsConstantTo(varFor);
                 if (groupsVarTo.Count == 2 && groupsConstTo.Count == 1)
                 {
                     ExComp variableTerm0 = groupsVarTo[0].GetVariableGroupComps(varFor).ToTerm().RemoveRedundancies();
@@ -253,7 +250,7 @@ namespace MathSolverWebsite.MathSolverLibrary
 
             if (HasOnlyOrFunctionsBasicOnly(FunctionType.Logarithm, FunctionType.Sinusodal, FunctionType.AbsoluteValue) && NumberOfPowers > 1)
             {
-                var variableTermsPows = from varGp in groupsVarTo
+                IEnumerable<ExComp> variableTermsPows = from varGp in groupsVarTo
                                         select varGp.GetVariableGroupComps(varFor).ToTerm().RemoveRedundancies();
 
                 List<AlgebraTerm> variableTerms = new List<AlgebraTerm>();
@@ -264,7 +261,7 @@ namespace MathSolverWebsite.MathSolverLibrary
 
                     if (varTermPow is Equation.Functions.PowerFunction)
                     {
-                        var baseTerm = (varTermPow as PowerFunction).Base.ToAlgTerm();
+                        AlgebraTerm baseTerm = (varTermPow as PowerFunction).Base.ToAlgTerm();
                         variableTerms.Add(baseTerm);
                         continue;
                     }
@@ -286,7 +283,7 @@ namespace MathSolverWebsite.MathSolverLibrary
                 {
                     factor = true;
 
-                    foreach (var variableTerm in variableTerms)
+                    foreach (AlgebraTerm variableTerm in variableTerms)
                     {
                         if (variableTerm is AlgebraFunction)
                         {

@@ -1,15 +1,12 @@
 ﻿using MathSolverWebsite.MathSolverLibrary.Equation;
-using MathSolverWebsite.MathSolverLibrary.Parsing;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using LexemeTable = System.Collections.Generic.List<
 MathSolverWebsite.MathSolverLibrary.TypePair<MathSolverWebsite.MathSolverLibrary.Parsing.LexemeType, string>>;
 
 namespace MathSolverWebsite.MathSolverLibrary.TermType
 {
-    class MultiLineHelper
+    internal class MultiLineHelper
     {
         private List<TypePair<FunctionDefinition, ExComp>> _funcDefs = new List<TypePair<FunctionDefinition, ExComp>>();
         private List<AndRestriction> _intervalDefs = new List<AndRestriction>();
@@ -37,7 +34,6 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
         public MultiLineHelper()
         {
-
         }
 
         public bool IsPreDefined(AlgebraComp funcDefVar)

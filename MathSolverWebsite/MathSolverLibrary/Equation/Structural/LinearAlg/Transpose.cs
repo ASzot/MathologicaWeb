@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg;
-using MathSolverWebsite.MathSolverLibrary.Equation.Functions;
+﻿using MathSolverWebsite.MathSolverLibrary.Equation.Functions;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
 {
-    class Transpose : AppliedFunction
+    internal class Transpose : AppliedFunction
     {
         public Transpose(ExComp exMat)
             : base(exMat, FunctionType.Transpose, typeof(Transpose))
         {
-
         }
 
         public override ExComp Evaluate(bool harshEval, ref TermType.EvalData pEvalData)

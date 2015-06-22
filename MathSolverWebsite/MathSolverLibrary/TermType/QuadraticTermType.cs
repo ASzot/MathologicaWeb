@@ -1,6 +1,6 @@
 ﻿using MathSolverWebsite.MathSolverLibrary.Equation;
-using MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg;
 using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
+using MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg;
 using MathSolverWebsite.MathSolverLibrary.Equation.Term;
 using MathSolverWebsite.MathSolverLibrary.Parsing;
 using System.Collections.Generic;
@@ -107,7 +107,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             return SolveResult.InvalidCmd(ref pEvalData);
         }
 
-        public bool Init(EquationInformation eqInfo, ExComp left, ExComp right, List<TypePair<LexemeType, string>> lexemeTable, 
+        public bool Init(EquationInformation eqInfo, ExComp left, ExComp right, List<TypePair<LexemeType, string>> lexemeTable,
             Dictionary<string, int> solveVars, string probSolveVar, ref EvalData pEvalData)
         {
             if (eqInfo.OnlyFactors)
@@ -179,10 +179,10 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             List<ExComp[]> linearGroups = _eq.GetGroupContainingTerm(solveForComp);
             List<AlgebraGroup> constantGroup = _eq.GetGroupsConstantTo(solveForComp);
 
-            var aTerms = from squaredGroup in squaredGroups
+            IEnumerable<AlgebraTerm> aTerms = from squaredGroup in squaredGroups
                          select squaredGroup.GetUnrelatableTermsOfGroup(solveForComp).ToAlgTerm();
 
-            var bTerms = from linearGroup in linearGroups
+            IEnumerable<AlgebraTerm> bTerms = from linearGroup in linearGroups
                          select linearGroup.GetUnrelatableTermsOfGroup(solveForComp).ToAlgTerm();
 
             if (aTerms.Count() == 0)
@@ -233,7 +233,6 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 else
                     tmpCmds.AddRange(tt_func.GetCommands());
             }
-
 
             if (_eq.GetAllAlgebraCompsStr().Count == 1)
             {

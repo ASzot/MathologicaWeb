@@ -1,7 +1,7 @@
 ﻿using MathSolverWebsite.MathSolverLibrary.Equation;
+using MathSolverWebsite.MathSolverLibrary.Equation.Functions;
 using System.Collections.Generic;
 using System.Linq;
-using MathSolverWebsite.MathSolverLibrary.Equation.Functions;
 
 namespace MathSolverWebsite.MathSolverLibrary.Solving
 {
@@ -107,15 +107,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
         /// <param name="solveForComp"></param>
         /// <param name="pEvalData"></param>
         /// <param name="strongDivide"></param>
-        public static void DivideByVariableCoeffs(ref AlgebraTerm left, ref AlgebraTerm right, AlgebraComp solveForComp, ref TermType.EvalData pEvalData, 
+        public static void DivideByVariableCoeffs(ref AlgebraTerm left, ref AlgebraTerm right, AlgebraComp solveForComp, ref TermType.EvalData pEvalData,
             bool strongDivide = false)
         {
             if (right.SubComps.Count == 0)
                 right.Add(Number.Zero);
             if (left.TermCount != 1)
             {
-                var groups = left.GetGroupsNoOps();
-                var unrelatedGroups = from gp in groups
+                List<ExComp[]> groups = left.GetGroupsNoOps();
+                IEnumerable<ExComp[]> unrelatedGroups = from gp in groups
                                       select gp.GetUnrelatableTermsOfGroup(solveForComp);
 
                 // Combine all of the unrelated terms.

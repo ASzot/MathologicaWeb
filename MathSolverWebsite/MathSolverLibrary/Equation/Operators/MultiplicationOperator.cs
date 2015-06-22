@@ -1,8 +1,8 @@
 ﻿using MathSolverWebsite.MathSolverLibrary.Equation.Functions;
+using MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
 {
@@ -54,7 +54,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 (ex2 as PowerFunction).Power = DivOp.StaticCombine((ex2 as PowerFunction).Power, Number.NegOne);
                 ex2 = new PowerFunction(ex2, Number.NegOne);
             }
-
 
             if (ex1 is ExMatrix || ex2 is ExMatrix)
             {
@@ -131,7 +130,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 AlgebraTerm term2 = ex2 as AlgebraTerm;
 
                 AlgebraTerm[] numDenTerm1 = term1.GetNumDenFrac();
-				AlgebraTerm[] numDenTerm2 = term2.GetNumDenFrac();
+                AlgebraTerm[] numDenTerm2 = term2.GetNumDenFrac();
 
                 if (numDenTerm1 != null || numDenTerm2 != null)
                 {
@@ -165,7 +164,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 }
 
                 List<ExComp[]> groups1 = term1.GetGroupsNoOps();
-				List<ExComp[]> groups2 = term2.GetGroupsNoOps();
+                List<ExComp[]> groups2 = term2.GetGroupsNoOps();
 
                 int groups1Count = groups1.Count;
                 int groups2Count = groups2.Count;
@@ -309,7 +308,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
             {
                 Number n1 = ex1 as Number;
                 Number n2 = ex2 as Number;
-                
+
                 Number result = n1 * n2;
                 return result;
             }

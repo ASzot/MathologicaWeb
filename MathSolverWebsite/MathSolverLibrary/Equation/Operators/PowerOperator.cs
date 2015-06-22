@@ -1,6 +1,6 @@
 ﻿using MathSolverWebsite.MathSolverLibrary.Equation.Functions;
-using System;
 using MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg;
+using System;
 using System.Collections.Generic;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
@@ -38,7 +38,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 bool imag = false;
 
                 // Given odd is false, even is not necessarily true as there can be decimals.
-                bool isOdd = false; 
+                bool isOdd = false;
                 if (dBase < 0.0)
                 {
                     double root = 1.0 / dPow;
@@ -147,8 +147,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                     // Use the binomial theorem.
                     AlgebraComp iterVar = new AlgebraComp("$k");
                     ChooseFunction chooseFunc = new ChooseFunction(power, iterVar);
-					AlgebraTerm group0 = groups[0].ToAlgTerm();
-					AlgebraTerm group1 = groups[1].ToAlgTerm();
+                    AlgebraTerm group0 = groups[0].ToAlgTerm();
+                    AlgebraTerm group1 = groups[1].ToAlgTerm();
                     ExComp overallEx = MulOp.StaticWeakCombine(chooseFunc, PowOp.StaticWeakCombine(group0, SubOp.StaticWeakCombine(power, iterVar)));
                     overallEx = MulOp.StaticWeakCombine(overallEx, PowOp.StaticWeakCombine(group1, iterVar));
 
@@ -224,7 +224,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 }
 
                 // With pow op combines it can either be done or it can't. There is no
-                // weak combine in between. 
+                // weak combine in between.
                 ExComp atmpt = MatrixHelper.PowOpCombine(mat, other);
                 if (atmpt == null)
                     return Number.Undefined;
@@ -278,7 +278,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                     {
                         ExComp[] gp = gps[0];
                         Number coeff = gp.GetCoeff();
-                        
+
                         if (coeff != null && coeff < 0.0 && nPow.IsEven())
                         {
                             gp.AssignCoeff(Number.Abs(coeff));
@@ -323,7 +323,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 }
             }
 
-
             PowerFunction powFunc = new PowerFunction(ex1, ex2);
             return powFunc.SimplifyRadical();
         }
@@ -341,7 +340,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
             {
                 // This is the transpose operation.
                 return new Transpose(ex1);
-            } 
+            }
             if ((ex1 is ExMatrix || ex1 is FunctionDefinition || ex1 is AlgebraComp))
             {
                 if (ex1 is AlgebraComp)

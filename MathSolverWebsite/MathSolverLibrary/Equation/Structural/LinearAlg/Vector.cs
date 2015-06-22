@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
+﻿using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
 {
-    class ExVector : ExMatrix
+    internal class ExVector : ExMatrix
     {
         public const string I = "\\vec{i}";
         public const string J = "\\vec{j}";
@@ -30,11 +25,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
 
         public ExComp Z
         {
-            get 
+            get
             {
-                // Not all vectors will have Z component whereas 
+                // Not all vectors will have Z component whereas
                 // they are garunteed to have a least an x and y component.
-                return 2 < Length ? Get(2) : Number.Zero; 
+                return 2 < Length ? Get(2) : Number.Zero;
             }
         }
 
@@ -49,13 +44,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
         public ExVector(int length)
             : base(1, length)
         {
-
         }
 
         public ExVector(params ExComp[] exs)
             : base(exs)
         {
-
         }
 
         public virtual ExComp Get(int index)

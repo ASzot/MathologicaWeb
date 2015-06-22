@@ -1,6 +1,6 @@
 ﻿using MathSolverWebsite.MathSolverLibrary.Equation.Functions;
-using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
 using MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus;
+using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -417,15 +417,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             List<ExComp[]> groups = GetGroupsNoOps();
 
             List<ExComp[]> fracGroups = (from gp in groups
-                              where gp.ContainsFrac()
-                              select gp).ToList();
+                                         where gp.ContainsFrac()
+                                         select gp).ToList();
 
             if (fracGroups.Count() == 0)
                 return this;
 
             IEnumerable<ExComp[]> nonFracGroups = from gp in groups
-                                where !gp.ContainsFrac()
-                                select gp;
+                                                  where !gp.ContainsFrac()
+                                                  select gp;
 
             if (fracGroups.Count + nonFracGroups.Count() == 1)
                 return this;
@@ -442,11 +442,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             }
 
             List<ExComp[]> denFracGroups = (from fracGp in fracGroups
-                                 select fracGp.GetDenominator()).ToList();
+                                            select fracGp.GetDenominator()).ToList();
 
-			List<ExComp[]> numFracGroups = (from fracGp in fracGroups
-                                 select fracGp.GetNumerator()).ToList();
-
+            List<ExComp[]> numFracGroups = (from fracGp in fracGroups
+                                            select fracGp.GetNumerator()).ToList();
 
             for (int i = 0; i < denFracGroups.Count; ++i)
             {
@@ -527,15 +526,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             List<ExComp[]> groups = GetGroupsNoOps();
 
             List<ExComp[]> fracGroups = (from gp in groups
-                              where gp.ContainsFrac()
-                              select gp).ToList();
+                                         where gp.ContainsFrac()
+                                         select gp).ToList();
 
             if (fracGroups.Count() == 0)
                 return this;
 
             IEnumerable<ExComp[]> nonFracGroups = from gp in groups
-                                where !gp.ContainsFrac()
-                                select gp;
+                                                  where !gp.ContainsFrac()
+                                                  select gp;
 
             if (fracGroups.Count + nonFracGroups.Count() == 1)
                 return this;
@@ -552,10 +551,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             }
 
             List<ExComp[]> denFracGroups = (from fracGp in fracGroups
-                                 select fracGp.GetDenominator()).ToList();
+                                            select fracGp.GetDenominator()).ToList();
 
-			List<ExComp[]> numFracGroups = (from fracGp in fracGroups
-                                 select fracGp.GetNumerator()).ToList();
+            List<ExComp[]> numFracGroups = (from fracGp in fracGroups
+                                            select fracGp.GetNumerator()).ToList();
 
             ExComp[] lcfDen = GroupHelper.LCF(denFracGroups);
             AlgebraTerm lcfTerm = lcfDen.ToAlgTerm();
@@ -584,7 +583,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
                 if (!(mulTerm is Number && (mulTerm as Number) == 1.0))
                 {
-					MulOp mulOp = new MulOp();
+                    MulOp mulOp = new MulOp();
                     ExComp combined = mulOp.Combine(term, mulTerm);
                     modifiedNumTerms.Add(combined);
                 }

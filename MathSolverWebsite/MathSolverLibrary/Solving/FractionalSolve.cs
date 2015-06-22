@@ -17,7 +17,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             b_hasOnlyFrac = hasOnlyFrac;
         }
 
-        public override ExComp SolveEquation(AlgebraTerm left, AlgebraTerm right, AlgebraVar solveFor, 
+        public override ExComp SolveEquation(AlgebraTerm left, AlgebraTerm right, AlgebraVar solveFor,
             ref TermType.EvalData pEvalData)
         {
             pEvalData.CheckSolutions = true;
@@ -60,7 +60,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 {
                     AlgebraTerm[] useNumDen = gp0NumDen == null ? gp1NumDen : gp0NumDen;
 
-                    pEvalData.WorkMgr.FromSides(MulOp.StaticWeakCombine(left, useNumDen[1]), useNumDen[0], 
+                    pEvalData.WorkMgr.FromSides(MulOp.StaticWeakCombine(left, useNumDen[1]), useNumDen[0],
                         "Get rid of the denominator by multiplying both sides by it");
 
                     left = useNumDen[0];
@@ -76,7 +76,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                     leftNumDen = gp0NumDen;
                     rightNumDen = gp1NumDen;
 
-                    pEvalData.WorkMgr.FromSides(MulOp.StaticWeakCombine(leftNumDen[0], rightNumDen[1]), 
+                    pEvalData.WorkMgr.FromSides(MulOp.StaticWeakCombine(leftNumDen[0], rightNumDen[1]),
                         MulOp.StaticWeakCombine(leftNumDen[1], rightNumDen[0]), "Cross multiply.");
 
                     left = MulOp.StaticCombine(leftNumDen[0], rightNumDen[1]).ToAlgTerm();
@@ -105,7 +105,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             }
             else if (leftNumDen == null && rightNumDen != null && !left.ContainsFractions())
             {
-                pEvalData.WorkMgr.FromSides(MulOp.StaticWeakCombine(left, rightNumDen[1]), rightNumDen[0], 
+                pEvalData.WorkMgr.FromSides(MulOp.StaticWeakCombine(left, rightNumDen[1]), rightNumDen[0],
                     "Get rid of the denominator by multiplying both sides by it");
 
                 left = MulOp.StaticCombine(left, rightNumDen[1]).ToAlgTerm();

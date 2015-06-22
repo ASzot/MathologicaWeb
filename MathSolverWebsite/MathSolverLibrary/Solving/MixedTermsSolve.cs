@@ -31,12 +31,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 _root = (_root as AlgebraTerm).RemoveRedundancies();
             }
 
-            var rootTerms = left.GetGroupPow(_root);
+            System.Collections.Generic.List<ExComp> rootTerms = left.GetGroupPow(_root);
             if (rootTerms == null || rootTerms.Count == 0)
                 return null;
 
-            var rootTerm = new AlgebraTerm();
-            foreach (var rt in rootTerms)
+            AlgebraTerm rootTerm = new AlgebraTerm();
+            foreach (ExComp rt in rootTerms)
             {
                 rootTerm = rootTerm + rt.ToAlgTerm();
             }

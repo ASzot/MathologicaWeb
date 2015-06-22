@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
+﻿using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
 using MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg;
+using System.Collections.Generic;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 {
-    class Integral : AppliedFunction
+    internal class Integral : AppliedFunction
     {
         private bool _failure = false;
         protected AlgebraComp _dVar = null;
@@ -18,7 +13,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         protected ExComp _upper = null;
         protected ExComp _lower = null;
         private bool _isInnerIntegral = false;
-
 
         public AlgebraTerm UpperLimitTerm
         {
@@ -33,11 +27,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         public ExComp UpperLimit
         {
             get { return _upper; }
-            set 
+            set
             {
                 _upper = value;
             }
         }
+
         public ExComp LowerLimit
         {
             get { return _lower; }
@@ -71,7 +66,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         public Integral(ExComp innerEx)
             : base(innerEx, FunctionType.AntiDerivative, typeof(Integral))
         {
-
         }
 
         public Integral(ExComp innerEx, bool isInnerIntegral)
@@ -79,7 +73,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         {
             _isInnerIntegral = isInnerIntegral;
         }
-
 
         public override ExComp Clone()
         {
@@ -126,7 +119,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 if (integral.LowerLimit.ToAlgTerm().Contains(integral.DVar) || integral.UpperLimit.ToAlgTerm().Contains(integral.DVar))
                 {
                     // The variables need to be switched.
-                    // Find a suitable place to switch the variable where the dvar is not the integration boundary.
+                    // Find a suitable place to switch the variable where the var is not the integration boundary.
                     foreach (KeyValuePair<string, Integral> compareKvPair in dict)
                     {
                         if (compareKvPair.Key != integral.DVar.Var.Var &&
@@ -257,14 +250,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             else
                 useLower = LowerLimit;
 
-
             if (useUpper != null && useLower != null && !useUpper.IsEqualTo(UpperLimit) && !useLower.IsEqualTo(LowerLimit))
             {
-                // Evaluating from infinity in both directions. 
+                // Evaluating from infinity in both directions.
                 // Split the integral up.
                 Integral upperInt = Integral.ConstructIntegral(InnerTerm, _dVar, Number.Zero, Number.PosInfinity);
                 Integral lowerInt = Integral.ConstructIntegral(InnerTerm, _dVar, Number.NegInfinity, Number.Zero);
-                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + integralStr + "=" + upperInt.FinalToDispStr() + "+" + 
+                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + integralStr + "=" + upperInt.FinalToDispStr() + "+" +
                     lowerInt.FinalToDispStr() + WorkMgr.EDM,
                     "Split the integral.");
 
@@ -320,7 +312,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             AlgebraTerm lowerEval = indefinite.Clone().ToAlgTerm().Substitute(_dVar, useLower);
             ExComp lowerEx = Simplifier.Simplify(new AlgebraTerm(lowerEval), ref pEvalData);
 
-
             AlgebraComp subVar = null;
             ExComp limVal = null;
             if (!useUpper.IsEqualTo(UpperLimit))
@@ -334,7 +325,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 limVal = Number.NegInfinity;
             }
 
-            integralStr = "\\int_{" + WorkMgr.ToDisp(useLower) + "}^{" + WorkMgr.ToDisp(useUpper) + "}(" + InnerTerm.FinalToDispStr() + ")d" + _dVar.ToDispString(); 
+            integralStr = "\\int_{" + WorkMgr.ToDisp(useLower) + "}^{" + WorkMgr.ToDisp(useUpper) + "}(" + InnerTerm.FinalToDispStr() + ")d" + _dVar.ToDispString();
 
             if (subVar != null)
             {
@@ -408,7 +399,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             // Independently take the derivative of each group.
             ExComp[] adGps = new ExComp[gps.Count];
-            for (int i = 0; i < gps.Count; ++i) 
+            for (int i = 0; i < gps.Count; ++i)
             {
                 IntegrationInfo integrationInfo = _integralInfo ?? new IntegrationInfo();
                 int prevStepCount = pEvalData.WorkMgr.WorkSteps.Count;
@@ -458,7 +449,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             }
 
             return finalTerm;
-        } 
+        }
 
         protected override AlgebraTerm CreateInstance(params ExComp[] args)
         {
@@ -481,7 +472,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 boundariesStr = "_{" + LowerLimit.ToTexString() + "}^{" + UpperLimit.ToTexString() + "}";
             return "\\int" + boundariesStr + (InnerEx is Integral ? InnerTerm.FinalToTexString() : "(" + InnerTerm.FinalToTexString() + ")") + "\\d" + _dVar.ToTexString();
         }
-        
+
         public override bool IsEqualTo(ExComp ex)
         {
             if (ex is Integral)
@@ -518,9 +509,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         {
             string boundariesStr = "";
             if (IsDefinite)
-                boundariesStr = "_{" + LowerLimit.ToTexString() + "}^{" + UpperLimit.ToTexString()+ "}";
+                boundariesStr = "_{" + LowerLimit.ToTexString() + "}^{" + UpperLimit.ToTexString() + "}";
             return "\\int" + boundariesStr + "(" + InnerTerm.ToTexString() + ")\\d" + _dVar.ToTexString();
         }
-
     }
 }

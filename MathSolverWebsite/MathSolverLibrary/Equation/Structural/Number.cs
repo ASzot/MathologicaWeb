@@ -1,8 +1,8 @@
-﻿using System;
+﻿using MathSolverWebsite.MathSolverLibrary.Equation.Functions;
+using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
-using MathSolverWebsite.MathSolverLibrary.Equation.Functions;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation
 {
@@ -528,7 +528,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             if (!IsRealInteger() || HasImaginaryComp())
                 return new List<TypePair<Number, Number>>(); ;         // Just an empty list.
 
-            var signInvariantDivisors = GetDivisors();
+            List<TypePair<Number, Number>> signInvariantDivisors = GetDivisors();
 
             if (d_realComp > 0)
             {
@@ -975,7 +975,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         }
 
         public override string ToTexString()
-        { 
+        {
             if (IsUndefined())
                 return "\\text{Undefined}";
             if (IsNegInfinity())
@@ -1017,7 +1017,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             pEvalData.TmpSetUseRad(true);
 
             ExComp result = MulOp.StaticWeakCombine(mag,
-                SubOp.StaticCombine(new CosFunction(angle), 
+                SubOp.StaticCombine(new CosFunction(angle),
                 MulOp.StaticCombine(Number.ImagOne, new SinFunction(angle))));
 
             pEvalData.TmpSetUseRad(origRadVal);

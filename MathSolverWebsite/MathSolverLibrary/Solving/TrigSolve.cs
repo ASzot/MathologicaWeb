@@ -78,7 +78,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
             pEvalData.AttemptSetInputType(TermType.InputType.TrigSolve);
 
-            var groups = left.GetGroups();
+            List<ExComp[]> groups = left.GetGroups();
             if (groups.Count != 1)
             {
                 // We have multiple groups involving an undetermined amount of variable trig functions.
@@ -324,7 +324,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             if (subOut != null && subIn != null)
             {
                 success = false;
-                var subbedTerm = term.Substitute(subOut, subIn, ref success);
+                AlgebraTerm subbedTerm = term.Substitute(subOut, subIn, ref success);
                 if (success && pEvalData.WorkMgr.AllowWork)
                 {
                     pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + subbedTerm.FinalToDispStr() + WorkMgr.EDM,
@@ -344,7 +344,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             AlgebraComp solveForComp = solveFor.ToAlgebraComp();
 
             AlgebraTerm overallTerm = right.IsZero() ? left : SubOp.StaticCombine(left, right).ToAlgTerm();
-            var groups = overallTerm.GetGroupsNoOps();
+            List<ExComp[]> groups = overallTerm.GetGroupsNoOps();
 
             //////////////////////////////////////////////////////////
             // Just try to turn the expression into a pair of factors.
@@ -373,12 +373,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             // Try to divide to remove one of the trig functions.
             if (groups.Count == 2)
             {
-                var complexities = from trigFunc in trigFuncs
+                IEnumerable<TypePair<int, ExComp>> complexities = from trigFunc in trigFuncs
                                    select new TypePair<int, ExComp>((int)TrigFunction.GetTrigFuncComplexity(trigFunc), trigFunc);
 
                 TrigFunction minTrigFunc = null;
                 int minVal = int.MaxValue;
-                foreach (var complexity in complexities)
+                foreach (TypePair<int, ExComp> complexity in complexities)
                 {
                     if (complexity.Data1 > 2)
                     {

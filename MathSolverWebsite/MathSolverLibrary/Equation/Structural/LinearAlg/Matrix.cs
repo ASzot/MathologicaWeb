@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
 using System;
-using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
@@ -54,7 +54,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
 
         /// <summary>
         /// The 'first' dimension of the array.
-        /// If 'i' is the ith row it can be 
+        /// If 'i' is the ith row it can be
         /// accessed through _exData[i][0]
         /// </summary>
         public int Rows
@@ -159,7 +159,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
         }
 
         public ExComp GetCofactor(int row, int col)
-       { 
+        {
             ExMatrix minor = GetMatrixMinor(row, col);
             ExComp minorDet = Determinant.TakeDeteriment(minor);
 
@@ -347,7 +347,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
                     if (_exData[i][j] is AlgebraTerm)
                     {
                         List<FunctionType>
-							tmp = (_exData[i][j] as AlgebraTerm).GetAppliedFunctionsNoPow(varFor);
+                            tmp = (_exData[i][j] as AlgebraTerm).GetAppliedFunctionsNoPow(varFor);
                         totalFuncs.AddRange(tmp);
                     }
                 }
@@ -433,7 +433,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
         {
             return false;
         }
-        
+
         public override ExComp MakeWorkable()
         {
             for (int i = 0; i < Rows; ++i)

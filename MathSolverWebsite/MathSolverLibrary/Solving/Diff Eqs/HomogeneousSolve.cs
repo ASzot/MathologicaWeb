@@ -1,15 +1,13 @@
 ﻿using MathSolverWebsite.MathSolverLibrary.Equation;
-using MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus;
 using MathSolverWebsite.MathSolverLibrary.Equation.Functions;
-using MathSolverWebsite.MathSolverLibrary.Equation.Term;
+using MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus;
 using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
 using System;
 using System.Collections.Generic;
 
-
 namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
 {
-    class HomogeneousSolve : DiffSolve
+    internal class HomogeneousSolve : DiffSolve
     {
         public override ExComp[] Solve(AlgebraTerm left, AlgebraTerm right, AlgebraComp funcVar, AlgebraComp dVar,
             ref TermType.EvalData pEvalData)
@@ -217,13 +215,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
 
                 den = den.RemoveEx(denPowAndIndex[1]);
 
-
                 gps[i] = new ExComp[num.Length + (den.Length == 0 ? 0 : 1)];
                 for (int j = 0; j < num.Length; ++j)
                 {
                     gps[i][j] = num[j];
                 }
-                
+
                 if (den.Length != 0)
                     gps[i][gps[i].Length - 1] = new PowerFunction(den.ToAlgTerm(), Number.NegOne);
             }

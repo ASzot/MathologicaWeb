@@ -1,18 +1,14 @@
 ﻿using MathSolverWebsite.MathSolverLibrary.Equation;
 using MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus;
-using MathSolverWebsite.MathSolverLibrary.Equation.Functions;
-using MathSolverWebsite.MathSolverLibrary.Equation.Term;
 using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
-using System;
 using System.Collections.Generic;
 
 namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
 {
-    class ExactEqsSolve : DiffSolve
+    internal class ExactEqsSolve : DiffSolve
     {
         public ExactEqsSolve()
         {
-
         }
 
         public override ExComp[] Solve(AlgebraTerm left, AlgebraTerm right, AlgebraComp funcVar, AlgebraComp dVar,
@@ -49,14 +45,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             if (!funcN.Contains(dVar) || !funcM.Contains(funcVar))
                 return null;
 
-            pEvalData.WorkMgr.FromSides(left, right, "The equation is in the form " + WorkMgr.STM + 
-                "N(x,y)\\frac{dy}{dx}+M(x,y)" + WorkMgr.EDM + " where " + WorkMgr.STM + "N(" + dVar.ToDispString() + "," + funcVar.ToDispString() + ")=" + WorkMgr.ToDisp(funcN) + WorkMgr.EDM + " and " + 
+            pEvalData.WorkMgr.FromSides(left, right, "The equation is in the form " + WorkMgr.STM +
+                "N(x,y)\\frac{dy}{dx}+M(x,y)" + WorkMgr.EDM + " where " + WorkMgr.STM + "N(" + dVar.ToDispString() + "," + funcVar.ToDispString() + ")=" + WorkMgr.ToDisp(funcN) + WorkMgr.EDM + " and " +
                 WorkMgr.STM + "M(" + dVar.ToDispString() + "," + funcVar.ToDispString() + ")=" + WorkMgr.ToDisp(funcM) + WorkMgr.EDM);
 
-            pEvalData.WorkMgr.FromSides(left, right, "Use exact equations only if " + WorkMgr.STM + "\\frac{\\partial M}{\\partial " + funcVar.ToDispString() + "}=\\frac{\\partial N}{\\partial " + 
+            pEvalData.WorkMgr.FromSides(left, right, "Use exact equations only if " + WorkMgr.STM + "\\frac{\\partial M}{\\partial " + funcVar.ToDispString() + "}=\\frac{\\partial N}{\\partial " +
                 dVar.ToDispString() + "}" + WorkMgr.EDM);
 
-            // Does M_y = N_x ? 
+            // Does M_y = N_x ?
             pEvalData.WorkMgr.FromFormatted("");
             WorkStep last = pEvalData.WorkMgr.GetLast();
 
@@ -146,7 +142,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             psi = AddOp.StaticCombine(psi, constFunc);
 
             pEvalData.WorkMgr.FromSides(new AlgebraComp("psi"), psi);
-
 
             ExComp[] sols = new ExComp[] { psi, Number.Zero };
             pEvalData.WorkMgr.FromSides(sols[0], sols[1]);

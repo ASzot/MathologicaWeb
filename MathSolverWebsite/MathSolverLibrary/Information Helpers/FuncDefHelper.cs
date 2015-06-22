@@ -1,6 +1,6 @@
 ﻿using MathSolverWebsite.MathSolverLibrary.Equation;
-using System.Collections.Generic;
 using MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg;
+using System.Collections.Generic;
 
 namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
 {
@@ -165,7 +165,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
         public void Define(FunctionDefinition func, ExComp funcDef, ref TermType.EvalData pEvalData)
         {
             FunctionDefinition removeKey = null;
-            foreach (var def in _defs)
+            foreach (KeyValuePair<FunctionDefinition, ExComp> def in _defs)
             {
                 if (def.Key.Iden.IsEqualTo(func.Iden))
                 {
@@ -182,7 +182,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
             if (funcDef is ExVector)
                 func.IsVectorFunc = true;
 
-            pEvalData.AddMsg(WorkMgr.STM + func.ToDispString() + WorkMgr.EDM + " defined as " + 
+            pEvalData.AddMsg(WorkMgr.STM + func.ToDispString() + WorkMgr.EDM + " defined as " +
                 WorkMgr.STM + WorkMgr.ToDisp(funcDef) + WorkMgr.EDM);
 
             _defs.Add(func, funcDef);
@@ -233,10 +233,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
 
         public int GetFuncArgCount(string iden)
         {
-            foreach (var def in _defs)
+            foreach (KeyValuePair<FunctionDefinition, ExComp> def in _defs)
             {
                 if (iden == def.Key.Iden.Var.Var)
-                    return def.Key.InputArgCount;           
+                    return def.Key.InputArgCount;
             }
 
             return -1;
@@ -244,7 +244,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
 
         public FunctionDefinition GetFuncDef(string idenStr)
         {
-            foreach (var def in _defs)
+            foreach (KeyValuePair<FunctionDefinition, ExComp> def in _defs)
             {
                 if (def.Key.Iden.Var.Var == idenStr)
                     return def.Key;
@@ -255,7 +255,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
 
         public bool IsFuncDefined(string idenStr)
         {
-            foreach (var def in _defs)
+            foreach (KeyValuePair<FunctionDefinition, ExComp> def in _defs)
             {
                 if (def.Key.Iden.Var.Var == idenStr)
                     return true;
@@ -266,7 +266,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
 
         public bool IsValidFuncCall(string idenStr, int argCount)
         {
-            foreach (var def in _defs)
+            foreach (KeyValuePair<FunctionDefinition, ExComp> def in _defs)
             {
                 if (def.Key.Iden.Var.Var == idenStr && argCount == def.Key.InputArgCount)
                     return true;

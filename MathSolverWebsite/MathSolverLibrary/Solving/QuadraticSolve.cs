@@ -3,6 +3,7 @@ using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
 using MathSolverWebsite.MathSolverLibrary.Equation.Term;
 using System;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace MathSolverWebsite.MathSolverLibrary.Solving
 {
@@ -145,21 +146,21 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
             left = left.RemoveRedundancies().ToAlgTerm();
 
-            var powersOfVar = left.GetPowersOfVar(solveForComp);
+            List<ExComp> powersOfVar = left.GetPowersOfVar(solveForComp);
 
             if (!powersOfVar.ContainsEx(new Number(2.0)) || !powersOfVar.ContainsEx(new Number(1.0)))
                 return p_agSolver.SolveEq(solveFor, left, right, ref pEvalData);
 
             left = left.EvaluateExponentsCompletely().ToAlgTerm();
 
-            var squaredGroups = left.GetGroupContainingTerm(solveForComp.ToPow(2.0));
-            var linearGroups = left.GetGroupContainingTerm(solveForComp);
-            var constantGroup = left.GetGroupsConstantTo(solveForComp);
+            List<ExComp[]> squaredGroups = left.GetGroupContainingTerm(solveForComp.ToPow(2.0));
+            List<ExComp[]> linearGroups = left.GetGroupContainingTerm(solveForComp);
+            List<AlgebraGroup> constantGroup = left.GetGroupsConstantTo(solveForComp);
 
-            var aTerms = from squaredGroup in squaredGroups
+            IEnumerable<AlgebraTerm> aTerms = from squaredGroup in squaredGroups
                          select squaredGroup.GetUnrelatableTermsOfGroup(solveForComp).ToAlgTerm();
 
-            var bTerms = from linearGroup in linearGroups
+            IEnumerable<AlgebraTerm> bTerms = from linearGroup in linearGroups
                          select linearGroup.GetUnrelatableTermsOfGroup(solveForComp).ToAlgTerm();
 
             AlgebraTerm a = new AlgebraTerm();
@@ -199,7 +200,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                     {
                         // Factor out solve variable. In the case... (ax^2+bx=0)
                         AlgebraTerm toLinearSolve = new AlgebraTerm(a, new MulOp(), solveForComp, new AddOp(), b);
-                        pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "{0}({1})={2}" + WorkMgr.EDM, "Factor out " + WorkMgr.STM + "{0}" + WorkMgr.EDM +" from the term.", solveForComp, toLinearSolve, right);
+                        pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "{0}({1})={2}" + WorkMgr.EDM, "Factor out " + WorkMgr.STM + "{0}" + WorkMgr.EDM + " from the term.", solveForComp, toLinearSolve, right);
                         pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "{0}({1})={2}" + WorkMgr.EDM, "Solve for each of the factors independently.", solveForComp, toLinearSolve, right);
                         pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "{0}=0" + WorkMgr.EDM, solveForComp);
 

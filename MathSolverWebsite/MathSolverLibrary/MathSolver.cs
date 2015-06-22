@@ -1,5 +1,4 @@
 ﻿using MathSolverWebsite.MathSolverLibrary.Equation;
-using MathSolverWebsite.MathSolverLibrary.Information_Helpers;
 using MathSolverWebsite.MathSolverLibrary.Parsing;
 using MathSolverWebsite.MathSolverLibrary.TermType;
 using System.Collections.Generic;
@@ -64,7 +63,6 @@ namespace MathSolverWebsite.MathSolverLibrary
                     // There are no variables in this expression.
                     return new EqualityCheckTermType(singularEqSet.Left, singularEqSet.Right, singularEqSet.ComparisonOp);
                 }
-
 
                 if (!singularEqSet.FixEqFuncDefs(ref pEvalData))
                     return null;
@@ -158,7 +156,7 @@ namespace MathSolverWebsite.MathSolverLibrary
                 }
 
                 int simpTermCount = 0;
-                foreach (var term in terms)
+                foreach (EqSet term in terms)
                 {
                     if (term.Sides.Count > 2)
                         return null;

@@ -1,16 +1,12 @@
 ﻿using MathSolverWebsite.MathSolverLibrary.Equation;
 using MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus;
-using MathSolverWebsite.MathSolverLibrary.Equation.Term;
-using System;
-using System.Collections.Generic;
 
 namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
 {
-    abstract class DiffSolve
+    internal abstract class DiffSolve
     {
         public abstract ExComp[] Solve(AlgebraTerm left, AlgebraTerm right, AlgebraComp funcVar, AlgebraComp dVar,
             ref TermType.EvalData pEvalData);
-
 
         protected static AlgebraTerm ConvertDerivsToAlgebraComps(AlgebraTerm term, AlgebraComp funcDeriv, AlgebraComp dVar, ref AlgebraComp replaceCmp)
         {

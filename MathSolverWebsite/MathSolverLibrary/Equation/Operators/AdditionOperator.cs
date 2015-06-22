@@ -1,5 +1,5 @@
-﻿using System;
-using MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg;
+﻿using MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg;
+using System;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
 {

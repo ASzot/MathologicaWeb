@@ -1,14 +1,12 @@
 ﻿using MathSolverWebsite.MathSolverLibrary.Equation;
 using MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus;
-using MathSolverWebsite.MathSolverLibrary.Equation.Term;
 using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
 {
-    class SeperableSolve : DiffSolve
+    internal class SeperableSolve : DiffSolve
     {
         private static AlgebraTerm FromFractionFix(ExComp num, ExComp den)
         {
@@ -65,11 +63,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
 
             AlgebraTerm[] numDen = null;
 
-            if ((left.Contains(funcVar) && !left.Contains(dVar) && right.Contains(dVar) && !right.Contains(funcVar)) || 
+            if ((left.Contains(funcVar) && !left.Contains(dVar) && right.Contains(dVar) && !right.Contains(funcVar)) ||
                 (left.Contains(dVar) && !left.Contains(funcVar) && right.Contains(funcVar) && !right.Contains(dVar)))
             {
-                var groups = left.GetGroupsNoOps();
-                var unrelatedGroups = from gp in groups
+                List<ExComp[]> groups = left.GetGroupsNoOps();
+                IEnumerable<ExComp[]> unrelatedGroups = from gp in groups
                                       select gp.GetUnrelatableTermsOfGroup(derivVar);
 
                 // Combine all of the unrelated terms.

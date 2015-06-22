@@ -1,5 +1,5 @@
-﻿using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
-using MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus;
+﻿using MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus;
+using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
 using System.Collections.Generic;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
@@ -54,11 +54,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
             if (constGp.Length != 0)
             {
-                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + constGp.ToAlgTerm().FinalToDispStr() + "*\\sum_{" + IterVar.ToDispString() + "=" + 
+                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + constGp.ToAlgTerm().FinalToDispStr() + "*\\sum_{" + IterVar.ToDispString() + "=" +
                     IterStart.ToAlgTerm().FinalToDispStr() + "}^{" + IterCount.ToAlgTerm().ToDispString() + "}" + varGp.ToAlgTerm().FinalToDispStr() + WorkMgr.EDM,
                     "Take constants out.");
             }
-
 
             AlgebraTerm innerTerm = varGp.ToAlgTerm();
             string innerExStr = innerTerm.FinalToDispStr();
@@ -169,7 +168,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                             return false;
                         }
 
-
                         if (pfPow.RemoveRedundancies().IsEqualTo(SubOp.StaticCombine(IterVar, IterStart)))
                         {
                             ExComp tmpDen = SubOp.StaticCombine(Number.One, exBase);
@@ -184,7 +182,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                             if (constGp.Length != 0)
                             {
                                 result = MulOp.StaticCombine(result, constGp.ToAlgTerm());
-                                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + constGp.ToAlgTerm().FinalToDispStr() + "*\\sum_{" + IterVar.ToDispString() + "=" + 
+                                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + constGp.ToAlgTerm().FinalToDispStr() + "*\\sum_{" + IterVar.ToDispString() + "=" +
                                     IterStart.ToAlgTerm().FinalToDispStr() + "}^{" + IterCount.ToAlgTerm().ToDispString() + "}" + varGp.ToAlgTerm().FinalToDispStr() + "=" +
                                     WorkMgr.ToDisp(result) + WorkMgr.EDM,
                                     "Multiply the by the constants.");
@@ -359,8 +357,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public override AlgebraTerm Substitute(ExComp subOut, ExComp subIn)
         {
-            return new SumFunction(InnerTerm.Substitute(subOut, subIn), 
-                IterVar.IsEqualTo(subOut) ? (AlgebraComp)subIn : IterVar, 
+            return new SumFunction(InnerTerm.Substitute(subOut, subIn),
+                IterVar.IsEqualTo(subOut) ? (AlgebraComp)subIn : IterVar,
                 IterStart.ToAlgTerm().Substitute(subOut, subIn).RemoveRedundancies(),
                 IterCount.ToAlgTerm().Substitute(subOut, subIn).RemoveRedundancies());
         }

@@ -1,6 +1,7 @@
 ﻿using MathSolverWebsite.MathSolverLibrary.Equation;
 using MathSolverWebsite.MathSolverLibrary.Equation.Functions;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace MathSolverWebsite.MathSolverLibrary.Solving
 {
@@ -38,13 +39,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
             DivideByVariableCoeffs(ref nonZeroTerm, ref zero, solveForComp, ref pEvalData);
 
-            var groups = nonZeroTerm.GetGroupsNoOps();
+            List<ExComp[]> groups = nonZeroTerm.GetGroupsNoOps();
 
             p_agSolver.ClearLinearSolveRepeatCount();
             if (groups.Count != 1)
                 return p_agSolver.Solve(solveFor, left, right, ref pEvalData);
 
-            var onlyGroup = nonZeroTerm.GetGroupsNoOps()[0];
+            ExComp[] onlyGroup = nonZeroTerm.GetGroupsNoOps()[0];
             onlyGroup = onlyGroup.RemoveOneCoeffs();
 
             // The factors are the algebra terms of this groups.

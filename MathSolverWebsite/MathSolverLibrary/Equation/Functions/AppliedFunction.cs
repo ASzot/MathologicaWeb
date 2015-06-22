@@ -1,9 +1,7 @@
-﻿using System;
+﻿using MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-
-using MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg;
-using MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 {
@@ -189,8 +187,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         {
             return (AlgebraTerm)Activator.CreateInstance(_type, args[0]);
         }
-
-
     }
 
     internal abstract class AppliedFunction_NArgs : AppliedFunction
@@ -206,7 +202,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         public override ExComp Clone()
         {
             IEnumerable<ExComp> cloned = from arg in _args
-										 select arg.Clone();
+                                         select arg.Clone();
             return CreateInstance(cloned.ToArray());
         }
 
@@ -225,7 +221,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         public override AlgebraTerm HarshEvaluation()
         {
             IEnumerable<ExComp> harshEval = from arg in _args
-											select arg.ToAlgTerm().HarshEvaluation();
+                                            select arg.ToAlgTerm().HarshEvaluation();
             AlgebraTerm created = CreateInstance(harshEval.ToArray());
             return created;
         }
@@ -233,14 +229,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         public override AlgebraTerm Order()
         {
             IEnumerable<ExComp> ordered = from arg in _args
-										  select arg.ToAlgTerm().Order();
+                                          select arg.ToAlgTerm().Order();
             return CreateInstance(ordered.ToArray());
         }
 
         public override AlgebraTerm RemoveOneCoeffs()
         {
             IEnumerable<ExComp> noOneCoeffs = from arg in _args
-											  select (arg is AlgebraTerm ? (arg as AlgebraTerm).RemoveOneCoeffs() : arg);
+                                              select (arg is AlgebraTerm ? (arg as AlgebraTerm).RemoveOneCoeffs() : arg);
             return CreateInstance(noOneCoeffs.ToArray());
         }
 
@@ -254,7 +250,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         public override AlgebraTerm Substitute(ExComp subOut, ExComp subIn)
         {
             IEnumerable<ExComp> substituted = from arg in _args
-											  select arg.ToAlgTerm().Substitute(subOut, subIn);
+                                              select arg.ToAlgTerm().Substitute(subOut, subIn);
             return CreateInstance(substituted.ToArray());
         }
 

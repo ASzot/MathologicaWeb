@@ -1,21 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MathSolverWebsite.MathSolverLibrary.Equation.Functions;
+﻿using MathSolverWebsite.MathSolverLibrary.Equation.Functions;
 using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
 {
-    class Determinant : AppliedFunction
+    internal class Determinant : AppliedFunction
     {
         private const int MAX_DET_DIMEN = 4;
 
         public Determinant(ExComp innerMat)
             : base(innerMat, FunctionType.Deteriment, typeof(Determinant))
         {
-
         }
 
         public static ExComp TakeDeteriment(ExMatrix mat)
@@ -85,6 +79,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
         public override string ToString()
         {
             return ToTexString();
-        }
+        }
     }
 }

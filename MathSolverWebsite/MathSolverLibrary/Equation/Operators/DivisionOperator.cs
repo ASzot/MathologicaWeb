@@ -1,9 +1,9 @@
 ﻿using MathSolverWebsite.MathSolverLibrary.Equation.Functions;
+using MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg;
 using MathSolverWebsite.MathSolverLibrary.Equation.Term;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
 {
@@ -703,7 +703,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 if (numDen != null)
                 {
                     AlgebraTerm num = numDen[0];
-					AlgebraTerm den = numDen[1];
+                    AlgebraTerm den = numDen[1];
 
                     AlgebraTerm reversedFrac = AlgebraTerm.FromFraction(den, num);
                     ExComp reverseFracMulResult = MulOp.StaticCombine(ex1, reversedFrac);
@@ -771,7 +771,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                         if (remainder.IsEqualTo(ex2))
                             return ex1Gcf;
                     }
-
                 }
             }
 

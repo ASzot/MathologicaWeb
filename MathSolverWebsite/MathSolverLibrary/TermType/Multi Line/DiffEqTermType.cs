@@ -1,6 +1,5 @@
 ﻿using MathSolverWebsite.MathSolverLibrary.Equation;
 using MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus;
-using System;
 using MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs;
 using System.Collections.Generic;
 
@@ -101,7 +100,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 _errorMsg = "Internal error";
                 return true;
             }
-            
+
             List<string> cmds = new List<string>();
 
             if (probSolveVar == null || probSolveVar == funcIden.Var.Var)

@@ -1,16 +1,11 @@
-﻿using System;
+﻿using MathSolverWebsite.MathSolverLibrary.Equation.Functions;
+using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
-using MathSolverWebsite.MathSolverLibrary.Equation;
-using MathSolverWebsite.MathSolverLibrary.Equation.Structural;
-using MathSolverWebsite.MathSolverLibrary.Equation.Functions;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
 {
-    static class MatrixHelper
+    internal static class MatrixHelper
     {
         public static ExMatrix CreateMatrix(List<ExComp> exs)
         {
@@ -123,7 +118,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
         {
             if (!(ex is ExMatrix))
             {
-
                 //if (ex is AlgebraTerm)
                 //{
                 //    AlgebraTerm term = ex as AlgebraTerm;
@@ -150,7 +144,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
             }
 
             ExMatrix mat1 = ex as ExMatrix;
-            
+
             // Matrix multiplication.
             if (mat0.Cols != mat1.Rows)
                 return Number.Undefined;
@@ -208,7 +202,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
             else if (ex is AlgebraTerm)
             {
                 AlgebraTerm term = ex as AlgebraTerm;
-                foreach (var subComp in term.SubComps)
+                foreach (ExComp subComp in term.SubComps)
                 {
                     if (TermContainsMatrices(subComp))
                         return true;

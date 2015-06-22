@@ -59,13 +59,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 pEvalData.WorkMgr.FromSides(left, right, "Simplify.");
             }
 
-            var powersOfVar = left.GetPowersOfVar(solveFor.ToAlgebraComp());
+            System.Collections.Generic.List<ExComp> powersOfVar = left.GetPowersOfVar(solveFor.ToAlgebraComp());
 
             if (powersOfVar.Count == 1)
                 return p_agSolver.SolveEq(solveFor, left, right, ref pEvalData);
 
             bool allValid = true;
-            foreach (var pow in powersOfVar)
+            foreach (ExComp pow in powersOfVar)
             {
                 if (!(pow is Number))
                 {

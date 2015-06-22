@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
+﻿using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
 using MathSolverWebsite.MathSolverLibrary.TermType;
-using MathSolverWebsite.MathSolverLibrary.Equation.Term;
+using System.Collections.Generic;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 {
-    class TrigSubTech
+    internal class TrigSubTech
     {
         public TrigSubTech()
         {
@@ -211,7 +206,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             return null;
         }
 
-        private static ExComp RecursiveTrigSubIn(AlgebraTerm term, ExComp hyp, ExComp opp, ExComp adj, AlgebraComp subInVar, ref List<string> defDispStrs, 
+        private static ExComp RecursiveTrigSubIn(AlgebraTerm term, ExComp hyp, ExComp opp, ExComp adj, AlgebraComp subInVar, ref List<string> defDispStrs,
             ref TermType.EvalData pEvalData)
         {
             for (int i = 0; i < term.TermCount; ++i)
@@ -281,7 +276,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 dispGp = group;
         }
 
-        private static ExComp TrigSubstitutionGetSub(ExComp[] group, AlgebraComp dVar, out AlgebraComp subVar, out ExComp subOut, out AlgebraTerm subbedResult, ref EvalData pEvalData, 
+        private static ExComp TrigSubstitutionGetSub(ExComp[] group, AlgebraComp dVar, out AlgebraComp subVar, out ExComp subOut, out AlgebraTerm subbedResult, ref EvalData pEvalData,
             ExComp[] dispGp, List<ExComp[]> dispSubGps, int index, int subIndex)
         {
             string subVarStr = "$theta";
@@ -306,7 +301,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     int subSubbedIndex = -1;
                     for (int j = 0; j < subGps.Count; ++j)
                     {
-                        subSubbedResult = TrigSubstitutionGetSub(subGps[j], dVar, out subVar, out subOut, out subbedResult, ref pEvalData, group.CloneGroup(), 
+                        subSubbedResult = TrigSubstitutionGetSub(subGps[j], dVar, out subVar, out subOut, out subbedResult, ref pEvalData, group.CloneGroup(),
                             subGps.CloneGpList(), i, j);
                         if (subSubbedResult != null)
                         {

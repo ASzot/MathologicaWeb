@@ -1,10 +1,9 @@
-﻿using System;
-
-namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
+﻿namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 {
     internal class ChooseFunction : AppliedFunction_NArgs
     {
         private const string IDEN = "C";
+
         public ExComp Bottom
         {
             get { return _args[1]; }
@@ -102,6 +101,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         {
             return "((" + Top.ToTexString() + "), (" + Bottom.ToTexString() + "))";
         }
+
         public override string FinalToAsciiString()
         {
             return "((" + TopTerm.FinalToAsciiString() + "), (" + BottomTerm.FinalToAsciiString() + "))";

@@ -1,6 +1,5 @@
 ﻿using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
 using MathSolverWebsite.MathSolverLibrary.Equation.Term;
-using MathSolverWebsite.MathSolverLibrary.Equation;
 
 using System.Collections.Generic;
 
@@ -381,7 +380,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     // Put all of the imaginary numbers back under the radical.
                     if (varTo.Length == 1 && varTo[0] is PowerFunction && (varTo[0] as PowerFunction).IsRadical())
                     {
-
                         if (imaginaryNumbers.Count != 0)
                         {
                             PowerFunction innerPf = varTo[0] as PowerFunction;
@@ -663,7 +661,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             lastStep.GoDown(ref pEvalData);
             pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "lim_{" + _varFor.ToDispString() + "=" + nValTo.ToDispString() + "^{+}}" +
-                "(" + innerStr + ")=lim_{" + _varFor.ToDispString() + "=" + nValTo.ToDispString() + "}(" +  WorkMgr.ToDisp(posSimp) + ")" + WorkMgr.EDM, 
+                "(" + innerStr + ")=lim_{" + _varFor.ToDispString() + "=" + nValTo.ToDispString() + "}(" + WorkMgr.ToDisp(posSimp) + ")" + WorkMgr.EDM,
                 "As the limit approaches from the positive direction.");
             ExComp posEval = Limit.TakeLim(posSimp.Clone(), _varFor, nValTo, ref pEvalData);
             if (posEval is AlgebraTerm)
@@ -681,7 +679,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             lastStep.GoDown(ref pEvalData);
             pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "lim_{" + _varFor.ToDispString() + "=" + nValTo.ToDispString() + "^{-}}" +
-                "(" + innerStr + ")=lim_{" + _varFor.ToDispString() + "=" + nValTo.ToDispString() + "}(" + WorkMgr.ToDisp(negSimp) + ")" + WorkMgr.EDM, 
+                "(" + innerStr + ")=lim_{" + _varFor.ToDispString() + "=" + nValTo.ToDispString() + "}(" + WorkMgr.ToDisp(negSimp) + ")" + WorkMgr.EDM,
                 "As the limit approaches from the negative direction.");
             ExComp negEval = Limit.TakeLim(negSimp.Clone(), _varFor, nValTo, ref pEvalData);
             if (negEval is AlgebraTerm)
@@ -692,7 +690,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             lastStep.WorkHtml = WorkMgr.STM + "lim_{" + _varFor.ToDispString() + "=" + nValTo.ToDispString() + "^{-}}" +
                 "(" + innerStr + ")=" + WorkMgr.ToDisp(negEval) + WorkMgr.EDM;
-
 
             pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "lim_{" + _varFor.ToDispString() + "=" + nValTo.ToDispString() + "^{-}}(" +
                 innerStr + ") \\ne lim_{" + _varFor.ToDispString() + "=" + nValTo.ToDispString() + "^{+}}(" + innerStr + ")" + WorkMgr.EDM,

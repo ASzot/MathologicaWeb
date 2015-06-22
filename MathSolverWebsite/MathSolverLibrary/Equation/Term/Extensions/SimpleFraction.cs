@@ -1,5 +1,5 @@
-﻿using System;
-using MathSolverWebsite.MathSolverLibrary.Equation.Functions;
+﻿using MathSolverWebsite.MathSolverLibrary.Equation.Functions;
+using System;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
 {
@@ -113,10 +113,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
             if (!Num.Contains(Constant.ParseConstant(@"pi")))
                 return false;
 
-            var numGroups = Num.GetGroupsNoOps();
+            System.Collections.Generic.List<ExComp[]> numGroups = Num.GetGroupsNoOps();
             if (numGroups.Count != 1)
                 return false;
-            var numGroup = numGroups[0];
+            ExComp[] numGroup = numGroups[0];
 
             if (numGroup.Length == 2)
             {

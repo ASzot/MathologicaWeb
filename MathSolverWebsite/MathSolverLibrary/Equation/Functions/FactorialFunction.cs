@@ -55,7 +55,6 @@
             return InnerEx.ToString() + "! ";
         }
 
-
         public override string FinalToAsciiString()
         {
             return ToAsciiString();

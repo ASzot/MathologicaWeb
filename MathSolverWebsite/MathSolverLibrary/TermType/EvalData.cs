@@ -1,7 +1,5 @@
 ﻿using MathSolverWebsite.MathSolverLibrary.Equation;
 using System.Collections.Generic;
-using System.Linq;
-using System;
 
 namespace MathSolverWebsite.MathSolverLibrary.TermType
 {
@@ -21,7 +19,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
         private string[] _graphEqStrs = null;
         private InputType _inputType = InputType.Invalid;
         private InputAddType _inputAddType = InputAddType.Invalid;
-        private List<AndRestriction> _variableRestrictions = null; 
+        private List<AndRestriction> _variableRestrictions = null;
 
         /// <summary>
         /// Can return null if the input type is invalid.
@@ -176,7 +174,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             {
                 _graphVar = graphVar;
                 AlgebraTerm term = graphEx.ToAlgTerm();
-                var vars = term.GetAllAlgebraCompsStr();
+                List<string> vars = term.GetAllAlgebraCompsStr();
                 if (vars.Count != 1)
                     return false;
 

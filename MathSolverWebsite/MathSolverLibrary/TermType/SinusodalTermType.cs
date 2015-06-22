@@ -83,7 +83,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             {
                 if (!(left is AlgebraComp && !right.ToAlgTerm().Contains(left as AlgebraComp)) &&
                     !(right is AlgebraComp && !left.ToAlgTerm().Contains(right as AlgebraComp)))
-                return false;
+                    return false;
             }
 
             if (!eqInfo.HasOnlyOrFunctions(FunctionType.Sinusodal))

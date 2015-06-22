@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MathSolverWebsite.MathSolverLibrary.Information_Helpers;
+﻿using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
 using MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg;
-using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
+using MathSolverWebsite.MathSolverLibrary.Information_Helpers;
+using System.Collections.Generic;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
 {
-    class LineIntegral : Integral
+    internal class LineIntegral : Integral
     {
         private AlgebraComp _lineIden;
 
@@ -21,7 +17,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
         public LineIntegral(ExComp innerEx)
             : base(innerEx)
         {
-
         }
 
         public override ExComp Clone()
@@ -151,7 +146,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
                 innerTerm = innerTerm.Substitute(new AlgebraComp(useDefs[i].Data1), useDefs[i].Data2);
             }
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + this.FinalToDispStr() + "=" + "\\oint_{" + _lineIden.ToDispString() + 
+            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + this.FinalToDispStr() + "=" + "\\oint_{" + _lineIden.ToDispString() +
                 "}(" + innerTerm.FinalToDispStr() + ")ds" + WorkMgr.EDM, "Substitute in the parameterized path.");
 
             ExComp totalInner = MulOp.StaticCombine(innerTerm, surfaceDifferential);
@@ -273,7 +268,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
 
             if (vectorFunc == null && (paraFuncs == null || paraFuncs.Count == 0))
                 return this;
-
 
             TypePair<string, ExComp>[] useDefs;
             AlgebraComp pathVar = null;

@@ -1,16 +1,14 @@
 ﻿using MathSolverWebsite.MathSolverLibrary.Equation;
-using MathSolverWebsite.MathSolverLibrary.Parsing;
-using MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg;
-using System.Collections.Generic;
-using System.Linq;
 using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
-
+using MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg;
+using MathSolverWebsite.MathSolverLibrary.Parsing;
+using System.Collections.Generic;
 using LexemeTable = System.Collections.Generic.List<
 MathSolverWebsite.MathSolverLibrary.TypePair<MathSolverWebsite.MathSolverLibrary.Parsing.LexemeType, string>>;
 
 namespace MathSolverWebsite.MathSolverLibrary.TermType
 {
-    class LinearAlgebraSolve : TermType
+    internal class LinearAlgebraSolve : TermType
     {
         private string GAUSSIAN_SOLVE = "Gaussian solve for ";
         private string INVERSE_SOLVE = "Solve using inverses";
@@ -19,6 +17,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
         /// Can either be a vector or a variable.
         /// </summary>
         private ExMatrix _B = null;
+
         private bool _aFirst = true;
         private AlgebraComp _x;
         private ExMatrix _X;
@@ -289,7 +288,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             if (solveForStr.Contains(","))
             {
                 string[] solveVars = solveForStr.Split(',');
-                
+
                 // First do a system of equations.
                 EqSet eq0 = _eqSets[0];
                 EqSet eq1 = _eqSets[1];
@@ -297,27 +296,27 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 List<LexemeTable> lts = new List<LexemeTable>();
 
                 LexemeTable lt0 = new LexemeTable();
-                lt0.Add(new TypePair<LexemeType,string>(LexemeType.Identifier, solveVars[0]));
-                lt0.Add(new TypePair<LexemeType,string>(LexemeType.Identifier, solveVars[1]));
+                lt0.Add(new TypePair<LexemeType, string>(LexemeType.Identifier, solveVars[0]));
+                lt0.Add(new TypePair<LexemeType, string>(LexemeType.Identifier, solveVars[1]));
 
                 lts.Add(lt0);
                 lts.Add(new LexemeTable());
 
                 LexemeTable lt1 = new LexemeTable();
-                lt1.Add(new TypePair<LexemeType,string>(LexemeType.Identifier, solveVars[0]));
-                lt1.Add(new TypePair<LexemeType,string>(LexemeType.Identifier, solveVars[1]));
+                lt1.Add(new TypePair<LexemeType, string>(LexemeType.Identifier, solveVars[0]));
+                lt1.Add(new TypePair<LexemeType, string>(LexemeType.Identifier, solveVars[1]));
 
                 lts.Add(lt1);
                 lts.Add(new LexemeTable());
 
-                Dictionary<string, int> allVars = new Dictionary<string,int>();
+                Dictionary<string, int> allVars = new Dictionary<string, int>();
                 allVars.Add(solveVars[0], 1);
                 allVars.Add(solveVars[1], 1);
 
                 Solving.EquationSystemSolve solveMethod = new Solving.EquationSystemSolve(agSolver);
                 SolveResult sysSolveResult = solveMethod.SolveEquationArray(_eqSets.GetRange(0, 2), lts, allVars, ref pEvalData);
 
-                // Check that the results hold in the other equations. 
+                // Check that the results hold in the other equations.
                 for (int i = 2; i < _eqSets.Count; ++i)
                 {
                     AlgebraTerm leftSubbed = _eqSets[i].LeftTerm;

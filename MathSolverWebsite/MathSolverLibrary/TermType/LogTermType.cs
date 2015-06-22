@@ -7,10 +7,9 @@ using System.Linq;
 
 namespace MathSolverWebsite.MathSolverLibrary.TermType
 {
-      ///////////////////////////////
-     // This class is never used.
+    ///////////////////////////////
+    // This class is never used.
     /// //////////////////////////
-
 
     internal class LogTermType : TermType
     {

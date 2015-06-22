@@ -1,6 +1,6 @@
 ﻿using MathSolverWebsite.MathSolverLibrary.Equation.Term;
-using System.Text.RegularExpressions;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation
 {
@@ -32,7 +32,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public bool HasValidInputArgs
         {
-            get 
+            get
             {
                 if (_args == null)
                     return false;
@@ -41,7 +41,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                     if (arg.IsTrash)
                         return false;
                 }
-                return true; 
+                return true;
             }
         }
 
@@ -103,7 +103,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="iden">The identifier of the function.</param>
         /// <param name="args">The definition of the arguments. Null is not acceptable.</param>
@@ -141,27 +141,27 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             if (_callArgs.Length != def.Key._args.Length)
                 return null;
 
-                for (int i = 0; i < _args.Length; ++i)
+            for (int i = 0; i < _args.Length; ++i)
+            {
+                AlgebraComp varParameter = def.Key._args[i];
+                AlgebraTerm input = _callArgs[i].ToAlgTerm();
+                // The input for some reason isn't weak workable most of the time.
+                ExComp inputEx = input.WeakMakeWorkable(ref pEvalData);
+                if (inputEx == null)
+                    return null;
+                if (callSubFuncs)
                 {
-                    AlgebraComp varParameter = def.Key._args[i];
-                    AlgebraTerm input = _callArgs[i].ToAlgTerm();
-                    // The input for some reason isn't weak workable most of the time.
-                    ExComp inputEx = input.WeakMakeWorkable(ref pEvalData);
-                    if (inputEx == null)
-                        return null;
-                    if (callSubFuncs)
+                    if (inputEx is AlgebraTerm)
                     {
-                        if (inputEx is AlgebraTerm)
-                        {
-                            if (!(inputEx as AlgebraTerm).CallFunctions(ref pEvalData))
-                                return null;
-                        }
-                        else if (inputEx is FunctionDefinition)
-                            inputEx = (inputEx as FunctionDefinition).CallFunc(ref pEvalData);
+                        if (!(inputEx as AlgebraTerm).CallFunctions(ref pEvalData))
+                            return null;
                     }
-
-                    thisDefTerm = thisDefTerm.Substitute(varParameter, inputEx);
+                    else if (inputEx is FunctionDefinition)
+                        inputEx = (inputEx as FunctionDefinition).CallFunc(ref pEvalData);
                 }
+
+                thisDefTerm = thisDefTerm.Substitute(varParameter, inputEx);
+            }
 
             thisDefTerm.EvaluateFunctions(false, ref pEvalData);
             thisDefTerm = thisDefTerm.EvaluatePowers(ref pEvalData);

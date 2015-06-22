@@ -1,9 +1,6 @@
-﻿using System;
+﻿using MathSolverWebsite.MathSolverLibrary.Equation;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-
-using MathSolverWebsite.MathSolverLibrary.Equation;
 
 namespace MathSolverWebsite.MathSolverLibrary
 {
@@ -20,7 +17,6 @@ namespace MathSolverWebsite.MathSolverLibrary
 
     public static class StringHelper
     {
-
         public static string RemoveSurroundingParas(this string str)
         {
             if (str.StartsWith("(") && str.EndsWith(")"))

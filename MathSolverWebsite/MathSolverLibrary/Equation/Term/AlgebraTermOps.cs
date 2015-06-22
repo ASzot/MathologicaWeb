@@ -40,8 +40,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             if (term1.TermCount == 0)
                 return term2;
 
-            var op = new Operators.SubOp();
-            ExComp combined = op.Combine(term1, term2);
+            ExComp combined = Operators.SubOp.StaticCombine(term1, term2);
             if (combined is AlgebraTerm)
                 return combined as AlgebraTerm;
             else
@@ -80,8 +79,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 return term;
 
             AlgebraTerm groupTerm = group.ToTerm();
-            var op = new Operators.MulOp();
-            ExComp combined = op.Combine(term, groupTerm);
+            ExComp combined = Operators.MulOp.StaticCombine(term, groupTerm);
             if (combined is AlgebraTerm)
                 return combined as AlgebraTerm;
             else
@@ -99,8 +97,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             if (term1.TermCount == 0)
                 return term2;
 
-            var op = new Operators.MulOp();
-            ExComp combined = op.Combine(term1, term2);
+            ExComp combined = Operators.MulOp.StaticCombine(term1, term2);
             if (combined is AlgebraTerm)
                 return combined as AlgebraTerm;
             else
@@ -117,8 +114,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 return term;
 
             AlgebraTerm groupTerm = group.ToTerm();
-            var op = new Operators.DivOp();
-            ExComp combined = op.Combine(term, groupTerm);
+            ExComp combined = Operators.DivOp.StaticCombine(term, groupTerm);
             if (combined is AlgebraTerm)
                 return combined as AlgebraTerm;
             else
@@ -136,8 +132,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             if (term1.TermCount == 0)
                 return Number.Zero.ToAlgTerm();
 
-            var op = new Operators.DivOp();
-            ExComp combined = op.Combine(term1, term2);
+            ExComp combined = Operators.DivOp.StaticCombine(term1, term2);
             if (combined is AlgebraTerm)
                 return combined as AlgebraTerm;
             else
@@ -154,8 +149,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 return term;
 
             AlgebraTerm groupTerm = group.ToTerm();
-            var op = new Operators.AddOp();
-            ExComp combined = op.Combine(term, groupTerm);
+            ExComp combined = Operators.AddOp.StaticCombine(term, groupTerm);
             if (combined is AlgebraTerm)
                 return combined as AlgebraTerm;
             else
@@ -173,8 +167,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             if (term1.TermCount == 0)
                 return term2;
 
-            var op = new Operators.AddOp();
-            ExComp combined = op.Combine(term1, term2);
+            ExComp combined = Operators.AddOp.StaticCombine(term1, term2);
             if (combined is AlgebraTerm)
                 return combined as AlgebraTerm;
             else

@@ -96,7 +96,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                     pEvalData.AttemptSetInputType(TermType.InputType.SOE_Sub_2Var);
                 else if (equations.Count == 3)
                     pEvalData.AttemptSetInputType(TermType.InputType.SOE_Sub_3Var);
-                
+
                 return SolveEquationArraySubstitution(equations, lexemeTables, ref pEvalData);
             }
             else if (_solveMethod == EquationSystemSolveMethod.Elimination)
@@ -300,7 +300,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
             if (pEvalData.WorkMgr.AllowWork)
             {
-                var sides = EqSet.GetSides(equations).ToList();
+                List<AlgebraTerm> sides = EqSet.GetSides(equations).ToList();
                 string finalStr = "";
                 for (int i = 0; i < sides.Count; i += 2)
                 {
@@ -320,7 +320,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
             for (int i = iterGenerations.Count - 1; i >= 0; --i)
             {
-                var eqSet = iterGenerations[i];
+                EqSet eqSet = iterGenerations[i];
 
                 AlgebraVar solveFor = GetLowestComplexityVar(eqSet.LeftTerm, eqSet.RightTerm);
                 if (solveFor.IsGarbage())
@@ -401,7 +401,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             List<LexemeTable> eqLexemeTables, ref TermType.EvalData pEvalData, bool ascending = true)
         {
             List<EqSet> clonedEqs = (from completeEq in completeEqs
-                                           select completeEq.Clone()).ToList();
+                                     select completeEq.Clone()).ToList();
 
             // Really this whole ascending thing really doesn't do much.
             int startVal;
