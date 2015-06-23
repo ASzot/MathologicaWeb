@@ -53,7 +53,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                 return TrigFunction.FinalEvalAngle(new Number(dACos), pEvalData.GetUseRad());
             }
 
-            if (dACos.IsInteger())
+            if (DoubleHelper.IsInteger(dACos))
                 return TrigFunction.FinalEvalAngle(new Number(dACos), pEvalData.GetUseRad());
 
             return this;
@@ -318,7 +318,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                 return TrigFunction.FinalEvalAngle(new Number(dASin), pEvalData.GetUseRad());
             }
 
-            if (dASin.IsInteger())
+            if (DoubleHelper.IsInteger(dASin))
                 return TrigFunction.FinalEvalAngle(new Number(dASin), pEvalData.GetUseRad());
 
             return this;
@@ -433,7 +433,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                 return TrigFunction.FinalEvalAngle(new Number(dATan), pEvalData.GetUseRad());
             }
 
-            if (dATan.IsInteger())
+            if (DoubleHelper.IsInteger(dATan))
                 return TrigFunction.FinalEvalAngle(new Number(dATan), pEvalData.GetUseRad());
 
             return this;

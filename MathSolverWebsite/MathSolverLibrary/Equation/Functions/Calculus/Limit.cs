@@ -92,7 +92,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 string limStr = "";
                 for (int i = 0; i < reducedGps.Count; ++i)
                 {
-                    limStr += "lim_{" + _varFor.ToDispString() + " \\to " + _valTo.ToDispString() + "}(" + reducedGps[i].ToAlgTerm().FinalToDispStr() + ")";
+                    limStr += "lim_{" + _varFor.ToDispString() + " \\to " + _valTo.ToDispString() + "}(" + GroupHelper.ToAlgTerm(reducedGps[i]).FinalToDispStr() + ")";
                     if (i + 1 < reducedGps.Count)
                         limStr += "+";
                 }
@@ -103,7 +103,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             ExComp overall = null;
             for (int i = 0; i < reducedGps.Count; ++i)
             {
-                AlgebraTerm reducedGpTerm = reducedGps[i].ToAlgTerm();
+                AlgebraTerm reducedGpTerm = GroupHelper.ToAlgTerm(reducedGps[i]);
                 _reducedInner = reducedGpTerm;
 
                 ExComp eval = infEval ? EvaluateLimGpInf(reducedGpTerm, ref pEvalData) : EvaluateLimGp(reducedGpTerm, ref pEvalData);
@@ -347,7 +347,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     // Remove the constants
                     ExComp[] gp = gps[0];
                     ExComp[] varTo, constTo;
-                    gp.GetConstVarTo(out varTo, out constTo, _varFor);
+                    GroupHelper.GetConstVarTo(gp, out varTo, out constTo, _varFor);
 
                     if (varTo.Length != 1)
                         return null;
@@ -373,7 +373,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                         if (exConst is Number && (exConst as Number).GetRealComp() == 0.0 && (exConst as Number).GetImagComp() != 0.0)
                         {
                             imaginaryNumbers.Add(exConst as Number);
-                            constTo.RemoveEx(exConst);
+                            GroupHelper.RemoveEx(constTo, exConst);
                         }
                     }
 
@@ -800,10 +800,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
                 ExComp[] group = groups[i];
                 ExComp[] constTo, varTo;
-                group.GetConstVarTo(out varTo, out constTo, varFor);
+                GroupHelper.GetConstVarTo(@group, out varTo, out constTo, varFor);
                 if (varTo.Length == 0)
                 {
-                    finalTerm.Add(DivOp.StaticCombine(group.ToAlgTerm(), dividend));
+                    finalTerm.Add(DivOp.StaticCombine(GroupHelper.ToAlgTerm(@group), dividend));
                     continue;
                 }
 
@@ -813,7 +813,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
                 ExComp varToEx = varTo[0];
                 ExComp compDiv = ComponentWiseDiv(varToEx.ToAlgTerm(), dividend, varFor);
-                ExComp finalAdd = constTo.Length == 0 ? compDiv : MulOp.StaticCombine(constTo.ToAlgTerm(), compDiv);
+                ExComp finalAdd = constTo.Length == 0 ? compDiv : MulOp.StaticCombine(GroupHelper.ToAlgTerm(constTo), compDiv);
                 finalTerm.Add(finalAdd);
             }
 
@@ -945,7 +945,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             List<ExComp[]> groups = term.GetGroups();
             for (int i = 0; i < groups.Count; ++i)
             {
-                AlgebraTerm[] numDen = groups[i].ToAlgTerm().GetNumDenFrac();
+                AlgebraTerm[] numDen = GroupHelper.ToAlgTerm(groups[i]).GetNumDenFrac();
 
                 if (numDen != null && !numDen[0].Contains(_varFor) && numDen[1].Contains(_varFor))
                     groups.RemoveAt(i--);
@@ -1089,8 +1089,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             List<ExComp[]> numGps = numDen[0].GetGroups();
             if (numGps.Count != 2)
                 return null;
-            ExComp numGp0 = numGps[0].ToAlgTerm().RemoveRedundancies();
-            ExComp numGp1 = numGps[1].ToAlgTerm().RemoveRedundancies();
+            ExComp numGp0 = GroupHelper.ToAlgTerm(numGps[0]).RemoveRedundancies();
+            ExComp numGp1 = GroupHelper.ToAlgTerm(numGps[1]).RemoveRedundancies();
 
             bool numGp0IsRadical = (numGp0 is PowerFunction && (numGp0 as PowerFunction).IsRadical());
             bool numGp1IsRadical = (numGp1 is PowerFunction && (numGp1 as PowerFunction).IsRadical());

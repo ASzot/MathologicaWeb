@@ -39,7 +39,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
             foreach (ExComp[] group in groups)
             {
-                if (group.GroupContains(term))
+                if (GroupHelper.GroupContains(@group, term))
                     matchingGroups.Add(group);
             }
 
@@ -73,7 +73,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 {
                     if (gpCmp is Functions.PowerFunction && (gpCmp as Functions.PowerFunction).GetPower().IsEqualTo(power))
                     {
-                        matchingTerms.Add(gp.ToAlgTerm());
+                        matchingTerms.Add(GroupHelper.ToAlgTerm(gp));
                         break;
                     }
                 }
@@ -125,7 +125,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             List<ExComp[]> groups = GetGroups();
 
             IEnumerable<AlgebraGroup> constantGroups = from gp in groups
-                                 where !gp.GroupContains(varFor)
+                                 where !GroupHelper.GroupContains(gp, varFor)
                                  select new AlgebraGroup(gp);
 
             return constantGroups.ToList();
@@ -137,7 +137,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
             for (int i = 0; i < groups.Count; ++i)
             {
-                groups[i] = groups[i].RemoveOperators().RemoveRedundancies();
+                groups[i] = GroupHelper.RemoveRedundancies(GroupHelper.RemoveOperators(groups[i]));
             }
 
             return groups;
@@ -148,7 +148,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             List<ExComp[]> groups = GetGroups();
 
             IEnumerable<AlgebraGroup> variableGroups = from gp in groups
-                                 where gp.GroupContains(varFor)
+                                 where GroupHelper.GroupContains(gp, varFor)
                                  select new AlgebraGroup(gp);
 
             return variableGroups.ToList();
@@ -159,7 +159,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             List<ExComp[]> groups = GetGroupsNoOps();
 
             IEnumerable<AlgebraGroup> variableGroups = from gp in groups
-                                 where gp.GroupContains(varFor)
+                                 where GroupHelper.GroupContains(gp, varFor)
                                  select new AlgebraGroup(gp);
 
             return variableGroups.ToList();
@@ -199,15 +199,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 return null;
 
             ExComp[] group = groups[0];
-            if (!group.ContainsFrac())
+            if (!GroupHelper.ContainsFrac(@group))
                 return null;
-            ExComp[] num = group.GetNumerator();
-            ExComp[] den = group.GetDenominator();
+            ExComp[] num = GroupHelper.GetNumerator(@group);
+            ExComp[] den = GroupHelper.GetDenominator(@group);
 
             if (den.Length == 0)
                 return null;
 
-            AlgebraTerm[] numDenTerm = { num.ToAlgTerm(), den.ToAlgTerm() };
+            AlgebraTerm[] numDenTerm = { GroupHelper.ToAlgTerm(num), GroupHelper.ToAlgTerm(den) };
             return numDenTerm;
         }
 
@@ -219,9 +219,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
             foreach (ExComp[] group in groups)
             {
-                if (group.ContainsFrac())
+                if (GroupHelper.ContainsFrac(@group))
                 {
-                    AlgebraTerm denTerm = group.GetDenominator().ToAlgTerm();
+                    AlgebraTerm denTerm = GroupHelper.ToAlgTerm(GroupHelper.GetDenominator(@group));
 
                     if (denTerm.Contains(varFor))
                     {

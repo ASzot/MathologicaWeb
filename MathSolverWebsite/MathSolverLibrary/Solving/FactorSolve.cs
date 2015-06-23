@@ -46,7 +46,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 return p_agSolver.Solve(solveFor, left, right, ref pEvalData);
 
             ExComp[] onlyGroup = nonZeroTerm.GetGroupsNoOps()[0];
-            onlyGroup = onlyGroup.RemoveOneCoeffs();
+            onlyGroup = GroupHelper.RemoveOneCoeffs(onlyGroup);
 
             // The factors are the algebra terms of this groups.
             AlgebraTerm[] factors = (from onlyGroupComp in onlyGroup

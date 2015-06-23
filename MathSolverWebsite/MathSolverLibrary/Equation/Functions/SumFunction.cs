@@ -42,7 +42,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         private bool? Converges(ref TermType.EvalData pEvalData, out ExComp result, ExComp[] gp)
         {
             result = null;
-            if (!gp.GroupContains(GetIterVar()))
+            if (!GroupHelper.GroupContains(gp, GetIterVar()))
             {
                 return false;
             }
@@ -50,16 +50,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             // Take out the constants.
             ExComp[] varGp;
             ExComp[] constGp;
-            gp.GetConstVarTo(out varGp, out constGp, GetIterVar());
+            GroupHelper.GetConstVarTo(gp, out varGp, out constGp, GetIterVar());
 
             if (constGp.Length != 0)
             {
-                pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + constGp.ToAlgTerm().FinalToDispStr() + "*\\sum_{" + GetIterVar().ToDispString() + "=" +
-                    GetIterStart().ToAlgTerm().FinalToDispStr() + "}^{" + GetIterCount().ToAlgTerm().ToDispString() + "}" + varGp.ToAlgTerm().FinalToDispStr() + WorkMgr.EDM,
+                pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + GroupHelper.ToAlgTerm(constGp).FinalToDispStr() + "*\\sum_{" + GetIterVar().ToDispString() + "=" +
+                    GetIterStart().ToAlgTerm().FinalToDispStr() + "}^{" + GetIterCount().ToAlgTerm().ToDispString() + "}" + GroupHelper.ToAlgTerm(varGp).FinalToDispStr() + WorkMgr.EDM,
                     "Take constants out.");
             }
 
-            AlgebraTerm innerTerm = varGp.ToAlgTerm();
+            AlgebraTerm innerTerm = GroupHelper.ToAlgTerm(varGp);
             string innerExStr = innerTerm.FinalToDispStr();
             string thisStrNoMathMark = "\\sum_{" + GetIterVar().ToDispString() + "=" + GetIterStart().ToAlgTerm().FinalToDispStr() + "}^{" +
                 GetIterCount().ToAlgTerm().ToDispString() + "}" + innerExStr;
@@ -67,7 +67,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
             // The basic divergence test.
             pEvalData.GetWorkMgr().FromFormatted(thisStr, "If " + WorkMgr.STM +
-                "\\lim_{" + GetIterVar().ToDispString() + " \\to \\infty}" + gp.ToAlgTerm().FinalToDispStr() + "\\ne 0 " + WorkMgr.EDM + " then the series is divergent");
+                "\\lim_{" + GetIterVar().ToDispString() + " \\to \\infty}" + GroupHelper.ToAlgTerm(gp).FinalToDispStr() + "\\ne 0 " + WorkMgr.EDM + " then the series is divergent");
 
             ExComp divTest = Limit.TakeLim(innerTerm, GetIterVar(), Number.GetPosInfinity(), ref pEvalData);
             if (divTest is Limit)
@@ -181,9 +181,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
                             if (constGp.Length != 0)
                             {
-                                result = MulOp.StaticCombine(result, constGp.ToAlgTerm());
-                                pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + constGp.ToAlgTerm().FinalToDispStr() + "*\\sum_{" + GetIterVar().ToDispString() + "=" +
-                                    GetIterStart().ToAlgTerm().FinalToDispStr() + "}^{" + GetIterCount().ToAlgTerm().ToDispString() + "}" + varGp.ToAlgTerm().FinalToDispStr() + "=" +
+                                result = MulOp.StaticCombine(result, GroupHelper.ToAlgTerm(constGp));
+                                pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + GroupHelper.ToAlgTerm(constGp).FinalToDispStr() + "*\\sum_{" + GetIterVar().ToDispString() + "=" +
+                                    GetIterStart().ToAlgTerm().FinalToDispStr() + "}^{" + GetIterCount().ToAlgTerm().ToDispString() + "}" + GroupHelper.ToAlgTerm(varGp).FinalToDispStr() + "=" +
                                     WorkMgr.ToDisp(result) + WorkMgr.EDM,
                                     "Multiply the by the constants.");
                             }
@@ -305,7 +305,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                     WorkStep lastStep = null;
                     if (count < MAX_WORK_STEP_COUNT)
                     {
-                        pEvalData.GetWorkMgr().FromFormatted("", "Evaluate the " + (i + 1).ToString() + (i + 1).GetCountingPrefix() + " term");
+                        pEvalData.GetWorkMgr().FromFormatted("", "Evaluate the " + (i + 1).ToString() + MathHelper.GetCountingPrefix((i + 1)) + " term");
                         lastStep = pEvalData.GetWorkMgr().GetLast();
                     }
 

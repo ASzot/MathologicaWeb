@@ -12,13 +12,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             string lowerStr = "", string upperStr = "")
         {
             string boundaryStr = (lowerStr == "" ? "" : "_" + lowerStr) + (upperStr == "" ? "" : "^" + upperStr);
-            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "\\int" + boundaryStr + "(" + gp.ToAlgTerm().FinalToDispStr() + ")\\d" + dVar.ToDispString() + WorkMgr.EDM,
+            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "\\int" + boundaryStr + "(" + GroupHelper.ToAlgTerm(gp).FinalToDispStr() + ")\\d" + dVar.ToDispString() + WorkMgr.EDM,
                 "Evaluate the integral.");
 
             // Take out all of the constants.
             ExComp[] varTo, constTo;
-            gp = gp.ForceDistributeExponent();
-            gp.GetConstVarTo(out varTo, out constTo, dVar);
+            gp = GroupHelper.ForceDistributeExponent(gp);
+            GroupHelper.GetConstVarTo(gp, out varTo, out constTo, dVar);
 
             if (varTo.Length == 1 && varTo[0] is PowerFunction && (varTo[0] as PowerFunction).GetPower().IsEqualTo(Number.GetNegOne()))
             {
@@ -28,10 +28,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 if (denGps.Count == 1)
                 {
                     // To be able to find the coefficient on a term like (28x)^4
-                    ExComp[] denGp = denGps[0].ForceDistributeExponent();
+                    ExComp[] denGp = GroupHelper.ForceDistributeExponent(denGps[0]);
                     ExComp[] denVarTo, denConstTo;
 
-                    denGp.GetConstVarTo(out denVarTo, out denConstTo, dVar);
+                    GroupHelper.GetConstVarTo(denGp, out denVarTo, out denConstTo, dVar);
 
                     if (denConstTo.Length != 0 && !(denConstTo.Length == 1 && denConstTo[0].IsEqualTo(Number.GetOne())))
                     {
@@ -41,19 +41,19 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                             tmpConstTo[i] = constTo[i];
                         }
 
-                        tmpConstTo[tmpConstTo.Length - 1] = new PowerFunction(denConstTo.ToAlgTerm(), Number.GetNegOne());
+                        tmpConstTo[tmpConstTo.Length - 1] = new PowerFunction(GroupHelper.ToAlgTerm(denConstTo), Number.GetNegOne());
                         constTo = tmpConstTo;
-                        varTo = new ExComp[] { new PowerFunction(denVarTo.ToAlgTerm(), Number.GetNegOne()) };
+                        varTo = new ExComp[] { new PowerFunction(GroupHelper.ToAlgTerm(denVarTo), Number.GetNegOne()) };
                     }
                 }
             }
 
             string constOutStr = "";
-            string constToStr = constTo.ToAlgTerm().FinalToDispStr();
+            string constToStr = GroupHelper.ToAlgTerm(constTo).FinalToDispStr();
             if (constTo.Length > 0)
             {
                 constOutStr = constToStr + "\\int(" +
-                    (varTo.Length == 0 ? "1" : varTo.ToAlgTerm().FinalToDispStr()) + ")\\d" + dVar.ToDispString();
+                    (varTo.Length == 0 ? "1" : GroupHelper.ToAlgTerm(varTo).FinalToDispStr()) + ")\\d" + dVar.ToDispString();
                 if (constToStr.Trim() != "1")
                     pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + constOutStr + WorkMgr.EDM, "Take out the constants.");
             }
@@ -70,7 +70,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
                     for (int i = 0; i < gps.Count; ++i)
                     {
-                        gpsStrs[i] = "\\int" + gps[i].ToAlgTerm().FinalToDispStr() + "\\d" + dVar.ToDispString();
+                        gpsStrs[i] = "\\int" + GroupHelper.ToAlgTerm(gps[i]).FinalToDispStr() + "\\d" + dVar.ToDispString();
                         overallStr += gpsStrs[i];
                         if (i != gps.Count - 1)
                             overallStr += "+";
@@ -115,7 +115,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
                     if (constTo.Length > 0)
                     {
-                        finalEx = MulOp.StaticCombine(finalEx, constTo.ToAlgTerm());
+                        finalEx = MulOp.StaticCombine(finalEx, GroupHelper.ToAlgTerm(constTo));
                         pEvalData.GetWorkMgr().FromSides(finalEx, null, "Multiply the constants back in.");
                     }
 
@@ -131,10 +131,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             {
                 if (constToStr.Trim() != "1")
                 {
-                    pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + constOutStr + "=" + WorkMgr.ToDisp(constTo.ToAlgTerm()) +
+                    pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + constOutStr + "=" + WorkMgr.ToDisp(GroupHelper.ToAlgTerm(constTo)) +
                         WorkMgr.ToDisp(antiDeriv) + WorkMgr.EDM, "Multiply the constants back in.");
                 }
-                return MulOp.StaticCombine(antiDeriv, constTo.ToAlgTerm());
+                return MulOp.StaticCombine(antiDeriv, GroupHelper.ToAlgTerm(constTo));
             }
             else
                 return antiDeriv;
@@ -171,7 +171,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
                 if (pIntInfo.ByPartsCount < IntegrationInfo.MAX_BY_PARTS_COUNT && (gp[0] is LogFunction || gp[0] is InverseTrigFunction))
                 {
-                    string thisStr = gp.ToAlgTerm().FinalToDispStr();
+                    string thisStr = GroupHelper.ToAlgTerm(gp).FinalToDispStr();
                     pIntInfo.IncPartsCount();
                     atmpt = SingularIntByParts(gp[0], dVar, thisStr, ref pIntInfo, ref pEvalData);
                     if (atmpt != null)
@@ -227,10 +227,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             if (gp.Length == 1 || gp.Length == 2)
             {
-                ExComp[] den = gp.GetDenominator();
+                ExComp[] den = GroupHelper.GetDenominator(gp);
                 if (den != null && den.Length == 1)
                 {
-                    ExComp[] num = gp.GetNumerator();
+                    ExComp[] num = GroupHelper.GetNumerator(gp);
                     if (num.Length == 1)
                     {
                         int prePFWorkStepCount = pEvalData.GetWorkMgr().GetWorkSteps().Count;
@@ -261,7 +261,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 if (pIntInfo.ByPartsCount < IntegrationInfo.MAX_BY_PARTS_COUNT)
                 {
                     int prevWorkStepCount = pEvalData.GetWorkMgr().GetWorkSteps().Count;
-                    string thisStr = gp.ToAlgTerm().FinalToDispStr();
+                    string thisStr = GroupHelper.ToAlgTerm(gp).FinalToDispStr();
                     pIntInfo.IncPartsCount();
                     // Is one of these a denominator because if so don't do integration by parts.
                     if (!(gp[0] is PowerFunction && (gp[0] as PowerFunction).IsDenominator()) && !(gp[1] is PowerFunction && (gp[1] as PowerFunction).IsDenominator()))
@@ -668,14 +668,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         private static ExComp TryU(ExComp[] group, ExComp uatmpt, AlgebraComp dVar, ref IntegrationInfo pIntInfo, ref EvalData pEvalData)
         {
-            string groupStr = group.CloneGroup().ToArray().ToAlgTerm().FinalToDispStr();
+            string groupStr = GroupHelper.ToAlgTerm(GroupHelper.CloneGroup(@group).ToArray()).FinalToDispStr();
             string thisStr = "\\int(" + groupStr + ")" + dVar.ToDispString();
             string atmptStr = uatmpt.ToAlgTerm().FinalToDispStr();
 
             pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "\\int (" + groupStr + ") \\d" + dVar.ToDispString() + WorkMgr.EDM,
                 "Use u-substitution.");
 
-            AlgebraTerm term = group.ToAlgNoRedunTerm();
+            AlgebraTerm term = GroupHelper.ToAlgNoRedunTerm(@group);
             AlgebraComp subInVar;
             if (term.Contains(new AlgebraComp("u")))
             {
@@ -724,13 +724,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             {
                 ExComp[] singularGp = groups[0];
                 ExComp[] varTo, constTo;
-                singularGp.GetConstVarTo(out varTo, out constTo, dVar);
+                GroupHelper.GetConstVarTo(singularGp, out varTo, out constTo, dVar);
 
-                constEx = constTo.Length == 0 ? Number.GetOne() : (ExComp)AlgebraTerm.FromFraction(Number.GetOne(), constTo.ToAlgTerm());
+                constEx = constTo.Length == 0 ? Number.GetOne() : (ExComp)AlgebraTerm.FromFraction(Number.GetOne(), GroupHelper.ToAlgTerm(constTo));
 
                 if (varTo.Length == 0)
                 {
-                    if (group.GroupContains(dVar))
+                    if (GroupHelper.GroupContains(@group, dVar))
                         return null;
 
                     pEvalData.GetWorkMgr().GetWorkSteps().Add(new WorkStep(WorkMgr.STM + thisStr +
@@ -738,7 +738,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                         atmptStr + WorkMgr.EDM + " and " + WorkMgr.STM + "d" + subInVar.ToDispString() + "=" +
                         evaluated.ToAlgTerm().FinalToDispStr() + WorkMgr.EDM, true));
 
-                    pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + constEx.ToAlgTerm().FinalToDispStr() + "\\int (" + group.ToArray().ToAlgTerm().FinalToDispStr() + ") d" + subInVar.ToDispString() + WorkMgr.EDM);
+                    pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + constEx.ToAlgTerm().FinalToDispStr() + "\\int (" + GroupHelper.ToAlgTerm(@group.ToArray()).FinalToDispStr() + ") d" + subInVar.ToDispString() + WorkMgr.EDM);
 
                     ExComp innerAntiDeriv = TakeAntiDerivativeGp(group.ToArray(), subInVar, ref pIntInfo, ref pEvalData);
                     if (innerAntiDeriv == null)
@@ -755,15 +755,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     return retEx;
                 }
 
-                evaluated = varTo.ToAlgTerm().RemoveRedundancies();
+                evaluated = GroupHelper.ToAlgTerm(varTo).RemoveRedundancies();
             }
             else
             {
                 ExComp[] groupGcf = evaluated.ToAlgTerm().GetGroupGCF();
                 ExComp[] varTo, constTo;
-                groupGcf.GetConstVarTo(out varTo, out constTo, dVar);
+                GroupHelper.GetConstVarTo(groupGcf, out varTo, out constTo, dVar);
 
-                AlgebraTerm constToAg = constTo.ToAlgTerm();
+                AlgebraTerm constToAg = GroupHelper.ToAlgTerm(constTo);
                 evaluated = DivOp.StaticCombine(evaluated, constToAg.CloneEx());
                 constEx = AlgebraTerm.FromFraction(Number.GetOne(), constToAg);
             }
@@ -785,11 +785,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
                     group = groupList.ToArray();
 
-                    if (group.GroupContains(dVar))
+                    if (GroupHelper.GroupContains(@group, dVar))
                         return null;
 
                     pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + mulInCostStr +
-                        "\\int (" + group.ToAlgTerm().FinalToDispStr() + ") d" + subInVar.ToDispString() + WorkMgr.EDM);
+                        "\\int (" + GroupHelper.ToAlgTerm(@group).FinalToDispStr() + ") d" + subInVar.ToDispString() + WorkMgr.EDM);
 
                     ExComp innerAntiDeriv = TakeAntiDerivativeGp(group, subInVar, ref pIntInfo, ref pEvalData);
                     if (innerAntiDeriv == null)
@@ -827,7 +827,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                                 List<ExComp> baseGpsList = baseGps[0].ToList();
                                 baseGpsList.RemoveAt(k);
 
-                                group[j] = new PowerFunction(baseGpsList.ToArray().ToAlgTerm(), evaluatedPf.GetPower());
+                                group[j] = new PowerFunction(GroupHelper.ToAlgTerm(baseGpsList.ToArray()), evaluatedPf.GetPower());
 
                                 pEvalData.GetWorkMgr().GetWorkSteps().Add(new WorkStep(WorkMgr.STM + thisStr +
                                     WorkMgr.EDM, "Make the substitution " + WorkMgr.STM + subInVar.ToDispString() + "=" +
@@ -838,7 +838,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                                 string mulInCostStr = (mulInCost ? constEx.ToAlgTerm().FinalToDispStr() : "");
 
                                 pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + mulInCostStr +
-                                    "\\int (" + group.ToAlgTerm().FinalToDispStr() + ") d" + subInVar.ToDispString() + WorkMgr.EDM);
+                                    "\\int (" + GroupHelper.ToAlgTerm(@group).FinalToDispStr() + ") d" + subInVar.ToDispString() + WorkMgr.EDM);
 
                                 ExComp innerAntiDeriv = TakeAntiDerivativeGp(group, subInVar, ref pIntInfo, ref pEvalData);
                                 if (innerAntiDeriv == null)

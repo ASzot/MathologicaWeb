@@ -352,7 +352,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
             if (gcf != null)
             {
-                AlgebraTerm gcfTerm = gcf.ToAlgNoRedunTerm();
+                AlgebraTerm gcfTerm = GroupHelper.ToAlgNoRedunTerm(gcf);
                 if (!Number.GetZero().IsEqualTo(gcfTerm) && !Number.GetOne().IsEqualTo(gcfTerm) && gcfTerm.Contains(solveForComp))
                 {
                     AlgebraTerm otherFactor = DivOp.StaticCombine(overallTerm, gcfTerm).ToAlgTerm();
@@ -400,8 +400,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
                 if (minTrigFunc != null)
                 {
-                    AlgebraTerm gpTerm0 = groups[0].ToAlgTerm();
-                    AlgebraTerm gpTerm1 = groups[1].ToAlgTerm();
+                    AlgebraTerm gpTerm0 = GroupHelper.ToAlgTerm(groups[0]);
+                    AlgebraTerm gpTerm1 = GroupHelper.ToAlgTerm(groups[1]);
 
                     if (pEvalData.GetWorkMgr().AllowWork)
                     {
@@ -416,7 +416,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
                     overallTerm = new AlgebraTerm(gp0, new AddOp(), gp1);
 
-                    overallTerm = overallTerm.TrigSimplify(ref pEvalData);
+                    overallTerm = AdvAlgebraTerm.TrigSimplify(overallTerm, ref pEvalData);
                     overallTerm = overallTerm.ApplyOrderOfOperations();
                     overallTerm = overallTerm.MakeWorkable().ToAlgTerm();
 

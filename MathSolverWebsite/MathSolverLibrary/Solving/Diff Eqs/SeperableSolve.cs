@@ -68,7 +68,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             {
                 List<ExComp[]> groups = left.GetGroupsNoOps();
                 IEnumerable<ExComp[]> unrelatedGroups = from gp in groups
-                                      select gp.GetUnrelatableTermsOfGroup(derivVar);
+                                      select GroupHelper.GetUnrelatableTermsOfGroup(gp, derivVar);
 
                 // Combine all of the unrelated terms.
                 AlgebraTerm leftDivideOut = new AlgebraTerm(unrelatedGroups.ToArray());

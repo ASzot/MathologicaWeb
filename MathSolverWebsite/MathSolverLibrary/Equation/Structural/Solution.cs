@@ -882,7 +882,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             int iUpper = (int)upper;
 
             // Are there any integers between the numbers?
-            if (lower.IsInteger() && upper.IsInteger() && iUpper - iLower > 1.0)
+            if (DoubleHelper.IsInteger(lower) && DoubleHelper.IsInteger(upper) && iUpper - iLower > 1.0)
                 return (double)((iLower + iUpper) / 2);
 
             double avg = (lower + upper) / 2;
@@ -897,14 +897,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public static double FindLowerTestPoint(double point)
         {
-            if (point.IsInteger())
+            if (DoubleHelper.IsInteger(point))
                 return point - 1.0;
             return Math.Round(point - 1.0);
         }
 
         public static double FindUpperTestPoint(double point)
         {
-            if (point.IsInteger())
+            if (DoubleHelper.IsInteger(point))
                 return point + 1.0;
             return Math.Round(point + 1.0);
         }

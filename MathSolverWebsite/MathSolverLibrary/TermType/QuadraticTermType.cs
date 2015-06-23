@@ -180,10 +180,10 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             List<AlgebraGroup> constantGroup = _eq.GetGroupsConstantTo(solveForComp);
 
             IEnumerable<AlgebraTerm> aTerms = from squaredGroup in squaredGroups
-                         select squaredGroup.GetUnrelatableTermsOfGroup(solveForComp).ToAlgTerm();
+                         select GroupHelper.ToAlgTerm(GroupHelper.GetUnrelatableTermsOfGroup(squaredGroup, solveForComp));
 
             IEnumerable<AlgebraTerm> bTerms = from linearGroup in linearGroups
-                         select linearGroup.GetUnrelatableTermsOfGroup(solveForComp).ToAlgTerm();
+                         select GroupHelper.ToAlgTerm(GroupHelper.GetUnrelatableTermsOfGroup(linearGroup, solveForComp));
 
             if (aTerms.Count() == 0)
                 return false;

@@ -174,7 +174,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             }
 
             thisDefTerm.EvaluateFunctions(false, ref pEvalData);
-            thisDefTerm = thisDefTerm.EvaluatePowers(ref pEvalData);
+            thisDefTerm = AdvAlgebraTerm.EvaluatePowers(thisDefTerm, ref pEvalData);
             thisDefTerm = thisDefTerm.ApplyOrderOfOperations();
             ExComp workable = thisDefTerm.MakeWorkable();
             if (workable == null)

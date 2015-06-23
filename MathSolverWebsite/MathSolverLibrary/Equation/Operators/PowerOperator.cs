@@ -42,7 +42,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 if (dBase < 0.0)
                 {
                     double root = 1.0 / dPow;
-                    if (root.IsInteger())
+                    if (DoubleHelper.IsInteger(root))
                     {
                         int rootInt = (int)root;
                         isOdd = rootInt % 2 != 0;
@@ -69,7 +69,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 else
                     result = Math.Pow(dBase, dPow);
 
-                bool isResultInt = result.IsInteger();
+                bool isResultInt = DoubleHelper.IsInteger(result);
 
                 if (isResultInt && isOdd && dBase < 0.0)
                     result *= -1.0;
@@ -104,7 +104,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
             else if (!n2.HasImaginaryComp())
             {
                 double dPow = n2.GetRealComp();
-                if (dPow.IsInteger())
+                if (DoubleHelper.IsInteger(dPow))
                 {
                     int iPow = (int)dPow;
 
@@ -147,8 +147,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                     // Use the binomial theorem.
                     AlgebraComp iterVar = new AlgebraComp("$k");
                     ChooseFunction chooseFunc = new ChooseFunction(power, iterVar);
-                    AlgebraTerm group0 = groups[0].ToAlgTerm();
-                    AlgebraTerm group1 = groups[1].ToAlgTerm();
+                    AlgebraTerm group0 = GroupHelper.ToAlgTerm(groups[0]);
+                    AlgebraTerm group1 = GroupHelper.ToAlgTerm(groups[1]);
                     ExComp overallEx = MulOp.StaticWeakCombine(chooseFunc, PowOp.StaticWeakCombine(group0, SubOp.StaticWeakCombine(power, iterVar)));
                     overallEx = MulOp.StaticWeakCombine(overallEx, PowOp.StaticWeakCombine(group1, iterVar));
 
@@ -277,12 +277,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                     if (gps.Count == 1)
                     {
                         ExComp[] gp = gps[0];
-                        Number coeff = gp.GetCoeff();
+                        Number coeff = GroupHelper.GetCoeff(gp);
 
                         if (coeff != null && Number.OpLT(coeff, 0.0) && nPow.IsEven())
                         {
-                            gp.AssignCoeff(Number.Abs(coeff));
-                            ex1 = gp.ToAlgTerm();
+                            GroupHelper.AssignCoeff(gp, Number.Abs(coeff));
+                            ex1 = GroupHelper.ToAlgTerm(gp);
                         }
                     }
                 }

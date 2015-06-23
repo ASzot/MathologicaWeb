@@ -46,7 +46,7 @@ namespace MathSolverWebsite.Website_Logic
                 }
             }
 
-            _exampleTxts.Shuffle();
+            ListExtensions.Shuffle(_exampleTxts);
         }
 
         public ExampleInputData GetExample(int index)

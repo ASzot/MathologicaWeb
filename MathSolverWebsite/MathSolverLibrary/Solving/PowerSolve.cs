@@ -47,7 +47,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             CombineFractions(ref left, ref right, ref pEvalData);
             if (left.GetGroupCount() != 1)
             {
-                if (_solveForPower.IsSimpleFraction())
+                if (AdvAlgebraTerm.IsSimpleFraction(_solveForPower))
                 {
                     // We are dealing with simple radicals.
                     return SolveMultipleRadicalEq(left, right, solveFor, ref pEvalData);
@@ -129,7 +129,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                         if (left.GetSubComps().Count == 1 && left.GetSubComps()[0] is AlgebraComp)
                             descs[i] = "Above is a solution for " + WorkMgr.STM + solveForComp.ToDispString() + WorkMgr.EDM + ".";
                         else
-                            descs[i] = "Solve with the found " + (i + 1).ToString() + (i + 1).GetCountingPrefix() + " root.";
+                            descs[i] = "Solve with the found " + (i + 1).ToString() + MathHelper.GetCountingPrefix((i + 1)) + " root.";
                     }
                     rights.SetSolveDescs(descs);
                     bool allSols;
@@ -167,7 +167,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
         {
             System.Collections.Generic.List<ExComp[]> groups = left.GetGroups();
 
-            AlgebraTerm subGroup = groups[1].ToAlgTerm();
+            AlgebraTerm subGroup = GroupHelper.ToAlgTerm(groups[1]);
 
             pEvalData.GetWorkMgr().FromSubtraction(subGroup, left, right);
 
@@ -188,8 +188,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
                 pEvalData.GetWorkMgr().FromFormatted("`({1})^({0})=({2})^({0})`", "Raise both sides to the `{0}` power.", root, left, right);
 
-                left = left.RaiseToPow(root, ref pEvalData).ToAlgTerm();
-                right = right.RaiseToPow(root, ref pEvalData).ToAlgTerm();
+                left = AdvAlgebraTerm.RaiseToPow(left, root, ref pEvalData).ToAlgTerm();
+                right = AdvAlgebraTerm.RaiseToPow(right, root, ref pEvalData).ToAlgTerm();
 
                 pEvalData.GetWorkMgr().FromSides(left, right);
 

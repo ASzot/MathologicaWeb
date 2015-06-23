@@ -333,8 +333,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public override ExComp CancelWith(ExComp innerEx, ref TermType.EvalData evalData)
         {
-            AlgebraTerm power = _power.ToAlgTerm().CompoundLogs();
-            power = power.ForceLogCoeffToPow();
+            AlgebraTerm power = AdvAlgebraTerm.CompoundLogs(_power.ToAlgTerm());
+            power = AdvAlgebraTerm.ForceLogCoeffToPow(power);
             ExComp powerEx = power.RemoveRedundancies();
 
             LogFunction log = powerEx as LogFunction;
@@ -428,7 +428,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             }
 
             if (!(GetBase() is Constant || GetBase() is AlgebraComp || GetBase() is BasicAppliedFunc))
-                baseAsciiStr = baseAsciiStr.SurroundWithParas();
+                baseAsciiStr = StringHelper.SurroundWithParas(baseAsciiStr);
 
             return baseAsciiStr + "^(" + powerAsciiStr + ")";
         }
@@ -476,7 +476,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             else
             {
                 if (!Regex.IsMatch(baseTexStr, @"^\d$") && baseTexStr.Length > 1 && !(baseTexStr.StartsWith("(") && baseTexStr.EndsWith(")")))
-                    baseTexStr = baseTexStr.SurroundWithParas();
+                    baseTexStr = StringHelper.SurroundWithParas(baseTexStr);
             }
 
             return baseTexStr + "^{" + powerTexStr + "}";
@@ -955,15 +955,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
                     int[] divisors;
                     if (root % 2 != 0)
-                        divisors = Math.Abs(n).GetDivisors(true);
+                        divisors = MathHelper.GetDivisors(Math.Abs(n), true);
                     else
-                        divisors = n.GetDivisors(true);
+                        divisors = MathHelper.GetDivisors(n, true);
 
                     for (int j = divisors.Length - 1; j >= 0; --j)
                     {
                         int divisor = divisors[j];
                         int rootResult;
-                        if (divisor.IsPerfectRoot(root, out rootResult))
+                        if (MathHelper.IsPerfectRoot(divisor, root, out rootResult))
                         {
                             n = n / divisor;
                             if (n < 0 && root % 2 != 0)
@@ -1006,7 +1006,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             if (mulTerms.Count == 0)
                 return this;
 
-            AlgebraTerm outsideTerm = mulTerms.ToArray().ToAlgTerm();
+            AlgebraTerm outsideTerm = GroupHelper.ToAlgTerm(mulTerms.ToArray());
             if (baseTerm.IsOne())
                 return outsideTerm;
 
@@ -1178,13 +1178,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                 if ((!Regex.IsMatch(baseAsciiStr, @"^\d$") && baseAsciiStr.Length > 1 && !(baseAsciiStr.StartsWith("(") && baseAsciiStr.EndsWith(")"))))
                 {
                     surrounded = true;
-                    baseAsciiStr = baseAsciiStr.SurroundWithParas();
+                    baseAsciiStr = StringHelper.SurroundWithParas(baseAsciiStr);
                 }
             }
 
             if (!surrounded && GetBase() is Number)
             {
-                baseAsciiStr = baseAsciiStr.SurroundWithParas();
+                baseAsciiStr = StringHelper.SurroundWithParas(baseAsciiStr);
             }
 
             return baseAsciiStr + "^(" + powerAsciiStr + ")";
@@ -1253,7 +1253,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             else
             {
                 if (!Regex.IsMatch(baseTexStr, @"^\d$") && baseTexStr.Length > 1 && !(baseTexStr.StartsWith("(") && baseTexStr.EndsWith(")")))
-                    baseTexStr = baseTexStr.SurroundWithParas();
+                    baseTexStr = StringHelper.SurroundWithParas(baseTexStr);
             }
 
             return baseTexStr + "^{" + powerTexStr + "}";

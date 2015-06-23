@@ -202,7 +202,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                     if ((term as AlgebraTerm).HasTrigFunctions())
                     {
                         // There are trig functions in this expression.
-                        term = (term as AlgebraTerm).TrigSimplify(ref pEvalData);
+                        term = AdvAlgebraTerm.TrigSimplify((term as AlgebraTerm), ref pEvalData);
                     }
                     term = (term as AlgebraTerm).CompoundFractions();
                 }
@@ -317,7 +317,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             }
             else if (command == "Factor")
             {
-                ExComp factorized = _term.CloneEx().ToAlgTerm().FactorizeTerm(ref pEvalData, true);
+                ExComp factorized = AdvAlgebraTerm.FactorizeTerm(_term.CloneEx().ToAlgTerm(), ref pEvalData, true);
                 if (factorized is AlgebraTerm)
                     factorized = (factorized as AlgebraTerm).RemoveRedundancies();
 
@@ -334,11 +334,11 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             }
             else if (command == "Condense logs")
             {
-                return SolveResult.Simplified(_term.ToAlgTerm().CompoundLogs());
+                return SolveResult.Simplified(AdvAlgebraTerm.CompoundLogs(_term.ToAlgTerm()));
             }
             else if (command == "Expand logs")
             {
-                return SolveResult.Simplified(_term.ToAlgTerm().ExpandLogs());
+                return SolveResult.Simplified(AdvAlgebraTerm.ExpandLogs(_term.ToAlgTerm()));
             }
             else if (command == "Divide" && _numPolyInfo != null && _denPolyInfo != null)
             {

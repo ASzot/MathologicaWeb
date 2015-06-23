@@ -29,7 +29,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 else
                     return new NoSolutions();
             }
-            left = left.CompoundLogs();
+            left = AdvAlgebraTerm.CompoundLogs(left);
 
             if (left.GetGroupCount() != 1)
                 return null;

@@ -96,7 +96,7 @@ namespace MathSolverWebsite.MathSolverLibrary
             Powers = new List<ExComp>();
             Powers.AddRange(powersLeft);
             Powers.AddRange(powersRight);
-            Powers = Powers.RemoveDuplicates();
+            Powers = GroupHelper.RemoveDuplicates(Powers);
 
             AppliedFunctions = new List<FunctionType>();
             AppliedFunctions.AddRange(funcsLeft);

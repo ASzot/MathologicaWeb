@@ -247,7 +247,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             ExComp summedTerm = null;
             for (int j = 0; j < subGps.Count; ++j)
             {
-                ExComp addTerm = (j != subIndex ? subGps[j].ToAlgTerm() : subInGp.ToAlgTerm());
+                ExComp addTerm = (j != subIndex ? GroupHelper.ToAlgTerm(subGps[j]) : GroupHelper.ToAlgTerm(subInGp));
                 if (summedTerm == null)
                     summedTerm = addTerm;
                 else
@@ -301,8 +301,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     int subSubbedIndex = -1;
                     for (int j = 0; j < subGps.Count; ++j)
                     {
-                        subSubbedResult = TrigSubstitutionGetSub(subGps[j], dVar, out subVar, out subOut, out subbedResult, ref pEvalData, group.CloneGroup(),
-                            subGps.CloneGpList(), i, j);
+                        subSubbedResult = TrigSubstitutionGetSub(subGps[j], dVar, out subVar, out subOut, out subbedResult, ref pEvalData, GroupHelper.CloneGroup(@group),
+                            GroupHelper.CloneGpList(subGps), i, j);
                         if (subSubbedResult != null)
                         {
                             subSubbedIndex = j;
@@ -315,7 +315,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                         ExComp summedTerm = null;
                         for (int j = 0; j < subGps.Count; ++j)
                         {
-                            ExComp addTerm = (j == subSubbedIndex ? subGps[j].ToAlgTerm() : subbedResult);
+                            ExComp addTerm = (j == subSubbedIndex ? GroupHelper.ToAlgTerm(subGps[j]) : subbedResult);
                             if (summedTerm == null)
                                 summedTerm = addTerm;
                             else
@@ -324,7 +324,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
                         (group[i] as AlgebraTerm).SetSubComps(summedTerm.ToAlgTerm().GetSubComps());
 
-                        subbedResult = group.ToAlgTerm();
+                        subbedResult = GroupHelper.ToAlgTerm(@group);
                         return subSubbedResult;
                     }
                 }
@@ -388,8 +388,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     aCoeff = aSq as Number;
                 else if (aSq is AlgebraTerm)
                 {
-                    ExComp[] aValGp = varGroups[0].GetGroup().GetUnrelatableTermsOfGroup(dVar);
-                    aCoeff = aValGp.GetCoeff();
+                    ExComp[] aValGp = GroupHelper.GetUnrelatableTermsOfGroup(varGroups[0].GetGroup(), dVar);
+                    aCoeff = GroupHelper.GetCoeff(aValGp);
                 }
 
                 if (aCoeff == null)
@@ -400,7 +400,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     bCoeff = bSq as Number;
                 else if (bSq is AlgebraTerm)
                 {
-                    bCoeff = constGroups[0].GetGroup().GetCoeff();
+                    bCoeff = GroupHelper.GetCoeff(constGroups[0].GetGroup());
                 }
 
                 if (bCoeff == null)
@@ -452,7 +452,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 group[i] = new PowerFunction(baseTermSubbed, pfPow);
                 SubstituteIn(ref dispGp, dispSubGps, group, index, subIndex);
 
-                pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "\\int (" + WorkMgr.ToDisp(dispGp.ToAlgTerm()) + ") d" + dVar.ToDispString() + WorkMgr.EDM, "Substitute " + WorkMgr.STM + subVar.ToDispString() +
+                pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "\\int (" + WorkMgr.ToDisp(GroupHelper.ToAlgTerm(dispGp)) + ") d" + dVar.ToDispString() + WorkMgr.EDM, "Substitute " + WorkMgr.STM + subVar.ToDispString() +
                     "=" + WorkMgr.ToDisp(subIn) + WorkMgr.EDM);
 
                 AlgebraTerm dispIdenStep = new AlgebraTerm();
@@ -486,7 +486,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 group[i] = new PowerFunction(dispIdenStep, pfPow);
                 SubstituteIn(ref dispGp, dispSubGps, group, index, subIndex);
 
-                pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "\\int (" + WorkMgr.ToDisp(dispGp.ToAlgTerm()) + ")d" + dVar.ToDispString() + WorkMgr.EDM,
+                pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "\\int (" + WorkMgr.ToDisp(GroupHelper.ToAlgTerm(dispGp)) + ")d" + dVar.ToDispString() + WorkMgr.EDM,
                     "Simplify.");
 
                 dispIdenStep = new AlgebraTerm();
@@ -500,15 +500,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 group[i] = dispIdenStep;
                 SubstituteIn(ref dispGp, dispSubGps, group, index, subIndex);
 
-                pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "\\int (" + WorkMgr.ToDisp(dispGp.ToAlgTerm()) + ") d" + dVar.ToDispString() + WorkMgr.EDM, "Use the trig identity " +
+                pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "\\int (" + WorkMgr.ToDisp(GroupHelper.ToAlgTerm(dispGp)) + ") d" + dVar.ToDispString() + WorkMgr.EDM, "Use the trig identity " +
                     WorkMgr.STM + WorkMgr.ToDisp(PowOp.StaticWeakCombine(simpTo, new Number(2.0))) + " = " + useTerm.FinalToDispStr() + WorkMgr.EDM);
 
                 group[i] = MulOp.StaticCombine(aVal, simpTo);
                 SubstituteIn(ref dispGp, dispSubGps, group, index, subIndex);
 
-                pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "\\int (" + WorkMgr.ToDisp(dispGp.ToAlgTerm()) + ") d" + dVar.ToDispString() + WorkMgr.EDM);
+                pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "\\int (" + WorkMgr.ToDisp(GroupHelper.ToAlgTerm(dispGp)) + ") d" + dVar.ToDispString() + WorkMgr.EDM);
 
-                subbedResult = group.ToAlgTerm();
+                subbedResult = GroupHelper.ToAlgTerm(@group);
 
                 return subIn;
             }

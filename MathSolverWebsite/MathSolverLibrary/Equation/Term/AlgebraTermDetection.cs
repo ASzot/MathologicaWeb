@@ -47,7 +47,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
             foreach (ExComp[] group in groups)
             {
-                if (group.ContainsFrac())
+                if (GroupHelper.ContainsFrac(@group))
                     return true;
             }
 
@@ -60,7 +60,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
             foreach (ExComp[] group in groups)
             {
-                if (!group.ContainsFrac())
+                if (!GroupHelper.ContainsFrac(@group))
                     return false;
             }
 
@@ -151,8 +151,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
             List<ExComp[]> groups = GetGroupsNoOps();
             IEnumerable<ExComp[]> unrelatedGroups = from gp in groups
-                                                    where gp.ToAlgTerm().Contains(varFor)
-                                                    select gp.GetUnrelatableTermsOfGroup(varFor);
+                                                    where GroupHelper.ToAlgTerm(gp).Contains(varFor)
+                                                    select GroupHelper.GetUnrelatableTermsOfGroup(gp, varFor);
 
             // Combine all of the unrelated terms.
             AlgebraTerm unrelatedTerm = new AlgebraTerm(unrelatedGroups.ToArray());
@@ -413,7 +413,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 }
             }
 
-            return powersApplied.RemoveDuplicates();
+            return GroupHelper.RemoveDuplicates(powersApplied);
         }
 
         public List<PowerFunction> GetRadicals()
@@ -483,9 +483,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
             foreach (ExComp[] group in groups)
             {
-                if (group.ContainsFrac())
+                if (GroupHelper.ContainsFrac(@group))
                 {
-                    AlgebraTerm denTerm = group.GetDenominator().ToAlgTerm();
+                    AlgebraTerm denTerm = GroupHelper.ToAlgTerm(GroupHelper.GetDenominator(@group));
 
                     if (denTerm.Contains(varFor))
                         return true;

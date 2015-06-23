@@ -70,7 +70,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         public static AlgebraTerm GetConstantTo(List<AlgebraGroup> gps, AlgebraComp cmp)
         {
             IEnumerable<AlgebraTerm> terms = from squaredGroup in gps
-                                             select squaredGroup.GetGroup().GetUnrelatableTermsOfGroup(cmp).ToAlgTerm();
+                                             select GroupHelper.ToAlgTerm(GroupHelper.GetUnrelatableTermsOfGroup(squaredGroup.GetGroup(), cmp));
 
             AlgebraTerm totalTerm = new AlgebraTerm();
             foreach (AlgebraTerm term in terms)

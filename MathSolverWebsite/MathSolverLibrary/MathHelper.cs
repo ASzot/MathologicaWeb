@@ -95,8 +95,8 @@ namespace MathSolverWebsite.MathSolverLibrary
         public static int[] GetCommonDivisors(int n1, int n2, bool includeSelf = false)
         {
             List<int> divisors = new List<int>();
-            int[] divisorsN1 = n1.GetDivisors(includeSelf);
-            int[] divisorsN2 = n2.GetDivisors(includeSelf);
+            int[] divisorsN1 = GetDivisors(n1, includeSelf);
+            int[] divisorsN2 = GetDivisors(n2, includeSelf);
 
             divisors.AddRange(divisorsN1);
             divisors.AddRange(divisorsN2);
@@ -104,7 +104,7 @@ namespace MathSolverWebsite.MathSolverLibrary
             return divisors.Distinct().ToArray();
         }
 
-        public static string GetCountingPrefix(this int num)
+        public static string GetCountingPrefix(int num)
         {
             string numStr = num.ToString();
 
@@ -118,7 +118,7 @@ namespace MathSolverWebsite.MathSolverLibrary
             return "th";
         }
 
-        public static int[] GetDivisors(this int n, bool includeSelf = false, bool includeOne = false)
+        public static int[] GetDivisors(int n, bool includeSelf = false, bool includeOne = false)
         {
             List<int> divisors = new List<int>();
             if (includeSelf)
@@ -144,7 +144,7 @@ namespace MathSolverWebsite.MathSolverLibrary
             return divisors.ToArray();
         }
 
-        public static bool IsPerfectRoot(this int n, int root, out int resultInt)
+        public static bool IsPerfectRoot(int n, int root, out int resultInt)
         {
             double result = Math.Pow(n, 1.0 / root);
 

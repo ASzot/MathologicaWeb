@@ -14,7 +14,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         public static ExComp Split(AlgebraTerm num, AlgebraTerm den, PolynomialExt numPoly, AlgebraComp dVar, ref TermType.EvalData pEvalData)
         {
             den = den.RemoveRedundancies().ToAlgTerm();
-            AlgebraTerm[] factors = den.GetFactors(ref pEvalData);
+            AlgebraTerm[] factors = AdvAlgebraTerm.GetFactors(den, ref pEvalData);
             if (factors == null || factors.Length < 2)
                 return null;
 
@@ -123,7 +123,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
                 List<ExComp[]> decomVarGroups = leftTerm.GetGroupContainingTerm(PowOp.StaticCombine(dVar, new Number(pow)));
                 IEnumerable<AlgebraTerm> decomVarTerms = from decomVarGroup in decomVarGroups
-                                                         select decomVarGroup.GetUnrelatableTermsOfGroup(dVar).ToAlgTerm();
+                                                         select GroupHelper.ToAlgTerm(GroupHelper.GetUnrelatableTermsOfGroup(decomVarGroup, dVar));
 
                 AlgebraTerm decomCoeff = new AlgebraTerm();
                 foreach (AlgebraTerm aTerm in decomVarTerms)

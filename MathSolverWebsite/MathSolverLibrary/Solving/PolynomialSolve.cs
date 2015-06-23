@@ -18,8 +18,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
         {
             PrepareForSolving(ref left, ref right, ref pEvalData);
 
-            left = left.EvaluatePowers(ref pEvalData);
-            right = right.EvaluatePowers(ref pEvalData);
+            left = AdvAlgebraTerm.EvaluatePowers(left, ref pEvalData);
+            right = AdvAlgebraTerm.EvaluatePowers(right, ref pEvalData);
 
             bool isRightZero = right.IsZero();
 
@@ -49,7 +49,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             ExComp[] groupGcf = left.GetGroupGCF();
             if (groupGcf != null && groupGcf.Length != 0)
             {
-                AlgebraTerm factorOut = groupGcf.ToAlgTerm();
+                AlgebraTerm factorOut = GroupHelper.ToAlgTerm(groupGcf);
                 if (!factorOut.IsOne())
                 {
                     left = DivOp.StaticCombine(left, factorOut).ToAlgTerm();

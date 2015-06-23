@@ -116,7 +116,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             {
                 List<ExComp[]> groups = left.GetGroupsNoOps();
                 IEnumerable<ExComp[]> unrelatedGroups = from gp in groups
-                                      select gp.GetUnrelatableTermsOfGroup(solveForComp);
+                                      select GroupHelper.GetUnrelatableTermsOfGroup(gp, solveForComp);
 
                 // Combine all of the unrelated terms.
                 AlgebraTerm factoredOutUnrelatedTerm = new AlgebraTerm(unrelatedGroups.ToArray());

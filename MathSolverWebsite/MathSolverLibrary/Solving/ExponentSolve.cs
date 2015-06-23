@@ -95,18 +95,18 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                     ExComp[] gp0 = leftGroups[0];
                     ExComp[] gp1 = leftGroups[1];
 
-                    ExComp[] gpConst0 = gp0.GetUnrelatableTermsOfGroup(solveForComp);
-                    ExComp[] gpConst1 = gp1.GetUnrelatableTermsOfGroup(solveForComp);
+                    ExComp[] gpConst0 = GroupHelper.GetUnrelatableTermsOfGroup(gp0, solveForComp);
+                    ExComp[] gpConst1 = GroupHelper.GetUnrelatableTermsOfGroup(gp1, solveForComp);
 
-                    ExComp exConst0 = gpConst0.ToAlgTerm().RemoveRedundancies();
-                    ExComp exConst1 = gpConst1.ToAlgTerm().RemoveRedundancies();
+                    ExComp exConst0 = GroupHelper.ToAlgTerm(gpConst0).RemoveRedundancies();
+                    ExComp exConst1 = GroupHelper.ToAlgTerm(gpConst1).RemoveRedundancies();
 
                     ExComp negExConst0 = MulOp.Negate(exConst0);
 
                     if (negExConst0.IsEqualTo(exConst1))
                     {
-                        ExComp exVar0 = gp0.RemoveExTerms(gpConst0).ToAlgTerm().RemoveRedundancies();
-                        ExComp exVar1 = gp1.RemoveExTerms(gpConst1).ToAlgTerm().RemoveRedundancies();
+                        ExComp exVar0 = GroupHelper.ToAlgTerm(GroupHelper.RemoveExTerms(gp0, gpConst0)).RemoveRedundancies();
+                        ExComp exVar1 = GroupHelper.ToAlgTerm(GroupHelper.RemoveExTerms(gp1, gpConst1)).RemoveRedundancies();
 
                         if (exVar0 is PowerFunction && exVar1 is PowerFunction)
                         {
@@ -168,8 +168,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
             // If we expand the logs we have a chance of evaluating them.
             // Example: log(1/25) -> log(1) - log(25) -> 0 - log(25) -> -log(25)
-            AlgebraTerm expandedRightLog = logRight.ExpandLogs();
-            AlgebraTerm expandedLeftLog = logLeft.ExpandLogs();
+            AlgebraTerm expandedRightLog = AdvAlgebraTerm.ExpandLogs(logRight);
+            AlgebraTerm expandedLeftLog = AdvAlgebraTerm.ExpandLogs(logLeft);
 
             expandedRightLog.EvaluateFunctions(FunctionType.Logarithm, false, ref pEvalData);
             expandedLeftLog.EvaluateFunctions(FunctionType.Logarithm, false, ref pEvalData);
@@ -245,9 +245,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             ExComp baseRightEx = rightLog.Evaluate(false, ref pEvalData);
 
             if (baseLeftEx is LogFunction)
-                baseLeftEx = (baseLeftEx as LogFunction).ForceLogPowToCoeff();
+                baseLeftEx = AdvAlgebraTerm.ForceLogPowToCoeff((baseLeftEx as LogFunction));
             if (baseRightEx is LogFunction)
-                baseRightEx = (baseRightEx as LogFunction).ForceLogPowToCoeff();
+                baseRightEx = AdvAlgebraTerm.ForceLogPowToCoeff((baseRightEx as LogFunction));
 
             left = MulOp.StaticCombine(pfLeft.GetPower(), baseLeftEx).ToAlgTerm();
             right = MulOp.StaticCombine(pfRight.GetPower(), baseRightEx).ToAlgTerm();

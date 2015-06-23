@@ -394,7 +394,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 string overallStr = "";
                 for (int i = 0; i < gps.Count; ++i)
                 {
-                    intStrs[i] = "\\int" + gps[i].ToAlgTerm().FinalToDispStr() + "\\d" + _dVar.ToDispString();
+                    intStrs[i] = "\\int" + GroupHelper.ToAlgTerm(gps[i]).FinalToDispStr() + "\\d" + _dVar.ToDispString();
                     overallStr += intStrs[i];
                     if (i != gps.Count - 1)
                         overallStr += "+";

@@ -40,9 +40,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             pEvalData.AttemptSetInputType(TermType.InputType.LogSolve);
 
             bool leftLogsCombined = false;
-            left = left.CompoundLogs(out leftLogsCombined, solveForComp);
+            left = AdvAlgebraTerm.CompoundLogs(left, out leftLogsCombined, solveForComp);
             bool rightLogsCombined = false;
-            right = right.CompoundLogs(out rightLogsCombined, solveForComp);
+            right = AdvAlgebraTerm.CompoundLogs(right, out rightLogsCombined, solveForComp);
 
             if (leftLogsCombined || rightLogsCombined)
                 pEvalData.GetWorkMgr().FromSides(left, right, "Combine logarithms.");
@@ -51,8 +51,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             System.Collections.Generic.List<ExComp[]> rightGroups = right.GetGroups();
             if (leftGroups.Count == 1 && rightGroups.Count == 1 && left.Contains(solveForComp) && right.Contains(solveForComp))
             {
-                left = left.ForceLogCoeffToPow();
-                right = right.ForceLogCoeffToPow();
+                left = AdvAlgebraTerm.ForceLogCoeffToPow(left);
+                right = AdvAlgebraTerm.ForceLogCoeffToPow(right);
                 ExComp log0Ex = left.RemoveRedundancies();
                 ExComp log1Ex = right.RemoveRedundancies();
 
@@ -157,8 +157,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             }
             CombineFractions(ref left, ref right, ref pEvalData);
 
-            left = left.CompoundLogs(solveForComp);
-            right = right.CompoundLogs(solveForComp);
+            left = AdvAlgebraTerm.CompoundLogs(left, solveForComp);
+            right = AdvAlgebraTerm.CompoundLogs(right, solveForComp);
 
             leftGroups = left.GetGroups();
 

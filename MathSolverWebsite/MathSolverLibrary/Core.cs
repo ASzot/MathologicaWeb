@@ -6,7 +6,7 @@ namespace MathSolverWebsite.MathSolverLibrary
 {
     public static class DoubleHelper
     {
-        public static bool IsInteger(this double d)
+        public static bool IsInteger(double d)
         {
             if (double.IsInfinity(d) || double.IsNaN(d))
                 return false;
@@ -17,7 +17,7 @@ namespace MathSolverWebsite.MathSolverLibrary
 
     public static class StringHelper
     {
-        public static string RemoveSurroundingParas(this string str)
+        public static string RemoveSurroundingParas(string str)
         {
             if (str.StartsWith("(") && str.EndsWith(")"))
             {
@@ -27,7 +27,7 @@ namespace MathSolverWebsite.MathSolverLibrary
             return str;
         }
 
-        public static string SurroundWithParas(this string str)
+        public static string SurroundWithParas(string str)
         {
             return str.Insert(str.Length, ")").Insert(0, "(");
         }
@@ -38,7 +38,7 @@ namespace MathSolverWebsite.MathSolverLibrary
         [ThreadStatic]
         private static Random Local;
 
-        public static Random getThisThreadsRandom()
+        public static Random GetThisThreadsRandom()
         {
             return Local ?? (Local = new Random(unchecked(Environment.TickCount * 31 + Environment.CurrentManagedThreadId)));
         }
@@ -87,13 +87,13 @@ namespace MathSolverWebsite.MathSolverLibrary
 
     internal static class ListExtensions
     {
-        public static void Shuffle<T>(this IList<T> list)
+        public static void Shuffle<T>(IList<T> list)
         {
             int n = list.Count;
             while (n > 1)
             {
                 n--;
-                int k = ThreadSafeRandom.getThisThreadsRandom().Next(n + 1);
+                int k = ThreadSafeRandom.GetThisThreadsRandom().Next(n + 1);
                 T value = list[k];
                 list[k] = list[n];
                 list[n] = value;
@@ -103,7 +103,7 @@ namespace MathSolverWebsite.MathSolverLibrary
 
     internal static class ObjectHelper
     {
-        public static bool ContainsEx(this List<Equation.ExComp> exs, Equation.ExComp ex)
+        public static bool ContainsEx(List<Equation.ExComp> exs, Equation.ExComp ex)
         {
             foreach (ExComp compareEx in exs)
             {

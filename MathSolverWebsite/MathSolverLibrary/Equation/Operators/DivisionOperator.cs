@@ -168,7 +168,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                             // The factor out term cancels.
                             List<ExComp> removedGroup = singleGroup.ToList();
                             removedGroup.RemoveAt(i);
-                            return removedGroup.ToArray().ToAlgTerm();
+                            return GroupHelper.ToAlgTerm(removedGroup.ToArray());
                         }
                         if (singleGroupComp is PowerFunction)
                         {
@@ -189,7 +189,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                                     (singleGroup[i] as PowerFunction).SetPower(changedPow);
                                 }
 
-                                return singleGroup.ToArray().ToAlgTerm();
+                                return GroupHelper.ToAlgTerm(singleGroup.ToArray());
                             }
                         }
                     }
@@ -322,7 +322,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 AlgebraTerm factorOutAgTerm = factorOutTerm as AlgebraTerm;
                 List<ExComp[]> groups = factorOutAgTerm.GetGroupsNoOps();
 
-                ExComp[] matchGp = group.CloneGroup();
+                ExComp[] matchGp = GroupHelper.CloneGroup(@group);
 
                 bool allGroupMatchesFound = true;
                 for (int i = 0; i < groups.Count; ++i)
@@ -349,7 +349,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                     group = matchGp;
                 }
 
-                group = group.RemoveOneCoeffs();
+                group = GroupHelper.RemoveOneCoeffs(@group);
 
                 return group;
             }
@@ -543,7 +543,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
 
                 ExComp[] gcfGroup = term.GetGroupGCF();
 
-                bool allHaveComp = gcfGroup.GetRelatableTermOfGroup(comp) != null;
+                bool allHaveComp = GroupHelper.GetRelatableTermOfGroup(gcfGroup, comp) != null;
 
                 if (allHaveComp)
                 {
@@ -605,7 +605,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
             {
                 ExComp[] gp = gps[i];
 
-                ExComp divided = StaticCombine(gp.ToAlgTerm(), div);
+                ExComp divided = StaticCombine(GroupHelper.ToAlgTerm(gp), div);
                 if (dividedTerm == null)
                     dividedTerm = divided.ToAlgTerm();
                 else
@@ -667,7 +667,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                     return atmpt;
             }
 
-            if (ex1 is AlgebraTerm && (ex1 as AlgebraTerm).IsSimpleFraction() && !(ex2 is AlgebraTerm && (ex2 as AlgebraTerm).IsSimpleFraction()))
+            if (ex1 is AlgebraTerm && AdvAlgebraTerm.IsSimpleFraction((ex1 as AlgebraTerm)) && !(ex2 is AlgebraTerm && AdvAlgebraTerm.IsSimpleFraction((ex2 as AlgebraTerm))))
             {
                 SimpleFraction frac = new SimpleFraction();
                 if (frac.Init(ex1 as AlgebraTerm))
@@ -752,7 +752,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 ExComp[] ex1GcfGroup = ex1.ToAlgTerm().GetGroupGCF();
                 if (ex1GcfGroup != null)
                 {
-                    ExComp ex1Gcf = ex1GcfGroup.ToAlgTerm().RemoveRedundancies();
+                    ExComp ex1Gcf = GroupHelper.ToAlgTerm(ex1GcfGroup).RemoveRedundancies();
                     if (ex1Gcf is AlgebraTerm)
                     {
                         (ex1Gcf as AlgebraTerm).ApplyOrderOfOperations();

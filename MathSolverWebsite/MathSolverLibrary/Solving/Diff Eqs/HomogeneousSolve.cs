@@ -41,13 +41,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
 
             foreach (ExComp xDenPower in xDenPowers)
             {
-                if (!xNumPowers.ContainsEx(xDenPower))
+                if (!ObjectHelper.ContainsEx(xNumPowers, xDenPower))
                     xNumPowers.Add(xDenPower);
             }
 
             foreach (ExComp yDenPower in yDenPowers)
             {
-                if (!yNumPowers.ContainsEx(yDenPower))
+                if (!ObjectHelper.ContainsEx(yNumPowers, yDenPower))
                     yNumPowers.Add(yDenPower);
             }
 
@@ -164,8 +164,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
                         gp[j] = MakeVSub(gp[j] as AlgebraTerm, funcVar, dVar, subInVar);
                 }
 
-                ExComp[] num = gp.GetNumerator();
-                ExComp[] den = gp.GetDenominator();
+                ExComp[] num = GroupHelper.GetNumerator(gp);
+                ExComp[] den = GroupHelper.GetDenominator(gp);
 
                 if (den.Length == 0)
                     continue;
@@ -198,7 +198,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
                 else
                     num[numPowAndIndex[1]] = vSubIn;
 
-                den = den.RemoveEx(denPowAndIndex[1]);
+                den = GroupHelper.RemoveEx(den, denPowAndIndex[1]);
 
                 gps[i] = new ExComp[num.Length + (den.Length == 0 ? 0 : 1)];
                 for (int j = 0; j < num.Length; ++j)
@@ -207,7 +207,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
                 }
 
                 if (den.Length != 0)
-                    gps[i][gps[i].Length - 1] = new PowerFunction(den.ToAlgTerm(), Number.GetNegOne());
+                    gps[i][gps[i].Length - 1] = new PowerFunction(GroupHelper.ToAlgTerm(den), Number.GetNegOne());
             }
 
             return new AlgebraTerm(gps.ToArray());

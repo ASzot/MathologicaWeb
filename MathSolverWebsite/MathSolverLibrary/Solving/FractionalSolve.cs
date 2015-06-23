@@ -44,13 +44,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
             if (gps.Count == 2 && right.IsZero())
             {
-                AlgebraTerm gp0 = gps[0].ToAlgTerm();
-                AlgebraTerm gp1 = MulOp.Negate(gps[1].ToAlgTerm()).ToAlgTerm();
+                AlgebraTerm gp0 = GroupHelper.ToAlgTerm(gps[0]);
+                AlgebraTerm gp1 = MulOp.Negate(GroupHelper.ToAlgTerm(gps[1])).ToAlgTerm();
 
                 left = gp0;
                 right = gp1;
 
-                pEvalData.GetWorkMgr().FromSubtraction(gps[1].ToAlgTerm(), left, right);
+                pEvalData.GetWorkMgr().FromSubtraction(GroupHelper.ToAlgTerm(gps[1]), left, right);
                 pEvalData.GetWorkMgr().FromSides(left, right);
 
                 AlgebraTerm[] gp0NumDen = gp0.GetNumDenFrac();
@@ -141,16 +141,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             List<ExComp[]> rightGroups = right.GetGroupsNoOps();
 
             List<ExComp[]> leftDens = (from leftGroup in leftGroups
-                                       select leftGroup.GetDenominator(true)).ToList();
+                                       select GroupHelper.GetDenominator(leftGroup, true)).ToList();
 
             List<ExComp[]> rightDens = (from rightGroup in rightGroups
-                                        select rightGroup.GetDenominator(true)).ToList();
+                                        select GroupHelper.GetDenominator(rightGroup, true)).ToList();
 
             List<ExComp[]> leftNums = (from leftGroup in leftGroups
-                                       select leftGroup.GetNumerator()).ToList();
+                                       select GroupHelper.GetNumerator(leftGroup)).ToList();
 
             List<ExComp[]> rightNums = (from rightGroup in rightGroups
-                                        select rightGroup.GetNumerator()).ToList();
+                                        select GroupHelper.GetNumerator(rightGroup)).ToList();
 
             if (leftDens.Count != leftNums.Count)
                 return null;
@@ -162,7 +162,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 for (int i = 0; i < leftDen.Length; ++i)
                 {
                     if (leftDen[i] is AlgebraTerm)
-                        leftDen[i] = (leftDen[i] as AlgebraTerm).FactorizeTerm(ref pEvalData);
+                        leftDen[i] = AdvAlgebraTerm.FactorizeTerm((leftDen[i] as AlgebraTerm), ref pEvalData);
                 }
             }
 
@@ -171,7 +171,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 for (int i = 0; i < rightDen.Length; ++i)
                 {
                     if (rightDen[i] is AlgebraTerm)
-                        rightDen[i] = (rightDen[i] as AlgebraTerm).FactorizeTerm(ref pEvalData);
+                        rightDen[i] = AdvAlgebraTerm.FactorizeTerm((rightDen[i] as AlgebraTerm), ref pEvalData);
                 }
             }
 
@@ -180,7 +180,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
             ExComp[] overallDensLcf = GroupHelper.LCF(leftDensLcf, rightDensLcf);
 
-            AlgebraTerm lcfTerm = overallDensLcf.ToAlgTerm();
+            AlgebraTerm lcfTerm = GroupHelper.ToAlgTerm(overallDensLcf);
 
             pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "{0}={1}" + WorkMgr.EDM, "The least common denominator of all the terms is " + WorkMgr.STM + "{2}" + WorkMgr.EDM, left, right, lcfTerm);
 
@@ -190,16 +190,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             for (int i = 0; i < leftDens.Count; ++i)
             {
                 ExComp[] leftDen = leftDens[i];
-                AlgebraTerm leftDenTerm = leftDen.ToAlgTerm();
+                AlgebraTerm leftDenTerm = GroupHelper.ToAlgTerm(leftDen);
 
                 ExComp mulTerm = DivOp.StaticCombine(lcfTerm.CloneEx(), leftDenTerm);
 
                 string mulWork = WorkStep.FormatStr("({0})*({1})", DivOp.StaticWeakCombine(mulTerm, mulTerm),
-                    DivOp.StaticWeakCombine(leftNums[i].ToAlgTerm(), leftDenTerm));
+                    DivOp.StaticWeakCombine(GroupHelper.ToAlgTerm(leftNums[i]), leftDenTerm));
 
                 overallWork += mulWork;
 
-                ExComp termToAdd = MulOp.StaticCombine(mulTerm, leftNums[i].ToAlgTerm());
+                ExComp termToAdd = MulOp.StaticCombine(mulTerm, GroupHelper.ToAlgTerm(leftNums[i]));
 
                 leftTerms.Add(termToAdd);
 
@@ -207,7 +207,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                     overallWork += "+";
             }
 
-            lcfTerm = overallDensLcf.ToAlgTerm();
+            lcfTerm = GroupHelper.ToAlgTerm(overallDensLcf);
 
             overallWork += "=";
 
@@ -216,16 +216,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             for (int i = 0; i < rightDens.Count; ++i)
             {
                 ExComp[] rightDen = rightDens[i];
-                AlgebraTerm rightDenTerm = rightDen.ToAlgTerm();
+                AlgebraTerm rightDenTerm = GroupHelper.ToAlgTerm(rightDen);
 
                 ExComp mulTerm = DivOp.StaticCombine(lcfTerm.CloneEx(), rightDenTerm);
 
                 string mulWork = WorkStep.FormatStr("({0})*({1})", DivOp.StaticWeakCombine(mulTerm, mulTerm),
-                    DivOp.StaticWeakCombine(rightNums[i].ToAlgTerm(), rightDenTerm));
+                    DivOp.StaticWeakCombine(GroupHelper.ToAlgTerm(rightNums[i]), rightDenTerm));
 
                 overallWork += mulWork;
 
-                ExComp termToAdd = MulOp.StaticCombine(mulTerm, rightNums[i].ToAlgTerm());
+                ExComp termToAdd = MulOp.StaticCombine(mulTerm, GroupHelper.ToAlgTerm(rightNums[i]));
                 rightTerms.Add(termToAdd);
 
                 if (i != rightDens.Count - 1)

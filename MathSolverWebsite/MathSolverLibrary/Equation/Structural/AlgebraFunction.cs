@@ -96,7 +96,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 {
                     List<ExComp> groupList = group.ToList();
                     groupList.Add(af);
-                    groups[i] = groupList.ToArray().RemoveOneCoeffs();
+                    groups[i] = GroupHelper.RemoveOneCoeffs(groupList.ToArray());
                 }
             }
 

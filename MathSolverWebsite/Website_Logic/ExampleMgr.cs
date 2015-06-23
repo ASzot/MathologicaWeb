@@ -32,7 +32,7 @@ namespace MathSolverWebsite.Website_Logic
         {
             _iterIndex = 0;
 
-            _examples.Shuffle();
+            ListExtensions.Shuffle(_examples);
         }
     }
 }

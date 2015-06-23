@@ -7,7 +7,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 {
     internal static class GroupHelper
     {
-        public static ExComp[] CloneGroup(this ExComp[] group)
+        public static ExComp[] CloneGroup(ExComp[] group)
         {
             ExComp[] clonedGroup = new ExComp[group.Length];
 
@@ -19,7 +19,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return clonedGroup;
         }
 
-        public static ExComp CompoundGroups(this List<AlgebraGroup> groups)
+        public static ExComp CompoundGroups(List<AlgebraGroup> groups)
         {
             AlgebraTerm term = new AlgebraTerm();
             foreach (AlgebraGroup group in groups)
@@ -30,12 +30,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return term;
         }
 
-        public static List<ExComp[]> CloneGpList(this List<ExComp[]> gps)
+        public static List<ExComp[]> CloneGpList(List<ExComp[]> gps)
         {
             List<ExComp[]> cloned = new List<ExComp[]>();
             for (int i = 0; i < gps.Count; ++i)
             {
-                cloned.Add(gps[i].CloneGroup());
+                cloned.Add(CloneGroup(gps[i]));
             }
 
             return cloned;
@@ -63,7 +63,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return false;
         }
 
-        public static bool ContainsFrac(this ExComp[] group)
+        public static bool ContainsFrac(ExComp[] group)
         {
             foreach (ExComp comp in group)
             {
@@ -78,7 +78,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                     List<ExComp[]> groups = (comp as AlgebraTerm).GetGroups();
                     foreach (ExComp[] compGroup in groups)
                     {
-                        if (compGroup.ContainsFrac())
+                        if (ContainsFrac(compGroup))
                             return true;
                     }
                 }
@@ -87,7 +87,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return false;
         }
 
-        public static string FinalToMathAsciiString(this ExComp[] group)
+        public static string FinalToMathAsciiString(ExComp[] group)
         {
             if (group.Length == 1)
             {
@@ -97,7 +97,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                     return (group[0] as AlgebraTerm).FinalToDispStr();
             }
 
-            return group.ToAsciiString();
+            return ToAsciiString(@group);
         }
 
         public static ExComp[] GCF(ExComp[] group1, ExComp[] group2)
@@ -121,7 +121,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return gcfGroup.ToArray();
         }
 
-        public static List<Constant> GetConstantTerms(this ExComp[] group)
+        public static List<Constant> GetConstantTerms(ExComp[] group)
         {
             List<Constant> constants = new List<Constant>();
             foreach (ExComp groupComp in group)
@@ -135,7 +135,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return constants;
         }
 
-        public static void GetConstVarTo(this ExComp[] group, out ExComp[] varGp, out ExComp[] constGp, params AlgebraComp[] varFors)
+        public static void GetConstVarTo(ExComp[] group, out ExComp[] varGp, out ExComp[] constGp, params AlgebraComp[] varFors)
         {
             List<ExComp> varGpList = new List<ExComp>();
             List<ExComp> constGpList = new List<ExComp>();
@@ -161,7 +161,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             constGp = constGpList.ToArray();
         }
 
-        public static ExComp[] ForceDistributeExponent(this ExComp[] group)
+        public static ExComp[] ForceDistributeExponent(ExComp[] group)
         {
             if (group.Length == 1 && group[0] is PowerFunction && !(@group[0] as PowerFunction).GetPower().IsEqualTo(Number.GetNegOne()))
             {
@@ -186,7 +186,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return group;
         }
 
-        public static ExComp[] GetDenominator(this ExComp[] group, bool force = false)
+        public static ExComp[] GetDenominator(ExComp[] group, bool force = false)
         {
             List<ExComp> denGroup = new List<ExComp>();
             for (int j = 0; j < group.Length; ++j)
@@ -209,12 +209,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             }
 
             ExComp[] denGroupArray = denGroup.ToArray();
-            denGroupArray = denGroupArray.RemoveRedundancies();
+            denGroupArray = RemoveRedundancies(denGroupArray);
 
             return denGroupArray;
         }
 
-        public static ExComp[] GetFactorOf(this ExComp[] group, ExComp[] compareGroup)
+        public static ExComp[] GetFactorOf(ExComp[] group, ExComp[] compareGroup)
         {
             List<ExComp> factorOfList = new List<ExComp>();
             for (int i = 0; i < group.Length; ++i)
@@ -292,7 +292,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return factorOfList.ToArray();
         }
 
-        public static double GetHighestPower(this ExComp[] group)
+        public static double GetHighestPower(ExComp[] group)
         {
             double max = -1;
             foreach (ExComp groupComp in group)
@@ -303,7 +303,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return max;
         }
 
-        public static ExComp[] GetNumerator(this ExComp[] group)
+        public static ExComp[] GetNumerator(ExComp[] group)
         {
             List<ExComp> numGroup = new List<ExComp>();
             for (int j = 0; j < group.Length; ++j)
@@ -316,7 +316,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             }
 
             ExComp[] numGroupArray = numGroup.ToArray();
-            numGroupArray = numGroupArray.RemoveRedundancies();
+            numGroupArray = RemoveRedundancies(numGroupArray);
 
             if (numGroupArray.Length == 0)
             {
@@ -327,7 +327,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return numGroupArray;
         }
 
-        public static ExComp GetPowerOfComp(this ExComp[] group, ExComp comp)
+        public static ExComp GetPowerOfComp(ExComp[] group, ExComp comp)
         {
             foreach (ExComp groupComp in group)
             {
@@ -341,7 +341,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return null;
         }
 
-        public static ExComp GetRelatableTermOfGroup(this ExComp[] group, ExComp comp, out int index)
+        public static ExComp GetRelatableTermOfGroup(ExComp[] group, ExComp comp, out int index)
         {
             index = -1;
             for (int i = 0; i < group.Count(); ++i)
@@ -357,7 +357,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return null;
         }
 
-        public static ExComp GetRelatableTermOfGroup(this ExComp[] group, ExComp comp)
+        public static ExComp GetRelatableTermOfGroup(ExComp[] group, ExComp comp)
         {
             foreach (ExComp groupComp in group)
             {
@@ -368,7 +368,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return null;
         }
 
-        public static ExComp GetRelatableTermOfGroup(this List<TypePair<ExComp, bool>> group, ExComp comp)
+        public static ExComp GetRelatableTermOfGroup(List<TypePair<ExComp, bool>> group, ExComp comp)
         {
             foreach (TypePair<ExComp, bool> groupComp in group)
             {
@@ -382,9 +382,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return null;
         }
 
-        public static ExComp[] GetUnrelatableTermsOfGroup(this ExComp[] group, AlgebraComp comp)
+        public static ExComp[] GetUnrelatableTermsOfGroup(ExComp[] group, AlgebraComp comp)
         {
-            group = group.RemoveRedundancies();
+            group = RemoveRedundancies(@group);
             List<ExComp> unrelatableTerms = new List<ExComp>();
             foreach (ExComp groupComp in group)
             {
@@ -403,7 +403,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return unrelatableTerms.ToArray();
         }
 
-        public static ExComp[] GetVariableTo(this ExComp[] group, AlgebraComp varFor)
+        public static ExComp[] GetVariableTo(ExComp[] group, AlgebraComp varFor)
         {
             List<ExComp> varGp = new List<ExComp>();
             foreach (ExComp gpCmp in group)
@@ -415,7 +415,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return varGp.ToArray();
         }
 
-        public static bool GroupContains(this ExComp[] group, AlgebraComp varFor)
+        public static bool GroupContains(ExComp[] group, AlgebraComp varFor)
         {
             foreach (ExComp groupComp in group)
             {
@@ -430,7 +430,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return false;
         }
 
-        public static bool GroupContains(this ExComp[] group, ExComp ex)
+        public static bool GroupContains(ExComp[] group, ExComp ex)
         {
             foreach (ExComp groupComp in group)
             {
@@ -440,7 +440,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return false;
         }
 
-        public static bool IsNeg(this ExComp[] group)
+        public static bool IsNeg(ExComp[] group)
         {
             foreach (ExComp gpCmp in group)
             {
@@ -526,8 +526,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public static ExComp[] LCF(ExComp[] group1, ExComp[] group2)
         {
-            group1 = group1.RemoveRedundancies();
-            group2 = group2.RemoveRedundancies();
+            group1 = RemoveRedundancies(group1);
+            group2 = RemoveRedundancies(group2);
             List<ExComp> lcmComps = new List<ExComp>();
 
             List<TypePair<ExComp, bool>> group2Checks = (from gpCmp in group2
@@ -535,7 +535,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
             foreach (ExComp group1Comp in group1)
             {
-                ExComp relatableComp = group2Checks.GetRelatableTermOfGroup(group1Comp);
+                ExComp relatableComp = GetRelatableTermOfGroup(group2Checks, group1Comp);
                 if (relatableComp != null)
                 {
                     ExComp lcf = LCF(relatableComp, group1Comp);
@@ -590,7 +590,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return corresponding;
         }
 
-        public static Number GetCoeff(this ExComp[] group)
+        public static Number GetCoeff(ExComp[] group)
         {
             foreach (ExComp gpCmp in group)
             {
@@ -601,7 +601,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return null;
         }
 
-        public static void AssignCoeff(this ExComp[] group, Number coeff)
+        public static void AssignCoeff(ExComp[] group, Number coeff)
         {
             for (int i = 0; i < group.Length; ++i)
             {
@@ -613,7 +613,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             }
         }
 
-        public static ExComp[] OrderGroup(this ExComp[] group)
+        public static ExComp[] OrderGroup(ExComp[] group)
         {
             List<Number> coeffs = new List<Number>();
             foreach (ExComp gpCmp in group)
@@ -624,8 +624,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             if (coeffs.Count != 0)
                 group = AlgebraTerm.RemoveCoeffs(group);
 
-            List<Constant> constants = group.GetConstantTerms();
-            group = group.RemoveExTerms(constants);
+            List<Constant> constants = GetConstantTerms(@group);
+            group = RemoveExTerms(@group, constants);
 
             group = group.OrderBy(g => g.GetCompareVal()).Reverse().ToArray();
             if (coeffs.Count != 0 || constants.Count > 0)
@@ -638,7 +638,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 group = final.ToArray();
             }
 
-            if (group.ContainsVectors())
+            if (ContainsVectors(@group))
                 return group;
 
             for (int i = 0; i < group.Length; ++i)
@@ -654,7 +654,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return group;
         }
 
-        public static List<ExComp> RemoveDuplicates(this List<ExComp> exCompList)
+        public static List<ExComp> RemoveDuplicates(List<ExComp> exCompList)
         {
             for (int i = 0; i < exCompList.Count; ++i)
             {
@@ -675,7 +675,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return exCompList;
         }
 
-        public static ExComp[] RemoveEx(this ExComp[] group, ExComp exToRemove)
+        public static ExComp[] RemoveEx(ExComp[] group, ExComp exToRemove)
         {
             List<ExComp> groupList = group.ToList();
 
@@ -684,7 +684,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return groupList.ToArray();
         }
 
-        public static ExComp[] RemoveEx(this ExComp[] group, int indexToRemove)
+        public static ExComp[] RemoveEx(ExComp[] group, int indexToRemove)
         {
             List<ExComp> groupList = group.ToList();
 
@@ -693,7 +693,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return groupList.ToArray();
         }
 
-        public static ExComp[] RemoveExTerms(this ExComp[] group, IEnumerable<ExComp> termsToRemove)
+        public static ExComp[] RemoveExTerms(ExComp[] group, IEnumerable<ExComp> termsToRemove)
         {
             foreach (ExComp term in termsToRemove)
             {
@@ -703,13 +703,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return group;
         }
 
-        public static ExComp[] RemoveOneCoeffs(this ExComp[] group)
+        public static ExComp[] RemoveOneCoeffs(ExComp[] group)
         {
-            bool hasDen = group.ContainsFrac();
+            bool hasDen = ContainsFrac(@group);
             if (hasDen)
             {
-                ExComp[] num = group.GetNumerator();
-                ExComp[] den = group.GetDenominator();
+                ExComp[] num = GetNumerator(@group);
+                ExComp[] den = GetDenominator(@group);
 
                 if (num.Length <= 1)
                 {
@@ -743,7 +743,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return retVal;
         }
 
-        public static ExComp[] RemoveOperators(this ExComp[] group)
+        public static ExComp[] RemoveOperators(ExComp[] group)
         {
             List<ExComp> groupList = group.ToList();
 
@@ -756,7 +756,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return groupList.ToArray();
         }
 
-        public static ExComp[] RemoveRedundancies(this ExComp[] group)
+        public static ExComp[] RemoveRedundancies(ExComp[] group)
         {
             List<ExComp> workedGroup = new List<ExComp>();
             for (int i = 0; i < group.Count(); ++i)
@@ -781,21 +781,21 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return workedGroup.ToArray();
         }
 
-        public static AlgebraTerm ToAlgNoRedunTerm(this ExComp[] group)
+        public static AlgebraTerm ToAlgNoRedunTerm(ExComp[] group)
         {
-            AlgebraTerm term = group.ToAlgTerm();
+            AlgebraTerm term = ToAlgTerm(@group);
             ExComp ex = term.RemoveRedundancies();
             return ex.ToAlgTerm();
         }
 
-        public static AlgebraTerm ToAlgTerm(this ExComp[] group)
+        public static AlgebraTerm ToAlgTerm(ExComp[] group)
         {
             AlgebraTerm term = new AlgebraTerm(group);
 
             return term;
         }
 
-        public static string ToAsciiString(this ExComp[] group)
+        public static string ToAsciiString(ExComp[] group)
         {
             string finalStr = "";
             for (int i = 0; i < group.Length; ++i)
@@ -812,7 +812,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return finalStr;
         }
 
-        public static string ToTexString(this ExComp[] group)
+        public static string ToTexString(ExComp[] group)
         {
             string finalStr = "";
             for (int i = 0; i < group.Length; ++i)
@@ -829,7 +829,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return finalStr;
         }
 
-        public static ExComp[] AccumulateTerms(this ExComp[] group)
+        public static ExComp[] AccumulateTerms(ExComp[] group)
         {
             ExComp accum = AccumulateTermsRecur(group.ToList());
             if (accum is AlgebraTerm)
@@ -861,7 +861,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return AccumulateTermsRecur(exs);
         }
 
-        private static bool ContainsVectors(this ExComp[] group)
+        private static bool ContainsVectors(ExComp[] group)
         {
             foreach (ExComp cmp in group)
             {

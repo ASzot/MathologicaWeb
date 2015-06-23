@@ -100,9 +100,9 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 return false;
 
             ExComp[] variableGroup = variableGroups[0].GetGroup();
-            ExComp[] variableCoeffs = variableGroup.GetUnrelatableTermsOfGroup(solveForComp);
+            ExComp[] variableCoeffs = GroupHelper.GetUnrelatableTermsOfGroup(variableGroup, solveForComp);
 
-            _coeff = variableCoeffs.ToAlgTerm();
+            _coeff = GroupHelper.ToAlgTerm(variableCoeffs);
 
             List<ExComp> varGroupList = variableGroup.ToList();
 

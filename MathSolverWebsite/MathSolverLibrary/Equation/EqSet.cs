@@ -296,7 +296,7 @@ namespace MathSolverWebsite.MathSolverLibrary
                 if (side == null)
                     continue;
                 AlgebraTerm sideTerm = side.ToAlgTerm();
-                sideTerm.GetAdditionalVarFors(ref varFors);
+                AdvAlgebraTerm.GetAdditionalVarFors(sideTerm, ref varFors);
             }
         }
 
@@ -307,7 +307,7 @@ namespace MathSolverWebsite.MathSolverLibrary
             {
                 if (side == null)
                     continue;
-                side.CloneEx().ToAlgTerm().GetDomain(agSolver, varFor, ref domainRests, ref pEvalData);
+                AdvAlgebraTerm.GetDomain(side.CloneEx().ToAlgTerm(), agSolver, varFor, ref domainRests, ref pEvalData);
                 if (domainRests == null)
                     return null;
             }

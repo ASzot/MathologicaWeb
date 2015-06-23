@@ -28,9 +28,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             if (divided.IsEqualTo(term))
             {
                 if (num is AlgebraTerm)
-                    num = (num as AlgebraTerm).FactorizeTerm(ref pEvalData);
+                    num = AdvAlgebraTerm.FactorizeTerm((num as AlgebraTerm), ref pEvalData);
                 if (den is AlgebraTerm)
-                    den = (den as AlgebraTerm).FactorizeTerm(ref pEvalData);
+                    den = AdvAlgebraTerm.FactorizeTerm((den as AlgebraTerm), ref pEvalData);
 
                 divided = Operators.DivOp.StaticCombine(num, den);
             }
@@ -85,12 +85,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public static ExComp Simplify(AlgebraTerm term, ref TermType.EvalData pEvalData)
         {
-            bool noPowEval = term.ContainsOneOfFuncs(typeof(Functions.Calculus.Derivative), typeof(Functions.Calculus.Integral));
+            bool noPowEval = AdvAlgebraTerm.ContainsOneOfFuncs(term, typeof(Functions.Calculus.Derivative), typeof(Functions.Calculus.Integral));
 
             term.EvaluateFunctions(false, ref pEvalData);
 
             if (!noPowEval)
-                term = term.EvaluatePowers(ref pEvalData);
+                term = AdvAlgebraTerm.EvaluatePowers(term, ref pEvalData);
 
             term = term.ApplyOrderOfOperations();
             term = term.MakeWorkable().ToAlgTerm();
@@ -98,7 +98,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             if (term.HasTrigFunctions())
             {
                 // There are trig functions in this expression.
-                term = term.TrigSimplify(ref pEvalData);
+                term = AdvAlgebraTerm.TrigSimplify(term, ref pEvalData);
             }
 
             term = term.Order();

@@ -147,7 +147,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                 return this;
             }
 
-            if (dLogVal.IsInteger())
+            if (DoubleHelper.IsInteger(dLogVal))
                 return new Number(dLogVal);
 
             if (GetInnerEx() is PowerFunction)

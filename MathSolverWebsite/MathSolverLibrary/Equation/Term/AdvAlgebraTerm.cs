@@ -8,7 +8,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
 {
     internal static class AdvAlgebraTerm
     {
-        public static AlgebraTerm AbsValToParas(this AlgebraTerm term)
+        public static AlgebraTerm AbsValToParas(AlgebraTerm term)
         {
             for (int i = 0; i < term.GetTermCount(); ++i)
             {
@@ -18,14 +18,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
                 }
                 else if (term[i] is AlgebraTerm && !(term is AlgebraFunction))
                 {
-                    term[i] = (term[i] as AlgebraTerm).AbsValToParas();
+                    term[i] = AbsValToParas((term[i] as AlgebraTerm));
                 }
             }
 
             return term;
         }
 
-        public static bool ContainsOneOfFuncs(this AlgebraTerm term, params Type[] types)
+        public static bool ContainsOneOfFuncs(AlgebraTerm term, params Type[] types)
         {
             if (types.Contains(term.GetType()))
                 return true;
@@ -35,20 +35,20 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
                 if (types.Contains(term.GetSubComps()[i].GetType()))
                     return true;
 
-                if (term.GetSubComps()[i] is AlgebraTerm && (term.GetSubComps()[i] as AlgebraTerm).ContainsOneOfFuncs(types))
+                if (term.GetSubComps()[i] is AlgebraTerm && ContainsOneOfFuncs((term.GetSubComps()[i] as AlgebraTerm), types))
                     return true;
             }
 
             return false;
         }
 
-        public static AlgebraTerm CompoundLogs(this AlgebraTerm term, AlgebraComp solveForComp = null)
+        public static AlgebraTerm CompoundLogs(AlgebraTerm term, AlgebraComp solveForComp = null)
         {
             bool garbage;
             return CompoundLogs(term, out garbage, solveForComp);
         }
 
-        public static AlgebraTerm CompoundLogs(this AlgebraTerm term, out bool hasCombined, AlgebraComp solveForComp = null)
+        public static AlgebraTerm CompoundLogs(AlgebraTerm term, out bool hasCombined, AlgebraComp solveForComp = null)
         {
             hasCombined = false;
             int varLogCount = -1;
@@ -190,7 +190,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
             return new AlgebraTerm(finalGroups.ToArray());
         }
 
-        public static ExComp EvaluateExponentsCompletely(this AlgebraTerm term)
+        public static ExComp EvaluateExponentsCompletely(AlgebraTerm term)
         {
             if (term is PowerFunction)
             {
@@ -216,14 +216,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
             {
                 if (term[i] is AlgebraTerm)
                 {
-                    term[i] = (term[i] as AlgebraTerm).EvaluateExponentsCompletely();
+                    term[i] = EvaluateExponentsCompletely((term[i] as AlgebraTerm));
                 }
             }
 
             return term;
         }
 
-        public static AlgebraTerm EvaluatePowers(this AlgebraTerm term, ref TermType.EvalData pEvalData)
+        public static AlgebraTerm EvaluatePowers(AlgebraTerm term, ref TermType.EvalData pEvalData)
         {
             term = term.RemoveRedundancies().ToAlgTerm();
 
@@ -252,7 +252,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
                     }
                     powNum = Number.Abs(powNum);
 
-                    term = powFunc.GetBase().RaiseToPow(powNum, ref pEvalData).ToAlgTerm();
+                    term = RaiseToPow(powFunc.GetBase(), powNum, ref pEvalData).ToAlgTerm();
 
                     if (makeDen)
                     {
@@ -276,7 +276,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
             {
                 if (term[i] is AlgebraTerm)
                 {
-                    term[i] = (term[i] as AlgebraTerm).EvaluatePowers(ref pEvalData);
+                    term[i] = EvaluatePowers((term[i] as AlgebraTerm), ref pEvalData);
                 }
             }
 
@@ -285,7 +285,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
 
         //TODO:
         // There's a good chance this won't work.
-        public static AlgebraTerm ExpandLogs(this AlgebraTerm term)
+        public static AlgebraTerm ExpandLogs(AlgebraTerm term)
         {
             term = term.RemoveRedundancies().ToAlgTerm();
 
@@ -411,7 +411,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
             }
 
             ExComp ac = MulOp.StaticCombine(a, c);
-            List<TypePair<ExComp, ExComp>> divisors = ac.GetDivisorsSignInvariant();
+            List<TypePair<ExComp, ExComp>> divisors = GetDivisorsSignInvariant(ac);
             if (divisors == null)
                 return null;
 
@@ -486,13 +486,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
             return factors;
         }
 
-        public static AlgebraTerm FactorizeTerm(this AlgebraTerm term, ref TermType.EvalData pEvalData, bool allowComplex = false)
+        public static AlgebraTerm FactorizeTerm(AlgebraTerm term, ref TermType.EvalData pEvalData, bool allowComplex = false)
         {
             if (term.GetAllAlgebraCompsStr().Count == 0)
                 return term;
 
             int startWorkSteps = pEvalData.GetWorkMgr().GetWorkSteps().Count;
-            AlgebraTerm[] factors = term.GetFactors(ref pEvalData);
+            AlgebraTerm[] factors = GetFactors(term, ref pEvalData);
 
             if (factors != null)
             {
@@ -525,7 +525,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
             return term;
         }
 
-        public static AlgebraTerm ForceLogCoeffToPow(this AlgebraTerm term, AlgebraComp solveForComp = null)
+        public static AlgebraTerm ForceLogCoeffToPow(AlgebraTerm term, AlgebraComp solveForComp = null)
         {
             List<ExComp[]> finalGroups = new List<ExComp[]>();
 
@@ -576,7 +576,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
             return new AlgebraTerm(finalGroups.ToArray());
         }
 
-        public static AlgebraTerm ForceLogPowToCoeff(this LogFunction log)
+        public static AlgebraTerm ForceLogPowToCoeff(LogFunction log)
         {
             AlgebraTerm innerTerm = log.GetInnerTerm();
             List<ExComp[]> groups = innerTerm.GetGroupsNoOps();
@@ -633,7 +633,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
                         (@group[i] as PowerFunction).SetPower(divResult);
                 }
 
-                LogFunction finalLog = new LogFunction(group.ToAlgTerm());
+                LogFunction finalLog = new LogFunction(GroupHelper.ToAlgTerm(@group));
                 finalLog.SetBase(log.GetBase());
 
                 return new AlgebraTerm(powersGcf, new MulOp(), finalLog);
@@ -642,13 +642,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
             return log;
         }
 
-        public static void GetAdditionalVarFors(this AlgebraTerm term, ref Dictionary<string, int> varFors)
+        public static void GetAdditionalVarFors(AlgebraTerm term, ref Dictionary<string, int> varFors)
         {
             foreach (ExComp subComp in term.GetSubComps())
             {
                 if (subComp is AlgebraTerm)
                 {
-                    (subComp as AlgebraTerm).GetAdditionalVarFors(ref varFors);
+                    GetAdditionalVarFors((subComp as AlgebraTerm), ref varFors);
                 }
                 if (subComp is FunctionDefinition)
                 {
@@ -664,7 +664,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
             }
         }
 
-        public static List<TypePair<ExComp, ExComp>> GetDivisors(this ExComp ex)
+        public static List<TypePair<ExComp, ExComp>> GetDivisors(ExComp ex)
         {
             List<TypePair<ExComp, ExComp>> divisors = null;
 
@@ -712,7 +712,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
             return divisors;
         }
 
-        public static List<TypePair<ExComp, ExComp>> GetDivisorsSignInvariant(this ExComp ex)
+        public static List<TypePair<ExComp, ExComp>> GetDivisorsSignInvariant(ExComp ex)
         {
             if (ex is Number)
             {
@@ -722,7 +722,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
                 return exDivisors.ToList();
             }
 
-            List<TypePair<ExComp, ExComp>> signInvariantDivisors = ex.GetDivisors();
+            List<TypePair<ExComp, ExComp>> signInvariantDivisors = GetDivisors(ex);
             if (signInvariantDivisors == null)
                 return null;
             // We have to account for the negative negative situation.
@@ -745,7 +745,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
             return signInvariantDivisors;
         }
 
-        public static void GetDomain(this AlgebraTerm term, AlgebraSolver agSolver, AlgebraVar varFor, ref List<Restriction> restrictions, ref TermType.EvalData pEvalData)
+        public static void GetDomain(AlgebraTerm term, AlgebraSolver agSolver, AlgebraVar varFor, ref List<Restriction> restrictions, ref TermType.EvalData pEvalData)
         {
             AlgebraTerm[] numDen = term.GetNumDenFrac();
             if (numDen != null)
@@ -780,10 +780,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
                         restrictions.Add(potentialAddRest);
                 }
 
-                numDen[0].GetDomain(agSolver, varFor, ref restrictions, ref pEvalData);
+                GetDomain(numDen[0], agSolver, varFor, ref restrictions, ref pEvalData);
                 if (restrictions == null)
                     return;
-                numDen[1].GetDomain(agSolver, varFor, ref restrictions, ref pEvalData);
+                GetDomain(numDen[1], agSolver, varFor, ref restrictions, ref pEvalData);
                 if (restrictions == null)
                     return;
             }
@@ -806,7 +806,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
                 {
                     if (subComp is AlgebraTerm)
                     {
-                        (subComp as AlgebraTerm).GetDomain(agSolver, varFor, ref restrictions, ref pEvalData);
+                        GetDomain((subComp as AlgebraTerm), agSolver, varFor, ref restrictions, ref pEvalData);
                         if (restrictions == null)
                             return;
                     }
@@ -841,7 +841,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
             restrictions.Add(compounded);
         }
 
-        public static AlgebraTerm[] GetFactors(this AlgebraTerm term, ref TermType.EvalData pEvalData)
+        public static AlgebraTerm[] GetFactors(AlgebraTerm term, ref TermType.EvalData pEvalData)
         {
             if (term.RemoveRedundancies() is Number)
                 return null;
@@ -877,7 +877,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
             ExComp[] gcfGp = term.GetGroupGCF();
             if (gcfGp != null && gcfGp.Length != 0 && !(gcfGp.Length == 1 && (Number.GetOne().IsEqualTo(gcfGp[0]) || Number.GetZero().IsEqualTo(gcfGp[0]))))
             {
-                AlgebraTerm gcfTerm = gcfGp.ToAlgNoRedunTerm();
+                AlgebraTerm gcfTerm = GroupHelper.ToAlgNoRedunTerm(gcfGp);
                 if (!term.IsEqualTo(gcfTerm))
                 {
                     term = DivOp.FactorOutTerm(term, gcfTerm.CloneEx()).ToAlgTerm();
@@ -917,7 +917,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
                     ExComp[] aGp;
                     ExComp[] bGp;
 
-                    if (groups[0].IsNeg())
+                    if (GroupHelper.IsNeg(groups[0]))
                     {
                         aGp = groups[1];
                         bGp = groups[0];
@@ -928,13 +928,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
                         bGp = groups[1];
                     }
 
-                    if (bGp.IsNeg())
+                    if (GroupHelper.IsNeg(bGp))
                     {
                         bGp = AbsValFunction.MakePositive(bGp);
 
                         // As in the power of 2.
-                        ExComp aExTo2 = aGp.ToAlgTerm().RemoveRedundancies();
-                        ExComp bExTo2 = bGp.ToAlgTerm().RemoveRedundancies();
+                        ExComp aExTo2 = GroupHelper.ToAlgTerm(aGp).RemoveRedundancies();
+                        ExComp bExTo2 = GroupHelper.ToAlgTerm(bGp).RemoveRedundancies();
 
                         ExComp aEx = PowOp.TakeRoot(aExTo2, squarePow, ref pEvalData);
                         if (aEx is AlgebraTermArray)
@@ -959,7 +959,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
                     ExComp[] aGp;
                     ExComp[] bGp;
 
-                    if (groups[0].IsNeg())
+                    if (GroupHelper.IsNeg(groups[0]))
                     {
                         aGp = groups[1];
                         bGp = groups[0];
@@ -970,13 +970,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
                         bGp = groups[1];
                     }
 
-                    bool isNeg = bGp.IsNeg();
+                    bool isNeg = GroupHelper.IsNeg(bGp);
                     if (isNeg)
                         bGp = AbsValFunction.MakePositive(bGp);
 
                     // As in the power of 3.
-                    ExComp aExTo3 = aGp.ToAlgTerm().RemoveRedundancies();
-                    ExComp bExTo3 = bGp.ToAlgTerm().RemoveRedundancies();
+                    ExComp aExTo3 = GroupHelper.ToAlgTerm(aGp).RemoveRedundancies();
+                    ExComp bExTo3 = GroupHelper.ToAlgTerm(bGp).RemoveRedundancies();
 
                     ExComp aEx = PowOp.TakeRoot(aExTo3, cubePow, ref pEvalData);
                     if (aEx is AlgebraTermArray)
@@ -1007,12 +1007,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
             else if (groups.Count == 4)
             {
                 // Can we factor by grouping.
-                ExComp ex0 = groups[0].ToAlgTerm().RemoveRedundancies();
-                ExComp ex1 = groups[1].ToAlgTerm().RemoveRedundancies();
-                ExComp ex2 = groups[2].ToAlgTerm().RemoveRedundancies();
-                ExComp ex3 = groups[3].ToAlgTerm().RemoveRedundancies();
+                ExComp ex0 = GroupHelper.ToAlgTerm(groups[0]).RemoveRedundancies();
+                ExComp ex1 = GroupHelper.ToAlgTerm(groups[1]).RemoveRedundancies();
+                ExComp ex2 = GroupHelper.ToAlgTerm(groups[2]).RemoveRedundancies();
+                ExComp ex3 = GroupHelper.ToAlgTerm(groups[3]).RemoveRedundancies();
 
-                bool is0Neg = groups[0].IsNeg();
+                bool is0Neg = GroupHelper.IsNeg(groups[0]);
                 bool is1Neg;
 
                 ExComp gcf0 = DivOp.GetCommonFactor(ex0, ex1);
@@ -1031,7 +1031,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
                             return null;
                         else
                         {
-                            is1Neg = groups[1].IsNeg();
+                            is1Neg = GroupHelper.IsNeg(groups[1]);
 
                             ExComp ex1Orig = ex1.CloneEx();
                             ExComp ex2Orig = ex2.CloneEx();
@@ -1044,7 +1044,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
                     }
                     else
                     {
-                        is1Neg = groups[3].IsNeg();
+                        is1Neg = GroupHelper.IsNeg(groups[3]);
 
                         ExComp ex1Orig = ex1.CloneEx();
                         ExComp ex2Orig = ex2.CloneEx();
@@ -1057,7 +1057,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
                 }
                 else
                 {
-                    is1Neg = groups[2].IsNeg();
+                    is1Neg = GroupHelper.IsNeg(groups[2]);
                 }
 
                 if (is0Neg)
@@ -1146,7 +1146,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
             return null;
         }
 
-        public static bool IsSimpleFraction(this AlgebraTerm term)
+        public static bool IsSimpleFraction(AlgebraTerm term)
         {
             if (term.ContainsOnlyFractions() && term.GetGroupCount() == 1)
                 return true;
@@ -1213,7 +1213,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
                         if (prevRange.Count + afterRange.Count == 0)
                             afterRange.Add(Number.GetOne());
                         ExComp[] totalRange = prevRange.Concat(afterRange).ToArray();
-                        if (!totalRange.ToAlgNoRedunTerm().IsEqualTo(coeff))
+                        if (!GroupHelper.ToAlgNoRedunTerm(totalRange).IsEqualTo(coeff))
                             continue;
 
                         return new TypePair<PowerFunction, ExComp[]>(gp[i] as PowerFunction, prevRange.Concat(afterRange).ToArray());
@@ -1245,7 +1245,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
                         ExComp[] compareGroup = groups[k];
 
                         TypePair<PowerFunction, ExComp[]> compareTrigCoeffPair = getTrigFuncAndCoeffRestrictions(compareGroup, trigCoeffPair.GetData1().GetPower(), innerEx,
-                            trigCoeffPair.GetData2().ToAlgNoRedunTerm(), desiredTrigFunc);
+                            GroupHelper.ToAlgNoRedunTerm(trigCoeffPair.GetData2()), desiredTrigFunc);
 
                         if (compareTrigCoeffPair == null)
                             continue;
@@ -1274,12 +1274,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
             return origTerm;
         }
 
-        public static ExComp RaiseToPow(this ExComp term, Number power, ref TermType.EvalData pEvalData)
+        public static ExComp RaiseToPow(ExComp term, Number power, ref TermType.EvalData pEvalData)
         {
             return PowOp.RaiseToPower(term, power, ref pEvalData);
         }
 
-        public static AlgebraTerm TrigSimplify(this AlgebraTerm term, ref TermType.EvalData pEvalData)
+        public static AlgebraTerm TrigSimplify(AlgebraTerm term, ref TermType.EvalData pEvalData)
         {
             term = TrigSimplifyCombine(term, ref pEvalData);
             term = PythagTrigSimplify(term, ref pEvalData);
@@ -1289,12 +1289,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
 
         private static ExComp[] CancelTrigTerms(ExComp[] group, ref TermType.EvalData pEvalData)
         {
-            ExComp[] den = group.GetDenominator();
+            ExComp[] den = GroupHelper.GetDenominator(@group);
             if (den != null && den.Length != 0)
             {
                 // There is a denominator in this group.
-                ExComp[] num = group.GetNumerator();
-                AlgebraTerm numDenResult = AlgebraTerm.FromFraction(num.ToAlgTerm(), den.ToAlgTerm()).TrigSimplify(ref pEvalData);
+                ExComp[] num = GroupHelper.GetNumerator(@group);
+                AlgebraTerm numDenResult = TrigSimplify(AlgebraTerm.FromFraction(GroupHelper.ToAlgTerm(num), GroupHelper.ToAlgTerm(den)), ref pEvalData);
                 List<ExComp[]> numDenResultGroups = numDenResult.GetGroups();
                 if (numDenResultGroups.Count == 1)
                     return numDenResultGroups[0];
@@ -1546,7 +1546,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
                         if (modifiedDens[i] != null)
                         {
                             modifiedNumDenPairs.Add(new TypePair<ExComp, ExComp>(
-                                numGroups[i].ToAlgTerm(), modifiedDens[i].ToArray().ToAlgTerm()));
+                                GroupHelper.ToAlgTerm(numGroups[i]), GroupHelper.ToAlgTerm(modifiedDens[i].ToArray())));
                         }
                     }
 
@@ -1589,7 +1589,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
                                 if (gp.Count > 0 && gp[gp.Count - 1] is AgOp)
                                     gp.RemoveAt(gp.Count - 1);
 
-                                modifiedNumDenPairs[i].SetData2(gp.ToArray().ToAlgTerm());
+                                modifiedNumDenPairs[i].SetData2(GroupHelper.ToAlgTerm(gp.ToArray()));
                             }
                         }
                         else if (modDen is TrigFunction)
@@ -1609,7 +1609,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
                     {
                         if (modifiedDens[i] == null)
                         {
-                            nonModifiedNums.Add(numGroups[i].ToAlgTerm());
+                            nonModifiedNums.Add(GroupHelper.ToAlgTerm(numGroups[i]));
                         }
                     }
 
@@ -1644,7 +1644,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
                         }
 
                         if (singleDenGp.Count > 0)
-                            final.Add(AlgebraTerm.FromFraction(nonModNum, singleDenGp.ToArray().ToAlgTerm()));
+                            final.Add(AlgebraTerm.FromFraction(nonModNum, GroupHelper.ToAlgTerm(singleDenGp.ToArray())));
                         else
                             final.Add(nonModNum);
                     }
@@ -1677,7 +1677,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
                     if (!(den is AlgebraTerm && (den as AlgebraTerm).GetGroupCount() != 1) &&
                         !(num is AlgebraTerm && (num as AlgebraTerm).GetGroupCount() != 1))
                     {
-                        return AlgebraTerm.FromFraction(num, den).TrigSimplify(ref pEvalData);
+                        return TrigSimplify(AlgebraTerm.FromFraction(num, den), ref pEvalData);
                     }
                 }
 

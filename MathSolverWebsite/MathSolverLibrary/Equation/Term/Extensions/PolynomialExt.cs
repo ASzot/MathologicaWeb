@@ -115,8 +115,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
                 iA = Math.Abs(iA);
                 iConst = Math.Abs(iConst);
 
-                int[] aDivs = iA.GetDivisors(true, true);
-                int[] constDivs = iConst.GetDivisors(true, true);
+                int[] aDivs = MathHelper.GetDivisors(iA, true, true);
+                int[] constDivs = MathHelper.GetDivisors(iConst, true, true);
 
                 List<ExComp> posRoots = new List<ExComp>();
 
@@ -139,7 +139,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
                     posRoots.Add(negPosRoot);
                 }
 
-                return posRoots.RemoveDuplicates();
+                return GroupHelper.RemoveDuplicates(posRoots);
             }
 
             return null;

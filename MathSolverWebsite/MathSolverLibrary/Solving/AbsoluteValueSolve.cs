@@ -79,12 +79,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             else if (left.GetGroupCount() == 2 && right.IsZero())
             {
                 List<ExComp[]> groups = left.GetGroups();
-                AlgebraTerm groupTerm0 = groups[0].ToAlgTerm();
-                AlgebraTerm groupTerm1 = groups[1].ToAlgTerm();
+                AlgebraTerm groupTerm0 = GroupHelper.ToAlgTerm(groups[0]);
+                AlgebraTerm groupTerm1 = GroupHelper.ToAlgTerm(groups[1]);
                 groupTerm1 = MulOp.Negate(groupTerm1).ToAlgTerm();
 
-                groupTerm0 = groupTerm0.AbsValToParas();
-                groupTerm1 = groupTerm1.AbsValToParas();
+                groupTerm0 = AdvAlgebraTerm.AbsValToParas(groupTerm0);
+                groupTerm1 = AdvAlgebraTerm.AbsValToParas(groupTerm1);
 
                 // Solve when one is negative and when they are both positive.
 

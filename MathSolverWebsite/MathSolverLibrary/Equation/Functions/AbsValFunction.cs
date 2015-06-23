@@ -72,12 +72,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                 if (groups.Count == 1)
                 {
                     ExComp[] gp = groups[0];
-                    Number coeff = gp.GetCoeff();
+                    Number coeff = GroupHelper.GetCoeff(gp);
                     if (coeff != null)
                     {
                         coeff = Number.Abs(coeff);
-                        gp.AssignCoeff(coeff);
-                        return new AbsValFunction(gp.ToAlgTerm());
+                        GroupHelper.AssignCoeff(gp, coeff);
+                        return new AbsValFunction(GroupHelper.ToAlgTerm(gp));
                     }
                 }
             }

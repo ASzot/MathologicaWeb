@@ -131,8 +131,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
             PrepareForSolving(ref left, ref right, solveForComp, ref pEvalData);
 
-            left = left.EvaluatePowers(ref pEvalData);
-            right = right.EvaluatePowers(ref pEvalData);
+            left = AdvAlgebraTerm.EvaluatePowers(left, ref pEvalData);
+            right = AdvAlgebraTerm.EvaluatePowers(right, ref pEvalData);
 
             ConstantsToRight(ref right, ref left, solveForComp, ref pEvalData);
             VariablesToLeft(ref left, ref right, solveForComp, ref pEvalData);
@@ -148,20 +148,20 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
             List<ExComp> powersOfVar = left.GetPowersOfVar(solveForComp);
 
-            if (!powersOfVar.ContainsEx(new Number(2.0)) || !powersOfVar.ContainsEx(new Number(1.0)))
+            if (!ObjectHelper.ContainsEx(powersOfVar, new Number(2.0)) || !ObjectHelper.ContainsEx(powersOfVar, new Number(1.0)))
                 return p_agSolver.SolveEq(solveFor, left, right, ref pEvalData);
 
-            left = left.EvaluateExponentsCompletely().ToAlgTerm();
+            left = AdvAlgebraTerm.EvaluateExponentsCompletely(left).ToAlgTerm();
 
             List<ExComp[]> squaredGroups = left.GetGroupContainingTerm(solveForComp.ToPow(2.0));
             List<ExComp[]> linearGroups = left.GetGroupContainingTerm(solveForComp);
             List<AlgebraGroup> constantGroup = left.GetGroupsConstantTo(solveForComp);
 
             IEnumerable<AlgebraTerm> aTerms = from squaredGroup in squaredGroups
-                         select squaredGroup.GetUnrelatableTermsOfGroup(solveForComp).ToAlgTerm();
+                         select GroupHelper.ToAlgTerm(GroupHelper.GetUnrelatableTermsOfGroup(squaredGroup, solveForComp));
 
             IEnumerable<AlgebraTerm> bTerms = from linearGroup in linearGroups
-                         select linearGroup.GetUnrelatableTermsOfGroup(solveForComp).ToAlgTerm();
+                         select GroupHelper.ToAlgTerm(GroupHelper.GetUnrelatableTermsOfGroup(linearGroup, solveForComp));
 
             AlgebraTerm a = new AlgebraTerm();
             foreach (AlgebraTerm aTerm in aTerms)

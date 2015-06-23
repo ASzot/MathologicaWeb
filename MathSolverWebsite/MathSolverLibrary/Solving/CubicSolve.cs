@@ -36,8 +36,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
         private ExComp Factor(ref AlgebraTerm left, ref AlgebraTerm right, AlgebraVar solveFor, ref TermType.EvalData pEvalData)
         {
-            left = left.EvaluatePowers(ref pEvalData);
-            right = right.EvaluatePowers(ref pEvalData);
+            left = AdvAlgebraTerm.EvaluatePowers(left, ref pEvalData);
+            right = AdvAlgebraTerm.EvaluatePowers(right, ref pEvalData);
 
             if (!right.IsZero())
             {
@@ -87,7 +87,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             ExComp[] groupGcf = left.GetGroupGCF();
             if (groupGcf != null && groupGcf.Length != 0)
             {
-                AlgebraTerm factorOut = groupGcf.ToAlgTerm();
+                AlgebraTerm factorOut = GroupHelper.ToAlgTerm(groupGcf);
                 if (!factorOut.IsOne())
                 {
                     left = DivOp.StaticCombine(left, factorOut).ToAlgTerm();
@@ -107,7 +107,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             pEvalData.GetWorkMgr().FromSides(left, right, "Solve this problem by factoring.");
             int startCount = pEvalData.GetWorkMgr().GetWorkSteps().Count;
 
-            AlgebraTerm[] factors = left.GetFactors(ref pEvalData);
+            AlgebraTerm[] factors = AdvAlgebraTerm.GetFactors(left, ref pEvalData);
             if (factors == null)
             {
                 // Remove all the steps that were associated with factoring.

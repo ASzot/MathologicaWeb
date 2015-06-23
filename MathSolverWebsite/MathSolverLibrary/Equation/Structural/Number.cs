@@ -130,7 +130,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 throw new ArgumentException();
 
             double result = Math.Pow(n1.GetRealComp(), 1.0 / root.GetRealComp());
-            return result.IsInteger();
+            return DoubleHelper.IsInteger(result);
         }
 
         public static double EpsilonCorrect(double d)
@@ -230,7 +230,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 double log1 = Math.Log(i1, divisor);
                 double log2 = Math.Log(i2, divisor);
 
-                if (log1.IsInteger() && log2.IsInteger())
+                if (DoubleHelper.IsInteger(log1) && DoubleHelper.IsInteger(log2))
                 {
                     minVal = divisor;
                     break;
@@ -396,7 +396,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
             int n = (int)d_realComp;
 
-            int[] divisors = n.GetDivisors();
+            int[] divisors = MathHelper.GetDivisors(n);
             List<int> sortedDivisors = divisors.ToList();
             sortedDivisors.Sort();
 
@@ -407,7 +407,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 // log_(divisor)(i1)
                 double logVal = Math.Log(n, divisor);
 
-                if (logVal.IsInteger())
+                if (DoubleHelper.IsInteger(logVal))
                 {
                     minVal = divisor;
                     break;
@@ -939,7 +939,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 str += "i";
 
                 if (useParas)
-                    str = str.SurroundWithParas();
+                    str = StringHelper.SurroundWithParas(str);
 
                 return str;
             }
@@ -995,7 +995,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 str += "i";
 
                 if (useParas)
-                    str = str.SurroundWithParas();
+                    str = StringHelper.SurroundWithParas(str);
 
                 return str;
             }

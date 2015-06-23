@@ -797,11 +797,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     {
                         ExComp[] gp = gps[0];
                         ExComp[] varTo, constTo;
-                        gp.GetConstVarTo(out varTo, out constTo, _withRespectTo);
+                        GroupHelper.GetConstVarTo(gp, out varTo, out constTo, _withRespectTo);
                         if (varTo.Length != 0 && constTo.Length != 0)
                         {
-                            AlgebraTerm agConst = AlgebraTerm.FromFraction(Number.GetOne(), constTo.ToAlgTerm());
-                            AlgebraTerm agVarTo = varTo.ToAlgNoRedunTerm();
+                            AlgebraTerm agConst = AlgebraTerm.FromFraction(Number.GetOne(), GroupHelper.ToAlgTerm(constTo));
+                            AlgebraTerm agVarTo = GroupHelper.ToAlgNoRedunTerm(varTo);
                             if (agVarTo is PowerFunction)
                                 (agVarTo as PowerFunction).SetPower(MulOp.Negate((agVarTo as PowerFunction).GetPower()));
                             else
@@ -1045,7 +1045,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     string indvDerivs = "";
                     for (int i = 0; i < gps.Count; ++i)
                     {
-                        indvDerivs += ca_derivSymb + "[" + gps[i].FinalToMathAsciiString() + "]";
+                        indvDerivs += ca_derivSymb + "[" + GroupHelper.FinalToMathAsciiString(gps[i]) + "]";
                         if (i != gps.Count - 1)
                             indvDerivs += "+";
                     }
@@ -1074,13 +1074,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         private ExComp TakeDerivativeOfGp(ExComp[] gp, ref TermType.EvalData pEvalData)
         {
             if (_withRespectTo == null)
-                return Derivative.ConstructDeriv(gp.ToAlgTerm(), _withRespectTo, _derivOf);
+                return Derivative.ConstructDeriv(GroupHelper.ToAlgTerm(gp), _withRespectTo, _derivOf);
 
             ExComp[] varTo, constTo;
             if (_derivOf == null)
-                gp.GetConstVarTo(out varTo, out constTo, _withRespectTo);
+                GroupHelper.GetConstVarTo(gp, out varTo, out constTo, _withRespectTo);
             else
-                gp.GetConstVarTo(out varTo, out constTo, _withRespectTo, _derivOf);
+                GroupHelper.GetConstVarTo(gp, out varTo, out constTo, _withRespectTo, _derivOf);
 
             if (constTo.Length == 1 && constTo[0].IsEqualTo(Number.GetOne()))
             {
@@ -1090,17 +1090,17 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             if (varTo.Length == 0)
             {
-                pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[" + gp.FinalToMathAsciiString() + "]=0`", "The entire term is constant therefore the derivative equals `0`");
+                pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[" + GroupHelper.FinalToMathAsciiString(gp) + "]=0`", "The entire term is constant therefore the derivative equals `0`");
                 return Number.GetZero();
             }
 
-            string varToStr = varTo.ToAlgTerm().ToAsciiString();
+            string varToStr = GroupHelper.ToAlgTerm(varTo).ToAsciiString();
 
             ExComp derivTerm = null;
 
             if (constTo.Length != 0)
             {
-                pEvalData.GetWorkMgr().FromFormatted("`" + constTo.ToAlgTerm().ToDispString() + ca_derivSymb + "[" + varToStr + "]`",
+                pEvalData.GetWorkMgr().FromFormatted("`" + GroupHelper.ToAlgTerm(constTo).ToDispString() + ca_derivSymb + "[" + varToStr + "]`",
                     "Bring out all constants as they will have no effect on the derivative. This comes from the derivative property that `d/(dx)[kf(x)]=k*d/(dx)[f(x)]` the constants will be multiplied back in at the end.");
             }
 
@@ -1112,13 +1112,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             }
             else
             {
-                ExComp[] num = varTo.GetNumerator();
-                ExComp[] den = varTo.GetDenominator();
+                ExComp[] num = GroupHelper.GetNumerator(varTo);
+                ExComp[] den = GroupHelper.GetDenominator(varTo);
 
                 if (den != null && den.Length > 0)
                 {
-                    ExComp numEx = num.ToAlgTerm();
-                    ExComp denEx = den.ToAlgTerm();
+                    ExComp numEx = GroupHelper.ToAlgTerm(num);
+                    ExComp denEx = GroupHelper.ToAlgTerm(den);
 
                     pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[" + varToStr + "]`",
                         "As the above is a fraction use the quotient rule which states `d/(dx)[u/v]=(u'v-uv')/(v^2)`. In this case `u=" + numEx.ToDispString() + "`, `v=" + denEx.ToDispString() + "`");
@@ -1132,7 +1132,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     ExComp numDeriv = TakeDerivativeOfGp(num, ref pEvalData);
                     last0.GoUp(ref pEvalData);
 
-                    last0.SetWorkHtml(WorkMgr.STM + ca_derivSymb + "[" + num.ToAlgTerm().FinalToDispStr() + "]=" + WorkMgr.ToDisp(numDeriv) + WorkMgr.EDM);
+                    last0.SetWorkHtml(WorkMgr.STM + ca_derivSymb + "[" + GroupHelper.ToAlgTerm(num).FinalToDispStr() + "]=" + WorkMgr.ToDisp(numDeriv) + WorkMgr.EDM);
 
                     pEvalData.GetWorkMgr().FromFormatted("",
                         "Find the derivative of the denominator.");
@@ -1142,7 +1142,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     ExComp denDeriv = TakeDerivativeOfGp(den, ref pEvalData);
                     last1.GoUp(ref pEvalData);
 
-                    last1.SetWorkHtml(WorkMgr.STM + ca_derivSymb + "[" + den.ToAlgTerm().FinalToDispStr() + "]=" + WorkMgr.ToDisp(denDeriv) + WorkMgr.EDM);
+                    last1.SetWorkHtml(WorkMgr.STM + ca_derivSymb + "[" + GroupHelper.ToAlgTerm(den).FinalToDispStr() + "]=" + WorkMgr.ToDisp(denDeriv) + WorkMgr.EDM);
 
                     pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[" + varToStr + "]=(({0})({1})-({2})({3}))/(({1})^2)`",
                         "Plug the values back into the equation for the quotient rule `d/(dx)[u/v]=(u'v-uv')/(v^2)`. In the above case `u={2}`, `u'={0}`, `v={1}`, `v'={3}`", numDeriv, denEx, numEx, denDeriv);
@@ -1158,9 +1158,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 else
                 {
                     ExComp u = num[0];
-                    ExComp v = num.ToList().GetRange(1, num.Length - 1).ToArray().ToAlgTerm();
+                    ExComp v = GroupHelper.ToAlgTerm(num.ToList().GetRange(1, num.Length - 1).ToArray());
 
-                    pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[" + num.ToAsciiString() + "]`",
+                    pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[" + GroupHelper.ToAsciiString(num) + "]`",
                         "Apply the product rule which states `d/(dx)[u*v]=u'v+uv'` in this case `u={0}`, `v={1}`", u, v);
 
                     pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[{0}]`", "Calculate `u'` for the product rule.", u);
@@ -1182,13 +1182,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             }
 
             if (derivTerm == null)
-                return Derivative.ConstructDeriv(gp.ToAlgTerm(), _withRespectTo, _derivOf);
+                return Derivative.ConstructDeriv(GroupHelper.ToAlgTerm(gp), _withRespectTo, _derivOf);
 
             if (constTo.Length == 0)
                 return derivTerm;
-            ExComp constToEx = constTo.ToAlgTerm();
+            ExComp constToEx = GroupHelper.ToAlgTerm(constTo);
 
-            pEvalData.GetWorkMgr().FromFormatted("`{0}*" + ca_derivSymb + "[" + varTo.ToAsciiString() + "]={0}*{1}`", "Multiply back in the constants.", constToEx, derivTerm);
+            pEvalData.GetWorkMgr().FromFormatted("`{0}*" + ca_derivSymb + "[" + GroupHelper.ToAsciiString(varTo) + "]={0}*{1}`", "Multiply back in the constants.", constToEx, derivTerm);
 
             return MulOp.StaticCombine(constToEx, derivTerm);
         }

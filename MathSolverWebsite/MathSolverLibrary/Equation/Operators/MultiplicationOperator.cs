@@ -183,7 +183,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                     {
                         ExComp[] group2 = groups2[j];
 
-                        ExComp[] combination = AlgebraTerm.MultiplyGroups(group1.CloneGroup(), group2.CloneGroup());
+                        ExComp[] combination = AlgebraTerm.MultiplyGroups(GroupHelper.CloneGroup(group1), GroupHelper.CloneGroup(group2));
                         combinedGroups.Add(combination);
                     }
                 }
