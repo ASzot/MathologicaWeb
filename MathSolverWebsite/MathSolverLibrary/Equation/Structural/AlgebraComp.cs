@@ -35,21 +35,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             Var = var;
         }
 
-        public static bool operator !=(AlgebraVar v1, AlgebraVar v2)
-        {
-            return !(v1 == v2);
-        }
-
-        public static bool operator ==(AlgebraVar v1, AlgebraVar v2)
-        {
-            if (((object)v1) == null && ((object)v1) == null)
-                return true;
-            else if (((object)v1) == null || ((object)v1) == null)
-                return false;
-
-            return (v1.Var == v2.Var);
-        }
-
         public override int GetHashCode()
         {
             return Var.GetHashCode();
@@ -115,27 +100,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             _var = var;
         }
 
-        public static bool operator !=(AlgebraComp ac1, AlgebraComp ac2)
-        {
-            return !(ac1 == ac2);
-        }
-
-        public static bool operator ==(AlgebraComp ac1, AlgebraComp ac2)
-        {
-            if (((object)ac1) == null && ((object)ac2) == null)
-                return true;
-            else if (((object)ac1) == null || ((object)ac2) == null)
-                return false;
-
-            return ac1.IsEqualTo(ac2);
-        }
-
         public static AlgebraComp Parse(string parseStr)
         {
             return new AlgebraComp(parseStr);
         }
 
-        public override ExComp Clone()
+        public override ExComp CloneEx()
         {
             return new AlgebraComp(_var.Var);
         }
@@ -155,7 +125,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             if (comp is AlgebraComp)
             {
                 AlgebraComp ac = comp as AlgebraComp;
-                return _var == ac._var;
+                return _var.Var == ac._var.Var;
             }
 
             return false;

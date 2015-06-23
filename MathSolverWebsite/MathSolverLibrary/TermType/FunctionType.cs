@@ -37,7 +37,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 // Find the inverse.
                 AlgebraComp inverseFunc = new AlgebraComp(_func.Iden.ToString() + "^(-1)" + "(" + _func.InputArgs[0].ToString() + ")");
                 AlgebraTerm left = _func.InputArgs[0].ToAlgTerm();
-                AlgebraTerm right = _assignTo.Clone().ToAlgTerm().Substitute(_func.InputArgs[0], inverseFunc);
+                AlgebraTerm right = _assignTo.CloneEx().ToAlgTerm().Substitute(_func.InputArgs[0], inverseFunc);
 
                 if (pEvalData.WorkMgr.AllowWork)
                     pEvalData.WorkMgr.FromSides(left, right, "`" + WorkMgr.ToDisp(inverseFunc) + "` is the inverse function, solve for it.");

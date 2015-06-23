@@ -308,7 +308,7 @@ namespace MathSolverWebsite.MathSolverLibrary
                 solveMethod = new QuadraticSolve(this);
                 solveDesc = "Solve this quadratic.";
             }
-            else if (solveInfo.MaxPower == 3.0 && solveInfo.OnlyIntPows)
+            else if (Number.OpEqual(solveInfo.MaxPower, 3.0) && solveInfo.OnlyIntPows)
             {
                 solveMethod = new CubicSolve(this);
                 solveDesc = "Solve this cubic.";
@@ -343,8 +343,8 @@ namespace MathSolverWebsite.MathSolverLibrary
             ExComp origLeft = null, origRight = null;
             if (pEvalData.WorkMgr.AllowWork)
             {
-                origLeft = left.Clone();
-                origRight = right.Clone();
+                origLeft = left.CloneEx();
+                origRight = right.CloneEx();
             }
 
             if (!(solveMethod is LinearSolve))
@@ -469,35 +469,35 @@ namespace MathSolverWebsite.MathSolverLibrary
                 {
                     Number nSide0 = sides[0] as Number;
                     Number nSide2 = sides[2] as Number;
-                    if (Restriction.IsGreaterThan(comparisonTypes[0]) && Restriction.IsGreaterThan(comparisonTypes[1]) && nSide0 < nSide2)
+                    if (Restriction.IsGreaterThan(comparisonTypes[0]) && Restriction.IsGreaterThan(comparisonTypes[1]) && Number.OpLT(nSide0, nSide2))
                     {
                         pEvalData.WorkMgr.FromSidesAndComps(sides, comparisonTypes, "This inequality will never be true.");
                         return SolveResult.NoSolutions();
                     }
-                    if (Restriction.IsGreaterThan(comparisonTypes[0]) && !Restriction.IsGreaterThan(comparisonTypes[1]) && nSide2 < nSide0)
+                    if (Restriction.IsGreaterThan(comparisonTypes[0]) && !Restriction.IsGreaterThan(comparisonTypes[1]) && Number.OpLT(nSide2, nSide0))
                     {
                         pEvalData.WorkMgr.FromSidesAndComps(sides, comparisonTypes, "This inequality will never be true..");
                         return SolveResult.NoSolutions();
                     }
-                    if (Restriction.IsGreaterThan(comparisonTypes[0]) && nSide0 < nSide2)
+                    if (Restriction.IsGreaterThan(comparisonTypes[0]) && Number.OpLT(nSide0, nSide2))
                     {
                         pEvalData.WorkMgr.FromFormatted(WorkMgr.STM +
                             WorkMgr.ToDisp(nSide0) + Restriction.ComparisonOpToStr(comparisonTypes[0]) + WorkMgr.ToDisp(sides[1]) + WorkMgr.EDM, "Remove the redundant side.");
                         return SolveRegInequality(nSide0.ToAlgTerm(), sides[1].ToAlgTerm(), comparisonTypes[0], solveFor, ref pEvalData);
                     }
-                    else if (!Restriction.IsGreaterThan(comparisonTypes[1]) && nSide2 < nSide0)
+                    else if (!Restriction.IsGreaterThan(comparisonTypes[1]) && Number.OpLT(nSide2, nSide0))
                     {
                         pEvalData.WorkMgr.FromFormatted(WorkMgr.STM +
                             WorkMgr.ToDisp(sides[1]) + Restriction.ComparisonOpToStr(comparisonTypes[1]) + WorkMgr.ToDisp(nSide2) + WorkMgr.EDM, "Remove the redundant side.");
                         return SolveRegInequality(sides[1].ToAlgTerm(), nSide2.ToAlgTerm(), comparisonTypes[1], solveFor, ref pEvalData);
                     }
-                    else if (!Restriction.IsGreaterThan(comparisonTypes[0]) && nSide0 > nSide2)
+                    else if (!Restriction.IsGreaterThan(comparisonTypes[0]) && Number.OpGT(nSide0, nSide2))
                     {
                         pEvalData.WorkMgr.FromFormatted(WorkMgr.STM +
                             WorkMgr.ToDisp(nSide0) + Restriction.ComparisonOpToStr(comparisonTypes[0]) + WorkMgr.ToDisp(sides[1]) + WorkMgr.EDM, "Remove the redundant side.");
                         return SolveRegInequality(nSide0.ToAlgTerm(), sides[1].ToAlgTerm(), comparisonTypes[0], solveFor, ref pEvalData);
                     }
-                    else if (Restriction.IsGreaterThan(comparisonTypes[1]) && nSide2 > nSide0)
+                    else if (Restriction.IsGreaterThan(comparisonTypes[1]) && Number.OpGT(nSide2, nSide0))
                     {
                         pEvalData.WorkMgr.FromFormatted(WorkMgr.STM +
                             WorkMgr.ToDisp(sides[1]) + Restriction.ComparisonOpToStr(comparisonTypes[1]) + WorkMgr.ToDisp(nSide2) + WorkMgr.EDM, "Remove the redundant side.");
@@ -547,7 +547,7 @@ namespace MathSolverWebsite.MathSolverLibrary
             SolveMethod.CombineFractions(ref left, ref right, ref pEvalData);
             pEvalData.WorkMgr.UseComparison = "=";
 
-            AlgebraTerm completeTerm = Equation.Operators.SubOp.StaticCombine(left.Clone(), right.Clone()).ToAlgTerm();
+            AlgebraTerm completeTerm = Equation.Operators.SubOp.StaticCombine(left.CloneEx(), right.CloneEx()).ToAlgTerm();
             completeTerm.EvaluateFunctions(false, ref pEvalData);
             completeTerm = completeTerm.CompoundFractions();
 
@@ -573,7 +573,7 @@ namespace MathSolverWebsite.MathSolverLibrary
                 pEvalData.WorkMgr.FromSides(left, right, "Find points of interest in the equation to find over what ranges this rational function is in the restriction. This will include solving for the denominator.");
                 // This will be solved slightly differently.
                 pEvalData.WorkMgr.FromSides(left, right, "Solve the term as a whole.");
-                SolveResult result0 = SolveEquationEquality(solveFor, (AlgebraTerm)left.Clone(), (AlgebraTerm)right.Clone(), ref pEvalData);
+                SolveResult result0 = SolveEquationEquality(solveFor, (AlgebraTerm)left.CloneEx(), (AlgebraTerm)right.CloneEx(), ref pEvalData);
                 if (result0.UndefinedSolution)
                     return SolveResult.NoSolutions();
                 if (!result0.Success)
@@ -588,7 +588,7 @@ namespace MathSolverWebsite.MathSolverLibrary
                     noninclusiveForced = comparison;
 
                 pEvalData.WorkMgr.FromSides(numDen[1], right, "Solve the denominator.");
-                SolveResult result1 = SolveEquationEquality(solveFor, (AlgebraTerm)numDen[1].Clone(), Number.Zero.ToAlgTerm(), ref pEvalData);
+                SolveResult result1 = SolveEquationEquality(solveFor, (AlgebraTerm)numDen[1].CloneEx(), Number.Zero.ToAlgTerm(), ref pEvalData);
                 if (result1.UndefinedSolution)
                     return SolveResult.NoSolutions();
                 if (!result1.Success)
@@ -612,7 +612,7 @@ namespace MathSolverWebsite.MathSolverLibrary
                 }
                 else
                 {
-                    result = SolveEquationEquality(solveFor, (AlgebraTerm)left.Clone(), (AlgebraTerm)right.Clone(), ref pEvalData);
+                    result = SolveEquationEquality(solveFor, (AlgebraTerm)left.CloneEx(), (AlgebraTerm)right.CloneEx(), ref pEvalData);
                     if (result.UndefinedSolution)
                         return SolveResult.NoSolutions();
                     if (!result.Success)
@@ -717,7 +717,7 @@ namespace MathSolverWebsite.MathSolverLibrary
                 // We can only do this if all the solutions are numbers.
                 foreach (Solution sol in result.Solutions)
                 {
-                    ExComp harshSimplified = Simplifier.HarshSimplify(sol.Result.Clone().ToAlgTerm(), ref pEvalData);
+                    ExComp harshSimplified = Simplifier.HarshSimplify(sol.Result.CloneEx().ToAlgTerm(), ref pEvalData);
                     if (harshSimplified is AlgebraTerm)
                         harshSimplified = (harshSimplified as AlgebraTerm).RemoveRedundancies();
                     if (!(harshSimplified is Number) || (harshSimplified is Number && (harshSimplified as Number).HasImaginaryComp()))
@@ -865,7 +865,7 @@ namespace MathSolverWebsite.MathSolverLibrary
 
         private bool? IsTestPointPos(AlgebraTerm completeTerm, AlgebraComp solveForComp, double testPoint, ref TermType.EvalData pEvalData)
         {
-            AlgebraTerm useTerm = (AlgebraTerm)completeTerm.Clone();
+            AlgebraTerm useTerm = (AlgebraTerm)completeTerm.CloneEx();
             AlgebraTerm subInTerm = useTerm.Substitute(solveForComp, new Number(testPoint));
             subInTerm = subInTerm.ApplyOrderOfOperations();
             AlgebraTerm final = subInTerm.MakeWorkable().ToAlgTerm();
@@ -891,7 +891,7 @@ namespace MathSolverWebsite.MathSolverLibrary
             pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "{0}{1}{2}{3}{4}" + WorkMgr.EDM, "To solve this compound inequality solve the middle expression for the outer ones just as regular inequalities.",
                 left0, Restriction.ComparisonOpToStr(comparison0), right, Restriction.ComparisonOpToStr(comparison1), left1);
 
-            SolveResult solve0 = SolveRegInequality(left0, right.Clone().ToAlgTerm(), comparison0, solveFor, ref pEvalData);
+            SolveResult solve0 = SolveRegInequality(left0, right.CloneEx().ToAlgTerm(), comparison0, solveFor, ref pEvalData);
             SolveResult solve1 = SolveRegInequality(right, left1, comparison1, solveFor, ref pEvalData);
 
             pEvalData.AttemptSetInputType(TermType.InputType.CompoundInequalities);

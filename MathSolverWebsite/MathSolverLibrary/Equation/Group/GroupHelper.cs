@@ -13,7 +13,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
             for (int i = 0; i < group.Length; ++i)
             {
-                clonedGroup[i] = group[i].Clone();
+                clonedGroup[i] = group[i].CloneEx();
             }
 
             return clonedGroup;
@@ -50,7 +50,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 AlgebraComp agComp1 = ex1 as AlgebraComp;
                 AlgebraComp agComp2 = ex2 as AlgebraComp;
 
-                if (agComp1.Var == agComp2.Var)
+                if (agComp1.Var.Var == agComp2.Var.Var)
                     return true;
             }
             if (ex1 is AlgebraTerm || ex2 is AlgebraTerm)
@@ -230,9 +230,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                         Number groupCompNum = groupComp as Number;
                         Number comapreGroupCompNum = compareGroupComp as Number;
                         Number gcf = Number.GCF(groupCompNum, comapreGroupCompNum);
-                        if (gcf == groupCompNum)
+                        if (Number.OpEqual(gcf, groupCompNum))
                         {
-                            ExComp diff = comapreGroupCompNum / groupCompNum;
+                            ExComp diff = Number.OpDiv(comapreGroupCompNum, groupCompNum);
                             factorOfList.Add(diff);
                             found = true;
                             break;
@@ -264,9 +264,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                             Number powNum1 = power1 as Number;
                             Number powNum2 = power2 as Number;
 
-                            if (powNum1 < powNum2)
+                            if (Number.OpLT(powNum1, powNum2))
                             {
-                                factorOfList.Add(powNum2 - powNum1);
+                                factorOfList.Add(Number.OpSub(powNum2, powNum1));
                                 found = true;
                                 break;
                             }
@@ -388,7 +388,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             List<ExComp> unrelatableTerms = new List<ExComp>();
             foreach (ExComp groupComp in group)
             {
-                if (groupComp is AlgebraComp && (groupComp as AlgebraComp) == comp)
+                if (groupComp is AlgebraComp && (groupComp as AlgebraComp).IsEqualTo(comp))
                     continue;
                 else if (groupComp is AlgebraTerm && (groupComp as AlgebraTerm).Contains(comp))
                     continue;
@@ -419,7 +419,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         {
             foreach (ExComp groupComp in group)
             {
-                if (groupComp is AlgebraComp && (groupComp as AlgebraComp) == varFor)
+                if (groupComp is AlgebraComp && (groupComp as AlgebraComp).IsEqualTo(varFor))
                     return true;
                 else if (groupComp is AlgebraTerm && (groupComp as AlgebraTerm).Contains(varFor))
                     return true;
@@ -444,7 +444,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         {
             foreach (ExComp gpCmp in group)
             {
-                if (gpCmp is Number && (gpCmp as Number) < 0.0)
+                if (gpCmp is Number && Number.OpLT((gpCmp as Number), 0.0))
                     return true;
             }
 
@@ -486,7 +486,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 PowerFunction pow = comp1 is PowerFunction ? comp1 as PowerFunction : comp2 as PowerFunction;
                 AlgebraComp agComp = comp1 is AlgebraComp ? comp1 as AlgebraComp : comp2 as AlgebraComp;
 
-                if (pow.Power is Number && (pow.Power as Number) > 1.0)
+                if (pow.Power is Number && Number.OpGT((pow.Power as Number), 1.0))
                     return pow;
             }
 
@@ -726,7 +726,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             {
                 if (groupComp is AlgebraTerm && (groupComp as AlgebraTerm).IsOne())
                     continue;
-                else if (groupComp is Number && (groupComp as Number) == 1.0)
+                else if (groupComp is Number && Number.OpEqual((groupComp as Number), 1.0))
                     continue;
                 removedList.Add(groupComp);
             }
@@ -802,7 +802,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             {
                 ExComp groupComp = group[i];
                 finalStr += groupComp.ToAsciiString();
-                if ((groupComp is Number && (groupComp as Number) == -1 && group.Length > 1) ||
+                if ((groupComp is Number && Number.OpEqual((groupComp as Number), -1) && group.Length > 1) ||
                     (groupComp is Number && i < group.Length - 1 && group[i + 1] is Number))
                     finalStr += "*";
                 else if (groupComp is AlgebraComp || groupComp is Number)
@@ -819,7 +819,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             {
                 ExComp groupComp = group[i];
                 finalStr += groupComp.ToTexString();
-                if ((groupComp is Number && (groupComp as Number) == -1 && group.Length > 1) ||
+                if ((groupComp is Number && Number.OpEqual((groupComp as Number), -1) && group.Length > 1) ||
                     (groupComp is Number && i < group.Length - 1 && group[i + 1] is Number))
                     finalStr += "*";
                 else if (groupComp is AlgebraComp)

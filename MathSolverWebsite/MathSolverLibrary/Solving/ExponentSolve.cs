@@ -217,8 +217,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
                 if (nLeftPow != null && nRightPow != null && nBase != null)
                 {
-                    string coeff0Str = nLeftPow != 1.0 ? "{1}*" : "";
-                    string coeff1Str = nRightPow != 1.0 ? "{3}*" : "";
+                    string coeff0Str = Number.OpNotEquals(nLeftPow, 1.0) ? "{1}*" : "";
+                    string coeff1Str = Number.OpNotEquals(nRightPow, 1.0) ? "{3}*" : "";
 
                     pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "({0})^(" + coeff0Str + "({2}))=({0})^(" + coeff1Str + "({4}))" + WorkMgr.EDM, "Convert both sides to have like bases.",
                         nBase, nLeftPow, pfLeft.Power, nRightPow, pfRight.Power);

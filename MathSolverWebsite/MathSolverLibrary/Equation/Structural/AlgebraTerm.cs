@@ -113,14 +113,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             if (den is AlgebraTerm)
                 den = (den as AlgebraTerm).RemoveRedundancies();
 
-            if (den is Number && (den as Number) < 0.0)
+            if (den is Number && Number.OpLT((den as Number), 0.0))
             {
                 num = Operators.MulOp.Negate(num);
-                den = Number.NegOne * (den as Number);
+                den = Number.OpMul(Number.NegOne, (den as Number));
             }
 
             if (((den is AlgebraTerm) && (den as AlgebraTerm).IsOne()) ||
-                (den is Number) && (den as Number) == 1.0)
+                (den is Number) && Number.OpEqual((den as Number), 1.0))
                 return num.ToAlgTerm();
 
             AlgebraTerm term = new AlgebraTerm(num, new Operators.MulOp(), new Functions.PowerFunction(den, Number.NegOne));
@@ -332,12 +332,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return true;
         }
 
-        public override ExComp Clone()
+        public override ExComp CloneEx()
         {
             List<ExComp> clonedSubComps = new List<ExComp>();
             foreach (ExComp subComp in _subComps)
             {
-                clonedSubComps.Add(subComp.Clone());
+                clonedSubComps.Add(subComp.CloneEx());
             }
 
             return new AlgebraTerm(clonedSubComps.ToArray());
@@ -387,7 +387,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                         RemoveExtraOperators(ref tmpList);
                         groupCopy = tmpList.ToArray();
 
-                        Number combinedNumbers = groupCoeff + compareGroupCoeff;
+                        Number combinedNumbers = Number.OpAdd(groupCoeff, compareGroupCoeff);
                         AddTermToGroup(ref groupCopy, combinedNumbers);
 
                         groups.Insert(i, groupCopy);
@@ -467,7 +467,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 ExComp[] denGroup = denFracGroups[i];
                 AlgebraTerm denGroupTerm = denGroup.ToAlgTerm();
 
-                ExComp mulTerm = Operators.DivOp.StaticCombine(lcfTerm.Clone(), denGroupTerm);
+                ExComp mulTerm = Operators.DivOp.StaticCombine(lcfTerm.CloneEx(), denGroupTerm);
                 numMulTerms.Add(mulTerm);
             }
 
@@ -480,7 +480,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
                 AlgebraTerm term = numTerm.ToAlgTerm();
 
-                if (!(mulTerm is Number && (mulTerm as Number) == 1.0))
+                if (!(mulTerm is Number && Number.OpEqual((mulTerm as Number), 1.0)))
                 {
                     ExComp combined = MulOp.StaticCombine(term, mulTerm);
                     modifiedNumTerms.Add(combined);
@@ -568,7 +568,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 ExComp[] denGroup = denFracGroups[i];
                 AlgebraTerm denGroupTerm = denGroup.ToAlgTerm();
 
-                ExComp mulTerm = DivOp.StaticCombine(lcfTerm.Clone(), denGroupTerm);
+                ExComp mulTerm = DivOp.StaticCombine(lcfTerm.CloneEx(), denGroupTerm);
                 numMulTerms.Add(mulTerm);
             }
 
@@ -581,7 +581,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
                 AlgebraTerm term = numTerm.ToAlgTerm();
 
-                if (!(mulTerm is Number && (mulTerm as Number) == 1.0))
+                if (!(mulTerm is Number && Number.OpEqual((mulTerm as Number), 1.0)))
                 {
                     MulOp mulOp = new MulOp();
                     ExComp combined = mulOp.Combine(term, mulTerm);
@@ -665,7 +665,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
                         if (num is Number && den is Number)
                         {
-                            ExComp result = (num as Number) / (den as Number);
+                            ExComp result = Number.OpDiv((num as Number), (den as Number));
                             (_subComps[i] as PowerFunction).Power = result;
                         }
                     }
@@ -873,7 +873,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                         Number numNumber = num[0] as Number;
                         Number denNumber = den[0] as Number;
 
-                        ExComp resultant = numNumber / denNumber;
+                        ExComp resultant = Number.OpDiv(numNumber, denNumber);
                         ExComp[] revisedGroup = { resultant };
                         groups[i] = revisedGroup;
                     }
@@ -914,15 +914,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
                     foreach (PowerFunction radical in radicals)
                     {
-                        numTerm = Operators.MulOp.StaticCombine(numTerm, radical.Clone()).ToAlgTerm();
-                        denTerm = Operators.MulOp.StaticCombine(denTerm, radical.Clone()).ToAlgTerm();
+                        numTerm = Operators.MulOp.StaticCombine(numTerm, radical.CloneEx()).ToAlgTerm();
+                        denTerm = Operators.MulOp.StaticCombine(denTerm, radical.CloneEx()).ToAlgTerm();
                     }
 
                     AlgebraTerm groupFrac = AlgebraTerm.FromFraction(numTerm, denTerm);
-                    overallTerm = overallTerm + groupFrac;
+                    overallTerm = AlgebraTerm.OpAdd(overallTerm, groupFrac);
                 }
                 else
-                    overallTerm = overallTerm + group.ToAlgTerm();
+                    overallTerm = AlgebraTerm.OpAdd(overallTerm, group.ToAlgTerm());
             }
 
             List<ExComp[]> overallGroups = overallTerm.GetGroups();
@@ -966,15 +966,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
                     foreach (PowerFunction radical in radicals)
                     {
-                        numTerm = Operators.MulOp.StaticCombine(numTerm, radical.Clone()).ToAlgTerm();
-                        denTerm = Operators.MulOp.StaticCombine(denTerm, radical.Clone()).ToAlgTerm();
+                        numTerm = Operators.MulOp.StaticCombine(numTerm, radical.CloneEx()).ToAlgTerm();
+                        denTerm = Operators.MulOp.StaticCombine(denTerm, radical.CloneEx()).ToAlgTerm();
                     }
 
                     AlgebraTerm groupFrac = AlgebraTerm.FromFraction(numTerm, denTerm);
-                    overallTerm = overallTerm + groupFrac;
+                    overallTerm = AlgebraTerm.OpAdd(overallTerm, groupFrac);
                 }
                 else
-                    overallTerm = overallTerm + group.ToAlgTerm();
+                    overallTerm = AlgebraTerm.OpAdd(overallTerm, group.ToAlgTerm());
             }
 
             List<ExComp[]> overallGroups = overallTerm.GetGroups();
@@ -1245,7 +1245,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 ExComp[] group = groups[i];
 
                 Number coeff = GetCoeffTerm(group);
-                if (coeff != null && coeff == 0.0)
+                if (coeff != null && Number.OpEqual(coeff, 0.0))
                 {
                     this.RemoveGroup(group);
                 }
@@ -1274,7 +1274,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             if (thisCompare.IsEqualTo(gcfTerm))
                 return this;
 
-            ExComp factoredOut = DivOp.StaticCombine(this.Clone(), gcfTerm);
+            ExComp factoredOut = DivOp.StaticCombine(this.CloneEx(), gcfTerm);
 
             return new AlgebraTerm(gcfTerm, new MulOp(), factoredOut);
         }
@@ -1493,7 +1493,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                     // Ensure that a potential division by 0 is not being ignored.
                     if (algebraOp is DivOp && afterComp is AlgebraFunction)
                     {
-                        ExComp tmpEval = (afterComp.Clone() as AlgebraFunction).Evaluate(true, ref pEvalData);
+                        ExComp tmpEval = (afterComp.CloneEx() as AlgebraFunction).Evaluate(true, ref pEvalData);
                         if (tmpEval is AlgebraTerm)
                             tmpEval = (tmpEval as AlgebraTerm).RemoveRedundancies();
                         if (Number.Zero.IsEqualTo(tmpEval))
@@ -1589,7 +1589,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                     // Ensure that a potential division by 0 is not being ignored.
                     if ((algebraOp is MulOp || algebraOp is DivOp) && afterComp is AlgebraFunction)
                     {
-                        ExComp tmpEval = (afterComp.Clone() as AlgebraFunction).Evaluate(true, ref pEvalData);
+                        ExComp tmpEval = (afterComp.CloneEx() as AlgebraFunction).Evaluate(true, ref pEvalData);
                         if (tmpEval is AlgebraTerm)
                             tmpEval = (tmpEval as AlgebraTerm).RemoveRedundancies();
                         if (Number.Zero.IsEqualTo(tmpEval) || (tmpEval is PowerFunction && (tmpEval as PowerFunction).Base.IsEqualTo(Number.Zero)))

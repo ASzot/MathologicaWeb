@@ -57,7 +57,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             WorkStep last = pEvalData.WorkMgr.GetLast();
 
             last.GoDown(ref pEvalData);
-            ExComp my = Derivative.TakeDeriv(funcM.Clone(), funcVar, ref pEvalData, true);
+            ExComp my = Derivative.TakeDeriv(funcM.CloneEx(), funcVar, ref pEvalData, true);
             last.GoUp(ref pEvalData);
 
             last.WorkHtml = WorkMgr.STM + "\\frac{\\partial M}{\\partial " + funcVar.ToDispString() + "}=" + WorkMgr.ToDisp(my) + WorkMgr.EDM;
@@ -66,7 +66,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             last = pEvalData.WorkMgr.GetLast();
 
             last.GoDown(ref pEvalData);
-            ExComp nx = Derivative.TakeDeriv(funcN.Clone(), dVar, ref pEvalData, true);
+            ExComp nx = Derivative.TakeDeriv(funcN.CloneEx(), dVar, ref pEvalData, true);
             last.GoUp(ref pEvalData);
 
             last.WorkHtml = WorkMgr.STM + "\\frac{\\partial N}{\\partial " + dVar.ToDispString() + "}=" + WorkMgr.ToDisp(nx) + WorkMgr.EDM;

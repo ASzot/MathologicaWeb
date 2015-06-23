@@ -116,7 +116,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             for (int i = 0; i < term2s.TermCount; ++i)
             {
                 ExComp sqrtTerm = term2s[i];
-                term2s.Terms[i] = AddOp.StaticCombine(term1.Clone(), term2s[i].Clone()).ToAlgTerm();
+                term2s.Terms[i] = AddOp.StaticCombine(term1.CloneEx(), term2s[i].CloneEx()).ToAlgTerm();
                 term2s.Terms[i] = DivOp.StaticCombine(term2s[i], term3).ToAlgTerm();
 
                 pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "{4}=({0}+{1})/({2})={3}" + WorkMgr.EDM, "The above term is a root of the quadratic.", term1, sqrtTerm, term3, term2s.Terms[i], solveForComp);
@@ -166,7 +166,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             AlgebraTerm a = new AlgebraTerm();
             foreach (AlgebraTerm aTerm in aTerms)
             {
-                a = a + aTerm;
+                a = AlgebraTerm.OpAdd(a, aTerm);
             }
             if (a.TermCount == 0)
                 a = Number.Zero.ToAlgTerm();
@@ -174,7 +174,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             AlgebraTerm b = new AlgebraTerm();
             foreach (AlgebraTerm bTerm in bTerms)
             {
-                b = b + bTerm;
+                b = AlgebraTerm.OpAdd(b, bTerm);
             }
             if (b.TermCount == 0)
                 b = Number.Zero.ToAlgTerm();

@@ -41,9 +41,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             _power = power;
         }
 
-        #region Operators
-
-        public static ExComp operator *(PowerFunction pf1, PowerFunction pf2)
+        public static ExComp OpMul(PowerFunction pf1, PowerFunction pf2)
         {
             ExComp base1 = pf1.Base;
             ExComp base2 = pf2.Base;
@@ -82,7 +80,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             }
         }
 
-        public static ExComp operator *(PowerFunction pf, AlgebraComp comp)
+        public static ExComp OpMul(PowerFunction pf, AlgebraComp comp)
         {
             if (!pf.Base.IsEqualTo(comp))
             {
@@ -95,11 +93,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                 return term;
             }
             PowerFunction compFunc = new PowerFunction(comp, new Number(1.0));
-            ExComp resultant = pf * compFunc;
+            ExComp resultant = PowerFunction.OpMul(pf, compFunc);
             return resultant;
         }
 
-        public static ExComp operator *(PowerFunction pf, AlgebraTerm term)
+        public static ExComp OpMul(PowerFunction pf, AlgebraTerm term)
         {
             if (!pf.Base.IsEqualTo(term))
             {
@@ -177,11 +175,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                 return MulOp.StaticWeakCombine(pf, term);
             }
             PowerFunction termFunc = new PowerFunction(term, new Number(1.0));
-            ExComp resultant = pf * termFunc;
+            ExComp resultant = PowerFunction.OpMul(pf, termFunc);
             return resultant;
         }
 
-        public static ExComp operator /(PowerFunction pf1, PowerFunction pf2)
+        public static ExComp OpDiv(PowerFunction pf1, PowerFunction pf2)
         {
             ExComp base1 = pf1.Base;
             ExComp base2 = pf2.Base;
@@ -191,7 +189,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                 power.Add(pf1.Power, new SubOp(), pf2.Power);
                 ExComp workablePow = power.MakeWorkable();
                 if ((workablePow is AlgebraTerm && (workablePow as AlgebraTerm).IsZero()) ||
-                    (workablePow is Number && (workablePow as Number) == 0.0))
+                    (workablePow is Number && Number.OpEqual((workablePow as Number), 0.0)))
                 {
                     AlgebraTerm term = new AlgebraTerm();
                     term.Add(new Number(1.0));
@@ -213,14 +211,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             }
         }
 
-        public static ExComp operator +(PowerFunction pf1, PowerFunction pf2)
+        public static ExComp OpAdd(PowerFunction pf1, PowerFunction pf2)
         {
             AlgebraTerm term = new AlgebraTerm();
             term.Add(pf1, new AddOp(), pf2);
             return term;
         }
-
-        #endregion Operators
 
         public override void CallFunction(FunctionDefinition funcDef, ExComp def, ref TermType.EvalData pEvalData, bool callSubTerms = true)
         {
@@ -285,9 +281,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                 throw new ArgumentException();
         }
 
-        public override ExComp Clone()
+        public override ExComp CloneEx()
         {
-            return new PowerFunction(Base.Clone(), _power.Clone());
+            return new PowerFunction(Base.CloneEx(), _power.CloneEx());
         }
 
         public override AlgebraTerm CompoundFractions()
@@ -315,12 +311,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         {
             if (Base is AlgebraTerm && (Base as AlgebraTerm).Contains(varFor))
                 return true;
-            else if (Base is AlgebraComp && (Base as AlgebraComp) == varFor)
+            else if (Base is AlgebraComp && (Base as AlgebraComp).IsEqualTo(varFor))
                 return true;
 
             if (Power is AlgebraTerm && (Power as AlgebraTerm).Contains(varFor))
                 return true;
-            else if (Power is AlgebraComp && (Power as AlgebraComp) == varFor)
+            else if (Power is AlgebraComp && (Power as AlgebraComp).IsEqualTo(varFor))
                 return true;
 
             return false;
@@ -493,7 +489,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             if (_power is AlgebraTerm)
                 _power = (_power as AlgebraTerm).RemoveRedundancies();
 
-            if (_power is Number && (_power as Number) == 1.0)
+            if (_power is Number && Number.OpEqual((_power as Number), 1.0))
                 return Base;
 
             return this;
@@ -599,7 +595,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             List<ExComp> powers = new List<ExComp>();
             if (Base is AlgebraTerm && (Base as AlgebraTerm).Contains(varFor))
                 powers.Add(_power);
-            else if (Base is AlgebraComp && (Base as AlgebraComp) == varFor)
+            else if (Base is AlgebraComp && (Base as AlgebraComp).IsEqualTo(varFor))
                 powers.Add(_power);
             else
                 powers = base.GetPowersOfVar(varFor);
@@ -725,8 +721,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             if (_power is Number)
             {
                 Number powNum = _power as Number;
-                return powNum == -1.0;
-                //return (powNum < 0.0);
+                return Number.OpEqual(powNum, -1.0);
             }
 
             return false;
@@ -753,7 +748,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
                             if (num is Number && den is Number)
                             {
-                                ExComp divNum = (num as Number) / (den as Number);
+                                ExComp divNum = Number.OpDiv((num as Number), (den as Number));
                                 if (divNum.IsEqualTo(_power))
                                     return true;
                             }
@@ -770,7 +765,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
                             if (num is Number && den is Number)
                             {
-                                ExComp divNum = (num as Number) / (den as Number);
+                                ExComp divNum = Number.OpDiv((num as Number), (den as Number));
                                 if (divNum.IsEqualTo(powerFunc.Power))
                                     return true;
                             }
@@ -882,9 +877,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             if (powerTerm is Number)
             {
                 Number powerNum = powerTerm as Number;
-                if (powerNum == 0.0)
+                if (Number.OpEqual(powerNum, 0.0))
                     return new Number(1.0);
-                else if (powerNum == 1.0)
+                else if (Number.OpEqual(powerNum, 1.0))
                     return baseTerm;
             }
 
@@ -911,9 +906,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             else if (_power is Number)
             {
                 Number number = _power as Number;
-                if (number == 0.0)
+                if (Number.OpEqual(number, 0.0))
                     return oneTerm;
-                if (number == 1.0)
+                if (Number.OpEqual(number, 1.0))
                     return baseTerm;
 
                 power = number;
@@ -952,7 +947,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                         if (n < 0)
                         {
                             mulTerms.Add(new Number(0.0, 1.0));
-                            baseTerm[i] = -nSubComp;
+                            baseTerm[i] = Number.OpSub(nSubComp);
                             n = -n;
                         }
                     }

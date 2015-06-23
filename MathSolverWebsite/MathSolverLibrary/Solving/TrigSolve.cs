@@ -122,7 +122,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
             pEvalData.WorkMgr.FromFormatted("Period " + WorkMgr.STM + "={0}" + WorkMgr.EDM, "The period of " + WorkMgr.STM + "{1}" + WorkMgr.EDM + " is " + WorkMgr.STM + "{0}" + WorkMgr.EDM, period, appliedTrigFunc);
 
-            ExComp interval = MulOp.StaticCombine(period.Clone(), p_agSolver.IterationVar);
+            ExComp interval = MulOp.StaticCombine(period.CloneEx(), p_agSolver.IterationVar);
 
             //ExComp innerCoeff = appliedTrigFunc.InnerTerm.GetCoeffOfVar(solveForComp);
 

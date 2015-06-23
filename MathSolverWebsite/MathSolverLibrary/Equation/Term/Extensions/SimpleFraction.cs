@@ -100,7 +100,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
             num = null;
             den = null;
 
-            if (NumEx is Number && (NumEx as Number) == 0.0)
+            if (NumEx is Number && Number.OpEqual((NumEx as Number), 0.0))
             {
                 num = Number.Zero;
                 den = Number.Zero;
@@ -141,24 +141,24 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
             if (!num.IsRealInteger() || !den.IsRealInteger())
                 return false;
 
-            Number doubleDen = den * 2.0;
+            Number doubleDen = Number.OpMul(den, 2.0);
             bool isNeg = false;
-            if (num < 0.0)
+            if (Number.OpLT(num, 0.0))
             {
-                num *= -1;
+                num = Number.OpMul(num, -1.0);
                 isNeg = true;
             }
-            if (doubleDen <= num)
+            if (Number.OpLE(doubleDen, num))
             {
-                num = num % doubleDen;
-                if (num == 0.0)
+                num = Number.OpMod(num, doubleDen);
+                if (Number.OpEqual(num, 0.0))
                     den = new Number(0.0);
             }
 
             if (isNeg && handleNegs)
             {
-                Number numSub = den * 2.0;
-                num = numSub - num;
+                Number numSub = Number.OpMul(den, 2.0);
+                num = Number.OpSub(numSub, num);
             }
 
             return true;

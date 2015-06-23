@@ -149,24 +149,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
 
         private static AlgebraTerm MakeVSub(AlgebraTerm term, AlgebraComp funcVar, AlgebraComp dVar, AlgebraComp subInVar)
         {
-            //if (term is AppliedFunction)
-            //{
-            //    AppliedFunction af = term as AppliedFunction;
-            //    AlgebraTerm innerTerm = MakeVSub(af.InnerTerm, funcVar, dVar, subInVar);
-
-            //    af.SetSubComps(innerTerm.SubComps);
-            //    return af;
-            //}
-            //else if (term is PowerFunction)
-            //{
-            //    PowerFunction pf = term as PowerFunction;
-            //    AlgebraTerm baseEx = MakeVSub(pf.Base.ToAlgTerm(), funcVar, dVar, subInVar);
-            //    AlgebraTerm powEx = MakeVSub(pf.Power.ToAlgTerm(), funcVar, dVar, subInVar);
-
-            //    return new PowerFunction(baseEx, powEx);
-            //}
-
             List<ExComp[]> gps = term.GetGroupsNoOps();
+
+            // This was intended to be checking for address not value equality.
             if (gps.Count == 1 && gps[0].Length == 1 && gps[0][0] == term)
                 return term;
 

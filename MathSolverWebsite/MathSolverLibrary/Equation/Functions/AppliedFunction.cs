@@ -62,9 +62,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             return base.MakeWorkable();
         }
 
-        public override ExComp Clone()
+        public override ExComp CloneEx()
         {
-            return CreateInstance(InnerTerm.Clone());
+            return CreateInstance(InnerTerm.CloneEx());
         }
 
         protected void CallChildren(bool harshEval, ref TermType.EvalData pEvalData)
@@ -119,7 +119,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         public override List<ExComp[]> GetGroups()
         {
             List<ExComp[]> groups = new List<ExComp[]>();
-            ExComp[] onlyGroup = { this.Clone() };
+            ExComp[] onlyGroup = { this.CloneEx() };
             groups.Add(onlyGroup);
             return groups;
         }
@@ -199,10 +199,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             _args = args;
         }
 
-        public override ExComp Clone()
+        public override ExComp CloneEx()
         {
             IEnumerable<ExComp> cloned = from arg in _args
-                                         select arg.Clone();
+                                         select arg.CloneEx();
             return CreateInstance(cloned.ToArray());
         }
 

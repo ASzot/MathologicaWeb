@@ -178,7 +178,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return CallFunc(def, ref pEvalData);
         }
 
-        public override ExComp Clone()
+        public override ExComp CloneEx()
         {
             return new FunctionDefinition(_iden, _args, _callArgs, _funcNotation);
         }

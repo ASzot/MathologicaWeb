@@ -110,10 +110,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
 
                     //IMPROVE:
                     // This could be improved by a lot.
-                    Number final = n1.Clone() as Number;
+                    Number final = n1.CloneEx() as Number;
                     for (int i = 1; i < iPow; ++i)
                     {
-                        final = final * (Number)n1.Clone();
+                        final = Number.OpMul(final, (Number)n1.CloneEx());
                     }
 
                     return final;
@@ -169,10 +169,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
             if (powerInt >= MAX_COMBINE_COUNT)
                 return StaticCombine(term, power);
 
-            ExComp acumTerm = term.Clone();
+            ExComp acumTerm = term.CloneEx();
             for (int i = 1; i < powerInt; ++i)
             {
-                acumTerm = MulOp.StaticCombine(acumTerm.Clone(), term.Clone());
+                acumTerm = MulOp.StaticCombine(acumTerm.CloneEx(), term.CloneEx());
             }
 
             if (acumTerm is AlgebraTerm)
@@ -237,10 +237,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 if (result != null)
                     return result;
             }
-            if (ex2 is Number && !(ex2 as Number).HasImaginaryComp() && (ex2 as Number) < 0.0)
+            if (ex2 is Number && !(ex2 as Number).HasImaginaryComp() && Number.OpLT((ex2 as Number), 0.0))
             {
                 Number nEx2 = ex2 as Number;
-                nEx2 *= -1.0;
+                nEx2 = Number.OpSub(nEx2);
                 ExComp raised = StaticCombine(ex1, nEx2);
                 return AlgebraTerm.FromFraction(Number.One, raised);
             }
@@ -279,7 +279,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                         ExComp[] gp = gps[0];
                         Number coeff = gp.GetCoeff();
 
-                        if (coeff != null && coeff < 0.0 && nPow.IsEven())
+                        if (coeff != null && Number.OpLT(coeff, 0.0) && nPow.IsEven())
                         {
                             gp.AssignCoeff(Number.Abs(coeff));
                             ex1 = gp.ToAlgTerm();
@@ -306,7 +306,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
 
                         Number recipDen = denominatorNum.GetReciprocal();
 
-                        if (numeratorNum != 1.0)
+                        if (Number.OpNotEquals(numeratorNum, 1.0))
                         {
                             ex1 = StaticCombine(n1, numeratorNum);
                             ex2 = AlgebraTerm.FromFraction(Number.One, denominatorNum);
@@ -331,9 +331,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
         {
             if (ex2 is Number)
             {
-                if ((ex2 as Number) == 0.0)
+                if (Number.OpEqual((ex2 as Number), 0.0))
                     return Number.One;
-                else if ((ex2 as Number) == 1.0)
+                else if (Number.OpEqual((ex2 as Number), 1.0))
                     return ex1;
             }
             if ((ex1 is ExMatrix || ex1 is FunctionDefinition || ex1 is AlgebraComp) && ex2 is AlgebraComp && (ex2 as AlgebraComp).Var.Var == "T")
@@ -377,7 +377,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
 
                 AlgebraTerm[] roots = new AlgebraTerm[(int)root.RealComp];
 
-                for (Number k = Number.Zero; k < root; k += 1.0)
+                for (Number k = Number.Zero; Number.OpLT(k, root); k = Number.OpAdd(k, 1.0))
                 {
                     ExComp p0 = StaticCombine(r, pow);
 
@@ -425,7 +425,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
 
             ExComp result = StaticCombine(ex1, pow);
 
-            AlgebraTerm pos = result.Clone().ToAlgTerm();
+            AlgebraTerm pos = result.CloneEx().ToAlgTerm();
             if (root.IsEven())
             {
                 AlgebraTerm neg = MulOp.Negate(result).ToAlgTerm();
@@ -447,7 +447,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
             return StaticWeakCombine(ex1, AlgebraTerm.FromFraction(new Number(1.0), new Number(2.0)));
         }
 
-        public override ExComp Clone()
+        public override ExComp CloneEx()
         {
             return new PowOp();
         }

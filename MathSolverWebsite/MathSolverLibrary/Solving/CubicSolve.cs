@@ -74,7 +74,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 }
 
                 Number nPow = pow as Number;
-                if (nPow > (new Number(3.0)))
+                if (Number.OpGT(nPow, (new Number(3.0))))
                 {
                     allValid = false;
                     break;

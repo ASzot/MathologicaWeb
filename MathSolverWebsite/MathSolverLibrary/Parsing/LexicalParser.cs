@@ -1890,7 +1890,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                         return new FunctionDefinition(new AlgebraComp(lexeme.Data2), inputArgs, argExs);
                     }
 
-                    FunctionDefinition funcCall = (FunctionDefinition)tmp.Clone();
+                    FunctionDefinition funcCall = (FunctionDefinition)tmp.CloneEx();
 
                     if (funcCall.InputArgCount != argExs.Length)
                     {
@@ -2143,7 +2143,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                 if (tmp == null)
                     return null;
 
-                funcDef = (FunctionDefinition)tmp.Clone();
+                funcDef = (FunctionDefinition)tmp.CloneEx();
 
                 funcDef.CallArgs = argExs;
 

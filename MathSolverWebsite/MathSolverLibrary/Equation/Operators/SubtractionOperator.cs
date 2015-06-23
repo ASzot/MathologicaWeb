@@ -23,7 +23,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
             return resultant;
         }
 
-        public override ExComp Clone()
+        public override ExComp CloneEx()
         {
             return new SubOp();
         }

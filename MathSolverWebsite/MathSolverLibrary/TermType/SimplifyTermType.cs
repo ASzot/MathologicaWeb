@@ -233,7 +233,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             solution = new Solution(simpEx);
             if (simpEx is AlgebraTerm)
             {
-                ExComp harshSimpEx = Simplifier.HarshSimplify(simpEx.Clone() as AlgebraTerm, ref pEvalData);
+                ExComp harshSimpEx = Simplifier.HarshSimplify(simpEx.CloneEx() as AlgebraTerm, ref pEvalData);
                 if (!harshSimpEx.IsEqualTo(simpEx))
                 {
                     // Display the harsh simplified equation as well.
@@ -257,7 +257,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             {
                 if (_term == null)
                     return SolveResult.Solved();
-                return SimplfyTerm(_term.Clone(), ref pEvalData);
+                return SimplfyTerm(_term.CloneEx(), ref pEvalData);
             }
             else if (command == "To polar form")
             {
@@ -317,7 +317,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             }
             else if (command == "Factor")
             {
-                ExComp factorized = _term.Clone().ToAlgTerm().FactorizeTerm(ref pEvalData, true);
+                ExComp factorized = _term.CloneEx().ToAlgTerm().FactorizeTerm(ref pEvalData, true);
                 if (factorized is AlgebraTerm)
                     factorized = (factorized as AlgebraTerm).RemoveRedundancies();
 

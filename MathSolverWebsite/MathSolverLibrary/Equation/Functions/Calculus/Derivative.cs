@@ -190,15 +190,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             return Derivative.ConstructDeriv(_inputVal == null ? null : _derivOf, def, _inputVal, _withRespectTo == null ? funcDef.InputArgs[0] : _withRespectTo, _order);
         }
 
-        public override ExComp Clone()
+        public override ExComp CloneEx()
         {
-            Derivative deriv = new Derivative(InnerEx.Clone());
-            deriv._withRespectTo = this._withRespectTo == null ? null : (AlgebraComp)this._withRespectTo.Clone();
-            deriv._order = this._order.Clone();
-            deriv._derivOf = this._derivOf == null ? null : (AlgebraComp)this._derivOf.Clone();
+            Derivative deriv = new Derivative(InnerEx.CloneEx());
+            deriv._withRespectTo = this._withRespectTo == null ? null : (AlgebraComp)this._withRespectTo.CloneEx();
+            deriv._order = this._order.CloneEx();
+            deriv._derivOf = this._derivOf == null ? null : (AlgebraComp)this._derivOf.CloneEx();
             deriv._isDefined = this._isDefined;
             deriv._isPartial = this._isPartial;
-            deriv._inputVal = this._inputVal == null ? null : _inputVal.Clone();
+            deriv._inputVal = this._inputVal == null ? null : _inputVal.CloneEx();
             return deriv;
         }
 
@@ -499,7 +499,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     ((deriv._derivOf != null && deriv._derivOf.IsEqualTo(this._derivOf)) ||
                     (deriv._derivOf == null && this._derivOf == null)) &&
                     (deriv._isPartial == this._isPartial) &&
-                    deriv._order == _order;
+                    deriv._order.IsEqualTo(_order);
             }
 
             return false;
@@ -627,12 +627,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         protected override AlgebraTerm CreateInstance(params ExComp[] args)
         {
             Derivative deriv = new Derivative(args[0]);
-            deriv._withRespectTo = this._withRespectTo == null ? null : (AlgebraComp)this._withRespectTo.Clone();
-            deriv._order = this._order.Clone();
+            deriv._withRespectTo = this._withRespectTo == null ? null : (AlgebraComp)this._withRespectTo.CloneEx();
+            deriv._order = this._order.CloneEx();
             deriv._isDefined = this._isDefined;
-            deriv._derivOf = this._derivOf == null ? null : (AlgebraComp)this._derivOf.Clone();
+            deriv._derivOf = this._derivOf == null ? null : (AlgebraComp)this._derivOf.CloneEx();
             deriv._isPartial = this._isPartial;
-            deriv._inputVal = this._inputVal == null ? null : this._inputVal.Clone();
+            deriv._inputVal = this._inputVal == null ? null : this._inputVal.CloneEx();
             return deriv;
         }
 
@@ -825,7 +825,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 }
             }
 
-            ExComp term = powFunc.Power.Clone();
+            ExComp term = powFunc.Power.CloneEx();
 
             ExComp power = SubOp.StaticCombine(powFunc.Power, Number.One);
             if (power is AlgebraTerm)
@@ -1155,8 +1155,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[" + varToStr + "]=(({0})({1})-({2})({3}))/(({1})^2)`",
                         "Plug the values back into the equation for the quotient rule `d/(dx)[u/v]=(u'v-uv')/(v^2)`. In the above case `u={2}`, `u'={0}`, `v={1}`, `v'={3}`", numDeriv, denEx, numEx, denDeriv);
 
-                    ExComp tmpMul0 = MulOp.StaticCombine(numDeriv, denEx.Clone());
-                    ExComp tmpMul1 = MulOp.StaticCombine(denDeriv.Clone(), numEx);
+                    ExComp tmpMul0 = MulOp.StaticCombine(numDeriv, denEx.CloneEx());
+                    ExComp tmpMul1 = MulOp.StaticCombine(denDeriv.CloneEx(), numEx);
 
                     ExComp tmpNum = SubOp.StaticCombine(tmpMul0, tmpMul1);
                     ExComp tmpDen = PowOp.StaticCombine(denEx, new Number(2.0));

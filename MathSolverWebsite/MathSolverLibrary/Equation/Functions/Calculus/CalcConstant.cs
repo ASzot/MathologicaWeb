@@ -14,7 +14,7 @@
             return -1.0;
         }
 
-        public override ExComp Clone()
+        public override ExComp CloneEx()
         {
             return new CalcConstant();
         }

@@ -13,7 +13,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
         public PowerSolve(AlgebraSolver pAgSolver, ExComp powerFor)
         {
             p_agSolver = pAgSolver;
-            _solveForPower = powerFor.Clone().ToAlgTerm();
+            _solveForPower = powerFor.CloneEx().ToAlgTerm();
         }
 
         public override ExComp SolveEquation(AlgebraTerm left, AlgebraTerm right, AlgebraVar solveFor, ref TermType.EvalData pEvalData)
@@ -96,12 +96,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 Number nPower = power as Number;
                 string rootStr;
                 string rootName;
-                if (nPower == 2.0)
+                if (Number.OpEqual(nPower, 2.0))
                 {
                     rootName = "square";
                     rootStr = "sqrt";
                 }
-                else if (nPower == 3.0)
+                else if (Number.OpEqual(nPower, 3.0))
                 {
                     rootName = "cube";
                     rootStr = "root(" + (power as Number).FinalToDispString() + ")";
@@ -171,8 +171,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
             pEvalData.WorkMgr.FromSubtraction(subGroup, left, right);
 
-            left = left - subGroup;
-            right = right - subGroup;
+            left = AlgebraTerm.OpSub(left, subGroup);
+            right = AlgebraTerm.OpSub(right, subGroup);
 
             pEvalData.WorkMgr.FromSides(left, right);
 
@@ -195,7 +195,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
                 pEvalData.WorkMgr.FromSubtraction(right, left, right);
 
-                left = SubOp.StaticCombine(left, right.Clone()).ToAlgTerm();
+                left = SubOp.StaticCombine(left, right.CloneEx()).ToAlgTerm();
 
                 left = left.RemoveZeros();
                 right = Number.Zero.ToAlgTerm();

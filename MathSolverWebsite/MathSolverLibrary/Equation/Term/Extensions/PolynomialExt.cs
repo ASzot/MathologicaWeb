@@ -60,9 +60,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
                 ExComp coeff = _info.GetCoeffForPow(i);
 
                 ExComp rootMul = MulOp.StaticCombine(root, prev);
-                muls.Add(rootMul.Clone());
+                muls.Add(rootMul.CloneEx());
                 ExComp result = AddOp.StaticCombine(coeff, rootMul);
-                results.Add(result.Clone());
+                results.Add(result.CloneEx());
                 prev = result;
             }
             resultCoeffs.Add(prev);

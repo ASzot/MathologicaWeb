@@ -26,7 +26,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 subIn = agSolver.Solve(dVar.Var, subOut.ToAlgTerm(), subIn.ToAlgTerm(), ref pEvalData);
             }
 
-            subbedResult = subbedResult.Substitute(dVar, subIn.Clone());
+            subbedResult = subbedResult.Substitute(dVar, subIn.CloneEx());
             pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\int (" + WorkMgr.ToDisp(subbedResult) + ") d" + dVar.ToDispString() + WorkMgr.EDM, "Substitute " + WorkMgr.STM + dVar.ToDispString() +
                 " = " + WorkMgr.ToDisp(subIn) + WorkMgr.EDM);
 
@@ -34,7 +34,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             WorkStep lastStep = pEvalData.WorkMgr.GetLast();
 
             lastStep.GoDown(ref pEvalData);
-            ExComp differential = Derivative.TakeDeriv(subIn.Clone(), subVar, ref pEvalData);
+            ExComp differential = Derivative.TakeDeriv(subIn.CloneEx(), subVar, ref pEvalData);
             lastStep.GoUp(ref pEvalData);
 
             lastStep.WorkHtml = WorkMgr.STM + "d" + dVar.ToDispString() + " = "
@@ -362,7 +362,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 if (basePows.Count != 1)
                     continue;
                 ExComp singlePow = basePows[0];
-                if (!(singlePow is Number) && (singlePow as Number) == 2.0)
+                if (!(singlePow is Number) && Number.OpEqual((singlePow as Number), 2.0))
                     continue;
 
                 subOut = dVar;
@@ -409,8 +409,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 if (aCoeff.HasImaginaryComp() || bCoeff.HasImaginaryComp())
                     return null;
 
-                bool aNeg = aCoeff < 0.0;
-                bool bNeg = bCoeff < 0.0;
+                bool aNeg = Number.OpLT(aCoeff, 0.0);
+                bool bNeg = Number.OpLT(bCoeff, 0.0);
 
                 if (aNeg)
                     aSq = (new AbsValFunction(aSq)).Evaluate(false, ref pEvalData);
@@ -490,7 +490,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     "Simplify.");
 
                 dispIdenStep = new AlgebraTerm();
-                if (aVal is Number && (aVal as Number) != 1.0)
+                if (aVal is Number && Number.OpNotEquals((aVal as Number), 1.0))
                 {
                     dispIdenStep.Add(aVal, new MulOp());
                 }

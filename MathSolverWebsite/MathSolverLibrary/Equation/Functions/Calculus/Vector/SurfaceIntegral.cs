@@ -23,9 +23,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
             return other._surface.IsEqualTo(this._surface) && base.IsEqualTo(ex);
         }
 
-        public override ExComp Clone()
+        public override ExComp CloneEx()
         {
-            return ConstructSurfaceIntegral(InnerTerm.Clone(), _surface == null ? null : (AlgebraComp)_surface.Clone(), _dVar == null ? null : (AlgebraComp)_dVar.Clone());
+            return ConstructSurfaceIntegral(InnerTerm.CloneEx(), _surface == null ? null : (AlgebraComp)_surface.CloneEx(), _dVar == null ? null : (AlgebraComp)_dVar.CloneEx());
         }
 
         protected override AlgebraTerm CreateInstance(params ExComp[] args)

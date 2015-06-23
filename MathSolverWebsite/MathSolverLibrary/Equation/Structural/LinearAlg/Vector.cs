@@ -96,12 +96,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
             return PowOp.StaticCombine(sum, AlgebraTerm.FromFraction(Number.One, new Number(2.0)));
         }
 
-        public override ExComp Clone()
+        public override ExComp CloneEx()
         {
             ExVector vec = new ExVector(this.Length);
             for (int i = 0; i < this.Length; ++i)
             {
-                vec.Set(i, this.Get(i).Clone());
+                vec.Set(i, this.Get(i).CloneEx());
             }
 
             return vec;
@@ -114,7 +114,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
 
             for (int i = 0; i < this.Length; ++i)
             {
-                ExComp setVal = DivOp.StaticCombine(this.Get(i), vecLength.Clone());
+                ExComp setVal = DivOp.StaticCombine(this.Get(i), vecLength.CloneEx());
                 vec.Set(i, setVal);
             }
 

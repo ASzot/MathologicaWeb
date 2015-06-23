@@ -36,7 +36,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
             return null;
         }
 
-        public override ExComp Clone()
+        public override ExComp CloneEx()
         {
             return new AddOp();
         }

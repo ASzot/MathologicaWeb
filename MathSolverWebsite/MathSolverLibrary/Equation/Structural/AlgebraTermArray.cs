@@ -56,11 +56,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 _terms.Add(comp.ToAlgTerm());
         }
 
-        public override ExComp Clone()
+        public override ExComp CloneEx()
         {
             List<AlgebraTerm> clonedTerms = new List<AlgebraTerm>();
             foreach (AlgebraTerm term in _terms)
-                clonedTerms.Add(term.Clone() as AlgebraTerm);
+                clonedTerms.Add(term.CloneEx() as AlgebraTerm);
             return new AlgebraTerm(clonedTerms.ToArray());
         }
 
@@ -132,11 +132,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 if (switchSides)
                 {
                     left = _terms[i];
-                    right = otherSide.Clone().ToAlgTerm();
+                    right = otherSide.CloneEx().ToAlgTerm();
                 }
                 else
                 {
-                    left = otherSide.Clone().ToAlgTerm();
+                    left = otherSide.CloneEx().ToAlgTerm();
                     right = _terms[i];
                 }
 

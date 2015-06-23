@@ -80,7 +80,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
             coeff.Add(number);
 
-            if (coeff != 0.0)
+            if (Number.OpNotEquals(coeff, 0.0))
                 term.AddGroup(matchingGroup);
             return term;
         }
@@ -154,11 +154,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
                     Number coeff1 = GetCoeffTerm(group1) ?? new Number(1.0);
                     Number coeff2 = GetCoeffTerm(match) ?? new Number(1.0);
-                    Number combinedCoeff = coeff1 + coeff2;
+                    Number combinedCoeff = Number.OpAdd(coeff1, coeff2);
 
-                    if (combinedCoeff != 0.0)
+                    if (Number.OpNotEquals(combinedCoeff, 0.0))
                     {
-                        if (combinedCoeff != 1.0)
+                        if (Number.OpNotEquals(combinedCoeff, 1.0))
                             AddTermToGroup(ref baseGroup, combinedCoeff);
 
                         intersectedGroups.Add(baseGroup);

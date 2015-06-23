@@ -764,7 +764,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 groupGcf.GetConstVarTo(out varTo, out constTo, dVar);
 
                 AlgebraTerm constToAg = constTo.ToAlgTerm();
-                evaluated = DivOp.StaticCombine(evaluated, constToAg.Clone());
+                evaluated = DivOp.StaticCombine(evaluated, constToAg.CloneEx());
                 constEx = AlgebraTerm.FromFraction(Number.One, constToAg);
             }
 
@@ -931,7 +931,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 return null;
 
             int stepCount = pEvalData.WorkMgr.WorkSteps.Count;
-            Integral antiderivativeOfDV = Integral.ConstructIntegral(dv.Clone(), dVar);
+            Integral antiderivativeOfDV = Integral.ConstructIntegral(dv.CloneEx(), dVar);
             antiderivativeOfDV.Info = pIntInfo;
             antiderivativeOfDV.AddConstant = false;
             ExComp v = antiderivativeOfDV.Evaluate(false, ref pEvalData);
@@ -986,7 +986,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "({0})({1})-\\int ({1}) ({2}) d" + dVar.ToDispString() + WorkMgr.EDM,
                 "Substitute the values into the integration by parts formula.", u, v, du);
 
-            ExComp uv = MulOp.StaticCombine(u, v.Clone());
+            ExComp uv = MulOp.StaticCombine(u, v.CloneEx());
             ExComp vDu = MulOp.StaticCombine(v, du);
 
             Integral antiDerivVDU = Integral.ConstructIntegral(vDu, dVar);
@@ -1026,7 +1026,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     if (pfBase is PowerFunction)
                     {
                         PowerFunction pfBasePf = pfBase as PowerFunction;
-                        if (pfBasePf.Power.Equals(new Number(0.5)) || pfBasePf.Power.Equals(AlgebraTerm.FromFraction(Number.One, new Number(2.0))))
+                        if (pfBasePf.Power.IsEqualTo(new Number(0.5)) || pfBasePf.Power.IsEqualTo(AlgebraTerm.FromFraction(Number.One, new Number(2.0))))
                         {
                             // Is this arcsin or arccos?
                             ExComp compare = AddOp.StaticCombine(MulOp.Negate(PowOp.StaticCombine(dVar, new Number(2.0))), Number.One).ToAlgTerm().RemoveRedundancies();
@@ -1096,7 +1096,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 if (IsDerivAcceptable(pf, dVar) && !pf.Power.ToAlgTerm().Contains(dVar))
                 {
                     // The special case for the power function anti-dervivative.
-                    if (Number.NegOne.Equals(pf.Power))
+                    if (Number.NegOne.IsEqualTo(pf.Power))
                     {
                         pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\int(" + pf.FinalToDispStr() + ")\\d" + dVar.ToDispString() +
                             "=ln(|" + dVar + "|)" + WorkMgr.EDM, "This comes from the known derivative " + WorkMgr.STM +

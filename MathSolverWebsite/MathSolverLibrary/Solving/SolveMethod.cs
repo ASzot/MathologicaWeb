@@ -78,7 +78,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
             foreach (AlgebraGroup constantGroup in constantGroupsLeft)
             {
-                ExComp subTerm = constantGroup.ToTerm().Clone();
+                ExComp subTerm = constantGroup.ToTerm().CloneEx();
                 left = Equation.Operators.SubOp.StaticCombine(left, subTerm).ToAlgTerm();
                 right = Equation.Operators.SubOp.StaticCombine(right, subTerm).ToAlgTerm();
             }
@@ -142,7 +142,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                     factoredOutUnrelatedTerm = factoredOutUnrelatedTerm.RemoveRedundancies().ToAlgTerm();
                     foreach (ExComp subComp in factoredOutUnrelatedTerm.SubComps)
                     {
-                        if (Number.NegOne.IsEqualTo(subComp) || (subComp is Number && !(subComp as Number).HasImaginaryComp() && (subComp as Number) < 0.0))
+                        if (Number.NegOne.IsEqualTo(subComp) || (subComp is Number && !(subComp as Number).HasImaginaryComp() && Number.OpLT((subComp as Number), 0.0)))
                         {
                             pEvalData.NegDivCount++;
                             break;
@@ -156,9 +156,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                     {
                         ExComp tmpRight = right;
 
-                        left = Equation.Operators.DivOp.StaticCombine(left, factoredOutUnrelatedTerm.Clone()).ToAlgTerm();
+                        left = Equation.Operators.DivOp.StaticCombine(left, factoredOutUnrelatedTerm.CloneEx()).ToAlgTerm();
 
-                        right = Equation.Operators.DivOp.StaticCombine(right, factoredOutUnrelatedTerm.Clone()).ToAlgTerm();
+                        right = Equation.Operators.DivOp.StaticCombine(right, factoredOutUnrelatedTerm.CloneEx()).ToAlgTerm();
 
                         //string divStr = WorkMgr.CG_TXT_TG("{0}");
                         string divStr = "{0}";
@@ -173,9 +173,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                         pEvalData.WorkMgr.FromDivision(factoredOutUnrelatedTerm, left, right);
                 }
 
-                left = Equation.Operators.DivOp.StaticCombine(left, factoredOutUnrelatedTerm.Clone()).ToAlgTerm();
+                left = Equation.Operators.DivOp.StaticCombine(left, factoredOutUnrelatedTerm.CloneEx()).ToAlgTerm();
 
-                right = Equation.Operators.DivOp.StaticCombine(right, factoredOutUnrelatedTerm.Clone()).ToAlgTerm();
+                right = Equation.Operators.DivOp.StaticCombine(right, factoredOutUnrelatedTerm.CloneEx()).ToAlgTerm();
 
                 pEvalData.WorkMgr.FromSides(left, right, "Cancel and simplify");
             }
@@ -271,7 +271,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
             foreach (AlgebraGroup varFracGroup in varFracGroups)
             {
-                ExComp subTerm = varFracGroup.ToTerm().Clone();
+                ExComp subTerm = varFracGroup.ToTerm().CloneEx();
 
                 left = Equation.Operators.SubOp.StaticCombine(left, subTerm).ToAlgTerm();
                 right = Equation.Operators.SubOp.StaticCombine(right, subTerm).ToAlgTerm();
@@ -293,8 +293,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
             foreach (AlgebraGroup variableGroup in variableGroupsRight)
             {
-                left = left - variableGroup;
-                right = right - variableGroup;
+                left = AlgebraTerm.OpSub(left, variableGroup);
+                right = AlgebraTerm.OpSub(right, variableGroup);
             }
 
             left = left.RemoveZeros();

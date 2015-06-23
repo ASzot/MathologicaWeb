@@ -110,7 +110,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                             group.Add(new Operators.MulOp());
                             group.Add(coeff);
                         }
-                        coeff = coeff * new Number(-1.0f);
+                        coeff = Number.OpMul(coeff, new Number(-1.0f));
                     }
 
                     groups.Add(group.ToArray());

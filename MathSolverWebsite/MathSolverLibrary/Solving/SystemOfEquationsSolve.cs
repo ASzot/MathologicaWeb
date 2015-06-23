@@ -208,8 +208,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 (result is AlgebraTerm ? (result as AlgebraTerm).FinalToDispStr() : result.ToAsciiString()) +
                 WorkMgr.EDM + " into the above equation. <i>(EQ" + (index + 1).ToString() + ")</i>");
 
-            data1 = data1.Substitute(solveForComp, result.Clone());
-            data2 = data2.Substitute(solveForComp, result.Clone());
+            data1 = data1.Substitute(solveForComp, result.CloneEx());
+            data2 = data2.Substitute(solveForComp, result.CloneEx());
 
             pEvalData.WorkMgr.FromSides(data1, data2);
 
@@ -344,7 +344,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 if (iterGenerations.Count > 1)
                     pEvalData.WorkMgr.FromSides(solveForComp, result, "Using the solved equation substitute the result into the other equations.");
 
-                solveResult.Solutions.Add(new Solution(solveForComp, result.Clone()));
+                solveResult.Solutions.Add(new Solution(solveForComp, result.CloneEx()));
 
                 iterGenerations.RemoveAt(i);
 

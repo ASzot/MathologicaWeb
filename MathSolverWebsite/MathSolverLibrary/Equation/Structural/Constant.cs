@@ -50,7 +50,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return null;
         }
 
-        public override ExComp Clone()
+        public override ExComp CloneEx()
         {
             return new Constant(_var.Var, d_value);
         }

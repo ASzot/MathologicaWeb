@@ -63,7 +63,7 @@ namespace MathSolverWebsite.MathSolverLibrary
                 if (pow is Number)
                 {
                     Number powNum = pow as Number;
-                    if (MaxPower == null || powNum > MaxPower)
+                    if (MaxPower == null || Number.OpGT(powNum, MaxPower))
                         MaxPower = powNum;
                 }
             }
@@ -122,7 +122,7 @@ namespace MathSolverWebsite.MathSolverLibrary
                 if (pow is Number)
                 {
                     Number powNum = pow as Number;
-                    if (MaxPower == null || powNum > MaxPower)
+                    if (MaxPower == null || Number.OpGT(powNum, MaxPower))
                         MaxPower = powNum;
                 }
             }
@@ -185,8 +185,8 @@ namespace MathSolverWebsite.MathSolverLibrary
         public ExComp GetSubOutRecom(AlgebraTerm left, AlgebraTerm right, AlgebraComp varFor, out AlgebraTerm totalTerm, out bool factor)
         {
             factor = false;
-            AlgebraTerm clonedLeft = (AlgebraTerm)left.Clone();
-            AlgebraTerm clonedRight = (AlgebraTerm)right.Clone();
+            AlgebraTerm clonedLeft = (AlgebraTerm)left.CloneEx();
+            AlgebraTerm clonedRight = (AlgebraTerm)right.CloneEx();
 
             totalTerm = Equation.Operators.SubOp.StaticCombine(clonedLeft, clonedRight).ToAlgTerm();
 

@@ -181,7 +181,7 @@ namespace MathSolverWebsite.MathSolverLibrary
             List<ExComp> clonedSides = new List<ExComp>();
             foreach (ExComp side in _sides)
             {
-                clonedSides.Add(side.Clone());
+                clonedSides.Add(side.CloneEx());
             }
 
             return new EqSet(clonedSides, _comparisonOps);
@@ -312,7 +312,7 @@ namespace MathSolverWebsite.MathSolverLibrary
             {
                 if (side == null)
                     continue;
-                side.Clone().ToAlgTerm().GetDomain(agSolver, varFor, ref domainRests, ref pEvalData);
+                side.CloneEx().ToAlgTerm().GetDomain(agSolver, varFor, ref domainRests, ref pEvalData);
                 if (domainRests == null)
                     return null;
             }

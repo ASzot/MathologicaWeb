@@ -26,24 +26,24 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             else if (comparison == LexemeType.Greater)
             {
                 if (side0 is Number && side1 is Number)
-                    valid = (side0 as Number) > (side1 as Number);
+                    valid = Number.OpGT((side0 as Number), (side1 as Number));
             }
             else if (comparison == LexemeType.GreaterEqual)
             {
                 if (side0 is Number && side1 is Number)
-                    valid = (side0 as Number) >= (side1 as Number);
+                    valid = Number.OpGE((side0 as Number),(side1 as Number));
                 else
                     valid = side0.IsEqualTo(side1);
             }
             else if (comparison == LexemeType.Less)
             {
                 if (side0 is Number && side1 is Number)
-                    valid = (side0 as Number) < (side1 as Number);
+                    valid = Number.OpLT((side0 as Number), (side1 as Number));
             }
             else if (comparison == LexemeType.LessEqual)
             {
                 if (side0 is Number && side1 is Number)
-                    valid = (side0 as Number) <= (side1 as Number);
+                    valid = Number.OpLE((side0 as Number), (side1 as Number));
                 else
                     valid = side0.IsEqualTo(side1);
             }
@@ -68,7 +68,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
         private ExComp SimpTerm(ExComp side, ref EvalData pEvalData)
         {
-            ExComp originalTerm = side.Clone();
+            ExComp originalTerm = side.CloneEx();
             AlgebraTerm agTerm;
             if (side is AlgebraTerm)
             {

@@ -88,7 +88,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     if (i == j)
                         continue;
 
-                    multipliedNumEx = MulOp.StaticCombine(multipliedNumEx, bottomFactors[j].Clone());
+                    multipliedNumEx = MulOp.StaticCombine(multipliedNumEx, bottomFactors[j].CloneEx());
                 }
 
                 if (left == null)
@@ -128,7 +128,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 AlgebraTerm decomCoeff = new AlgebraTerm();
                 foreach (AlgebraTerm aTerm in decomVarTerms)
                 {
-                    decomCoeff = decomCoeff + aTerm;
+                    decomCoeff = AlgebraTerm.OpAdd(decomCoeff, aTerm);
                 }
 
                 decomCoeffs.Add(decomCoeff);
@@ -141,7 +141,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 AlgebraTerm constantCoeff = new AlgebraTerm();
                 foreach (AlgebraGroup constantGp in constantGps)
                 {
-                    constantCoeff = constantCoeff + constantGp;
+                    constantCoeff = AlgebraTerm.OpAdd(constantCoeff, constantGp);
                 }
 
                 decomCoeffs.Add(constantCoeff);

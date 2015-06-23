@@ -34,7 +34,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             {
                 if (subComp is AlgebraTerm && (subComp as AlgebraTerm).Contains(varFor))
                     return true;
-                if (subComp is AlgebraComp && (subComp as AlgebraComp) == varFor)
+                if (subComp is AlgebraComp && (subComp as AlgebraComp).IsEqualTo(varFor))
                     return true;
             }
 
@@ -281,7 +281,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                         {
                             if (!(powFunc.Base is Number))
                                 return null;
-                            coeff = Operators.MulOp.StaticCombine(coeff, Number.One / (powFunc.Base as Number));
+                            coeff = Operators.MulOp.StaticCombine(coeff, Number.OpDiv(Number.One, (powFunc.Base as Number)));
                         }
                         else
                         {
@@ -393,7 +393,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             List<ExComp> powersApplied = new List<ExComp>();
             foreach (ExComp subComp in _subComps)
             {
-                if (subComp is AlgebraComp && (subComp as AlgebraComp) == varFor)
+                if (subComp is AlgebraComp && (subComp as AlgebraComp).IsEqualTo(varFor))
                     powersApplied.Add(Number.One);
                 else if (subComp is PowerFunction)
                 {
@@ -401,7 +401,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                     if ((subCompPowFunc.Base is AlgebraTerm &&
                         (subCompPowFunc.Base as AlgebraTerm).Contains(varFor)) ||
                         (subCompPowFunc.Base is AlgebraComp &&
-                        (subCompPowFunc.Base as AlgebraComp) == varFor))
+                        (subCompPowFunc.Base as AlgebraComp).IsEqualTo(varFor)))
                     {
                         powersApplied.Add(subCompPowFunc.Power);
                     }
@@ -576,7 +576,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         public virtual bool IsOne()
         {
             if (TermCount == 1 && _subComps[0] is Number)
-                return (_subComps[0] as Number) == 1.0;
+                return Number.OpEqual((_subComps[0] as Number), 1.0);
             return false;
         }
 
@@ -597,7 +597,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             if (TermCount == 1)
             {
                 if (_subComps[0] is Number)
-                    return (_subComps[0] as Number) == 0.0;
+                    return Number.OpEqual((_subComps[0] as Number), 0.0);
                 else if (_subComps[0] is AlgebraTerm)
                     return (_subComps[0] as AlgebraTerm).IsZero();
             }
@@ -615,7 +615,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                         allZero = false;
                         break;
                     }
-                    else if (coeff != 0.0)
+                    else if (Number.OpNotEquals(coeff, 0.0))
                     {
                         allZero = false;
                         break;

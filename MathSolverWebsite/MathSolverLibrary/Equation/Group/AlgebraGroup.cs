@@ -58,7 +58,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         {
             AlgebraTerm term = new AlgebraTerm();
             foreach (AlgebraGroup gp in gps)
-                term = term + gp;
+                term = AlgebraTerm.OpAdd(term, gp);
 
             return term;
         }
@@ -71,7 +71,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             AlgebraTerm totalTerm = new AlgebraTerm();
             foreach (AlgebraTerm term in terms)
             {
-                totalTerm = totalTerm + term;
+                totalTerm = AlgebraTerm.OpAdd(totalTerm, term);
             }
 
             if (totalTerm.SubComps.Count == 0)

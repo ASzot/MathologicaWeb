@@ -53,7 +53,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
             {
                 AlgebraFunction func1 = ex1 as AlgebraFunction;
                 AlgebraFunction func2 = ex2 as AlgebraFunction;
-                ExComp addedFuncs = func1 + func2;
+                ExComp addedFuncs = AlgebraFunction.OpAdd(func1, func2);
                 return addedFuncs;
             }
             else if (ex1 is AlgebraTerm && ex2 is AlgebraTerm)
@@ -87,7 +87,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
             {
                 AlgebraTerm term = ex1 is AlgebraTerm ? ex1 as AlgebraTerm : ex2 as AlgebraTerm;
                 Number num = ex1 is Number ? ex1 as Number : ex2 as Number;
-                if (num == 0.0)
+                if (Number.OpEqual(num, 0.0))
                     return term;
 
                 ExComp intersect = AlgebraTerm.Intersect(term, num);
@@ -97,7 +97,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
             {
                 Number n1 = ex1 as Number;
                 Number n2 = ex2 as Number;
-                Number result = n1 + n2;
+                Number result = Number.OpAdd(n1, n2);
                 return result;
             }
             else if (ex1 is AlgebraComp && ex2 is AlgebraComp)
@@ -105,7 +105,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 AlgebraComp c1 = ex1 as AlgebraComp;
                 AlgebraComp c2 = ex2 as AlgebraComp;
 
-                if (c1 == c2)
+                if (c1.IsEqualTo(c2))
                 {
                     AlgebraTerm term = new AlgebraTerm();
                     term.Add(new Number(2.0), new MulOp(), c1);
@@ -126,7 +126,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
             return term;
         }
 
-        public override ExComp Clone()
+        public override ExComp CloneEx()
         {
             return new AddOp();
         }

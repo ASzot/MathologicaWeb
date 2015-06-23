@@ -47,7 +47,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 }
 
                 ExComp rightEx = right.RemoveRedundancies();
-                if (rightEx is Number && !(rightEx as Number).HasImaginaryComp() && (rightEx as Number) < -1.0)
+                if (rightEx is Number && !(rightEx as Number).HasImaginaryComp() && Number.OpLT((rightEx as Number), -1.0))
                 {
                     pEvalData.WorkMgr.FromSides(left, right, "An absolute value will never equal a negative number. So there are no solutions to this equation.");
                     return new NoSolutions();

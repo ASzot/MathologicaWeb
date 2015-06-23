@@ -74,7 +74,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             _isInnerIntegral = isInnerIntegral;
         }
 
-        public override ExComp Clone()
+        public override ExComp CloneEx()
         {
             return ConstructIntegral(InnerTerm, _dVar, LowerLimit, UpperLimit, _isInnerIntegral);
         }
@@ -306,10 +306,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     return indefinite;
             }
 
-            AlgebraTerm upperEval = indefinite.Clone().ToAlgTerm().Substitute(_dVar, useUpper);
+            AlgebraTerm upperEval = indefinite.CloneEx().ToAlgTerm().Substitute(_dVar, useUpper);
             ExComp upperEx = Simplifier.Simplify(new AlgebraTerm(upperEval), ref pEvalData);
 
-            AlgebraTerm lowerEval = indefinite.Clone().ToAlgTerm().Substitute(_dVar, useLower);
+            AlgebraTerm lowerEval = indefinite.CloneEx().ToAlgTerm().Substitute(_dVar, useLower);
             ExComp lowerEx = Simplifier.Simplify(new AlgebraTerm(lowerEval), ref pEvalData);
 
             AlgebraComp subVar = null;
@@ -372,7 +372,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             string thisStr = takeEx.ToAlgTerm().FinalToDispStr();
 
             // Split the integral up by groups.
-            List<ExComp[]> gps = takeEx.Clone().ToAlgTerm().GetGroupsNoOps();
+            List<ExComp[]> gps = takeEx.CloneEx().ToAlgTerm().GetGroupsNoOps();
 
             if (gps.Count == 0)
             {

@@ -19,9 +19,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
         {
         }
 
-        public override ExComp Clone()
+        public override ExComp CloneEx()
         {
-            return ConstructLineIntegral(InnerTerm.Clone(), _lineIden == null ? null : (AlgebraComp)_lineIden.Clone(), _dVar == null ? null : (AlgebraComp)_dVar.Clone());
+            return ConstructLineIntegral(InnerTerm.CloneEx(), _lineIden == null ? null : (AlgebraComp)_lineIden.CloneEx(), _dVar == null ? null : (AlgebraComp)_dVar.CloneEx());
         }
 
         public override bool IsEqualTo(ExComp ex)

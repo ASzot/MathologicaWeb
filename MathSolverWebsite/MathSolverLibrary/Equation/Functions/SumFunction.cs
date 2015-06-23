@@ -34,9 +34,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         {
         }
 
-        public override ExComp Clone()
+        public override ExComp CloneEx()
         {
-            return new SumFunction(InnerEx.Clone(), (AlgebraComp)IterVar.Clone(), IterStart.Clone(), IterCount.Clone());
+            return new SumFunction(InnerEx.CloneEx(), (AlgebraComp)IterVar.CloneEx(), IterStart.CloneEx(), IterCount.CloneEx());
         }
 
         private bool? Converges(ref TermType.EvalData pEvalData, out ExComp result, ExComp[] gp)
@@ -88,11 +88,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                 if (den is PowerFunction)
                 {
                     PowerFunction powFunc = den as PowerFunction;
-                    if (powFunc.Base.IsEqualTo(IterVar) && powFunc.Power is Number && (powFunc.Power as Number) > 0.0 &&
-                        IterStart is Number && (IterStart as Number) >= 1.0)
+                    if (powFunc.Base.IsEqualTo(IterVar) && powFunc.Power is Number && Number.OpGT((powFunc.Power as Number), 0.0) &&
+                        IterStart is Number && Number.OpGE((IterStart as Number), 1.0))
                     {
                         Number nPow = powFunc.Power as Number;
-                        bool isConvergent = nPow > 1.0;
+                        bool isConvergent = Number.OpGT(nPow, 1.0);
                         pEvalData.WorkMgr.FromFormatted(thisStr, "In the form " + WorkMgr.STM + "1/n^p" + WorkMgr.EDM + " if " +
                             WorkMgr.STM + "p \\gt 1" + WorkMgr.EDM + " then the series is convergent.");
                         if (isConvergent)
@@ -141,12 +141,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                 }
 
                 if (a != null && pf != null && !a.ToAlgTerm().Contains(IterVar) && pf.Base is Number && !(pf.Base as Number).HasImaginaryComp() &&
-                    IterStart is Number && (IterStart as Number) >= 0.0)
+                    IterStart is Number && Number.OpGE((IterStart as Number), 0.0))
                 {
                     Number nBase = pf.Base as Number;
                     ExComp exBase = nBase;
                     if (pfDen)
-                        exBase = Number.One / nBase;
+                        exBase = Number.OpDiv(Number.One, nBase);
 
                     if (!(exBase is Number))
                         return null;
@@ -162,7 +162,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                     {
                         pEvalData.WorkMgr.FromFormatted(thisStr, "In the geometric series form " + WorkMgr.STM + "ar^{n-1}" + WorkMgr.EDM + " if " +
                             WorkMgr.STM + "|r| \\lt 1 " + WorkMgr.EDM + " than the series is convergent");
-                        if (nBase >= 1.0)
+                        if (Number.OpGE(nBase, 1.0))
                         {
                             pEvalData.WorkMgr.FromFormatted(thisStr, WorkMgr.STM + "|r| \\ge 1" + WorkMgr.EDM + ", the series is divergent.");
                             return false;
@@ -237,8 +237,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             CallChildren(harshEval, ref pEvalData);
 
             // No negative numbers with summations.
-            if ((IterCount is Number && (IterCount as Number) < 0.0) ||
-                (IterStart is Number && (IterStart as Number) < 0.0))
+            if ((IterCount is Number && Number.OpLT((IterCount as Number), 0.0)) ||
+                (IterStart is Number && Number.OpLT((IterStart as Number), 0.0)))
                 return this;
 
             bool toInfinity = IterCount is Number && IterCount.IsEqualTo(Number.PosInfinity);
@@ -298,7 +298,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                 {
                     iterVal = new Number(i);
 
-                    AlgebraTerm innerTerm = InnerTerm.Clone().ToAlgTerm();
+                    AlgebraTerm innerTerm = InnerTerm.CloneEx().ToAlgTerm();
 
                     innerTerm = innerTerm.Substitute(IterVar, iterVal);
 
@@ -312,7 +312,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                     if (lastStep != null)
                         lastStep.GoDown(ref pEvalData);
 
-                    ExComp simpInnerEx = TermType.SimplifyTermType.BasicSimplify(innerTerm.Clone().ToAlgTerm().RemoveRedundancies(), ref pEvalData);
+                    ExComp simpInnerEx = TermType.SimplifyTermType.BasicSimplify(innerTerm.CloneEx().ToAlgTerm().RemoveRedundancies(), ref pEvalData);
 
                     if (lastStep != null)
                         lastStep.GoUp(ref pEvalData);

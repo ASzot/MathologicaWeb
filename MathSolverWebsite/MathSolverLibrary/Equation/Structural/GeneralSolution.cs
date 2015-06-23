@@ -23,9 +23,9 @@
             _iterVar = iterationVar;
         }
 
-        public override ExComp Clone()
+        public override ExComp CloneEx()
         {
-            return new GeneralSolution(_result.Clone(), _interval.Clone(), (AlgebraComp)_iterVar.Clone());
+            return new GeneralSolution(_result.CloneEx(), _interval.CloneEx(), (AlgebraComp)_iterVar.CloneEx());
         }
 
         public override AlgebraTerm Order()

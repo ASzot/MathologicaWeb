@@ -6,7 +6,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
     {
         public const string IDEN = "times";
 
-        public override ExComp Clone()
+        public override ExComp CloneEx()
         {
             return new CrossProductOp();
         }

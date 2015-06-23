@@ -78,7 +78,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                         Number nLog0Base = log0.Base as Number;
                         Number nLog1Base = log1.Base as Number;
 
-                        if (nLog0Base % nLog1Base == 0)
+                        if (Number.OpEqual(Number.OpMod(nLog0Base, nLog1Base), 0))
                         {
                             AlgebraComp tmpSolveFor = p_agSolver.NextSubVar();
                             AlgebraComp tmpSolveFor0 = new AlgebraComp(tmpSolveFor.Var.Var + "_0");
@@ -108,7 +108,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                             pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "{0}={1}" + WorkMgr.EDM + "<br />" + WorkMgr.STM + "{0}={2}" + WorkMgr.EDM, "The left hand sides are now equal. So " +
                                 WorkMgr.STM + "{0}={1}={2}" + WorkMgr.EDM, PowOp.StaticWeakCombine(nLog0Base, tmpSolveFor0), log0Inner, log1Inner);
                         }
-                        else if (nLog1Base % nLog0Base == 0)
+                        else if (Number.OpEqual(Number.OpMod(nLog1Base, nLog0Base), 0))
                         {
                             AlgebraComp tmpSolveFor = p_agSolver.NextSubVar();
                             AlgebraComp tmpSolveFor0 = new AlgebraComp(tmpSolveFor.Var.Var + "_0");

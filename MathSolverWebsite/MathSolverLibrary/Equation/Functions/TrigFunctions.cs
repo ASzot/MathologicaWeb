@@ -848,15 +848,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         protected bool InStandardDomain(ref TermType.EvalData pEvalData)
         {
-            ExComp innerEx = InnerEx.Clone();
+            ExComp innerEx = InnerEx.CloneEx();
             innerEx = Simplifier.HarshSimplify(innerEx.ToAlgTerm(), ref pEvalData, false);
 
             if (innerEx is Number)
             {
                 Number nInner = innerEx as Number;
-                if (nInner > 1.0)
+                if (Number.OpGT(nInner, 1.0))
                     return false;
-                if (nInner < -1.0)
+                if (Number.OpLT(nInner, -1.0))
                     return false;
             }
 
@@ -1387,14 +1387,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                             AlgebraTerm resultingTerm = new AlgebraTerm();
 
                             Number nMinPow;
-                            if (nPf0Pow > nPf1Pow)
+                            if (Number.OpGT(nPf0Pow, nPf1Pow))
                             {
-                                resultingTerm.Add(new PowerFunction(pf0Base, nPf0Pow - nPf1Pow));
+                                resultingTerm.Add(new PowerFunction(pf0Base, Number.OpSub(nPf0Pow, nPf1Pow)));
                                 nMinPow = nPf1Pow;
                             }
                             else
                             {
-                                resultingTerm.Add(new PowerFunction(pf1Base, nPf1Pow - nPf0Pow));
+                                resultingTerm.Add(new PowerFunction(pf1Base, Number.OpSub(nPf1Pow, nPf0Pow)));
                                 nMinPow = nPf0Pow;
                             }
 
@@ -1461,9 +1461,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             {
                 Number nInner = innerEx as Number;
 
-                if (nInner < -1.0)
+                if (Number.OpLT(nInner, -1.0))
                     return false;
-                else if (nInner > 1.0)
+                else if (Number.OpGT(nInner, 1.0))
                     return false;
             }
 

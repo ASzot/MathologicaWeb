@@ -38,7 +38,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             AlgebraTerm rootTerm = new AlgebraTerm();
             foreach (ExComp rt in rootTerms)
             {
-                rootTerm = rootTerm + rt.ToAlgTerm();
+                rootTerm = AlgebraTerm.OpAdd(rootTerm, rt.ToAlgTerm());
             }
 
             if (!left.Contains(solveForComp))

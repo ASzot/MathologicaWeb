@@ -37,10 +37,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
             foreach (TypePair<ExComp, int> tp in Info)
             {
-                info.Add(new TypePair<ExComp, int>(tp.Data1.Clone(), tp.Data2));
+                info.Add(new TypePair<ExComp, int>(tp.Data1.CloneEx(), tp.Data2));
             }
 
-            return new LoosePolyInfo(info, (AlgebraComp)_var.Clone());
+            return new LoosePolyInfo(info, (AlgebraComp)_var.CloneEx());
         }
 
         public void FillInPowRanges()
@@ -83,7 +83,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
             foreach (TypePair<ExComp, int> tp in Info)
             {
-                info.Add(new TypePair<ExComp, int>(MulOp.Negate(tp.Data1.Clone()), tp.Data2));
+                info.Add(new TypePair<ExComp, int>(MulOp.Negate(tp.Data1.CloneEx()), tp.Data2));
             }
 
             return new LoosePolyInfo(info, (AlgebraComp)_var);

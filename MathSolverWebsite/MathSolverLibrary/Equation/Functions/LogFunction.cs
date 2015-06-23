@@ -59,10 +59,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             return logFunc;
         }
 
-        public override ExComp Clone()
+        public override ExComp CloneEx()
         {
-            LogFunction log = new LogFunction(InnerTerm.Clone());
-            log.Base = this.Base.Clone();
+            LogFunction log = new LogFunction(InnerTerm.CloneEx());
+            log.Base = this.Base.CloneEx();
             return log;
         }
 

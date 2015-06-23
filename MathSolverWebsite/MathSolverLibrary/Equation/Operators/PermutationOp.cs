@@ -2,7 +2,7 @@
 {
     internal class PermutationOp : AgOp
     {
-        public override ExComp Clone()
+        public override ExComp CloneEx()
         {
             return new PermutationOp();
         }

@@ -6,7 +6,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
     {
         public const string IDEN = "CompWiseMul";
 
-        public override ExComp Clone()
+        public override ExComp CloneEx()
         {
             return new CompWiseMul();
         }

@@ -273,7 +273,7 @@ namespace MathSolverWebsite.MathSolverLibrary
 
             string subStr = sub is AlgebraTerm ? (sub as AlgebraTerm).FinalToDispStr() : sub.ToDispString();
 
-            if (sub is Number && (sub as Number) < 0.0)
+            if (sub is Number && Number.OpLT((sub as Number), 0.0))
                 isNeg = true;
 
             if (sub is AlgebraTerm)

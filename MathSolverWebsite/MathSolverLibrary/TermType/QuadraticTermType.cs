@@ -191,13 +191,13 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             AlgebraTerm a = new AlgebraTerm();
             foreach (AlgebraTerm aTerm in aTerms)
             {
-                a = a + aTerm;
+                a = AlgebraTerm.OpAdd(a, aTerm);
             }
 
             AlgebraTerm b = new AlgebraTerm();
             foreach (AlgebraTerm bTerm in bTerms)
             {
-                b = b + bTerm;
+                b = AlgebraTerm.OpAdd(b, bTerm);
             }
 
             AlgebraTerm c = new AlgebraTerm(constantGroup.ToArray());

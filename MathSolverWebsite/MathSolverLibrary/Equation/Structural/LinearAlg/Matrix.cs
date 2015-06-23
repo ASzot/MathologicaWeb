@@ -9,7 +9,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
     {
         public class ExTrash : ExComp
         {
-            public override ExComp Clone()
+            public override ExComp CloneEx()
             {
                 return this;
             }
@@ -219,7 +219,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
             if (!IsSquare)
                 return null;
 
-            ExComp det = Determinant.TakeDeteriment((ExMatrix)this.Clone());
+            ExComp det = Determinant.TakeDeteriment((ExMatrix)this.CloneEx());
             if (det.IsEqualTo(Number.Zero))
                 return null;
 
@@ -546,7 +546,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
             }
         }
 
-        public override ExComp Clone()
+        public override ExComp CloneEx()
         {
             ExComp[][] clonedExData = new ExComp[Rows][];
             for (int i = 0; i < clonedExData.Length; ++i)
@@ -555,7 +555,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
             {
                 for (int j = 0; j < Cols; ++j)
                 {
-                    clonedExData[i][j] = _exData[i][j].Clone();
+                    clonedExData[i][j] = _exData[i][j].CloneEx();
                 }
             }
 

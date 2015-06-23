@@ -38,9 +38,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         {
             for (int i = 0; i < group.Length; ++i)
             {
-                if (group[i] is Number && (group[i] as Number) < 0.0)
+                if (group[i] is Number && Number.OpLT((group[i] as Number), 0.0))
                 {
-                    group[i] = (group[i] as Number) * -1.0;
+                    group[i] = Number.OpMul((group[i] as Number), -1.0);
                 }
             }
 

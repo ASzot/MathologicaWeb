@@ -126,7 +126,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             if (!b_hasOnlyFrac)
             {
                 // Move everything to the right.
-                right = right - left;
+                right = AlgebraTerm.OpSub(right, left);
                 left = new AlgebraTerm();
 
                 right = right.RemoveRedundancies().ToAlgTerm();
@@ -192,7 +192,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 ExComp[] leftDen = leftDens[i];
                 AlgebraTerm leftDenTerm = leftDen.ToAlgTerm();
 
-                ExComp mulTerm = DivOp.StaticCombine(lcfTerm.Clone(), leftDenTerm);
+                ExComp mulTerm = DivOp.StaticCombine(lcfTerm.CloneEx(), leftDenTerm);
 
                 string mulWork = WorkStep.FormatStr("({0})*({1})", DivOp.StaticWeakCombine(mulTerm, mulTerm),
                     DivOp.StaticWeakCombine(leftNums[i].ToAlgTerm(), leftDenTerm));
@@ -218,7 +218,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 ExComp[] rightDen = rightDens[i];
                 AlgebraTerm rightDenTerm = rightDen.ToAlgTerm();
 
-                ExComp mulTerm = DivOp.StaticCombine(lcfTerm.Clone(), rightDenTerm);
+                ExComp mulTerm = DivOp.StaticCombine(lcfTerm.CloneEx(), rightDenTerm);
 
                 string mulWork = WorkStep.FormatStr("({0})*({1})", DivOp.StaticWeakCombine(mulTerm, mulTerm),
                     DivOp.StaticWeakCombine(rightNums[i].ToAlgTerm(), rightDenTerm));

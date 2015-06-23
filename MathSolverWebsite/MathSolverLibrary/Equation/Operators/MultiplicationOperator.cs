@@ -97,7 +97,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                     return DivOp.StaticCombine(func1, divBy);
                 }
 
-                ExComp resultant = func1 * func2;
+                ExComp resultant = AlgebraFunction.OpMul(func1, func2);
                 return resultant;
             }
             else if ((ex1 is AlgebraFunction && ex2 is AlgebraComp) ||
@@ -106,7 +106,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 AlgebraFunction func = ex1 is AlgebraFunction ? ex1 as AlgebraFunction : ex2 as AlgebraFunction;
                 AlgebraComp comp = ex2 is AlgebraComp ? ex2 as AlgebraComp : ex1 as AlgebraComp;
 
-                ExComp resultant = func * comp;
+                ExComp resultant = AlgebraFunction.OpMul(func, comp);
                 return resultant;
             }
             else if ((ex1 is AlgebraFunction && ex2 is AlgebraTerm) ||
@@ -121,7 +121,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                     return DivOp.StaticCombine(term, flipped);
                 }
 
-                ExComp resultant = func * term;
+                ExComp resultant = AlgebraFunction.OpMul(func, term);
                 return resultant;
             }
             else if (ex1 is AlgebraTerm && ex2 is AlgebraTerm)
@@ -259,7 +259,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                     }
                 }
 
-                if (num == 1.0)
+                if (Number.OpEqual(num, 1.0))
                     return term;
 
                 List<ExComp[]> groups = term.GetGroupsNoOps();
@@ -277,7 +277,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                     if (coeff == null)
                         coeff = new Number(1.0);
 
-                    Number newCoeff = coeff * num;
+                    Number newCoeff = Number.OpMul(coeff, num);
                     AlgebraTerm.AddTermToGroup(ref groupToAdd, newCoeff, false);
 
                     combinedGroups.Add(groupToAdd);
@@ -294,10 +294,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 AlgebraComp comp = ex1 is AlgebraComp ? ex1 as AlgebraComp : ex2 as AlgebraComp;
                 Number number = ex1 is Number ? ex1 as Number : ex2 as Number;
 
-                if (number == 1.0)
+                if (Number.OpEqual(number, 1.0))
                     return comp;
 
-                if (number == 1.0)
+                if (Number.OpEqual(number, 1.0))
                     return comp;
 
                 AlgebraTerm term = new AlgebraTerm();
@@ -309,7 +309,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 Number n1 = ex1 as Number;
                 Number n2 = ex2 as Number;
 
-                Number result = n1 * n2;
+                Number result = Number.OpMul(n1, n2);
                 return result;
             }
             else if (ex1 is AlgebraComp && ex2 is AlgebraComp)
@@ -317,7 +317,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 AlgebraComp c1 = ex1 as AlgebraComp;
                 AlgebraComp c2 = ex2 as AlgebraComp;
 
-                if (c1 == c2)
+                if (c1.IsEqualTo(c2))
                 {
                     Functions.PowerFunction powFunc = new Functions.PowerFunction(c1, new Number(2.0));
                     return powFunc;
@@ -340,7 +340,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
             return new AlgebraTerm(ex1, new MulOp(), ex2);
         }
 
-        public override ExComp Clone()
+        public override ExComp CloneEx()
         {
             return new MulOp();
         }

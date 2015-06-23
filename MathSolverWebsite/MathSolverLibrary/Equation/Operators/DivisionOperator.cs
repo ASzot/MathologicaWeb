@@ -132,7 +132,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 PowerFunction pfFactorOut = factorOutTerm as PowerFunction;
 
                 if (pfExCmp.Base.IsEqualTo(pfFactorOut.Base))
-                    return pfExCmp / pfFactorOut;
+                    return AlgebraTerm.OpDiv(pfExCmp, pfFactorOut);
             }
             else if (exComp is PowerFunction && factorOutTerm is AlgebraTerm)
             {
@@ -140,7 +140,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 AlgebraTerm atFactorOut = factorOutTerm as AlgebraTerm;
 
                 if (pfExCmp.Base.IsEqualTo(atFactorOut))
-                    return pfExCmp / new PowerFunction(atFactorOut, Number.One);
+                    return AlgebraTerm.OpDiv(pfExCmp, new PowerFunction(atFactorOut, Number.One));
             }
             else if (exComp is AlgebraTerm && factorOutTerm is PowerFunction)
             {
@@ -148,7 +148,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 PowerFunction pfFactorOut = factorOutTerm as PowerFunction;
 
                 if (pfFactorOut.Base.IsEqualTo(atExCmp))
-                    return (new PowerFunction(atExCmp, Number.One)) / pfFactorOut;
+                    return PowerFunction.OpDiv((new PowerFunction(atExCmp, Number.One)), pfFactorOut);
             }
 
             if (exComp is AlgebraTerm)
@@ -175,7 +175,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                             PowerFunction pfSingleGroupComp = singleGroupComp as PowerFunction;
                             if (pfSingleGroupComp.Base.IsEqualTo(factorOutTerm))
                             {
-                                ExComp changedPow = SubOp.StaticCombine(pfSingleGroupComp.Power.Clone(), Number.One);
+                                ExComp changedPow = SubOp.StaticCombine(pfSingleGroupComp.Power.CloneEx(), Number.One);
                                 if (!(changedPow is Number))
                                     continue;
                                 if (!(changedPow as Number).IsRealInteger())
@@ -252,7 +252,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                         new PowerFunction(group[i], Number.One);
                     if (powFuncFactorOut.Base.IsEqualTo(powFuncGroup.Base))
                     {
-                        ExComp factoredOut = powFuncGroup / powFuncFactorOut;
+                        ExComp factoredOut = PowerFunction.OpDiv(powFuncGroup, powFuncFactorOut);
                         if (factoredOut is AlgebraTerm)
                         {
                             factoredOut = (factoredOut as AlgebraTerm).RemoveRedundancies();
@@ -359,7 +359,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 {
                     if (group[i] is Number)
                     {
-                        group[i] = (group[i] as Number) / (factorOutTerm as Number);
+                        group[i] = Number.OpDiv((group[i] as Number), (factorOutTerm as Number));
                         return group;
                     }
                 }
@@ -388,8 +388,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                         ExComp pow1 = powFunc1.Power is AlgebraTerm ? (powFunc1.Power as AlgebraTerm).RemoveRedundancies() : powFunc1.Power;
                         ExComp pow2 = powFunc2.Power is AlgebraTerm ? (powFunc2.Power as AlgebraTerm).RemoveRedundancies() : powFunc2.Power;
 
-                        ExComp origPow1 = pow1.Clone();
-                        ExComp origPow2 = pow2.Clone();
+                        ExComp origPow1 = pow1.CloneEx();
+                        ExComp origPow2 = pow2.CloneEx();
 
                         if (pow1 is AlgebraTerm)
                         {
@@ -400,7 +400,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                                 ExComp pow1Den = pow1Frac[1].RemoveRedundancies();
                                 if (pow1Num is Number && pow1Den is Number)
                                 {
-                                    pow1 = ((Number)pow1Num / (Number)pow1Den);
+                                    pow1 = (Number.OpDiv((Number)pow1Num, (Number)pow1Den));
                                 }
                             }
                         }
@@ -414,7 +414,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                                 ExComp pow2Den = pow2Frac[1].RemoveRedundancies();
 
                                 if (pow2Num is Number && pow2Den is Number)
-                                    pow2 = ((Number)pow2Num / (Number)pow2Den);
+                                    pow2 = Number.OpDiv((Number)pow2Num, (Number)pow2Den);
                             }
                         }
 
@@ -423,7 +423,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                             Number pow1Num = pow1 as Number;
                             Number pow2Num = pow2 as Number;
                             ExComp usePow;
-                            if (pow1Num < pow2Num)
+                            if (Number.OpLT(pow1Num, pow2Num))
                                 usePow = origPow1;
                             else
                                 usePow = origPow2;
@@ -444,7 +444,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 {
                     // Return whichever one has less of a power.
                     if (powFunc.Power is Number)
-                        return (powFunc.Power as Number) < Number.One ? powFunc : nonPowFunc;
+                        return Number.OpLT((powFunc.Power as Number), Number.One) ? powFunc : nonPowFunc;
                     else if (powFunc.Power is AlgebraTerm)
                     {
                         SimpleFraction simpFrac = new SimpleFraction();
@@ -452,7 +452,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                         {
                             if (simpFrac.NumEx is Number && simpFrac.DenEx is Number)
                             {
-                                return (simpFrac.NumEx as Number) > (simpFrac.DenEx as Number) ? nonPowFunc : powFunc;
+                                return Number.OpGT((simpFrac.NumEx as Number), (simpFrac.DenEx as Number)) ? nonPowFunc : powFunc;
                             }
                         }
                     }
@@ -635,9 +635,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
             else if (ex2 is Functions.Calculus.CalcConstant)
                 return ex2;
 
-            if (ex2 is Number && (ex2 as Number) == 0.0)
+            if (ex2 is Number && Number.OpEqual((ex2 as Number), 0.0))
                 return Number.Undefined;
-            else if (ex1 is Number && (ex1 as Number) == 0.0)
+            else if (ex1 is Number && Number.OpEqual((ex1 as Number), 0.0))
                 return Number.Zero;
             else if (Number.PosInfinity.IsEqualTo(ex1) || Number.PosInfinity.IsEqualTo(ex2))
                 return Number.PosInfinity;
@@ -718,7 +718,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
 
                 if (nEx1.HasImagRealComp() || nEx2.HasImagRealComp())
                 {
-                    return nEx1 / nEx2;
+                    return Number.OpDiv(nEx1, nEx2);
                 }
             }
 
@@ -764,7 +764,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
 
                     if (!Number.Zero.IsEqualTo(ex1Gcf))
                     {
-                        ExComp remainder = FactorOutTerm(ex1.Clone(), ex1Gcf);
+                        ExComp remainder = FactorOutTerm(ex1.CloneEx(), ex1Gcf);
 
                         if (ex1Gcf.IsEqualTo(ex2))
                             return remainder;
@@ -777,7 +777,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
             if (ex1 is AlgebraTerm)
                 ex1 = (ex1 as AlgebraTerm).RemoveZeros();
 
-            if (ex2 is Number && (ex2 as Number) == 1.0)
+            if (ex2 is Number && Number.OpEqual((ex2 as Number), 1.0))
             {
                 return ex1;
             }
@@ -814,7 +814,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
             return AlgebraTerm.FromFraction(ex1, ex2);
         }
 
-        public override ExComp Clone()
+        public override ExComp CloneEx()
         {
             return new DivOp();
         }

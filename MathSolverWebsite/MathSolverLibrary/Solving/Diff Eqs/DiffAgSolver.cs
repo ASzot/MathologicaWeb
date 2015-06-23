@@ -45,7 +45,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             {
                 // Try separable differential equations.
                 prevWorkStepCount = pEvalData.WorkMgr.WorkSteps.Count;
-                atmpt = diffSolves[i].Solve((AlgebraTerm)ex0Term.Clone(), (AlgebraTerm)ex1Term.Clone(), solveForFunc, withRespect, ref pEvalData);
+                atmpt = diffSolves[i].Solve((AlgebraTerm)ex0Term.CloneEx(), (AlgebraTerm)ex1Term.CloneEx(), solveForFunc, withRespect, ref pEvalData);
                 if (atmpt != null)
                 {
                     if (!(atmpt[0] is Integral || atmpt[1] is Integral))
@@ -91,7 +91,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             WorkStep lastStep = pEvalData.WorkMgr.GetLast();
 
             lastStep.GoDown(ref pEvalData);
-            ExComp solved = agSolver.SolveEq(solveForFunc.Var, leftRight[0].Clone().ToAlgTerm(), leftRight[1].Clone().ToAlgTerm(), ref pEvalData);
+            ExComp solved = agSolver.SolveEq(solveForFunc.Var, leftRight[0].CloneEx().ToAlgTerm(), leftRight[1].CloneEx().ToAlgTerm(), ref pEvalData);
             lastStep.GoUp(ref pEvalData);
 
             if (solved == null)
