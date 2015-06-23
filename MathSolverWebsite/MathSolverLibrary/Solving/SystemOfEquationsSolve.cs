@@ -26,15 +26,19 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
         private EquationSystemSolveMethod _solveMethod = EquationSystemSolveMethod.Substitution;
         private AlgebraSolver p_agSolver;
 
-        public List<string> SolveFors
+        public void SetSolveFors(List<string> value)
         {
-            set { _solveFors = value; }
+            _solveFors = value;
         }
 
-        public EquationSystemSolveMethod SolvingMethod
+        public void SetSolvingMethod(EquationSystemSolveMethod value)
         {
-            get { return _solveMethod; }
-            set { _solveMethod = value; }
+            _solveMethod = value;
+        }
+
+        public EquationSystemSolveMethod GetSolvingMethod()
+        {
+            return _solveMethod;
         }
 
         public EquationSystemSolve(AlgebraSolver pAgSolver)
@@ -55,18 +59,18 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             for (int i = 0; i < equations.Count; ++i)
             {
                 EqSet eqSet = equations[i];
-                if (eqSet.Sides.Count != 2)
+                if (eqSet.GetSides().Count != 2)
                     continue;
 
-                if (eqSet.Left is AlgebraComp || eqSet.Right is AlgebraComp)
+                if (eqSet.GetLeft() is AlgebraComp || eqSet.GetRight() is AlgebraComp)
                 {
-                    ExComp other = eqSet.Left is AlgebraComp ? eqSet.Right : eqSet.Left;
+                    ExComp other = eqSet.GetLeft() is AlgebraComp ? eqSet.GetRight() : eqSet.GetLeft();
 
                     //TODO:
                     // Allow more complex assignments other than just numbers.
                     if (other is Number)
                     {
-                        AlgebraComp varFor = eqSet.Left is AlgebraComp ? eqSet.Left as AlgebraComp : eqSet.Right as AlgebraComp;
+                        AlgebraComp varFor = eqSet.GetLeft() is AlgebraComp ? eqSet.GetLeft() as AlgebraComp : eqSet.GetRight() as AlgebraComp;
 
                         equations.RemoveAt(i--);
 
@@ -116,11 +120,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
         {
             AlgebraComp elimAgComp = eliminate.ToAlgebraComp();
 
-            AlgebraTerm eq0Left = eq0.LeftTerm;
-            AlgebraTerm eq0Right = eq0.RightTerm;
+            AlgebraTerm eq0Left = eq0.GetLeftTerm();
+            AlgebraTerm eq0Right = eq0.GetRightTerm();
 
-            AlgebraTerm eq1Left = eq1.LeftTerm;
-            AlgebraTerm eq1Right = eq1.RightTerm;
+            AlgebraTerm eq1Left = eq1.GetLeftTerm();
+            AlgebraTerm eq1Right = eq1.GetRightTerm();
 
             SolveMethod.VariablesToLeft(ref eq0Left, ref eq0Right, elimAgComp, ref pEvalData);
             SolveMethod.VariablesToLeft(ref eq1Left, ref eq1Right, elimAgComp, ref pEvalData);
@@ -134,10 +138,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 return null;
             }
 
-            if (Number.Zero.IsEqualTo(elimCoeff0) || (elimCoeff0 is AlgebraTerm && (elimCoeff0 as AlgebraTerm).IsZero()))
-                elimCoeff0 = Number.One;
-            if (Number.Zero.IsEqualTo(elimCoeff1) || (elimCoeff1 is AlgebraTerm && (elimCoeff1 as AlgebraTerm).IsZero()))
-                elimCoeff1 = Number.One;
+            if (Number.GetZero().IsEqualTo(elimCoeff0) || (elimCoeff0 is AlgebraTerm && (elimCoeff0 as AlgebraTerm).IsZero()))
+                elimCoeff0 = Number.GetOne();
+            if (Number.GetZero().IsEqualTo(elimCoeff1) || (elimCoeff1 is AlgebraTerm && (elimCoeff1 as AlgebraTerm).IsZero()))
+                elimCoeff1 = Number.GetOne();
 
             ExComp gcf = GroupHelper.LCF(elimCoeff0, elimCoeff1);
 
@@ -147,15 +151,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             mul0 = AbsValFunction.MakePositive(mul0);
             mul1 = AbsValFunction.MakePositive(mul1);
 
-            if (pEvalData.WorkMgr.AllowWork && (!Number.One.IsEqualTo(mul0) || !Number.One.IsEqualTo(mul1)))
+            if (pEvalData.GetWorkMgr().AllowWork && (!Number.GetOne().IsEqualTo(mul0) || !Number.GetOne().IsEqualTo(mul1)))
             {
-                ExComp tmpEq0Left = Number.One.IsEqualTo(mul0) ? eq0Left : MulOp.StaticWeakCombine(mul0, eq0Left);
-                ExComp tmpEq0Right = Number.One.IsEqualTo(mul0) ? eq0Right : MulOp.StaticWeakCombine(mul0, eq0Right);
+                ExComp tmpEq0Left = Number.GetOne().IsEqualTo(mul0) ? eq0Left : MulOp.StaticWeakCombine(mul0, eq0Left);
+                ExComp tmpEq0Right = Number.GetOne().IsEqualTo(mul0) ? eq0Right : MulOp.StaticWeakCombine(mul0, eq0Right);
 
-                ExComp tmpEq1Left = Number.One.IsEqualTo(mul1) ? eq1Left : MulOp.StaticWeakCombine(mul1, eq1Left);
-                ExComp tmpEq1Right = Number.One.IsEqualTo(mul1) ? eq1Right : MulOp.StaticWeakCombine(mul1, eq1Right);
+                ExComp tmpEq1Left = Number.GetOne().IsEqualTo(mul1) ? eq1Left : MulOp.StaticWeakCombine(mul1, eq1Left);
+                ExComp tmpEq1Right = Number.GetOne().IsEqualTo(mul1) ? eq1Right : MulOp.StaticWeakCombine(mul1, eq1Right);
 
-                pEvalData.WorkMgr.FromArraySides("Eliminate the variable " + elimAgComp.ToAsciiString() + ". To do so make the variable in the equations have equal coefficients.",
+                pEvalData.GetWorkMgr().FromArraySides("Eliminate the variable " + elimAgComp.ToAsciiString() + ". To do so make the variable in the equations have equal coefficients.",
                     tmpEq0Left, tmpEq0Right,
                     tmpEq1Left, tmpEq1Right);
             }
@@ -166,9 +170,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             eq1Left = MulOp.StaticCombine(mul1, eq1Left).ToAlgTerm();
             eq1Right = MulOp.StaticCombine(mul1, eq1Right).ToAlgTerm();
 
-            if (pEvalData.WorkMgr.AllowWork && (!Number.One.IsEqualTo(mul0) || !Number.One.IsEqualTo(mul1)))
+            if (pEvalData.GetWorkMgr().AllowWork && (!Number.GetOne().IsEqualTo(mul0) || !Number.GetOne().IsEqualTo(mul1)))
             {
-                pEvalData.WorkMgr.FromArraySides(eq0Left, eq0Right,
+                pEvalData.GetWorkMgr().FromArraySides(eq0Left, eq0Right,
                     eq1Left, eq1Right);
             }
 
@@ -182,7 +186,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             else
                 combineOp = new SubOp();
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "{0}={1}" + WorkMgr.EDM + "</br>" + WorkMgr.STM + "{4}({2}={3})" + WorkMgr.EDM,
+            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "{0}={1}" + WorkMgr.EDM + "</br>" + WorkMgr.STM + "{4}({2}={3})" + WorkMgr.EDM,
                 ((combineOp is AddOp) ? "Add" : "Subtract") + " the equations eliminating " + WorkMgr.STM + elimAgComp.ToAsciiString() + WorkMgr.EDM + " from the resulting equation.",
                 eq0Left, eq0Right, eq1Left, eq1Right, combineOp);
 
@@ -192,17 +196,17 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             if (finalLeft.Contains(elimAgComp))
                 return null;
 
-            pEvalData.WorkMgr.FromSides(finalLeft, finalRight, "The resulting combined equation.");
+            pEvalData.GetWorkMgr().FromSides(finalLeft, finalRight, "The resulting combined equation.");
 
             return new EqSet(finalLeft, finalRight, Parsing.LexemeType.EqualsOp);
         }
 
         private void DoSub(int index, ref List<EqSet> completeEqs, ref TermType.EvalData pEvalData, AlgebraComp solveForComp, ExComp result)
         {
-            AlgebraTerm data1 = completeEqs[index].LeftTerm;
-            AlgebraTerm data2 = completeEqs[index].RightTerm;
+            AlgebraTerm data1 = completeEqs[index].GetLeftTerm();
+            AlgebraTerm data2 = completeEqs[index].GetRightTerm();
 
-            pEvalData.WorkMgr.FromSides(data1, data2,
+            pEvalData.GetWorkMgr().FromSides(data1, data2,
                 "Substitute " + WorkMgr.STM +
                 solveForComp.ToAsciiString() + "=" +
                 (result is AlgebraTerm ? (result as AlgebraTerm).FinalToDispStr() : result.ToAsciiString()) +
@@ -211,12 +215,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             data1 = data1.Substitute(solveForComp, result.CloneEx());
             data2 = data2.Substitute(solveForComp, result.CloneEx());
 
-            pEvalData.WorkMgr.FromSides(data1, data2);
+            pEvalData.GetWorkMgr().FromSides(data1, data2);
 
-            pEvalData.IsWorkable = false;
+            pEvalData.SetIsWorkable(false);
             SolveMethod.PrepareForSolving(ref data1, ref data2, ref pEvalData);
 
-            pEvalData.WorkMgr.FromSides(data1, data2, "Simplify.");
+            pEvalData.GetWorkMgr().FromSides(data1, data2, "Simplify.");
 
             completeEqs[index].SetLeft(data1);
             completeEqs[index].SetRight(data2);
@@ -250,17 +254,17 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             // Find the lowest complexity var that hasn't already been choosen as a solve variable.
             foreach (TypePair<AlgebraComp, int> complexity in eqVarComplexity)
             {
-                if (complexity.Data2 < lowestComplexity)
+                if (complexity.GetData2() < lowestComplexity)
                 {
-                    lowestComplexity = complexity.Data2;
-                    lowestComplexityVar = complexity.Data1;
+                    lowestComplexity = complexity.GetData2();
+                    lowestComplexityVar = complexity.GetData1();
                 }
             }
 
             if (lowestComplexityVar == null)
-                return AlgebraVar.GarbageVar;
+                return AlgebraVar.GetGarbageVar();
 
-            return lowestComplexityVar.Var;
+            return lowestComplexityVar.GetVar();
         }
 
         private bool SolveEliminationRecur(List<EqSet> equations, AlgebraSolver agSolver, AlgebraVar eliminate, ref List<EqSet> iterGenerations, ref TermType.EvalData pEvalData)
@@ -287,7 +291,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             }
 
             if (finalEquationSets.Count > 1)
-                eliminate = GetLowestComplexityVar(finalEquationSets[0].LeftTerm, finalEquationSets[0].RightTerm);
+                eliminate = GetLowestComplexityVar(finalEquationSets[0].GetLeftTerm(), finalEquationSets[0].GetRightTerm());
 
             return SolveEliminationRecur(finalEquationSets, agSolver, eliminate, ref iterGenerations, ref pEvalData);
         }
@@ -296,9 +300,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
         {
             p_agSolver.CreateUSubTable(allIdens);
 
-            AlgebraVar eliminate = GetLowestComplexityVar(equations[0].LeftTerm, equations[0].RightTerm);
+            AlgebraVar eliminate = GetLowestComplexityVar(equations[0].GetLeftTerm(), equations[0].GetRightTerm());
 
-            if (pEvalData.WorkMgr.AllowWork)
+            if (pEvalData.GetWorkMgr().AllowWork)
             {
                 List<AlgebraTerm> sides = EqSet.GetSides(equations).ToList();
                 string finalStr = "";
@@ -307,7 +311,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                     finalStr += WorkMgr.STM + "{" + i.ToString() + "}={" + (i + 1).ToString() + "}" + WorkMgr.EDM + " <br />";
                 }
 
-                pEvalData.WorkMgr.FromFormatted(finalStr, "Solve this system of equations by elimination.", sides.ToArray());
+                pEvalData.GetWorkMgr().FromFormatted(finalStr, "Solve this system of equations by elimination.", sides.ToArray());
             }
 
             List<EqSet> iterGenerations = new List<EqSet>();
@@ -322,15 +326,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             {
                 EqSet eqSet = iterGenerations[i];
 
-                AlgebraVar solveFor = GetLowestComplexityVar(eqSet.LeftTerm, eqSet.RightTerm);
+                AlgebraVar solveFor = GetLowestComplexityVar(eqSet.GetLeftTerm(), eqSet.GetRightTerm());
                 if (solveFor.IsGarbage())
                 {
                     return SolveResult.Simplified(new NoSolutions());
                 }
 
-                pEvalData.WorkMgr.FromSides(eqSet.Left, eqSet.Right, "Solve for " + WorkMgr.STM + solveFor.ToMathAsciiString() + WorkMgr.EDM + " in this equation.");
+                pEvalData.GetWorkMgr().FromSides(eqSet.GetLeft(), eqSet.GetRight(), "Solve for " + WorkMgr.STM + solveFor.ToMathAsciiString() + WorkMgr.EDM + " in this equation.");
 
-                ExComp result = p_agSolver.SolveEq(solveFor, eqSet.LeftTerm, eqSet.RightTerm, ref pEvalData, true);
+                ExComp result = p_agSolver.SolveEq(solveFor, eqSet.GetLeftTerm(), eqSet.GetRightTerm(), ref pEvalData, true);
                 if (result == null)
                     return SolveResult.Failure();
                 if (result is AlgebraTermArray || result is GeneralSolution || result is NoSolutions || result is AllSolutions)
@@ -342,7 +346,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 AlgebraComp solveForComp = solveFor.ToAlgebraComp();
 
                 if (iterGenerations.Count > 1)
-                    pEvalData.WorkMgr.FromSides(solveForComp, result, "Using the solved equation substitute the result into the other equations.");
+                    pEvalData.GetWorkMgr().FromSides(solveForComp, result, "Using the solved equation substitute the result into the other equations.");
 
                 solveResult.Solutions.Add(new Solution(solveForComp, result.CloneEx()));
 
@@ -350,11 +354,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
                 foreach (EqSet subInEqSet in iterGenerations)
                 {
-                    pEvalData.WorkMgr.FromSides(subInEqSet.Left, subInEqSet.Right,
+                    pEvalData.GetWorkMgr().FromSides(subInEqSet.GetLeft(), subInEqSet.GetRight(),
                         "Substitute in " + WorkMgr.STM + solveForComp.ToAsciiString() + "=" + result.ToAsciiString() + WorkMgr.EDM + " into this equation.");
 
-                    AlgebraTerm leftSub = subInEqSet.LeftTerm.Substitute(solveForComp, result);
-                    AlgebraTerm rightSub = subInEqSet.RightTerm.Substitute(solveForComp, result);
+                    AlgebraTerm leftSub = subInEqSet.GetLeftTerm().Substitute(solveForComp, result);
+                    AlgebraTerm rightSub = subInEqSet.GetRightTerm().Substitute(solveForComp, result);
 
                     leftSub = leftSub.ApplyOrderOfOperations();
                     rightSub = rightSub.ApplyOrderOfOperations();
@@ -362,7 +366,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                     subInEqSet.SetLeft(leftSub.MakeWorkable());
                     subInEqSet.SetRight(rightSub.MakeWorkable());
 
-                    pEvalData.WorkMgr.FromSides(subInEqSet.Left, subInEqSet.Right, "Substitute in and simplify.");
+                    pEvalData.GetWorkMgr().FromSides(subInEqSet.GetLeft(), subInEqSet.GetRight(), "Substitute in and simplify.");
                 }
             }
 
@@ -384,9 +388,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             for (int i = 0; i < equations.Count; i += 2)
             {
                 // So we ensure our terms are made workable.
-                pEvalData.IsWorkable = false;
-                AlgebraTerm left = equations[i].Left.ToAlgTerm();
-                AlgebraTerm right = equations[i].Right.ToAlgTerm();
+                pEvalData.SetIsWorkable(false);
+                AlgebraTerm left = equations[i].GetLeft().ToAlgTerm();
+                AlgebraTerm right = equations[i].GetRight().ToAlgTerm();
 
                 SolveMethod.PrepareForSolving(ref left, ref right, ref pEvalData);
 
@@ -418,7 +422,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 endVal = 0;
             }
 
-            if (pEvalData.WorkMgr.AllowWork)
+            if (pEvalData.GetWorkMgr().AllowWork)
             {
                 string idensDisp = "";
                 for (int j = 0; j < completeEqs.Count; ++j)
@@ -428,7 +432,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                         idensDisp += "<br />";
                 }
 
-                pEvalData.WorkMgr.FromFormatted(idensDisp, "The equations will be referred to by the identifier in parentheses.");
+                pEvalData.GetWorkMgr().FromFormatted(idensDisp, "The equations will be referred to by the identifier in parentheses.");
             }
 
             int i = startVal;
@@ -439,8 +443,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 else if (!ascending && i < endVal)
                     break;
 
-                AlgebraTerm term0 = completeEqs[i].LeftTerm;
-                AlgebraTerm term1 = completeEqs[i].RightTerm;
+                AlgebraTerm term0 = completeEqs[i].GetLeftTerm();
+                AlgebraTerm term1 = completeEqs[i].GetRightTerm();
 
                 AlgebraSolver agSolver = new AlgebraSolver();
                 AlgebraVar solveFor = GetLowestComplexityVar(term0, term1);
@@ -454,11 +458,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 agSolver.CreateUSubTable(eqLexemeTables[i]);
                 AlgebraComp solveForComp = solveFor.ToAlgebraComp();
 
-                pEvalData.WorkMgr.FromSides(term0, term1, "Solve this equation" + eqIdStr + " for " + WorkMgr.STM + solveForComp.ToAsciiString() + WorkMgr.EDM);
+                pEvalData.GetWorkMgr().FromSides(term0, term1, "Solve this equation" + eqIdStr + " for " + WorkMgr.STM + solveForComp.ToAsciiString() + WorkMgr.EDM);
 
-                pEvalData.WorkMgr.WorkLabel = eqIdStr;
+                pEvalData.GetWorkMgr().SetWorkLabel(eqIdStr);
                 ExComp result = agSolver.SolveEq(solveFor, term0, term1, ref pEvalData, false);
-                pEvalData.WorkMgr.WorkLabel = null;
+                pEvalData.GetWorkMgr().SetWorkLabel(null);
 
                 // I have not really though about how this would work with three systems of equations. So for now I will just keep it at two.
                 if (result is SpecialSolution && completeEqs.Count == 2)
@@ -506,8 +510,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
             for (int i = completeEqs.Count - 1; i >= 0; --i)
             {
-                AlgebraTerm term0 = completeEqs[i].LeftTerm;
-                AlgebraTerm term1 = completeEqs[i].RightTerm;
+                AlgebraTerm term0 = completeEqs[i].GetLeftTerm();
+                AlgebraTerm term1 = completeEqs[i].GetRightTerm();
 
                 ExComp ex0 = term0.RemoveRedundancies();
                 if (!(ex0 is AlgebraComp))
@@ -525,21 +529,21 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
                 for (int j = i - 1; j >= 0; --j)
                 {
-                    AlgebraTerm subTerm1 = completeEqs[j].RightTerm;
+                    AlgebraTerm subTerm1 = completeEqs[j].GetRightTerm();
 
-                    pEvalData.WorkMgr.FromSides(completeEqs[j].Left, subTerm1, "Substitute " + WorkMgr.STM + varFor.ToAsciiString() + "=" + term1.FinalToDispStr() + WorkMgr.EDM + " into the above equation.");
+                    pEvalData.GetWorkMgr().FromSides(completeEqs[j].GetLeft(), subTerm1, "Substitute " + WorkMgr.STM + varFor.ToAsciiString() + "=" + term1.FinalToDispStr() + WorkMgr.EDM + " into the above equation.");
                     AlgebraTerm tmpRight = subTerm1.Substitute(varFor, term1);
                     SolveMethod.EvaluateEntirely(ref tmpRight);
                     completeEqs[j].SetRight(tmpRight);
-                    pEvalData.WorkMgr.FromSides(completeEqs[j].Left, completeEqs[j].Right, "Substitute in and simplify.");
+                    pEvalData.GetWorkMgr().FromSides(completeEqs[j].GetLeft(), completeEqs[j].GetRight(), "Substitute in and simplify.");
                 }
 
-                AlgebraTerm before = completeEqs[i - 1].RightTerm;
+                AlgebraTerm before = completeEqs[i - 1].GetRightTerm();
                 SolveMethod.EvaluateEntirely(ref before);
 
                 before = before.CompoundFractions();
 
-                pEvalData.WorkMgr.FromSides(completeEqs[i - 1].Left, before, "Simplify, getting a solution for one of the variables.");
+                pEvalData.GetWorkMgr().FromSides(completeEqs[i - 1].GetLeft(), before, "Simplify, getting a solution for one of the variables.");
 
                 completeEqs[i - 1].SetRight(before);
             }

@@ -11,22 +11,19 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         public List<Solution> Solutions;
         public bool Success;
 
-        public bool HasRestrictions
+        public bool GetHasRestrictions()
         {
-            get { return Restrictions != null && Restrictions.Count != 0; }
+            return Restrictions != null && Restrictions.Count != 0;
         }
 
-        public bool HasSolutions
+        public bool GetHasSolutions()
         {
-            get { return Solutions != null && Solutions.Count != 0; }
+            return Solutions != null && Solutions.Count != 0;
         }
 
-        public bool UndefinedSolution
+        public bool GetUndefinedSolution()
         {
-            get
-            {
-                return (Solutions.Count == 1 && Number.IsUndef(Solutions[0].Result));
-            }
+            return (Solutions.Count == 1 && Number.IsUndef(Solutions[0].Result));
         }
 
         public SolveResult(params Solution[] solutions)
@@ -90,7 +87,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             {
                 AlgebraTermArray resultArray = result as AlgebraTermArray;
 
-                foreach (AlgebraTerm resultTerm in resultArray.Terms)
+                foreach (AlgebraTerm resultTerm in resultArray.GetTerms())
                 {
                     success.Solutions.Add(new Solution(resultTerm));
                 }
@@ -121,7 +118,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             {
                 AlgebraTermArray resultArray = result as AlgebraTermArray;
 
-                foreach (AlgebraTerm resultTerm in resultArray.Terms)
+                foreach (AlgebraTerm resultTerm in resultArray.GetTerms())
                 {
                     success.Solutions.Add(new Solution(resultTerm));
                 }
@@ -150,7 +147,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             {
                 AlgebraTermArray resultArray = result as AlgebraTermArray;
 
-                foreach (AlgebraTerm resultTerm in resultArray.Terms)
+                foreach (AlgebraTerm resultTerm in resultArray.GetTerms())
                 {
                     if (resultTerm is GeneralSolution)
                         success.Solutions.Add(Solution.FromGeneralSol(solveFor, resultTerm as GeneralSolution));
@@ -254,7 +251,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 }
             }
 
-            return allAllSols && !HasRestrictions && !pEvalData.HasPartialSolutions;
+            return allAllSols && !GetHasRestrictions() && !pEvalData.GetHasPartialSolutions();
         }
 
         public bool IsOnlyNoSolutions(ref TermType.EvalData pEvalData)
@@ -269,7 +266,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 }
             }
 
-            return allNoSols && !HasRestrictions && !pEvalData.HasPartialSolutions;
+            return allNoSols && !GetHasRestrictions() && !pEvalData.GetHasPartialSolutions();
         }
 
         public bool RemoveComplexSolutions()
@@ -327,7 +324,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public void RemoveExtraneousSolutions(EqSet eqSet, ref TermType.EvalData pEvalData)
         {
-            if (!Success || !pEvalData.CheckSolutions)
+            if (!Success || !pEvalData.GetCheckSolutions())
                 return;
 
             for (int i = 0; i < Solutions.Count; ++i)
@@ -343,12 +340,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 if (!(solution is Number))
                     continue;
 
-                for (int j = 0; j < eqSet.Sides.Count; j += 2)
+                for (int j = 0; j < eqSet.GetSides().Count; j += 2)
                 {
-                    ExComp left = eqSet.Sides[j];
-                    ExComp right = eqSet.Sides[j + 1];
+                    ExComp left = eqSet.GetSides()[j];
+                    ExComp right = eqSet.GetSides()[j + 1];
 
-                    LexemeType comparison = eqSet.ComparisonOps[j];
+                    LexemeType comparison = eqSet.GetComparisonOps()[j];
 
                     AlgebraTerm leftSubbed = left.CloneEx().ToAlgTerm().Substitute(Solutions[i].SolveFor, solution);
                     AlgebraTerm rightSubbed = right.CloneEx().ToAlgTerm().Substitute(Solutions[i].SolveFor, solution);
@@ -368,7 +365,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                     {
                         string varSolStr = Solutions[i].SolveFor.ToAsciiString() + "=" + WorkMgr.ToDisp(Solutions[i].Result);
 
-                        pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "{0}\\ne{1}" + WorkMgr.EDM, "Plugging " + WorkMgr.STM + varSolStr + WorkMgr.EDM +
+                        pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "{0}\\ne{1}" + WorkMgr.EDM, "Plugging " + WorkMgr.STM + varSolStr + WorkMgr.EDM +
                             " back into the original equation gives the above. The equation doesn't hold true under this solution therefore " + WorkMgr.STM +
                             varSolStr + WorkMgr.EDM + " is an extraneous solution.", leftEx, rightEx);
                         Solutions.RemoveAt(i--);
@@ -507,7 +504,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public override string ToMathAsciiStr()
         {
-            if (Number.NegInfinity.IsEqualTo(Compare0) && Number.PosInfinity.IsEqualTo(Compare1))
+            if (Number.GetNegInfinity().IsEqualTo(Compare0) && Number.GetPosInfinity().IsEqualTo(Compare1))
                 return VarComp.ToTexString() + "\\in\\mathbb{R}";
 
             string compare0Str = Compare0 is AlgebraTerm ? (Compare0 as AlgebraTerm).FinalToTexString() : Compare0.ToTexString();
@@ -541,7 +538,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             {
                 AlgebraTermArray resultArray = result as AlgebraTermArray;
 
-                IEnumerable<NotRestriction> rests = from term in resultArray.Terms
+                IEnumerable<NotRestriction> rests = from term in resultArray.GetTerms()
                             select new NotRestriction(varFor, term);
 
                 return rests.ToArray();
@@ -598,7 +595,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         {
             get
             {
-                return Number.NegInfinity.IsEqualTo(Compare) && Comparison == LexemeType.LessEqual;
+                return Number.GetNegInfinity().IsEqualTo(Compare) && Comparison == LexemeType.LessEqual;
             }
         }
 
@@ -615,8 +612,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             if (rest0.VarComp != rest1.VarComp)
                 return null;
 
-            ExComp rest0Compare = rest0.Compare is GeneralSolution ? (rest0.Compare as GeneralSolution).Result : rest0.Compare;
-            ExComp rest1Compare = rest1.Compare is GeneralSolution ? (rest1.Compare as GeneralSolution).Result : rest1.Compare;
+            ExComp rest0Compare = rest0.Compare is GeneralSolution ? (rest0.Compare as GeneralSolution).GetResult() : rest0.Compare;
+            ExComp rest1Compare = rest1.Compare is GeneralSolution ? (rest1.Compare as GeneralSolution).GetResult() : rest1.Compare;
 
             ExComp compareEx0 = rest0Compare is AlgebraTerm ? Simplifier.HarshSimplify(rest0Compare.CloneEx() as AlgebraTerm, ref pEvalData, false) : rest0Compare;
             ExComp compareEx1 = rest1Compare is AlgebraTerm ? Simplifier.HarshSimplify(rest1Compare.CloneEx() as AlgebraTerm, ref pEvalData, false) : rest1Compare;
@@ -651,21 +648,21 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public static OrRestriction GetNoRealNumsRestriction(AlgebraComp varFor, ref TermType.EvalData pEvalData)
         {
-            return new OrRestriction(varFor, LexemeType.LessEqual, Number.NegInfinity, ref pEvalData);
+            return new OrRestriction(varFor, LexemeType.LessEqual, Number.GetNegInfinity(), ref pEvalData);
         }
 
         public override ExComp GetLower()
         {
             if (Restriction.IsGreaterThan(Comparison))
                 return Compare;
-            return Number.NegInfinity;
+            return Number.GetNegInfinity();
         }
 
         public override ExComp GetUpper()
         {
             if (!Restriction.IsGreaterThan(Comparison))
                 return Compare;
-            return Number.PosInfinity;
+            return Number.GetPosInfinity();
         }
 
         public override bool IsLowerInclusive()
@@ -706,7 +703,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public override string ToMathAsciiStr()
         {
-            if (Number.NegInfinity.IsEqualTo(Compare) && Comparison == LexemeType.LessEqual)
+            if (Number.GetNegInfinity().IsEqualTo(Compare) && Comparison == LexemeType.LessEqual)
                 return VarComp.ToAsciiString() + "\\in\\text{No Real Numbers}";
             string compareStr;
             if (Compare is AlgebraTerm)
@@ -740,7 +737,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public static AndRestriction AllNumbers(AlgebraComp varFor, ref TermType.EvalData pEvalData)
         {
-            return new AndRestriction(Number.NegInfinity, LexemeType.Less, varFor, LexemeType.Less, Number.PosInfinity, ref pEvalData);
+            return new AndRestriction(Number.GetNegInfinity(), LexemeType.Less, varFor, LexemeType.Less, Number.GetPosInfinity(), ref pEvalData);
         }
 
         public static bool AreEqualTo(Restriction rest0, Restriction rest1)
@@ -951,13 +948,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 upper1 = (upper1 as AlgebraTerm).RemoveRedundancies();
 
             if (lower0 is Constant)
-                lower0 = (lower0 as Constant).Value;
+                lower0 = (lower0 as Constant).GetValue();
             if (upper0 is Constant)
-                upper0 = (upper0 as Constant).Value;
+                upper0 = (upper0 as Constant).GetValue();
             if (lower1 is Constant)
-                lower1 = (lower1 as Constant).Value;
+                lower1 = (lower1 as Constant).GetValue();
             if (upper1 is Constant)
-                upper1 = (upper1 as Constant).Value;
+                upper1 = (upper1 as Constant).GetValue();
 
             lower0 = Simplifier.HarshSimplify(lower0.CloneEx().ToAlgTerm(), ref pEvalData, false);
             lower1 = Simplifier.HarshSimplify(lower1.CloneEx().ToAlgTerm(), ref pEvalData, false);

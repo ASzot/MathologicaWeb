@@ -83,11 +83,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                         group[j] = new PowerFunction(group[j], new Number(2.0));
                         break;
                     }
-                    else if (groupComp is PowerFunction && (groupComp as PowerFunction).Base.IsEqualTo(af))
+                    else if (groupComp is PowerFunction && (groupComp as PowerFunction).GetBase().IsEqualTo(af))
                     {
                         combined = true;
                         group[j] = new PowerFunction(af,
-                            Operators.AddOp.StaticCombine((groupComp as PowerFunction).Power, Number.One));
+                            Operators.AddOp.StaticCombine((groupComp as PowerFunction).GetPower(), Number.GetOne()));
                         break;
                     }
                 }

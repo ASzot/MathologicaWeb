@@ -20,9 +20,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
         public ExComp CompleteTheSquare(ExComp a, ExComp b, ExComp c, AlgebraVar solveFor, ExComp overall, ref TermType.EvalData pEvalData)
         {
-            if (!Number.One.IsEqualTo(a))
+            if (!Number.GetOne().IsEqualTo(a))
             {
-                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "({0})/({1})=({0})/({1})" + WorkMgr.EDM, "Factor out the A term of " + WorkMgr.STM + "{1}" + WorkMgr.EDM + " to make completing the square easier.", overall, a);
+                pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "({0})/({1})=({0})/({1})" + WorkMgr.EDM, "Factor out the A term of " + WorkMgr.STM + "{1}" + WorkMgr.EDM + " to make completing the square easier.", overall, a);
 
                 b = DivOp.StaticCombine(b, a);
                 c = DivOp.StaticCombine(c, a);
@@ -32,12 +32,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
             AlgebraComp solveForComp = solveFor.ToAlgebraComp();
 
-            pEvalData.WorkMgr.FromSides(AddOp.StaticWeakCombine(PowOp.StaticCombine(solveForComp, new Number(2.0)), MulOp.StaticWeakCombine(b, solveForComp)), c, "Move the C value to the other side.");
+            pEvalData.GetWorkMgr().FromSides(AddOp.StaticWeakCombine(PowOp.StaticCombine(solveForComp, new Number(2.0)), MulOp.StaticWeakCombine(b, solveForComp)), c, "Move the C value to the other side.");
 
             ExComp halfB = DivOp.StaticCombine(b, new Number(2.0));
             ExComp completeTheSquareTerm = PowOp.RaiseToPower(halfB, new Number(2.0), ref pEvalData);
 
-            pEvalData.WorkMgr.FromSides(AddOp.StaticWeakCombine(AddOp.StaticCombine(PowOp.StaticWeakCombine(solveForComp, new Number(2.0)), MulOp.StaticWeakCombine(b, solveForComp)), completeTheSquareTerm),
+            pEvalData.GetWorkMgr().FromSides(AddOp.StaticWeakCombine(AddOp.StaticCombine(PowOp.StaticWeakCombine(solveForComp, new Number(2.0)), MulOp.StaticWeakCombine(b, solveForComp)), completeTheSquareTerm),
                 AddOp.StaticCombine(c, completeTheSquareTerm),
                 "Add " + WorkMgr.STM + "(b^2)/4" + WorkMgr.EDM + " or in this case " + WorkMgr.STM +
                 (completeTheSquareTerm is AlgebraTerm ? (completeTheSquareTerm as AlgebraTerm).FinalToDispStr() : completeTheSquareTerm.ToAsciiString()) +
@@ -51,27 +51,27 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             ExComp tmpWeakLeftInner = AddOp.StaticWeakCombine(solveForComp, halfB);
             ExComp tmpWeakLeft = PowOp.StaticWeakCombine(tmpWeakLeftInner, new Number(2.0));
 
-            pEvalData.WorkMgr.FromSides(tmpWeakLeft, right, "Factor the left side and simplify the right side.");
+            pEvalData.GetWorkMgr().FromSides(tmpWeakLeft, right, "Factor the left side and simplify the right side.");
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\sqrt({0})=\\sqrt({1})" + WorkMgr.EDM, "Take the square root of both sides.", tmpWeakLeft, right);
+            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "\\sqrt({0})=\\sqrt({1})" + WorkMgr.EDM, "Take the square root of both sides.", tmpWeakLeft, right);
 
             AlgebraTermArray solutions = PowOp.TakeSqrt(right, ref pEvalData);
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "{0}=\\pm({1})" + WorkMgr.EDM, "The square root has positive and negative roots. Both " + WorkMgr.STM + "{0}={1}" + WorkMgr.EDM +
-                " and " + WorkMgr.STM + "{0}={2}" + WorkMgr.EDM, tmpWeakLeftInner, solutions[0], solutions[1]);
+            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "{0}=\\pm({1})" + WorkMgr.EDM, "The square root has positive and negative roots. Both " + WorkMgr.STM + "{0}={1}" + WorkMgr.EDM +
+                " and " + WorkMgr.STM + "{0}={2}" + WorkMgr.EDM, tmpWeakLeftInner, solutions.GetItem(0), solutions.GetItem(1));
 
-            for (int i = 0; i < solutions.TermCount; ++i)
+            for (int i = 0; i < solutions.GetTermCount(); ++i)
             {
-                if (!Number.Zero.IsEqualTo(halfB))
+                if (!Number.GetZero().IsEqualTo(halfB))
                 {
-                    pEvalData.WorkMgr.FromSubtraction(halfB, tmpWeakLeftInner, solutions[i]);
+                    pEvalData.GetWorkMgr().FromSubtraction(halfB, tmpWeakLeftInner, solutions.GetItem(i));
                 }
 
-                solutions.Terms[i] = SubOp.StaticCombine(solutions[i], halfB).ToAlgTerm();
-                solutions.Terms[i].ReduceFracs();
-                solutions.Terms[i] = solutions.Terms[i].CompoundFractions();
+                solutions.GetTerms()[i] = SubOp.StaticCombine(solutions.GetItem(i), halfB).ToAlgTerm();
+                solutions.GetTerms()[i].ReduceFracs();
+                solutions.GetTerms()[i] = solutions.GetTerms()[i].CompoundFractions();
 
-                pEvalData.WorkMgr.FromSides(solveForComp, solutions[i], "Simplify.");
+                pEvalData.GetWorkMgr().FromSides(solveForComp, solutions.GetItem(i), "Simplify.");
             }
 
             return solutions;
@@ -81,11 +81,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
         {
             AlgebraComp solveForComp = solveFor.ToAlgebraComp();
 
-            AlgebraTerm[] factors = MathSolverLibrary.Equation.Term.AdvAlgebraTerm.Factorize(a, b, c, solveFor, ref pEvalData, pEvalData.WorkMgr.AllowWork);
+            AlgebraTerm[] factors = MathSolverLibrary.Equation.Term.AdvAlgebraTerm.Factorize(a, b, c, solveFor, ref pEvalData, pEvalData.GetWorkMgr().AllowWork);
             if (factors == null)
                 return null;
 
-            AlgebraTerm zeroTerm = Number.Zero.ToAlgTerm();
+            AlgebraTerm zeroTerm = Number.GetZero().ToAlgTerm();
 
             ExComp solution1 = p_agSolver.SolveEq(solveFor, factors[0], zeroTerm, ref pEvalData);
             ExComp solution2 = p_agSolver.SolveEq(solveFor, factors[1], zeroTerm, ref pEvalData);
@@ -98,7 +98,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
         public ExComp QuadraticFormulaSolve(ExComp a, ExComp b, ExComp c, AlgebraVar solveFor, ref TermType.EvalData pEvalData)
         {
             AlgebraComp solveForComp = solveFor.ToAlgebraComp();
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "{3}=(-({1})\\pm\\sqrt(({1})^2-4({0})({2})))/(2({0}))" + WorkMgr.EDM,
+            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "{3}=(-({1})\\pm\\sqrt(({1})^2-4({0})({2})))/(2({0}))" + WorkMgr.EDM,
                 "Plug values into the quadratic equation.", a, b, c, solveForComp);
 
             ExComp term1 = MulOp.Negate(b);
@@ -111,15 +111,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             AlgebraTermArray term2s = PowOp.TakeSqrt(term2, ref pEvalData);
             ExComp term3 = MulOp.StaticCombine(new Number(2.0), a);
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "{3}=({0}\\pm({1}))/({2})" + WorkMgr.EDM, "Simplify.", term1, term2s[0], term3, solveForComp);
+            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "{3}=({0}\\pm({1}))/({2})" + WorkMgr.EDM, "Simplify.", term1, term2s.GetItem(0), term3, solveForComp);
 
-            for (int i = 0; i < term2s.TermCount; ++i)
+            for (int i = 0; i < term2s.GetTermCount(); ++i)
             {
-                ExComp sqrtTerm = term2s[i];
-                term2s.Terms[i] = AddOp.StaticCombine(term1.CloneEx(), term2s[i].CloneEx()).ToAlgTerm();
-                term2s.Terms[i] = DivOp.StaticCombine(term2s[i], term3).ToAlgTerm();
+                ExComp sqrtTerm = term2s.GetItem(i);
+                term2s.GetTerms()[i] = AddOp.StaticCombine(term1.CloneEx(), term2s.GetItem(i).CloneEx()).ToAlgTerm();
+                term2s.GetTerms()[i] = DivOp.StaticCombine(term2s.GetItem(i), term3).ToAlgTerm();
 
-                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "{4}=({0}+{1})/({2})={3}" + WorkMgr.EDM, "The above term is a root of the quadratic.", term1, sqrtTerm, term3, term2s.Terms[i], solveForComp);
+                pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "{4}=({0}+{1})/({2})={3}" + WorkMgr.EDM, "The above term is a root of the quadratic.", term1, sqrtTerm, term3, term2s.GetTerms()[i], solveForComp);
             }
 
             return term2s;
@@ -168,22 +168,22 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             {
                 a = AlgebraTerm.OpAdd(a, aTerm);
             }
-            if (a.TermCount == 0)
-                a = Number.Zero.ToAlgTerm();
+            if (a.GetTermCount() == 0)
+                a = Number.GetZero().ToAlgTerm();
 
             AlgebraTerm b = new AlgebraTerm();
             foreach (AlgebraTerm bTerm in bTerms)
             {
                 b = AlgebraTerm.OpAdd(b, bTerm);
             }
-            if (b.TermCount == 0)
-                b = Number.Zero.ToAlgTerm();
+            if (b.GetTermCount() == 0)
+                b = Number.GetZero().ToAlgTerm();
 
             AlgebraTerm c = new AlgebraTerm(constantGroup.ToArray());
-            if (b.TermCount == 0)
-                b = Number.Zero.ToAlgTerm();
+            if (b.GetTermCount() == 0)
+                b = Number.GetZero().ToAlgTerm();
 
-            int leftGroupCount = left.GroupCount;
+            int leftGroupCount = left.GetGroupCount();
             if (leftGroupCount != 3)
             {
                 if (leftGroupCount == 2)
@@ -200,16 +200,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                     {
                         // Factor out solve variable. In the case... (ax^2+bx=0)
                         AlgebraTerm toLinearSolve = new AlgebraTerm(a, new MulOp(), solveForComp, new AddOp(), b);
-                        pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "{0}({1})={2}" + WorkMgr.EDM, "Factor out " + WorkMgr.STM + "{0}" + WorkMgr.EDM + " from the term.", solveForComp, toLinearSolve, right);
-                        pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "{0}({1})={2}" + WorkMgr.EDM, "Solve for each of the factors independently.", solveForComp, toLinearSolve, right);
-                        pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "{0}=0" + WorkMgr.EDM, solveForComp);
+                        pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "{0}({1})={2}" + WorkMgr.EDM, "Factor out " + WorkMgr.STM + "{0}" + WorkMgr.EDM + " from the term.", solveForComp, toLinearSolve, right);
+                        pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "{0}({1})={2}" + WorkMgr.EDM, "Solve for each of the factors independently.", solveForComp, toLinearSolve, right);
+                        pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "{0}=0" + WorkMgr.EDM, solveForComp);
 
                         LinearSolve linearSolve = new LinearSolve(p_agSolver, 0);
 
-                        pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "{0}=0" + WorkMgr.EDM, toLinearSolve);
+                        pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "{0}=0" + WorkMgr.EDM, toLinearSolve);
 
-                        ExComp linearSolved = linearSolve.SolveEquation(toLinearSolve, Number.Zero.ToAlgTerm(), solveFor, ref pEvalData);
-                        AlgebraTermArray ata = new AlgebraTermArray(Number.Zero.ToAlgTerm(), linearSolved.ToAlgTerm());
+                        ExComp linearSolved = linearSolve.SolveEquation(toLinearSolve, Number.GetZero().ToAlgTerm(), solveFor, ref pEvalData);
+                        AlgebraTermArray ata = new AlgebraTermArray(Number.GetZero().ToAlgTerm(), linearSolved.ToAlgTerm());
                         return ata;
                     }
                 }
@@ -219,41 +219,41 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             ExComp exB = b.RemoveRedundancies();
             ExComp exC = c.RemoveRedundancies();
 
-            QuadraticSolveMethod originalSolveMethod = pEvalData.QuadSolveMethod;
-            if (pEvalData.QuadSolveMethod == QuadraticSolveMethod.Factor)
+            QuadraticSolveMethod originalSolveMethod = pEvalData.GetQuadSolveMethod();
+            if (pEvalData.GetQuadSolveMethod() == QuadraticSolveMethod.Factor)
             {
                 pEvalData.AttemptSetInputType(TermType.InputType.SolveQuadsFactor);
 
-                pEvalData.WorkMgr.FromSides(left, Number.Zero, "Solve this quadratic equation by factoring.");
+                pEvalData.GetWorkMgr().FromSides(left, Number.GetZero(), "Solve this quadratic equation by factoring.");
                 ExComp factorSolutions = Factor(exA, exB, exC, solveFor, ref pEvalData);
                 // Null is returned on factoring not working.
                 if (factorSolutions != null)
                     return factorSolutions;
-                pEvalData.WorkMgr.PopStep();
-                pEvalData.WorkMgr.FromSides(left, Number.Zero, "The quadratic cannot be factored.");
-                pEvalData.QuadSolveMethod = QuadraticSolveMethod.Formula;
+                pEvalData.GetWorkMgr().PopStep();
+                pEvalData.GetWorkMgr().FromSides(left, Number.GetZero(), "The quadratic cannot be factored.");
+                pEvalData.SetQuadSolveMethod(QuadraticSolveMethod.Formula);
             }
-            if (pEvalData.QuadSolveMethod == QuadraticSolveMethod.Formula)
+            if (pEvalData.GetQuadSolveMethod() == QuadraticSolveMethod.Formula)
             {
                 pEvalData.AttemptSetInputType(TermType.InputType.SolveQuadsQE);
 
-                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "{0}=0" + WorkMgr.EDM, "Use the quadratic equation " + WorkMgr.STM + "{4}=(-b&sqrt(b^2-4ac))/(2a)" + WorkMgr.EDM +
+                pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "{0}=0" + WorkMgr.EDM, "Use the quadratic equation " + WorkMgr.STM + "{4}=(-b&sqrt(b^2-4ac))/(2a)" + WorkMgr.EDM +
                     " where " + WorkMgr.STM + "a={1}" + WorkMgr.EDM + ", " + WorkMgr.STM + "b={2}" + WorkMgr.EDM + ", and " + WorkMgr.STM + "c={3}" + WorkMgr.EDM, left, exA, exB, exC, solveForComp);
 
                 ExComp qfSolutions = QuadraticFormulaSolve(exA, exB, exC, solveFor, ref pEvalData);
                 // Restore the selected solve method.
-                pEvalData.QuadSolveMethod = originalSolveMethod;
+                pEvalData.SetQuadSolveMethod(originalSolveMethod);
                 return qfSolutions;
             }
-            else if (pEvalData.QuadSolveMethod == QuadraticSolveMethod.CompleteSquare)
+            else if (pEvalData.GetQuadSolveMethod() == QuadraticSolveMethod.CompleteSquare)
             {
                 pEvalData.AttemptSetInputType(TermType.InputType.SolveQuadsCTS);
 
-                pEvalData.WorkMgr.FromSides(left, Number.Zero, "Solve this quadratic equation by completing the square.");
+                pEvalData.GetWorkMgr().FromSides(left, Number.GetZero(), "Solve this quadratic equation by completing the square.");
 
                 ExComp ctsSolutions = CompleteTheSquare(exA, exB, exC, solveFor, left, ref pEvalData);
                 // Restore the selected solve method.
-                pEvalData.QuadSolveMethod = originalSolveMethod;
+                pEvalData.SetQuadSolveMethod(originalSolveMethod);
                 return ctsSolutions;
             }
 

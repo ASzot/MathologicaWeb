@@ -40,20 +40,20 @@ namespace MathSolverWebsite.Website_Logic
         {
             string final = "";
 
-            if (workStep.WorkHtml != null || workStep.WorkDesc != null || (workStep.SubWorkSteps != null && workStep.SubWorkSteps.Count != 0))
+            if (workStep.GetWorkHtml() != null || workStep.GetWorkDesc() != null || (workStep.GetSubWorkSteps() != null && workStep.GetSubWorkSteps().Count != 0))
                 final += "<li class='workListItem'>";
 
-            if (workStep.WorkHtml != null)
-                final += "<p>" + workStep.WorkHtml + "</p>";
+            if (workStep.GetWorkHtml() != null)
+                final += "<p>" + workStep.GetWorkHtml() + "</p>";
 
-            if (workStep.WorkDesc != null)
-                final += "<p class='workDescText'>" + workStep.WorkDesc + "</p>";
+            if (workStep.GetWorkDesc() != null)
+                final += "<p class='workDescText'>" + workStep.GetWorkDesc() + "</p>";
 
-            if (workStep.SubWorkSteps != null && workStep.SubWorkSteps.Count != 0)
+            if (workStep.GetSubWorkSteps() != null && workStep.GetSubWorkSteps().Count != 0)
             {
                 final += "<input type='button' class='sub-work-list-toggle-btn' value='+ Show Work Steps' />";
                 final += "<ul class='sub-work-list' style='display: none;'>";
-                foreach (WorkStep subWorkStep in workStep.SubWorkSteps)
+                foreach (WorkStep subWorkStep in workStep.GetSubWorkSteps())
                 {
                     final += WorkStepToHtml(subWorkStep);
                 }
@@ -101,14 +101,14 @@ namespace MathSolverWebsite.Website_Logic
             final += "<ul class='sol-list'>";
             if (sr.Success)
             {
-                if (evalData.GraphEqStrs != null && evalData.GraphVar != null)
+                if (evalData.GetGraphEqStrs() != null && evalData.GetGraphVar() != null)
                 {
                     string finalJavascript = "";
                     finalJavascript += "<script>";
                     finalJavascript += "var grapher = JXG.JSXGraph.initBoard('graphbox', {boundingbox: [-10, 10, 10, -10], axis: true});";
-                    foreach (string graphEqStr in evalData.GraphEqStrs)
+                    foreach (string graphEqStr in evalData.GetGraphEqStrs())
                     {
-                        finalJavascript += "grapher.create('functiongraph', [function(" + evalData.GraphVar + ") { return " + graphEqStr + ";}]);";
+                        finalJavascript += "grapher.create('functiongraph', [function(" + evalData.GetGraphVar() + ") { return " + graphEqStr + ";}]);";
                     }
                     finalJavascript += "</script>";
                     final += finalJavascript;
@@ -116,22 +116,22 @@ namespace MathSolverWebsite.Website_Logic
                     final += "<div id='graphbox' class='graph-disp'></div>";
                     final += "</li>";
                 }
-                if (evalData.Msgs != null)
+                if (evalData.GetMsgs() != null)
                 {
-                    foreach (var msg in evalData.Msgs)
+                    foreach (var msg in evalData.GetMsgs())
                     {
                         final += "<li class='resultListItem'>";
                         final += "<p>" + msg + "</p>";
                         final += "</li>";
                     }
                 }
-                if (evalData.HasPartialSolutions)
+                if (evalData.GetHasPartialSolutions())
                 {
                     final += "<li class='resultListItem'>";
                     final += "<p>Partial Solution</p>";
                     final += "</li>";
 
-                    for (int i = 0; i < evalData.PartialSolutions.Count; ++i)
+                    for (int i = 0; i < evalData.GetPartialSolutions().Count; ++i)
                     {
                         string dispStr = WorkMgr.STM + evalData.PartialSolToMathAsciiStr(i) + WorkMgr.EDM;
                         final += "<li class='resultListItem'>";
@@ -193,7 +193,7 @@ namespace MathSolverWebsite.Website_Logic
 
                 final += "<p class='error'>Failure</p>";
                 final += "<p>";
-                foreach (var failure in evalData.FailureMsgs)
+                foreach (var failure in evalData.GetFailureMsgs())
                 {
                     final += failure + "<br />";
                 }
@@ -215,7 +215,7 @@ namespace MathSolverWebsite.Website_Logic
 
         public static string OutputWorkStepsToHtml(WorkMgr workMgr)
         {
-            if (workMgr.WorkSteps.Count == 0)
+            if (workMgr.GetWorkSteps().Count == 0)
                 return "";
 
             string final = "";
@@ -227,7 +227,7 @@ namespace MathSolverWebsite.Website_Logic
 
             final += "<ul id='workDisplayList' class='work-disp-list'>";
 
-            foreach (WorkStep workStep in workMgr.WorkSteps)
+            foreach (WorkStep workStep in workMgr.GetWorkSteps())
             {
                 final += WorkStepToHtml(workStep);
             }

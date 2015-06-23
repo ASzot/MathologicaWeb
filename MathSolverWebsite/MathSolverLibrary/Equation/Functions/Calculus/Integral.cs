@@ -14,53 +14,59 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         protected ExComp _lower = null;
         private bool _isInnerIntegral = false;
 
-        public AlgebraTerm UpperLimitTerm
+        public AlgebraTerm GetUpperLimitTerm()
         {
-            get { return _upper.ToAlgTerm(); }
+            return _upper.ToAlgTerm();
         }
 
-        public AlgebraTerm LowerLimitTerm
+        public AlgebraTerm GetLowerLimitTerm()
         {
-            get { return _lower.ToAlgTerm(); }
+            return _lower.ToAlgTerm();
         }
 
-        public ExComp UpperLimit
+        public void SetUpperLimit(ExComp value)
         {
-            get { return _upper; }
-            set
-            {
-                _upper = value;
-            }
+            _upper = value;
         }
 
-        public ExComp LowerLimit
+        public ExComp GetUpperLimit()
         {
-            get { return _lower; }
-            set
-            {
-                _lower = value;
-            }
+            return _upper;
         }
 
-        public bool AddConstant
+        public void SetLowerLimit(ExComp value)
         {
-            set { _addConstant = value; }
+            _lower = value;
         }
 
-        public IntegrationInfo Info
+        public ExComp GetLowerLimit()
         {
-            set { _integralInfo = value; }
+            return _lower;
         }
 
-        public AlgebraComp DVar
+        public void SetAddConstant(bool value)
         {
-            get { return _dVar; }
-            set { _dVar = value; }
+            _addConstant = value;
         }
 
-        public bool IsDefinite
+        public void SetInfo(IntegrationInfo value)
         {
-            get { return LowerLimit != null && UpperLimit != null; }
+            _integralInfo = value;
+        }
+
+        public void SetDVar(AlgebraComp value)
+        {
+            _dVar = value;
+        }
+
+        public AlgebraComp GetDVar()
+        {
+            return _dVar;
+        }
+
+        public bool GetIsDefinite()
+        {
+            return GetLowerLimit() != null && GetUpperLimit() != null;
         }
 
         public Integral(ExComp innerEx)
@@ -76,7 +82,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         public override ExComp CloneEx()
         {
-            return ConstructIntegral(InnerTerm, _dVar, LowerLimit, UpperLimit, _isInnerIntegral);
+            return ConstructIntegral(GetInnerTerm(), _dVar, GetLowerLimit(), GetUpperLimit(), _isInnerIntegral);
         }
 
         public static Integral ConstructIntegral(ExComp innerEx, AlgebraComp dVar)
@@ -86,15 +92,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         private static Dictionary<string, Integral> GetIntegralDepths(Integral integral, ref Dictionary<string, Integral> dict, out ExComp baseValue)
         {
-            if (integral.DVar == null || dict.ContainsKey(integral.DVar.Var.Var) || !integral.IsDefinite)
+            if (integral.GetDVar() == null || dict.ContainsKey(integral.GetDVar().GetVar().GetVar()) || !integral.GetIsDefinite())
             {
-                baseValue = integral.InnerTerm;
+                baseValue = integral.GetInnerTerm();
                 return dict;
             }
 
-            dict[integral.DVar.Var.Var] = integral;
+            dict[integral.GetDVar().GetVar().GetVar()] = integral;
 
-            ExComp innerEx = integral.InnerEx;
+            ExComp innerEx = integral.GetInnerEx();
             if (innerEx is Integral)
             {
                 return GetIntegralDepths(innerEx as Integral, ref dict, out baseValue);
@@ -116,20 +122,20 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             foreach (KeyValuePair<string, Integral> kvPair in dict)
             {
                 Integral integral = kvPair.Value;
-                if (integral.LowerLimit.ToAlgTerm().Contains(integral.DVar) || integral.UpperLimit.ToAlgTerm().Contains(integral.DVar))
+                if (integral.GetLowerLimit().ToAlgTerm().Contains(integral.GetDVar()) || integral.GetUpperLimit().ToAlgTerm().Contains(integral.GetDVar()))
                 {
                     // The variables need to be switched.
                     // Find a suitable place to switch the variable where the var is not the integration boundary.
                     foreach (KeyValuePair<string, Integral> compareKvPair in dict)
                     {
-                        if (compareKvPair.Key != integral.DVar.Var.Var &&
-                            compareKvPair.Value.LowerLimit.ToAlgTerm().Contains(integral.DVar) &&
-                            compareKvPair.Value.UpperLimit.ToAlgTerm().Contains(integral.DVar) &&
-                            integral.LowerLimit.ToAlgTerm().Contains(compareKvPair.Value.DVar) &&
-                            integral.UpperLimit.ToAlgTerm().Contains(compareKvPair.Value.DVar))
+                        if (compareKvPair.Key != integral.GetDVar().GetVar().GetVar() &&
+                            compareKvPair.Value.GetLowerLimit().ToAlgTerm().Contains(integral.GetDVar()) &&
+                            compareKvPair.Value.GetUpperLimit().ToAlgTerm().Contains(integral.GetDVar()) &&
+                            integral.GetLowerLimit().ToAlgTerm().Contains(compareKvPair.Value.GetDVar()) &&
+                            integral.GetUpperLimit().ToAlgTerm().Contains(compareKvPair.Value.GetDVar()))
                         {
-                            AlgebraComp tmp = kvPair.Value.DVar;
-                            kvPair.Value.DVar = compareKvPair.Value.DVar;
+                            AlgebraComp tmp = kvPair.Value.GetDVar();
+                            kvPair.Value.SetDVar(compareKvPair.Value.GetDVar());
                             switched = true;
                             break;
                         }
@@ -144,7 +150,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             ExComp overallIntegral = baseValue;
             foreach (Integral value in dict.Values)
             {
-                overallIntegral = ConstructIntegral(overallIntegral, value.DVar, value.LowerLimit, value.UpperLimit, false, false);
+                overallIntegral = ConstructIntegral(overallIntegral, value.GetDVar(), value.GetLowerLimit(), value.GetUpperLimit(), false, false);
             }
 
             return overallIntegral;
@@ -154,8 +160,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         {
             Integral integral = new Integral(innerEx);
             integral._dVar = dVar;
-            integral.LowerLimit = lower;
-            integral.UpperLimit = upper;
+            integral.SetLowerLimit(lower);
+            integral.SetUpperLimit(upper);
             integral._isInnerIntegral = isInner;
 
             // In the case of multidimensional integrals variable boundaries will potentially have to be rearranged.
@@ -182,10 +188,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (innerEx is Derivative)
             {
                 Derivative innerDeriv = innerEx as Derivative;
-                if (innerDeriv.WithRespectTo.IsEqualTo(_dVar) && innerDeriv.DerivOf == null && innerDeriv.OrderInt == 1)
+                if (innerDeriv.GetWithRespectTo().IsEqualTo(_dVar) && innerDeriv.GetDerivOf() == null && innerDeriv.GetOrderInt() == 1)
                 {
-                    evalData.WorkMgr.FromSides(this, null, "The integral and the derivative cancel.");
-                    return innerDeriv.InnerTerm;
+                    evalData.GetWorkMgr().FromSides(this, null, "The integral and the derivative cancel.");
+                    return innerDeriv.GetInnerTerm();
                 }
             }
 
@@ -194,9 +200,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         public override AlgebraTerm Substitute(ExComp subOut, ExComp subIn)
         {
-            AlgebraTerm upperLim = UpperLimit == null ? null : UpperLimitTerm.Substitute(subOut, subIn);
-            AlgebraTerm lowerLim = LowerLimit == null ? null : LowerLimitTerm.Substitute(subOut, subIn);
-            AlgebraTerm innerTerm = InnerTerm.Substitute(subOut, subIn);
+            AlgebraTerm upperLim = GetUpperLimit() == null ? null : GetUpperLimitTerm().Substitute(subOut, subIn);
+            AlgebraTerm lowerLim = GetLowerLimit() == null ? null : GetLowerLimitTerm().Substitute(subOut, subIn);
+            AlgebraTerm innerTerm = GetInnerTerm().Substitute(subOut, subIn);
 
             return ConstructIntegral(innerTerm, _dVar, lowerLim, upperLim, _isInnerIntegral);
         }
@@ -205,15 +211,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         {
             CallChildren(harshEval, ref pEvalData);
 
-            AlgebraTerm innerTerm = InnerTerm;
+            AlgebraTerm innerTerm = GetInnerTerm();
             ExComp innerEx = Simplifier.Simplify(innerTerm, ref pEvalData);
             if (innerEx is AlgebraTerm)
                 innerEx = (innerEx as AlgebraTerm).RemoveRedundancies();
 
             if (Number.IsUndef(innerEx))
-                return Number.Undefined;
+                return Number.GetUndefined();
 
-            if (innerEx is ExVector && !IsDefinite)
+            if (innerEx is ExVector && !GetIsDefinite())
             {
                 ExVector vec = innerEx as ExVector;
 
@@ -221,7 +227,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
                 ExVector antiDerivVec = vec.CreateEmptyBody();
 
-                for (int i = 0; i < vec.Length; ++i)
+                for (int i = 0; i < vec.GetLength(); ++i)
                 {
                     ExComp antiDeriv = Indefinite(vec.Get(i), ref pEvalData);
                     antiDerivVec.Set(i, antiDeriv);
@@ -232,7 +238,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             else if (innerEx is ExMatrix)
             {
                 // Don't know if this works.
-                return Number.Undefined;
+                return Number.GetUndefined();
             }
 
             string integralStr = FinalToDispStr();
@@ -240,47 +246,47 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             ExComp useUpper;
             ExComp useLower;
 
-            if (UpperLimit is Number && (UpperLimit as Number).IsInfinity())
+            if (GetUpperLimit() is Number && (GetUpperLimit() as Number).IsInfinity())
                 useUpper = new AlgebraComp("$n");
             else
-                useUpper = UpperLimit;
+                useUpper = GetUpperLimit();
 
-            if (LowerLimit is Number && (LowerLimit as Number).IsInfinity())
+            if (GetLowerLimit() is Number && (GetLowerLimit() as Number).IsInfinity())
                 useLower = new AlgebraComp("$n");
             else
-                useLower = LowerLimit;
+                useLower = GetLowerLimit();
 
-            if (useUpper != null && useLower != null && !useUpper.IsEqualTo(UpperLimit) && !useLower.IsEqualTo(LowerLimit))
+            if (useUpper != null && useLower != null && !useUpper.IsEqualTo(GetUpperLimit()) && !useLower.IsEqualTo(GetLowerLimit()))
             {
                 // Evaluating from infinity in both directions.
                 // Split the integral up.
-                Integral upperInt = Integral.ConstructIntegral(InnerTerm, _dVar, Number.Zero, Number.PosInfinity);
-                Integral lowerInt = Integral.ConstructIntegral(InnerTerm, _dVar, Number.NegInfinity, Number.Zero);
-                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + integralStr + "=" + upperInt.FinalToDispStr() + "+" +
+                Integral upperInt = Integral.ConstructIntegral(GetInnerTerm(), _dVar, Number.GetZero(), Number.GetPosInfinity());
+                Integral lowerInt = Integral.ConstructIntegral(GetInnerTerm(), _dVar, Number.GetNegInfinity(), Number.GetZero());
+                pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + integralStr + "=" + upperInt.FinalToDispStr() + "+" +
                     lowerInt.FinalToDispStr() + WorkMgr.EDM,
                     "Split the integral.");
 
-                pEvalData.WorkMgr.FromFormatted("", "Evaluate the upper integral.");
-                WorkStep lastStep = pEvalData.WorkMgr.GetLast();
+                pEvalData.GetWorkMgr().FromFormatted("", "Evaluate the upper integral.");
+                WorkStep lastStep = pEvalData.GetWorkMgr().GetLast();
 
                 lastStep.GoDown(ref pEvalData);
                 ExComp upperSideEval = upperInt.Evaluate(harshEval, ref pEvalData);
                 lastStep.GoUp(ref pEvalData);
 
-                lastStep.WorkHtml = WorkMgr.STM + upperInt.FinalToDispStr() + "=" + WorkMgr.ToDisp(upperSideEval) + WorkMgr.EDM;
+                lastStep.SetWorkHtml(WorkMgr.STM + upperInt.FinalToDispStr() + "=" + WorkMgr.ToDisp(upperSideEval) + WorkMgr.EDM);
 
-                pEvalData.WorkMgr.FromFormatted("", "Evaluate the lower integral.");
-                lastStep = pEvalData.WorkMgr.GetLast();
+                pEvalData.GetWorkMgr().FromFormatted("", "Evaluate the lower integral.");
+                lastStep = pEvalData.GetWorkMgr().GetLast();
 
                 lastStep.GoDown(ref pEvalData);
                 ExComp lowerSideEval = lowerInt.Evaluate(harshEval, ref pEvalData);
                 lastStep.GoUp(ref pEvalData);
 
-                lastStep.WorkHtml = WorkMgr.STM + lowerInt.FinalToDispStr() + "=" + WorkMgr.ToDisp(lowerSideEval) + WorkMgr.EDM;
+                lastStep.SetWorkHtml(WorkMgr.STM + lowerInt.FinalToDispStr() + "=" + WorkMgr.ToDisp(lowerSideEval) + WorkMgr.EDM);
 
                 ExComp added = AddOp.StaticCombine(upperSideEval, lowerSideEval);
 
-                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + WorkMgr.ToDisp(upperSideEval) + "+" + WorkMgr.ToDisp(lowerSideEval) +
+                pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + WorkMgr.ToDisp(upperSideEval) + "+" + WorkMgr.ToDisp(lowerSideEval) +
                     "=" + WorkMgr.ToDisp(added) + WorkMgr.EDM, "Combine the integral back together.");
 
                 return added;
@@ -292,13 +298,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             ExComp indefiniteEx = indefinite.RemoveRedundancies();
 
-            if (LowerLimit == null || UpperLimit == null)
+            if (GetLowerLimit() == null || GetUpperLimit() == null)
             {
                 if (_addConstant && !_isInnerIntegral && !(indefiniteEx is Integral))
                 {
                     // Add the constant.
                     ExComp retEx = AddOp.StaticWeakCombine(indefinite, new CalcConstant());
-                    pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + retEx.ToAlgTerm().FinalToDispStr() + WorkMgr.EDM,
+                    pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + retEx.ToAlgTerm().FinalToDispStr() + WorkMgr.EDM,
                         "Add the constant of integration.");
                     return retEx;
                 }
@@ -314,34 +320,34 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             AlgebraComp subVar = null;
             ExComp limVal = null;
-            if (!useUpper.IsEqualTo(UpperLimit))
+            if (!useUpper.IsEqualTo(GetUpperLimit()))
             {
                 subVar = useUpper as AlgebraComp;
-                limVal = Number.PosInfinity;
+                limVal = Number.GetPosInfinity();
             }
-            else if (!useLower.IsEqualTo(LowerLimit))
+            else if (!useLower.IsEqualTo(GetLowerLimit()))
             {
                 subVar = useLower as AlgebraComp;
-                limVal = Number.NegInfinity;
+                limVal = Number.GetNegInfinity();
             }
 
-            integralStr = "\\int_{" + WorkMgr.ToDisp(useLower) + "}^{" + WorkMgr.ToDisp(useUpper) + "}(" + InnerTerm.FinalToDispStr() + ")d" + _dVar.ToDispString();
+            integralStr = "\\int_{" + WorkMgr.ToDisp(useLower) + "}^{" + WorkMgr.ToDisp(useUpper) + "}(" + GetInnerTerm().FinalToDispStr() + ")d" + _dVar.ToDispString();
 
             if (subVar != null)
             {
-                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + integralStr + "=\\lim_{" + subVar.ToDispString() +
+                pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + integralStr + "=\\lim_{" + subVar.ToDispString() +
                     " \\to \\infty}" + integralStr + WorkMgr.EDM);
                 integralStr = "\\lim_{" + subVar.ToDispString() +
                     " \\to \\infty}" + integralStr;
             }
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + integralStr + "=F(" +
+            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + integralStr + "=F(" +
                 WorkMgr.ToDisp(useUpper) + ")-F(" + WorkMgr.ToDisp(useLower) + ")" + WorkMgr.EDM,
                 "Evaluate the definite integral where F is the antiderivative.");
 
             string resultStr0 = SubOp.StaticWeakCombine(upperEx, lowerEx).ToAlgTerm().FinalToDispStr();
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + integralStr + "=" +
+            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + integralStr + "=" +
                 resultStr0 + WorkMgr.EDM);
 
             ExComp result = SubOp.StaticCombine(upperEx, lowerEx);
@@ -352,7 +358,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             if (subVar != null)
             {
-                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\lim_{" + subVar.ToDispString() + " \\to \\infty}" +
+                pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "\\lim_{" + subVar.ToDispString() + " \\to \\infty}" +
                     WorkMgr.ToDisp(result) + WorkMgr.EDM, "Take the limit to infinity.");
                 result = Limit.TakeLim(result, subVar, limVal, ref pEvalData);
             }
@@ -362,7 +368,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             string resultStr1 = WorkMgr.ToDisp(result);
             integralStr = this.FinalToDispStr();
             if (resultStr0 != resultStr1)
-                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + integralStr + "=" + resultStr1 + WorkMgr.EDM);
+                pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + integralStr + "=" + resultStr1 + WorkMgr.EDM);
 
             return result;
         }
@@ -376,7 +382,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             if (gps.Count == 0)
             {
-                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\int\\d" + _dVar.ToDispString() + "=" + _dVar.ToDispString() + WorkMgr.EDM,
+                pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "\\int\\d" + _dVar.ToDispString() + "=" + _dVar.ToDispString() + WorkMgr.EDM,
                     "Use the antiderivative power rule.");
                 return _dVar.ToAlgTerm();
             }
@@ -394,7 +400,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                         overallStr += "+";
                 }
 
-                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + overallStr + WorkMgr.EDM, "Split the integral up.");
+                pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + overallStr + WorkMgr.EDM, "Split the integral up.");
             }
 
             // Independently take the derivative of each group.
@@ -402,16 +408,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             for (int i = 0; i < gps.Count; ++i)
             {
                 IntegrationInfo integrationInfo = _integralInfo ?? new IntegrationInfo();
-                int prevStepCount = pEvalData.WorkMgr.WorkSteps.Count;
+                int prevStepCount = pEvalData.GetWorkMgr().GetWorkSteps().Count;
 
-                string lowerStr = LowerLimit == null ? "" : LowerLimit.ToAlgTerm().FinalToDispStr();
-                string upperStr = UpperLimit == null ? "" : UpperLimit.ToAlgTerm().FinalToDispStr();
+                string lowerStr = GetLowerLimit() == null ? "" : GetLowerLimit().ToAlgTerm().FinalToDispStr();
+                string upperStr = GetUpperLimit() == null ? "" : GetUpperLimit().ToAlgTerm().FinalToDispStr();
 
                 WorkStep last = null;
                 if (gps.Count > 1)
                 {
-                    pEvalData.WorkMgr.FromFormatted("");
-                    last = pEvalData.WorkMgr.GetLast();
+                    pEvalData.GetWorkMgr().FromFormatted("");
+                    last = pEvalData.GetWorkMgr().GetLast();
                     last.GoDown(ref pEvalData);
                 }
 
@@ -422,13 +428,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
                 if (aderiv == null)
                 {
-                    pEvalData.WorkMgr.PopStepsCount(pEvalData.WorkMgr.WorkSteps.Count - prevStepCount);
+                    pEvalData.GetWorkMgr().PopStepsCount(pEvalData.GetWorkMgr().GetWorkSteps().Count - prevStepCount);
                     _failure = true;
                     return this;
                 }
 
                 if (gps.Count > 1)
-                    last.WorkHtml = WorkMgr.STM + intStrs[i] + "=" + WorkMgr.ToDisp(aderiv) + WorkMgr.EDM;
+                    last.SetWorkHtml(WorkMgr.STM + intStrs[i] + "=" + WorkMgr.ToDisp(aderiv) + WorkMgr.EDM);
                 adGps[i] = aderiv;
             }
 
@@ -443,8 +449,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             finalTerm = finalTerm.Order();
             if (adGps.Length > 1)
             {
-                string definiteStr = IsDefinite ? "|_{" + _lower.ToAlgTerm().FinalToDispStr() + "}^{" + _upper.ToAlgTerm().FinalToDispStr() + "}" : "";
-                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + thisStr + "=" + finalTerm.FinalToDispStr() + definiteStr + WorkMgr.EDM,
+                string definiteStr = GetIsDefinite() ? "|_{" + _lower.ToAlgTerm().FinalToDispStr() + "}^{" + _upper.ToAlgTerm().FinalToDispStr() + "}" : "";
+                pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + thisStr + "=" + finalTerm.FinalToDispStr() + definiteStr + WorkMgr.EDM,
                     "Add all together.");
             }
 
@@ -453,24 +459,24 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         protected override AlgebraTerm CreateInstance(params ExComp[] args)
         {
-            return ConstructIntegral(args[0], this._dVar, LowerLimit, UpperLimit);
+            return ConstructIntegral(args[0], this._dVar, GetLowerLimit(), GetUpperLimit());
         }
 
         public override string FinalToAsciiString()
         {
             string boundariesStr = "";
-            if (IsDefinite)
-                boundariesStr = "_{" + LowerLimit.ToAsciiString() + "}^{" + UpperLimit.ToAsciiString() + "}";
+            if (GetIsDefinite())
+                boundariesStr = "_{" + GetLowerLimit().ToAsciiString() + "}^{" + GetUpperLimit().ToAsciiString() + "}";
 
-            return "\\int" + boundariesStr + (InnerEx is Integral ? InnerTerm.FinalToAsciiString() : "(" + InnerTerm.FinalToAsciiString() + ")") + "\\d" + _dVar.ToAsciiString();
+            return "\\int" + boundariesStr + (GetInnerEx() is Integral ? GetInnerTerm().FinalToAsciiString() : "(" + GetInnerTerm().FinalToAsciiString() + ")") + "\\d" + _dVar.ToAsciiString();
         }
 
         public override string FinalToTexString()
         {
             string boundariesStr = "";
-            if (IsDefinite)
-                boundariesStr = "_{" + LowerLimit.ToTexString() + "}^{" + UpperLimit.ToTexString() + "}";
-            return "\\int" + boundariesStr + (InnerEx is Integral ? InnerTerm.FinalToTexString() : "(" + InnerTerm.FinalToTexString() + ")") + "\\d" + _dVar.ToTexString();
+            if (GetIsDefinite())
+                boundariesStr = "_{" + GetLowerLimit().ToTexString() + "}^{" + GetUpperLimit().ToTexString() + "}";
+            return "\\int" + boundariesStr + (GetInnerEx() is Integral ? GetInnerTerm().FinalToTexString() : "(" + GetInnerTerm().FinalToTexString() + ")") + "\\d" + _dVar.ToTexString();
         }
 
         public override bool IsEqualTo(ExComp ex)
@@ -478,7 +484,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (ex is Integral)
             {
                 Integral integral = ex as Integral;
-                return integral._dVar.IsEqualTo(this._dVar) && integral.InnerEx.IsEqualTo(this.InnerEx);
+                return integral._dVar.IsEqualTo(this._dVar) && integral.GetInnerEx().IsEqualTo(this.GetInnerEx());
             }
 
             return false;
@@ -487,9 +493,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         public override string ToAsciiString()
         {
             string boundariesStr = "";
-            if (IsDefinite)
-                boundariesStr = "_{" + LowerLimit.ToAsciiString() + "}^{" + UpperLimit.ToAsciiString() + "}";
-            return "\\int" + boundariesStr + "(" + InnerTerm.ToAsciiString() + ")\\d" + _dVar.ToAsciiString();
+            if (GetIsDefinite())
+                boundariesStr = "_{" + GetLowerLimit().ToAsciiString() + "}^{" + GetUpperLimit().ToAsciiString() + "}";
+            return "\\int" + boundariesStr + "(" + GetInnerTerm().ToAsciiString() + ")\\d" + _dVar.ToAsciiString();
         }
 
         public override string ToJavaScriptString(bool useRad)
@@ -500,17 +506,17 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         public override string ToString()
         {
             string boundariesStr = "";
-            if (IsDefinite)
-                boundariesStr = "_{" + LowerLimit.ToString() + "}^{" + UpperLimit.ToString() + "}";
-            return "\\int" + boundariesStr + "(" + InnerTerm.ToString() + ")\\d" + _dVar.ToString();
+            if (GetIsDefinite())
+                boundariesStr = "_{" + GetLowerLimit().ToString() + "}^{" + GetUpperLimit().ToString() + "}";
+            return "\\int" + boundariesStr + "(" + GetInnerTerm().ToString() + ")\\d" + _dVar.ToString();
         }
 
         public override string ToTexString()
         {
             string boundariesStr = "";
-            if (IsDefinite)
-                boundariesStr = "_{" + LowerLimit.ToTexString() + "}^{" + UpperLimit.ToTexString() + "}";
-            return "\\int" + boundariesStr + "(" + InnerTerm.ToTexString() + ")\\d" + _dVar.ToTexString();
+            if (GetIsDefinite())
+                boundariesStr = "_{" + GetLowerLimit().ToTexString() + "}^{" + GetUpperLimit().ToTexString() + "}";
+            return "\\int" + boundariesStr + "(" + GetInnerTerm().ToTexString() + ")\\d" + _dVar.ToTexString();
         }
     }
 }

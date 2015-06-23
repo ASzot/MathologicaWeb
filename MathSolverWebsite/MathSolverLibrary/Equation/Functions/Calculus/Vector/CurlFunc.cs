@@ -16,13 +16,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
             if (innerEx is ExVector)
             {
                 ExVector exVec = innerEx as ExVector;
-                return exVec.Length > 1 && exVec.Length < 4;
+                return exVec.GetLength() > 1 && exVec.GetLength() < 4;
             }
             if (innerEx is FunctionDefinition)
             {
                 FunctionDefinition funcDef = innerEx as FunctionDefinition;
 
-                return funcDef.InputArgCount > 1 && funcDef.InputArgCount < 4;
+                return funcDef.GetInputArgCount() > 1 && funcDef.GetInputArgCount() < 4;
             }
             if (innerEx is AlgebraComp)
             {
@@ -36,8 +36,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
         {
             if (innerEx is GradientFunc)
             {
-                pEvalData.WorkMgr.FromFormatted(FinalToDispStr() + "=0", "From the identity " + WorkMgr.STM + "curl(\\nablaF)=0" + WorkMgr.EDM);
-                return Number.Zero;
+                pEvalData.GetWorkMgr().FromFormatted(FinalToDispStr() + "=0", "From the identity " + WorkMgr.STM + "curl(\\nablaF)=0" + WorkMgr.EDM);
+                return Number.GetZero();
             }
 
             return null;
@@ -47,8 +47,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
         {
             CallChildren(harshEval, ref pEvalData);
 
-            if (!IsSuitableField(InnerEx))
-                return Number.Undefined;
+            if (!IsSuitableField(GetInnerEx()))
+                return Number.GetUndefined();
 
             ExComp p, q, r;
             ExComp innerEx = GetCorrectedInnerEx(ref pEvalData);
@@ -73,9 +73,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
             if (innerEx is ExVector)
             {
                 ExVector innerVec = innerEx as ExVector;
-                p = innerVec.X;
-                q = innerVec.Y;
-                r = innerVec.Z;
+                p = innerVec.GetX();
+                q = innerVec.GetY();
+                r = innerVec.GetZ();
                 isFuncDeriv = false;
             }
             else if (innerEx is FunctionDefinition)
@@ -83,11 +83,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
                 FunctionDefinition funcDef = innerEx as FunctionDefinition;
                 p = new AlgebraComp("P");
                 q = new AlgebraComp("Q");
-                r = funcDef.InputArgCount == 3 ? new AlgebraComp("R") : null;
+                r = funcDef.GetInputArgCount() == 3 ? new AlgebraComp("R") : null;
 
-                x = funcDef.InputArgs[0];
-                y = funcDef.InputArgs[1];
-                z = funcDef.InputArgCount == 3 ? funcDef.InputArgs[2] : null;
+                x = funcDef.GetInputArgs()[0];
+                y = funcDef.GetInputArgs()[1];
+                z = funcDef.GetInputArgCount() == 3 ? funcDef.GetInputArgs()[2] : null;
 
                 isFuncDeriv = true;
             }
@@ -103,7 +103,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
 
             if (isFuncDeriv)
             {
-                pEvalData.WorkMgr.FromFormatted("",
+                pEvalData.GetWorkMgr().FromFormatted("",
                     "Assuming " + WorkMgr.STM + innerEx.ToDispString() + WorkMgr.EDM +
                     " is defined as the vector field " +
                     "P(x,y,z)" + ExVector.I + " + Q(x,y,z)" + ExVector.J + " + R(x,y,z)" + ExVector.K);
@@ -124,15 +124,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
                 descStr += "Where ";
                 string funcParamsStr = z == null ? "(x,y)" : "(x,y,z)";
                 ExVector innerVec = innerEx as ExVector;
-                descStr += WorkMgr.STM + "P" + funcParamsStr + " = " + WorkMgr.ToDisp(innerVec.X) + ",Q" + funcParamsStr +
+                descStr += WorkMgr.STM + "P" + funcParamsStr + " = " + WorkMgr.ToDisp(innerVec.GetX()) + ",Q" + funcParamsStr +
                            "=" +
-                           WorkMgr.ToDisp(innerVec.Y);
+                           WorkMgr.ToDisp(innerVec.GetY());
                 if (z != null)
-                    descStr += "," + "R" + funcParamsStr + "=" + WorkMgr.ToDisp(innerVec.Z);
+                    descStr += "," + "R" + funcParamsStr + "=" + WorkMgr.ToDisp(innerVec.GetZ());
                 descStr += WorkMgr.EDM;
             }
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + FinalToDispStr() + "=" + formulaStr + WorkMgr.EDM, descStr);
+            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + FinalToDispStr() + "=" + formulaStr + WorkMgr.EDM, descStr);
 
             WorkStep lastStep;
             string stepStr;
@@ -141,92 +141,92 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
             if (z != null)
             {
                 stepStr = "\\frac{\\partial R}{\\partial " + y.ToDispString() + "}";
-                pEvalData.WorkMgr.FromFormatted("", "Find " + WorkMgr.STM + stepStr + WorkMgr.EDM);
-                lastStep = pEvalData.WorkMgr.GetLast();
+                pEvalData.GetWorkMgr().FromFormatted("", "Find " + WorkMgr.STM + stepStr + WorkMgr.EDM);
+                lastStep = pEvalData.GetWorkMgr().GetLast();
 
                 lastStep.GoDown(ref pEvalData);
                 r_y = Derivative.TakeDeriv(r, y, ref pEvalData, true, isFuncDeriv);
                 lastStep.GoUp(ref pEvalData);
 
-                lastStep.WorkHtml = WorkMgr.STM + stepStr + "=" + WorkMgr.ToDisp(r_y) + WorkMgr.EDM;
+                lastStep.SetWorkHtml(WorkMgr.STM + stepStr + "=" + WorkMgr.ToDisp(r_y) + WorkMgr.EDM);
             }
             else
-                r_y = Number.Zero;
+                r_y = Number.GetZero();
 
             ExComp q_z;
             if (z != null)
             {
                 stepStr = "\\frac{\\partial Q}{\\partial " + z.ToDispString() + "}";
-                pEvalData.WorkMgr.FromFormatted("", "Find " + WorkMgr.STM + stepStr + WorkMgr.EDM);
-                lastStep = pEvalData.WorkMgr.GetLast();
+                pEvalData.GetWorkMgr().FromFormatted("", "Find " + WorkMgr.STM + stepStr + WorkMgr.EDM);
+                lastStep = pEvalData.GetWorkMgr().GetLast();
 
                 lastStep.GoDown(ref pEvalData);
                 q_z = Derivative.TakeDeriv(q, z, ref pEvalData, true, isFuncDeriv);
                 lastStep.GoUp(ref pEvalData);
 
-                lastStep.WorkHtml = WorkMgr.STM + stepStr + "=" + WorkMgr.ToDisp(q_z) + WorkMgr.EDM;
+                lastStep.SetWorkHtml(WorkMgr.STM + stepStr + "=" + WorkMgr.ToDisp(q_z) + WorkMgr.EDM);
             }
             else
-                q_z = Number.Zero;
+                q_z = Number.GetZero();
 
             ExComp p_z;
             if (z != null)
             {
                 stepStr = "\\frac{\\partial P}{\\partial " + z.ToDispString() + "}";
-                pEvalData.WorkMgr.FromFormatted("", "Find " + WorkMgr.STM + stepStr + WorkMgr.EDM);
-                lastStep = pEvalData.WorkMgr.GetLast();
+                pEvalData.GetWorkMgr().FromFormatted("", "Find " + WorkMgr.STM + stepStr + WorkMgr.EDM);
+                lastStep = pEvalData.GetWorkMgr().GetLast();
 
                 lastStep.GoDown(ref pEvalData);
                 p_z = Derivative.TakeDeriv(p, z, ref pEvalData, true, isFuncDeriv);
                 lastStep.GoUp(ref pEvalData);
 
-                lastStep.WorkHtml = WorkMgr.STM + stepStr + "=" + WorkMgr.ToDisp(p_z) + WorkMgr.EDM;
+                lastStep.SetWorkHtml(WorkMgr.STM + stepStr + "=" + WorkMgr.ToDisp(p_z) + WorkMgr.EDM);
             }
             else
-                p_z = Number.Zero;
+                p_z = Number.GetZero();
 
             ExComp r_x;
             if (z != null)
             {
                 stepStr = "\\frac{\\partial R}{\\partial " + x.ToDispString() + "}";
-                pEvalData.WorkMgr.FromFormatted("", "Find " + WorkMgr.STM + stepStr + WorkMgr.EDM);
-                lastStep = pEvalData.WorkMgr.GetLast();
+                pEvalData.GetWorkMgr().FromFormatted("", "Find " + WorkMgr.STM + stepStr + WorkMgr.EDM);
+                lastStep = pEvalData.GetWorkMgr().GetLast();
 
                 lastStep.GoDown(ref pEvalData);
                 r_x = Derivative.TakeDeriv(r, x, ref pEvalData, true, isFuncDeriv);
                 lastStep.GoUp(ref pEvalData);
 
-                lastStep.WorkHtml = WorkMgr.STM + stepStr + "=" + WorkMgr.ToDisp(r_x) + WorkMgr.EDM;
+                lastStep.SetWorkHtml(WorkMgr.STM + stepStr + "=" + WorkMgr.ToDisp(r_x) + WorkMgr.EDM);
             }
             else
-                r_x = Number.Zero;
+                r_x = Number.GetZero();
 
             stepStr = "\\frac{\\partial Q}{\\partial " + x.ToDispString() + "}";
-            pEvalData.WorkMgr.FromFormatted("", "Find " + WorkMgr.STM + stepStr + WorkMgr.EDM);
-            lastStep = pEvalData.WorkMgr.GetLast();
+            pEvalData.GetWorkMgr().FromFormatted("", "Find " + WorkMgr.STM + stepStr + WorkMgr.EDM);
+            lastStep = pEvalData.GetWorkMgr().GetLast();
 
             lastStep.GoDown(ref pEvalData);
             ExComp q_x = Derivative.TakeDeriv(q, x, ref pEvalData, true, isFuncDeriv);
             lastStep.GoUp(ref pEvalData);
 
-            lastStep.WorkHtml = WorkMgr.STM + stepStr + "=" + WorkMgr.ToDisp(q_x) + WorkMgr.EDM;
+            lastStep.SetWorkHtml(WorkMgr.STM + stepStr + "=" + WorkMgr.ToDisp(q_x) + WorkMgr.EDM);
 
             stepStr = "\\frac{\\partial P}{\\partial " + y.ToDispString() + "}";
-            pEvalData.WorkMgr.FromFormatted("", "Find " + WorkMgr.STM + stepStr + WorkMgr.EDM);
-            lastStep = pEvalData.WorkMgr.GetLast();
+            pEvalData.GetWorkMgr().FromFormatted("", "Find " + WorkMgr.STM + stepStr + WorkMgr.EDM);
+            lastStep = pEvalData.GetWorkMgr().GetLast();
 
             lastStep.GoDown(ref pEvalData);
             ExComp p_y = Derivative.TakeDeriv(p, y, ref pEvalData, true, isFuncDeriv);
             lastStep.GoUp(ref pEvalData);
 
-            lastStep.WorkHtml = WorkMgr.STM + stepStr + "=" + WorkMgr.ToDisp(p_y) + WorkMgr.EDM;
+            lastStep.SetWorkHtml(WorkMgr.STM + stepStr + "=" + WorkMgr.ToDisp(p_y) + WorkMgr.EDM);
 
             ExVector vec = new ExVector(
                 SubOp.StaticCombine(r_y, q_z),
                 SubOp.StaticCombine(p_z, r_x),
                 SubOp.StaticCombine(q_x, p_y));
 
-            pEvalData.WorkMgr.FromSides(this, vec);
+            pEvalData.GetWorkMgr().FromSides(this, vec);
 
             return vec;
         }

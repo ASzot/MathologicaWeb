@@ -33,7 +33,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         public override ExComp CloneEx()
         {
-            Limit lim = new Limit(InnerTerm);
+            Limit lim = new Limit(GetInnerTerm());
             lim._reducedInner = this._reducedInner == null ? null : this._reducedInner.CloneEx();
             lim._valTo = this._valTo == null ? null : this._valTo.CloneEx();
             lim._varFor = this._varFor == null ? null : (AlgebraComp)this._varFor.CloneEx();
@@ -60,21 +60,21 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (_evalFail)
                 return this;
 
-            _thisDispStr = pEvalData.WorkMgr.AllowWork ? this.FinalToDispStr() : "";
+            _thisDispStr = pEvalData.GetWorkMgr().AllowWork ? this.FinalToDispStr() : "";
             _limStr = "\\lim_(" + _varFor.ToAsciiString() + "\\to" + _valTo.ToAsciiString() + ")";
 
-            int stepCount = pEvalData.WorkMgr.WorkSteps.Count;
+            int stepCount = pEvalData.GetWorkMgr().GetWorkSteps().Count;
 
             // Is the point defined?
             if (_reducedInner == null)
-                _reducedInner = TermType.SimplifyTermType.BasicSimplify(InnerTerm, ref pEvalData, false);
+                _reducedInner = TermType.SimplifyTermType.BasicSimplify(GetInnerTerm(), ref pEvalData, false);
 
             AlgebraTerm reduced = _reducedInner.ToAlgTerm();
             if (!reduced.Contains(_varFor))
                 return reduced;
 
             bool infEval = false;
-            if (Number.NegInfinity.IsEqualTo(_valTo) || Number.PosInfinity.IsEqualTo(_valTo))
+            if (Number.GetNegInfinity().IsEqualTo(_valTo) || Number.GetPosInfinity().IsEqualTo(_valTo))
             {
                 PolynomialExt poly = new PolynomialExt();
                 ExComp harshSimp = Simplifier.HarshSimplify(reduced.CloneEx().ToAlgTerm(), ref pEvalData);
@@ -97,7 +97,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                         limStr += "+";
                 }
 
-                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + limStr + WorkMgr.EDM, "Split the limit up and evaluate each part independently.");
+                pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + limStr + WorkMgr.EDM, "Split the limit up and evaluate each part independently.");
             }
 
             ExComp overall = null;
@@ -121,7 +121,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (overall is Limit)
             {
                 _evalFail = true;
-                pEvalData.WorkMgr.PopStepsCount(pEvalData.WorkMgr.WorkSteps.Count - stepCount);
+                pEvalData.GetWorkMgr().PopStepsCount(pEvalData.GetWorkMgr().GetWorkSteps().Count - stepCount);
             }
 
             return overall;
@@ -132,12 +132,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (!eval.Contains(_varFor))
                 return eval;
 
-            int stepCount = pEvalData.WorkMgr.WorkSteps.Count;
+            int stepCount = pEvalData.GetWorkMgr().GetWorkSteps().Count;
 
             ExComp attempt = EvaluateInfinity(eval, ref pEvalData);
             if (attempt == null)
             {
-                pEvalData.WorkMgr.PopStepsCount(pEvalData.WorkMgr.WorkSteps.Count - stepCount);
+                pEvalData.GetWorkMgr().PopStepsCount(pEvalData.GetWorkMgr().GetWorkSteps().Count - stepCount);
             }
 
             if (attempt == null)
@@ -147,18 +147,18 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             if (attempt == null)
             {
-                int preHopitalsRuleStepCount = pEvalData.WorkMgr.WorkSteps.Count;
+                int preHopitalsRuleStepCount = pEvalData.GetWorkMgr().GetWorkSteps().Count;
                 attempt = AttemptLeHopitals(eval, ref pEvalData);
 
                 if (attempt == null)
                 {
                     _leHopitalCount = 0;
-                    pEvalData.WorkMgr.PopStepsCount(pEvalData.WorkMgr.WorkSteps.Count - preHopitalsRuleStepCount);
+                    pEvalData.GetWorkMgr().PopStepsCount(pEvalData.GetWorkMgr().GetWorkSteps().Count - preHopitalsRuleStepCount);
                     return attempt;
                 }
             }
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + _thisDispStr + "={0}" + WorkMgr.EDM, attempt);
+            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + _thisDispStr + "={0}" + WorkMgr.EDM, attempt);
 
             pEvalData.AttemptSetInputType(TermType.InputType.Limits);
 
@@ -173,7 +173,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             ExComp plugIn = PlugIn(eval, ref pEvalData);
             if (plugIn != null)
             {
-                pEvalData.WorkMgr.FromFormatted("`" + _thisDispStr + "={0}`", plugIn);
+                pEvalData.GetWorkMgr().FromFormatted("`" + _thisDispStr + "={0}`", plugIn);
 
                 pEvalData.AttemptSetInputType(TermType.InputType.Limits);
                 return plugIn;
@@ -182,7 +182,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             ExComp attempt = EvalSpecialFunc(eval);
             if (attempt != null)
             {
-                pEvalData.WorkMgr.FromFormatted("`" + _thisDispStr + "={0}`", attempt);
+                pEvalData.GetWorkMgr().FromFormatted("`" + _thisDispStr + "={0}`", attempt);
 
                 pEvalData.AttemptSetInputType(TermType.InputType.Limits);
                 return attempt;
@@ -191,13 +191,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (CheckForLimitDivergence(eval, ref pEvalData))
             {
                 pEvalData.AddMsg("Limit Diverges");
-                return Number.Undefined;
+                return Number.GetUndefined();
             }
 
             attempt = TryRadicalConjugate(eval, ref pEvalData);
             if (attempt != null)
             {
-                pEvalData.WorkMgr.FromFormatted("`" + _thisDispStr + "={0}`", attempt);
+                pEvalData.GetWorkMgr().FromFormatted("`" + _thisDispStr + "={0}`", attempt);
 
                 pEvalData.AttemptSetInputType(TermType.InputType.Limits);
                 return attempt;
@@ -207,7 +207,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             if (attempt != null)
             {
-                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + _thisDispStr + "={0}" + WorkMgr.EDM, attempt);
+                pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + _thisDispStr + "={0}" + WorkMgr.EDM, attempt);
 
                 pEvalData.AttemptSetInputType(TermType.InputType.LeHopital);
                 return attempt;
@@ -218,7 +218,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         private ExComp EvalInfinitySpecialFunc(ExComp ex, ref TermType.EvalData pEvalData)
         {
-            bool posInfinity = Number.PosInfinity.IsEqualTo(_valTo);
+            bool posInfinity = Number.GetPosInfinity().IsEqualTo(_valTo);
 
             if (ex is AlgebraTerm)
                 ex = (ex as AlgebraTerm).RemoveRedundancies();
@@ -226,18 +226,18 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (ex is PowerFunction)
             {
                 PowerFunction pf = ex as PowerFunction;
-                ExComp baseVal = pf.Base is Constant ? (pf.Base as Constant).Value : pf.Base;
+                ExComp baseVal = pf.GetBase() is Constant ? (pf.GetBase() as Constant).GetValue() : pf.GetBase();
                 if (baseVal is Number && !(baseVal as Number).HasImaginaryComp())
                 {
                     Number baseNum = baseVal as Number;
-                    if (Number.One.IsEqualTo(baseNum))
-                        return Number.One;
+                    if (Number.GetOne().IsEqualTo(baseNum))
+                        return Number.GetOne();
                     bool ltOne = Number.OpLT(baseNum, 1.0);
 
                     // Get the coefficient of the power.
-                    AlgebraTerm power = pf.Power.ToAlgTerm();
+                    AlgebraTerm power = pf.GetPower().ToAlgTerm();
                     List<ExComp> powers = power.GetPowersOfVar(_varFor);
-                    if (powers.Count != 1 || !powers[0].ToAlgTerm().RemoveRedundancies().IsEqualTo(Number.One))
+                    if (powers.Count != 1 || !powers[0].ToAlgTerm().RemoveRedundancies().IsEqualTo(Number.GetOne()))
                         return null;
 
                     ExComp powCoeff = power.GetCoeffOfVar(_varFor);
@@ -258,15 +258,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                         posInfinity = !posInfinity;
 
                     if (posInfinity)
-                        result = ltOne ? Number.Zero : Number.PosInfinity;
+                        result = ltOne ? Number.GetZero() : Number.GetPosInfinity();
                     else
-                        result = ltOne ? Number.PosInfinity : Number.Zero;
+                        result = ltOne ? Number.GetPosInfinity() : Number.GetZero();
 
                     return result;
                 }
                 else if (baseVal is AlgebraTerm || baseVal is AlgebraComp)
                 {
-                    ExComp flippedPow = DivOp.StaticCombine(Number.One, pf.Power);
+                    ExComp flippedPow = DivOp.StaticCombine(Number.GetOne(), pf.GetPower());
                     if (!(flippedPow is Number))
                         return null;
 
@@ -275,7 +275,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     if (!rootIndex.IsRealInteger())
                         return null;
 
-                    int iRootIndex = (int)(rootIndex.RealComp);
+                    int iRootIndex = (int)(rootIndex.GetRealComp());
 
                     AlgebraTerm baseTerm = baseVal.ToAlgTerm();
                     List<ExComp> varPows = baseTerm.GetPowersOfVar(_varFor);
@@ -299,20 +299,20 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     bool isEven = iRootIndex % 2 == 0;
 
                     if (posInfinity && isEven)
-                        return Number.PosInfinity;
+                        return Number.GetPosInfinity();
                     else if (posInfinity && !isEven)
-                        return Number.PosInfinity;
+                        return Number.GetPosInfinity();
                     else if (!posInfinity && isEven)
-                        return Number.Undefined;
+                        return Number.GetUndefined();
                     else if (!posInfinity && !isEven)
-                        return Number.NegInfinity;
+                        return Number.GetNegInfinity();
                 }
             }
             else if (ex is LogFunction)
             {
-                AlgebraTerm innerTerm = (ex as LogFunction).InnerTerm;
+                AlgebraTerm innerTerm = (ex as LogFunction).GetInnerTerm();
                 List<ExComp> powers = innerTerm.GetPowersOfVar(_varFor);
-                if (powers.Count != 1 || !Number.One.IsEqualTo(powers[0]))
+                if (powers.Count != 1 || !Number.GetOne().IsEqualTo(powers[0]))
                     return null;
                 ExComp coeff = innerTerm.GetCoeffOfVar(_varFor);
 
@@ -326,17 +326,17 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 bool isNeg = Number.OpLT(nCoeff, 0.0);
 
                 if (posInfinity && isNeg)
-                    return Number.Undefined;
+                    return Number.GetUndefined();
                 else if (posInfinity && !isNeg)
-                    return Number.PosInfinity;
+                    return Number.GetPosInfinity();
                 else if (!posInfinity && isNeg)
-                    return Number.PosInfinity;
+                    return Number.GetPosInfinity();
                 else
-                    return Number.Undefined;
+                    return Number.GetUndefined();
             }
             else if (ex is TrigFunction)
             {
-                return Number.Undefined;
+                return Number.GetUndefined();
             }
             else if (ex is AlgebraTerm && !(ex is AlgebraFunction))
             {
@@ -356,7 +356,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     if (constTo.Length == 1 && constTo[0] is Number && !(constTo[0] as Number).HasImaginaryComp())
                         coeff = constTo[0] as Number;
                     else if (constTo.Length == 0)
-                        coeff = Number.One;
+                        coeff = Number.GetOne();
                     else if (constTo.Length == 1)
                     {
                         ExComp harshEvalAtmpt = Simplifier.HarshSimplify(constTo[0].ToAlgTerm(), ref pEvalData, false);
@@ -370,7 +370,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     List<Number> imaginaryNumbers = new List<Number>();
                     foreach (ExComp exConst in constTo)
                     {
-                        if (exConst is Number && (exConst as Number).RealComp == 0.0 && (exConst as Number).ImagComp != 0.0)
+                        if (exConst is Number && (exConst as Number).GetRealComp() == 0.0 && (exConst as Number).GetImagComp() != 0.0)
                         {
                             imaginaryNumbers.Add(exConst as Number);
                             constTo.RemoveEx(exConst);
@@ -383,7 +383,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                         if (imaginaryNumbers.Count != 0)
                         {
                             PowerFunction innerPf = varTo[0] as PowerFunction;
-                            ExComp flipped = DivOp.StaticCombine(Number.One, innerPf.Power.CloneEx());
+                            ExComp flipped = DivOp.StaticCombine(Number.GetOne(), innerPf.GetPower().CloneEx());
 
                             if (flipped is Number)
                             {
@@ -395,7 +395,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
                                 foreach (ExComp raisedEx in raised)
                                 {
-                                    innerPf = new PowerFunction(MulOp.StaticCombine(innerPf.Base, raisedEx), innerPf.Power);
+                                    innerPf = new PowerFunction(MulOp.StaticCombine(innerPf.GetBase(), raisedEx), innerPf.GetPower());
                                 }
 
                                 varTo[0] = innerPf;
@@ -425,15 +425,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         {
             if (ex is TrigFunction)
             {
-                return Number.Undefined;
+                return Number.GetUndefined();
             }
             else if (ex is LogFunction)
             {
                 LogFunction lf = ex as LogFunction;
-                if (Number.Zero.IsEqualTo(_valTo))
-                    return Number.NegInfinity;
-                if (Number.PosInfinity.IsEqualTo(_valTo))
-                    return Number.PosInfinity;
+                if (Number.GetZero().IsEqualTo(_valTo))
+                    return Number.GetNegInfinity();
+                if (Number.GetPosInfinity().IsEqualTo(_valTo))
+                    return Number.GetPosInfinity();
             }
             else if (ex is AlgebraTerm)
             {
@@ -456,7 +456,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                         return null;
 
                     List<AlgebraGroup> constGps = denTerm.GetGroupsConstantTo(_varFor);
-                    ExComp constEx = Number.Zero;
+                    ExComp constEx = Number.GetZero();
                     foreach (AlgebraGroup constGp in constGps)
                     {
                         constEx = AddOp.StaticCombine(constEx, constGp.ToTerm());
@@ -468,13 +468,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     if (!constEx.IsEqualTo(MulOp.Negate(_valTo)))
                         return null;
 
-                    if (varGps[0].GroupCount > 1)
+                    if (varGps[0].GetGroupCount() > 1)
                     {
                         // There might be a coefficient.
-                        if (varGps[0].GroupCount != 2)
+                        if (varGps[0].GetGroupCount() != 2)
                             return null;
-                        Number coeff = varGps[0][0] is Number ? varGps[0][0] as Number : varGps[0][1] as Number;
-                        den = varGps[0][0] is Number ? varGps[0][1] : varGps[0][0];
+                        Number coeff = varGps[0].GetItem(0) is Number ? varGps[0].GetItem(0) as Number : varGps[0].GetItem(1) as Number;
+                        den = varGps[0].GetItem(0) is Number ? varGps[0].GetItem(1) : varGps[0].GetItem(0);
 
                         if (coeff.HasImaginaryComp())
                             return null;
@@ -485,29 +485,29 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     else
                         den = varGps[0].ToTerm().RemoveRedundancies();
                 }
-                else if (!Number.Zero.IsEqualTo(_valTo))
+                else if (!Number.GetZero().IsEqualTo(_valTo))
                     return null;
 
                 if (den is AlgebraComp)
-                    den = new PowerFunction(den, Number.One);
+                    den = new PowerFunction(den, Number.GetOne());
 
                 if (!(den is PowerFunction))
                     return null;
 
                 PowerFunction pf = den as PowerFunction;
-                if (!pf.Base.IsEqualTo(_varFor) || !(pf.Power is Number))
+                if (!pf.GetBase().IsEqualTo(_varFor) || !(pf.GetPower() is Number))
                     return null;
 
-                Number powNum = pf.Power as Number;
+                Number powNum = pf.GetPower() as Number;
                 if (!powNum.IsRealInteger())
                     return null;
 
-                int iPow = (int)powNum.RealComp;
+                int iPow = (int)powNum.GetRealComp();
 
                 if (iPow % 2 != 0)
-                    return Number.Undefined;
+                    return Number.GetUndefined();
                 else
-                    return isNeg ? Number.NegInfinity : Number.PosInfinity;
+                    return isNeg ? Number.GetNegInfinity() : Number.GetPosInfinity();
             }
 
             return null;
@@ -536,13 +536,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             string limStr = "\\lim_{" + _varFor.ToDispString() + " \\to " + _valTo.ToAlgTerm().FinalToDispStr() + "}";
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\frac{" + limStr + "(" + numStr + ")}{" + limStr + "(" + denStr + ")}" + WorkMgr.EDM,
+            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "\\frac{" + limStr + "(" + numStr + ")}{" + limStr + "(" + denStr + ")}" + WorkMgr.EDM,
                 "Check if in the indeterminate form.");
 
             // Is this an indefinite form.
-            pEvalData.WorkMgr.FromFormatted("",
+            pEvalData.GetWorkMgr().FromFormatted("",
                 "Take the limit of the numerator.");
-            WorkStep last = pEvalData.WorkMgr.GetLast();
+            WorkStep last = pEvalData.GetWorkMgr().GetLast();
 
             last.GoDown(ref pEvalData);
             ExComp numEval = TakeLim(num, _varFor, _valTo, ref pEvalData, _leHopitalCount);
@@ -551,11 +551,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             last.GoUp(ref pEvalData);
             string numEvalStr = WorkMgr.ToDisp(numEval);
 
-            last.WorkHtml = WorkMgr.STM + limStr + "(" + numStr + ")=" + numEvalStr + WorkMgr.EDM;
+            last.SetWorkHtml(WorkMgr.STM + limStr + "(" + numStr + ")=" + numEvalStr + WorkMgr.EDM);
 
-            pEvalData.WorkMgr.FromFormatted("",
+            pEvalData.GetWorkMgr().FromFormatted("",
                 "Take the limit of the denominator");
-            last = pEvalData.WorkMgr.GetLast();
+            last = pEvalData.GetWorkMgr().GetLast();
 
             last.GoDown(ref pEvalData);
             ExComp denEval = TakeLim(den, _varFor, _valTo, ref pEvalData, _leHopitalCount);
@@ -564,45 +564,45 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             last.GoUp(ref pEvalData);
             string denEvalStr = WorkMgr.ToDisp(denEval);
 
-            last.WorkHtml = WorkMgr.STM + limStr + "(" + denStr + ")=" + denEvalStr + WorkMgr.EDM;
+            last.SetWorkHtml(WorkMgr.STM + limStr + "(" + denStr + ")=" + denEvalStr + WorkMgr.EDM);
 
             // Check the conditions for applying L'Hopitals rule.
-            if (!Number.Zero.IsEqualTo(numEval) && !Number.NegInfinity.IsEqualTo(numEval) && !Number.PosInfinity.IsEqualTo(numEval))
+            if (!Number.GetZero().IsEqualTo(numEval) && !Number.GetNegInfinity().IsEqualTo(numEval) && !Number.GetPosInfinity().IsEqualTo(numEval))
                 return null;
 
             if (!numEval.IsEqualTo(denEval))
                 return null;
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + limStr + "\\frac{" + numStr + "}{" + denStr +
+            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + limStr + "\\frac{" + numStr + "}{" + denStr +
                 "}=\\frac{" + numEvalStr + "}{" + denEvalStr + "}" + WorkMgr.EDM,
                 "The limit is in the form to apply L'Hospital's Rule.");
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + limStr + "(\\frac{" + numStr + "}{" + denStr +
+            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + limStr + "(\\frac{" + numStr + "}{" + denStr +
                 "})=\\frac{\\frac{d}{d" + _varFor.ToDispString() + "}[" + numStr + "]}{\\frac{d}{d" + _varFor.ToDispString() + "}[" + denStr + "]}" + WorkMgr.EDM,
                 "Apply L'Hospital's rule.");
 
             // This is in indefinite form.
-            pEvalData.WorkMgr.FromFormatted("", "Take the derivative of the numerator");
-            last = pEvalData.WorkMgr.GetLast();
+            pEvalData.GetWorkMgr().FromFormatted("", "Take the derivative of the numerator");
+            last = pEvalData.GetWorkMgr().GetLast();
 
             last.GoDown(ref pEvalData);
             ExComp numDeriv = Derivative.TakeDeriv(num, _varFor, ref pEvalData);
             last.GoUp(ref pEvalData);
 
-            last.WorkHtml = WorkMgr.STM + "\\frac{d}{d" + _varFor.ToDispString() + "}[" + numStr + "]=" + WorkMgr.ToDisp(numDeriv) + WorkMgr.EDM;
+            last.SetWorkHtml(WorkMgr.STM + "\\frac{d}{d" + _varFor.ToDispString() + "}[" + numStr + "]=" + WorkMgr.ToDisp(numDeriv) + WorkMgr.EDM);
 
-            pEvalData.WorkMgr.FromFormatted("", "Take the derivative of the denominator");
-            last = pEvalData.WorkMgr.GetLast();
+            pEvalData.GetWorkMgr().FromFormatted("", "Take the derivative of the denominator");
+            last = pEvalData.GetWorkMgr().GetLast();
 
             last.GoDown(ref pEvalData);
             ExComp denDeriv = Derivative.TakeDeriv(den, _varFor, ref pEvalData);
             last.GoUp(ref pEvalData);
 
-            last.WorkHtml = WorkMgr.STM + "\\frac{d}{d" + _varFor.ToDispString() + "}[" + denStr + "]=" + WorkMgr.ToDisp(denDeriv) + WorkMgr.EDM;
+            last.SetWorkHtml(WorkMgr.STM + "\\frac{d}{d" + _varFor.ToDispString() + "}[" + denStr + "]=" + WorkMgr.ToDisp(denDeriv) + WorkMgr.EDM);
 
             ExComp frac = DivOp.StaticCombine(numDeriv, denDeriv);
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + limStr + "(\\frac{" + WorkMgr.ToDisp(numDeriv) + "}{" + WorkMgr.ToDisp(denDeriv) + "})" + WorkMgr.EDM,
+            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + limStr + "(\\frac{" + WorkMgr.ToDisp(numDeriv) + "}{" + WorkMgr.ToDisp(denDeriv) + "})" + WorkMgr.EDM,
                 "Divide the derivatives.");
 
             ExComp evalLim = TakeLim(frac, _varFor, _valTo, ref pEvalData, _leHopitalCount);
@@ -614,17 +614,17 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         private AlgebraTerm ConvertAbsVal(AlgebraTerm term, Number valApproaching, bool pos, ref bool changed)
         {
-            for (int i = 0; i < term.TermCount; ++i)
+            for (int i = 0; i < term.GetTermCount(); ++i)
             {
                 if (term[i] is AbsValFunction)
                 {
                     AbsValFunction absValFunc = term[i] as AbsValFunction;
                     ExComp compareEx = SubOp.StaticCombine(_varFor, valApproaching);
 
-                    if (absValFunc.InnerEx.IsEqualTo(compareEx))
+                    if (absValFunc.GetInnerEx().IsEqualTo(compareEx))
                     {
                         changed = true;
-                        term[i] = pos ? absValFunc.InnerTerm : MulOp.Negate(absValFunc.InnerTerm);
+                        term[i] = pos ? absValFunc.GetInnerTerm() : MulOp.Negate(absValFunc.GetInnerTerm());
                     }
                 }
                 if (term[i] is AlgebraTerm)
@@ -655,12 +655,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             string innerStr = WorkMgr.ToDisp(ex);
 
-            pEvalData.WorkMgr.FromFormatted("",
+            pEvalData.GetWorkMgr().FromFormatted("",
                 "Take the limit from the positive direction.");
-            WorkStep lastStep = pEvalData.WorkMgr.GetLast();
+            WorkStep lastStep = pEvalData.GetWorkMgr().GetLast();
 
             lastStep.GoDown(ref pEvalData);
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "lim_{" + _varFor.ToDispString() + "=" + nValTo.ToDispString() + "^{+}}" +
+            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "lim_{" + _varFor.ToDispString() + "=" + nValTo.ToDispString() + "^{+}}" +
                 "(" + innerStr + ")=lim_{" + _varFor.ToDispString() + "=" + nValTo.ToDispString() + "}(" + WorkMgr.ToDisp(posSimp) + ")" + WorkMgr.EDM,
                 "As the limit approaches from the positive direction.");
             ExComp posEval = Limit.TakeLim(posSimp.CloneEx(), _varFor, nValTo, ref pEvalData);
@@ -670,15 +670,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 return false;
             lastStep.GoUp(ref pEvalData);
 
-            lastStep.WorkHtml = WorkMgr.STM + "lim_{" + _varFor.ToDispString() + "=" + nValTo.ToDispString() + "^{+}}" +
-                "(" + innerStr + ")=" + WorkMgr.ToDisp(posEval) + WorkMgr.EDM;
+            lastStep.SetWorkHtml(WorkMgr.STM + "lim_{" + _varFor.ToDispString() + "=" + nValTo.ToDispString() + "^{+}}" +
+                                 "(" + innerStr + ")=" + WorkMgr.ToDisp(posEval) + WorkMgr.EDM);
 
-            pEvalData.WorkMgr.FromFormatted("",
+            pEvalData.GetWorkMgr().FromFormatted("",
                 "Take the limit from the negative direction.");
-            lastStep = pEvalData.WorkMgr.GetLast();
+            lastStep = pEvalData.GetWorkMgr().GetLast();
 
             lastStep.GoDown(ref pEvalData);
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "lim_{" + _varFor.ToDispString() + "=" + nValTo.ToDispString() + "^{-}}" +
+            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "lim_{" + _varFor.ToDispString() + "=" + nValTo.ToDispString() + "^{-}}" +
                 "(" + innerStr + ")=lim_{" + _varFor.ToDispString() + "=" + nValTo.ToDispString() + "}(" + WorkMgr.ToDisp(negSimp) + ")" + WorkMgr.EDM,
                 "As the limit approaches from the negative direction.");
             ExComp negEval = Limit.TakeLim(negSimp.CloneEx(), _varFor, nValTo, ref pEvalData);
@@ -688,10 +688,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 return false;
             lastStep.GoUp(ref pEvalData);
 
-            lastStep.WorkHtml = WorkMgr.STM + "lim_{" + _varFor.ToDispString() + "=" + nValTo.ToDispString() + "^{-}}" +
-                "(" + innerStr + ")=" + WorkMgr.ToDisp(negEval) + WorkMgr.EDM;
+            lastStep.SetWorkHtml(WorkMgr.STM + "lim_{" + _varFor.ToDispString() + "=" + nValTo.ToDispString() + "^{-}}" +
+                                 "(" + innerStr + ")=" + WorkMgr.ToDisp(negEval) + WorkMgr.EDM);
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "lim_{" + _varFor.ToDispString() + "=" + nValTo.ToDispString() + "^{-}}(" +
+            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "lim_{" + _varFor.ToDispString() + "=" + nValTo.ToDispString() + "^{-}}(" +
                 innerStr + ") \\ne lim_{" + _varFor.ToDispString() + "=" + nValTo.ToDispString() + "^{+}}(" + innerStr + ")" + WorkMgr.EDM,
                 "The limit is not equal from both directions and therefore is divergent.");
 
@@ -700,7 +700,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         public override string FinalToAsciiString()
         {
-            return "\\lim_(" + _varFor.ToAsciiString() + "\\to" + _valTo.ToAsciiString() + ")(" + InnerTerm.FinalToAsciiString() + ")";
+            return "\\lim_(" + _varFor.ToAsciiString() + "\\to" + _valTo.ToAsciiString() + ")(" + GetInnerTerm().FinalToAsciiString() + ")";
         }
 
         public override string FinalToDispStr()
@@ -712,7 +712,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         public override string FinalToTexString()
         {
-            return "\\lim_(" + _varFor.ToTexString() + "\\to" + _valTo.ToTexString() + ")(" + InnerTerm.FinalToTexString() + ")";
+            return "\\lim_(" + _varFor.ToTexString() + "\\to" + _valTo.ToTexString() + ")(" + GetInnerTerm().FinalToTexString() + ")";
         }
 
         public override bool IsEqualTo(ExComp ex)
@@ -720,7 +720,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (ex is Limit)
             {
                 Limit lim = ex as Limit;
-                return (this.InnerEx.IsEqualTo(lim.InnerEx) && this._varFor.IsEqualTo(lim._varFor) && this._valTo.IsEqualTo(lim._valTo));
+                return (this.GetInnerEx().IsEqualTo(lim.GetInnerEx()) && this._varFor.IsEqualTo(lim._varFor) && this._valTo.IsEqualTo(lim._valTo));
             }
 
             return false;
@@ -728,7 +728,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         public override string ToAsciiString()
         {
-            return "\\lim_(" + _varFor.ToAsciiString() + "\\to" + _valTo.ToAsciiString() + ")(" + InnerTerm.ToAsciiString() + ")";
+            return "\\lim_(" + _varFor.ToAsciiString() + "\\to" + _valTo.ToAsciiString() + ")(" + GetInnerTerm().ToAsciiString() + ")";
         }
 
         public override string ToJavaScriptString(bool useRad)
@@ -738,12 +738,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         public override string ToString()
         {
-            return "\\lim_(" + _varFor.ToString() + "\\to" + _valTo.ToString() + ")(" + InnerTerm.ToString() + ")";
+            return "\\lim_(" + _varFor.ToString() + "\\to" + _valTo.ToString() + ")(" + GetInnerTerm().ToString() + ")";
         }
 
         public override string ToTexString()
         {
-            return "\\lim_(" + _varFor.ToTexString() + "\\to" + _valTo.ToTexString() + ")(" + InnerTerm.ToTexString() + ")";
+            return "\\lim_(" + _varFor.ToTexString() + "\\to" + _valTo.ToTexString() + ")(" + GetInnerTerm().ToTexString() + ")";
         }
 
         protected override AlgebraTerm CreateInstance(params ExComp[] args)
@@ -765,26 +765,26 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         {
             if (term is PowerFunction)
             {
-                if ((term as PowerFunction).Base.IsEqualTo(varFor))
+                if ((term as PowerFunction).GetBase().IsEqualTo(varFor))
                     return DivOp.StaticCombine(term, dividend);
 
                 PowerFunction pf = term as PowerFunction;
-                ExComp root = DivOp.StaticCombine(Number.One, pf.Power);
+                ExComp root = DivOp.StaticCombine(Number.GetOne(), pf.GetPower());
 
-                return new PowerFunction(ComponentWiseDiv((term as PowerFunction).Base.ToAlgTerm(),
-                    PowOp.StaticCombine(dividend, root), varFor), pf.Power);
+                return new PowerFunction(ComponentWiseDiv((term as PowerFunction).GetBase().ToAlgTerm(),
+                    PowOp.StaticCombine(dividend, root), varFor), pf.GetPower());
             }
 
-            if (term.TermCount == 1)
+            if (term.GetTermCount() == 1)
             {
                 ExComp singular = term[0];
                 if (singular is PowerFunction)
                 {
-                    if ((term as PowerFunction).Base.IsEqualTo(varFor))
+                    if ((term as PowerFunction).GetBase().IsEqualTo(varFor))
                         return DivOp.StaticCombine(term, dividend);
 
-                    return ComponentWiseDiv((term as PowerFunction).Base.ToAlgTerm(),
-                        PowOp.StaticCombine(dividend, (term as PowerFunction).Power), varFor);
+                    return ComponentWiseDiv((term as PowerFunction).GetBase().ToAlgTerm(),
+                        PowOp.StaticCombine(dividend, (term as PowerFunction).GetPower()), varFor);
                 }
                 else
                     return DivOp.StaticCombine(singular, dividend);
@@ -822,20 +822,20 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         private ExComp EvaluatePoly(PolynomialExt poly, ref TermType.EvalData pEvalData)
         {
-            bool evenFunc = poly.MaxPow % 2 == 0;
-            ExComp leadingCoeffEx = poly.LeadingCoeff;
+            bool evenFunc = poly.GetMaxPow() % 2 == 0;
+            ExComp leadingCoeffEx = poly.GetLeadingCoeff();
             if (!(leadingCoeffEx is Number))
                 return null;
             bool neg = Number.OpLT((leadingCoeffEx as Number), 0.0);
 
             ExComp infRet = null;
-            if (Number.PosInfinity.IsEqualTo(_valTo))
+            if (Number.GetPosInfinity().IsEqualTo(_valTo))
             {
-                infRet = Number.PosInfinity;
+                infRet = Number.GetPosInfinity();
             }
-            else if (Number.NegInfinity.IsEqualTo(_valTo))
+            else if (Number.GetNegInfinity().IsEqualTo(_valTo))
             {
-                infRet = evenFunc ? Number.PosInfinity : Number.NegInfinity;
+                infRet = evenFunc ? Number.GetPosInfinity() : Number.GetNegInfinity();
             }
 
             if (infRet == null)
@@ -849,7 +849,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 explainStr += " However the leading coefficient of the polynomial is negative so the function ends are reflected resulting in the limit becoming `" + infRet.ToDispString() + "`.";
             }
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + this.FinalToDispStr() + "=" + WorkMgr.ToDisp(infRet) + WorkMgr.EDM, explainStr);
+            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + this.FinalToDispStr() + "=" + WorkMgr.ToDisp(infRet) + WorkMgr.EDM, explainStr);
 
             return infRet;
         }
@@ -876,34 +876,34 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         {
             if (term is PowerFunction)
             {
-                ExComp pow = Simplifier.HarshSimplify((term as PowerFunction).Power.ToAlgTerm(), ref pEvalData, false);
+                ExComp pow = Simplifier.HarshSimplify((term as PowerFunction).GetPower().ToAlgTerm(), ref pEvalData, false);
                 if (!(pow is Number))
                     return null;
 
                 Number nPow = pow as Number;
-                Number highestInnerPow = GetHighestPower((term as PowerFunction).Base.ToAlgTerm(), ref pEvalData);
+                Number highestInnerPow = GetHighestPower((term as PowerFunction).GetBase().ToAlgTerm(), ref pEvalData);
                 if (highestInnerPow == null)
                     return null;
 
                 return Number.OpMul(nPow, highestInnerPow);
             }
 
-            Number max = Number.Zero;
+            Number max = Number.GetZero();
 
-            for (int i = 0; i < term.TermCount; ++i)
+            for (int i = 0; i < term.GetTermCount(); ++i)
             {
-                if (term[i] is PowerFunction && (term[i] as PowerFunction).Base.IsEqualTo(_varFor))
+                if (term[i] is PowerFunction && (term[i] as PowerFunction).GetBase().IsEqualTo(_varFor))
                 {
-                    if (!((term[i] as PowerFunction).Power is Number))
+                    if (!((term[i] as PowerFunction).GetPower() is Number))
                         return null;
-                    max = Number.Maximum(max, (term[i] as PowerFunction).Power as Number);
+                    max = Number.Maximum(max, (term[i] as PowerFunction).GetPower() as Number);
                 }
                 else if (term[i] is AlgebraFunction && !(term[i] is PowerFunction))
                     return null;
                 else if (term[i] is AlgebraComp)
                 {
                     if (_varFor.IsEqualTo(term[i]))
-                        max = Number.Maximum(max, Number.One);
+                        max = Number.Maximum(max, Number.GetOne());
                     else
                         return null;
                 }
@@ -926,7 +926,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             if (evaluated != null && !Number.IsUndef(evaluated) && !(evaluated is AlgebraTerm && (evaluated as AlgebraTerm).IsUndefined()))
             {
-                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + _limStr + "{0}=" + _limStr + "{1}={2}" + WorkMgr.EDM,
+                pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + _limStr + "{0}=" + _limStr + "{1}={2}" + WorkMgr.EDM,
                     "As " + WorkMgr.STM + _varFor.ToDispString() + "=" + _valTo.ToDispString() + WorkMgr.EDM + " is defined in this function just plug in the value to evaluate the limit.",
                     ex, subbedIn, evaluated);
                 return evaluated;
@@ -939,7 +939,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (term is PowerFunction)
             {
                 PowerFunction pf = term as PowerFunction;
-                return new PowerFunction(RemoveOverVarTerms(pf.Base.ToAlgTerm()), pf.Power);
+                return new PowerFunction(RemoveOverVarTerms(pf.GetBase().ToAlgTerm()), pf.GetPower());
             }
 
             List<ExComp[]> groups = term.GetGroups();
@@ -975,7 +975,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             bool denContains = numDen[1].Contains(_varFor);
 
             if (!numContains && denContains)
-                return Number.Zero;
+                return Number.GetZero();
 
             if (numDen == null || !numContains || !denContains)
                 return null;
@@ -990,12 +990,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (denPow == null)
                 return null;
 
-            pEvalData.WorkMgr.FromFormatted("`" + _thisDispStr + "`", "The maximum power of the numerator is `" + numPow.ToDispString() + "` and the maximum power of the denominator is `" + denPow.ToDispString() + "`.");
+            pEvalData.GetWorkMgr().FromFormatted("`" + _thisDispStr + "`", "The maximum power of the numerator is `" + numPow.ToDispString() + "` and the maximum power of the denominator is `" + denPow.ToDispString() + "`.");
 
             if (Number.OpLT(numPow, denPow))
             {
-                pEvalData.WorkMgr.FromFormatted("`" + _thisDispStr + "`", "As the maximum power of the numerator is less than the maximum power of the denominator this limit evaluates to zero. This comes from `\\lim_(x\\to\\pmoo)\\frac{1}{x^k}=0`");
-                return Number.Zero;
+                pEvalData.GetWorkMgr().FromFormatted("`" + _thisDispStr + "`", "As the maximum power of the numerator is less than the maximum power of the denominator this limit evaluates to zero. This comes from `\\lim_(x\\to\\pmoo)\\frac{1}{x^k}=0`");
+                return Number.GetZero();
             }
 
             if (Number.OpGT(numPow, denPow))
@@ -1003,12 +1003,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 PolynomialExt numPoly = new PolynomialExt();
                 PolynomialExt denPoly = new PolynomialExt();
 
-                if (numPoly.Init(numDen[0]) && denPoly.Init(numDen[1]) && numPoly.LeadingCoeff is Number && denPoly.LeadingCoeff is Number)
+                if (numPoly.Init(numDen[0]) && denPoly.Init(numDen[1]) && numPoly.GetLeadingCoeff() is Number && denPoly.GetLeadingCoeff() is Number)
                 {
-                    Number numCoeff = numPoly.LeadingCoeff as Number;
-                    Number denCoeff = denPoly.LeadingCoeff as Number;
+                    Number numCoeff = numPoly.GetLeadingCoeff() as Number;
+                    Number denCoeff = denPoly.GetLeadingCoeff() as Number;
 
-                    bool powDiffEven = (numPoly.MaxPow - denPoly.MaxPow) % 2 == 0;
+                    bool powDiffEven = (numPoly.GetMaxPow() - denPoly.GetMaxPow()) % 2 == 0;
 
                     ExComp dividedCoeffEx = Number.OpDiv(numCoeff, denCoeff);
 
@@ -1016,21 +1016,21 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                         return null;
 
                     ExComp infRet = null;
-                    if (Number.PosInfinity.IsEqualTo(_valTo))
+                    if (Number.GetPosInfinity().IsEqualTo(_valTo))
                     {
-                        infRet = Number.PosInfinity;
+                        infRet = Number.GetPosInfinity();
                     }
-                    else if (Number.NegInfinity.IsEqualTo(_valTo))
+                    else if (Number.GetNegInfinity().IsEqualTo(_valTo))
                     {
-                        infRet = powDiffEven ? Number.PosInfinity : Number.NegInfinity;
+                        infRet = powDiffEven ? Number.GetPosInfinity() : Number.GetNegInfinity();
                     }
 
                     if (Number.OpLT((dividedCoeffEx as Number), 0.0))
                         infRet = MulOp.Negate(infRet);
 
-                    pEvalData.WorkMgr.FromFormatted("`" + _thisDispStr + "`",
+                    pEvalData.GetWorkMgr().FromFormatted("`" + _thisDispStr + "`",
                         "As the maximum power of the numerator is greater than the denominator, the numerator will increase at a faster rate than the denominator making the function go the an infinity." +
-                        "The difference between the maximum power of the numerator and denominator is `" + (numPoly.MaxPow - denPoly.MaxPow).ToString() + "` making the function act like an " +
+                        "The difference between the maximum power of the numerator and denominator is `" + (numPoly.GetMaxPow() - denPoly.GetMaxPow()).ToString() + "` making the function act like an " +
                         (powDiffEven ? "even" : "odd") + " function making the limit be `" + infRet.ToDispString() + "`.");
 
                     return infRet;
@@ -1039,13 +1039,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 return null;
             }
 
-            pEvalData.WorkMgr.FromFormatted("`" + _thisDispStr + "`", "The maximum power of the denominator is greater than the numerator meaning the limit will converge on a value. Use the statement `\\lim_(x\\to\\pmoo)\\frac{1}{x^k}=0` to evaluate this limit.");
+            pEvalData.GetWorkMgr().FromFormatted("`" + _thisDispStr + "`", "The maximum power of the denominator is greater than the numerator meaning the limit will converge on a value. Use the statement `\\lim_(x\\to\\pmoo)\\frac{1}{x^k}=0` to evaluate this limit.");
 
             ExComp dividend = PowOp.StaticCombine(_varFor, denPow);
             ExComp dividedNum = ComponentWiseDiv(numDen[0].CloneEx().ToAlgTerm(), dividend);
             ExComp dividedDen = ComponentWiseDiv(numDen[1].CloneEx().ToAlgTerm(), dividend);
 
-            pEvalData.WorkMgr.FromFormatted("`" + _limStr + "({0})/({1})`", "Divide all terms of the numerator and denominator by `" + dividend.ToDispString() + "` to cancel some terms to zero.", dividedNum, dividedDen);
+            pEvalData.GetWorkMgr().FromFormatted("`" + _limStr + "({0})/({1})`", "Divide all terms of the numerator and denominator by `" + dividend.ToDispString() + "` to cancel some terms to zero.", dividedNum, dividedDen);
 
             if (dividedNum == null || dividedDen == null)
                 return null;
@@ -1055,7 +1055,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             dividedNum = RemoveOverVarTerms(dividedNum.ToAlgTerm());
             dividedDen = RemoveOverVarTerms(dividedDen.ToAlgTerm());
 
-            pEvalData.WorkMgr.FromFormatted("`" + _limStr + "({0})/({1})`", "Cancel terms to zero from the statement `\\lim_(x\\to\\pmoo)(1)/(x^k)=0`", dividedNum, dividedDen);
+            pEvalData.GetWorkMgr().FromFormatted("`" + _limStr + "({0})/({1})`", "Cancel terms to zero from the statement `\\lim_(x\\to\\pmoo)(1)/(x^k)=0`", dividedNum, dividedDen);
 
             if (dividedNum is AlgebraTerm)
             {
@@ -1073,7 +1073,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (frac != null && !Number.IsUndef(frac) && !(frac is AlgebraTerm && (frac as AlgebraTerm).IsUndefined()) &&
                 !frac.ToAlgTerm().Contains(_varFor))
             {
-                pEvalData.WorkMgr.FromFormatted("`" + _limStr + "{0}`", "Simplify.", frac);
+                pEvalData.GetWorkMgr().FromFormatted("`" + _limStr + "{0}`", "Simplify.", frac);
                 return frac;
             }
 
@@ -1106,13 +1106,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             AlgebraTerm conjugate = new AlgebraTerm(numGp0, new AddOp(), numGp1);
 
-            pEvalData.WorkMgr.FromFormatted("`" + _limStr + "({0})/({1})*({2})/({2})`", numDen[0], numDen[1], conjugate, "Multiply the top and bottom by the conjugate.");
+            pEvalData.GetWorkMgr().FromFormatted("`" + _limStr + "({0})/({1})*({2})/({2})`", numDen[0], numDen[1], conjugate, "Multiply the top and bottom by the conjugate.");
 
             ExComp mulNum = MulOp.StaticCombine(numDen[0], conjugate);
             ExComp mulDen = MulOp.StaticCombine(numDen[1], conjugate);
 
             ExComp conjugateDiv = DivOp.StaticCombine(mulNum, mulDen);
-            pEvalData.WorkMgr.FromFormatted("`" + _limStr + "{0}`", "Simplify.", conjugateDiv);
+            pEvalData.GetWorkMgr().FromFormatted("`" + _limStr + "{0}`", "Simplify.", conjugateDiv);
             ExComp plugIn = PlugIn(conjugateDiv, ref pEvalData);
             if (plugIn != null)
                 return plugIn;

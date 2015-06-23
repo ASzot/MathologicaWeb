@@ -19,7 +19,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
         /// <returns></returns>
         public static ExComp Exp(ExComp power)
         {
-            return new PowerFunction(Constant.E, power);
+            return new PowerFunction(Constant.GetE(), power);
         }
 
         public static ExComp RaiseNumToNum(ExComp ex1, ExComp ex2)
@@ -32,8 +32,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
 
             if (!n1.HasImaginaryComp() && !n2.HasImaginaryComp())
             {
-                double dBase = n1.RealComp;
-                double dPow = n2.RealComp;
+                double dBase = n1.GetRealComp();
+                double dPow = n2.GetRealComp();
 
                 bool imag = false;
 
@@ -96,14 +96,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                     resultEx = new Number(result);
 
                 if (resultEx != null && negPow)
-                    resultEx = AlgebraTerm.FromFraction(Number.One, resultEx);
+                    resultEx = AlgebraTerm.FromFraction(Number.GetOne(), resultEx);
 
                 if (resultEx != null)
                     return resultEx;
             }
             else if (!n2.HasImaginaryComp())
             {
-                double dPow = n2.RealComp;
+                double dPow = n2.GetRealComp();
                 if (dPow.IsInteger())
                 {
                     int iPow = (int)dPow;
@@ -128,7 +128,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
             if (!power.IsRealInteger())
                 return StaticWeakCombine(term, power).ToAlgTerm();
 
-            int powerInt = (int)power.RealComp;
+            int powerInt = (int)power.GetRealComp();
 
             if (term is AlgebraTerm)
             {
@@ -153,9 +153,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                     overallEx = MulOp.StaticWeakCombine(overallEx, PowOp.StaticWeakCombine(group1, iterVar));
 
                     // Don't display the work steps associated with this.
-                    int startingWorkSteps = pEvalData.WorkMgr.WorkSteps.Count;
-                    SumFunction sumFunc = new SumFunction(overallEx, iterVar, Number.Zero, power);
-                    pEvalData.WorkMgr.PopSteps(startingWorkSteps);
+                    int startingWorkSteps = pEvalData.GetWorkMgr().GetWorkSteps().Count;
+                    SumFunction sumFunc = new SumFunction(overallEx, iterVar, Number.GetZero(), power);
+                    pEvalData.GetWorkMgr().PopSteps(startingWorkSteps);
 
                     return sumFunc.Evaluate(false, ref pEvalData);
                 }
@@ -199,14 +199,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 return ex2;
 
             if (Number.IsUndef(ex1) || Number.IsUndef(ex2))
-                return Number.Undefined;
+                return Number.GetUndefined();
 
-            if (Number.One.IsEqualTo(ex2))
+            if (Number.GetOne().IsEqualTo(ex2))
                 return ex1;
-            if (Number.One.IsEqualTo(ex1))
+            if (Number.GetOne().IsEqualTo(ex1))
                 return ex1;
-            if (Number.Zero.IsEqualTo(ex2))
-                return Number.One;
+            if (Number.GetZero().IsEqualTo(ex2))
+                return Number.GetOne();
 
             if (ex1 is ExMatrix || ex2 is ExMatrix)
             {
@@ -227,7 +227,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 // weak combine in between.
                 ExComp atmpt = MatrixHelper.PowOpCombine(mat, other);
                 if (atmpt == null)
-                    return Number.Undefined;
+                    return Number.GetUndefined();
                 return atmpt;
             }
 
@@ -242,13 +242,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 Number nEx2 = ex2 as Number;
                 nEx2 = Number.OpSub(nEx2);
                 ExComp raised = StaticCombine(ex1, nEx2);
-                return AlgebraTerm.FromFraction(Number.One, raised);
+                return AlgebraTerm.FromFraction(Number.GetOne(), raised);
             }
             else if (ex1 is PowerFunction)
             {
                 PowerFunction powFunc1 = ex1 as PowerFunction;
-                ExComp ex1Power = powFunc1.Power;
-                powFunc1.Power = MulOp.StaticCombine(ex1Power, ex2);
+                ExComp ex1Power = powFunc1.GetPower();
+                powFunc1.SetPower(MulOp.StaticCombine(ex1Power, ex2));
 
                 ExComp resultant = powFunc1.RemoveRedundancies();
 
@@ -259,11 +259,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 Term.SimpleFraction simpFrac = new Term.SimpleFraction();
                 if (simpFrac.HarshInit(ex1 as AlgebraTerm))
                 {
-                    ExComp num = StaticCombine(simpFrac.NumEx, ex2);
-                    ExComp den = StaticCombine(simpFrac.DenEx, ex2);
+                    ExComp num = StaticCombine(simpFrac.GetNumEx(), ex2);
+                    ExComp den = StaticCombine(simpFrac.GetDenEx(), ex2);
 
-                    if (!num.IsEqualTo(StaticWeakCombine(simpFrac.NumEx, ex2)) ||
-                        !den.IsEqualTo(StaticWeakCombine(simpFrac.DenEx, ex2)))
+                    if (!num.IsEqualTo(StaticWeakCombine(simpFrac.GetNumEx(), ex2)) ||
+                        !den.IsEqualTo(StaticWeakCombine(simpFrac.GetDenEx(), ex2)))
                     {
                         return AlgebraTerm.FromFraction(num, den);
                     }
@@ -309,7 +309,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                         if (Number.OpNotEquals(numeratorNum, 1.0))
                         {
                             ex1 = StaticCombine(n1, numeratorNum);
-                            ex2 = AlgebraTerm.FromFraction(Number.One, denominatorNum);
+                            ex2 = AlgebraTerm.FromFraction(Number.GetOne(), denominatorNum);
                         }
 
                         ExComp result = RaiseNumToNum(ex1, recipDen);
@@ -332,11 +332,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
             if (ex2 is Number)
             {
                 if (Number.OpEqual((ex2 as Number), 0.0))
-                    return Number.One;
+                    return Number.GetOne();
                 else if (Number.OpEqual((ex2 as Number), 1.0))
                     return ex1;
             }
-            if ((ex1 is ExMatrix || ex1 is FunctionDefinition || ex1 is AlgebraComp) && ex2 is AlgebraComp && (ex2 as AlgebraComp).Var.Var == "T")
+            if ((ex1 is ExMatrix || ex1 is FunctionDefinition || ex1 is AlgebraComp) && ex2 is AlgebraComp && (ex2 as AlgebraComp).GetVar().GetVar() == "T")
             {
                 // This is the transpose operation.
                 return new Transpose(ex1);
@@ -346,7 +346,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 if (ex1 is AlgebraComp)
                 {
                     AlgebraComp cmp = ex1 as AlgebraComp;
-                    if (cmp.Var.Var.Length != 1 || !Char.IsUpper(cmp.Var.Var[0]))
+                    if (cmp.GetVar().GetVar().Length != 1 || !Char.IsUpper(cmp.GetVar().GetVar()[0]))
                         return new PowerFunction(ex1, ex2);
                 }
 
@@ -358,13 +358,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
 
         public static ExComp TakeRoot(ExComp ex1, Number root, ref TermType.EvalData pEvalData, bool showWork = false)
         {
-            if (Number.Zero.IsEqualTo(ex1))
+            if (Number.GetZero().IsEqualTo(ex1))
             {
                 // To get multiplicities correct two zeros must be returned.
-                return new AlgebraTermArray(Number.Zero.ToAlgTerm(), Number.Zero.ToAlgTerm());
+                return new AlgebraTermArray(Number.GetZero().ToAlgTerm(), Number.GetZero().ToAlgTerm());
             }
 
-            AlgebraTerm pow = AlgebraTerm.FromFraction(Number.One, root);
+            AlgebraTerm pow = AlgebraTerm.FromFraction(Number.GetOne(), root);
 
             // Using DeMoivre's theorem.
             if (root.IsRealInteger() && ex1 is Number && !root.IsEqualTo(new Number(2.0)))
@@ -375,14 +375,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 ExComp r, theta;
                 n1.GetPolarData(out r, out theta, ref pEvalData);
 
-                AlgebraTerm[] roots = new AlgebraTerm[(int)root.RealComp];
+                AlgebraTerm[] roots = new AlgebraTerm[(int)root.GetRealComp()];
 
-                for (Number k = Number.Zero; Number.OpLT(k, root); k = Number.OpAdd(k, 1.0))
+                for (Number k = Number.GetZero(); Number.OpLT(k, root); k = Number.OpAdd(k, 1.0))
                 {
                     ExComp p0 = StaticCombine(r, pow);
 
                     ExComp num = MulOp.StaticCombine(new Number(2.0), k);
-                    num = MulOp.StaticCombine(num, Constant.Pi);
+                    num = MulOp.StaticCombine(num, Constant.GetPi());
                     num = AddOp.StaticCombine(num, theta);
                     ExComp frac = DivOp.StaticCombine(num, root);
 
@@ -390,23 +390,23 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                     ExComp p1 = cos.Evaluate(false, ref pEvalData);
 
                     SinFunction sin = new SinFunction(frac);
-                    ExComp p2 = MulOp.StaticCombine(Number.ImagOne, sin.Evaluate(false, ref pEvalData));
+                    ExComp p2 = MulOp.StaticCombine(Number.GetImagOne(), sin.Evaluate(false, ref pEvalData));
                     ExComp final;
                     ExComp add = AddOp.StaticCombine(p1, p2);
 
                     if (add is AlgebraTerm)
                         add = (add as AlgebraTerm).CompoundFractions();
-                    if (Number.One.IsEqualTo(p0))
+                    if (Number.GetOne().IsEqualTo(p0))
                     {
                         final = add;
                     }
-                    else if (Number.One.IsEqualTo(add))
+                    else if (Number.GetOne().IsEqualTo(add))
                     {
                         final = p0;
                     }
                     else
                     {
-                        if (add is AlgebraTerm && (add as AlgebraTerm).GroupCount != 1)
+                        if (add is AlgebraTerm && (add as AlgebraTerm).GetGroupCount() != 1)
                             final = MulOp.StaticWeakCombine(p0, add);
                         else
                             final = MulOp.StaticCombine(p0, add);
@@ -414,10 +414,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
 
                     if (showWork)
                     {
-                        pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "root({0})({1})={2}" + WorkMgr.EDM, "Using De Moivre's theorem the root " + WorkMgr.STM + "{2}" + WorkMgr.EDM + " was found.", root, ex1, final);
+                        pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "root({0})({1})={2}" + WorkMgr.EDM, "Using De Moivre's theorem the root " + WorkMgr.STM + "{2}" + WorkMgr.EDM + " was found.", root, ex1, final);
                     }
 
-                    roots[(int)k.RealComp] = final.ToAlgTerm();
+                    roots[(int)k.GetRealComp()] = final.ToAlgTerm();
                 }
 
                 return new AlgebraTermArray(roots);

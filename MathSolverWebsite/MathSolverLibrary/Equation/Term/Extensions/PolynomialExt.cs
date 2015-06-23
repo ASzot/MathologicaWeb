@@ -9,30 +9,24 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
         private LoosePolyInfo _info;
         private int i_maxPow;
 
-        public ExComp ConstantCoeff
+        public ExComp GetConstantCoeff()
         {
-            get
-            {
-                return _info.GetCoeffForPow(0);
-            }
+            return _info.GetCoeffForPow(0);
         }
 
-        public LoosePolyInfo Info
+        public LoosePolyInfo GetInfo()
         {
-            get { return _info; }
+            return _info;
         }
 
-        public ExComp LeadingCoeff
+        public ExComp GetLeadingCoeff()
         {
-            get
-            {
-                return _info.GetCoeffForPow(i_maxPow);
-            }
+            return _info.GetCoeffForPow(i_maxPow);
         }
 
-        public int MaxPow
+        public int GetMaxPow()
         {
-            get { return i_maxPow; }
+            return i_maxPow;
         }
 
         public PolynomialExt()
@@ -50,7 +44,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
             muls = new List<ExComp>();
             results = new List<ExComp>();
 
-            ExComp prev = LeadingCoeff;
+            ExComp prev = GetLeadingCoeff();
 
             List<ExComp> resultCoeffs = new List<ExComp>();
 
@@ -75,10 +69,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
                 coeffPowPairs.Add(pair);
             }
 
-            LoosePolyInfo polyInfo = new LoosePolyInfo(coeffPowPairs, _info.Var);
+            LoosePolyInfo polyInfo = new LoosePolyInfo(coeffPowPairs, _info.GetVar());
 
             ExComp resultingPow = polyInfo.GetCoeffForPow(0);
-            if (Number.Zero.IsEqualTo(resultingPow))
+            if (Number.GetZero().IsEqualTo(resultingPow))
             {
                 polyInfo.RemovePowCoeffPair(0);
                 polyInfo.ShiftPowers(-1);
@@ -99,7 +93,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
             {
                 ExComp coeff = _info.GetCoeffForPow(i);
                 if (coeff == null)
-                    yield return Number.Zero;
+                    yield return Number.GetZero();
                 else
                     yield return coeff;
             }
@@ -107,16 +101,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
 
         public List<ExComp> GetRationalPossibleRoots()
         {
-            if (!(LeadingCoeff is Number) || !(ConstantCoeff is Number))
+            if (!(GetLeadingCoeff() is Number) || !(GetConstantCoeff() is Number))
                 return null;
 
-            Number a = LeadingCoeff as Number;
-            Number nConst = ConstantCoeff as Number;
+            Number a = GetLeadingCoeff() as Number;
+            Number nConst = GetConstantCoeff() as Number;
 
             if (a.IsRealInteger() && nConst.IsRealInteger())
             {
-                int iA = (int)a.RealComp;
-                int iConst = (int)nConst.RealComp;
+                int iA = (int)a.GetRealComp();
+                int iConst = (int)nConst.GetRealComp();
 
                 iA = Math.Abs(iA);
                 iConst = Math.Abs(iConst);
@@ -172,25 +166,25 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
         {
             AlgebraTerm finalTerm = new AlgebraTerm();
 
-            foreach (TypePair<ExComp, int> coeffPow in _info.Info)
+            foreach (TypePair<ExComp, int> coeffPow in _info.GetInfo())
             {
-                if (Number.Zero.IsEqualTo(coeffPow.Data1))
+                if (Number.GetZero().IsEqualTo(coeffPow.GetData1()))
                     continue;
 
-                if (coeffPow.Data2 == 0.0)
+                if (coeffPow.GetData2() == 0.0)
                 {
-                    finalTerm.AddGroup(coeffPow.Data1);
+                    finalTerm.AddGroup(coeffPow.GetData1());
                     continue;
                 }
 
-                if (coeffPow.Data2 == 1.0)
+                if (coeffPow.GetData2() == 1.0)
                 {
-                    finalTerm.AddGroup(MulOp.StaticCombine(coeffPow.Data1, _info.Var));
+                    finalTerm.AddGroup(MulOp.StaticCombine(coeffPow.GetData1(), _info.GetVar()));
                     continue;
                 }
 
-                ExComp varPow = new Functions.PowerFunction(_info.Var, new Number(coeffPow.Data2));
-                finalTerm.AddGroup(MulOp.StaticCombine(coeffPow.Data1, varPow));
+                ExComp varPow = new Functions.PowerFunction(_info.GetVar(), new Number(coeffPow.GetData2()));
+                finalTerm.AddGroup(MulOp.StaticCombine(coeffPow.GetData1(), varPow));
             }
 
             return finalTerm;
@@ -206,9 +200,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
             if (_info != null)
             {
                 i_maxPow = int.MinValue;
-                for (int i = 0; i < _info.Info.Count; ++i)
+                for (int i = 0; i < _info.GetInfo().Count; ++i)
                 {
-                    int pow = _info.Info[i].Data2;
+                    int pow = _info.GetInfo()[i].GetData2();
                     if (pow < 0.0)
                         return false;
                     i_maxPow = Math.Max(i_maxPow, pow);

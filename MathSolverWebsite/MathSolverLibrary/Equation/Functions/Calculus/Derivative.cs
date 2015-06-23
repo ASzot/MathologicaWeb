@@ -12,7 +12,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         private AlgebraComp _derivOf = null;
         private bool _isDefined = true;
         private bool _isPartial = false;
-        private ExComp _order = Number.One;
+        private ExComp _order = Number.GetOne();
         private AlgebraComp _withRespectTo;
         private string ca_derivSymb = null;
         private AlgebraComp ca_impDeriv = null;
@@ -29,63 +29,55 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         {
         }
 
-        public AlgebraComp DerivOf
+        public AlgebraComp GetDerivOf()
         {
-            get { return _derivOf; }
+            return _derivOf;
         }
 
-        public bool IsOrderOne
+        public bool GetIsOrderOne()
         {
-            get
-            {
-                return OrderInt == 1;
-            }
+            return GetOrderInt() == 1;
         }
 
-        public string NotationIden
+        public string GetNotationIden()
         {
-            get
-            {
-                return _isPartial ? "\\partial" : "d";
-            }
+            return _isPartial ? "\\partial" : "d";
         }
 
-        public int OrderInt
+        public int GetOrderInt()
         {
-            get
-            {
-                if (!(_order is Number))
-                    return -1;
-                Number num = _order as Number;
-                if (!num.IsRealInteger())
-                    return -1;
+            if (!(_order is Number))
+                return -1;
+            Number num = _order as Number;
+            if (!num.IsRealInteger())
+                return -1;
 
-                return (int)num.RealComp;
-            }
+            return (int) num.GetRealComp();
         }
 
-        public AlgebraComp WithRespectTo
+        public void SetWithRespectTo(AlgebraComp value)
         {
-            get { return _withRespectTo; }
-            set
-            {
-                _withRespectTo = value;
-            }
+            _withRespectTo = value;
         }
 
-        public bool IsPartial
+        public AlgebraComp GetWithRespectTo()
         {
-            get { return _isPartial; }
+            return _withRespectTo;
+        }
+
+        public bool GetIsPartial()
+        {
+            return _isPartial;
         }
 
         public static Derivative ConstructDeriv(ExComp innerEx, AlgebraComp withRespect, AlgebraComp derivOf)
         {
-            return ConstructDeriv(derivOf, innerEx, null, withRespect, Number.One);
+            return ConstructDeriv(derivOf, innerEx, null, withRespect, Number.GetOne());
         }
 
         public static Derivative ConstructDeriv(AlgebraComp withRespect, AlgebraComp derivOf)
         {
-            Derivative deriv = ConstructDeriv(derivOf, Number.Zero, null, withRespect, Number.One);
+            Derivative deriv = ConstructDeriv(derivOf, Number.GetZero(), null, withRespect, Number.GetOne());
             deriv._isDefined = false;
 
             return deriv;
@@ -93,7 +85,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         public static Derivative ConstructDeriv(AlgebraComp funcIden, ExComp inputVal, ExComp order)
         {
-            return ConstructDeriv(funcIden, Number.Zero, inputVal, null, order);
+            return ConstructDeriv(funcIden, Number.GetZero(), inputVal, null, order);
         }
 
         public static Derivative ConstructDeriv(AlgebraComp derivOf, ExComp innerEx, ExComp inputVal, AlgebraComp withRespect, ExComp order)
@@ -116,11 +108,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             AlgebraComp respectToCmp = withRespectTo == null ? null : new AlgebraComp(withRespectTo);
 
             Derivative deriv;
-            deriv = new Derivative(Number.Zero);
+            deriv = new Derivative(Number.GetZero());
             deriv._isDefined = false;
             deriv._derivOf = new AlgebraComp(function);
 
-            deriv.WithRespectTo = respectToCmp;
+            deriv.SetWithRespectTo(respectToCmp);
             deriv._order = order;
             deriv._isPartial = isPartial;
 
@@ -133,7 +125,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 return null;
 
             Derivative deriv = new Derivative(inner);
-            deriv.WithRespectTo = withRespectTo == null ? null : new AlgebraComp(withRespectTo);
+            deriv.SetWithRespectTo(withRespectTo == null ? null : new AlgebraComp(withRespectTo));
             deriv._order = order;
             deriv._isPartial = isPartial;
 
@@ -154,12 +146,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         public ExComp GetDerivOfFunc(FunctionDefinition funcDef, ExComp def)
         {
-            if (_derivOf == null || !funcDef.Iden.IsEqualTo(_derivOf))
+            if (_derivOf == null || !funcDef.GetIden().IsEqualTo(_derivOf))
                 return null;
 
             if (_withRespectTo == null)
             {
-                if (!funcDef.HasValidInputArgs || funcDef.InputArgCount != 1)
+                if (!funcDef.GetHasValidInputArgs() || funcDef.GetInputArgCount() != 1)
                     return null;
             }
 
@@ -187,12 +179,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             //		return null;
             //}
 
-            return Derivative.ConstructDeriv(_inputVal == null ? null : _derivOf, def, _inputVal, _withRespectTo == null ? funcDef.InputArgs[0] : _withRespectTo, _order);
+            return Derivative.ConstructDeriv(_inputVal == null ? null : _derivOf, def, _inputVal, _withRespectTo == null ? funcDef.GetInputArgs()[0] : _withRespectTo, _order);
         }
 
         public override ExComp CloneEx()
         {
-            Derivative deriv = new Derivative(InnerEx.CloneEx());
+            Derivative deriv = new Derivative(GetInnerEx().CloneEx());
             deriv._withRespectTo = this._withRespectTo == null ? null : (AlgebraComp)this._withRespectTo.CloneEx();
             deriv._order = this._order.CloneEx();
             deriv._derivOf = this._derivOf == null ? null : (AlgebraComp)this._derivOf.CloneEx();
@@ -230,43 +222,43 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (!(_order is Number && (_order as Number).IsRealInteger()))
                 return null;
 
-            int order = (int)(_order as Number).RealComp;
+            int order = (int)(_order as Number).GetRealComp();
 
             if (innerEx is Integral && _derivOf == null && order == 1)
             {
                 Integral finalInt = innerEx as Integral;
-                if (finalInt.DVar.IsEqualTo(_withRespectTo) && !finalInt.IsDefinite)
+                if (finalInt.GetDVar().IsEqualTo(_withRespectTo) && !finalInt.GetIsDefinite())
                 {
-                    pEvalData.WorkMgr.FromSides(this, null, "The derivative and the integral cancel.");
-                    return finalInt.InnerTerm;
+                    pEvalData.GetWorkMgr().FromSides(this, null, "The derivative and the integral cancel.");
+                    return finalInt.GetInnerTerm();
                 }
-                else if (finalInt.IsDefinite)
+                else if (finalInt.GetIsDefinite())
                 {
-                    bool upperContains = finalInt.UpperLimitTerm.ToAlgTerm().Contains(_withRespectTo);
-                    bool lowerContains = finalInt.LowerLimitTerm.ToAlgTerm().Contains(_withRespectTo);
+                    bool upperContains = finalInt.GetUpperLimitTerm().ToAlgTerm().Contains(_withRespectTo);
+                    bool lowerContains = finalInt.GetLowerLimitTerm().ToAlgTerm().Contains(_withRespectTo);
                     if (upperContains || lowerContains)
                     {
-                        pEvalData.WorkMgr.FromSides(this, null, "Use the fundemental theorem of calculus.");
+                        pEvalData.GetWorkMgr().FromSides(this, null, "Use the fundemental theorem of calculus.");
                         // Fundemental Theorem of calculus should be applied here.
                         Integral[] ints;
                         if (upperContains && lowerContains)
                         {
                             AlgebraComp tmpBoundryVar = new AlgebraComp("a");
-                            Integral otherInt = Integral.ConstructIntegral(finalInt.InnerTerm, finalInt.DVar, finalInt.LowerLimit, tmpBoundryVar);
-                            finalInt.LowerLimit = tmpBoundryVar;
+                            Integral otherInt = Integral.ConstructIntegral(finalInt.GetInnerTerm(), finalInt.GetDVar(), finalInt.GetLowerLimit(), tmpBoundryVar);
+                            finalInt.SetLowerLimit(tmpBoundryVar);
 
-                            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + ca_derivSymb + "[" + finalInt.FinalToDispStr() + "+" + otherInt.FinalToDispStr() + "]" + WorkMgr.EDM, "Split the integral");
-                            ExComp tmp = otherInt.UpperLimit;
-                            otherInt.UpperLimit = otherInt.LowerLimit;
-                            otherInt.LowerLimit = tmp;
-                            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + ca_derivSymb + "[" + finalInt.FinalToDispStr() + "-" + otherInt.FinalToDispStr() + "]" + WorkMgr.EDM, "Switch the integral bounds");
+                            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + ca_derivSymb + "[" + finalInt.FinalToDispStr() + "+" + otherInt.FinalToDispStr() + "]" + WorkMgr.EDM, "Split the integral");
+                            ExComp tmp = otherInt.GetUpperLimit();
+                            otherInt.SetUpperLimit(otherInt.GetLowerLimit());
+                            otherInt.SetLowerLimit(tmp);
+                            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + ca_derivSymb + "[" + finalInt.FinalToDispStr() + "-" + otherInt.FinalToDispStr() + "]" + WorkMgr.EDM, "Switch the integral bounds");
 
                             ints = new Integral[] { finalInt, otherInt };
                         }
                         else if (lowerContains)
                         {
-                            Integral tmpInt = Integral.ConstructIntegral(MulOp.Negate(finalInt.InnerEx), finalInt.DVar, finalInt.UpperLimit, finalInt.LowerLimit);
-                            pEvalData.WorkMgr.FromSides(tmpInt, null, "Switch the integral bounds.");
+                            Integral tmpInt = Integral.ConstructIntegral(MulOp.Negate(finalInt.GetInnerEx()), finalInt.GetDVar(), finalInt.GetUpperLimit(), finalInt.GetLowerLimit());
+                            pEvalData.GetWorkMgr().FromSides(tmpInt, null, "Switch the integral bounds.");
                             ints = new Integral[] { tmpInt };
                         }
                         else
@@ -276,8 +268,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                         Derivative[] chainRules = new Derivative[ints.Length];
                         for (int i = 0; i < ints.Length; ++i)
                         {
-                            modified[i] = ints[i].InnerTerm.Substitute(ints[i].DVar, ints[i].UpperLimit);
-                            chainRules[i] = ints[i].UpperLimit.IsEqualTo(_withRespectTo) ? null : Derivative.ConstructDeriv(ints[i].UpperLimit, _withRespectTo, null);
+                            modified[i] = ints[i].GetInnerTerm().Substitute(ints[i].GetDVar(), ints[i].GetUpperLimit());
+                            chainRules[i] = ints[i].GetUpperLimit().IsEqualTo(_withRespectTo) ? null : Derivative.ConstructDeriv(ints[i].GetUpperLimit(), _withRespectTo, null);
                         }
 
                         string dispStr = "";
@@ -299,7 +291,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                             }
                         }
 
-                        pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + dispStr + WorkMgr.EDM, "Substitute in" + (useChainRule ? " and use the chain rule." : "."));
+                        pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + dispStr + WorkMgr.EDM, "Substitute in" + (useChainRule ? " and use the chain rule." : "."));
 
                         ExComp[] chainRuled = new ExComp[chainRules.Length];
                         dispStr = "";
@@ -319,7 +311,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                         }
 
                         if (useChainRule)
-                            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + dispStr + WorkMgr.EDM);
+                            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + dispStr + WorkMgr.EDM);
 
                         ExComp totalTerm = new AlgebraTerm();
                         for (int i = 0; i < chainRuled.Length; ++i)
@@ -328,7 +320,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                         }
 
                         if (useChainRule)
-                            pEvalData.WorkMgr.FromSides(totalTerm, null);
+                            pEvalData.GetWorkMgr().FromSides(totalTerm, null);
 
                         return totalTerm;
                     }
@@ -355,7 +347,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (!(_order is Number && (_order as Number).IsRealInteger()))
                 return this;
 
-            int order = (int)(_order as Number).RealComp;
+            int order = (int)(_order as Number).GetRealComp();
 
             if (order > MAX_DERIV)
                 return this;
@@ -365,7 +357,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             ca_derivSymb = "d/(d" + _withRespectTo.ToDispString() + ")";
 
-            ExComp final = InnerEx;
+            ExComp final = GetInnerEx();
 
             if (final is ExVector)
             {
@@ -375,7 +367,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
                 // Work steps should go here.
 
-                for (int i = 0; i < vec.Length; ++i)
+                for (int i = 0; i < vec.GetLength(); ++i)
                 {
                     ExComp deriv = TakeDerivativeOf(vec.Get(i), ref pEvalData);
                     derivVec.Set(i, deriv);
@@ -394,15 +386,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             else if (final is ExMatrix)
             {
                 // Don't know if this works.
-                return Number.Undefined;
+                return Number.GetUndefined();
             }
 
-            pEvalData.WorkMgr.FromFormatted("`{0}`", "Find the " + (_order).ToString() + MathHelper.GetCountingPrefix(order)
-                + " derivative of the above.", InnerEx);
+            pEvalData.GetWorkMgr().FromFormatted("`{0}`", "Find the " + (_order).ToString() + MathHelper.GetCountingPrefix(order)
+                + " derivative of the above.", GetInnerEx());
             for (int i = 0; i < order; ++i)
             {
                 ExComp tmp = TakeDerivativeOf(final, ref pEvalData);
-                pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]={1}`", "The final " + (i + 1).ToString() +
+                pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[{0}]={1}`", "The final " + (i + 1).ToString() +
                     MathHelper.GetCountingPrefix(i + 1) + " derivative.", final, tmp);
                 final = tmp;
             }
@@ -419,11 +411,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         public override string FinalToAsciiString()
         {
-            string orderStr = IsOrderOne ? "" : "^{" + _order.ToAsciiString() + "}";
+            string orderStr = GetIsOrderOne() ? "" : "^{" + _order.ToAsciiString() + "}";
             string followingStr = null;
             if (_order is Number && (_order as Number).IsRealInteger())
             {
-                int order = (int)(_order as Number).RealComp;
+                int order = (int)(_order as Number).GetRealComp();
                 if (order < 3)
                 {
                     followingStr = "";
@@ -444,21 +436,21 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (!_isDefined || _inputVal != null)
             {
                 if (_inputVal == null)
-                    return "(\\frac{" + NotationIden + orderStr + _derivOf.ToAsciiString() + "}{" + NotationIden + _withRespectTo.ToAsciiString() + orderStr + "})";
+                    return "(\\frac{" + GetNotationIden() + orderStr + _derivOf.ToAsciiString() + "}{" + GetNotationIden() + _withRespectTo.ToAsciiString() + orderStr + "})";
                 else
                     return _derivOf.ToAsciiString() + (followingStr == null ? orderStr : followingStr) + "(" + _inputVal.ToAlgTerm().FinalToAsciiString() + ")";
             }
-            return "(\\frac{" + NotationIden + orderStr + "}{" + NotationIden + _withRespectTo.ToAsciiString() + orderStr + "}[" +
-                InnerEx.ToAlgTerm().FinalToAsciiString() + "])";
+            return "(\\frac{" + GetNotationIden() + orderStr + "}{" + GetNotationIden() + _withRespectTo.ToAsciiString() + orderStr + "}[" +
+                GetInnerEx().ToAlgTerm().FinalToAsciiString() + "])";
         }
 
         public override string FinalToTexString()
         {
-            string orderStr = IsOrderOne ? "" : "^{" + _order.ToTexString() + "}";
+            string orderStr = GetIsOrderOne() ? "" : "^{" + _order.ToTexString() + "}";
             string followingStr = null;
             if (_order is Number && (_order as Number).IsRealInteger())
             {
-                int order = (int)(_order as Number).RealComp;
+                int order = (int)(_order as Number).GetRealComp();
                 if (order < 3)
                 {
                     followingStr = "";
@@ -479,12 +471,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (!_isDefined || _inputVal != null)
             {
                 if (_inputVal == null)
-                    return "(\\frac{" + NotationIden + orderStr + _derivOf.ToTexString() + "}{" + NotationIden + _withRespectTo.ToTexString() + orderStr + "})";
+                    return "(\\frac{" + GetNotationIden() + orderStr + _derivOf.ToTexString() + "}{" + GetNotationIden() + _withRespectTo.ToTexString() + orderStr + "})";
                 else
                     return _derivOf.ToTexString() + (followingStr == null ? orderStr : followingStr) + "(" + _inputVal.ToAlgTerm().FinalToTexString() + ")";
             }
-            return "(\\frac{" + NotationIden + orderStr + "}{" + NotationIden + _withRespectTo.ToTexString() + orderStr + "}[" +
-                InnerEx.ToAlgTerm().FinalToTexString() + "])";
+            return "(\\frac{" + GetNotationIden() + orderStr + "}{" + GetNotationIden() + _withRespectTo.ToTexString() + orderStr + "}[" +
+                GetInnerEx().ToAlgTerm().FinalToTexString() + "])";
         }
 
         public override bool IsEqualTo(ExComp ex)
@@ -493,7 +485,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             {
                 Derivative deriv = ex as Derivative;
 
-                return deriv.InnerEx.IsEqualTo(InnerEx) &&
+                return deriv.GetInnerEx().IsEqualTo(GetInnerEx()) &&
                     ((deriv._withRespectTo != null && deriv._withRespectTo.IsEqualTo(this._withRespectTo)) ||
                     (deriv._withRespectTo == null && this._withRespectTo == null)) &&
                     ((deriv._derivOf != null && deriv._derivOf.IsEqualTo(this._derivOf)) ||
@@ -507,7 +499,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         public override AlgebraTerm Substitute(ExComp subOut, ExComp subIn)
         {
-            Derivative deriv = new Derivative(InnerTerm.Substitute(subOut, subIn));
+            Derivative deriv = new Derivative(GetInnerTerm().Substitute(subOut, subIn));
             deriv._derivOf = this._derivOf;
             deriv._isDefined = this._isDefined;
             deriv._isPartial = this._isPartial;
@@ -526,7 +518,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         public override AlgebraTerm Substitute(ExComp subOut, ExComp subIn, ref bool success)
         {
-            Derivative deriv = new Derivative(InnerTerm.Substitute(subOut, subIn, ref success));
+            Derivative deriv = new Derivative(GetInnerTerm().Substitute(subOut, subIn, ref success));
             deriv._derivOf = this._derivOf;
             deriv._isDefined = this._isDefined;
             deriv._isPartial = this._isPartial;
@@ -546,11 +538,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         public override string ToAsciiString()
         {
-            string orderStr = IsOrderOne ? "" : "^{" + _order.ToAsciiString() + "}";
+            string orderStr = GetIsOrderOne() ? "" : "^{" + _order.ToAsciiString() + "}";
             string followingStr = null;
             if (_order is Number && (_order as Number).IsRealInteger())
             {
-                int order = (int)(_order as Number).RealComp;
+                int order = (int)(_order as Number).GetRealComp();
                 if (order < 3)
                 {
                     followingStr = "";
@@ -571,12 +563,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (!_isDefined || _inputVal != null)
             {
                 if (_inputVal == null)
-                    return "(\\frac{" + NotationIden + orderStr + _derivOf.ToAsciiString() + "}{" + NotationIden + _withRespectTo.ToAsciiString() + orderStr + "})";
+                    return "(\\frac{" + GetNotationIden() + orderStr + _derivOf.ToAsciiString() + "}{" + GetNotationIden() + _withRespectTo.ToAsciiString() + orderStr + "})";
                 else
                     return _derivOf.ToAsciiString() + (followingStr == null ? orderStr : followingStr) + "(" + _inputVal.ToAsciiString() + ")";
             }
-            return "(\\frac{" + NotationIden + orderStr + "}{" + NotationIden + _withRespectTo.ToAsciiString() + orderStr + "}[" +
-                InnerEx.ToAsciiString() + "])";
+            return "(\\frac{" + GetNotationIden() + orderStr + "}{" + GetNotationIden() + _withRespectTo.ToAsciiString() + orderStr + "}[" +
+                GetInnerEx().ToAsciiString() + "])";
         }
 
         public override string ToJavaScriptString(bool useRad)
@@ -591,11 +583,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         public override string ToTexString()
         {
-            string orderStr = IsOrderOne ? "" : "^{" + _order.ToTexString() + "}";
+            string orderStr = GetIsOrderOne() ? "" : "^{" + _order.ToTexString() + "}";
             string followingStr = null;
             if (_order is Number && (_order as Number).IsRealInteger())
             {
-                int order = (int)(_order as Number).RealComp;
+                int order = (int)(_order as Number).GetRealComp();
                 if (order < 3)
                 {
                     followingStr = "";
@@ -616,12 +608,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (!_isDefined || _inputVal != null)
             {
                 if (_inputVal == null)
-                    return "(\\frac{" + NotationIden + orderStr + _derivOf.ToTexString() + "}{" + NotationIden + _withRespectTo.ToTexString() + orderStr + "})";
+                    return "(\\frac{" + GetNotationIden() + orderStr + _derivOf.ToTexString() + "}{" + GetNotationIden() + _withRespectTo.ToTexString() + orderStr + "})";
                 else
                     return _derivOf.ToTexString() + (followingStr == null ? orderStr : followingStr) + "(" + _inputVal.ToTexString() + ")";
             }
-            return "(\\frac{" + NotationIden + orderStr + "}{" + NotationIden + _withRespectTo.ToTexString() + orderStr + "}[" +
-                InnerEx.ToTexString() + "])";
+            return "(\\frac{" + GetNotationIden() + orderStr + "}{" + GetNotationIden() + _withRespectTo.ToTexString() + orderStr + "}[" +
+                GetInnerEx().ToTexString() + "])";
         }
 
         protected override AlgebraTerm CreateInstance(params ExComp[] args)
@@ -638,30 +630,30 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         private ExComp ApplyAbsDeriv(AbsValFunction abs, ref TermType.EvalData pEvalData)
         {
-            ExComp innerEx = abs.InnerEx;
+            ExComp innerEx = abs.GetInnerEx();
             bool useChainRule = ShouldApplyChainRule(innerEx);
             if (useChainRule)
             {
-                pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]`",
+                pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[{0}]`",
                     "The above is a composition of functions `f(g(" + _withRespectTo.ToDispString() +
                     "))`. Use the chain rule which states `d/(dx)[f(g(x))]=f'(g(x))*g'(x)` First take the derivative of the outside function.", abs);
             }
 
-            pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]=({0})/({1})`", "From the common derivative of the absolute value function.", abs.InnerTerm, abs);
+            pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[{0}]=({0})/({1})`", "From the common derivative of the absolute value function.", abs.GetInnerTerm(), abs);
 
             ExComp deriv = DivOp.StaticCombine(innerEx, abs);
 
             if (useChainRule)
             {
                 pEvalData.AddInputType(TermType.InputAddType.DerivCR);
-                pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]`", "Next take the derivative of the inner function.", abs.InnerTerm);
-                WorkStep last = pEvalData.WorkMgr.GetLast();
+                pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[{0}]`", "Next take the derivative of the inner function.", abs.GetInnerTerm());
+                WorkStep last = pEvalData.GetWorkMgr().GetLast();
 
                 last.GoDown(ref pEvalData);
-                ExComp innerDeriv = TakeDerivativeOf(abs.InnerTerm, ref pEvalData);
+                ExComp innerDeriv = TakeDerivativeOf(abs.GetInnerTerm(), ref pEvalData);
                 last.GoUp(ref pEvalData);
 
-                pEvalData.WorkMgr.FromFormatted("`{0}`",
+                pEvalData.GetWorkMgr().FromFormatted("`{0}`",
                     "According to the chain rule multiply the derivative of the inner function by the derivative of the outer function.",
                     MulOp.StaticWeakCombine(innerDeriv, deriv));
 
@@ -674,32 +666,32 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         private ExComp ApplyInvTrigDeriv(InverseTrigFunction invTrigFunc, ref TermType.EvalData pEvalData)
         {
-            bool useChainRule = ShouldApplyChainRule(invTrigFunc.InnerEx);
+            bool useChainRule = ShouldApplyChainRule(invTrigFunc.GetInnerEx());
             if (useChainRule)
             {
-                pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]`",
+                pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[{0}]`",
                     "The above is a composition of functions `f(g(" + _withRespectTo.ToDispString() +
                     "))`. Use the chain rule which states `d/(dx)[f(g(x))]=f'(g(x))*g'(x)` First take the derivative of the outside function.", invTrigFunc);
             }
 
             ExComp deriv = invTrigFunc.GetDerivativeOf();
-            pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]={1}`",
-                "Use the common definition that `d/(dx)[" + invTrigFunc.FuncName + "(x)]=" + invTrigFunc.GetDerivativeOfStr() + "`.", invTrigFunc, deriv);
+            pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[{0}]={1}`",
+                "Use the common definition that `d/(dx)[" + invTrigFunc.GetFuncName() + "(x)]=" + invTrigFunc.GetDerivativeOfStr() + "`.", invTrigFunc, deriv);
 
             pEvalData.AttemptSetInputType(TermType.InputType.DerivInvTrig);
 
             if (useChainRule)
             {
                 pEvalData.AddInputType(TermType.InputAddType.DerivCR);
-                pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]`", "Next take the derivative of the inner function.", invTrigFunc.InnerTerm);
-                WorkStep last = pEvalData.WorkMgr.GetLast();
+                pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[{0}]`", "Next take the derivative of the inner function.", invTrigFunc.GetInnerTerm());
+                WorkStep last = pEvalData.GetWorkMgr().GetLast();
 
                 last.GoDown(ref pEvalData);
                 // Apply the chain rule.
-                ExComp innerDeriv = TakeDerivativeOf(invTrigFunc.InnerTerm, ref pEvalData);
+                ExComp innerDeriv = TakeDerivativeOf(invTrigFunc.GetInnerTerm(), ref pEvalData);
                 last.GoUp(ref pEvalData);
 
-                pEvalData.WorkMgr.FromFormatted("`{0}`",
+                pEvalData.GetWorkMgr().FromFormatted("`{0}`",
                     "According to the chain rule multiply the derivative of the inner function by the derivative of the outer function.",
                     MulOp.StaticWeakCombine(innerDeriv, deriv));
 
@@ -711,34 +703,34 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         private ExComp ApplyLogDeriv(LogFunction log, ref TermType.EvalData pEvalData)
         {
-            if (log.Base.ToAlgTerm().Contains(_withRespectTo))
+            if (log.GetBase().ToAlgTerm().Contains(_withRespectTo))
             {
                 // Terms in the form log_x(y) cannot have the derivative be taken with respect to x.
                 return ConstructDeriv(log, _withRespectTo, _derivOf);
             }
 
-            bool useChainRule = ShouldApplyChainRule(log.InnerEx);
+            bool useChainRule = ShouldApplyChainRule(log.GetInnerEx());
             if (useChainRule)
             {
-                pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]`",
+                pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[{0}]`",
                     "The above is a composition of functions `f(g(" + _withRespectTo.ToDispString() +
                     "))`. Use the chain rule which states `d/(dx)[f(g(x))]=f'(g(x))*g'(x)` First take the derivative of the outside function.", log);
             }
 
             ExComp deriv;
-            if (log.Base.IsEqualTo(Constant.E))
+            if (log.GetBase().IsEqualTo(Constant.GetE()))
             {
-                pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]=1/({1})`",
+                pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[{0}]=1/({1})`",
                     "Using the definition that `d/(dx)[log_b(x)]=1/(ln(b)x)` which can be extended to natural logs to say `d/(dx)[ln(x)]=1/x`",
-                    log, log.InnerTerm);
-                deriv = DivOp.StaticCombine(Number.One, log.InnerTerm);
+                    log, log.GetInnerTerm());
+                deriv = DivOp.StaticCombine(Number.GetOne(), log.GetInnerTerm());
             }
             else
             {
-                pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]=1/(ln({2})({1}))`",
+                pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[{0}]=1/(ln({2})({1}))`",
                     "Using the definition that `d/(dx)[log_b(x)]=1/(ln(b)x)`",
-                    log, log.InnerTerm, log.Base);
-                deriv = DivOp.StaticCombine(Number.One, MulOp.StaticWeakCombine(log.InnerTerm, LogFunction.Ln(log.Base)));
+                    log, log.GetInnerTerm(), log.GetBase());
+                deriv = DivOp.StaticCombine(Number.GetOne(), MulOp.StaticWeakCombine(log.GetInnerTerm(), LogFunction.Ln(log.GetBase())));
             }
 
             pEvalData.AttemptSetInputType(TermType.InputType.DerivLog);
@@ -746,14 +738,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (useChainRule)
             {
                 pEvalData.AddInputType(TermType.InputAddType.DerivCR);
-                pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]`", "Next take the derivative of the inner function.", log.InnerTerm);
-                WorkStep last = pEvalData.WorkMgr.GetLast();
+                pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[{0}]`", "Next take the derivative of the inner function.", log.GetInnerTerm());
+                WorkStep last = pEvalData.GetWorkMgr().GetLast();
 
                 last.GoDown(ref pEvalData);
-                ExComp innerDeriv = TakeDerivativeOf(log.InnerTerm, ref pEvalData);
+                ExComp innerDeriv = TakeDerivativeOf(log.GetInnerTerm(), ref pEvalData);
                 last.GoUp(ref pEvalData);
 
-                pEvalData.WorkMgr.FromFormatted("`{0}`",
+                pEvalData.GetWorkMgr().FromFormatted("`{0}`",
                     "According to the chain rule multiply the derivative of the inner function by the derivative of the outer function.",
                     MulOp.StaticWeakCombine(innerDeriv, deriv));
 
@@ -766,16 +758,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         private ExComp ApplyPowBaseDeriv(PowerFunction powFunc, ref TermType.EvalData pEvalData)
         {
-            ExComp final = MulOp.StaticCombine(powFunc.Power, LogFunction.Ln(powFunc.Base));
-            pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]=({0})*d/(dx)[{1}]`", "This comes from the definition for the derivative of `d/(dx)[x^x]=x^x*d/(dx)[x*ln(x)]`.", powFunc, final);
+            ExComp final = MulOp.StaticCombine(powFunc.GetPower(), LogFunction.Ln(powFunc.GetBase()));
+            pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[{0}]=({0})*d/(dx)[{1}]`", "This comes from the definition for the derivative of `d/(dx)[x^x]=x^x*d/(dx)[x*ln(x)]`.", powFunc, final);
 
             return MulOp.StaticCombine(powFunc, TakeDerivativeOf(final, ref pEvalData));
         }
 
         private ExComp ApplyPower(PowerFunction pfGpCmp, ref TermType.EvalData pEvalData)
         {
-            bool powHas = ContainsVarOfInterest(pfGpCmp.Power);
-            bool baseHas = ContainsVarOfInterest(pfGpCmp.Base);
+            bool powHas = ContainsVarOfInterest(pfGpCmp.GetPower());
+            bool baseHas = ContainsVarOfInterest(pfGpCmp.GetBase());
 
             if (powHas && baseHas)
             {
@@ -795,12 +787,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         private ExComp ApplyPowerRuleBase(PowerFunction powFunc, ref TermType.EvalData pEvalData)
         {
-            if (powFunc.Power.IsEqualTo(Number.NegOne))
+            if (powFunc.GetPower().IsEqualTo(Number.GetNegOne()))
             {
                 // Don't include the constants which are still contained under the neg one power.
-                if (powFunc.Base is AlgebraTerm)
+                if (powFunc.GetBase() is AlgebraTerm)
                 {
-                    List<ExComp[]> gps = (powFunc.Base as AlgebraTerm).GetGroupsNoOps();
+                    List<ExComp[]> gps = (powFunc.GetBase() as AlgebraTerm).GetGroupsNoOps();
                     if (gps.Count == 1)
                     {
                         ExComp[] gp = gps[0];
@@ -808,14 +800,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                         gp.GetConstVarTo(out varTo, out constTo, _withRespectTo);
                         if (varTo.Length != 0 && constTo.Length != 0)
                         {
-                            AlgebraTerm agConst = AlgebraTerm.FromFraction(Number.One, constTo.ToAlgTerm());
+                            AlgebraTerm agConst = AlgebraTerm.FromFraction(Number.GetOne(), constTo.ToAlgTerm());
                             AlgebraTerm agVarTo = varTo.ToAlgNoRedunTerm();
                             if (agVarTo is PowerFunction)
-                                (agVarTo as PowerFunction).Power = MulOp.Negate((agVarTo as PowerFunction).Power);
+                                (agVarTo as PowerFunction).SetPower(MulOp.Negate((agVarTo as PowerFunction).GetPower()));
                             else
-                                agVarTo = new PowerFunction(agVarTo, Number.NegOne);
+                                agVarTo = new PowerFunction(agVarTo, Number.GetNegOne());
 
-                            pEvalData.WorkMgr.FromFormatted("`" + agConst.ToDispString() + ca_derivSymb + "[" + agVarTo.FinalToDispStr() + "]`",
+                            pEvalData.GetWorkMgr().FromFormatted("`" + agConst.ToDispString() + ca_derivSymb + "[" + agVarTo.FinalToDispStr() + "]`",
                                 "Bring out all constants as they will have no effect on the derivative. This comes from the derivative property that `d/(dx)[kf(x)]=k*d/(dx)[f(x)]` the constants will be multiplied back in at the end.");
 
                             ExComp deriv = TakeDerivativeOf(agVarTo, ref pEvalData);
@@ -825,27 +817,27 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 }
             }
 
-            ExComp term = powFunc.Power.CloneEx();
+            ExComp term = powFunc.GetPower().CloneEx();
 
-            ExComp power = SubOp.StaticCombine(powFunc.Power, Number.One);
+            ExComp power = SubOp.StaticCombine(powFunc.GetPower(), Number.GetOne());
             if (power is AlgebraTerm)
                 power = (power as AlgebraTerm).CompoundFractions();
 
-            PowerFunction derivPowFunc = new PowerFunction(powFunc.Base, power);
-            if (derivPowFunc.Power.ToAlgTerm().IsOne())
-                term = MulOp.StaticCombine(term, powFunc.Base);
+            PowerFunction derivPowFunc = new PowerFunction(powFunc.GetBase(), power);
+            if (derivPowFunc.GetPower().ToAlgTerm().IsOne())
+                term = MulOp.StaticCombine(term, powFunc.GetBase());
             else
                 term = MulOp.StaticCombine(term, derivPowFunc);
 
-            bool useChainRule = ShouldApplyChainRule(powFunc.Base);
+            bool useChainRule = ShouldApplyChainRule(powFunc.GetBase());
             if (useChainRule)
             {
-                pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]`",
+                pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[{0}]`",
                     "The above is a composition of functions `f(g(" + _withRespectTo.ToDispString() +
                     "))`. Use the chain rule which states `d/(dx)[f(g(x))]=f'(g(x))*g'(x)` First take the derivative of the outside function.", powFunc);
             }
 
-            pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]={1}`",
+            pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[{0}]={1}`",
                 "Through using the power rule which states `d/(dx)[x^n]=nx^(n-1)`.", powFunc, term);
 
             pEvalData.AttemptSetInputType(TermType.InputType.DerivPoly);
@@ -853,15 +845,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (useChainRule)
             {
                 pEvalData.AddInputType(TermType.InputAddType.DerivCR);
-                pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]`", "Next take the derivative of the inner function.", powFunc.Base);
-                WorkStep last = pEvalData.WorkMgr.GetLast();
+                pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[{0}]`", "Next take the derivative of the inner function.", powFunc.GetBase());
+                WorkStep last = pEvalData.GetWorkMgr().GetLast();
 
                 last.GoDown(ref pEvalData);
                 // The chain rule has to be applied here.
-                ExComp innerDeriv = TakeDerivativeOf(powFunc.Base, ref pEvalData);
+                ExComp innerDeriv = TakeDerivativeOf(powFunc.GetBase(), ref pEvalData);
                 last.GoUp(ref pEvalData);
 
-                pEvalData.WorkMgr.FromFormatted("`{0}`",
+                pEvalData.GetWorkMgr().FromFormatted("`{0}`",
                     "According to the chain rule multiply the derivative of the inner function by the derivative of the outer function.",
                     MulOp.StaticWeakCombine(innerDeriv, term));
 
@@ -872,25 +864,25 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         private ExComp ApplyPowerRulePower(PowerFunction powFunc, ref TermType.EvalData pEvalData)
         {
-            bool useChainRule = ShouldApplyChainRule(powFunc.Power);
+            bool useChainRule = ShouldApplyChainRule(powFunc.GetPower());
 
             if (useChainRule)
             {
-                pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]`",
+                pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[{0}]`",
                     "The above is a composition of functions `f(g(" + _withRespectTo.ToDispString() +
                     "))`. Use the chain rule which states `d/(dx)[f(g(x))]=f'(g(x))*g'(x)` First take the derivative of the outside function.", powFunc);
             }
 
             ExComp deriv;
-            if (powFunc.Base is Constant && (powFunc.Base as Constant).Var.Var == "e")
+            if (powFunc.GetBase() is Constant && (powFunc.GetBase() as Constant).GetVar().GetVar() == "e")
             {
-                pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]={0}`", "The derivative of `e` raised to anything is always the same.", powFunc);
+                pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[{0}]={0}`", "The derivative of `e` raised to anything is always the same.", powFunc);
                 deriv = powFunc;
             }
             else
             {
-                deriv = MulOp.StaticWeakCombine(LogFunction.Ln(powFunc.Base), powFunc);
-                pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]={1}`", "Using the exponent rule which states `d/(dx)[a^x]=ln(a)a^x`", powFunc, deriv);
+                deriv = MulOp.StaticWeakCombine(LogFunction.Ln(powFunc.GetBase()), powFunc);
+                pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[{0}]={1}`", "Using the exponent rule which states `d/(dx)[a^x]=ln(a)a^x`", powFunc, deriv);
             }
 
             pEvalData.AttemptSetInputType(TermType.InputType.DerivExp);
@@ -898,15 +890,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (useChainRule)
             {
                 pEvalData.AddInputType(TermType.InputAddType.DerivCR);
-                pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]`", "Next take the derivative of the inner function.", powFunc.Power);
-                WorkStep last = pEvalData.WorkMgr.GetLast();
+                pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[{0}]`", "Next take the derivative of the inner function.", powFunc.GetPower());
+                WorkStep last = pEvalData.GetWorkMgr().GetLast();
 
                 last.GoDown(ref pEvalData);
                 // Apply chain rule.
-                ExComp innerDeriv = TakeDerivativeOf(powFunc.Power, ref pEvalData);
+                ExComp innerDeriv = TakeDerivativeOf(powFunc.GetPower(), ref pEvalData);
                 last.GoUp(ref pEvalData);
 
-                pEvalData.WorkMgr.FromFormatted("`{0}`",
+                pEvalData.GetWorkMgr().FromFormatted("`{0}`",
                     "According to the chain rule multiply the derivative of the inner function by the derivative of the outer function.",
                     MulOp.StaticWeakCombine(innerDeriv, deriv));
                 return MulOp.StaticCombine(deriv, innerDeriv);
@@ -917,31 +909,31 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         private ExComp ApplyTrigDeriv(TrigFunction trigFunc, ref TermType.EvalData pEvalData)
         {
-            bool useChainRule = ShouldApplyChainRule(trigFunc.InnerEx);
+            bool useChainRule = ShouldApplyChainRule(trigFunc.GetInnerEx());
             if (useChainRule)
             {
-                pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]`",
+                pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[{0}]`",
                     "The above is a composition of functions `f(g(" + _withRespectTo.ToDispString() +
                     "))`. Use the chain rule which states `d/(dx)[f(g(x))]=f'(g(x))*g'(x)` First take the derivative of the outside function.", trigFunc);
             }
 
             ExComp deriv = trigFunc.GetDerivativeOf();
-            pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]={1}`",
-                "Use the common definition that `d/(dx)[" + trigFunc.FuncName + "(x)]=" + trigFunc.GetDerivativeOfStr() + "`.", trigFunc, deriv);
+            pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[{0}]={1}`",
+                "Use the common definition that `d/(dx)[" + trigFunc.GetFuncName() + "(x)]=" + trigFunc.GetDerivativeOfStr() + "`.", trigFunc, deriv);
 
             pEvalData.AttemptSetInputType(TermType.InputType.DerivTrig);
 
             if (useChainRule)
             {
                 pEvalData.AddInputType(TermType.InputAddType.DerivCR);
-                pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]`", "Next take the derivative of the inner function.", trigFunc.InnerTerm);
-                WorkStep lastWorkStep = pEvalData.WorkMgr.GetLast();
+                pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[{0}]`", "Next take the derivative of the inner function.", trigFunc.GetInnerTerm());
+                WorkStep lastWorkStep = pEvalData.GetWorkMgr().GetLast();
 
                 lastWorkStep.GoDown(ref pEvalData);
-                ExComp innerDeriv = TakeDerivativeOf(trigFunc.InnerTerm, ref pEvalData);
+                ExComp innerDeriv = TakeDerivativeOf(trigFunc.GetInnerTerm(), ref pEvalData);
                 lastWorkStep.GoUp(ref pEvalData);
 
-                pEvalData.WorkMgr.FromFormatted("`{0}`",
+                pEvalData.GetWorkMgr().FromFormatted("`{0}`",
                     "According to the chain rule multiply the derivative of the inner function by the derivative of the outer function.",
                     MulOp.StaticWeakCombine(innerDeriv, deriv));
 
@@ -970,33 +962,33 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             if (ca_derivSymb == null)
             {
-                ca_derivSymb = "d/(" + NotationIden + _withRespectTo.ToDispString() + ")";
+                ca_derivSymb = "d/(" + GetNotationIden() + _withRespectTo.ToDispString() + ")";
             }
 
-            pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]`",
+            pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[{0}]`",
                 _derivOf == null ? "Take the derivative of this expression with respect to `" + _withRespectTo.ToDispString() + "`." :
                 "Find the derivative `" + ConstructImplicitDerivAgCmp().ToDispString() + "`", ex);
 
             if (!ContainsVarOfInterest(ex))
             {
-                pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]=0`", "The entire term is constant therefore the derivative equals `0`", ex);
-                return Number.Zero;
+                pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[{0}]=0`", "The entire term is constant therefore the derivative equals `0`", ex);
+                return Number.GetZero();
             }
 
             if (ex is AlgebraComp)
             {
                 if (_withRespectTo.IsEqualTo(ex))
                 {
-                    pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]=1`",
+                    pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[{0}]=1`",
                         "Use the power rule.", ex);
-                    return Number.One;
+                    return Number.GetOne();
                 }
                 else if (_derivOf != null && _derivOf.IsEqualTo(ex))
                 {
-                    pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]=(d{0})/(d{1})`",
+                    pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[{0}]=(d{0})/(d{1})`",
                         "As `{1}` is a function of `{0}` rather than the derivative being `(" +
-                        NotationIden + "{1})/(" + NotationIden + "{1})=1` it is `(" + NotationIden +
-                        "{0})/(" + NotationIden + "{1})`", _derivOf, _withRespectTo);
+                        GetNotationIden() + "{1})/(" + GetNotationIden() + "{1})=1` it is `(" + GetNotationIden() +
+                        "{0})/(" + GetNotationIden() + "{1})`", _derivOf, _withRespectTo);
                     return ConstructImplicitDerivAgCmp();
                 }
             }
@@ -1036,10 +1028,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     ExComp numEx = numDen[0].RemoveRedundancies();
                     ExComp denEx = numDen[1].RemoveRedundancies();
 
-                    if (Number.One.IsEqualTo(numEx) && denEx is PowerFunction)
+                    if (Number.GetOne().IsEqualTo(numEx) && denEx is PowerFunction)
                     {
                         PowerFunction pfDen = denEx as PowerFunction;
-                        pfDen.Power = MulOp.Negate(pfDen.Power);
+                        pfDen.SetPower(MulOp.Negate(pfDen.GetPower()));
 
                         return ApplyPower(pfDen, ref pEvalData);
                     }
@@ -1048,7 +1040,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 List<ExComp[]> gps = term.GetGroupsNoOps();
                 AlgebraTerm final = new AlgebraTerm();
 
-                if (gps.Count != 1 && pEvalData.WorkMgr.AllowWork)
+                if (gps.Count != 1 && pEvalData.GetWorkMgr().AllowWork)
                 {
                     string indvDerivs = "";
                     for (int i = 0; i < gps.Count; ++i)
@@ -1058,7 +1050,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                             indvDerivs += "+";
                     }
 
-                    pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[" + WorkMgr.ToDisp(ex) + "]=" + indvDerivs + "`",
+                    pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[" + WorkMgr.ToDisp(ex) + "]=" + indvDerivs + "`",
                         "Split the derivative up using the property of derivatives that `d/(dx)[f(x)+g(x)]=f'(x)+g'(x)`");
                 }
 
@@ -1090,7 +1082,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             else
                 gp.GetConstVarTo(out varTo, out constTo, _withRespectTo, _derivOf);
 
-            if (constTo.Length == 1 && constTo[0].IsEqualTo(Number.One))
+            if (constTo.Length == 1 && constTo[0].IsEqualTo(Number.GetOne()))
             {
                 ExComp[] empty = { };
                 constTo = empty;
@@ -1098,8 +1090,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             if (varTo.Length == 0)
             {
-                pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[" + gp.FinalToMathAsciiString() + "]=0`", "The entire term is constant therefore the derivative equals `0`");
-                return Number.Zero;
+                pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[" + gp.FinalToMathAsciiString() + "]=0`", "The entire term is constant therefore the derivative equals `0`");
+                return Number.GetZero();
             }
 
             string varToStr = varTo.ToAlgTerm().ToAsciiString();
@@ -1108,7 +1100,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             if (constTo.Length != 0)
             {
-                pEvalData.WorkMgr.FromFormatted("`" + constTo.ToAlgTerm().ToDispString() + ca_derivSymb + "[" + varToStr + "]`",
+                pEvalData.GetWorkMgr().FromFormatted("`" + constTo.ToAlgTerm().ToDispString() + ca_derivSymb + "[" + varToStr + "]`",
                     "Bring out all constants as they will have no effect on the derivative. This comes from the derivative property that `d/(dx)[kf(x)]=k*d/(dx)[f(x)]` the constants will be multiplied back in at the end.");
             }
 
@@ -1128,31 +1120,31 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     ExComp numEx = num.ToAlgTerm();
                     ExComp denEx = den.ToAlgTerm();
 
-                    pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[" + varToStr + "]`",
+                    pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[" + varToStr + "]`",
                         "As the above is a fraction use the quotient rule which states `d/(dx)[u/v]=(u'v-uv')/(v^2)`. In this case `u=" + numEx.ToDispString() + "`, `v=" + denEx.ToDispString() + "`");
 
                     // Use the quotient rule.
-                    pEvalData.WorkMgr.FromFormatted("",
+                    pEvalData.GetWorkMgr().FromFormatted("",
                         "First find the derivative of the numerator.");
-                    WorkStep last0 = pEvalData.WorkMgr.GetLast();
+                    WorkStep last0 = pEvalData.GetWorkMgr().GetLast();
 
                     last0.GoDown(ref pEvalData);
                     ExComp numDeriv = TakeDerivativeOfGp(num, ref pEvalData);
                     last0.GoUp(ref pEvalData);
 
-                    last0.WorkHtml = WorkMgr.STM + ca_derivSymb + "[" + num.ToAlgTerm().FinalToDispStr() + "]=" + WorkMgr.ToDisp(numDeriv) + WorkMgr.EDM;
+                    last0.SetWorkHtml(WorkMgr.STM + ca_derivSymb + "[" + num.ToAlgTerm().FinalToDispStr() + "]=" + WorkMgr.ToDisp(numDeriv) + WorkMgr.EDM);
 
-                    pEvalData.WorkMgr.FromFormatted("",
+                    pEvalData.GetWorkMgr().FromFormatted("",
                         "Find the derivative of the denominator.");
-                    WorkStep last1 = pEvalData.WorkMgr.GetLast();
+                    WorkStep last1 = pEvalData.GetWorkMgr().GetLast();
 
                     last1.GoDown(ref pEvalData);
                     ExComp denDeriv = TakeDerivativeOfGp(den, ref pEvalData);
                     last1.GoUp(ref pEvalData);
 
-                    last1.WorkHtml = WorkMgr.STM + ca_derivSymb + "[" + den.ToAlgTerm().FinalToDispStr() + "]=" + WorkMgr.ToDisp(denDeriv) + WorkMgr.EDM;
+                    last1.SetWorkHtml(WorkMgr.STM + ca_derivSymb + "[" + den.ToAlgTerm().FinalToDispStr() + "]=" + WorkMgr.ToDisp(denDeriv) + WorkMgr.EDM);
 
-                    pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[" + varToStr + "]=(({0})({1})-({2})({3}))/(({1})^2)`",
+                    pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[" + varToStr + "]=(({0})({1})-({2})({3}))/(({1})^2)`",
                         "Plug the values back into the equation for the quotient rule `d/(dx)[u/v]=(u'v-uv')/(v^2)`. In the above case `u={2}`, `u'={0}`, `v={1}`, `v'={3}`", numDeriv, denEx, numEx, denDeriv);
 
                     ExComp tmpMul0 = MulOp.StaticCombine(numDeriv, denEx.CloneEx());
@@ -1168,18 +1160,18 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     ExComp u = num[0];
                     ExComp v = num.ToList().GetRange(1, num.Length - 1).ToArray().ToAlgTerm();
 
-                    pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[" + num.ToAsciiString() + "]`",
+                    pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[" + num.ToAsciiString() + "]`",
                         "Apply the product rule which states `d/(dx)[u*v]=u'v+uv'` in this case `u={0}`, `v={1}`", u, v);
 
-                    pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]`", "Calculate `u'` for the product rule.", u);
-                    WorkStep last0 = pEvalData.WorkMgr.GetLast();
+                    pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[{0}]`", "Calculate `u'` for the product rule.", u);
+                    WorkStep last0 = pEvalData.GetWorkMgr().GetLast();
 
                     last0.GoDown(ref pEvalData);
                     ExComp uDeriv = TakeDerivativeOf(u, ref pEvalData);
                     last0.GoUp(ref pEvalData);
 
-                    pEvalData.WorkMgr.FromFormatted("`" + ca_derivSymb + "[{0}]`", "Calculate `v'` for the product rule.", v);
-                    WorkStep last1 = pEvalData.WorkMgr.GetLast();
+                    pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[{0}]`", "Calculate `v'` for the product rule.", v);
+                    WorkStep last1 = pEvalData.GetWorkMgr().GetLast();
 
                     last1.GoDown(ref pEvalData);
                     ExComp vDeriv = TakeDerivativeOf(v, ref pEvalData);
@@ -1196,7 +1188,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 return derivTerm;
             ExComp constToEx = constTo.ToAlgTerm();
 
-            pEvalData.WorkMgr.FromFormatted("`{0}*" + ca_derivSymb + "[" + varTo.ToAsciiString() + "]={0}*{1}`", "Multiply back in the constants.", constToEx, derivTerm);
+            pEvalData.GetWorkMgr().FromFormatted("`{0}*" + ca_derivSymb + "[" + varTo.ToAsciiString() + "]={0}*{1}`", "Multiply back in the constants.", constToEx, derivTerm);
 
             return MulOp.StaticCombine(constToEx, derivTerm);
         }

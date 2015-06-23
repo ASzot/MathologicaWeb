@@ -31,7 +31,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             }
             left = left.CompoundLogs();
 
-            if (left.GroupCount != 1)
+            if (left.GetGroupCount() != 1)
                 return null;
 
             ExComp leftLogEx = left.RemoveRedundancies();
@@ -44,11 +44,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
             LogFunction log = leftLogEx as LogFunction;
 
-            PowerFunction powFunc = new PowerFunction(log.Base, right);
+            PowerFunction powFunc = new PowerFunction(log.GetBase(), right);
 
-            pEvalData.WorkMgr.FromSides(powFunc, log.InnerEx, "Convert from logarithm form to exponential form.");
+            pEvalData.GetWorkMgr().FromSides(powFunc, log.GetInnerEx(), "Convert from logarithm form to exponential form.");
 
-            return p_agSolver.SolveEq(solveFor, powFunc, log.InnerTerm, ref pEvalData);
+            return p_agSolver.SolveEq(solveFor, powFunc, log.GetInnerTerm(), ref pEvalData);
         }
     }
 }

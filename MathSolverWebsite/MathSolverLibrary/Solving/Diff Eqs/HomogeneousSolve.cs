@@ -60,7 +60,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
                 if (!(xPow is Number) || !(xPow as Number).IsRealInteger())
                     return null;
 
-                int iPow = (int)(xPow as Number).RealComp;
+                int iPow = (int)(xPow as Number).GetRealComp();
                 if (iPow < 1.0)
                     return null;
 
@@ -72,7 +72,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
                 if (!(yPow is Number) || !(yPow as Number).IsRealInteger())
                     return null;
 
-                int iPow = (int)(yPow as Number).RealComp;
+                int iPow = (int)(yPow as Number).GetRealComp();
                 if (iPow < 1.0)
                     return null;
 
@@ -107,7 +107,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             numDen[0] = Limit.ComponentWiseDiv(numDen[0], xPf, dVar).ToAlgTerm();
             numDen[1] = Limit.ComponentWiseDiv(numDen[1], xPf, dVar).ToAlgTerm();
 
-            pEvalData.WorkMgr.FromSides(left, AlgebraTerm.FromFraction(numDen[0], numDen[1]), "Divide the numerator and denominator by " + WorkMgr.STM + WorkMgr.ToDisp(xPf) + WorkMgr.EDM);
+            pEvalData.GetWorkMgr().FromSides(left, AlgebraTerm.FromFraction(numDen[0], numDen[1]), "Divide the numerator and denominator by " + WorkMgr.STM + WorkMgr.ToDisp(xPf) + WorkMgr.EDM);
 
             // Make the substitution 'y/x -> v'
             AlgebraComp subVar = new AlgebraComp("$v");
@@ -123,7 +123,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             left = AddOp.StaticCombine(subVar, MulOp.StaticCombine(dVar, Derivative.ConstructDeriv(dVar, subVar))).ToAlgTerm();
             right = DivOp.StaticCombine(numDen[0], numDen[1]).ToAlgTerm();
 
-            pEvalData.WorkMgr.FromSides(left, right, "Make the substitution " + WorkMgr.STM + "v=\\frac{d" + funcVar.ToDispString() + "}{d" + dVar.ToDispString() + "}" + WorkMgr.EDM);
+            pEvalData.GetWorkMgr().FromSides(left, right, "Make the substitution " + WorkMgr.STM + "v=\\frac{d" + funcVar.ToDispString() + "}{d" + dVar.ToDispString() + "}" + WorkMgr.EDM);
 
             ExComp[] solved = (new SeperableSolve()).Solve(left, right, subVar, dVar, ref pEvalData);
             if (solved == null)
@@ -132,7 +132,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             if (solved[0] is Integral || solved[1] is Integral)
                 return solved;
 
-            pEvalData.WorkMgr.FromSides(solved[0], solved[1]);
+            pEvalData.GetWorkMgr().FromSides(solved[0], solved[1]);
 
             // Substitute back in.
             for (int i = 0; i < solved.Length; ++i)
@@ -142,7 +142,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
                 solved[i] = subbed.MakeWorkable();
             }
 
-            pEvalData.WorkMgr.FromSides(solved[0], solved[1], "Substitute back in " + WorkMgr.STM + subVar.ToDispString() + "=\\frac{" + funcVar.ToDispString() + "}{" + dVar.ToDispString() + "}" + WorkMgr.EDM);
+            pEvalData.GetWorkMgr().FromSides(solved[0], solved[1], "Substitute back in " + WorkMgr.STM + subVar.ToDispString() + "=\\frac{" + funcVar.ToDispString() + "}{" + dVar.ToDispString() + "}" + WorkMgr.EDM);
 
             return solved;
         }
@@ -207,7 +207,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
                 }
 
                 if (den.Length != 0)
-                    gps[i][gps[i].Length - 1] = new PowerFunction(den.ToAlgTerm(), Number.NegOne);
+                    gps[i][gps[i].Length - 1] = new PowerFunction(den.ToAlgTerm(), Number.GetNegOne());
             }
 
             return new AlgebraTerm(gps.ToArray());
@@ -226,18 +226,18 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
                 }
                 else if (gp[j] is PowerFunction)
                 {
-                    ExComp exBase = (gp[j] as PowerFunction).Base;
+                    ExComp exBase = (gp[j] as PowerFunction).GetBase();
                     if (exBase is AlgebraTerm)
                         exBase = (exBase as AlgebraTerm).RemoveRedundancies();
 
                     if (!exBase.IsEqualTo(searchVar))
                         continue;
 
-                    ExComp power = (gp[j] as PowerFunction).Power;
+                    ExComp power = (gp[j] as PowerFunction).GetPower();
                     if (!(power is Number) || !(power as Number).IsRealInteger())
                         continue;
 
-                    pow = (int)(power as Number).RealComp;
+                    pow = (int)(power as Number).GetRealComp();
                     if (pow < 1.0)
                         continue;
 

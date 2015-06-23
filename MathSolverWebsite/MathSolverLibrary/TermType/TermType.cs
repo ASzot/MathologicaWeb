@@ -8,9 +8,9 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
         protected string[] _cmds = null;
         protected MultiLineHelper _multiLineHelper = null;
 
-        public int CmdCount
+        public int GetCmdCount()
         {
-            get { return _cmds.Length; }
+            return _cmds.Length;
         }
 
         public TermType(params string[] cmds)

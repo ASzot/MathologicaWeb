@@ -9,9 +9,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
     {
         private AlgebraComp _lineIden;
 
-        public AlgebraComp LineIden
+        public AlgebraComp GetLineIden()
         {
-            get { return _lineIden; }
+            return _lineIden;
         }
 
         public LineIntegral(ExComp innerEx)
@@ -21,7 +21,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
 
         public override ExComp CloneEx()
         {
-            return ConstructLineIntegral(InnerTerm.CloneEx(), _lineIden == null ? null : (AlgebraComp)_lineIden.CloneEx(), _dVar == null ? null : (AlgebraComp)_dVar.CloneEx());
+            return ConstructLineIntegral(GetInnerTerm().CloneEx(), _lineIden == null ? null : (AlgebraComp)_lineIden.CloneEx(), _dVar == null ? null : (AlgebraComp)_dVar.CloneEx());
         }
 
         public override bool IsEqualTo(ExComp ex)
@@ -43,7 +43,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
             if (this._lineIden != null && !this._lineIden.IsEqualTo(other._lineIden))
                 return false;
 
-            return this.InnerEx.IsEqualTo(other.InnerEx);
+            return this.GetInnerEx().IsEqualTo(other.GetInnerEx());
         }
 
         protected override AlgebraTerm CreateInstance(params ExComp[] args)
@@ -53,30 +53,30 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
 
         public override string FinalToTexString()
         {
-            if (InnerEx is ExVector)
-                return "\\oint_{" + _lineIden.ToTexString() + "}" + InnerTerm.FinalToTexString() + "*d" + _dVar.ToTexString();
-            return "\\oint_{" + _lineIden.ToTexString() + "}(" + InnerTerm.FinalToTexString() + ")d" + _dVar.ToTexString();
+            if (GetInnerEx() is ExVector)
+                return "\\oint_{" + _lineIden.ToTexString() + "}" + GetInnerTerm().FinalToTexString() + "*d" + _dVar.ToTexString();
+            return "\\oint_{" + _lineIden.ToTexString() + "}(" + GetInnerTerm().FinalToTexString() + ")d" + _dVar.ToTexString();
         }
 
         public override string FinalToAsciiString()
         {
-            if (InnerEx is ExVector)
-                return "\\oint_{" + _lineIden.ToAsciiString() + "}" + InnerTerm.FinalToAsciiString() + "*d" + _dVar.ToAsciiString();
-            return "\\oint_{" + _lineIden.ToAsciiString() + "}(" + InnerTerm.FinalToAsciiString() + ")d" + _dVar.ToAsciiString();
+            if (GetInnerEx() is ExVector)
+                return "\\oint_{" + _lineIden.ToAsciiString() + "}" + GetInnerTerm().FinalToAsciiString() + "*d" + _dVar.ToAsciiString();
+            return "\\oint_{" + _lineIden.ToAsciiString() + "}(" + GetInnerTerm().FinalToAsciiString() + ")d" + _dVar.ToAsciiString();
         }
 
         public override string ToTexString()
         {
-            if (InnerEx is ExVector)
-                return "\\oint_{" + _lineIden.ToTexString() + "}" + InnerTerm.ToTexString() + "*d" + _dVar.ToTexString();
-            return "\\oint_{" + _lineIden.ToTexString() + "}(" + InnerTerm.ToTexString() + ")d" + _dVar.ToTexString();
+            if (GetInnerEx() is ExVector)
+                return "\\oint_{" + _lineIden.ToTexString() + "}" + GetInnerTerm().ToTexString() + "*d" + _dVar.ToTexString();
+            return "\\oint_{" + _lineIden.ToTexString() + "}(" + GetInnerTerm().ToTexString() + ")d" + _dVar.ToTexString();
         }
 
         public override string ToAsciiString()
         {
-            if (InnerEx is ExVector)
-                return "\\oint_{" + _lineIden.ToAsciiString() + "}" + InnerTerm.ToAsciiString() + "*d" + _dVar.ToAsciiString();
-            return "\\oint_{" + _lineIden.ToAsciiString() + "}(" + InnerTerm.ToAsciiString() + ")d" + _dVar.ToAsciiString();
+            if (GetInnerEx() is ExVector)
+                return "\\oint_{" + _lineIden.ToAsciiString() + "}" + GetInnerTerm().ToAsciiString() + "*d" + _dVar.ToAsciiString();
+            return "\\oint_{" + _lineIden.ToAsciiString() + "}(" + GetInnerTerm().ToAsciiString() + ")d" + _dVar.ToAsciiString();
         }
 
         public static LineIntegral ConstructLineIntegral(ExComp innerEx, AlgebraComp surfaceIden, AlgebraComp withRespectTo)
@@ -93,14 +93,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
             string totalFuncStr = "";
             for (int i = 0; i < useDefs.Length; ++i)
             {
-                totalFuncStr += "(\\frac{d" + useDefs[i].Data1 + "}{d" + pathVar.ToDispString() + "})^{2}";
+                totalFuncStr += "(\\frac{d" + useDefs[i].GetData1() + "}{d" + pathVar.ToDispString() + "})^{2}";
                 if (i != useDefs.Length - 1)
                     totalFuncStr += "+";
             }
 
             totalFuncStr = "\\sqrt{" + totalFuncStr + "}";
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "d" + pathVar.ToDispString() + "=" + totalFuncStr + WorkMgr.EDM,
+            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "d" + pathVar.ToDispString() + "=" + totalFuncStr + WorkMgr.EDM,
                 "Find the path differential.");
 
             WorkStep lastStep;
@@ -108,24 +108,24 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
             ExComp[] derived = new ExComp[useDefs.Length];
             for (int i = 0; i < derived.Length; ++i)
             {
-                pEvalData.WorkMgr.FromFormatted("");
-                lastStep = pEvalData.WorkMgr.GetLast();
+                pEvalData.GetWorkMgr().FromFormatted("");
+                lastStep = pEvalData.GetWorkMgr().GetLast();
 
                 lastStep.GoDown(ref pEvalData);
-                derived[i] = Derivative.TakeDeriv(useDefs[i].Data2, pathVar, ref pEvalData);
+                derived[i] = Derivative.TakeDeriv(useDefs[i].GetData2(), pathVar, ref pEvalData);
                 lastStep.GoUp(ref pEvalData);
 
-                lastStep.WorkHtml = WorkMgr.STM + "\\frac{d" + useDefs[i].Data1 + "}{d" + pathVar.ToDispString() + "}=" + WorkMgr.ToDisp(derived[i]) + WorkMgr.EDM;
+                lastStep.SetWorkHtml(WorkMgr.STM + "\\frac{d" + useDefs[i].GetData1() + "}{d" + pathVar.ToDispString() + "}=" + WorkMgr.ToDisp(derived[i]) + WorkMgr.EDM);
             }
 
             ExComp[] squared = new ExComp[derived.Length];
             for (int i = 0; i < squared.Length; ++i)
             {
-                lastStep = pEvalData.WorkMgr.GetLast();
+                lastStep = pEvalData.GetWorkMgr().GetLast();
 
                 squared[i] = PowOp.StaticCombine(derived[i], new Number(2.0));
 
-                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "(\\frac{d" + useDefs[i].Data1 + "}{d" + pathVar.ToDispString() + "})^{2}=" + WorkMgr.ToDisp(squared[i]) + WorkMgr.EDM);
+                pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "(\\frac{d" + useDefs[i].GetData1() + "}{d" + pathVar.ToDispString() + "})^{2}=" + WorkMgr.ToDisp(squared[i]) + WorkMgr.EDM);
             }
 
             ExComp combined = null;
@@ -137,22 +137,22 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
                     combined = AddOp.StaticCombine(combined, squared[i]);
             }
 
-            ExComp surfaceDifferential = PowOp.StaticCombine(combined, AlgebraTerm.FromFraction(Number.One, new Number(2.0)));
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "d" + _dVar.ToDispString() + "=" + totalFuncStr + "=" + WorkMgr.ToDisp(surfaceDifferential) + WorkMgr.EDM);
+            ExComp surfaceDifferential = PowOp.StaticCombine(combined, AlgebraTerm.FromFraction(Number.GetOne(), new Number(2.0)));
+            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "d" + _dVar.ToDispString() + "=" + totalFuncStr + "=" + WorkMgr.ToDisp(surfaceDifferential) + WorkMgr.EDM);
 
-            AlgebraTerm innerTerm = InnerTerm;
+            AlgebraTerm innerTerm = GetInnerTerm();
             for (int i = 0; i < useDefs.Length; ++i)
             {
-                innerTerm = innerTerm.Substitute(new AlgebraComp(useDefs[i].Data1), useDefs[i].Data2);
+                innerTerm = innerTerm.Substitute(new AlgebraComp(useDefs[i].GetData1()), useDefs[i].GetData2());
             }
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + this.FinalToDispStr() + "=" + "\\oint_{" + _lineIden.ToDispString() +
+            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + this.FinalToDispStr() + "=" + "\\oint_{" + _lineIden.ToDispString() +
                 "}(" + innerTerm.FinalToDispStr() + ")ds" + WorkMgr.EDM, "Substitute in the parameterized path.");
 
             ExComp totalInner = MulOp.StaticCombine(innerTerm, surfaceDifferential);
 
-            pEvalData.WorkMgr.FromFormatted("", "Use the path domain to convert to a definite integral.");
-            lastStep = pEvalData.WorkMgr.GetLast();
+            pEvalData.GetWorkMgr().FromFormatted("", "Use the path domain to convert to a definite integral.");
+            lastStep = pEvalData.GetWorkMgr().GetLast();
 
             lastStep.GoDown(ref pEvalData);
 
@@ -161,7 +161,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
 
             lastStep.GoUp(ref pEvalData);
 
-            lastStep.WorkHtml = WorkMgr.STM + integral.FinalToDispStr() + (integralEval is Integral ? "" : "=" + WorkMgr.ToDisp(integralEval)) + WorkMgr.EDM;
+            lastStep.SetWorkHtml(WorkMgr.STM + integral.FinalToDispStr() + (integralEval is Integral ? "" : "=" + WorkMgr.ToDisp(integralEval)) + WorkMgr.EDM);
 
             return integralEval;
         }
@@ -174,14 +174,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
 
             for (int i = 0; i < useDefs.Length; ++i)
             {
-                pEvalData.WorkMgr.FromFormatted("", "Work towards calculating " + WorkMgr.STM + pathDerivStr + WorkMgr.EDM);
-                lastStep = pEvalData.WorkMgr.GetLast();
+                pEvalData.GetWorkMgr().FromFormatted("", "Work towards calculating " + WorkMgr.STM + pathDerivStr + WorkMgr.EDM);
+                lastStep = pEvalData.GetWorkMgr().GetLast();
 
                 lastStep.GoDown(ref pEvalData);
-                pathDerivs[i] = Derivative.TakeDeriv(useDefs[i].Data2, pathVar, ref pEvalData);
+                pathDerivs[i] = Derivative.TakeDeriv(useDefs[i].GetData2(), pathVar, ref pEvalData);
                 lastStep.GoUp(ref pEvalData);
 
-                lastStep.WorkHtml = WorkMgr.STM + "\\frac{d" + useDefs[i].Data1 + "}{d" + pathVar.ToDispString() + "}=" + WorkMgr.ToDisp(pathDerivs[i]) + WorkMgr.EDM;
+                lastStep.SetWorkHtml(WorkMgr.STM + "\\frac{d" + useDefs[i].GetData1() + "}{d" + pathVar.ToDispString() + "}=" + WorkMgr.ToDisp(pathDerivs[i]) + WorkMgr.EDM);
             }
 
             string pathStr = "";
@@ -195,13 +195,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
 
             pathStr = "[" + pathStr + "]";
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "d" + _dVar.ToDispString() + "=" + pathDerivStr + "=" + pathStr + WorkMgr.EDM);
+            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "d" + _dVar.ToDispString() + "=" + pathDerivStr + "=" + pathStr + WorkMgr.EDM);
 
             // Rewrite the function in terms of the path variable.
-            AlgebraTerm innerTerm = InnerTerm;
+            AlgebraTerm innerTerm = GetInnerTerm();
             foreach (TypePair<string, ExComp> useDef in useDefs)
             {
-                innerTerm = innerTerm.Substitute(new AlgebraComp(useDef.Data1), useDef.Data2);
+                innerTerm = innerTerm.Substitute(new AlgebraComp(useDef.GetData1()), useDef.GetData2());
             }
 
             ExComp innerEx = innerTerm is AlgebraTerm ? (innerTerm as AlgebraTerm).RemoveRedundancies() : innerTerm;
@@ -210,10 +210,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
 
             ExVector innerVec = innerEx as ExVector;
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + this.FinalToDispStr() + "=\\oint_{" + _lineIden.ToDispString() + "}" + innerVec.FinalToDispStr() + "*d" + _dVar.ToDispString() + WorkMgr.EDM,
+            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + this.FinalToDispStr() + "=\\oint_{" + _lineIden.ToDispString() + "}" + innerVec.FinalToDispStr() + "*d" + _dVar.ToDispString() + WorkMgr.EDM,
                 "Substitute in the parameterized path.");
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + innerVec.FinalToDispStr() + "*" + pathStr + WorkMgr.EDM, "Calculate the dot product.");
+            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + innerVec.FinalToDispStr() + "*" + pathStr + WorkMgr.EDM, "Calculate the dot product.");
 
             // Take the dot product of the function and the path equation.
             ExComp[] overallTerms = new ExComp[useDefs.Length];
@@ -232,18 +232,18 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
                 overallTerm = AddOp.StaticCombine(overallTerm, overallTerms[i]);
             }
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + innerVec.FinalToDispStr() + "*" + pathStr + "=" + WorkMgr.ToDisp(overallTerm) + WorkMgr.EDM);
+            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + innerVec.FinalToDispStr() + "*" + pathStr + "=" + WorkMgr.ToDisp(overallTerm) + WorkMgr.EDM);
 
             Integral integral = Integral.ConstructIntegral(overallTerm, pathVar, pathRestriction.GetLower(), pathRestriction.GetUpper());
 
-            pEvalData.WorkMgr.FromFormatted("", "Use the path domain to convert to a definite integral.");
-            lastStep = pEvalData.WorkMgr.GetLast();
+            pEvalData.GetWorkMgr().FromFormatted("", "Use the path domain to convert to a definite integral.");
+            lastStep = pEvalData.GetWorkMgr().GetLast();
 
             lastStep.GoDown(ref pEvalData);
             ExComp evaluated = integral.Evaluate(false, ref pEvalData);
             lastStep.GoUp(ref pEvalData);
 
-            lastStep.WorkHtml = WorkMgr.STM + integral.FinalToDispStr() + (evaluated is Integral ? "" : "=" + WorkMgr.ToDisp(evaluated)) + WorkMgr.EDM;
+            lastStep.SetWorkHtml(WorkMgr.STM + integral.FinalToDispStr() + (evaluated is Integral ? "" : "=" + WorkMgr.ToDisp(evaluated)) + WorkMgr.EDM);
 
             return evaluated;
         }
@@ -253,14 +253,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
             CallChildren(harshEval, ref pEvalData);
 
             // Get the line.
-            List<FunctionDefinition> vectorFuncs = pEvalData.FuncDefs.GetAllVecEquations(1);
+            List<FunctionDefinition> vectorFuncs = pEvalData.GetFuncDefs().GetAllVecEquations(1);
             FunctionDefinition vectorFunc = null;
             if (vectorFuncs != null || vectorFuncs.Count == 0)
             {
                 vectorFunc = FuncDefHelper.GetMostCurrentDef(vectorFuncs, _lineIden);
             }
 
-            List<FunctionDefinition> paraFuncs = pEvalData.FuncDefs.GetProbableParametricEquations(1);
+            List<FunctionDefinition> paraFuncs = pEvalData.GetFuncDefs().GetProbableParametricEquations(1);
 
             int maxIndex = int.MinValue;
             if (paraFuncs != null)
@@ -272,21 +272,21 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
             TypePair<string, ExComp>[] useDefs;
             AlgebraComp pathVar = null;
 
-            if (vectorFunc != null && vectorFunc.FuncDefIndex > maxIndex)
+            if (vectorFunc != null && vectorFunc.GetFuncDefIndex() > maxIndex)
             {
-                useDefs = pEvalData.FuncDefs.GetDefinitionToPara(vectorFunc);
-                pathVar = vectorFunc.InputArgs[0];
+                useDefs = pEvalData.GetFuncDefs().GetDefinitionToPara(vectorFunc);
+                pathVar = vectorFunc.GetInputArgs()[0];
             }
             else if (paraFuncs.Count < 2)
                 return this;
             else
             {
                 useDefs = new TypePair<string, ExComp>[paraFuncs.Count];
-                pathVar = paraFuncs[0].InputArgs[0];
+                pathVar = paraFuncs[0].GetInputArgs()[0];
                 for (int i = 0; i < useDefs.Length; ++i)
                 {
-                    ExComp definition = pEvalData.FuncDefs.GetDefinition(paraFuncs[i]).Value;
-                    useDefs[i] = new TypePair<string, ExComp>(paraFuncs[i].Iden.Var.Var, definition);
+                    ExComp definition = pEvalData.GetFuncDefs().GetDefinition(paraFuncs[i]).Value;
+                    useDefs[i] = new TypePair<string, ExComp>(paraFuncs[i].GetIden().GetVar().GetVar(), definition);
                 }
             }
 
@@ -294,7 +294,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
             if (pathRestriction == null)
                 return this;
 
-            ExComp innerEx = InnerEx;
+            ExComp innerEx = GetInnerEx();
             if (innerEx is ExVector)
                 return EvaluateVectorField(ref pEvalData, pathVar, pathRestriction, useDefs);
             else if (innerEx is ExMatrix)

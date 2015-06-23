@@ -15,7 +15,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             {
                 if (subComp is AlgebraComp && !(subComp is Constant))
                 {
-                    varStrs.Add((subComp as AlgebraComp).Var.Var);
+                    varStrs.Add((subComp as AlgebraComp).GetVar().GetVar());
                 }
                 else if (subComp is AlgebraTerm)
                 {
@@ -71,7 +71,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             {
                 foreach (ExComp gpCmp in gp)
                 {
-                    if (gpCmp is Functions.PowerFunction && (gpCmp as Functions.PowerFunction).Power.IsEqualTo(power))
+                    if (gpCmp is Functions.PowerFunction && (gpCmp as Functions.PowerFunction).GetPower().IsEqualTo(power))
                     {
                         matchingTerms.Add(gp.ToAlgTerm());
                         break;
@@ -169,7 +169,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         {
             unchecked
             {
-                int hash = GroupCount ^ TermCount;
+                int hash = GetGroupCount() ^ GetTermCount();
                 foreach (ExComp subComp in _subComps)
                 {
                     hash *= subComp.GetHashCode();

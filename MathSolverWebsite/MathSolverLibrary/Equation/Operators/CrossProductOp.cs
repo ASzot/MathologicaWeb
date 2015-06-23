@@ -29,29 +29,29 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
         public static ExComp StaticCombine(ExComp ex1, ExComp ex2)
         {
             if (!(ex1 is ExVector) || !(ex2 is ExVector))
-                return Number.Undefined;
+                return Number.GetUndefined();
 
             ExVector vec0 = ex1 as ExVector;
             ExVector vec1 = ex2 as ExVector;
 
-            if (vec0.Length != vec1.Length)
-                return Number.Undefined;
+            if (vec0.GetLength() != vec1.GetLength())
+                return Number.GetUndefined();
 
-            if (vec0.Length == 1)
-                return Number.Undefined;
+            if (vec0.GetLength() == 1)
+                return Number.GetUndefined();
 
-            if (vec0.Length != 2 && vec1.Length != 3)
+            if (vec0.GetLength() != 2 && vec1.GetLength() != 3)
                 return StaticWeakCombine(vec0, vec1);
 
             // The formula is a2b3-a3b2,a3b1-a1b3,a1b2-a2b1
 
             ExComp a1 = vec0.Get(0);
             ExComp a2 = vec0.Get(1);
-            ExComp a3 = vec0.Length > 2 ? vec0.Get(2) : Number.Zero;
+            ExComp a3 = vec0.GetLength() > 2 ? vec0.Get(2) : Number.GetZero();
 
             ExComp b1 = vec1.Get(0);
             ExComp b2 = vec1.Get(1);
-            ExComp b3 = vec1.Length > 2 ? vec1.Get(2) : Number.Zero;
+            ExComp b3 = vec1.GetLength() > 2 ? vec1.Get(2) : Number.GetZero();
 
             ExComp x = SubOp.StaticCombine(MulOp.StaticCombine(a2, b3), MulOp.StaticCombine(a3, b2));
             ExComp y = SubOp.StaticCombine(MulOp.StaticCombine(a3, b1), MulOp.StaticCombine(a1, b3));
@@ -77,7 +77,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
 
             ExVector vec0 = ex1 as ExVector;
             ExVector vec1 = ex2 as ExVector;
-            if (vec0.Length != vec1.Length)
+            if (vec0.GetLength() != vec1.GetLength())
                 return null;
 
             return StaticWeakCombine(ex1, ex2);

@@ -8,29 +8,26 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
         public const string J = "\\vec{j}";
         public const string K = "\\vec{k}";
 
-        public virtual int Length
+        public virtual int GetLength()
         {
-            get { return base.Cols; }
+            return base.GetCols();
         }
 
-        public ExComp X
+        public ExComp GetX()
         {
-            get { return 0 < Length ? Get(0) : Number.Zero; }
+            return 0 < GetLength() ? Get(0) : Number.GetZero();
         }
 
-        public ExComp Y
+        public ExComp GetY()
         {
-            get { return 1 < Length ? Get(1) : Number.Zero; }
+            return 1 < GetLength() ? Get(1) : Number.GetZero();
         }
 
-        public ExComp Z
+        public ExComp GetZ()
         {
-            get
-            {
-                // Not all vectors will have Z component whereas
-                // they are garunteed to have a least an x and y component.
-                return 2 < Length ? Get(2) : Number.Zero;
-            }
+            // Not all vectors will have Z component whereas
+            // they are garunteed to have a least an x and y component.
+            return 2 < GetLength() ? Get(2) : Number.GetZero();
         }
 
         public ExComp[] Components
@@ -63,11 +60,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
 
         public static ExComp Dot(ExVector vec0, ExVector vec1)
         {
-            if (vec0.Length != vec1.Length)
-                return Number.Undefined;
+            if (vec0.GetLength() != vec1.GetLength())
+                return Number.GetUndefined();
 
-            ExComp totalSum = Number.Zero;
-            for (int i = 0; i < vec0.Length; ++i)
+            ExComp totalSum = Number.GetZero();
+            for (int i = 0; i < vec0.GetLength(); ++i)
             {
                 ExComp prod = MulOp.StaticCombine(vec0.Get(i), vec1.Get(i));
                 totalSum = AddOp.StaticCombine(prod, totalSum);
@@ -77,7 +74,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
 
         public virtual ExVector CreateEmptyBody()
         {
-            return new ExVector(Length);
+            return new ExVector(GetLength());
         }
 
         public virtual ExVector CreateVec(params ExComp[] exs)
@@ -87,19 +84,19 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
 
         public ExComp GetVecLength()
         {
-            ExComp sum = Number.Zero;
-            for (int i = 0; i < this.Length; ++i)
+            ExComp sum = Number.GetZero();
+            for (int i = 0; i < this.GetLength(); ++i)
             {
                 sum = AddOp.StaticCombine(PowOp.StaticCombine(Get(i), new Number(2.0)), sum);
             }
 
-            return PowOp.StaticCombine(sum, AlgebraTerm.FromFraction(Number.One, new Number(2.0)));
+            return PowOp.StaticCombine(sum, AlgebraTerm.FromFraction(Number.GetOne(), new Number(2.0)));
         }
 
         public override ExComp CloneEx()
         {
-            ExVector vec = new ExVector(this.Length);
-            for (int i = 0; i < this.Length; ++i)
+            ExVector vec = new ExVector(this.GetLength());
+            for (int i = 0; i < this.GetLength(); ++i)
             {
                 vec.Set(i, this.Get(i).CloneEx());
             }
@@ -112,7 +109,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
             ExVector vec = this.CreateEmptyBody();
             ExComp vecLength = GetVecLength();
 
-            for (int i = 0; i < this.Length; ++i)
+            for (int i = 0; i < this.GetLength(); ++i)
             {
                 ExComp setVal = DivOp.StaticCombine(this.Get(i), vecLength.CloneEx());
                 vec.Set(i, setVal);

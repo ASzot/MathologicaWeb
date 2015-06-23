@@ -13,24 +13,24 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         private readonly double d_value;
 
-        public static Constant E
+        public static Constant GetE()
         {
-            get { return ParseConstant("e"); }
+            return ParseConstant("e");
         }
 
-        public static Constant Pi
+        public static Constant GetPi()
         {
-            get { return ParseConstant("pi"); }
+            return ParseConstant("pi");
         }
 
-        public static AlgebraTerm TwoPi
+        public static AlgebraTerm GetTwoPi()
         {
-            get { return new AlgebraTerm(new Number(2.0), new Operators.MulOp(), Pi); }
+            return new AlgebraTerm(new Number(2.0), new Operators.MulOp(), GetPi());
         }
 
-        public Number Value
+        public Number GetValue()
         {
-            get { return new Number(d_value); }
+            return new Number(d_value);
         }
 
         public Constant(string iden, double value)
@@ -43,7 +43,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         {
             foreach (Constant constant in _definedConstants.ToList())
             {
-                if (constant.Var.Var == parseStr)
+                if (constant.GetVar().GetVar() == parseStr)
                     return constant;
             }
 
@@ -52,7 +52,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public override ExComp CloneEx()
         {
-            return new Constant(_var.Var, d_value);
+            return new Constant(_var.GetVar(), d_value);
         }
 
         public override double GetCompareVal()
@@ -77,7 +77,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         {
             if (MathSolver.USE_TEX_DEBUG)
                 return ToTexString();
-            return "C(" + Var.ToString() + ")";
+            return "C(" + GetVar().ToString() + ")";
         }
     }
 }

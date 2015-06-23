@@ -25,19 +25,19 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 for (int j = 0; j < checkGroups2.Count(); ++j)
                 {
                     TypePair<bool, ExComp> checkGroup = checkGroups2.ElementAt(j);
-                    if (checkGroup.Data1)
+                    if (checkGroup.GetData1())
                         continue;
-                    if (checkGroup.Data2.GetType() == comp.GetType())
+                    if (checkGroup.GetData2().GetType() == comp.GetType())
                     {
-                        if (checkGroup.Data2.IsEqualTo(comp))
-                            checkGroups2[j].Data1 = true;
+                        if (checkGroup.GetData2().IsEqualTo(comp))
+                            checkGroups2[j].SetData1(true);
                     }
                 }
             }
 
             foreach (TypePair<bool, ExComp> checkGroup in checkGroups2)
             {
-                if (!checkGroup.Data1)
+                if (!checkGroup.GetData1())
                     return false;
             }
 
@@ -135,12 +135,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 for (int j = 0; j < group2Checks.Count; ++j)
                 {
                     TypePair<ExComp[], bool> group2Check = group2Checks[j];
-                    if (group2Check.Data2)
+                    if (group2Check.GetData2())
                         continue;
-                    if (GroupsCombinable(group1, group2Check.Data1))
+                    if (GroupsCombinable(group1, group2Check.GetData1()))
                     {
-                        match = group2Check.Data1;
-                        group2Checks[j].Data2 = true;
+                        match = group2Check.GetData1();
+                        group2Checks[j].SetData2(true);
                         break;
                     }
                 }
@@ -168,8 +168,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
             foreach (TypePair<ExComp[], bool> group2Check in group2Checks)
             {
-                if (!group2Check.Data2)
-                    intersectedGroups.Add(group2Check.Data1);
+                if (!group2Check.GetData2())
+                    intersectedGroups.Add(group2Check.GetData1());
             }
 
             AlgebraTerm finalTerm = new AlgebraTerm(intersectedGroups.ToArray());
@@ -187,8 +187,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 bool combinable = false;
                 if (groupComp is PowerFunction || comp is PowerFunction)
                 {
-                    ExComp base1 = groupComp is PowerFunction ? (groupComp as PowerFunction).Base : groupComp;
-                    ExComp base2 = comp is PowerFunction ? (comp as PowerFunction).Base : comp;
+                    ExComp base1 = groupComp is PowerFunction ? (groupComp as PowerFunction).GetBase() : groupComp;
+                    ExComp base2 = comp is PowerFunction ? (comp as PowerFunction).GetBase() : comp;
 
                     combinable = base1.IsEqualTo(base2);
                 }
@@ -251,25 +251,25 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                     if (trigFunc is PowerFunction)
                     {
                         PowerFunction pfTf = trigFunc as PowerFunction;
-                        if (!(pfTf.Power is Number))
+                        if (!(pfTf.GetPower() is Number))
                             return null;
-                        Number pfTfPow = pfTf.Power as Number;
+                        Number pfTfPow = pfTf.GetPower() as Number;
                         if (!pfTfPow.IsRealInteger())
                             return null;
-                        int pow = (int)pfTfPow.RealComp;
+                        int pow = (int)pfTfPow.GetRealComp();
                         if (pow % 2 != 0)
-                            return pfTf.Base as TrigFunction;
-                        trigFuncIntPows.Add(new TypePair<int, TrigFunction>(pow, pfTf.Base as TrigFunction));
+                            return pfTf.GetBase() as TrigFunction;
+                        trigFuncIntPows.Add(new TypePair<int, TrigFunction>(pow, pfTf.GetBase() as TrigFunction));
                     }
                     else
                         throw new InvalidOperationException();
                 }
 
-                trigFuncIntPows.OrderBy(trigFuncIntPow => trigFuncIntPow.Data1);
+                trigFuncIntPows.OrderBy(trigFuncIntPow => trigFuncIntPow.GetData1());
 
                 if (trigFuncIntPows.Count > 0)
                 {
-                    return trigFuncIntPows[0].Data2;
+                    return trigFuncIntPows[0].GetData2();
                 }
             }
 

@@ -38,9 +38,9 @@ namespace MathSolverWebsite.MathSolverLibrary
         [ThreadStatic]
         private static Random Local;
 
-        public static Random ThisThreadsRandom
+        public static Random getThisThreadsRandom()
         {
-            get { return Local ?? (Local = new Random(unchecked(Environment.TickCount * 31 + Environment.CurrentManagedThreadId))); }
+            return Local ?? (Local = new Random(unchecked(Environment.TickCount * 31 + Environment.CurrentManagedThreadId)));
         }
     }
 
@@ -49,16 +49,24 @@ namespace MathSolverWebsite.MathSolverLibrary
         private T _data1;
         private K _data2;
 
-        public T Data1
+        public void SetData1(T value)
         {
-            get { return _data1; }
-            set { _data1 = value; }
+            _data1 = value;
         }
 
-        public K Data2
+        public T GetData1()
         {
-            get { return _data2; }
-            set { _data2 = value; }
+            return _data1;
+        }
+
+        public void SetData2(K value)
+        {
+            _data2 = value;
+        }
+
+        public K GetData2()
+        {
+            return _data2;
         }
 
         public TypePair(T data1, K data2)
@@ -73,7 +81,7 @@ namespace MathSolverWebsite.MathSolverLibrary
 
         public override string ToString()
         {
-            return Data1.ToString() + ":" + Data2.ToString();
+            return GetData1().ToString() + ":" + GetData2().ToString();
         }
     }
 
@@ -85,7 +93,7 @@ namespace MathSolverWebsite.MathSolverLibrary
             while (n > 1)
             {
                 n--;
-                int k = ThreadSafeRandom.ThisThreadsRandom.Next(n + 1);
+                int k = ThreadSafeRandom.getThisThreadsRandom().Next(n + 1);
                 T value = list[k];
                 list[k] = list[n];
                 list[n] = value;

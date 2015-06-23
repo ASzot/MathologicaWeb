@@ -44,8 +44,8 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                     _denPolyInfo = new PolynomialExt();
 
                     if (!_numPolyInfo.Init(numDen[0]) || !_denPolyInfo.Init(numDen[1]) ||
-                        _numPolyInfo.Info.Var == null || _denPolyInfo.Info.Var == null ||
-                        !_numPolyInfo.Info.Var.IsEqualTo(_denPolyInfo.Info.Var))
+                        _numPolyInfo.GetInfo().GetVar() == null || _denPolyInfo.GetInfo().GetVar() == null ||
+                        !_numPolyInfo.GetInfo().GetVar().IsEqualTo(_denPolyInfo.GetInfo().GetVar()))
                     {
                         _numPolyInfo = null;
                         _denPolyInfo = null;
@@ -78,7 +78,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             if (isFuncDef)
                 tmpCmds.Add(KEY_SIMPLIFY);
 
-            if (_numPolyInfo != null && _denPolyInfo != null && _numPolyInfo.MaxPow > _denPolyInfo.MaxPow)
+            if (_numPolyInfo != null && _denPolyInfo != null && _numPolyInfo.GetMaxPow() > _denPolyInfo.GetMaxPow())
             {
                 tmpCmds.Add("Divide");
             }
@@ -86,7 +86,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             if (term is SumFunction)
             {
                 SumFunction sum = term as SumFunction;
-                if (sum.IsInfiniteSeries)
+                if (sum.GetIsInfiniteSeries())
                     tmpCmds.Add("Test for convergence");
             }
 
@@ -102,7 +102,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 else
                 {
                     ExMatrix mat = _term as ExMatrix;
-                    if (mat.IsSquare)
+                    if (mat.GetIsSquare())
                     {
                         tmpCmds.Add("Find inverse");
                         tmpCmds.Add("Find determinant");
@@ -169,7 +169,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
         {
             base.AttachMultiLineHelper(mlh);
 
-            if (_term == null && mlh.ShouldGraph)
+            if (_term == null && mlh.GetShouldGraph())
             {
                 // Adjust to allow for graphing.
                 _cmds = new string[] { "Graph", KEY_SIMPLIFY };
@@ -225,7 +225,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
         public static SolveResult SimplfyTerm(ExComp term, ref EvalData pEvalData)
         {
             if (Number.IsUndef(term))
-                return SolveResult.Simplified(Number.Undefined);
+                return SolveResult.Simplified(Number.GetUndefined());
             ExComp simpEx = BasicSimplify(term, ref pEvalData);
 
             Solution solution;
@@ -241,7 +241,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 }
             }
             else if (simpEx is Constant)
-                solution.ApproximateResult = (simpEx as Constant).Value;
+                solution.ApproximateResult = (simpEx as Constant).GetValue();
 
             return solution.ToSolveResult();
         }
@@ -328,7 +328,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 string varForKey = command.Substring("Derivative d/d".Length, command.Length - "Derivative d/d".Length);
 
                 Equation.Functions.Calculus.Derivative deriv = new Equation.Functions.Calculus.Derivative(_term);
-                deriv.WithRespectTo = new AlgebraComp(varForKey);
+                deriv.SetWithRespectTo(new AlgebraComp(varForKey));
 
                 return SolveResult.Simplified(deriv.Evaluate(false, ref pEvalData));
             }
@@ -357,9 +357,9 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             }
             else if (command == "Graph")
             {
-                if (_term == null && _multiLineHelper.ShouldGraph)
+                if (_term == null && _multiLineHelper.GetShouldGraph())
                 {
-                    pEvalData.AttemptSetGraphData(_multiLineHelper.GraphStrs, _multiLineHelper.GraphVar);
+                    pEvalData.AttemptSetGraphData(_multiLineHelper.GetGraphStrs(), _multiLineHelper.GetGraphVar());
                     return SolveResult.Solved();
                 }
                 string graphStr = _term.ToAlgTerm().GetAllAlgebraCompsStr()[0];

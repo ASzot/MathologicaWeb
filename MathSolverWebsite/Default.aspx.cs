@@ -209,7 +209,7 @@ namespace MathSolverWebsite
             }
             else
             {
-                IEnumerable<KeyValuePair<FunctionDefinition, ExComp>> allFuncDefs = funcDefHelper.AllDefinitions;
+                IEnumerable<KeyValuePair<FunctionDefinition, ExComp>> allFuncDefs = funcDefHelper.GetAllDefinitions();
                 funcDisps = (from funcDef in allFuncDefs
                              select new FuncDispConv(funcDef)).ToList();
             }
@@ -267,7 +267,7 @@ namespace MathSolverWebsite
 
             if (solveResult.Success)
             {
-                workHtml = HtmlHelper.OutputWorkStepsToHtml(evalData.WorkMgr);
+                workHtml = HtmlHelper.OutputWorkStepsToHtml(evalData.GetWorkMgr());
             }
 
             string selectedVal = selectedIndex.ToString();

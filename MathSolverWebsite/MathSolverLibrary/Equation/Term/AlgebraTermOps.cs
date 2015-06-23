@@ -18,7 +18,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public static AlgebraTerm OpSub(AlgebraTerm term, AlgebraGroup group)
         {
-            if (group.GroupCount == 0)
+            if (@group.GetGroupCount() == 0)
                 return term;
 
             AlgebraTerm groupTerm = group.ToTerm();
@@ -35,9 +35,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public static AlgebraTerm OpSub(AlgebraTerm term1, AlgebraTerm term2)
         {
-            if (term2.TermCount == 0)
+            if (term2.GetTermCount() == 0)
                 return term1;
-            if (term1.TermCount == 0)
+            if (term1.GetTermCount() == 0)
                 return term2;
 
             ExComp combined = Operators.SubOp.StaticCombine(term1, term2);
@@ -64,7 +64,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public static AlgebraTerm OpSub(AlgebraTerm term)
         {
-            ExComp negTerm = Operators.MulOp.StaticCombine(Number.NegOne, term);
+            ExComp negTerm = Operators.MulOp.StaticCombine(Number.GetNegOne(), term);
             return negTerm.ToAlgTerm();
         }
 
@@ -75,7 +75,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public static AlgebraTerm OpMul(AlgebraTerm term, AlgebraGroup group)
         {
-            if (group.GroupCount == 0)
+            if (@group.GetGroupCount() == 0)
                 return term;
 
             AlgebraTerm groupTerm = group.ToTerm();
@@ -92,9 +92,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public static AlgebraTerm OpMul(AlgebraTerm term1, AlgebraTerm term2)
         {
-            if (term2.TermCount == 0)
+            if (term2.GetTermCount() == 0)
                 return term1;
-            if (term1.TermCount == 0)
+            if (term1.GetTermCount() == 0)
                 return term2;
 
             ExComp combined = Operators.MulOp.StaticCombine(term1, term2);
@@ -110,7 +110,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public static AlgebraTerm OpDiv(AlgebraTerm term, AlgebraGroup group)
         {
-            if (group.GroupCount == 0)
+            if (@group.GetGroupCount() == 0)
                 return term;
 
             AlgebraTerm groupTerm = group.ToTerm();
@@ -127,10 +127,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public static AlgebraTerm OpDiv(AlgebraTerm term1, AlgebraTerm term2)
         {
-            if (term2.TermCount == 0)
-                return Number.Undefined.ToAlgTerm();
-            if (term1.TermCount == 0)
-                return Number.Zero.ToAlgTerm();
+            if (term2.GetTermCount() == 0)
+                return Number.GetUndefined().ToAlgTerm();
+            if (term1.GetTermCount() == 0)
+                return Number.GetZero().ToAlgTerm();
 
             ExComp combined = Operators.DivOp.StaticCombine(term1, term2);
             if (combined is AlgebraTerm)
@@ -145,7 +145,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public static AlgebraTerm OpAdd(AlgebraTerm term, AlgebraGroup group)
         {
-            if (group.GroupCount == 0)
+            if (@group.GetGroupCount() == 0)
                 return term;
 
             AlgebraTerm groupTerm = group.ToTerm();
@@ -162,9 +162,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public static AlgebraTerm OpAdd(AlgebraTerm term1, AlgebraTerm term2)
         {
-            if (term2.TermCount == 0)
+            if (term2.GetTermCount() == 0)
                 return term1;
-            if (term1.TermCount == 0)
+            if (term1.GetTermCount() == 0)
                 return term2;
 
             ExComp combined = Operators.AddOp.StaticCombine(term1, term2);

@@ -9,9 +9,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
         private int _defineIndex = 0;
         private Dictionary<FunctionDefinition, ExComp> _defs = new Dictionary<FunctionDefinition, ExComp>();
 
-        public IEnumerable<KeyValuePair<FunctionDefinition, ExComp>> AllDefinitions
+        public IEnumerable<KeyValuePair<FunctionDefinition, ExComp>> GetAllDefinitions()
         {
-            get { return _defs; }
+            return _defs;
         }
 
         public FuncDefHelper()
@@ -23,7 +23,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
             List<FunctionDefinition> funcDefs = new List<FunctionDefinition>();
             foreach (KeyValuePair<FunctionDefinition, ExComp> func in _defs)
             {
-                if (func.Key.InputArgCount == dimen && !(func.Value is ExMatrix))
+                if (func.Key.GetInputArgCount() == dimen && !(func.Value is ExMatrix))
                     funcDefs.Add(func.Key);
             }
 
@@ -36,7 +36,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
             List<FunctionDefinition> funcs = GetAllParaFuncs(dimen);
             foreach (FunctionDefinition func in funcs)
             {
-                string varStr = func.InputArgs[0].Var.Var;
+                string varStr = func.GetInputArgs()[0].GetVar().GetVar();
                 if (!funcDicts.ContainsKey(varStr))
                     funcDicts[varStr] = new List<FunctionDefinition>();
                 funcDicts[varStr].Add(func);
@@ -50,7 +50,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
             for (int i = 0; i < funcs.Count; ++i)
             {
                 FunctionDefinition funcDef = funcs[i];
-                if (funcDef.Iden.Var.Var == iden)
+                if (funcDef.GetIden().GetVar().GetVar() == iden)
                 {
                     return funcDef;
                 }
@@ -63,9 +63,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
             int maxIndex = int.MinValue;
             foreach (FunctionDefinition funcDef in funcDefs)
             {
-                if (funcDef.FuncDefIndex > maxIndex)
+                if (funcDef.GetFuncDefIndex() > maxIndex)
                 {
-                    maxIndex = funcDef.FuncDefIndex;
+                    maxIndex = funcDef.GetFuncDefIndex();
                 }
             }
 
@@ -84,11 +84,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
             FunctionDefinition func = null;
             foreach (FunctionDefinition funcDef in funcDefs)
             {
-                if (biasIden != null && funcDef.Iden.IsEqualTo(biasIden))
+                if (biasIden != null && funcDef.GetIden().IsEqualTo(biasIden))
                     return funcDef;
-                if (funcDef.FuncDefIndex > maxIndex)
+                if (funcDef.GetFuncDefIndex() > maxIndex)
                 {
-                    maxIndex = funcDef.FuncDefIndex;
+                    maxIndex = funcDef.GetFuncDefIndex();
                     func = funcDef;
                 }
             }
@@ -119,7 +119,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
             List<FunctionDefinition> funcs = new List<FunctionDefinition>();
             foreach (KeyValuePair<FunctionDefinition, ExComp> keyVal in _defs)
             {
-                if (keyVal.Key.InputArgCount == dimen && (keyVal.Value is ExVector))
+                if (keyVal.Key.GetInputArgCount() == dimen && (keyVal.Value is ExVector))
                 {
                     funcs.Add(keyVal.Key);
                 }
@@ -132,7 +132,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
         {
             foreach (KeyValuePair<FunctionDefinition, ExComp> keyVal in _defs)
             {
-                if (keyVal.Key.Iden.IsEqualTo(iden) && !keyVal.Key.HasValidInputArgs)
+                if (keyVal.Key.GetIden().IsEqualTo(iden) && !keyVal.Key.GetHasValidInputArgs())
                 {
                     return keyVal.Value;
                 }
@@ -167,7 +167,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
             FunctionDefinition removeKey = null;
             foreach (KeyValuePair<FunctionDefinition, ExComp> def in _defs)
             {
-                if (def.Key.Iden.IsEqualTo(func.Iden))
+                if (def.Key.GetIden().IsEqualTo(func.GetIden()))
                 {
                     // The user has redefined this function.
                     removeKey = def.Key;
@@ -177,10 +177,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
 
             if (removeKey != null)
                 _defs.Remove(removeKey);
-            func.FuncDefIndex = _defineIndex++;
+            func.SetFuncDefIndex(_defineIndex++);
 
             if (funcDef is ExVector)
-                func.IsVectorFunc = true;
+                func.SetIsVectorFunc(true);
 
             pEvalData.AddMsg(WorkMgr.STM + func.ToDispString() + WorkMgr.EDM + " defined as " +
                 WorkMgr.STM + WorkMgr.ToDisp(funcDef) + WorkMgr.EDM);
@@ -192,7 +192,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
         {
             foreach (KeyValuePair<FunctionDefinition, ExComp> def in _defs)
             {
-                if (def.Key.Iden.IsEqualTo(func.Iden))
+                if (def.Key.GetIden().IsEqualTo(func.GetIden()))
                     return def;
             }
 
@@ -203,7 +203,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
         {
             foreach (KeyValuePair<FunctionDefinition, ExComp> def in _defs)
             {
-                if (def.Key.Iden.IsEqualTo(searchFuncIden))
+                if (def.Key.GetIden().IsEqualTo(searchFuncIden))
                     return def;
             }
 
@@ -215,14 +215,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
             ExVector useVector = null;
             foreach (KeyValuePair<FunctionDefinition, ExComp> def in _defs)
             {
-                if (def.Key.Iden.IsEqualTo(func.Iden))
+                if (def.Key.GetIden().IsEqualTo(func.GetIden()))
                 {
                     useVector = def.Value as ExVector;
                     break;
                 }
             }
 
-            TypePair<string, ExComp>[] retVec = new TypePair<string, ExComp>[useVector.Length];
+            TypePair<string, ExComp>[] retVec = new TypePair<string, ExComp>[useVector.GetLength()];
             for (int i = 0; i < retVec.Length; ++i)
             {
                 retVec[i] = new TypePair<string, ExComp>(FunctionDefinition.GetDimenStr(i), useVector.Get(i));
@@ -235,8 +235,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
         {
             foreach (KeyValuePair<FunctionDefinition, ExComp> def in _defs)
             {
-                if (iden == def.Key.Iden.Var.Var)
-                    return def.Key.InputArgCount;
+                if (iden == def.Key.GetIden().GetVar().GetVar())
+                    return def.Key.GetInputArgCount();
             }
 
             return -1;
@@ -246,7 +246,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
         {
             foreach (KeyValuePair<FunctionDefinition, ExComp> def in _defs)
             {
-                if (def.Key.Iden.Var.Var == idenStr)
+                if (def.Key.GetIden().GetVar().GetVar() == idenStr)
                     return def.Key;
             }
 
@@ -257,7 +257,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
         {
             foreach (KeyValuePair<FunctionDefinition, ExComp> def in _defs)
             {
-                if (def.Key.Iden.Var.Var == idenStr)
+                if (def.Key.GetIden().GetVar().GetVar() == idenStr)
                     return true;
             }
 
@@ -268,7 +268,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
         {
             foreach (KeyValuePair<FunctionDefinition, ExComp> def in _defs)
             {
-                if (def.Key.Iden.Var.Var == idenStr && argCount == def.Key.InputArgCount)
+                if (def.Key.GetIden().GetVar().GetVar() == idenStr && argCount == def.Key.GetInputArgCount())
                     return true;
             }
 

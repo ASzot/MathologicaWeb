@@ -61,16 +61,16 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             else if (command == "Find the discriminant")
             {
                 // Discriminant.
-                pEvalData.WorkMgr.FromFormatted("`" + _eq.FinalToDispStr() + "`", "In the quadratic above `a=" + _a.ToDispString() + ", b=" + _b.ToDispString() + ",c=" + _c.ToDispString() +
+                pEvalData.GetWorkMgr().FromFormatted("`" + _eq.FinalToDispStr() + "`", "In the quadratic above `a=" + _a.ToDispString() + ", b=" + _b.ToDispString() + ",c=" + _c.ToDispString() +
                     "`. The equation for getting the discriminant of a quadratic is `b^2-4ac`.");
 
-                pEvalData.WorkMgr.FromFormatted("`({0})^2-4({1})({2})`", "Plug the values into the equation.", _a, _b, _c);
+                pEvalData.GetWorkMgr().FromFormatted("`({0})^2-4({1})({2})`", "Plug the values into the equation.", _a, _b, _c);
 
                 ExComp subVal = MulOp.StaticCombine(_a, _c);
                 subVal = MulOp.StaticCombine(subVal, new Number(4.0));
                 ExComp discriminant = SubOp.StaticCombine(PowOp.StaticCombine(_b, new Number(2.0)), subVal);
 
-                pEvalData.WorkMgr.FromFormatted("`" + WorkMgr.ToDisp(discriminant) + "`", "Simplify getting the final discriminant.");
+                pEvalData.GetWorkMgr().FromFormatted("`" + WorkMgr.ToDisp(discriminant) + "`", "Simplify getting the final discriminant.");
 
                 return SolveResult.Simplified(discriminant);
             }
@@ -82,7 +82,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             }
             else if (command == "Graph")
             {
-                if (pEvalData.AttemptSetGraphData(_graphStr, _solveFor.Var))
+                if (pEvalData.AttemptSetGraphData(_graphStr, _solveFor.GetVar()))
                     return SolveResult.Solved();
                 else
                     return SolveResult.Failure();
@@ -93,13 +93,13 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             else if (tt_solve != null && tt_solve.IsValidCommand(command))
             {
                 if (command.Contains("completing the square"))
-                    pEvalData.QuadSolveMethod = Solving.QuadraticSolveMethod.CompleteSquare;
+                    pEvalData.SetQuadSolveMethod(Solving.QuadraticSolveMethod.CompleteSquare);
                 else if (command.Contains("quadratic equation"))
-                    pEvalData.QuadSolveMethod = Solving.QuadraticSolveMethod.Formula;
+                    pEvalData.SetQuadSolveMethod(Solving.QuadraticSolveMethod.Formula);
                 else
                 {
                     // The default is factoring as this will go on to the quadratic formula method if necessary.
-                    pEvalData.QuadSolveMethod = Solving.QuadraticSolveMethod.Factor;
+                    pEvalData.SetQuadSolveMethod(Solving.QuadraticSolveMethod.Factor);
                 }
                 return tt_solve.ExecuteCommand(command, ref pEvalData);
             }
@@ -166,8 +166,8 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             }
 
             if (promptStrs != null)
-                tt_solve = new SolveTermType(new EqSet(_eq, Number.Zero, LexemeType.EqualsOp), lexemeTable, solveVars, probSolveVar, promptStrs,
-                    _funcIden is AlgebraComp ? (_funcIden as AlgebraComp).Var.Var : "");
+                tt_solve = new SolveTermType(new EqSet(_eq, Number.GetZero(), LexemeType.EqualsOp), lexemeTable, solveVars, probSolveVar, promptStrs,
+                    _funcIden is AlgebraComp ? (_funcIden as AlgebraComp).GetVar().GetVar() : "");
 
             AlgebraTerm nullTerm = null;
 
@@ -204,8 +204,8 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
             _a = a;
             _b = b;
-            if (c.TermCount == 0)
-                c.Add(Number.Zero);
+            if (c.GetTermCount() == 0)
+                c.Add(Number.GetZero());
             _c = c;
 
             if (_a is AlgebraTerm)
@@ -236,7 +236,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
             if (_eq.GetAllAlgebraCompsStr().Count == 1)
             {
-                _graphStr = _eq.ToJavaScriptString(pEvalData.UseRad);
+                _graphStr = _eq.ToJavaScriptString(pEvalData.GetUseRad());
                 if (_graphStr != null)
                     tmpCmds.Add("Graph");
             }
@@ -280,7 +280,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
         private static ExComp ToVertexForm(ExComp a, ExComp b, ExComp c, AlgebraComp solveFor, ref EvalData pEvalData)
         {
-            if (!Number.One.IsEqualTo(a))
+            if (!Number.GetOne().IsEqualTo(a))
             {
                 b = DivOp.StaticCombine(b, a);
                 c = DivOp.StaticCombine(c, a);
@@ -297,15 +297,15 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             }
 
             AlgebraTerm final = new AlgebraTerm();
-            if (!Number.One.IsEqualTo(a))
+            if (!Number.GetOne().IsEqualTo(a))
                 final.Add(a, new MulOp());
 
-            if (!Number.Zero.IsEqualTo(halfB))
+            if (!Number.GetZero().IsEqualTo(halfB))
                 final.Add(new Equation.Functions.PowerFunction(new AlgebraTerm(solveFor, new AddOp(), halfB), new Number(2.0)));
             else
                 final.Add(solveFor);
 
-            if (!Number.Zero.IsEqualTo(hVal))
+            if (!Number.GetZero().IsEqualTo(hVal))
                 final.Add(new AddOp(), hVal);
 
             return final;

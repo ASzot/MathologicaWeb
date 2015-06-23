@@ -13,20 +13,20 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 ex2 = (ex2 as AlgebraTerm).RemoveRedundancies();
 
             if (Number.IsUndef(ex1) || Number.IsUndef(ex2))
-                return Number.Undefined;
+                return Number.GetUndefined();
 
-            if (Number.Zero.IsEqualTo(ex1))
+            if (Number.GetZero().IsEqualTo(ex1))
                 return ex2;
-            if (Number.Zero.IsEqualTo(ex2))
+            if (Number.GetZero().IsEqualTo(ex2))
                 return ex1;
 
-            if ((Number.PosInfinity.IsEqualTo(ex1) && Number.NegInfinity.IsEqualTo(ex2)) ||
-                (Number.PosInfinity.IsEqualTo(ex2) && Number.NegInfinity.IsEqualTo(ex1)))
-                return Number.Zero;
-            if (Number.NegInfinity.IsEqualTo(ex1) || Number.NegInfinity.IsEqualTo(ex2))
-                return Number.NegInfinity;
-            if (Number.PosInfinity.IsEqualTo(ex1) || Number.PosInfinity.IsEqualTo(ex2))
-                return Number.PosInfinity;
+            if ((Number.GetPosInfinity().IsEqualTo(ex1) && Number.GetNegInfinity().IsEqualTo(ex2)) ||
+                (Number.GetPosInfinity().IsEqualTo(ex2) && Number.GetNegInfinity().IsEqualTo(ex1)))
+                return Number.GetZero();
+            if (Number.GetNegInfinity().IsEqualTo(ex1) || Number.GetNegInfinity().IsEqualTo(ex2))
+                return Number.GetNegInfinity();
+            if (Number.GetPosInfinity().IsEqualTo(ex1) || Number.GetPosInfinity().IsEqualTo(ex2))
+                return Number.GetPosInfinity();
 
             if (ex1 is ExMatrix || ex2 is ExMatrix)
             {
@@ -61,15 +61,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 AlgebraTerm term1 = ex1 as AlgebraTerm;
                 AlgebraTerm term2 = ex2 as AlgebraTerm;
 
-                if (term1.TermCount == 0)
+                if (term1.GetTermCount() == 0)
                     return term2;
-                if (term2.TermCount == 0)
+                if (term2.GetTermCount() == 0)
                     return term1;
 
                 ExComp intersect = AlgebraTerm.Intersect(term1, term2);
 
-                if (intersect is AlgebraTerm && (intersect as AlgebraTerm).TermCount == 0)
-                    return Number.Zero;
+                if (intersect is AlgebraTerm && (intersect as AlgebraTerm).GetTermCount() == 0)
+                    return Number.GetZero();
 
                 return intersect;
             }

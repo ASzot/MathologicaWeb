@@ -13,14 +13,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             if (replaceCmp == null)
                 replaceCmp = new AlgebraComp("\\frac{d" + funcDeriv.ToDispString() + "}{d" + dVar.ToDispString() + "}");
 
-            if (term is Derivative && (term as Derivative).DerivOf != null && (term as Derivative).DerivOf.IsEqualTo(funcDeriv))
+            if (term is Derivative && (term as Derivative).GetDerivOf() != null && (term as Derivative).GetDerivOf().IsEqualTo(funcDeriv))
                 return replaceCmp.ToAlgTerm();
 
-            for (int i = 0; i < term.TermCount; ++i)
+            for (int i = 0; i < term.GetTermCount(); ++i)
             {
                 if (term[i] is AlgebraTerm)
                     term[i] = ConvertDerivsToAlgebraComps(term[i] as AlgebraTerm, funcDeriv, dVar, ref replaceCmp);
-                if (term[i] is Derivative && (term[i] as Derivative).DerivOf != null && (term[i] as Derivative).DerivOf.IsEqualTo(funcDeriv))
+                if (term[i] is Derivative && (term[i] as Derivative).GetDerivOf() != null && (term[i] as Derivative).GetDerivOf().IsEqualTo(funcDeriv))
                 {
                     term[i] = replaceCmp;
                 }

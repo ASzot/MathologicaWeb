@@ -4,26 +4,34 @@
     {
         private const string IDEN = "P";
 
-        public ExComp Bottom
+        public void SetBottom(ExComp value)
         {
-            get { return _args[1]; }
-            set { _args[1] = value; }
+            _args[1] = value;
         }
 
-        public ExComp Top
+        public ExComp GetBottom()
         {
-            get { return _args[0]; }
-            set { _args[0] = value; }
+            return _args[1];
         }
 
-        public AlgebraTerm TopTerm
+        public void SetTop(ExComp value)
         {
-            get { return Top.ToAlgTerm(); }
+            _args[0] = value;
         }
 
-        public AlgebraTerm BottomTerm
+        public ExComp GetTop()
         {
-            get { return Bottom.ToAlgTerm(); }
+            return _args[0];
+        }
+
+        public AlgebraTerm GetTopTerm()
+        {
+            return GetTop().ToAlgTerm();
+        }
+
+        public AlgebraTerm GetBottomTerm()
+        {
+            return GetBottom().ToAlgTerm();
         }
 
         public PermutationFunction(ExComp top, ExComp bottom)
@@ -36,14 +44,14 @@
         public override AlgebraTerm ConvertImaginaryToVar()
         {
             ExComp bottom, top;
-            if (Bottom is AlgebraTerm)
-                bottom = (Bottom as AlgebraTerm).ConvertImaginaryToVar();
+            if (GetBottom() is AlgebraTerm)
+                bottom = (GetBottom() as AlgebraTerm).ConvertImaginaryToVar();
             else
-                bottom = Bottom;
-            if (Top is AlgebraTerm)
-                top = (Top as AlgebraTerm).ConvertImaginaryToVar();
+                bottom = GetBottom();
+            if (GetTop() is AlgebraTerm)
+                top = (GetTop() as AlgebraTerm).ConvertImaginaryToVar();
             else
-                top = Top;
+                top = GetTop();
 
             return new ChooseFunction(top, bottom);
         }
@@ -52,8 +60,8 @@
         {
             CallChildren(harshEval, ref pEvalData);
 
-            ExComp n = Top;
-            ExComp k = Bottom;
+            ExComp n = GetTop();
+            ExComp k = GetBottom();
 
             if (n is Number && k is Number && (n as Number).IsRealInteger() && (k as Number).IsRealInteger())
             {
@@ -63,11 +71,11 @@
 
                 ExComp nFactEval = nFactorial.Evaluate(harshEval, ref pEvalData);
                 if (Number.IsUndef(nFactEval))
-                    return Number.Undefined;
+                    return Number.GetUndefined();
 
                 ExComp nMinusKFactEval = nMinusKFactorial.Evaluate(harshEval, ref pEvalData);
                 if (Number.IsUndef(nMinusKFactEval))
-                    return Number.Undefined;
+                    return Number.GetUndefined();
 
                 return Operators.DivOp.StaticCombine(nFactEval, nMinusKFactEval);
             }
@@ -77,7 +85,7 @@
 
         public override string ToAsciiString()
         {
-            return IDEN + "(" + Top.ToAsciiString() + ", " + Bottom.ToAsciiString() + ")";
+            return IDEN + "(" + GetTop().ToAsciiString() + ", " + GetBottom().ToAsciiString() + ")";
         }
 
         public override string ToJavaScriptString(bool useRad)
@@ -92,17 +100,17 @@
 
         public override string ToTexString()
         {
-            return IDEN + "(" + Top.ToTexString() + ", " + Bottom.ToTexString() + ")";
+            return IDEN + "(" + GetTop().ToTexString() + ", " + GetBottom().ToTexString() + ")";
         }
 
         public override string FinalToAsciiString()
         {
-            return IDEN + "(" + TopTerm.FinalToAsciiString() + ", " + BottomTerm.FinalToAsciiString() + ")";
+            return IDEN + "(" + GetTopTerm().FinalToAsciiString() + ", " + GetBottomTerm().FinalToAsciiString() + ")";
         }
 
         public override string FinalToTexString()
         {
-            return IDEN + "( " + TopTerm.FinalToTexString() + ", " + BottomTerm.FinalToTexString() + ")";
+            return IDEN + "( " + GetTopTerm().FinalToTexString() + ", " + GetBottomTerm().FinalToTexString() + ")";
         }
     }
 }

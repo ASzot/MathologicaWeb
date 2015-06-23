@@ -20,12 +20,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Group
                 bool matchFound = false;
                 for (int j = 0; j < matches.Count; ++j)
                 {
-                    if (matches[j].Data2)
+                    if (matches[j].GetData2())
                         continue;
-                    if (matches[j].Data1.GetType() == gp2[i].GetType() &&
-                        matches[j].Data1.IsEqualTo(gp2[i]))
+                    if (matches[j].GetData1().GetType() == gp2[i].GetType() &&
+                        matches[j].GetData1().IsEqualTo(gp2[i]))
                     {
-                        matches[j].Data2 = true;
+                        matches[j].SetData2(true);
                         matchFound = true;
                         break;
                     }
@@ -37,7 +37,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Group
 
             foreach (TypePair<ExComp, bool> match in matches)
             {
-                if (!match.Data2)
+                if (!match.GetData2())
                     return false;
             }
 

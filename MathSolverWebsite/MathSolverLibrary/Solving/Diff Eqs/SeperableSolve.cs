@@ -10,8 +10,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
     {
         private static AlgebraTerm FromFractionFix(ExComp num, ExComp den)
         {
-            ExComp finalNum = Number.One;
-            ExComp finalDen = Number.One;
+            ExComp finalNum = Number.GetOne();
+            ExComp finalDen = Number.GetOne();
 
             if (num is AlgebraTerm)
             {
@@ -50,7 +50,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             left = ConvertDerivsToAlgebraComps(left, funcVar, dVar, ref derivVar);
             right = ConvertDerivsToAlgebraComps(right, funcVar, dVar, ref derivVar);
 
-            pEvalData.WorkMgr.FromSides(left, right, "This is a seperable differential equation.");
+            pEvalData.GetWorkMgr().FromSides(left, right, "This is a seperable differential equation.");
 
             // Move the dy/dx to the left.
             SolveMethod.VariablesToLeft(ref left, ref right, derivVar, ref pEvalData);
@@ -73,7 +73,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
                 // Combine all of the unrelated terms.
                 AlgebraTerm leftDivideOut = new AlgebraTerm(unrelatedGroups.ToArray());
 
-                if (leftDivideOut.GroupCount > 1)
+                if (leftDivideOut.GetGroupCount() > 1)
                 {
                     leftDivideOut = leftDivideOut.ApplyOrderOfOperations();
                     leftDivideOut = leftDivideOut.MakeWorkable().ToAlgTerm();
@@ -94,7 +94,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
 
             if (numDen == null)
             {
-                numDen = new AlgebraTerm[] { right, Number.One.ToAlgTerm() };
+                numDen = new AlgebraTerm[] { right, Number.GetOne().ToAlgTerm() };
             }
 
             // The 'dx' on the left is implied.
@@ -108,22 +108,22 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             }
             else if (!numDen[1].Contains(funcVar) && !numDen[0].Contains(dVar))
             {
-                left = FromFractionFix(Number.One, numDen[0]);
-                right = FromFractionFix(Number.One, numDen[1]);
+                left = FromFractionFix(Number.GetOne(), numDen[0]);
+                right = FromFractionFix(Number.GetOne(), numDen[1]);
             }
             else if (!numDen[0].Contains(funcVar) && !numDen[1].Contains(funcVar))
             {
-                left = Number.One.ToAlgTerm();
+                left = Number.GetOne().ToAlgTerm();
                 right = FromFractionFix(numDen[0], numDen[1]);
             }
             else if (!numDen[0].Contains(dVar) && !numDen[1].Contains(dVar))
             {
                 left = FromFractionFix(numDen[1], numDen[2]);
-                right = Number.One.ToAlgTerm();
+                right = Number.GetOne().ToAlgTerm();
             }
             else
             {
-                int gpCount = left.GroupCount;
+                int gpCount = left.GetGroupCount();
                 List<AlgebraGroup> yVarTo = right.GetGroupsVariableToNoOps(funcVar);
                 List<AlgebraGroup> xVarTo = right.GetGroupsVariableToNoOps(dVar);
 
@@ -131,7 +131,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
                 {
                     AlgebraTerm divTerm = AlgebraGroup.GetConstantTo(yVarTo, funcVar);
 
-                    left = AlgebraTerm.FromFraction(Number.One, DivOp.StaticCombine(right, divTerm));
+                    left = AlgebraTerm.FromFraction(Number.GetOne(), DivOp.StaticCombine(right, divTerm));
                     if (left.Contains(dVar))
                         return null;
                     right = divTerm;
@@ -140,7 +140,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
                 {
                     AlgebraTerm divTerm = AlgebraGroup.GetConstantTo(xVarTo, dVar);
 
-                    left = AlgebraTerm.FromFraction(Number.One, divTerm);
+                    left = AlgebraTerm.FromFraction(Number.GetOne(), divTerm);
                     right = DivOp.StaticCombine(right, divTerm).ToAlgTerm();
                     if (right.Contains(funcVar))
                         return null;
@@ -152,30 +152,30 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             string leftStr = left.FinalToDispStr();
             string rightStr = right.FinalToDispStr();
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "(" + leftStr + ")d" + funcVar.ToDispString() +
+            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "(" + leftStr + ")d" + funcVar.ToDispString() +
                 "= (" + rightStr + ")d" + dVar.ToDispString() + WorkMgr.EDM, "Cross multiply.");
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\int (" + leftStr + ")d" + funcVar.ToDispString() +
+            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "\\int (" + leftStr + ")d" + funcVar.ToDispString() +
                 "= \\int (" + rightStr + ")d" + dVar.ToDispString() + WorkMgr.EDM, "Take the anti-derivative of both sides.");
 
             // Integrate both sides.
-            pEvalData.WorkMgr.FromFormatted("", "Integrate.");
-            WorkStep lastWorkStep = pEvalData.WorkMgr.GetLast();
+            pEvalData.GetWorkMgr().FromFormatted("", "Integrate.");
+            WorkStep lastWorkStep = pEvalData.GetWorkMgr().GetLast();
 
             lastWorkStep.GoDown(ref pEvalData);
             ExComp leftIntegrated = Integral.TakeAntiDeriv(left, funcVar, ref pEvalData);
             lastWorkStep.GoUp(ref pEvalData);
 
-            lastWorkStep.WorkHtml = WorkMgr.STM + "\\int (" + leftStr + ")d" + funcVar.ToDispString() + "=" + WorkMgr.ToDisp(leftIntegrated) + WorkMgr.EDM;
+            lastWorkStep.SetWorkHtml(WorkMgr.STM + "\\int (" + leftStr + ")d" + funcVar.ToDispString() + "=" + WorkMgr.ToDisp(leftIntegrated) + WorkMgr.EDM);
 
-            pEvalData.WorkMgr.FromFormatted("", "Integrate.");
-            lastWorkStep = pEvalData.WorkMgr.GetLast();
+            pEvalData.GetWorkMgr().FromFormatted("", "Integrate.");
+            lastWorkStep = pEvalData.GetWorkMgr().GetLast();
 
             lastWorkStep.GoDown(ref pEvalData);
             ExComp rightIntegrated = Integral.TakeAntiDeriv(right, dVar, ref pEvalData);
             lastWorkStep.GoUp(ref pEvalData);
 
-            lastWorkStep.WorkHtml = WorkMgr.STM + "\\int (" + rightStr + ")d" + dVar.ToDispString() + "=" + WorkMgr.ToDisp(rightIntegrated) + WorkMgr.EDM;
+            lastWorkStep.SetWorkHtml(WorkMgr.STM + "\\int (" + rightStr + ")d" + dVar.ToDispString() + "=" + WorkMgr.ToDisp(rightIntegrated) + WorkMgr.EDM);
 
             return new ExComp[] { leftIntegrated, rightIntegrated };
         }

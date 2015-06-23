@@ -49,14 +49,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                     return new NoSolutions();
             }
 
-            pEvalData.CheckSolutions = true;
+            pEvalData.SetCheckSolutions(true);
 
             CombineFractions(ref left, ref right, ref pEvalData);
 
             left = SubOp.StaticCombine(left, rootTerm).ToAlgTerm();
             right = SubOp.StaticCombine(right, rootTerm).ToAlgTerm();
 
-            pEvalData.WorkMgr.FromSides(left, right, "Isolate the radical term to the right side.");
+            pEvalData.GetWorkMgr().FromSides(left, right, "Isolate the radical term to the right side.");
 
             SimpleFraction fracPow = new SimpleFraction();
             if (!fracPow.Init(_root as AlgebraTerm))
@@ -69,7 +69,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 return null;
             }
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "{0}={1}" + WorkMgr.EDM, "Raise both sides to the " + WorkMgr.STM + "{2}" + WorkMgr.EDM + " power.",
+            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "{0}={1}" + WorkMgr.EDM, "Raise both sides to the " + WorkMgr.STM + "{2}" + WorkMgr.EDM + " power.",
                 PowOp.StaticWeakCombine(left, rootEx), PowOp.StaticWeakCombine(right, rootEx), rootEx);
 
             left = PowOp.RaiseToPower(left, rootEx as Number, ref pEvalData, true).ToAlgTerm();
@@ -78,7 +78,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             if (right is Equation.Functions.PowerFunction)
                 return null;
 
-            pEvalData.WorkMgr.FromSides(left, right, "Simplify.");
+            pEvalData.GetWorkMgr().FromSides(left, right, "Simplify.");
 
             return p_solver.SolveEq(solveFor, left, right, ref pEvalData);
         }

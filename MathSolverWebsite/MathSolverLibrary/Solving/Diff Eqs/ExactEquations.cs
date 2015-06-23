@@ -25,8 +25,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             if (left.IsZero())
             {
                 left = SubOp.StaticCombine(left, right).ToAlgTerm();
-                right = Number.Zero.ToAlgTerm();
-                pEvalData.WorkMgr.FromSides(left, right, "Move everything to the left hand side.");
+                right = Number.GetZero().ToAlgTerm();
+                pEvalData.GetWorkMgr().FromSides(left, right, "Move everything to the left hand side.");
             }
 
             // Find N(x,y)
@@ -45,31 +45,31 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             if (!funcN.Contains(dVar) || !funcM.Contains(funcVar))
                 return null;
 
-            pEvalData.WorkMgr.FromSides(left, right, "The equation is in the form " + WorkMgr.STM +
+            pEvalData.GetWorkMgr().FromSides(left, right, "The equation is in the form " + WorkMgr.STM +
                 "N(x,y)\\frac{dy}{dx}+M(x,y)" + WorkMgr.EDM + " where " + WorkMgr.STM + "N(" + dVar.ToDispString() + "," + funcVar.ToDispString() + ")=" + WorkMgr.ToDisp(funcN) + WorkMgr.EDM + " and " +
                 WorkMgr.STM + "M(" + dVar.ToDispString() + "," + funcVar.ToDispString() + ")=" + WorkMgr.ToDisp(funcM) + WorkMgr.EDM);
 
-            pEvalData.WorkMgr.FromSides(left, right, "Use exact equations only if " + WorkMgr.STM + "\\frac{\\partial M}{\\partial " + funcVar.ToDispString() + "}=\\frac{\\partial N}{\\partial " +
+            pEvalData.GetWorkMgr().FromSides(left, right, "Use exact equations only if " + WorkMgr.STM + "\\frac{\\partial M}{\\partial " + funcVar.ToDispString() + "}=\\frac{\\partial N}{\\partial " +
                 dVar.ToDispString() + "}" + WorkMgr.EDM);
 
             // Does M_y = N_x ?
-            pEvalData.WorkMgr.FromFormatted("");
-            WorkStep last = pEvalData.WorkMgr.GetLast();
+            pEvalData.GetWorkMgr().FromFormatted("");
+            WorkStep last = pEvalData.GetWorkMgr().GetLast();
 
             last.GoDown(ref pEvalData);
             ExComp my = Derivative.TakeDeriv(funcM.CloneEx(), funcVar, ref pEvalData, true);
             last.GoUp(ref pEvalData);
 
-            last.WorkHtml = WorkMgr.STM + "\\frac{\\partial M}{\\partial " + funcVar.ToDispString() + "}=" + WorkMgr.ToDisp(my) + WorkMgr.EDM;
+            last.SetWorkHtml(WorkMgr.STM + "\\frac{\\partial M}{\\partial " + funcVar.ToDispString() + "}=" + WorkMgr.ToDisp(my) + WorkMgr.EDM);
 
-            pEvalData.WorkMgr.FromFormatted("");
-            last = pEvalData.WorkMgr.GetLast();
+            pEvalData.GetWorkMgr().FromFormatted("");
+            last = pEvalData.GetWorkMgr().GetLast();
 
             last.GoDown(ref pEvalData);
             ExComp nx = Derivative.TakeDeriv(funcN.CloneEx(), dVar, ref pEvalData, true);
             last.GoUp(ref pEvalData);
 
-            last.WorkHtml = WorkMgr.STM + "\\frac{\\partial N}{\\partial " + dVar.ToDispString() + "}=" + WorkMgr.ToDisp(nx) + WorkMgr.EDM;
+            last.SetWorkHtml(WorkMgr.STM + "\\frac{\\partial N}{\\partial " + dVar.ToDispString() + "}=" + WorkMgr.ToDisp(nx) + WorkMgr.EDM);
 
             if (my is AlgebraTerm)
                 my = (my as AlgebraTerm).RemoveRedundancies();
@@ -79,24 +79,24 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             if (!my.IsEqualTo(nx))
                 return null;
 
-            pEvalData.WorkMgr.FromFormatted("");
-            last = pEvalData.WorkMgr.GetLast();
+            pEvalData.GetWorkMgr().FromFormatted("");
+            last = pEvalData.GetWorkMgr().GetLast();
 
             last.GoDown(ref pEvalData);
 
-            int startWorkStepCount = pEvalData.WorkMgr.WorkSteps.Count;
+            int startWorkStepCount = pEvalData.GetWorkMgr().GetWorkSteps().Count;
             string startWorkHtml = "\\psi = \\int (" + WorkMgr.ToDisp(funcM) + " )d" + dVar.ToDispString();
             ExComp psi = Integral.TakeAntiDeriv(funcM, dVar, ref pEvalData);
-            last.WorkDesc = "If " + WorkMgr.STM + "\\psi_" + dVar.ToDispString() + "=M" + WorkMgr.EDM + " then " + WorkMgr.STM + "\\int M d" + dVar.ToDispString() + " = \\psi" + WorkMgr.EDM;
+            last.SetWorkDesc("If " + WorkMgr.STM + "\\psi_" + dVar.ToDispString() + "=M" + WorkMgr.EDM + " then " + WorkMgr.STM + "\\int M d" + dVar.ToDispString() + " = \\psi" + WorkMgr.EDM);
             bool constX = false;
             if (psi is Integral)
             {
-                pEvalData.WorkMgr.PopSteps(startWorkStepCount);
+                pEvalData.GetWorkMgr().PopSteps(startWorkStepCount);
                 // The integration failed.
                 // Maybe integrating the other function will work.
                 startWorkHtml = "\\psi = \\int (" + WorkMgr.ToDisp(funcN) + " )d" + funcVar.ToDispString();
                 psi = Integral.TakeAntiDeriv(funcN, funcVar, ref pEvalData);
-                last.WorkDesc = "If " + WorkMgr.STM + "\\psi_" + funcVar.ToDispString() + "=N" + WorkMgr.EDM + " then " + WorkMgr.STM + "\\int N d" + funcVar.ToDispString() + " = \\psi" + WorkMgr.EDM;
+                last.SetWorkDesc("If " + WorkMgr.STM + "\\psi_" + funcVar.ToDispString() + "=N" + WorkMgr.EDM + " then " + WorkMgr.STM + "\\int N d" + funcVar.ToDispString() + " = \\psi" + WorkMgr.EDM);
                 constX = true;
             }
 
@@ -107,29 +107,29 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
 
             startWorkHtml += " = " + WorkMgr.ToDisp(psi) + "+" + (constX ? " h(x)" : "h(y)");
 
-            last.WorkHtml = WorkMgr.STM + startWorkHtml + WorkMgr.EDM;
+            last.SetWorkHtml(WorkMgr.STM + startWorkHtml + WorkMgr.EDM);
 
             // Now solve for the constant function.
             AlgebraComp solveForConstVar = constX ? dVar : funcVar;
 
-            pEvalData.WorkMgr.FromFormatted("");
-            last = pEvalData.WorkMgr.GetLast();
+            pEvalData.GetWorkMgr().FromFormatted("");
+            last = pEvalData.GetWorkMgr().GetLast();
 
             last.GoDown(ref pEvalData);
             ExComp tmpPsi = Derivative.TakeDeriv(psi, solveForConstVar, ref pEvalData, true);
             last.GoUp(ref pEvalData);
 
-            last.WorkHtml = WorkMgr.STM + "\\psi_" + funcVar.ToDispString() + " = " + WorkMgr.ToDisp(tmpPsi) + "+" + (constX ? "h'(x)" : "h'(y)") + WorkMgr.EDM;
+            last.SetWorkHtml(WorkMgr.STM + "\\psi_" + funcVar.ToDispString() + " = " + WorkMgr.ToDisp(tmpPsi) + "+" + (constX ? "h'(x)" : "h'(y)") + WorkMgr.EDM);
 
             // Find the difference.
             ExComp derivConstFunc = SubOp.StaticCombine(constX ? funcM : funcN, tmpPsi);
             // Negate because we subtracted.
             derivConstFunc = MulOp.Negate(derivConstFunc);
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + (constX ? "h'(x)" : "h'(y)") + " = " + WorkMgr.ToDisp(derivConstFunc) + WorkMgr.EDM);
+            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + (constX ? "h'(x)" : "h'(y)") + " = " + WorkMgr.ToDisp(derivConstFunc) + WorkMgr.EDM);
 
-            pEvalData.WorkMgr.FromFormatted("");
-            last = pEvalData.WorkMgr.GetLast();
+            pEvalData.GetWorkMgr().FromFormatted("");
+            last = pEvalData.GetWorkMgr().GetLast();
 
             last.GoDown(ref pEvalData);
             ExComp constFunc = Integral.TakeAntiDeriv(derivConstFunc, solveForConstVar, ref pEvalData);
@@ -137,14 +137,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             if (constFunc is Integral)
                 return null;
 
-            last.WorkHtml = WorkMgr.STM + "\\int " + (constX ? "h'(x)" : "h'(y)") + " d" + (constX ? "x" : "y") + " = " + WorkMgr.ToDisp(constFunc) + WorkMgr.EDM;
+            last.SetWorkHtml(WorkMgr.STM + "\\int " + (constX ? "h'(x)" : "h'(y)") + " d" + (constX ? "x" : "y") + " = " + WorkMgr.ToDisp(constFunc) + WorkMgr.EDM);
 
             psi = AddOp.StaticCombine(psi, constFunc);
 
-            pEvalData.WorkMgr.FromSides(new AlgebraComp("psi"), psi);
+            pEvalData.GetWorkMgr().FromSides(new AlgebraComp("psi"), psi);
 
-            ExComp[] sols = new ExComp[] { psi, Number.Zero };
-            pEvalData.WorkMgr.FromSides(sols[0], sols[1]);
+            ExComp[] sols = new ExComp[] { psi, Number.GetZero() };
+            pEvalData.GetWorkMgr().FromSides(sols[0], sols[1]);
 
             return sols;
         }

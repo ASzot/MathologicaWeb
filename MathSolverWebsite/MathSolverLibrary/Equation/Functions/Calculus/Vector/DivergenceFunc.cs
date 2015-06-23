@@ -15,13 +15,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
             if (innerEx is ExVector)
             {
                 ExVector exVec = innerEx as ExVector;
-                return exVec.Length > 1 && exVec.Length < 4;
+                return exVec.GetLength() > 1 && exVec.GetLength() < 4;
             }
             else if (innerEx is FunctionDefinition)
             {
                 FunctionDefinition funcDef = innerEx as FunctionDefinition;
 
-                return funcDef.InputArgCount > 1 && funcDef.InputArgCount < 4;
+                return funcDef.GetInputArgCount() > 1 && funcDef.GetInputArgCount() < 4;
             }
             else if (innerEx is AlgebraComp)
             {
@@ -35,7 +35,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
         public override ExComp CancelWith(ExComp innerEx, ref TermType.EvalData evalData)
         {
             if (innerEx is CurlFunc)
-                return Number.Zero;
+                return Number.GetZero();
             return null;
         }
 
@@ -43,8 +43,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
         {
             CallChildren(harshEval, ref pEvalData);
 
-            if (!IsSuitableField(InnerEx))
-                return Number.Undefined;
+            if (!IsSuitableField(GetInnerEx()))
+                return Number.GetUndefined();
 
             ExComp p, q, r;
             ExComp innerEx = GetCorrectedInnerEx(ref pEvalData);
@@ -69,9 +69,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
             if (innerEx is ExVector)
             {
                 ExVector innerVec = innerEx as ExVector;
-                p = innerVec.X;
-                q = innerVec.Y;
-                r = innerVec.Z;
+                p = innerVec.GetX();
+                q = innerVec.GetY();
+                r = innerVec.GetZ();
                 isFuncDeriv = false;
             }
             else if (innerEx is FunctionDefinition)
@@ -79,11 +79,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
                 FunctionDefinition funcDef = innerEx as FunctionDefinition;
                 p = new AlgebraComp("P");
                 q = new AlgebraComp("Q");
-                r = funcDef.InputArgCount == 3 ? new AlgebraComp("R") : null;
+                r = funcDef.GetInputArgCount() == 3 ? new AlgebraComp("R") : null;
 
-                x = funcDef.InputArgs[0];
-                y = funcDef.InputArgs[1];
-                z = funcDef.InputArgCount == 3 ? funcDef.InputArgs[2] : null;
+                x = funcDef.GetInputArgs()[0];
+                y = funcDef.GetInputArgs()[1];
+                z = funcDef.GetInputArgCount() == 3 ? funcDef.GetInputArgs()[2] : null;
 
                 isFuncDeriv = true;
             }
@@ -104,7 +104,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
             if (z != null)
                 r_z = Derivative.TakeDeriv(r, z, ref pEvalData, true, isFuncDeriv);
             else
-                r_z = Number.Zero;
+                r_z = Number.GetZero();
 
             return AddOp.StaticCombine(AddOp.StaticCombine(p_x, q_y), r_z);
         }

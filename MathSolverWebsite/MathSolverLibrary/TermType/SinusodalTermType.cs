@@ -58,7 +58,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             }
             else if (command == "Graph" && _graphStr != null)
             {
-                if (pEvalData.AttemptSetGraphData(_graphStr, _solveFor.Var))
+                if (pEvalData.AttemptSetGraphData(_graphStr, _solveFor.GetVar()))
                     return SolveResult.Solved();
                 else
                     return SolveResult.Failure();
@@ -117,12 +117,12 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             {
                 tt_func = new FunctionTermType();
                 if (!tt_func.Init(new EqSet(_funcIden, overall, LexemeType.EqualsOp), lexemeTable, solveVars,
-                    _funcIden is AlgebraComp ? (_funcIden as AlgebraComp).Var.Var : ""))
+                    _funcIden is AlgebraComp ? (_funcIden as AlgebraComp).GetVar().GetVar() : ""))
                     tt_func = null;
             }
             else if (_funcIden is AlgebraComp)
             {
-                solveVars.Remove((_funcIden as AlgebraComp).Var.Var);
+                solveVars.Remove((_funcIden as AlgebraComp).GetVar().GetVar());
             }
 
             string promptStr;
@@ -136,10 +136,10 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 tt_simp = new SimplifyTermType(left != null ? left : right);
             }
 
-            tt_solve = new SolveTermType(new EqSet(overall, Number.Zero, LexemeType.EqualsOp), lexemeTable, solveVars,
+            tt_solve = new SolveTermType(new EqSet(overall, Number.GetZero(), LexemeType.EqualsOp), lexemeTable, solveVars,
                 probSolveVar, promptStr);
 
-            int groupCount = overall.GroupCount;
+            int groupCount = overall.GetGroupCount();
 
             List<AlgebraGroup> variableGroups = overall.GetGroupsVariableTo(solveForComp);
 
@@ -147,7 +147,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             if (variableGroups.Count != 1)
                 return false;
 
-            ExComp[] variableGroup = variableGroups[0].Group;
+            ExComp[] variableGroup = variableGroups[0].GetGroup();
             ExComp[] variableCoeffs = variableGroup.GetUnrelatableTermsOfGroup(solveForComp);
 
             _coeff = variableCoeffs.ToAlgTerm();
@@ -156,7 +156,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
             foreach (ExComp varCoeff in variableCoeffs)
             {
-                if (!varGroupList.Remove(varCoeff) && !Number.One.IsEqualTo(varCoeff))
+                if (!varGroupList.Remove(varCoeff) && !Number.GetOne().IsEqualTo(varCoeff))
                     return false;
             }
 
@@ -172,12 +172,12 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
             _trigFunc = singleGpCmp as TrigFunction;
 
-            List<AlgebraGroup> innerConstantTerms = _trigFunc.InnerTerm.GetGroupsConstantTo(solveForComp);
-            _phaseShift = Number.Zero;
+            List<AlgebraGroup> innerConstantTerms = _trigFunc.GetInnerTerm().GetGroupsConstantTo(solveForComp);
+            _phaseShift = Number.GetZero();
             foreach (AlgebraGroup innerConstantTerm in innerConstantTerms)
                 _phaseShift = AddOp.StaticCombine(_phaseShift, innerConstantTerm.ToTerm()).ToAlgTerm();
 
-            _period = _trigFunc.GetPeriod(solveForComp, pEvalData.UseRad);
+            _period = _trigFunc.GetPeriod(solveForComp, pEvalData.GetUseRad());
             if (_period == null)
                 _coeff = null;
 
@@ -208,7 +208,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
             if (!tmpCmds.Contains("Graph"))
             {
-                _graphStr = overall.ToJavaScriptString(pEvalData.UseRad);
+                _graphStr = overall.ToJavaScriptString(pEvalData.GetUseRad());
                 if (_graphStr != null && solveVars.Count == 1)
                     tmpCmds.Insert(0, "Graph");
             }

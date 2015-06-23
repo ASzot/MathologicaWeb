@@ -8,27 +8,24 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         private string[] _solveDescs = null;
         private List<AlgebraTerm> _terms = new List<AlgebraTerm>();
 
-        public string[] SolveDescs
+        public void SetSolveDescs(string[] value)
         {
-            set { _solveDescs = value; }
+            _solveDescs = value;
         }
 
-        public int TermCount
+        public int GetTermCount()
         {
-            get { return _terms.Count; }
+            return _terms.Count;
         }
 
-        public List<AlgebraTerm> Terms
+        public List<AlgebraTerm> GetTerms()
         {
-            get { return _terms; }
+            return _terms;
         }
 
-        public ExComp this[int i]
+        public ExComp GetItem(int i)
         {
-            get
-            {
-                return _terms[i];
-            }
+            return _terms[i];
         }
 
         public AlgebraTermArray(params AlgebraTerm[] terms)
@@ -51,7 +48,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         public void Add(ExComp comp)
         {
             if (comp is AlgebraTermArray)
-                _terms.AddRange((comp as AlgebraTermArray).Terms);
+                _terms.AddRange((comp as AlgebraTermArray).GetTerms());
             else
                 _terms.Add(comp.ToAlgTerm());
         }
@@ -74,11 +71,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             if (ex is AlgebraTermArray)
             {
                 AlgebraTermArray exTermArray = ex as AlgebraTermArray;
-                if (this.TermCount != exTermArray.TermCount)
+                if (this.GetTermCount() != exTermArray.GetTermCount())
                     return false;
-                for (int i = 0; i < exTermArray.Terms.Count; ++i)
+                for (int i = 0; i < exTermArray.GetTerms().Count; ++i)
                 {
-                    if (!exTermArray.Terms[i].IsEqualTo(this.Terms[i]))
+                    if (!exTermArray.GetTerms()[i].IsEqualTo(this.GetTerms()[i]))
                         return false;
                 }
 
@@ -124,7 +121,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
             List<AlgebraTerm> solvedTerms = new List<AlgebraTerm>();
             int termCount = _terms.Count;
-            int startNegDivCount = pEvalData.NegDivCount;
+            int startNegDivCount = pEvalData.GetNegDivCount();
             for (int i = 0; i < termCount; ++i)
             {
                 AlgebraTerm left, right;
@@ -140,10 +137,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                     right = _terms[i];
                 }
 
-                pEvalData.IsWorkable = false;
+                pEvalData.SetIsWorkable(false);
                 if (_solveDescs != null && i < _solveDescs.Length)
                 {
-                    pEvalData.WorkMgr.FromSides(left, right, _solveDescs[i]);
+                    pEvalData.GetWorkMgr().FromSides(left, right, _solveDescs[i]);
                 }
 
                 ExComp solved = solver.SolveEq(solveFor, left, right, ref pEvalData, false, true);
@@ -159,22 +156,22 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 if (solved is AlgebraTermArray)
                 {
                     AlgebraTermArray mergeArray = solved as AlgebraTermArray;
-                    solvedTerms.AddRange(mergeArray.Terms);
+                    solvedTerms.AddRange(mergeArray.GetTerms());
                 }
                 else
                     solvedTerms.Add(solved.ToAlgTerm());
             }
 
-            if (startNegDivCount < pEvalData.NegDivCount)
+            if (startNegDivCount < pEvalData.GetNegDivCount())
             {
-                int changeCount = pEvalData.NegDivCount - startNegDivCount;
+                int changeCount = pEvalData.GetNegDivCount() - startNegDivCount;
                 // The div count was incremented for each branch of equation.
                 // Only increment it overall for each instance of negative number,
                 // as each negative number was only divided once.
                 if (changeCount % termCount == 0)
                 {
                     int incrementCount = changeCount / termCount;
-                    pEvalData.NegDivCount = startNegDivCount + incrementCount;
+                    pEvalData.SetNegDivCount(startNegDivCount + incrementCount);
                 }
                 else
                 {

@@ -14,22 +14,19 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
         private string[] _graphStrs = null;
         private string _graphVar = null;
 
-        public bool ShouldGraph
+        public bool GetShouldGraph()
         {
-            get
-            {
-                return _graphVar != null && _graphStrs != null;
-            }
+            return _graphVar != null && _graphStrs != null;
         }
 
-        public string[] GraphStrs
+        public string[] GetGraphStrs()
         {
-            get { return _graphStrs; }
+            return _graphStrs;
         }
 
-        public string GraphVar
+        public string GetGraphVar()
         {
-            get { return _graphVar; }
+            return _graphVar;
         }
 
         public MultiLineHelper()
@@ -40,7 +37,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
         {
             foreach (TypePair<FunctionDefinition, ExComp> funcDef in _funcDefs)
             {
-                if (funcDef.Data1.Iden.IsEqualTo(funcDefVar))
+                if (funcDef.GetData1().GetIden().IsEqualTo(funcDefVar))
                     return true;
             }
 
@@ -51,12 +48,12 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
         {
             foreach (TypePair<FunctionDefinition, ExComp> funcDef in _funcDefs)
             {
-                pEvalData.FuncDefs.Define(funcDef.Data1, funcDef.Data2, ref pEvalData);
+                pEvalData.GetFuncDefs().Define(funcDef.GetData1(), funcDef.GetData2(), ref pEvalData);
             }
             foreach (List<WorkStep> intervalWorkStep in _intervalWorkSteps)
             {
                 if (intervalWorkStep != null)
-                    pEvalData.WorkMgr.WorkSteps.AddRange(intervalWorkStep);
+                    pEvalData.GetWorkMgr().GetWorkSteps().AddRange(intervalWorkStep);
             }
             foreach (AndRestriction rest in _intervalDefs)
             {
@@ -72,18 +69,18 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             {
                 // Compound the lts for the number of sides there are.
                 LexemeTable eqLt = new LexemeTable();
-                for (int j = ltsCount; j < ltsCount + eqs[i].ValidComparisonOps.Count + 1; ++j)
+                for (int j = ltsCount; j < ltsCount + eqs[i].GetValidComparisonOps().Count + 1; ++j)
                 {
                     eqLt.AddRange(lts[j]);
                 }
 
                 if (AttemptAddFuncDef(eqs, i, ref pEvalData) || AttemptAddIntervalDef(eqs[i], eqLt, ref pEvalData))
                 {
-                    lts.RemoveRange(ltsCount, eqs[i].ValidComparisonOps.Count + 1);
+                    lts.RemoveRange(ltsCount, eqs[i].GetValidComparisonOps().Count + 1);
                     eqs.RemoveAt(i--);
                 }
                 else
-                    ltsCount += eqs[i].ValidComparisonOps.Count + 1;
+                    ltsCount += eqs[i].GetValidComparisonOps().Count + 1;
             }
 
             foreach (LexemeTable lt in lts)
@@ -96,10 +93,10 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             foreach (TypePair<FunctionDefinition, ExComp> searchFuncDef in _funcDefs)
             {
                 if (funcDef == null)
-                    funcDef = searchFuncDef.Data1;
+                    funcDef = searchFuncDef.GetData1();
                 else
                 {
-                    if (!funcDef.IsEqualTo(searchFuncDef.Data1))
+                    if (!funcDef.IsEqualTo(searchFuncDef.GetData1()))
                     {
                         allEqual = false;
                         break;
@@ -109,7 +106,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
             if (!allEqual && funcDef != null)
             {
-                solveVars.Remove(funcDef.Iden.Var.Var);
+                solveVars.Remove(funcDef.GetIden().GetVar().GetVar());
 
                 if (solveVars.Count == 1)
                 {
@@ -121,7 +118,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                     bool allValid = true;
                     for (int i = 0; i < _funcDefs.Count; ++i)
                     {
-                        _graphStrs[i] = _funcDefs[i].Data2.ToJavaScriptString(pEvalData.UseRad);
+                        _graphStrs[i] = _funcDefs[i].GetData2().ToJavaScriptString(pEvalData.GetUseRad());
                         if (_graphStrs[i] == null)
                         {
                             allValid = false;
@@ -157,31 +154,31 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
         private bool AttemptAddIntervalDef(EqSet eqSet, LexemeTable lt, ref EvalData pEvalData)
         {
-            if (eqSet.Sides.Count != 3)
+            if (eqSet.GetSides().Count != 3)
                 return false;
 
-            if (eqSet.ComparisonOps.Count != 2)
+            if (eqSet.GetComparisonOps().Count != 2)
                 return false;
 
             AlgebraSolver algebraSolver = new AlgebraSolver();
             Dictionary<string, int> solveVars = AlgebraSolver.GetIdenOccurances(lt);
             string solveVar = AlgebraSolver.GetProbableVar(solveVars);
 
-            int workStepCount = pEvalData.WorkMgr.WorkSteps.Count;
+            int workStepCount = pEvalData.GetWorkMgr().GetWorkSteps().Count;
 
-            ExComp centerEx = eqSet.Sides[1];
+            ExComp centerEx = eqSet.GetSides()[1];
             if (centerEx is AlgebraTerm)
                 centerEx = (centerEx as AlgebraTerm).RemoveRedundancies();
 
             bool addWork = !centerEx.IsEqualTo(new AlgebraComp(solveVar));
 
-            SolveResult result = algebraSolver.SolveEquationInequality(eqSet.Sides, eqSet.ComparisonOps, new AlgebraVar(solveVar), ref pEvalData);
+            SolveResult result = algebraSolver.SolveEquationInequality(eqSet.GetSides(), eqSet.GetComparisonOps(), new AlgebraVar(solveVar), ref pEvalData);
 
             if (addWork)
-                _intervalWorkSteps.Add(pEvalData.WorkMgr.WorkSteps.GetRange(workStepCount, pEvalData.WorkMgr.WorkSteps.Count - workStepCount));
+                _intervalWorkSteps.Add(pEvalData.GetWorkMgr().GetWorkSteps().GetRange(workStepCount, pEvalData.GetWorkMgr().GetWorkSteps().Count - workStepCount));
             else
                 _intervalWorkSteps.Add(null);
-            pEvalData.WorkMgr.WorkSteps.RemoveRange(workStepCount, pEvalData.WorkMgr.WorkSteps.Count - workStepCount);
+            pEvalData.GetWorkMgr().GetWorkSteps().RemoveRange(workStepCount, pEvalData.GetWorkMgr().GetWorkSteps().Count - workStepCount);
 
             if ((result.Solutions != null && result.Solutions.Count != 0) ||
                 (result.Restrictions == null || result.Restrictions.Count != 1) ||
@@ -196,16 +193,16 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
         private bool AttemptAddFuncDef(List<EqSet> eqs, int i, ref EvalData pEvalData)
         {
             EqSet eqSet = eqs[i];
-            if (eqSet.Sides.Count != 2 || eqSet.Sides[1] == null)
+            if (eqSet.GetSides().Count != 2 || eqSet.GetSides()[1] == null)
                 return false;
             FunctionDefinition funcDef = null;
             ExComp assignTo = null;
 
-            ExComp left = eqSet.Left;
+            ExComp left = eqSet.GetLeft();
             if (left is AlgebraTerm)
                 left = (left as AlgebraTerm).RemoveRedundancies();
 
-            ExComp right = eqSet.Right;
+            ExComp right = eqSet.GetRight();
             if (right is AlgebraTerm)
                 right = (right as AlgebraTerm).RemoveRedundancies();
 
@@ -238,10 +235,10 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             {
                 if (j == i)
                     continue;
-                ExComp leftEx = eqs[j].Left;
-                ExComp rightEx = eqs[j].Right;
+                ExComp leftEx = eqs[j].GetLeft();
+                ExComp rightEx = eqs[j].GetRight();
 
-                if ((leftEx != null && leftEx.IsEqualTo(funcDef.Iden)) || (rightEx != null && rightEx.IsEqualTo(funcDef.Iden)))
+                if ((leftEx != null && leftEx.IsEqualTo(funcDef.GetIden())) || (rightEx != null && rightEx.IsEqualTo(funcDef.GetIden())))
                     continue;
                 allEqual = false;
                 break;

@@ -13,61 +13,62 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         private string _varStr;
 
-        public static AlgebraVar GarbageVar
+        public static AlgebraVar GetGarbageVar()
         {
-            get { return new AlgebraVar(GARBAGE_VALUE); }
+            return new AlgebraVar(GARBAGE_VALUE);
         }
 
-        public string Var
+        public void SetVar(string value)
         {
-            get { return _varStr; }
-            set
-            {
-                _varStr = value;
-                _useEscape = _varStr == null ? false : Regex.IsMatch(_varStr, SPECIAL_MATCH);
-            }
+            _varStr = value;
+            _useEscape = _varStr == null ? false : Regex.IsMatch(_varStr, SPECIAL_MATCH);
+        }
+
+        public string GetVar()
+        {
+            return _varStr;
         }
 
         public AlgebraVar(string var)
         {
             _useEscape = false;
             _varStr = null;
-            Var = var;
+            SetVar(var);
         }
 
         public override int GetHashCode()
         {
-            return Var.GetHashCode();
+            return GetVar().GetHashCode();
         }
 
         public bool IsGarbage()
         {
-            return Var == GARBAGE_VALUE;
+            return GetVar() == GARBAGE_VALUE;
         }
 
         public AlgebraComp ToAlgebraComp()
         {
-            return new AlgebraComp(Var);
+            return new AlgebraComp(GetVar());
         }
 
         public string ToMathAsciiString()
         {
-            return (_useEscape ? "\\" : "") + Var.Replace("$", "");
+            return (_useEscape ? "\\" : "") + GetVar().Replace("$", "");
         }
 
         public override string ToString()
         {
-            return (_useEscape ? "\\" : "") + Var.Replace("$", "");
+            return (_useEscape ? "\\" : "") + GetVar().Replace("$", "");
         }
 
         public string ToJavaScriptString()
         {
-            return Var.Replace("$", "");
+            return GetVar().Replace("$", "");
         }
 
         public string ToTexString()
         {
-            return (_useEscape ? "\\" : "") + Var.Replace("$", "");
+            return (_useEscape ? "\\" : "") + GetVar().Replace("$", "");
         }
     }
 
@@ -75,14 +76,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
     {
         protected AlgebraVar _var;
 
-        public AlgebraVar Var
+        public AlgebraVar GetVar()
         {
-            get { return _var; }
+            return _var;
         }
 
-        public bool IsTrash
+        public bool GetIsTrash()
         {
-            get { return _var.Var == AlgebraVar.GARBAGE_VALUE; }
+            return _var.GetVar() == AlgebraVar.GARBAGE_VALUE;
         }
 
         public AlgebraComp()
@@ -107,7 +108,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public override ExComp CloneEx()
         {
-            return new AlgebraComp(_var.Var);
+            return new AlgebraComp(_var.GetVar());
         }
 
         public override double GetCompareVal()
@@ -117,7 +118,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public override int GetHashCode()
         {
-            return Var.GetHashCode();
+            return GetVar().GetHashCode();
         }
 
         public override bool IsEqualTo(ExComp comp)
@@ -125,7 +126,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             if (comp is AlgebraComp)
             {
                 AlgebraComp ac = comp as AlgebraComp;
-                return _var.Var == ac._var.Var;
+                return _var.GetVar() == ac._var.GetVar();
             }
 
             return false;
@@ -138,7 +139,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public override string ToAsciiString()
         {
-            return Var.ToMathAsciiString();
+            return GetVar().ToMathAsciiString();
         }
 
         public Functions.PowerFunction ToPow(double realNum)
@@ -148,7 +149,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public override string ToJavaScriptString(bool useRad)
         {
-            return Var.ToJavaScriptString();
+            return GetVar().ToJavaScriptString();
         }
 
         public override string ToString()
@@ -160,7 +161,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public override string ToTexString()
         {
-            return Var.ToTexString();
+            return GetVar().ToTexString();
         }
     }
 }

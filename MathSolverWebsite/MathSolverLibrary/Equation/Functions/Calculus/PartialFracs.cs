@@ -24,16 +24,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 ExComp factorEx = factors[i].RemoveRedundancies();
                 if (factorEx is PowerFunction)
                 {
-                    ExComp pow = (factorEx as PowerFunction).Power;
+                    ExComp pow = (factorEx as PowerFunction).GetPower();
                     if (!(pow is Number) || !(pow as Number).IsRealInteger())
                         return null;
 
-                    int iPow = (int)(pow as Number).RealComp;
+                    int iPow = (int)(pow as Number).GetRealComp();
 
                     if (iPow < 0)
                         return null;
 
-                    ExComp baseEx = (factorEx as PowerFunction).Base;
+                    ExComp baseEx = (factorEx as PowerFunction).GetBase();
                     for (int j = 1; j <= iPow; ++j)
                     {
                         bottomFactors.Add(PowOp.StaticCombine(baseEx, new Number(j)));
@@ -53,7 +53,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             {
                 int denGpCount = 1;
                 if (bottomFactors[i] is AlgebraTerm)
-                    denGpCount = (bottomFactors[i] as AlgebraTerm).GroupCount;
+                    denGpCount = (bottomFactors[i] as AlgebraTerm).GetGroupCount();
 
                 int startChar = alphaNumericChar;
                 AlgebraTerm decomNum = PolynomialGen.GenGenericOfDegree(Math.Max(denGpCount - 2, 0), dVar, ref alphaNumericChar);
@@ -75,7 +75,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     numsDisp += "+";
             }
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "\\frac{" + num.FinalToDispStr() + "}{" + den.FinalToDispStr() + "}=" + numsDisp + WorkMgr.EDM,
+            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "\\frac{" + num.FinalToDispStr() + "}{" + den.FinalToDispStr() + "}=" + numsDisp + WorkMgr.EDM,
                 "Split the fraction up.");
 
             // Now multiply the numerator by each of the other denominators.
@@ -99,7 +99,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             AlgebraTerm leftTerm = left.ToAlgTerm();
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + leftTerm.FinalToDispStr() + "=" + num.FinalToDispStr() + WorkMgr.EDM,
+            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + leftTerm.FinalToDispStr() + "=" + num.FinalToDispStr() + WorkMgr.EDM,
                 "Cross multiply the fractions.");
 
             List<ExComp> pows = leftTerm.GetPowersOfVar(dVar);
@@ -111,7 +111,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 ExComp pow = pows[i];
                 if (!(pow is Number) || !(pow as Number).IsRealInteger())
                     return null;
-                int powInt = (int)(pow as Number).RealComp;
+                int powInt = (int)(pow as Number).GetRealComp();
                 iPows.Add(powInt);
             }
 
@@ -153,8 +153,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             for (int i = 0; i < decomCoeffs.Count; ++i)
             {
                 int pow = iPows[i];
-                ExComp coeffForPow = numPoly.Info.GetCoeffForPow(pow);
-                ExComp right = coeffForPow ?? Number.Zero;
+                ExComp coeffForPow = numPoly.GetInfo().GetCoeffForPow(pow);
+                ExComp right = coeffForPow ?? Number.GetZero();
 
                 equations.Add(new EqSet(decomCoeffs[i], right, Parsing.LexemeType.EqualsOp));
             }

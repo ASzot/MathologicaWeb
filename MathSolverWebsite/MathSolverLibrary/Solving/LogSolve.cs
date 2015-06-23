@@ -23,8 +23,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 left = right;
                 right = leftTmp;
 
-                if (pEvalData.NegDivCount != -1)
-                    pEvalData.NegDivCount++;
+                if (pEvalData.GetNegDivCount() != -1)
+                    pEvalData.SetNegDivCount(pEvalData.GetNegDivCount() + 1);
             }
 
             ConstantsToRight(ref left, ref right, solveForComp, ref pEvalData);
@@ -45,7 +45,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             right = right.CompoundLogs(out rightLogsCombined, solveForComp);
 
             if (leftLogsCombined || rightLogsCombined)
-                pEvalData.WorkMgr.FromSides(left, right, "Combine logarithms.");
+                pEvalData.GetWorkMgr().FromSides(left, right, "Combine logarithms.");
 
             System.Collections.Generic.List<ExComp[]> leftGroups = left.GetGroups();
             System.Collections.Generic.List<ExComp[]> rightGroups = right.GetGroups();
@@ -61,81 +61,81 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                     LogFunction log0 = log0Ex as LogFunction;
                     LogFunction log1 = log1Ex as LogFunction;
 
-                    if (log0.Base.IsEqualTo(log1.Base))
+                    if (log0.GetBase().IsEqualTo(log1.GetBase()))
                     {
                         // Using the property log(x)=log(y) -> x = y
-                        left = log0.InnerEx.ToAlgTerm();
-                        right = log1.InnerEx.ToAlgTerm();
-                        pEvalData.WorkMgr.FromSides(left, right, "By the rule if " + WorkMgr.STM + "log(x)=log(y)" + WorkMgr.EDM + " then " + WorkMgr.STM + "x=y" + WorkMgr.EDM);
+                        left = log0.GetInnerEx().ToAlgTerm();
+                        right = log1.GetInnerEx().ToAlgTerm();
+                        pEvalData.GetWorkMgr().FromSides(left, right, "By the rule if " + WorkMgr.STM + "log(x)=log(y)" + WorkMgr.EDM + " then " + WorkMgr.STM + "x=y" + WorkMgr.EDM);
                         return p_agSolver.SolveEq(solveFor, left, right, ref pEvalData);
                     }
 
-                    if (log0.Base is Number && log1.Base is Number)
+                    if (log0.GetBase() is Number && log1.GetBase() is Number)
                     {
-                        ExComp log0Inner = log0.InnerEx;
-                        ExComp log1Inner = log1.InnerEx;
+                        ExComp log0Inner = log0.GetInnerEx();
+                        ExComp log1Inner = log1.GetInnerEx();
 
-                        Number nLog0Base = log0.Base as Number;
-                        Number nLog1Base = log1.Base as Number;
+                        Number nLog0Base = log0.GetBase() as Number;
+                        Number nLog1Base = log1.GetBase() as Number;
 
                         if (Number.OpEqual(Number.OpMod(nLog0Base, nLog1Base), 0))
                         {
                             AlgebraComp tmpSolveFor = p_agSolver.NextSubVar();
-                            AlgebraComp tmpSolveFor0 = new AlgebraComp(tmpSolveFor.Var.Var + "_0");
-                            AlgebraComp tmpSolveFor1 = new AlgebraComp(tmpSolveFor.Var.Var + "_1");
+                            AlgebraComp tmpSolveFor0 = new AlgebraComp(tmpSolveFor.GetVar().GetVar() + "_0");
+                            AlgebraComp tmpSolveFor1 = new AlgebraComp(tmpSolveFor.GetVar().GetVar() + "_1");
 
                             string workStr = WorkStep.FormatStr("Given this it can be said " + WorkMgr.STM + "{0}={1}" + WorkMgr.EDM, PowOp.StaticWeakCombine(nLog0Base, tmpSolveFor0), log0Inner);
                             workStr += WorkStep.FormatStr(" and " + WorkMgr.STM + "{0}={1}" + WorkMgr.EDM, PowOp.StaticWeakCombine(nLog1Base, tmpSolveFor1), log1Inner);
                             workStr += " make the bases equal so the right hand sides can be set equal to each other.";
 
-                            pEvalData.WorkMgr.FromSides(left, right, workStr);
+                            pEvalData.GetWorkMgr().FromSides(left, right, workStr);
 
                             ExponentSolve expSolve = new ExponentSolve(p_agSolver);
 
                             AlgebraTerm tmpLeft = PowOp.StaticWeakCombine(nLog1Base, tmpSolveFor).ToAlgTerm();
                             AlgebraTerm tmpRight = nLog0Base.ToAlgTerm();
 
-                            pEvalData.WorkMgr.AllowWork = false;
-                            ExComp raiseTo = expSolve.SolveEquation(tmpLeft, tmpRight, tmpSolveFor.Var, ref pEvalData);
-                            pEvalData.WorkMgr.AllowWork = true;
+                            pEvalData.GetWorkMgr().AllowWork = false;
+                            ExComp raiseTo = expSolve.SolveEquation(tmpLeft, tmpRight, tmpSolveFor.GetVar(), ref pEvalData);
+                            pEvalData.GetWorkMgr().AllowWork = true;
 
                             ExComp tmpRaiseTo = MulOp.StaticCombine(raiseTo, tmpSolveFor0);
 
                             log1Inner = PowOp.StaticCombine(log1Inner, raiseTo);
 
-                            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "{0}={1}" + WorkMgr.EDM, "Make the bases equal.", PowOp.StaticWeakCombine(nLog1Base, tmpRaiseTo), log1Inner);
+                            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "{0}={1}" + WorkMgr.EDM, "Make the bases equal.", PowOp.StaticWeakCombine(nLog1Base, tmpRaiseTo), log1Inner);
 
-                            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "{0}={1}" + WorkMgr.EDM + "<br />" + WorkMgr.STM + "{0}={2}" + WorkMgr.EDM, "The left hand sides are now equal. So " +
+                            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "{0}={1}" + WorkMgr.EDM + "<br />" + WorkMgr.STM + "{0}={2}" + WorkMgr.EDM, "The left hand sides are now equal. So " +
                                 WorkMgr.STM + "{0}={1}={2}" + WorkMgr.EDM, PowOp.StaticWeakCombine(nLog0Base, tmpSolveFor0), log0Inner, log1Inner);
                         }
                         else if (Number.OpEqual(Number.OpMod(nLog1Base, nLog0Base), 0))
                         {
                             AlgebraComp tmpSolveFor = p_agSolver.NextSubVar();
-                            AlgebraComp tmpSolveFor0 = new AlgebraComp(tmpSolveFor.Var.Var + "_0");
-                            AlgebraComp tmpSolveFor1 = new AlgebraComp(tmpSolveFor.Var.Var + "_1");
+                            AlgebraComp tmpSolveFor0 = new AlgebraComp(tmpSolveFor.GetVar().GetVar() + "_0");
+                            AlgebraComp tmpSolveFor1 = new AlgebraComp(tmpSolveFor.GetVar().GetVar() + "_1");
 
                             string workStr = WorkStep.FormatStr("Given this it can be said " + WorkMgr.STM + "{0}={1}" + WorkMgr.EDM, PowOp.StaticWeakCombine(nLog1Base, tmpSolveFor1), log1Inner);
                             workStr += WorkStep.FormatStr(" and " + WorkMgr.STM + "{0}={1}" + WorkMgr.EDM, PowOp.StaticWeakCombine(nLog0Base, tmpSolveFor0), log0Inner);
                             workStr += " make the bases equal so the right hand sides can be set equal to each other.";
 
-                            pEvalData.WorkMgr.FromSides(left, right, workStr);
+                            pEvalData.GetWorkMgr().FromSides(left, right, workStr);
 
                             ExponentSolve expSolve = new ExponentSolve(p_agSolver);
 
                             AlgebraTerm tmpLeft = PowOp.StaticWeakCombine(nLog0Base, tmpSolveFor).ToAlgTerm();
                             AlgebraTerm tmpRight = nLog1Base.ToAlgTerm();
 
-                            pEvalData.WorkMgr.AllowWork = false;
-                            ExComp raiseTo = expSolve.SolveEquation(tmpLeft, tmpRight, tmpSolveFor.Var, ref pEvalData);
-                            pEvalData.WorkMgr.AllowWork = true;
+                            pEvalData.GetWorkMgr().AllowWork = false;
+                            ExComp raiseTo = expSolve.SolveEquation(tmpLeft, tmpRight, tmpSolveFor.GetVar(), ref pEvalData);
+                            pEvalData.GetWorkMgr().AllowWork = true;
 
                             ExComp tmpRaiseTo = MulOp.StaticCombine(raiseTo, tmpSolveFor1);
 
                             log0Inner = PowOp.StaticCombine(log0Inner, raiseTo);
 
-                            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "{0}={1}" + WorkMgr.EDM, "Make the bases equal.", PowOp.StaticWeakCombine(nLog0Base, tmpRaiseTo), log0Inner);
+                            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "{0}={1}" + WorkMgr.EDM, "Make the bases equal.", PowOp.StaticWeakCombine(nLog0Base, tmpRaiseTo), log0Inner);
 
-                            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "{0}={1}" + WorkMgr.EDM + "<br />" + WorkMgr.STM + "{0}={2}" + WorkMgr.EDM,
+                            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "{0}={1}" + WorkMgr.EDM + "<br />" + WorkMgr.STM + "{0}={2}" + WorkMgr.EDM,
                                 "The left hand sides are now equal. So " + WorkMgr.STM + "{0}={1}={2}" + WorkMgr.EDM, PowOp.StaticWeakCombine(nLog1Base, tmpSolveFor1), log1Inner, log0Inner);
                         }
                         else
@@ -144,7 +144,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                             return null;
                         }
 
-                        pEvalData.WorkMgr.FromSides(log0Inner, log1Inner, "Solve this equation.");
+                        pEvalData.GetWorkMgr().FromSides(log0Inner, log1Inner, "Solve this equation.");
                         return p_agSolver.SolveEq(solveFor, log0Inner.ToAlgTerm(), log1Inner.ToAlgTerm(), ref pEvalData);
                     }
                 }
@@ -175,12 +175,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
             LogFunction log = leftEx as LogFunction;
 
-            left = log.InnerTerm;
-            pEvalData.WorkMgr.FromSides(left, PowOp.StaticWeakCombine(log.Base, right), "Convert from logarithm form to exponential form.");
+            left = log.GetInnerTerm();
+            pEvalData.GetWorkMgr().FromSides(left, PowOp.StaticWeakCombine(log.GetBase(), right), "Convert from logarithm form to exponential form.");
 
-            right = PowOp.StaticCombine(log.Base, right).ToAlgTerm();
+            right = PowOp.StaticCombine(log.GetBase(), right).ToAlgTerm();
 
-            pEvalData.WorkMgr.FromSides(left, right);
+            pEvalData.GetWorkMgr().FromSides(left, right);
 
             return p_agSolver.SolveEq(solveFor, left, right, ref pEvalData);
         }

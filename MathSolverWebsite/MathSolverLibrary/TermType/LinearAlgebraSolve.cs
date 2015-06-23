@@ -27,15 +27,15 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
         public LinearAlgebraSolve(EqSet eqSet, string probSolveVar, ref EvalData pEvalData)
         {
             // In the form Ax=b
-            ExComp left = eqSet.Left;
-            ExComp right = eqSet.Right;
+            ExComp left = eqSet.GetLeft();
+            ExComp right = eqSet.GetRight();
             const string errorMsg = "Cannot solve";
 
             if (AttemptInit(left, right, probSolveVar, ref pEvalData))
             {
                 if (_cmds != null && _cmds.Length > 0)
                     return;
-                if (_A != null && _A.IsSquare && AreMultiplicationsValid())
+                if (_A != null && _A.GetIsSquare() && AreMultiplicationsValid())
                     _cmds = new string[] { INVERSE_SOLVE };
             }
 
@@ -47,11 +47,11 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
         {
             if (_aFirst)
             {
-                return (_A.Cols == _B.Rows && (_X == null || (_X.Rows == _A.Cols)));
+                return (_A.GetCols() == _B.GetRows() && (_X == null || (_X.GetRows() == _A.GetCols())));
             }
             else
             {
-                return (_A.Rows == _B.Cols && (_X == null || (_X.Cols == _A.Rows)));
+                return (_A.GetRows() == _B.GetCols() && (_X == null || (_X.GetCols() == _A.GetRows())));
             }
         }
 
@@ -162,14 +162,14 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             if (rightCompacted == null)
                 return false;
 
-            if (leftCompacted.Length != rightCompacted.Length || leftCompacted.Length < 2)
+            if (leftCompacted.GetLength() != rightCompacted.GetLength() || leftCompacted.GetLength() < 2)
                 return false;
 
             _eqSets = new List<EqSet>();
 
             List<string> solveVarsLeft = new List<string>();
             List<string> solveVarsRight = new List<string>();
-            for (int i = 0; i < leftCompacted.Length; ++i)
+            for (int i = 0; i < leftCompacted.GetLength(); ++i)
             {
                 ExComp leftEx = leftCompacted.Get(i);
                 ExComp rightEx = rightCompacted.Get(i);
@@ -256,7 +256,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                     leftTotalVec = exVec;
                 else
                 {
-                    if (leftTotalVec.Length != exVec.Length)
+                    if (leftTotalVec.GetLength() != exVec.GetLength())
                         return null;
                     leftTotalVec = AddOp.StaticCombine(leftTotalVec, exVec) as ExVector;
                     if (leftTotalVec == null)
@@ -319,8 +319,8 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 // Check that the results hold in the other equations.
                 for (int i = 2; i < _eqSets.Count; ++i)
                 {
-                    AlgebraTerm leftSubbed = _eqSets[i].LeftTerm;
-                    AlgebraTerm rightSubbed = _eqSets[i].RightTerm;
+                    AlgebraTerm leftSubbed = _eqSets[i].GetLeftTerm();
+                    AlgebraTerm rightSubbed = _eqSets[i].GetRightTerm();
                     foreach (Solution sol in sysSolveResult.Solutions)
                     {
                         if (sol.Result is NoSolutions)
@@ -341,7 +341,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
                     if (!leftEx.IsEqualTo(rightEx))
                     {
-                        return SolveResult.Simplified(Number.Undefined);
+                        return SolveResult.Simplified(Number.GetUndefined());
                     }
                 }
 
@@ -354,9 +354,9 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
             for (int i = 0; i < _eqSets.Count; ++i)
             {
-                ExComp tmpResult = agSolver.SolveEq(solveForVar, _eqSets[i].LeftTerm, _eqSets[i].RightTerm, ref pEvalData);
+                ExComp tmpResult = agSolver.SolveEq(solveForVar, _eqSets[i].GetLeftTerm(), _eqSets[i].GetRightTerm(), ref pEvalData);
                 if (i == 0)
-                    end = pEvalData.WorkMgr.WorkSteps.Count;
+                    end = pEvalData.GetWorkMgr().GetWorkSteps().Count;
                 if (tmpResult is AlgebraTerm)
                     tmpResult = (tmpResult as AlgebraTerm).RemoveRedundancies();
 
@@ -367,11 +367,11 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                     solveResult = tmpResult;
                 else if (!solveResult.IsEqualTo(tmpResult))
                 {
-                    return SolveResult.Solved(solveForVar, Number.Undefined, ref pEvalData);
+                    return SolveResult.Solved(solveForVar, Number.GetUndefined(), ref pEvalData);
                 }
             }
 
-            pEvalData.WorkMgr.PopSteps(end);
+            pEvalData.GetWorkMgr().PopSteps(end);
 
             return SolveResult.Solved(solveForVar, solveResult, ref pEvalData);
         }

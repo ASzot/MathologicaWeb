@@ -140,16 +140,16 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
                     EqSet useSet = _eqSet.Clone();
 
-                    pEvalData.IsWorkable = false;
+                    pEvalData.SetIsWorkable(false);
                     SolveResult result;
-                    if (_eqSet.ComparisonOp == LexemeType.EqualsOp)
-                        result = _agSolver.SolveEquationEquality(solveFor, useSet.Left.ToAlgTerm(), useSet.Right.ToAlgTerm(), ref pEvalData);
+                    if (_eqSet.GetComparisonOp() == LexemeType.EqualsOp)
+                        result = _agSolver.SolveEquationEquality(solveFor, useSet.GetLeft().ToAlgTerm(), useSet.GetRight().ToAlgTerm(), ref pEvalData);
                     else
-                        result = _agSolver.SolveEquationInequality(useSet.Sides, useSet.ComparisonOps, solveFor, ref pEvalData);
+                        result = _agSolver.SolveEquationInequality(useSet.GetSides(), useSet.GetComparisonOps(), solveFor, ref pEvalData);
 
                     result.RemoveUndefinedSolutions();
                     result.RemoveExtraneousSolutions(_eqSet, ref pEvalData);
-                    if (!result.HasSolutions && !result.HasRestrictions && !pEvalData.HasPartialSolutions && result.Success)
+                    if (!result.GetHasSolutions() && !result.GetHasRestrictions() && !pEvalData.GetHasPartialSolutions() && result.Success)
                         return SolveResult.Solved(solveFor, new NoSolutions(), ref pEvalData);
 
                     return result;

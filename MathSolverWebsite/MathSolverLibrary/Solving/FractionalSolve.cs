@@ -20,7 +20,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
         public override ExComp SolveEquation(AlgebraTerm left, AlgebraTerm right, AlgebraVar solveFor,
             ref TermType.EvalData pEvalData)
         {
-            pEvalData.CheckSolutions = true;
+            pEvalData.SetCheckSolutions(true);
 
             AlgebraComp solveForComp = solveFor.ToAlgebraComp();
             PrepareForSolving(ref left, ref right, solveForComp, ref pEvalData);
@@ -50,8 +50,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 left = gp0;
                 right = gp1;
 
-                pEvalData.WorkMgr.FromSubtraction(gps[1].ToAlgTerm(), left, right);
-                pEvalData.WorkMgr.FromSides(left, right);
+                pEvalData.GetWorkMgr().FromSubtraction(gps[1].ToAlgTerm(), left, right);
+                pEvalData.GetWorkMgr().FromSides(left, right);
 
                 AlgebraTerm[] gp0NumDen = gp0.GetNumDenFrac();
                 AlgebraTerm[] gp1NumDen = gp1.GetNumDenFrac();
@@ -60,7 +60,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 {
                     AlgebraTerm[] useNumDen = gp0NumDen == null ? gp1NumDen : gp0NumDen;
 
-                    pEvalData.WorkMgr.FromSides(MulOp.StaticWeakCombine(left, useNumDen[1]), useNumDen[0],
+                    pEvalData.GetWorkMgr().FromSides(MulOp.StaticWeakCombine(left, useNumDen[1]), useNumDen[0],
                         "Get rid of the denominator by multiplying both sides by it");
 
                     left = useNumDen[0];
@@ -76,13 +76,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                     leftNumDen = gp0NumDen;
                     rightNumDen = gp1NumDen;
 
-                    pEvalData.WorkMgr.FromSides(MulOp.StaticWeakCombine(leftNumDen[0], rightNumDen[1]),
+                    pEvalData.GetWorkMgr().FromSides(MulOp.StaticWeakCombine(leftNumDen[0], rightNumDen[1]),
                         MulOp.StaticWeakCombine(leftNumDen[1], rightNumDen[0]), "Cross multiply.");
 
                     left = MulOp.StaticCombine(leftNumDen[0], rightNumDen[1]).ToAlgTerm();
                     right = MulOp.StaticCombine(leftNumDen[1], rightNumDen[0]).ToAlgTerm();
 
-                    pEvalData.WorkMgr.FromSides(left, right, "Simplify.");
+                    pEvalData.GetWorkMgr().FromSides(left, right, "Simplify.");
 
                     return p_agSolver.SolveEq(solveFor, left, right, ref pEvalData);
                 }
@@ -94,18 +94,18 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             {
                 // Cross multiply.
 
-                pEvalData.WorkMgr.FromSides(MulOp.StaticWeakCombine(leftNumDen[0], rightNumDen[1]), MulOp.StaticWeakCombine(leftNumDen[1], rightNumDen[0]), "Cross multiply.");
+                pEvalData.GetWorkMgr().FromSides(MulOp.StaticWeakCombine(leftNumDen[0], rightNumDen[1]), MulOp.StaticWeakCombine(leftNumDen[1], rightNumDen[0]), "Cross multiply.");
 
                 left = MulOp.StaticCombine(leftNumDen[0], rightNumDen[1]).ToAlgTerm();
                 right = MulOp.StaticCombine(leftNumDen[1], rightNumDen[0]).ToAlgTerm();
 
-                pEvalData.WorkMgr.FromSides(left, right, "Simplify.");
+                pEvalData.GetWorkMgr().FromSides(left, right, "Simplify.");
 
                 return p_agSolver.SolveEq(solveFor, left, right, ref pEvalData);
             }
             else if (leftNumDen == null && rightNumDen != null && !left.ContainsFractions())
             {
-                pEvalData.WorkMgr.FromSides(MulOp.StaticWeakCombine(left, rightNumDen[1]), rightNumDen[0],
+                pEvalData.GetWorkMgr().FromSides(MulOp.StaticWeakCombine(left, rightNumDen[1]), rightNumDen[0],
                     "Get rid of the denominator by multiplying both sides by it");
 
                 left = MulOp.StaticCombine(left, rightNumDen[1]).ToAlgTerm();
@@ -115,7 +115,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             }
             else if (leftNumDen != null && rightNumDen == null && !right.ContainsFractions())
             {
-                pEvalData.WorkMgr.FromSides(leftNumDen[0], MulOp.StaticWeakCombine(right, leftNumDen[1]), "Get rid of the denominator by multiplying both sides by it");
+                pEvalData.GetWorkMgr().FromSides(leftNumDen[0], MulOp.StaticWeakCombine(right, leftNumDen[1]), "Get rid of the denominator by multiplying both sides by it");
 
                 right = MulOp.StaticCombine(right, leftNumDen[1]).ToAlgTerm();
                 left = leftNumDen[0];
@@ -182,7 +182,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
             AlgebraTerm lcfTerm = overallDensLcf.ToAlgTerm();
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "{0}={1}" + WorkMgr.EDM, "The least common denominator of all the terms is " + WorkMgr.STM + "{2}" + WorkMgr.EDM, left, right, lcfTerm);
+            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "{0}={1}" + WorkMgr.EDM, "The least common denominator of all the terms is " + WorkMgr.STM + "{2}" + WorkMgr.EDM, left, right, lcfTerm);
 
             List<ExComp> leftTerms = new List<ExComp>();
 
@@ -232,9 +232,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                     overallWork += "+";
             }
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + overallWork + WorkMgr.EDM, "Convert all fractions to have the same denominator so they can be combined");
+            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + overallWork + WorkMgr.EDM, "Convert all fractions to have the same denominator so they can be combined");
 
-            if (pEvalData.WorkMgr.AllowWork)
+            if (pEvalData.GetWorkMgr().AllowWork)
             {
                 string simpWork = "";
 
@@ -258,7 +258,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                         simpWork += "+";
                 }
 
-                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + simpWork + WorkMgr.EDM, "Simplify the terms");
+                pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + simpWork + WorkMgr.EDM, "Simplify the terms");
             }
 
             AlgebraTerm finalLeftTerm = new AlgebraTerm();
@@ -275,7 +275,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 finalRightTerm.AddGroup(rightTermGroup);
             }
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "{0}={1}" + WorkMgr.EDM, "Add the fractions together as they have equal denominators.",
+            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "{0}={1}" + WorkMgr.EDM, "Add the fractions together as they have equal denominators.",
                 DivOp.StaticWeakCombine(finalLeftTerm, lcfTerm), DivOp.StaticWeakCombine(finalRightTerm, lcfTerm));
 
             finalLeftTerm = finalLeftTerm.ApplyOrderOfOperations();
@@ -283,12 +283,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             ExComp finalLeft = finalLeftTerm.MakeWorkable();
             ExComp finalRight = finalRightTerm.MakeWorkable();
 
-            pEvalData.WorkMgr.FromSides(DivOp.StaticWeakCombine(finalLeft, lcfTerm), DivOp.StaticWeakCombine(finalRight, lcfTerm), "Simplify.");
+            pEvalData.GetWorkMgr().FromSides(DivOp.StaticWeakCombine(finalLeft, lcfTerm), DivOp.StaticWeakCombine(finalRight, lcfTerm), "Simplify.");
 
             finalLeftTerm = finalLeft.ToAlgTerm();
             finalRightTerm = finalRight.ToAlgTerm();
 
-            pEvalData.WorkMgr.FromSides(finalLeft, finalRight, "Cancel the denominators from both sides");
+            pEvalData.GetWorkMgr().FromSides(finalLeft, finalRight, "Cancel the denominators from both sides");
 
             return p_agSolver.SolveEq(solveFor, finalLeftTerm, finalRightTerm, ref pEvalData);
         }

@@ -41,7 +41,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
             if (!left.RemoveRedundancies().IsEqualTo(solveForComp))
             {
-                pEvalData.IsWorkable = false;
+                pEvalData.SetIsWorkable(false);
                 // We may have a fraction which hasn't been entirely solved.
                 // The linear solve repeat count is to ensure an overflow exception doesn't occur
                 // with potential recursive linear solves.

@@ -13,26 +13,26 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
         {
             CallChildren(harshEval, ref pEvalData);
 
-            ExMatrix mat = InnerEx as ExMatrix;
+            ExMatrix mat = GetInnerEx() as ExMatrix;
             if (mat == null)
-                return Number.Undefined;
+                return Number.GetUndefined();
 
             return mat.Transpose();
         }
 
         public override string FinalToAsciiString()
         {
-            return InnerTerm.FinalToAsciiString() + "^{T}";
+            return GetInnerTerm().FinalToAsciiString() + "^{T}";
         }
 
         public override string FinalToTexString()
         {
-            return InnerTerm.FinalToTexString() + "^{T}";
+            return GetInnerTerm().FinalToTexString() + "^{T}";
         }
 
         public override string ToAsciiString()
         {
-            return InnerTerm.ToAsciiString() + "^{T}";
+            return GetInnerTerm().ToAsciiString() + "^{T}";
         }
 
         public override string ToTexString()

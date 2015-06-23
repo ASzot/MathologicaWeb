@@ -19,12 +19,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
             ExVector vec0 = ex1 as ExVector;
             ExVector vec1 = ex2 as ExVector;
 
-            if (vec0.Length != vec1.Length)
-                return Number.Undefined;
+            if (vec0.GetLength() != vec1.GetLength())
+                return Number.GetUndefined();
 
             ExVector vec = vec0.CreateEmptyBody();
 
-            for (int i = 0; i < vec0.Length; ++i)
+            for (int i = 0; i < vec0.GetLength(); ++i)
             {
                 vec.Set(i, MulOp.StaticCombine(vec0.Get(i), vec1.Get(i)));
             }

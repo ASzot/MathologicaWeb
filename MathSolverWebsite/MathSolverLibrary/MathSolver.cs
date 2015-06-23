@@ -20,48 +20,48 @@ namespace MathSolverWebsite.MathSolverLibrary
 
             DiffEqTermType diffEqTT = new DiffEqTermType();
             diffEqTT.AttachMultiLineHelper(mlh);
-            if (!singularEqSet.IsSingular && diffEqTT.Init(singularEqSet, solveVars, probSolveVar, ref pEvalData))
+            if (!singularEqSet.GetIsSingular() && diffEqTT.Init(singularEqSet, solveVars, probSolveVar, ref pEvalData))
                 return diffEqTT;
 
-            EquationInformation eqInfo = singularEqSet.IsSingular ? new EquationInformation(singularEqSet.LeftTerm, new AlgebraComp(probSolveVar)) :
-                new EquationInformation(singularEqSet.LeftTerm, singularEqSet.RightTerm, new AlgebraComp(probSolveVar));
+            EquationInformation eqInfo = singularEqSet.GetIsSingular() ? new EquationInformation(singularEqSet.GetLeftTerm(), new AlgebraComp(probSolveVar)) :
+                new EquationInformation(singularEqSet.GetLeftTerm(), singularEqSet.GetRightTerm(), new AlgebraComp(probSolveVar));
 
             // Error type for equations with no comparison sign.
-            if (singularEqSet.ComparisonOp == LexemeType.EqualsOp || singularEqSet.ComparisonOp == LexemeType.ErrorType)
+            if (singularEqSet.GetComparisonOp() == LexemeType.EqualsOp || singularEqSet.GetComparisonOp() == LexemeType.ErrorType)
             {
                 QuadraticTermType qtt = new QuadraticTermType();
-                if (qtt.Init(eqInfo, singularEqSet.Left, singularEqSet.Right, completeLexemeTable, solveVars, probSolveVar, ref pEvalData))
+                if (qtt.Init(eqInfo, singularEqSet.GetLeft(), singularEqSet.GetRight(), completeLexemeTable, solveVars, probSolveVar, ref pEvalData))
                     return qtt;
 
                 SinusodalTermType stt = new SinusodalTermType();
-                if (stt.Init(eqInfo, singularEqSet.Left, singularEqSet.Right, completeLexemeTable, solveVars, probSolveVar, ref pEvalData))
+                if (stt.Init(eqInfo, singularEqSet.GetLeft(), singularEqSet.GetRight(), completeLexemeTable, solveVars, probSolveVar, ref pEvalData))
                     return stt;
             }
 
-            if (singularEqSet.IsSingular)
+            if (singularEqSet.GetIsSingular())
             {
                 bool isFuncDef = false;
-                if (singularEqSet.Left is FunctionDefinition)
+                if (singularEqSet.GetLeft() is FunctionDefinition)
                     isFuncDef = true;
 
                 if (!singularEqSet.FixEqFuncDefs(ref pEvalData))
                     return null;
                 // The single term is always in the left component.
-                return new SimplifyTermType(singularEqSet.Left, completeLexemeTable, solveVars, probSolveVar, singularEqSet.StartingType, isFuncDef);
+                return new SimplifyTermType(singularEqSet.GetLeft(), completeLexemeTable, solveVars, probSolveVar, singularEqSet.GetStartingType(), isFuncDef);
             }
             else
             {
-                if (singularEqSet.ComparisonOp == LexemeType.EqualsOp && singularEqSet.ComparisonOps.Count == 1)
+                if (singularEqSet.GetComparisonOp() == LexemeType.EqualsOp && singularEqSet.GetComparisonOps().Count == 1)
                 {
                     FunctionTermType funcType = new FunctionTermType();
                     if (funcType.Init(singularEqSet, completeLexemeTable, solveVars, probSolveVar))
                         return funcType;
                 }
 
-                if (solveVars.Count == 0 && singularEqSet.ComparisonOps.Count == 1)
+                if (solveVars.Count == 0 && singularEqSet.GetComparisonOps().Count == 1)
                 {
                     // There are no variables in this expression.
-                    return new EqualityCheckTermType(singularEqSet.Left, singularEqSet.Right, singularEqSet.ComparisonOp);
+                    return new EqualityCheckTermType(singularEqSet.GetLeft(), singularEqSet.GetRight(), singularEqSet.GetComparisonOp());
                 }
 
                 if (!singularEqSet.FixEqFuncDefs(ref pEvalData))
@@ -158,9 +158,9 @@ namespace MathSolverWebsite.MathSolverLibrary
                 int simpTermCount = 0;
                 foreach (EqSet term in terms)
                 {
-                    if (term.Sides.Count > 2)
+                    if (term.GetSides().Count > 2)
                         return null;
-                    if (term.Left == null || term.Right == null)
+                    if (term.GetLeft() == null || term.GetRight() == null)
                     {
                         simpTermCount++;
                     }

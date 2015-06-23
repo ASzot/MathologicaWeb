@@ -4,12 +4,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
 {
     internal class ExColVec : ExVector
     {
-        public override int Length
+        public override int GetLength()
         {
-            get
-            {
-                return base.Rows;
-            }
+            return base.GetRows();
         }
 
         public ExColVec(int length)
@@ -41,7 +38,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
 
         public override ExVector CreateEmptyBody()
         {
-            return new ExColVec(Length);
+            return new ExColVec(GetLength());
         }
 
         public override ExVector CreateVec(params ExComp[] exs)

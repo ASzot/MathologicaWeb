@@ -47,8 +47,8 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
         public bool Init(EqSet eqSet, Dictionary<string, int> solveVars, string probSolveVar, ref EvalData pEvalData)
         {
-            _left = eqSet.Left;
-            _right = eqSet.Right;
+            _left = eqSet.GetLeft();
+            _right = eqSet.GetRight();
 
             List<Derivative> totalDerivs = new List<Derivative>();
             totalDerivs.AddRange(GetDerivs(_left, ref pEvalData));
@@ -62,29 +62,29 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             _order = int.MinValue;
             foreach (Derivative deriv in totalDerivs)
             {
-                if (deriv.IsPartial)
+                if (deriv.GetIsPartial())
                 {
                     _errorMsg = "Partial differential equations are not supported";
                     return true;
                 }
 
                 if (funcIden == null)
-                    funcIden = deriv.DerivOf;
-                else if (!funcIden.IsEqualTo(deriv.DerivOf))
+                    funcIden = deriv.GetDerivOf();
+                else if (!funcIden.IsEqualTo(deriv.GetDerivOf()))
                 {
                     _errorMsg = "Derivatives of different functions";
                     return true;
                 }
 
                 if (withRespect == null)
-                    withRespect = deriv.WithRespectTo;
-                else if (deriv.WithRespectTo != null && !withRespect.IsEqualTo(deriv.WithRespectTo))
+                    withRespect = deriv.GetWithRespectTo();
+                else if (deriv.GetWithRespectTo() != null && !withRespect.IsEqualTo(deriv.GetWithRespectTo()))
                 {
                     _errorMsg = "Derivatives are not with respect to same variable";
                     return true;
                 }
 
-                int currentOrder = deriv.OrderInt;
+                int currentOrder = deriv.GetOrderInt();
                 if (currentOrder == -1)
                 {
                     _errorMsg = "Must have numeric order of differential equation";
@@ -103,7 +103,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
             List<string> cmds = new List<string>();
 
-            if (probSolveVar == null || probSolveVar == funcIden.Var.Var)
+            if (probSolveVar == null || probSolveVar == funcIden.GetVar().GetVar())
                 probSolveVar = "x";
 
             if (withRespect == null)
@@ -111,7 +111,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 cmds.Add("Solve for d" + funcIden.ToTexString() + "/d" + probSolveVar);
                 foreach (string solveVar in solveVars.Keys)
                 {
-                    if (solveVar == probSolveVar || solveVar == funcIden.Var.Var)
+                    if (solveVar == probSolveVar || solveVar == funcIden.GetVar().GetVar())
                         continue;
                     cmds.Add("Solve for d" + funcIden.ToTexString() + "/d" + solveVar);
                 }
@@ -133,8 +133,8 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             for (int i = 0; i < eqSets.Count; ++i)
             {
                 EqSet eqSet = eqSets[i];
-                ExComp left = eqSet.Left;
-                ExComp right = eqSet.Right;
+                ExComp left = eqSet.GetLeft();
+                ExComp right = eqSet.GetRight();
 
                 FunctionDefinition funcDef = null;
                 ExComp val = null;
@@ -157,12 +157,12 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                     continue;
                 }
 
-                if (funcDef.CallArgs == null || funcDef.CallArgs.Length != 1)
+                if (funcDef.GetCallArgs() == null || funcDef.GetCallArgs().Length != 1)
                 {
                     return false;
                 }
 
-                InitialVal initVal = new InitialVal(funcDef.Iden, val, funcDef.CallArgs[0]);
+                InitialVal initVal = new InitialVal(funcDef.GetIden(), val, funcDef.GetCallArgs()[0]);
                 _initValues.Add(initVal);
             }
 
@@ -182,18 +182,18 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 Derivative deriv = ex as Derivative;
 
                 bool isAlreadyDefined = false;
-                if (deriv.DerivOf != null && pEvalData.FuncDefs.IsFuncDefined(deriv.DerivOf.Var.Var))
+                if (deriv.GetDerivOf() != null && pEvalData.GetFuncDefs().IsFuncDefined(deriv.GetDerivOf().GetVar().GetVar()))
                     isAlreadyDefined = true;
-                else if (_multiLineHelper != null && deriv.DerivOf != null && _multiLineHelper.IsPreDefined(deriv.DerivOf))
+                else if (_multiLineHelper != null && deriv.GetDerivOf() != null && _multiLineHelper.IsPreDefined(deriv.GetDerivOf()))
                     isAlreadyDefined = true;
 
-                if (!isAlreadyDefined && deriv.DerivOf != null)
+                if (!isAlreadyDefined && deriv.GetDerivOf() != null)
                     derivs.Add(deriv);
             }
             else if (ex is AlgebraTerm)
             {
                 AlgebraTerm term = ex as AlgebraTerm;
-                foreach (ExComp termEx in term.SubComps)
+                foreach (ExComp termEx in term.GetSubComps())
                 {
                     List<Derivative> subDerivs = GetDerivs(termEx, ref pEvalData);
                     derivs.AddRange(subDerivs);

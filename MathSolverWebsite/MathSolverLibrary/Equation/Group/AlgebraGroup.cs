@@ -7,20 +7,24 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
     {
         private ExComp[] _group;
 
-        public ExComp[] Group
+        public ExComp[] GetGroup()
         {
-            get { return _group; }
+            return _group;
         }
 
-        public int GroupCount
+        public int GetGroupCount()
         {
-            get { return _group.Count(); }
+            return _group.Count();
         }
 
-        public ExComp this[int i]
+        public void SetItem(int i, ExComp value)
         {
-            get { return _group[i]; }
-            set { _group[i] = value; }
+            _group[i] = value;
+        }
+
+        public ExComp GetItem(int i)
+        {
+            return _group[i];
         }
 
         public AlgebraGroup(ExComp[] group)
@@ -43,7 +47,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public bool IsZero()
         {
-            return _group.Length == 1 && Number.Zero.IsEqualTo(_group[0]);
+            return _group.Length == 1 && Number.GetZero().IsEqualTo(_group[0]);
         }
 
         public override string ToString()
@@ -66,7 +70,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         public static AlgebraTerm GetConstantTo(List<AlgebraGroup> gps, AlgebraComp cmp)
         {
             IEnumerable<AlgebraTerm> terms = from squaredGroup in gps
-                                             select squaredGroup.Group.GetUnrelatableTermsOfGroup(cmp).ToAlgTerm();
+                                             select squaredGroup.GetGroup().GetUnrelatableTermsOfGroup(cmp).ToAlgTerm();
 
             AlgebraTerm totalTerm = new AlgebraTerm();
             foreach (AlgebraTerm term in terms)
@@ -74,19 +78,19 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 totalTerm = AlgebraTerm.OpAdd(totalTerm, term);
             }
 
-            if (totalTerm.SubComps.Count == 0)
-                return Number.One.ToAlgTerm();
+            if (totalTerm.GetSubComps().Count == 0)
+                return Number.GetOne().ToAlgTerm();
 
             return totalTerm;
         }
 
         public bool IsEqualTo(AlgebraGroup ag)
         {
-            if (this.GroupCount != ag.GroupCount)
+            if (this.GetGroupCount() != ag.GetGroupCount())
                 return false;
-            for (int i = 0; i < ag.GroupCount; ++i)
+            for (int i = 0; i < ag.GetGroupCount(); ++i)
             {
-                if (!this[i].IsEqualTo(ag[i]))
+                if (!GetItem(i).IsEqualTo(ag.GetItem(i)))
                     return false;
             }
 

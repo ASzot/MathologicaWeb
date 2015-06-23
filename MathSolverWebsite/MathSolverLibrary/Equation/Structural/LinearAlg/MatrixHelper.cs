@@ -29,7 +29,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
             List<ExComp> transposedEles = new List<ExComp>();
             foreach (ExComp ex in exs)
             {
-                if (ex is ExVector && (ex as ExVector).Length == 1)
+                if (ex is ExVector && (ex as ExVector).GetLength() == 1)
                     transposedEles.Add((ex as ExVector).Get(0));
                 else
                     break;
@@ -53,7 +53,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
                     if (!(exs[i] is ExVector))
                         return null;
                     ExVector vec = exs[i] as ExVector;
-                    if (i != 0 && vectors[i - 1].Length != vec.Length)
+                    if (i != 0 && vectors[i - 1].Length != vec.GetLength())
                         return null;
 
                     vectors[i] = vec.Components;
@@ -70,7 +70,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
             if (ex is ExMatrix)
                 return null;
 
-            if (ex is AlgebraComp && (ex as AlgebraComp).Var.Var == "T")
+            if (ex is AlgebraComp && (ex as AlgebraComp).GetVar().GetVar() == "T")
             {
                 // This is the transpose operation.
                 return mat.Transpose();
@@ -96,11 +96,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
 
             ExMatrix mat1 = ex as ExMatrix;
 
-            if (mat0.Cols != mat1.Cols || mat0.Rows != mat1.Rows)
+            if (mat0.GetCols() != mat1.GetCols() || mat0.GetRows() != mat1.GetRows())
                 return null;
 
-            int m = mat0.Rows;
-            int n = mat0.Cols;
+            int m = mat0.GetRows();
+            int n = mat0.GetCols();
             ExMatrix finalMat = new ExMatrix(m, n);
             for (int i = 0; i < m; ++i)
             {
@@ -146,15 +146,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
             ExMatrix mat1 = ex as ExMatrix;
 
             // Matrix multiplication.
-            if (mat0.Cols != mat1.Rows)
-                return Number.Undefined;
+            if (mat0.GetCols() != mat1.GetRows())
+                return Number.GetUndefined();
 
-            ExMatrix resultant = new ExMatrix(mat0.Rows, mat1.Cols);
+            ExMatrix resultant = new ExMatrix(mat0.GetRows(), mat1.GetCols());
 
-            for (int i = 0; i < mat0.Rows; ++i)
+            for (int i = 0; i < mat0.GetRows(); ++i)
             {
                 ExVector rowVecMat0 = mat0.GetRowVec(i);
-                for (int j = 0; j < mat1.Cols; ++j)
+                for (int j = 0; j < mat1.GetCols(); ++j)
                 {
                     ExVector colVecMat1 = mat1.GetColVec(j);
                     ExComp matEntry = ExVector.Dot(rowVecMat0, colVecMat1);
@@ -187,22 +187,22 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
             if (ex is PowerFunction)
             {
                 PowerFunction pf = ex as PowerFunction;
-                return TermContainsMatrices(pf.Base) || TermContainsMatrices(pf.Power);
+                return TermContainsMatrices(pf.GetBase()) || TermContainsMatrices(pf.GetPower());
             }
             else if (ex is LogFunction)
             {
                 LogFunction log = ex as LogFunction;
-                return TermContainsMatrices(log.Base) || TermContainsMatrices(log.InnerTerm);
+                return TermContainsMatrices(log.GetBase()) || TermContainsMatrices(log.GetInnerTerm());
             }
             else if (ex is ChooseFunction)
             {
                 ChooseFunction choose = ex as ChooseFunction;
-                return TermContainsMatrices(choose.Bottom) || TermContainsMatrices(choose.Top);
+                return TermContainsMatrices(choose.GetBottom()) || TermContainsMatrices(choose.GetTop());
             }
             else if (ex is AlgebraTerm)
             {
                 AlgebraTerm term = ex as AlgebraTerm;
-                foreach (ExComp subComp in term.SubComps)
+                foreach (ExComp subComp in term.GetSubComps())
                 {
                     if (TermContainsMatrices(subComp))
                         return true;

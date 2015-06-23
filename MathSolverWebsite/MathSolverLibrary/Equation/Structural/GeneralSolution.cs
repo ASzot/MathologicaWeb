@@ -6,9 +6,9 @@
         private ExComp _interval;
         private AlgebraComp _iterVar;
 
-        public ExComp Result
+        public ExComp GetResult()
         {
-            get { return _result; }
+            return _result;
         }
 
         public GeneralSolution(ExComp result, ExComp interval, AlgebraComp iterationVar)
@@ -87,9 +87,9 @@
             string finalStr = "";
 
             if (Number.IsUndef(_result))
-                return Number.Undefined.ToAsciiString();
+                return Number.GetUndefined().ToAsciiString();
 
-            if (!Number.Zero.IsEqualTo(_result) && !(_result is AlgebraTerm && (_result as AlgebraTerm).IsZero()))
+            if (!Number.GetZero().IsEqualTo(_result) && !(_result is AlgebraTerm && (_result as AlgebraTerm).IsZero()))
             {
                 if (_result is AlgebraTerm)
                     finalStr += (_result as AlgebraTerm).FinalToDispStr();
@@ -112,9 +112,9 @@
             string finalStr = "";
 
             if (Number.IsUndef(_result))
-                return Number.Undefined.ToTexString();
+                return Number.GetUndefined().ToTexString();
 
-            if (!Number.Zero.IsEqualTo(_result) && !(_result is AlgebraTerm && (_result as AlgebraTerm).IsZero()))
+            if (!Number.GetZero().IsEqualTo(_result) && !(_result is AlgebraTerm && (_result as AlgebraTerm).IsZero()))
             {
                 if (_result is AlgebraTerm)
                     finalStr += (_result as AlgebraTerm).FinalToTexString();

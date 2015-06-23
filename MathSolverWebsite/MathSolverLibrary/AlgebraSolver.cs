@@ -39,12 +39,12 @@ namespace MathSolverWebsite.MathSolverLibrary
             Dictionary<string, int> occurances = new Dictionary<string, int>();
             foreach (TypePair<LexemeType, string> lexeme in lexemeTable)
             {
-                if (lexeme.Data1 == LexemeType.Identifier)
+                if (lexeme.GetData1() == LexemeType.Identifier)
                 {
-                    if (occurances.ContainsKey(lexeme.Data2))
-                        occurances[lexeme.Data2] = occurances[lexeme.Data2] + 1;
+                    if (occurances.ContainsKey(lexeme.GetData2()))
+                        occurances[lexeme.GetData2()] = occurances[lexeme.GetData2()] + 1;
                     else
-                        occurances[lexeme.Data2] = 1;
+                        occurances[lexeme.GetData2()] = 1;
                 }
             }
 
@@ -92,7 +92,7 @@ namespace MathSolverWebsite.MathSolverLibrary
 
             pEvalData.AttemptSetInputType(TermType.InputType.FunctionDomain);
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "{0}" + WorkMgr.EDM, "Find the domain of " + WorkMgr.STM + varFor.ToMathAsciiString() + WorkMgr.EDM + " in the term.", useSet.FinalToDispStr());
+            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "{0}" + WorkMgr.EDM, "Find the domain of " + WorkMgr.STM + varFor.ToMathAsciiString() + WorkMgr.EDM + " in the term.", useSet.FinalToDispStr());
 
             List<Restriction> domainRestrictions = useSet.GetDomain(varFor, this, ref pEvalData);
             if (domainRestrictions == null)
@@ -186,12 +186,12 @@ namespace MathSolverWebsite.MathSolverLibrary
             if (!left.CallFunctions(ref pEvalData))
             {
                 pEvalData.AddMsg("Invalid function call.");
-                return Number.Undefined;
+                return Number.GetUndefined();
             }
             if (!right.CallFunctions(ref pEvalData))
             {
                 pEvalData.AddMsg("Invalid function call.");
-                return Number.Undefined;
+                return Number.GetUndefined();
             }
 
             ExComp leftEx = left.RemoveRedundancies();
@@ -208,7 +208,7 @@ namespace MathSolverWebsite.MathSolverLibrary
                 right.EvaluateFunctions(false, ref pEvalData);
 
             if (left.IsUndefined() || right.IsUndefined())
-                return Number.Undefined;
+                return Number.GetUndefined();
 
             if (left.IsEqualTo(right))
                 return new AllSolutions();
@@ -230,8 +230,8 @@ namespace MathSolverWebsite.MathSolverLibrary
 
             if (rightEx.IsEqualTo(solveForComp) && !left.Contains(solveForComp))
             {
-                if (pEvalData.NegDivCount != -1)
-                    pEvalData.NegDivCount++;
+                if (pEvalData.GetNegDivCount() != -1)
+                    pEvalData.SetNegDivCount(pEvalData.GetNegDivCount() + 1);
                 //WorkMgr.FromSides(right, left);
                 left = left.ApplyOrderOfOperations();
                 return left.MakeWorkable();
@@ -246,7 +246,7 @@ namespace MathSolverWebsite.MathSolverLibrary
             // This is used for when the term is something like sin(x)^2 = 1/2. Now why isn't this mechanism in place
             // for a problem like ln(x)^2=1/2? On a power function with a trig function the trig func type is added to the
             // functions for the term. This is to allow for trig simplifications (which often use the properties of powers).
-            bool skipSinusodal = solveInfo.NumberOfAppliedFuncs == 1 && solveInfo.NumberOfPowers > 0 && !solveInfo.HasPower(Number.One);
+            bool skipSinusodal = solveInfo.NumberOfAppliedFuncs == 1 && solveInfo.GetNumberOfPowers() > 0 && !solveInfo.HasPower(Number.GetOne());
 
             string solveDesc = null;
 
@@ -298,7 +298,7 @@ namespace MathSolverWebsite.MathSolverLibrary
                 _linearSolveRepeatCount++;
                 solveDesc = "Solve this linear problem.";
             }
-            else if (solveInfo.NumberOfPowers == 1)
+            else if (solveInfo.GetNumberOfPowers() == 1)
             {
                 solveMethod = new PowerSolve(this, solveInfo.Powers[0]);
                 solveDesc = "Solve this power problem";
@@ -308,12 +308,12 @@ namespace MathSolverWebsite.MathSolverLibrary
                 solveMethod = new QuadraticSolve(this);
                 solveDesc = "Solve this quadratic.";
             }
-            else if (Number.OpEqual(solveInfo.MaxPower, 3.0) && solveInfo.OnlyIntPows)
+            else if (Number.OpEqual(solveInfo.MaxPower, 3.0) && solveInfo.GetOnlyIntPows())
             {
                 solveMethod = new CubicSolve(this);
                 solveDesc = "Solve this cubic.";
             }
-            else if (solveInfo.OnlyIntPows)
+            else if (solveInfo.GetOnlyIntPows())
             {
                 solveMethod = new PolynomialSolve(this);
                 solveDesc = "Solve this polynomial.";
@@ -323,7 +323,7 @@ namespace MathSolverWebsite.MathSolverLibrary
                 solveMethod = new ExponentSolve(this);
                 solveDesc = "Solve this exponent problem.";
             }
-            else if (solveInfo.NumberOfPowers == 2 && solveInfo.GetFractionalPowCount() == 1
+            else if (solveInfo.GetNumberOfPowers() == 2 && solveInfo.GetFractionalPowCount() == 1
                 && solveInfo.GetIntegerPowCount() == 1)
             {
                 ExComp root = solveInfo.Powers[0] is AlgebraTerm ? solveInfo.Powers[0] : solveInfo.Powers[1];
@@ -338,10 +338,10 @@ namespace MathSolverWebsite.MathSolverLibrary
             }
 
             if (solveDesc != null)
-                pEvalData.WorkMgr.FromSides(left, right, solveDesc);
+                pEvalData.GetWorkMgr().FromSides(left, right, solveDesc);
 
             ExComp origLeft = null, origRight = null;
-            if (pEvalData.WorkMgr.AllowWork)
+            if (pEvalData.GetWorkMgr().AllowWork)
             {
                 origLeft = left.CloneEx();
                 origRight = right.CloneEx();
@@ -351,31 +351,31 @@ namespace MathSolverWebsite.MathSolverLibrary
                 _linearSolveRepeatCount = 0;
 
             ExComp result = solveMethod.SolveEquation(left, right, solveFor, ref pEvalData);
-            if (result is AlgebraTermArray && (result as AlgebraTermArray).TermCount == 1)
-                result = (result as AlgebraTermArray).Terms[0];
+            if (result is AlgebraTermArray && (result as AlgebraTermArray).GetTermCount() == 1)
+                result = (result as AlgebraTermArray).GetTerms()[0];
 
-            if (showFinalStep && result != null && pEvalData.WorkMgr.AllowWork && !Number.IsUndef(result))
+            if (showFinalStep && result != null && pEvalData.GetWorkMgr().AllowWork && !Number.IsUndef(result))
             {
                 if (result is AlgebraTermArray)
                 {
                     string workStr = "";
                     AlgebraTermArray ataResult = result as AlgebraTermArray;
-                    for (int i = 0; i < ataResult.Terms.Count; ++i)
+                    for (int i = 0; i < ataResult.GetTerms().Count; ++i)
                     {
-                        AlgebraTerm indResult = ataResult.Terms[i];
+                        AlgebraTerm indResult = ataResult.GetTerms()[i];
                         if (indResult == null || Number.IsUndef(indResult))
                             continue;
                         string indResultDispStr = indResult.FinalToDispStr();
                         workStr += WorkMgr.STM + solveForComp.ToDispString() + "=" + indResultDispStr + WorkMgr.EDM;
-                        if (i != ataResult.Terms.Count - 1)
+                        if (i != ataResult.GetTerms().Count - 1)
                             workStr += "<br />";
                     }
 
                     if (workStr == "")
-                        pEvalData.WorkMgr.FromSides(origLeft, origRight, "There are no solutions to the above equation.");
+                        pEvalData.GetWorkMgr().FromSides(origLeft, origRight, "There are no solutions to the above equation.");
                     else
                     {
-                        pEvalData.WorkMgr.FromFormatted(workStr, "Above are the solutions of " + WorkMgr.STM + solveForComp.ToDispString() + WorkMgr.EDM +
+                        pEvalData.GetWorkMgr().FromFormatted(workStr, "Above are the solutions of " + WorkMgr.STM + solveForComp.ToDispString() + WorkMgr.EDM +
                         " for " + WorkMgr.STM + WorkMgr.ToDisp(origLeft) + "=" +
                         WorkMgr.ToDisp(origRight) + WorkMgr.EDM + ".");
                     }
@@ -383,10 +383,10 @@ namespace MathSolverWebsite.MathSolverLibrary
                 else if (result != null)
                 {
                     if (Number.IsUndef(result))
-                        pEvalData.WorkMgr.FromSides(origLeft, origRight, "There are no solutions to the above equation.");
+                        pEvalData.GetWorkMgr().FromSides(origLeft, origRight, "There are no solutions to the above equation.");
                     else
                     {
-                        pEvalData.WorkMgr.FromSides(solveForComp, result,
+                        pEvalData.GetWorkMgr().FromSides(solveForComp, result,
                         "The above is the solution of " + WorkMgr.STM + solveForComp.ToDispString() + WorkMgr.EDM +
                         " for " + WorkMgr.STM + WorkMgr.ToDisp(origLeft) + "=" +
                         WorkMgr.ToDisp(origRight) + WorkMgr.EDM + ".");
@@ -463,7 +463,7 @@ namespace MathSolverWebsite.MathSolverLibrary
                     return SolveResult.Failure();
                 }
 
-                pEvalData.WorkMgr.FromSidesAndComps(sides, comparisonTypes, "Solve this compound inequality");
+                pEvalData.GetWorkMgr().FromSidesAndComps(sides, comparisonTypes, "Solve this compound inequality");
 
                 if (sides[0] is Number && sides[2] is Number)
                 {
@@ -471,35 +471,35 @@ namespace MathSolverWebsite.MathSolverLibrary
                     Number nSide2 = sides[2] as Number;
                     if (Restriction.IsGreaterThan(comparisonTypes[0]) && Restriction.IsGreaterThan(comparisonTypes[1]) && Number.OpLT(nSide0, nSide2))
                     {
-                        pEvalData.WorkMgr.FromSidesAndComps(sides, comparisonTypes, "This inequality will never be true.");
+                        pEvalData.GetWorkMgr().FromSidesAndComps(sides, comparisonTypes, "This inequality will never be true.");
                         return SolveResult.NoSolutions();
                     }
                     if (Restriction.IsGreaterThan(comparisonTypes[0]) && !Restriction.IsGreaterThan(comparisonTypes[1]) && Number.OpLT(nSide2, nSide0))
                     {
-                        pEvalData.WorkMgr.FromSidesAndComps(sides, comparisonTypes, "This inequality will never be true..");
+                        pEvalData.GetWorkMgr().FromSidesAndComps(sides, comparisonTypes, "This inequality will never be true..");
                         return SolveResult.NoSolutions();
                     }
                     if (Restriction.IsGreaterThan(comparisonTypes[0]) && Number.OpLT(nSide0, nSide2))
                     {
-                        pEvalData.WorkMgr.FromFormatted(WorkMgr.STM +
+                        pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM +
                             WorkMgr.ToDisp(nSide0) + Restriction.ComparisonOpToStr(comparisonTypes[0]) + WorkMgr.ToDisp(sides[1]) + WorkMgr.EDM, "Remove the redundant side.");
                         return SolveRegInequality(nSide0.ToAlgTerm(), sides[1].ToAlgTerm(), comparisonTypes[0], solveFor, ref pEvalData);
                     }
                     else if (!Restriction.IsGreaterThan(comparisonTypes[1]) && Number.OpLT(nSide2, nSide0))
                     {
-                        pEvalData.WorkMgr.FromFormatted(WorkMgr.STM +
+                        pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM +
                             WorkMgr.ToDisp(sides[1]) + Restriction.ComparisonOpToStr(comparisonTypes[1]) + WorkMgr.ToDisp(nSide2) + WorkMgr.EDM, "Remove the redundant side.");
                         return SolveRegInequality(sides[1].ToAlgTerm(), nSide2.ToAlgTerm(), comparisonTypes[1], solveFor, ref pEvalData);
                     }
                     else if (!Restriction.IsGreaterThan(comparisonTypes[0]) && Number.OpGT(nSide0, nSide2))
                     {
-                        pEvalData.WorkMgr.FromFormatted(WorkMgr.STM +
+                        pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM +
                             WorkMgr.ToDisp(nSide0) + Restriction.ComparisonOpToStr(comparisonTypes[0]) + WorkMgr.ToDisp(sides[1]) + WorkMgr.EDM, "Remove the redundant side.");
                         return SolveRegInequality(nSide0.ToAlgTerm(), sides[1].ToAlgTerm(), comparisonTypes[0], solveFor, ref pEvalData);
                     }
                     else if (Restriction.IsGreaterThan(comparisonTypes[1]) && Number.OpGT(nSide2, nSide0))
                     {
-                        pEvalData.WorkMgr.FromFormatted(WorkMgr.STM +
+                        pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM +
                             WorkMgr.ToDisp(sides[1]) + Restriction.ComparisonOpToStr(comparisonTypes[1]) + WorkMgr.ToDisp(nSide2) + WorkMgr.EDM, "Remove the redundant side.");
                         return SolveRegInequality(sides[1].ToAlgTerm(), nSide2.ToAlgTerm(), comparisonTypes[1], solveFor, ref pEvalData);
                     }
@@ -530,37 +530,37 @@ namespace MathSolverWebsite.MathSolverLibrary
         public SolveResult SolveRegInequality(AlgebraTerm left, AlgebraTerm right, LexemeType comparison, AlgebraVar solveFor, ref TermType.EvalData pEvalData)
         {
             ResetIterCount();
-            pEvalData.NegDivCount = 0;
+            pEvalData.SetNegDivCount(0);
 
             AlgebraComp solveForComp = solveFor.ToAlgebraComp();
 
             SolveMethod.PrepareForSolving(ref left, ref right, solveForComp, ref pEvalData);
-            if (pEvalData.NegDivCount == 0 ? false : pEvalData.NegDivCount % 2 != 0)
+            if (pEvalData.GetNegDivCount() == 0 ? false : pEvalData.GetNegDivCount() % 2 != 0)
             {
                 comparison = Restriction.SwitchComparisonType(comparison);
-                pEvalData.NegDivCount = 0;
+                pEvalData.SetNegDivCount(0);
             }
 
-            pEvalData.WorkMgr.UseComparison = Restriction.ComparisonOpToStr(comparison);
+            pEvalData.GetWorkMgr().UseComparison = Restriction.ComparisonOpToStr(comparison);
             SolveMethod.ConstantsToRight(ref left, ref right, solveForComp, ref pEvalData);
             SolveMethod.VariablesToLeft(ref left, ref right, solveForComp, ref pEvalData);
             SolveMethod.CombineFractions(ref left, ref right, ref pEvalData);
-            pEvalData.WorkMgr.UseComparison = "=";
+            pEvalData.GetWorkMgr().UseComparison = "=";
 
             AlgebraTerm completeTerm = Equation.Operators.SubOp.StaticCombine(left.CloneEx(), right.CloneEx()).ToAlgTerm();
             completeTerm.EvaluateFunctions(false, ref pEvalData);
             completeTerm = completeTerm.CompoundFractions();
 
-            if (completeTerm.RemoveRedundancies().IsEqualTo(Number.Zero))
+            if (completeTerm.RemoveRedundancies().IsEqualTo(Number.GetZero()))
             {
                 if (Restriction.IsEqualTo(comparison))
                 {
-                    pEvalData.WorkMgr.FromFormatted("`{0}=0`", "As the right side is equal to the left and the inequality is inclusive there are infinite solutions.", completeTerm);
+                    pEvalData.GetWorkMgr().FromFormatted("`{0}=0`", "As the right side is equal to the left and the inequality is inclusive there are infinite solutions.", completeTerm);
                     return SolveResult.Simplified(new AllSolutions());
                 }
                 else
                 {
-                    pEvalData.WorkMgr.FromFormatted("`{0}=0`", "As the right side is equal to the left and the inequality is non inclusive there are no solutions.", completeTerm);
+                    pEvalData.GetWorkMgr().FromFormatted("`{0}=0`", "As the right side is equal to the left and the inequality is non inclusive there are no solutions.", completeTerm);
                     return SolveResult.Simplified(new NoSolutions());
                 }
             }
@@ -570,11 +570,11 @@ namespace MathSolverWebsite.MathSolverLibrary
             AlgebraTerm[] numDen = left.GetNumDenFrac();
             if (numDen != null && numDen[1].Contains(solveForComp) && numDen[0].Contains(solveForComp))
             {
-                pEvalData.WorkMgr.FromSides(left, right, "Find points of interest in the equation to find over what ranges this rational function is in the restriction. This will include solving for the denominator.");
+                pEvalData.GetWorkMgr().FromSides(left, right, "Find points of interest in the equation to find over what ranges this rational function is in the restriction. This will include solving for the denominator.");
                 // This will be solved slightly differently.
-                pEvalData.WorkMgr.FromSides(left, right, "Solve the term as a whole.");
+                pEvalData.GetWorkMgr().FromSides(left, right, "Solve the term as a whole.");
                 SolveResult result0 = SolveEquationEquality(solveFor, (AlgebraTerm)left.CloneEx(), (AlgebraTerm)right.CloneEx(), ref pEvalData);
-                if (result0.UndefinedSolution)
+                if (result0.GetUndefinedSolution())
                     return SolveResult.NoSolutions();
                 if (!result0.Success)
                     return SolveResult.Failure();
@@ -587,9 +587,9 @@ namespace MathSolverWebsite.MathSolverLibrary
                 else
                     noninclusiveForced = comparison;
 
-                pEvalData.WorkMgr.FromSides(numDen[1], right, "Solve the denominator.");
-                SolveResult result1 = SolveEquationEquality(solveFor, (AlgebraTerm)numDen[1].CloneEx(), Number.Zero.ToAlgTerm(), ref pEvalData);
-                if (result1.UndefinedSolution)
+                pEvalData.GetWorkMgr().FromSides(numDen[1], right, "Solve the denominator.");
+                SolveResult result1 = SolveEquationEquality(solveFor, (AlgebraTerm)numDen[1].CloneEx(), Number.GetZero().ToAlgTerm(), ref pEvalData);
+                if (result1.GetUndefinedSolution())
                     return SolveResult.NoSolutions();
                 if (!result1.Success)
                     return SolveResult.Failure();
@@ -603,17 +603,17 @@ namespace MathSolverWebsite.MathSolverLibrary
             }
             else
             {
-                pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "{0}{1}{2}" + WorkMgr.EDM, "Solve the equation just like an equality.", left, Restriction.ComparisonOpToStr(comparison), right);
+                pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "{0}{1}{2}" + WorkMgr.EDM, "Solve the equation just like an equality.", left, Restriction.ComparisonOpToStr(comparison), right);
                 if (right.RemoveRedundancies().IsEqualTo(solveForComp))
                 {
                     OrRestriction orRest = new OrRestriction(solveForComp, Restriction.InvertComparison(comparison), left, ref pEvalData);
-                    pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + orRest.ToMathAsciiStr() + WorkMgr.EDM, "The resulting equality.");
+                    pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + orRest.ToMathAsciiStr() + WorkMgr.EDM, "The resulting equality.");
                     return SolveResult.InequalitySolved(orRest);
                 }
                 else
                 {
                     result = SolveEquationEquality(solveFor, (AlgebraTerm)left.CloneEx(), (AlgebraTerm)right.CloneEx(), ref pEvalData);
-                    if (result.UndefinedSolution)
+                    if (result.GetUndefinedSolution())
                         return SolveResult.NoSolutions();
                     if (!result.Success)
                         return SolveResult.Failure();
@@ -621,7 +621,7 @@ namespace MathSolverWebsite.MathSolverLibrary
                     //result.RemoveExtraneousSolutions(new EquationSet(left, right, LexemeType.EqualsOp));
                     result.RemoveUndefinedSolutions();
 
-                    if (!result.HasSolutions && !result.HasRestrictions && !pEvalData.HasPartialSolutions && result.Success)
+                    if (!result.GetHasSolutions() && !result.GetHasRestrictions() && !pEvalData.GetHasPartialSolutions() && result.Success)
                     {
                         return SolveResult.Solved(solveFor, new NoSolutions(), ref pEvalData);
                     }
@@ -639,13 +639,13 @@ namespace MathSolverWebsite.MathSolverLibrary
             {
                 if (result.RemoveComplexSolutions())
                 {
-                    pEvalData.WorkMgr.FromSides(left, right, "Exclude all complex solutions.");
+                    pEvalData.GetWorkMgr().FromSides(left, right, "Exclude all complex solutions.");
                 }
             }
 
-            bool switchSign = pEvalData.NegDivCount == 0 ? false : pEvalData.NegDivCount % 2 != 0;
+            bool switchSign = pEvalData.GetNegDivCount() == 0 ? false : pEvalData.GetNegDivCount() % 2 != 0;
             // So the sign switches are no longer counted.
-            pEvalData.NegDivCount = -1;
+            pEvalData.SetNegDivCount(-1);
 
             int totalMultiplicity = result.GetTotalMultiplicity();
 
@@ -669,12 +669,12 @@ namespace MathSolverWebsite.MathSolverLibrary
                 AndRestriction overallRest = OrRestriction.AttemptCombine(rest0, rest1, ref pEvalData);
                 if (overallRest != null)
                 {
-                    pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "{0}" + WorkMgr.EDM, "Combine the ranges to get the final result.", overallRest);
+                    pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "{0}" + WorkMgr.EDM, "Combine the ranges to get the final result.", overallRest);
                     return SolveResult.InequalitySolved(overallRest);
                 }
                 else
                 {
-                    pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "{0}" + WorkMgr.EDM + ", " + WorkMgr.STM + "{1}" + WorkMgr.EDM, "Get the final result from the solved equation.", rest0, rest1);
+                    pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "{0}" + WorkMgr.EDM + ", " + WorkMgr.STM + "{1}" + WorkMgr.EDM, "Get the final result from the solved equation.", rest0, rest1);
                     return SolveResult.InequalitySolved(rest0, rest1);
                 }
             }
@@ -684,7 +684,7 @@ namespace MathSolverWebsite.MathSolverLibrary
                 if (switchSign)
                 {
                     rest.SwitchComparison();
-                    pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + rest.ToMathAsciiStr() + WorkMgr.EDM, "Switch the inequality sign because of the division by a negative number.");
+                    pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + rest.ToMathAsciiStr() + WorkMgr.EDM, "Switch the inequality sign because of the division by a negative number.");
                 }
 
                 return SolveResult.InequalitySolved(rest);
@@ -692,7 +692,7 @@ namespace MathSolverWebsite.MathSolverLibrary
             else if (totalMultiplicity == 2 && result.Solutions.Count == 1 && !forceRootsCheck)
             {
                 // We have a quadratic function (or quadratic like function) which bounces off the x-axis.
-                pEvalData.WorkMgr.FromSides(left, right,
+                pEvalData.GetWorkMgr().FromSides(left, right,
                     "The above equation has only one root, " +
                     WorkMgr.STM + WorkMgr.ToDisp(result.Solutions[0].Result) + WorkMgr.EDM + ", with a multiplicity of two.");
                 if (Restriction.IsGreaterThan(comparison) == !switchSign)
@@ -726,22 +726,22 @@ namespace MathSolverWebsite.MathSolverLibrary
                         return SolveResult.Failure();
                     }
 
-                    roots.Add(new TypePair<double, ExComp>((harshSimplified as Number).RealComp, sol.Result));
+                    roots.Add(new TypePair<double, ExComp>((harshSimplified as Number).GetRealComp(), sol.Result));
                 }
 
-                roots = roots.OrderBy(x => x.Data1).ToList();
+                roots = roots.OrderBy(x => x.GetData1()).ToList();
 
-                if (pEvalData.WorkMgr.AllowWork)
+                if (pEvalData.GetWorkMgr().AllowWork)
                 {
                     string rootsStr = "";
                     for (int i = 0; i < roots.Count; ++i)
                     {
-                        rootsStr += WorkMgr.STM + WorkMgr.ToDisp(roots[i].Data2) + WorkMgr.EDM;
+                        rootsStr += WorkMgr.STM + WorkMgr.ToDisp(roots[i].GetData2()) + WorkMgr.EDM;
                         if (i != roots.Count - 1)
                             rootsStr += ", ";
                     }
 
-                    pEvalData.WorkMgr.FromFormatted(rootsStr, "Using the roots determine the ranges where the statement " +
+                    pEvalData.GetWorkMgr().FromFormatted(rootsStr, "Using the roots determine the ranges where the statement " +
                         WorkMgr.STM + left.FinalToDispStr() + Restriction.ComparisonOpToStr(comparison) + right.FinalToDispStr() + WorkMgr.EDM + " is true.");
                 }
 
@@ -753,7 +753,7 @@ namespace MathSolverWebsite.MathSolverLibrary
                     bool? isPos;
                     if (i == 0)
                     {
-                        testPoint = Restriction.FindLowerTestPoint(roots[0].Data1);
+                        testPoint = Restriction.FindLowerTestPoint(roots[0].GetData1());
                         isPos = IsTestPointPos(completeTerm, solveForComp, testPoint, ref pEvalData);
                         if (!isPos.HasValue)
                         {
@@ -766,7 +766,7 @@ namespace MathSolverWebsite.MathSolverLibrary
                     // Important that it's not an else-if here. The first element can also be the last if there is only one solution.
                     if (i == roots.Count - 1)
                     {
-                        testPoint = Restriction.FindUpperTestPoint(roots[i].Data1);
+                        testPoint = Restriction.FindUpperTestPoint(roots[i].GetData1());
                         isPos = IsTestPointPos(completeTerm, solveForComp, testPoint, ref pEvalData);
                         if (!isPos.HasValue)
                         {
@@ -779,7 +779,7 @@ namespace MathSolverWebsite.MathSolverLibrary
                         continue;
                     }
 
-                    testPoint = Restriction.FindConvenientTestPoint(roots[i].Data1, roots[i + 1].Data1);
+                    testPoint = Restriction.FindConvenientTestPoint(roots[i].GetData1(), roots[i + 1].GetData1());
                     isPos = IsTestPointPos(completeTerm, solveForComp, testPoint, ref pEvalData);
                     if (!isPos.HasValue)
                     {
@@ -811,7 +811,7 @@ namespace MathSolverWebsite.MathSolverLibrary
                     if (i > 0 && testPointsPos[i] == testPointsPos[i - 1] && testPointsPos[i] != isGreaterThan && isEqualTo)
                     {
                         // We have a root which is a 'bouncer' rather than a piercer.
-                        ranges.Add(Restriction.FromOnly(roots[i - 1].Data2, solveForComp, ref pEvalData));
+                        ranges.Add(Restriction.FromOnly(roots[i - 1].GetData2(), solveForComp, ref pEvalData));
                     }
 
                     if (isPos != isGreaterThan)
@@ -827,12 +827,12 @@ namespace MathSolverWebsite.MathSolverLibrary
                         {
                             if (i == 0)
                             {
-                                lower = Number.NegInfinity;
+                                lower = Number.GetNegInfinity();
                             }
                             else
-                                lower = roots[i - 1].Data2;
+                                lower = roots[i - 1].GetData2();
 
-                            upper = roots[j - 1].Data2;
+                            upper = roots[j - 1].GetData2();
 
                             break;
                         }
@@ -841,11 +841,11 @@ namespace MathSolverWebsite.MathSolverLibrary
                     if (lower == null || upper == null)
                     {
                         if (i == 0)
-                            lower = Number.NegInfinity;
+                            lower = Number.GetNegInfinity();
                         else
-                            lower = roots[i - 1].Data2;
+                            lower = roots[i - 1].GetData2();
 
-                        upper = Number.PosInfinity;
+                        upper = Number.GetPosInfinity();
                     }
 
                     ranges.Add(new AndRestriction(lower, less, solveForComp, less, upper, ref pEvalData));
@@ -878,7 +878,7 @@ namespace MathSolverWebsite.MathSolverLibrary
             if (!(simpEx is Number) || (simpEx is Number && (simpEx as Number).HasImaginaryComp()))
                 return null;
 
-            return (simpEx as Number).RealComp > 0.0;
+            return (simpEx as Number).GetRealComp() > 0.0;
         }
 
         private SolveResult SolveCompoundInequality(AlgebraTerm left0, AlgebraTerm left1, AlgebraTerm right, LexemeType comparison0, LexemeType comparison1, AlgebraVar solveFor,
@@ -888,7 +888,7 @@ namespace MathSolverWebsite.MathSolverLibrary
                 throw new InvalidOperationException("Evaluate data is not set.");
 
             ResetIterCount();
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "{0}{1}{2}{3}{4}" + WorkMgr.EDM, "To solve this compound inequality solve the middle expression for the outer ones just as regular inequalities.",
+            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "{0}{1}{2}{3}{4}" + WorkMgr.EDM, "To solve this compound inequality solve the middle expression for the outer ones just as regular inequalities.",
                 left0, Restriction.ComparisonOpToStr(comparison0), right, Restriction.ComparisonOpToStr(comparison1), left1);
 
             SolveResult solve0 = SolveRegInequality(left0, right.CloneEx().ToAlgTerm(), comparison0, solveFor, ref pEvalData);

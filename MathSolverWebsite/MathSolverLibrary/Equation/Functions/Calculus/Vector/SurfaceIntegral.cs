@@ -25,12 +25,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
 
         public override ExComp CloneEx()
         {
-            return ConstructSurfaceIntegral(InnerTerm.CloneEx(), _surface == null ? null : (AlgebraComp)_surface.CloneEx(), _dVar == null ? null : (AlgebraComp)_dVar.CloneEx());
+            return ConstructSurfaceIntegral(GetInnerTerm().CloneEx(), _surface == null ? null : (AlgebraComp)_surface.CloneEx(), _dVar == null ? null : (AlgebraComp)_dVar.CloneEx());
         }
 
         protected override AlgebraTerm CreateInstance(params ExComp[] args)
         {
-            return ConstructSurfaceIntegral(InnerTerm, _surface, _dVar);
+            return ConstructSurfaceIntegral(GetInnerTerm(), _surface, _dVar);
         }
 
         public static SurfaceIntegral ConstructSurfaceIntegral(ExComp innerEx, AlgebraComp surface, AlgebraComp surfaceDiff)
@@ -44,35 +44,35 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
 
         public override string ToTexString()
         {
-            return "\\int\\int_{" + _surface.ToTexString() + "}(" + InnerTerm.ToTexString() + ")d" + _surface.ToTexString();
+            return "\\int\\int_{" + _surface.ToTexString() + "}(" + GetInnerTerm().ToTexString() + ")d" + _surface.ToTexString();
         }
 
         public override string FinalToTexString()
         {
-            return "\\int\\int_{" + _surface.ToTexString() + "}(" + InnerTerm.FinalToTexString() + ")d" + _surface.ToTexString();
+            return "\\int\\int_{" + _surface.ToTexString() + "}(" + GetInnerTerm().FinalToTexString() + ")d" + _surface.ToTexString();
         }
 
         public override string ToAsciiString()
         {
-            return "\\int\\int_{" + _surface.ToAsciiString() + "}(" + InnerTerm.ToAsciiString() + ")d" + _dVar.ToAsciiString();
+            return "\\int\\int_{" + _surface.ToAsciiString() + "}(" + GetInnerTerm().ToAsciiString() + ")d" + _dVar.ToAsciiString();
         }
 
         public override string FinalToAsciiString()
         {
-            return "\\int\\int_{" + _surface.ToAsciiString() + "}(" + InnerTerm.FinalToAsciiString() + ")d" + _dVar.ToAsciiString();
+            return "\\int\\int_{" + _surface.ToAsciiString() + "}(" + GetInnerTerm().FinalToAsciiString() + ")d" + _dVar.ToAsciiString();
         }
 
         public override ExComp Evaluate(bool harshEval, ref TermType.EvalData pEvalData)
         {
             CallChildren(harshEval, ref pEvalData);
 
-            int startingWorkSteps = pEvalData.WorkMgr.WorkSteps.Count;
+            int startingWorkSteps = pEvalData.GetWorkMgr().GetWorkSteps().Count;
             // Only the surface differential identifier was specified.
-            List<FunctionDefinition> vectorFuncs = pEvalData.FuncDefs.GetAllVecEquations(2);
+            List<FunctionDefinition> vectorFuncs = pEvalData.GetFuncDefs().GetAllVecEquations(2);
             FunctionDefinition vectorFunc = FuncDefHelper.GetMostCurrentDef(vectorFuncs, _dVar);
 
             // Search for a set of parametric equations.
-            List<FunctionDefinition> paraFuncs = pEvalData.FuncDefs.GetProbableParametricEquations(2);
+            List<FunctionDefinition> paraFuncs = pEvalData.GetFuncDefs().GetProbableParametricEquations(2);
 
             int maxIndex = int.MinValue;
             if (paraFuncs != null)
@@ -84,13 +84,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
             ExVector vectorDef = null;
             AlgebraComp withRespect0 = null;
             AlgebraComp withRespect1 = null;
-            if (vectorFunc != null && vectorFunc.FuncDefIndex > maxIndex)
+            if (vectorFunc != null && vectorFunc.GetFuncDefIndex() > maxIndex)
             {
-                ExComp def = pEvalData.FuncDefs.GetDefinition(vectorFunc).Value;
+                ExComp def = pEvalData.GetFuncDefs().GetDefinition(vectorFunc).Value;
                 if (def == null)
                     return this;
-                withRespect0 = vectorFunc.InputArgs[0];
-                withRespect1 = vectorFunc.InputArgs[1];
+                withRespect0 = vectorFunc.GetInputArgs()[0];
+                withRespect1 = vectorFunc.GetInputArgs()[1];
                 if (!(def is ExVector))
                     return this;
                 vectorDef = def as ExVector;
@@ -102,14 +102,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
                 vectorDef = new ExVector(paraFuncs.Count);
                 for (int i = 0; i < paraFuncs.Count; ++i)
                 {
-                    ExComp definition = pEvalData.FuncDefs.GetDefinition(paraFuncs[i]).Value;
+                    ExComp definition = pEvalData.GetFuncDefs().GetDefinition(paraFuncs[i]).Value;
                     vectorDef.Set(i, definition);
                 }
-                withRespect0 = paraFuncs[0].InputArgs[0];
-                withRespect1 = paraFuncs[0].InputArgs[1];
+                withRespect0 = paraFuncs[0].GetInputArgs()[0];
+                withRespect1 = paraFuncs[0].GetInputArgs()[1];
             }
 
-            if (vectorDef == null || vectorDef.Length > 3)
+            if (vectorDef == null || vectorDef.GetLength() > 3)
                 return this;
 
             AndRestriction respect0Rest = pEvalData.GetVariableRestriction(withRespect0);
@@ -124,62 +124,62 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
             string withRespect0Str = withRespect0.ToDispString();
             string withRespect1Str = withRespect1.ToDispString();
             string integralStr = "\\int\\int_{" + _surface.ToDispString() + "}";
-            string innerStr = InnerTerm.FinalToDispStr();
+            string innerStr = GetInnerTerm().FinalToDispStr();
             WorkStep lastStep = null;
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + integralStr + innerStr +
+            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + integralStr + innerStr +
                 "|\\frac{\\partial " + vectorFuncIden + "}{\\partial " + withRespect0Str + "}" + CrossProductOp.IDEN +
                 "\\frac{\\partial " + vectorFuncIden + "}{\\partial " + withRespect1Str + "}|d" + withRespect0Str + "d" + withRespect1Str + WorkMgr.EDM);
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "|\\frac{\\partial " + vectorFuncIden + "}{\\partial " + withRespect0Str + "}" + CrossProductOp.IDEN +
+            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "|\\frac{\\partial " + vectorFuncIden + "}{\\partial " + withRespect0Str + "}" + CrossProductOp.IDEN +
                 "\\frac{\\partial " + vectorFuncIden + "}{\\partial " + withRespect1Str + "}|" + WorkMgr.EDM, "Calculate.");
 
-            pEvalData.WorkMgr.FromFormatted("", "Calculate.");
-            lastStep = pEvalData.WorkMgr.GetLast();
+            pEvalData.GetWorkMgr().FromFormatted("", "Calculate.");
+            lastStep = pEvalData.GetWorkMgr().GetLast();
 
             lastStep.GoDown(ref pEvalData);
             ExComp surfacePartial0 = Derivative.TakeDeriv(vectorDef, withRespect0, ref pEvalData, true);
             lastStep.GoUp(ref pEvalData);
 
-            lastStep.WorkHtml = WorkMgr.STM + "\\frac{\\partial " + vectorFuncIden + "}{\\partial " + withRespect0Str + "}=" + WorkMgr.ToDisp(surfacePartial0) + WorkMgr.EDM;
+            lastStep.SetWorkHtml(WorkMgr.STM + "\\frac{\\partial " + vectorFuncIden + "}{\\partial " + withRespect0Str + "}=" + WorkMgr.ToDisp(surfacePartial0) + WorkMgr.EDM);
 
-            pEvalData.WorkMgr.FromFormatted("", "Calculate.");
-            lastStep = pEvalData.WorkMgr.GetLast();
+            pEvalData.GetWorkMgr().FromFormatted("", "Calculate.");
+            lastStep = pEvalData.GetWorkMgr().GetLast();
 
             lastStep.GoDown(ref pEvalData);
             ExComp surfacePartial1 = Derivative.TakeDeriv(vectorDef, withRespect1, ref pEvalData, true);
             lastStep.GoUp(ref pEvalData);
 
-            lastStep.WorkHtml = WorkMgr.STM + "\\frac{\\partial " + vectorFuncIden + "}{\\partial " + withRespect1Str + "}=" + WorkMgr.ToDisp(surfacePartial1) + WorkMgr.EDM;
+            lastStep.SetWorkHtml(WorkMgr.STM + "\\frac{\\partial " + vectorFuncIden + "}{\\partial " + withRespect1Str + "}=" + WorkMgr.ToDisp(surfacePartial1) + WorkMgr.EDM);
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + WorkMgr.ToDisp(surfacePartial0) + CrossProductOp.IDEN + WorkMgr.ToDisp(surfacePartial1) + WorkMgr.EDM, "Calculate the cross product");
+            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + WorkMgr.ToDisp(surfacePartial0) + CrossProductOp.IDEN + WorkMgr.ToDisp(surfacePartial1) + WorkMgr.EDM, "Calculate the cross product");
             ExComp crossed = CrossProductOp.StaticCombine(surfacePartial0, surfacePartial1);
-            pEvalData.WorkMgr.FromSides(crossed, null, "The calculated cross product.");
+            pEvalData.GetWorkMgr().FromSides(crossed, null, "The calculated cross product.");
 
             if (!(crossed is ExVector))
             {
-                pEvalData.WorkMgr.WorkSteps.RemoveRange(startingWorkSteps, pEvalData.WorkMgr.WorkSteps.Count - startingWorkSteps);
+                pEvalData.GetWorkMgr().GetWorkSteps().RemoveRange(startingWorkSteps, pEvalData.GetWorkMgr().GetWorkSteps().Count - startingWorkSteps);
                 return this;
             }
 
             ExVector crossedVec = crossed as ExVector;
             ExComp crossedVecLength = crossedVec.GetVecLength();
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + "|" + crossedVec.FinalToDispStr() + "|=" + WorkMgr.ToDisp(crossedVecLength) + WorkMgr.EDM,
+            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "|" + crossedVec.FinalToDispStr() + "|=" + WorkMgr.ToDisp(crossedVecLength) + WorkMgr.EDM,
                 "Calculate the length of the vector.");
 
             string surfaceDiffIdenStr = "d" + _dVar.ToDispString();
             string surfaceDiffStr = WorkMgr.ToDisp(crossedVecLength);
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + surfaceDiffIdenStr + "=" + surfaceDiffStr + WorkMgr.EDM, "The calculated surface differential");
+            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + surfaceDiffIdenStr + "=" + surfaceDiffStr + WorkMgr.EDM, "The calculated surface differential");
 
             // Sub the parameterization of the surface into the function.
-            AlgebraTerm innerTerm = InnerTerm;
+            AlgebraTerm innerTerm = GetInnerTerm();
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + integralStr + innerStr + surfaceDiffIdenStr + WorkMgr.EDM,
+            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + integralStr + innerStr + surfaceDiffIdenStr + WorkMgr.EDM,
                 "Change to terms of " + WorkMgr.STM + withRespect0Str + WorkMgr.EDM + " and " + WorkMgr.STM + withRespect1Str + WorkMgr.EDM);
 
             // X, Y, and Z have to be assumed for this.
-            for (int i = 0; i < vectorDef.Length; ++i)
+            for (int i = 0; i < vectorDef.GetLength(); ++i)
             {
                 string dimenIden = FunctionDefinition.GetDimenStr(i);
                 innerTerm = innerTerm.Substitute(new AlgebraComp(dimenIden), vectorDef.Get(i));
@@ -187,20 +187,20 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
 
             innerStr = innerTerm.FinalToDispStr();
 
-            pEvalData.WorkMgr.FromFormatted(WorkMgr.STM + integralStr + "(" + innerStr + ")(" + surfaceDiffStr + ")d" + withRespect0Str + "d" + withRespect1Str + WorkMgr.EDM);
+            pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + integralStr + "(" + innerStr + ")(" + surfaceDiffStr + ")d" + withRespect0Str + "d" + withRespect1Str + WorkMgr.EDM);
             ExComp innerEx = MulOp.StaticCombine(innerTerm, crossedVecLength);
 
             Integral firstIntegral = Integral.ConstructIntegral(innerEx, withRespect0, respect0Rest.GetLower(), respect0Rest.GetUpper());
             Integral secondIntegral = Integral.ConstructIntegral(firstIntegral, withRespect1, respect1Rest.GetLower(), respect1Rest.GetUpper());
 
-            pEvalData.WorkMgr.FromFormatted("", "Use the surface domain to convert to a definite integral.");
-            lastStep = pEvalData.WorkMgr.GetLast();
+            pEvalData.GetWorkMgr().FromFormatted("", "Use the surface domain to convert to a definite integral.");
+            lastStep = pEvalData.GetWorkMgr().GetLast();
 
             lastStep.GoDown(ref pEvalData);
             ExComp evaluated = secondIntegral.Evaluate(false, ref pEvalData);
             lastStep.GoUp(ref pEvalData);
 
-            lastStep.WorkHtml = WorkMgr.STM + secondIntegral.FinalToDispStr() + (evaluated is Integral ? "" : "=" + WorkMgr.ToDisp(evaluated)) + WorkMgr.EDM;
+            lastStep.SetWorkHtml(WorkMgr.STM + secondIntegral.FinalToDispStr() + (evaluated is Integral ? "" : "=" + WorkMgr.ToDisp(evaluated)) + WorkMgr.EDM);
 
             return evaluated;
         }

@@ -16,27 +16,21 @@ namespace MathSolverWebsite.MathSolverLibrary
         public bool OnlyFractions;
         public List<ExComp> Powers;
 
-        public bool IsLinear
+        public bool GetIsLinear()
         {
-            get
-            {
-                return HasOnlyPowers(Number.One);
-            }
+            return HasOnlyPowers(Number.GetOne());
         }
 
-        public int NumberOfPowers
+        public int GetNumberOfPowers()
         {
-            get { return Powers.Count; }
+            return Powers.Count;
         }
 
-        public bool OnlyIntPows
+        public bool GetOnlyIntPows()
         {
-            get
-            {
-                if (Powers.Count == 0)
-                    return false;
-                return GetIntegerPowCount() == Powers.Count;
-            }
+            if (Powers.Count == 0)
+                return false;
+            return GetIntegerPowCount() == Powers.Count;
         }
 
         public EquationInformation(AlgebraTerm singular, AlgebraComp varFor)
@@ -70,7 +64,7 @@ namespace MathSolverWebsite.MathSolverLibrary
 
             OnlyFactors = false;
 
-            if (singular.GroupCount == 1)
+            if (singular.GetGroupCount() == 1)
             {
                 ExComp[] onlyGroup = singular.GetGroupsNoOps()[0];
                 if (onlyGroup.Length > 1)
@@ -132,7 +126,7 @@ namespace MathSolverWebsite.MathSolverLibrary
             {
                 AlgebraTerm nonZeroTerm = left.IsZero() ? right : left;
 
-                if (nonZeroTerm.GroupCount == 1)
+                if (nonZeroTerm.GetGroupCount() == 1)
                 {
                     ExComp[] onlyGroup = nonZeroTerm.GetGroupsNoOps()[0];
                     if (onlyGroup.Length > 1)
@@ -161,7 +155,7 @@ namespace MathSolverWebsite.MathSolverLibrary
                 {
                     if (simpFrac.Init(power as AlgebraTerm))
                     {
-                        if (simpFrac.NumEx is Number && simpFrac.DenEx is Number)
+                        if (simpFrac.GetNumEx() is Number && simpFrac.GetDenEx() is Number)
                             fracPowCount++;
                     }
                 }
@@ -212,24 +206,24 @@ namespace MathSolverWebsite.MathSolverLibrary
                     if (variableTerm0 is Equation.Functions.PowerFunction)
                     {
                         Equation.Functions.PowerFunction fnVariableTerm0 = variableTerm0 as Equation.Functions.PowerFunction;
-                        pow0 = fnVariableTerm0.Power;
-                        base0 = fnVariableTerm0.Base;
+                        pow0 = fnVariableTerm0.GetPower();
+                        base0 = fnVariableTerm0.GetBase();
                     }
                     else
                     {
-                        pow0 = Number.One;
+                        pow0 = Number.GetOne();
                         base0 = variableTerm0;
                     }
 
                     if (variableTerm1 is Equation.Functions.PowerFunction)
                     {
                         Equation.Functions.PowerFunction fnVariableTerm1 = variableTerm1 as Equation.Functions.PowerFunction;
-                        pow1 = fnVariableTerm1.Power;
-                        base1 = fnVariableTerm1.Base;
+                        pow1 = fnVariableTerm1.GetPower();
+                        base1 = fnVariableTerm1.GetBase();
                     }
                     else
                     {
-                        pow1 = Number.One;
+                        pow1 = Number.GetOne();
                         base1 = variableTerm1;
                     }
 
@@ -248,7 +242,7 @@ namespace MathSolverWebsite.MathSolverLibrary
                 }
             }
 
-            if (HasOnlyOrFunctionsBasicOnly(FunctionType.Logarithm, FunctionType.Sinusodal, FunctionType.AbsoluteValue) && NumberOfPowers > 1)
+            if (HasOnlyOrFunctionsBasicOnly(FunctionType.Logarithm, FunctionType.Sinusodal, FunctionType.AbsoluteValue) && GetNumberOfPowers() > 1)
             {
                 IEnumerable<ExComp> variableTermsPows = from varGp in groupsVarTo
                                         select varGp.GetVariableGroupComps(varFor).ToTerm().RemoveRedundancies();
@@ -261,7 +255,7 @@ namespace MathSolverWebsite.MathSolverLibrary
 
                     if (varTermPow is Equation.Functions.PowerFunction)
                     {
-                        AlgebraTerm baseTerm = (varTermPow as PowerFunction).Base.ToAlgTerm();
+                        AlgebraTerm baseTerm = (varTermPow as PowerFunction).GetBase().ToAlgTerm();
                         variableTerms.Add(baseTerm);
                         continue;
                     }

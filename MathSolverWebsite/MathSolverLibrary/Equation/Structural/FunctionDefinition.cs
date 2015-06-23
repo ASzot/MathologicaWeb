@@ -18,61 +18,71 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         /// They are not defined they are given.
         /// Example is f(2) but not f(x)
         /// </summary>
-        public ExComp[] CallArgs
+        public void SetCallArgs(ExComp[] value)
         {
-            set { _callArgs = value; }
-            get { return _callArgs; }
+            _callArgs = value;
         }
 
-        public int FuncDefIndex
+        /// <summary>
+        /// The supplied arguments to the function.
+        /// They are not defined they are given.
+        /// Example is f(2) but not f(x)
+        /// </summary>
+        public ExComp[] GetCallArgs()
         {
-            get { return _funcDefIndex; }
-            set { _funcDefIndex = value; }
+            return _callArgs;
         }
 
-        public bool HasValidInputArgs
+        public void SetFuncDefIndex(int value)
         {
-            get
+            _funcDefIndex = value;
+        }
+
+        public int GetFuncDefIndex()
+        {
+            return _funcDefIndex;
+        }
+
+        public bool GetHasValidInputArgs()
+        {
+            if (_args == null)
+                return false;
+            foreach (AlgebraComp arg in _args)
             {
-                if (_args == null)
+                if (arg.GetIsTrash())
                     return false;
-                foreach (AlgebraComp arg in _args)
-                {
-                    if (arg.IsTrash)
-                        return false;
-                }
-                return true;
             }
+            return true;
         }
 
-        public bool HasCallArgs
+        public bool GetHasCallArgs()
         {
-            get { return _callArgs != null; }
+            return _callArgs != null;
         }
 
-        public bool FuncNotation
+        public bool GetFuncNotation()
         {
-            get { return _funcNotation; }
+            return _funcNotation;
         }
 
-        public AlgebraComp Iden
+        public AlgebraComp GetIden()
         {
-            get { return _iden; }
+            return _iden;
         }
 
-        public int InputArgCount
+        public int GetInputArgCount()
         {
-            get { return _args == null ? 0 : _args.Length; }
+            return _args == null ? 0 : _args.Length;
         }
 
-        public bool IsMultiValued
+        public bool GetIsMultiValued()
         {
-            get { return _args.Length != 1; }
+            return _args.Length != 1;
         }
 
-        public bool IsVectorFunc
+        public void SetIsVectorFunc(bool value)
         {
-            set { _isVectorFunc = value; }
+            _isVectorFunc = value;
         }
 
         /// <summary>
@@ -80,9 +90,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         /// These are not supplied.
         /// Example is f(x) but not f(2)
         /// </summary>
-        public AlgebraComp[] InputArgs
+        public AlgebraComp[] GetInputArgs()
         {
-            get { return _args; }
+            return _args;
         }
 
         public FunctionDefinition()
@@ -121,7 +131,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         {
             if (def.Value == null)
             {
-                if (CallArgs != null && InputArgs == null)
+                if (GetCallArgs() != null && GetInputArgs() == null)
                     return null;
                 return this;
             }
@@ -174,7 +184,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public ExComp CallFunc(ref TermType.EvalData pEvalData)
         {
-            KeyValuePair<FunctionDefinition, ExComp> def = pEvalData.FuncDefs.GetDefinition(this);
+            KeyValuePair<FunctionDefinition, ExComp> def = pEvalData.GetFuncDefs().GetDefinition(this);
             return CallFunc(def, ref pEvalData);
         }
 
@@ -187,7 +197,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         {
             foreach (AlgebraComp arg in _args)
             {
-                if (arg.Var.Var == argIden)
+                if (arg.GetVar().GetVar() == argIden)
                     return true;
             }
 

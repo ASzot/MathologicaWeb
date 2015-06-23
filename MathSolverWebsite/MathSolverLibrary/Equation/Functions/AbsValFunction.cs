@@ -16,7 +16,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             else if (ex is AlgebraTerm)
             {
                 AlgebraTerm term = ex as AlgebraTerm;
-                for (int i = 0; i < term.TermCount; ++i)
+                for (int i = 0; i < term.GetTermCount(); ++i)
                 {
                     if (term[i] is Number)
                     {
@@ -51,10 +51,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         {
             CallChildren(harshEval, ref pEvalData);
 
-            ExComp innerEx = InnerEx;
+            ExComp innerEx = GetInnerEx();
 
             if (Number.IsUndef(innerEx))
-                return Number.Undefined;
+                return Number.GetUndefined();
             if (innerEx is Number)
             {
                 Number absInner = Number.Abs(innerEx as Number);
@@ -87,12 +87,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public override string FinalToAsciiString()
         {
-            return "|" + InnerTerm.FinalToAsciiString() + "|";
+            return "|" + GetInnerTerm().FinalToAsciiString() + "|";
         }
 
         public override string ToAsciiString()
         {
-            return "|" + InnerTerm.FinalToAsciiString() + "|";
+            return "|" + GetInnerTerm().FinalToAsciiString() + "|";
         }
 
         public override string ToJavaScriptString(bool useRad)
@@ -111,7 +111,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public override string ToTexString()
         {
-            return "|" + InnerTerm.ToTexString() + "|";
+            return "|" + GetInnerTerm().ToTexString() + "|";
         }
     }
 }

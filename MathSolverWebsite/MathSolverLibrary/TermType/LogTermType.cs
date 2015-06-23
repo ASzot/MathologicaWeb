@@ -88,10 +88,10 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             if (promptStr == null)
                 return false;
 
-            tt_solve = new SolveTermType(new EqSet(overall, Number.Zero, LexemeType.EqualsOp), lexemeTable, solveVars,
+            tt_solve = new SolveTermType(new EqSet(overall, Number.GetZero(), LexemeType.EqualsOp), lexemeTable, solveVars,
                 probSolveVar, promptStr);
 
-            int groupCount = overall.GroupCount;
+            int groupCount = overall.GetGroupCount();
 
             List<AlgebraGroup> variableGroups = overall.GetGroupsVariableTo(solveForComp);
 
@@ -99,7 +99,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             if (variableGroups.Count != 1)
                 return false;
 
-            ExComp[] variableGroup = variableGroups[0].Group;
+            ExComp[] variableGroup = variableGroups[0].GetGroup();
             ExComp[] variableCoeffs = variableGroup.GetUnrelatableTermsOfGroup(solveForComp);
 
             _coeff = variableCoeffs.ToAlgTerm();
@@ -108,7 +108,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
             foreach (ExComp varCoeff in variableCoeffs)
             {
-                if (!varGroupList.Remove(varCoeff) && !Number.One.IsEqualTo(varCoeff))
+                if (!varGroupList.Remove(varCoeff) && !Number.GetOne().IsEqualTo(varCoeff))
                     return false;
             }
 
@@ -124,8 +124,8 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
             _log = singleGpCmp as LogFunction;
 
-            List<AlgebraGroup> innerConstantTerms = _log.InnerTerm.GetGroupsConstantTo(solveForComp);
-            _horizontalShift = Number.Zero;
+            List<AlgebraGroup> innerConstantTerms = _log.GetInnerTerm().GetGroupsConstantTo(solveForComp);
+            _horizontalShift = Number.GetZero();
             foreach (AlgebraGroup innerConstantTerm in innerConstantTerms)
                 _horizontalShift = AddOp.StaticCombine(_horizontalShift, innerConstantTerm.ToTerm()).ToAlgTerm();
 

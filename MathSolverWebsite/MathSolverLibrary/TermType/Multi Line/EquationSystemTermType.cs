@@ -40,11 +40,11 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
                 Solving.EquationSystemSolve solveMethod = new Solving.EquationSystemSolve(agSolver);
 
-                solveMethod.SolveFors = solveVars.ToList();
+                solveMethod.SetSolveFors(solveVars.ToList());
 
                 IEnumerable<EqSet> clonedEqSet = from eqSet in _eqSets
                                   select eqSet.Clone();
-                solveMethod.SolvingMethod = Solving.EquationSystemSolveMethod.Substitution;
+                solveMethod.SetSolvingMethod(Solving.EquationSystemSolveMethod.Substitution);
                 return solveMethod.SolveEquationArray(clonedEqSet.ToList(), _lts, _allIdens, ref pEvalData);
             }
             else if (command.StartsWith("Solve by elimination for "))
@@ -56,11 +56,11 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
                 Solving.EquationSystemSolve solveMethod = new Solving.EquationSystemSolve(agSolver);
 
-                solveMethod.SolveFors = solveVars.ToList();
+                solveMethod.SetSolveFors(solveVars.ToList());
 
                 IEnumerable<EqSet> clonedEqSet = from eqSet in _eqSets
                                   select eqSet.Clone();
-                solveMethod.SolvingMethod = Solving.EquationSystemSolveMethod.Elimination;
+                solveMethod.SetSolvingMethod(Solving.EquationSystemSolveMethod.Elimination);
                 return solveMethod.SolveEquationArray(clonedEqSet.ToList(), _lts, _allIdens, ref pEvalData);
             }
             else if (command == "Graph")
@@ -82,10 +82,10 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             string[] graphStrs = new string[_eqSets.Count];
             for (int i = 0; i < _eqSets.Count; ++i)
             {
-                if (!_eqSets[i].IsSingular)
+                if (!_eqSets[i].GetIsSingular())
                     return false;
 
-                string graphStr = _eqSets[i].LeftTerm.ToJavaScriptString(pEvalData.UseRad);
+                string graphStr = _eqSets[i].GetLeftTerm().ToJavaScriptString(pEvalData.GetUseRad());
                 if (graphStr == null)
                     return false;
                 graphStrs[i] = graphStr;
@@ -115,7 +115,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             for (int i = 0; i < _eqSets.Count; ++i)
             {
                 EqSet eqSet = _eqSets[i];
-                if (!eqSet.IsSingular)
+                if (!eqSet.GetIsSingular())
                 {
                     ExComp[] funcDef = eqSet.GetFuncDefComps();
                     if (funcDef != null)
@@ -136,7 +136,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 }
                 else
                 {
-                    AlgebraTerm term = eqSet.LeftTerm;
+                    AlgebraTerm term = eqSet.GetLeftTerm();
                     List<string> vars = term.GetAllAlgebraCompsStr();
                     if (vars.Count == 1 && (_graphVarStr == null || vars[0] == _graphVarStr))
                     {
@@ -162,14 +162,14 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             List<Dictionary<string, int>> idenOccurs = new List<Dictionary<string, int>>();
             for (int i = 0, j = 0; i < _eqSets.Count; i++, j++)
             {
-                if (_eqSets[i].Left == null || _eqSets[i].Right == null)
+                if (_eqSets[i].GetLeft() == null || _eqSets[i].GetRight() == null)
                 {
                     idenOccurs = null;
                     break;
                 }
 
                 List<TypePair<LexemeType, string>> lt0 = _lts[j];
-                if (_eqSets[i].Right != null)
+                if (_eqSets[i].GetRight() != null)
                 {
                     List<TypePair<LexemeType, string>> lt1 = _lts[j + 1];
                     j++;

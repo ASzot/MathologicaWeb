@@ -12,7 +12,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             else if (ex is AlgebraTerm)
             {
                 AlgebraTerm term = ex as AlgebraTerm;
-                foreach (ExComp subEx in term.SubComps)
+                foreach (ExComp subEx in term.GetSubComps())
                 {
                     if (ContainsDerivative(subEx))
                         return true;
@@ -44,7 +44,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             for (int i = 0; i < diffSolves.Length; ++i)
             {
                 // Try separable differential equations.
-                prevWorkStepCount = pEvalData.WorkMgr.WorkSteps.Count;
+                prevWorkStepCount = pEvalData.GetWorkMgr().GetWorkSteps().Count;
                 atmpt = diffSolves[i].Solve((AlgebraTerm)ex0Term.CloneEx(), (AlgebraTerm)ex1Term.CloneEx(), solveForFunc, withRespect, ref pEvalData);
                 if (atmpt != null)
                 {
@@ -54,13 +54,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
                         AlgebraComp varConstant = new AlgebraComp("$C");
                         atmpt[1] = Equation.Operators.AddOp.StaticCombine(atmpt[1], varConstant);
 
-                        pEvalData.WorkMgr.FromSides(atmpt[0], atmpt[1], "Add the constant of integration.");
+                        pEvalData.GetWorkMgr().FromSides(atmpt[0], atmpt[1], "Add the constant of integration.");
                     }
 
                     return atmpt;
                 }
                 else
-                    pEvalData.WorkMgr.PopSteps(prevWorkStepCount);
+                    pEvalData.GetWorkMgr().PopSteps(prevWorkStepCount);
             }
 
             return null;
@@ -85,22 +85,22 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
 
             AlgebraSolver agSolver = new AlgebraSolver();
 
-            int startStepCount = pEvalData.WorkMgr.WorkSteps.Count;
+            int startStepCount = pEvalData.GetWorkMgr().GetWorkSteps().Count;
 
-            pEvalData.WorkMgr.FromFormatted("", "Solve for " + WorkMgr.STM + solveForFunc.ToDispString() + WorkMgr.EDM);
-            WorkStep lastStep = pEvalData.WorkMgr.GetLast();
+            pEvalData.GetWorkMgr().FromFormatted("", "Solve for " + WorkMgr.STM + solveForFunc.ToDispString() + WorkMgr.EDM);
+            WorkStep lastStep = pEvalData.GetWorkMgr().GetLast();
 
             lastStep.GoDown(ref pEvalData);
-            ExComp solved = agSolver.SolveEq(solveForFunc.Var, leftRight[0].CloneEx().ToAlgTerm(), leftRight[1].CloneEx().ToAlgTerm(), ref pEvalData);
+            ExComp solved = agSolver.SolveEq(solveForFunc.GetVar(), leftRight[0].CloneEx().ToAlgTerm(), leftRight[1].CloneEx().ToAlgTerm(), ref pEvalData);
             lastStep.GoUp(ref pEvalData);
 
             if (solved == null)
             {
-                pEvalData.WorkMgr.PopSteps(startStepCount);
+                pEvalData.GetWorkMgr().PopSteps(startStepCount);
                 return SolveResult.Solved(leftRight[0], leftRight[1], ref pEvalData);
             }
 
-            lastStep.WorkHtml = WorkMgr.STM + solveForFunc.ToDispString() + " = " + WorkMgr.ToDisp(solved) + WorkMgr.EDM;
+            lastStep.SetWorkHtml(WorkMgr.STM + solveForFunc.ToDispString() + " = " + WorkMgr.ToDisp(solved) + WorkMgr.EDM);
 
             SolveResult solveResult = SolveResult.Solved(solveForFunc, solved, ref pEvalData);
             solveResult.Solutions.Insert(0, genSol);

@@ -16,71 +16,79 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public const int FINAL_ROUND_COUNT = 4;
 
-        public static Number ImagOne
+        public static Number GetImagOne()
         {
-            get { return new Number(0.0, 1.0); }
+            return new Number(0.0, 1.0);
         }
 
-        public static Number NegInfinity
+        public static Number GetNegInfinity()
         {
-            get { return new Number(double.NegativeInfinity); }
+            return new Number(double.NegativeInfinity);
         }
 
-        public static Number NegOne
+        public static Number GetNegOne()
         {
-            get { return new Number(-1.0); }
+            return new Number(-1.0);
         }
 
-        public static Number One
+        public static Number GetOne()
         {
-            get { return new Number(1.0); }
+            return new Number(1.0);
         }
 
-        public static Number PosInfinity
+        public static Number GetPosInfinity()
         {
-            get { return new Number(double.PositiveInfinity); }
+            return new Number(double.PositiveInfinity);
         }
 
-        public static Number Undefined
+        public static Number GetUndefined()
         {
-            get { return new Number(double.NaN, double.NaN); }
+            return new Number(double.NaN, double.NaN);
         }
 
-        public static Number Zero
+        public static Number GetZero()
         {
-            get { return new Number(0.0); }
+            return new Number(0.0);
         }
 
-        public Number Imag
+        public Number GetImag()
         {
-            get { return new Number(d_imagComp); }
+            return new Number(d_imagComp);
         }
 
-        public double ImagComp
+        public void SetImagComp(double value)
         {
-            get { return d_imagComp; }
-            set { d_imagComp = value; }
+            d_imagComp = value;
         }
 
-        public double ImagCompRnd
+        public double GetImagComp()
         {
-            get { return Math.Round(ImagComp, ROUND_COUNT); }
+            return d_imagComp;
         }
 
-        public Number Real
+        public double GetImagCompRnd()
         {
-            get { return new Number(d_realComp); }
+            return Math.Round(GetImagComp(), ROUND_COUNT);
         }
 
-        public double RealComp
+        public Number GetReal()
         {
-            get { return d_realComp; }
-            set { d_realComp = value; }
+            return new Number(d_realComp);
         }
 
-        public double RealCompRnd
+        public void SetRealComp(double value)
         {
-            get { return Math.Round(RealComp, ROUND_COUNT); }
+            d_realComp = value;
+        }
+
+        public double GetRealComp()
+        {
+            return d_realComp;
+        }
+
+        public double GetRealCompRnd()
+        {
+            return Math.Round(GetRealComp(), ROUND_COUNT);
         }
 
         public Number()
@@ -113,7 +121,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public static Number Abs(Number n1)
         {
-            return new Number(Math.Abs(n1.RealComp), Math.Abs(n1.ImagComp));
+            return new Number(Math.Abs(n1.GetRealComp()), Math.Abs(n1.GetImagComp()));
         }
 
         public static bool CleanRootExists(Number n1, Number root)
@@ -121,7 +129,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             if (n1.HasImaginaryComp() || root.HasImaginaryComp())
                 throw new ArgumentException();
 
-            double result = Math.Pow(n1.RealComp, 1.0 / root.RealComp);
+            double result = Math.Pow(n1.GetRealComp(), 1.0 / root.GetRealComp());
             return result.IsInteger();
         }
 
@@ -169,26 +177,26 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         public static Number GCF(Number n1, Number n2)
         {
             double gcf;
-            if (n1.RealComp != 0.0 && n2.ImagComp != 0.0)
-                gcf = MathHelper.GCFDouble(n1.RealComp, n1.ImagComp);
-            else if (n1.RealComp != 0.0)
-                gcf = n1.RealComp;
+            if (n1.GetRealComp() != 0.0 && n2.GetImagComp() != 0.0)
+                gcf = MathHelper.GCFDouble(n1.GetRealComp(), n1.GetImagComp());
+            else if (n1.GetRealComp() != 0.0)
+                gcf = n1.GetRealComp();
             else
-                gcf = n1.ImagComp;
+                gcf = n1.GetImagComp();
 
-            if (n2.RealComp != 0.0 && n2.ImagComp != 0.0)
+            if (n2.GetRealComp() != 0.0 && n2.GetImagComp() != 0.0)
             {
-                gcf = MathHelper.GCFDouble(gcf, n2.RealComp);
-                gcf = MathHelper.GCFDouble(gcf, n2.ImagComp);
+                gcf = MathHelper.GCFDouble(gcf, n2.GetRealComp());
+                gcf = MathHelper.GCFDouble(gcf, n2.GetImagComp());
             }
-            else if (n2.RealComp != 0.0)
-                gcf = MathHelper.GCFDouble(gcf, n2.RealComp);
+            else if (n2.GetRealComp() != 0.0)
+                gcf = MathHelper.GCFDouble(gcf, n2.GetRealComp());
             else
-                gcf = MathHelper.GCFDouble(gcf, n2.ImagComp);
+                gcf = MathHelper.GCFDouble(gcf, n2.GetImagComp());
 
             gcf = Math.Abs(gcf);
 
-            if (n1.RealComp == 0.0 && n2.RealComp == 0.0)
+            if (n1.GetRealComp() == 0.0 && n2.GetRealComp() == 0.0)
                 return new Number(0.0, gcf);
 
             return new Number(gcf);
@@ -203,8 +211,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             if (!n1.IsRealInteger() || !n2.IsRealInteger())
                 return;
 
-            int i1 = (int)n1.RealComp;
-            int i2 = (int)n2.RealComp;
+            int i1 = (int)n1.GetRealComp();
+            int i2 = (int)n2.GetRealComp();
 
             // We have (g = h) we want to change this to (b^x = b^y).
 
@@ -257,7 +265,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 }
                 else
                 {
-                    foreach (ExComp comp in term.SubComps)
+                    foreach (ExComp comp in term.GetSubComps())
                     {
                         if (IsUndef(comp))
                             return true;
@@ -270,8 +278,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public static Number LCF(Number n1, Number n2)
         {
-            double lcfReal = MathHelper.LCFDouble(n1.RealComp, n2.RealComp);
-            double lcfImag = MathHelper.LCFDouble(n1.ImagComp, n2.ImagComp);
+            double lcfReal = MathHelper.LCFDouble(n1.GetRealComp(), n2.GetRealComp());
+            double lcfImag = MathHelper.LCFDouble(n1.GetImagComp(), n2.GetImagComp());
             lcfReal = Math.Abs(lcfReal);
             lcfImag = Math.Abs(lcfImag);
 
@@ -321,7 +329,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             if (n1.HasImaginaryComp())
                 return null;
 
-            Number resultant = new Number(Math.Pow(n1.RealComp, d), 0.0);
+            Number resultant = new Number(Math.Pow(n1.GetRealComp(), d), 0.0);
             return resultant;
         }
 
@@ -330,14 +338,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             if (n1.HasImaginaryComp() || n2.HasImaginaryComp())
                 return null;
 
-            return RaiseToPower(n1, n2.RealComp);
+            return RaiseToPower(n1, n2.GetRealComp());
         }
 
         public static Number TakeRootOf(Number n1, double root)
         {
             if (n1.HasImaginaryComp())
                 throw new ArgumentException();
-            Number resultant = new Number(Math.Pow(n1.RealComp, 1.0 / root), 0.0);
+            Number resultant = new Number(Math.Pow(n1.GetRealComp(), 1.0 / root), 0.0);
             return resultant;
         }
 
@@ -346,7 +354,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             if (n1.HasImaginaryComp() || root.HasImaginaryComp())
                 throw new ArgumentException();
 
-            return TakeRootOf(n1, root.RealComp);
+            return TakeRootOf(n1, root.GetRealComp());
         }
 
         public void Add(double realComp)
@@ -356,7 +364,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public void Add(Number n)
         {
-            Add(n.RealComp, n.ImagComp);
+            Add(n.GetRealComp(), n.GetImagComp());
         }
 
         public void Add(double realComp, double imagComp)
@@ -488,8 +496,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                     int num2 = realCompInt / i;
                     int highOrder = Math.Max(num1, num2);
                     int lowOrder = Math.Min(num1, num2);
-                    pair.Data1 = new Number((double)highOrder);
-                    pair.Data2 = new Number((double)lowOrder);
+                    pair.SetData1(new Number((double)highOrder));
+                    pair.SetData2(new Number((double)lowOrder));
                     factors.Add(pair);
                 }
             }
@@ -501,14 +509,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 {
                     TypePair<Number, Number> pair = factors.ElementAt(i);
                     TypePair<Number, Number> newPair1 = new TypePair<Number, Number>();
-                    newPair1.Data1 = pair.Data1;
-                    newPair1.Data2 = Number.OpSub(pair.Data2);
+                    newPair1.SetData1(pair.GetData1());
+                    newPair1.SetData2(Number.OpSub(pair.GetData2()));
 
                     finalPair.Add(newPair1);
 
                     TypePair<Number, Number> newPair2 = new TypePair<Number, Number>();
-                    newPair2.Data1 = Number.OpSub(newPair1.Data1);
-                    newPair2.Data2 = Number.OpSub(newPair1.Data2);
+                    newPair2.SetData1(Number.OpSub(newPair1.GetData1()));
+                    newPair2.SetData2(Number.OpSub(newPair1.GetData2()));
 
                     finalPair.Add(newPair2);
                 }
@@ -540,8 +548,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                     // Make it into a negative negative combination.
                     // We can safely assume both of these numbers are positive as they are the divisors of a positive number.
                     TypePair<Number, Number> newPair = new TypePair<Number, Number>();
-                    newPair.Data1 = Number.OpSub(ip.Data1);
-                    newPair.Data2 = Number.OpSub(ip.Data2);
+                    newPair.SetData1(Number.OpSub(ip.GetData1()));
+                    newPair.SetData2(Number.OpSub(ip.GetData2()));
 
                     signInvariantDivisors.Insert(i, newPair);
 
@@ -570,23 +578,23 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             Number imag = new Number(Math.Pow(d_imagComp, 2.0));
             mag = Operators.PowOp.StaticCombine(Number.OpAdd(real, imag), new Number(0.5));
 
-            if (Number.OpEqual(Real, 0.0) && Number.OpEqual(Imag, 0.0))
+            if (Number.OpEqual(GetReal(), 0.0) && Number.OpEqual(GetImag(), 0.0))
             {
-                angle = Number.Zero;
+                angle = Number.GetZero();
                 return;
             }
-            if (Number.OpEqual(Real, 0.0))
+            if (Number.OpEqual(GetReal(), 0.0))
             {
-                angle = Number.OpGT(Imag, 0.0) ? AlgebraTerm.FromFraction(Constant.Pi, new Number(2.0)) :
-                    AlgebraTerm.FromFraction(new AlgebraTerm(new Number(3.0), new Operators.MulOp(), Constant.Pi), new Number(2.0));
+                angle = Number.OpGT(GetImag(), 0.0) ? AlgebraTerm.FromFraction(Constant.GetPi(), new Number(2.0)) :
+                    AlgebraTerm.FromFraction(new AlgebraTerm(new Number(3.0), new Operators.MulOp(), Constant.GetPi()), new Number(2.0));
                 return;
             }
-            if (Number.OpEqual(Imag, 0.0))
+            if (Number.OpEqual(GetImag(), 0.0))
             {
-                angle = Number.OpGT(Real, 0.0) ? (ExComp)Number.Zero : (ExComp)Constant.Pi;
+                angle = Number.OpGT(GetReal(), 0.0) ? (ExComp)Number.GetZero() : (ExComp)Constant.GetPi();
                 return;
             }
-            ExComp div = Operators.DivOp.StaticCombine(Imag, Real);
+            ExComp div = Operators.DivOp.StaticCombine(GetImag(), GetReal());
             Functions.ATanFunction tan = new Functions.ATanFunction(div);
             ExComp evaluated = tan.Evaluate(false, ref pEvalData);
 
@@ -605,7 +613,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                     num = Number.OpAdd(num, den);
                 }
 
-                angle = AlgebraTerm.FromFraction(new AlgebraTerm(num, new Operators.MulOp(), Constant.Pi), den);
+                angle = AlgebraTerm.FromFraction(new AlgebraTerm(num, new Operators.MulOp(), Constant.GetPi()), den);
             }
             else
                 angle = evaluated;
@@ -630,14 +638,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public override bool IsEqualTo(ExComp ex)
         {
-            if (d_realComp == 0.0 && d_imagComp == 0.0 && ex is AlgebraTerm && (ex as AlgebraTerm).TermCount == 0)
+            if (d_realComp == 0.0 && d_imagComp == 0.0 && ex is AlgebraTerm && (ex as AlgebraTerm).GetTermCount() == 0)
                 return true;
             if (ex is Number)
             {
                 Number number = ex as Number;
                 EpsilonCorrect();
                 number.EpsilonCorrect();
-                return ((this.RealCompRnd == number.RealCompRnd) && (this.ImagCompRnd == number.ImagCompRnd));
+                return ((this.GetRealCompRnd() == number.GetRealCompRnd()) && (this.GetImagCompRnd() == number.GetImagCompRnd()));
             }
 
             return false;
@@ -657,7 +665,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public static Number OpSub(Number n1, Number n2)
         {
-            Number resultant = new Number(n1.RealComp - n2.RealComp, n1.ImagComp - n2.ImagComp);
+            Number resultant = new Number(n1.GetRealComp() - n2.GetRealComp(), n1.GetImagComp() - n2.GetImagComp());
 
             resultant.EpsilonCorrect();
 
@@ -666,14 +674,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public static Number OpSub(Number n1)
         {
-            return new Number(-n1.RealComp, -n1.ImagComp);
+            return new Number(-n1.GetRealComp(), -n1.GetImagComp());
         }
 
         public static Number OpSub(Number n1, double d)
         {
-            n1.RealComp -= d;
-            if (Math.Abs(n1.RealComp) < EPSILON_ACCEPT)
-                n1.RealComp = 0.0;
+            n1.SetRealComp(n1.GetRealComp() - d);
+            if (Math.Abs(n1.GetRealComp()) < EPSILON_ACCEPT)
+                n1.SetRealComp(0.0);
             return n1;
         }
 
@@ -692,8 +700,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             if (!n1.IsRealInteger() || !n2.IsRealInteger())
                 return null;
 
-            int realInt1 = (int)n1.RealComp;
-            int realInt2 = (int)n2.RealComp;
+            int realInt1 = (int)n1.GetRealComp();
+            int realInt2 = (int)n2.GetRealComp();
 
             int realResult = realInt1 % realInt2;
 
@@ -705,7 +713,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             if (!n1.IsRealInteger())
                 return null;
 
-            int realInt1 = (int)n1.RealComp;
+            int realInt1 = (int)n1.GetRealComp();
 
             int realResult = realInt1 % n2;
 
@@ -714,8 +722,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public static Number OpMul(Number n1, Number n2)
         {
-            double real = (n1.RealComp * n2.RealComp) - (n1.ImagComp * n2.ImagComp);
-            double imag = (n1.RealComp * n2.ImagComp) + (n1.ImagComp * n2.RealComp);
+            double real = (n1.GetRealComp() * n2.GetRealComp()) - (n1.GetImagComp() * n2.GetImagComp());
+            double imag = (n1.GetRealComp() * n2.GetImagComp()) + (n1.GetImagComp() * n2.GetRealComp());
             if (n1.IsInfinity() || n2.IsInfinity())
                 imag = 0.0;
 
@@ -723,9 +731,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             imag = EpsilonCorrect(imag);
 
             if (imag == 0.0 && n1.IsPosInfinity())
-                return Number.OpLT(n2, 0.0) ? NegInfinity : PosInfinity;
+                return Number.OpLT(n2, 0.0) ? GetNegInfinity() : GetPosInfinity();
             else if (imag == 0.0 && n2.IsPosInfinity())
-                return Number.OpLT(n1, 0.0) ? NegInfinity : PosInfinity;
+                return Number.OpLT(n1, 0.0) ? GetNegInfinity() : GetPosInfinity();
 
             return new Number(real, imag);
         }
@@ -739,16 +747,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         {
             if (!n1.HasImaginaryComp() && !n2.HasImaginaryComp())
             {
-                Number resultant = new Number(n1.RealComp / n2.RealComp);
+                Number resultant = new Number(n1.GetRealComp() / n2.GetRealComp());
                 resultant.EpsilonCorrect();
                 return resultant;
             }
 
-            double realNum = ((n1.RealComp * n2.RealComp) + (n1.ImagComp * n2.ImagComp));
-            double realDen = ((n2.RealComp * n2.RealComp) + (n2.ImagComp * n2.ImagComp));
+            double realNum = ((n1.GetRealComp() * n2.GetRealComp()) + (n1.GetImagComp() * n2.GetImagComp()));
+            double realDen = ((n2.GetRealComp() * n2.GetRealComp()) + (n2.GetImagComp() * n2.GetImagComp()));
 
-            double imagNum = ((n1.ImagComp * n2.RealComp) - (n1.RealComp * n2.ImagComp));
-            double imagDen = ((n2.RealComp * n2.RealComp) + (n2.ImagComp * n2.ImagComp));
+            double imagNum = ((n1.GetImagComp() * n2.GetRealComp()) - (n1.GetRealComp() * n2.GetImagComp()));
+            double imagDen = ((n2.GetRealComp() * n2.GetRealComp()) + (n2.GetImagComp() * n2.GetImagComp()));
 
             ExComp realEx = Operators.DivOp.StaticCombine(new Number(realNum), new Number(realDen));
             ExComp imagCoeffEx = Operators.DivOp.StaticCombine(new Number(imagNum), new Number(imagDen));
@@ -772,7 +780,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public static Number OpAdd(Number n1, Number n2)
         {
-            Number resultant = new Number(n1.RealComp + n2.RealComp, n1.ImagComp + n2.ImagComp);
+            Number resultant = new Number(n1.GetRealComp() + n2.GetRealComp(), n1.GetImagComp() + n2.GetImagComp());
 
             resultant.EpsilonCorrect();
 
@@ -781,9 +789,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public static Number OpAdd(Number n1, double d)
         {
-            n1.RealComp += d;
-            if (Math.Abs(n1.RealComp) < EPSILON_ACCEPT)
-                n1.RealComp = 0.0;
+            n1.SetRealComp(n1.GetRealComp() + d);
+            if (Math.Abs(n1.GetRealComp()) < EPSILON_ACCEPT)
+                n1.SetRealComp(0.0);
             return n1;
         }
 
@@ -792,12 +800,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             if (n1.HasImaginaryComp())
                 return false;
 
-            return n1.RealComp < d;
+            return n1.GetRealComp() < d;
         }
 
         public static bool OpLT(Number n1, Number n2)
         {
-            return (n1.RealComp < n2.RealComp) && (n1.ImagComp <= n2.ImagComp);
+            return (n1.GetRealComp() < n2.GetRealComp()) && (n1.GetImagComp() <= n2.GetImagComp());
         }
 
         public static bool OpLE(Number n1, double d)
@@ -805,12 +813,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             if (n1.HasImaginaryComp())
                 return false;
 
-            return n1.RealComp <= d;
+            return n1.GetRealComp() <= d;
         }
 
         public static bool OpLE(Number n1, Number n2)
         {
-            return (n1.RealComp <= n2.RealComp) && (n1.ImagComp <= n2.ImagComp);
+            return (n1.GetRealComp() <= n2.GetRealComp()) && (n1.GetImagComp() <= n2.GetImagComp());
         }
 
         public static bool OpEqual(Number n1, double d)
@@ -821,10 +829,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             if (n1.HasImaginaryComp())
                 return false;
 
-            n1.RealComp = EpsilonCorrect(n1.RealComp);
+            n1.SetRealComp(EpsilonCorrect(n1.GetRealComp()));
             d = EpsilonCorrect(d);
 
-            return n1.RealCompRnd == d;
+            return n1.GetRealCompRnd() == d;
         }
 
         public static bool OpEqual(Number n1, Number n2)
@@ -842,17 +850,17 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             if (n1.HasImaginaryComp())
                 return false;
 
-            return n1.RealComp > d;
+            return n1.GetRealComp() > d;
         }
 
         public static bool OpGT(Number n1, Number n2)
         {
-            return (n1.RealComp > n2.RealComp) && (n1.ImagComp >= n2.ImagComp);
+            return (n1.GetRealComp() > n2.GetRealComp()) && (n1.GetImagComp() >= n2.GetImagComp());
         }
 
         public static bool OpGE(Number n1, Number n2)
         {
-            return (n1.RealComp >= n2.RealComp) && (n1.ImagComp >= n2.ImagComp);
+            return (n1.GetRealComp() >= n2.GetRealComp()) && (n1.GetImagComp() >= n2.GetImagComp());
         }
 
         public static bool OpGE(Number n1, double d)
@@ -860,7 +868,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             if (n1.HasImaginaryComp())
                 return false;
 
-            return n1.RealComp >= d;
+            return n1.GetRealComp() >= d;
         }
 
         public bool IsNegInfinity()
@@ -1000,12 +1008,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             ExComp mag, angle;
             GetPolarData(out mag, out angle, ref pEvalData);
 
-            bool origRadVal = pEvalData.UseRad;
+            bool origRadVal = pEvalData.GetUseRad();
             pEvalData.TmpSetUseRad(true);
 
             ExComp result = MulOp.StaticWeakCombine(mag,
                 SubOp.StaticCombine(new CosFunction(angle),
-                MulOp.StaticCombine(Number.ImagOne, new SinFunction(angle))));
+                MulOp.StaticCombine(Number.GetImagOne(), new SinFunction(angle))));
 
             pEvalData.TmpSetUseRad(origRadVal);
 
@@ -1017,7 +1025,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             ExComp mag, angle;
             GetPolarData(out mag, out angle, ref pEvalData);
 
-            return MulOp.StaticCombine(mag, PowOp.Exp(MulOp.StaticCombine(angle, Number.ImagOne)));
+            return MulOp.StaticCombine(mag, PowOp.Exp(MulOp.StaticCombine(angle, Number.GetImagOne())));
         }
     }
 }

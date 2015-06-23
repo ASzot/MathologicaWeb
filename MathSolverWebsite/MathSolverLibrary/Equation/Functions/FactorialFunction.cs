@@ -11,21 +11,21 @@
         {
             CallChildren(harshEval, ref pEvalData);
 
-            ExComp innerEx = InnerEx;
+            ExComp innerEx = GetInnerEx();
 
             if (innerEx is Number && (innerEx as Number).IsRealInteger())
             {
-                int num = (int)(innerEx as Number).RealComp;
+                int num = (int)(innerEx as Number).GetRealComp();
 
                 long factorialResult = 1;
 
                 if (num < 0)
                 {
-                    return Number.Undefined;
+                    return Number.GetUndefined();
                 }
 
                 if (num == 0)
-                    return Number.One;
+                    return Number.GetOne();
 
                 for (int i = 1; i <= num; ++i)
                 {
@@ -40,7 +40,7 @@
 
         public override string ToAsciiString()
         {
-            return InnerEx.ToAsciiString() + "! ";
+            return GetInnerEx().ToAsciiString() + "! ";
         }
 
         public override string ToJavaScriptString(bool useRad)
@@ -52,7 +52,7 @@
         {
             if (MathSolver.USE_TEX_DEBUG)
                 return ToTexString();
-            return InnerEx.ToString() + "! ";
+            return GetInnerEx().ToString() + "! ";
         }
 
         public override string FinalToAsciiString()
@@ -67,7 +67,7 @@
 
         public override string ToTexString()
         {
-            return InnerEx.ToTexString() + "! ";
+            return GetInnerEx().ToTexString() + "! ";
         }
     }
 }

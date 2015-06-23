@@ -86,10 +86,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                     if (subComp is PowerFunction)
                     {
                         PowerFunction powFunc = subComp as PowerFunction;
-                        if ((powFunc.Power is AlgebraTerm && (powFunc.Power as AlgebraTerm).Contains(varFor)) ||
-                            (powFunc.Power is AlgebraComp && powFunc.Power.IsEqualTo(varFor)))
+                        if ((powFunc.GetPower() is AlgebraTerm && (powFunc.GetPower() as AlgebraTerm).Contains(varFor)) ||
+                            (powFunc.GetPower() is AlgebraComp && powFunc.GetPower().IsEqualTo(varFor)))
                             appliedFuncs.Add(FunctionType.Exponential);
-                        else if (powFunc.Base is TrigFunction)
+                        else if (powFunc.GetBase() is TrigFunction)
                         {
                             appliedFuncs.Add(FunctionType.Sinusodal);
                         }
@@ -98,16 +98,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                     {
                         AbsValFunction absValFunc = subComp as AbsValFunction;
 
-                        if (varFor.IsEqualTo(absValFunc.InnerEx) || absValFunc.Contains(varFor))
+                        if (varFor.IsEqualTo(absValFunc.GetInnerEx()) || absValFunc.Contains(varFor))
                             appliedFuncs.Add(FunctionType.AbsoluteValue);
                     }
                     else if (subComp is LogFunction)
                     {
                         LogFunction logFunc = subComp as LogFunction;
 
-                        if (logFunc.InnerTerm.Contains(varFor))
+                        if (logFunc.GetInnerTerm().Contains(varFor))
                             appliedFuncs.Add(FunctionType.Logarithm);
-                        if (logFunc.Base.IsEqualTo(varFor) || (logFunc.Base is AlgebraTerm && (logFunc.Base as AlgebraTerm).Contains(varFor)))
+                        if (logFunc.GetBase().IsEqualTo(varFor) || (logFunc.GetBase() is AlgebraTerm && (logFunc.GetBase() as AlgebraTerm).Contains(varFor)))
                             appliedFuncs.Add(FunctionType.LogarithmBase);
                     }
                     else if (subComp is TrigFunction)
@@ -144,9 +144,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             if (!Contains(varFor))
                 return null;
 
-            if (TermCount == 1)
+            if (GetTermCount() == 1)
             {
-                return Number.One;
+                return Number.GetOne();
             }
 
             List<ExComp[]> groups = GetGroupsNoOps();
@@ -156,7 +156,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
             // Combine all of the unrelated terms.
             AlgebraTerm unrelatedTerm = new AlgebraTerm(unrelatedGroups.ToArray());
-            if (unrelatedTerm.GroupCount > 1)
+            if (unrelatedTerm.GetGroupCount() > 1)
             {
                 unrelatedTerm = unrelatedTerm.ApplyOrderOfOperations();
                 unrelatedTerm = unrelatedTerm.MakeWorkable().ToAlgTerm();
@@ -195,7 +195,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                         ExComp varForEx = varFor.IsEqualTo(gpc0) ? gpc0 : gpc1;
                         ExComp otherEx = varFor.IsEqualTo(gpc0) ? gpc1 : gpc0;
 
-                        if (otherEx is Number && Number.NegOne.IsEqualTo(otherEx))
+                        if (otherEx is Number && Number.GetNegOne().IsEqualTo(otherEx))
                         {
                             complexity += 1;
                             continue;
@@ -271,21 +271,21 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                     else if (groupComp is PowerFunction)
                     {
                         PowerFunction powFunc = groupComp as PowerFunction;
-                        if (!(powFunc.Power is Number))
+                        if (!(powFunc.GetPower() is Number))
                             return null;
-                        Number powNum = powFunc.Power as Number;
+                        Number powNum = powFunc.GetPower() as Number;
                         if (!powNum.IsRealInteger())
                             return null;
 
-                        if (-1 == (int)powNum.RealComp)
+                        if (-1 == (int)powNum.GetRealComp())
                         {
-                            if (!(powFunc.Base is Number))
+                            if (!(powFunc.GetBase() is Number))
                                 return null;
-                            coeff = Operators.MulOp.StaticCombine(coeff, Number.OpDiv(Number.One, (powFunc.Base as Number)));
+                            coeff = Operators.MulOp.StaticCombine(coeff, Number.OpDiv(Number.GetOne(), (powFunc.GetBase() as Number)));
                         }
                         else
                         {
-                            ExComp powFuncInner = powFunc.Base;
+                            ExComp powFuncInner = powFunc.GetBase();
 
                             if (!(powFuncInner is AlgebraComp))
                                 return null;
@@ -294,7 +294,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                             if (polyVar == null)
                                 polyVar = variable;
 
-                            pow = (int)powNum.RealComp;
+                            pow = (int)powNum.GetRealComp();
                         }
                     }
                     else if (groupComp is Number)
@@ -350,15 +350,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                     else if (groupComp is PowerFunction)
                     {
                         PowerFunction powFunc = groupComp as PowerFunction;
-                        if (!(powFunc.Power is Number))
+                        if (!(powFunc.GetPower() is Number))
                             return null;
-                        Number powNum = powFunc.Power as Number;
+                        Number powNum = powFunc.GetPower() as Number;
                         if (!powNum.IsRealInteger())
                             return null;
 
-                        pow = (int)powNum.RealComp;
+                        pow = (int)powNum.GetRealComp();
 
-                        ExComp powFuncInner = powFunc.Base;
+                        ExComp powFuncInner = powFunc.GetBase();
                         if (!(powFuncInner is AlgebraComp))
                             return null;
 
@@ -394,16 +394,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             foreach (ExComp subComp in _subComps)
             {
                 if (subComp is AlgebraComp && (subComp as AlgebraComp).IsEqualTo(varFor))
-                    powersApplied.Add(Number.One);
+                    powersApplied.Add(Number.GetOne());
                 else if (subComp is PowerFunction)
                 {
                     PowerFunction subCompPowFunc = subComp as PowerFunction;
-                    if ((subCompPowFunc.Base is AlgebraTerm &&
-                        (subCompPowFunc.Base as AlgebraTerm).Contains(varFor)) ||
-                        (subCompPowFunc.Base is AlgebraComp &&
-                        (subCompPowFunc.Base as AlgebraComp).IsEqualTo(varFor)))
+                    if ((subCompPowFunc.GetBase() is AlgebraTerm &&
+                        (subCompPowFunc.GetBase() as AlgebraTerm).Contains(varFor)) ||
+                        (subCompPowFunc.GetBase() is AlgebraComp &&
+                        (subCompPowFunc.GetBase() as AlgebraComp).IsEqualTo(varFor)))
                     {
-                        powersApplied.Add(subCompPowFunc.Power);
+                        powersApplied.Add(subCompPowFunc.GetPower());
                     }
                 }
                 else if (subComp is AlgebraTerm)
@@ -441,7 +441,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 else if (_subComps[i] is PowerFunction)
                 {
                     PowerFunction pf = _subComps[i] as PowerFunction;
-                    if (pf.Base is TrigFunction)
+                    if (pf.GetBase() is TrigFunction)
                     {
                         trigFuncs.Add(pf);
                     }
@@ -521,8 +521,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public override bool IsEqualTo(ExComp ex)
         {
-            if (TermCount == 0)
-                Add(Number.Zero);
+            if (GetTermCount() == 0)
+                Add(Number.GetZero());
 
             if (ex is AlgebraFunction)
                 return false;
@@ -531,7 +531,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
             AlgebraTerm term = ex as AlgebraTerm;
 
-            if (this.TermCount != term.TermCount)
+            if (this.GetTermCount() != term.GetTermCount())
                 return false;
 
             List<ExComp[]> gps1 = this.GetGroups();
@@ -549,13 +549,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 bool matchFound = false;
                 for (int j = 0; j < matches.Count; ++j)
                 {
-                    if (matches[j].Data2)
+                    if (matches[j].GetData2())
                         continue;
 
-                    if (Equation.Group.GroupUtil.GpsEqual(gps2[i], matches[j].Data1))
+                    if (Equation.Group.GroupUtil.GpsEqual(gps2[i], matches[j].GetData1()))
                     {
                         matchFound = true;
-                        matches[j].Data2 = true;
+                        matches[j].SetData2(true);
                         break;
                     }
                 }
@@ -566,7 +566,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
             foreach (TypePair<ExComp[], bool> match in matches)
             {
-                if (!match.Data2)
+                if (!match.GetData2())
                     return false;
             }
 
@@ -575,7 +575,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public virtual bool IsOne()
         {
-            if (TermCount == 1 && _subComps[0] is Number)
+            if (GetTermCount() == 1 && _subComps[0] is Number)
                 return Number.OpEqual((_subComps[0] as Number), 1.0);
             return false;
         }
@@ -594,14 +594,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public virtual bool IsZero()
         {
-            if (TermCount == 1)
+            if (GetTermCount() == 1)
             {
                 if (_subComps[0] is Number)
                     return Number.OpEqual((_subComps[0] as Number), 0.0);
                 else if (_subComps[0] is AlgebraTerm)
                     return (_subComps[0] as AlgebraTerm).IsZero();
             }
-            else if (TermCount == 0)
+            else if (GetTermCount() == 0)
                 return true;
             else
             {
@@ -635,7 +635,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             if (comp is AlgebraTerm)
             {
                 AlgebraTerm term = comp as AlgebraTerm;
-                if (term.TermCount == 1 && TermCount == 1)
+                if (term.GetTermCount() == 1 && GetTermCount() == 1)
                 {
                     ExComp first1 = term._subComps[0];
                     ExComp first2 = _subComps[0];
@@ -643,7 +643,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                     return GroupHelper.CompsRelatable(first1, first2);
                 }
             }
-            else if (TermCount == 1)
+            else if (GetTermCount() == 1)
             {
                 ExComp first = _subComps[0];
 

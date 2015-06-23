@@ -14,7 +14,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
 
         public static ExComp TakeDeteriment(ExMatrix mat)
         {
-            if (mat.Rows == 2)
+            if (mat.GetRows() == 2)
             {
                 ExComp a = mat.Get(0, 0);
                 ExComp b = mat.Get(0, 1);
@@ -24,8 +24,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
                 return SubOp.StaticCombine(MulOp.StaticCombine(a, d), MulOp.StaticCombine(b, c));
             }
 
-            ExComp total = Number.Zero;
-            for (int i = 0; i < mat.Cols; ++i)
+            ExComp total = Number.GetZero();
+            for (int i = 0; i < mat.GetCols(); ++i)
             {
                 ExComp factor = mat.Get(0, i);
                 ExComp cofactor = mat.GetCofactor(0, i);
@@ -41,16 +41,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
         {
             CallChildren(harshEval, ref pEvalData);
 
-            ExComp innerEx = InnerEx;
+            ExComp innerEx = GetInnerEx();
 
             ExMatrix mat = innerEx as ExMatrix;
-            if (mat == null || !mat.IsSquare)
+            if (mat == null || !mat.GetIsSquare())
             {
                 pEvalData.AddMsg("Only the deteriment of square matrices can be taken");
-                return Number.Undefined;
+                return Number.GetUndefined();
             }
 
-            if (mat.Rows > MAX_DET_DIMEN)
+            if (mat.GetRows() > MAX_DET_DIMEN)
                 return this;
 
             return TakeDeteriment(mat);
@@ -58,22 +58,22 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
 
         public override string FinalToAsciiString()
         {
-            return "\\text{det}" + InnerTerm.FinalToAsciiString();
+            return "\\text{det}" + GetInnerTerm().FinalToAsciiString();
         }
 
         public override string FinalToTexString()
         {
-            return "\\text{det}" + InnerTerm.FinalToTexString();
+            return "\\text{det}" + GetInnerTerm().FinalToTexString();
         }
 
         public override string ToTexString()
         {
-            return "\\text{det}" + InnerEx.ToTexString();
+            return "\\text{det}" + GetInnerEx().ToTexString();
         }
 
         public override string ToAsciiString()
         {
-            return "\\text{det}" + InnerEx.ToAsciiString();
+            return "\\text{det}" + GetInnerEx().ToAsciiString();
         }
 
         public override string ToString()

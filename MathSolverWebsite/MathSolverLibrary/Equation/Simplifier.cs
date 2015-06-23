@@ -20,8 +20,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             if (simpFrac.IsDenOne())
                 return term;
 
-            ExComp num = simpFrac.NumEx;
-            ExComp den = simpFrac.DenEx;
+            ExComp num = simpFrac.GetNumEx();
+            ExComp den = simpFrac.GetDenEx();
 
             ExComp divided = Operators.DivOp.StaticCombine(num, den);
 
@@ -49,7 +49,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         public static ExComp HarshSimplify(AlgebraTerm term, ref TermType.EvalData pEvalData, bool order = true)
         {
             // Harsh simplify per component.
-            for (int i = 0; i < term.TermCount; ++i)
+            for (int i = 0; i < term.GetTermCount(); ++i)
             {
                 if (term[i] is AlgebraTerm)
                     term[i] = HarshSimplify(term[i] as AlgebraTerm, ref pEvalData, order);

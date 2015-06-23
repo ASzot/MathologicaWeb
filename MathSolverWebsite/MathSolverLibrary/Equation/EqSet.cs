@@ -18,112 +18,107 @@ namespace MathSolverWebsite.MathSolverLibrary
         private List<ExComp> _sides;
         private string _strContent;
 
-        public LexemeType ComparisonOp
+        public void SetComparisonOp(LexemeType value)
         {
-            get { return _comparisonOps[0]; }
-            set
-            {
-                if (_comparisonOps.Count < 1)
-                    _comparisonOps.Add(value);
-                else
-                    _comparisonOps[0] = value;
-            }
+            if (_comparisonOps.Count < 1)
+                _comparisonOps.Add(value);
+            else
+                _comparisonOps[0] = value;
         }
 
-        public Type StartingType
+        public LexemeType GetComparisonOp()
         {
-            set
-            {
-                _startingType = value;
-            }
-            get { return _startingType; }
+            return _comparisonOps[0];
         }
 
-        public List<LexemeType> ComparisonOps
+        public void SetStartingType(Type value)
         {
-            get { return _comparisonOps; }
+            _startingType = value;
+        }
+
+        public Type GetStartingType()
+        {
+            return _startingType;
+        }
+
+        public List<LexemeType> GetComparisonOps()
+        {
+            return _comparisonOps;
         }
 
         /// <summary>
         /// All of the comparison ops not including the invalid 'ErrorType'.
         /// </summary>
-        public List<LexemeType> ValidComparisonOps
+        public List<LexemeType> GetValidComparisonOps()
         {
-            get
-            {
-                return (from compOp in _comparisonOps
-                        where compOp != LexemeType.ErrorType
-                        select compOp).ToList();
-            }
+            return (from compOp in _comparisonOps
+                where compOp != LexemeType.ErrorType
+                select compOp).ToList();
         }
 
-        public string ContentStr
+        public string GetContentStr()
         {
-            get { return _strContent; }
+            return _strContent;
         }
 
-        public bool IsSingular
+        public bool GetIsSingular()
         {
-            get { return Right == null; }
+            return GetRight() == null;
         }
 
-        public ExComp Left
+        public void SetLeft(ExComp value)
         {
-            get
+            if (_sides.Count < 1)
+                _sides.Add(value);
+            else
+                _sides[0] = value;
+        }
+
+        public ExComp GetLeft()
+        {
+            if (_sides.Count < 1)
+                return null;
+            else
+                return _sides[0];
+        }
+
+        public AlgebraTerm GetLeftTerm()
+        {
+            return GetLeft().ToAlgTerm();
+        }
+
+        public void SetRight(ExComp value)
+        {
+            if (_sides.Count < 2)
             {
-                if (_sides.Count < 1)
-                    return null;
-                else
-                    return _sides[0];
-            }
-            set
-            {
-                if (_sides.Count < 1)
+                if (_sides.Count == 1)
                     _sides.Add(value);
                 else
-                    _sides[0] = value;
-            }
-        }
-
-        public AlgebraTerm LeftTerm
-        {
-            get { return Left.ToAlgTerm(); }
-        }
-
-        public ExComp Right
-        {
-            get
-            {
-                if (_sides.Count < 2)
-                    return null;
-                else
-                    return _sides[1];
-            }
-            set
-            {
-                if (_sides.Count < 2)
                 {
-                    if (_sides.Count == 1)
-                        _sides.Add(value);
-                    else
-                    {
-                        _sides.Add(null);
-                        _sides.Add(value);
-                    }
+                    _sides.Add(null);
+                    _sides.Add(value);
                 }
-                else
-                    _sides[1] = value;
             }
+            else
+                _sides[1] = value;
         }
 
-        public AlgebraTerm RightTerm
+        public ExComp GetRight()
         {
-            get { return Right.ToAlgTerm(); }
+            if (_sides.Count < 2)
+                return null;
+            else
+                return _sides[1];
         }
 
-        public List<ExComp> Sides
+        public AlgebraTerm GetRightTerm()
         {
-            get { return _sides; }
+            return GetRight().ToAlgTerm();
+        }
+
+        public List<ExComp> GetSides()
+        {
+            return _sides;
         }
 
         public EqSet(ExComp singleEx, string strContent)
@@ -132,9 +127,9 @@ namespace MathSolverWebsite.MathSolverLibrary
             _comparisonOps = new List<LexemeType>();
             _strContent = strContent;
             _startingType = null;
-            ComparisonOp = LexemeType.ErrorType;
-            Left = singleEx;
-            Right = null;
+            SetComparisonOp(LexemeType.ErrorType);
+            SetLeft(singleEx);
+            SetRight(null);
         }
 
         public EqSet(List<ExComp> sides, List<LexemeType> comparionOps)
@@ -151,9 +146,9 @@ namespace MathSolverWebsite.MathSolverLibrary
             _comparisonOps = new List<LexemeType>();
             _strContent = null;
             _startingType = null;
-            ComparisonOp = comparisonOp;
-            Left = left;
-            Right = right;
+            SetComparisonOp(comparisonOp);
+            SetLeft(left);
+            SetRight(right);
         }
 
         public EqSet(ExComp singleEx)
@@ -162,17 +157,17 @@ namespace MathSolverWebsite.MathSolverLibrary
             _comparisonOps = new List<LexemeType>();
             _strContent = null;
             _startingType = null;
-            ComparisonOp = LexemeType.ErrorType;
-            Left = singleEx;
-            Right = null;
+            SetComparisonOp(LexemeType.ErrorType);
+            SetLeft(singleEx);
+            SetRight(null);
         }
 
         public static IEnumerable<AlgebraTerm> GetSides(List<EqSet> eqSets)
         {
             foreach (EqSet eqSet in eqSets)
             {
-                yield return eqSet.LeftTerm;
-                yield return eqSet.RightTerm;
+                yield return eqSet.GetLeftTerm();
+                yield return eqSet.GetRightTerm();
             }
         }
 
@@ -189,9 +184,9 @@ namespace MathSolverWebsite.MathSolverLibrary
 
         public ExComp[] GetFuncDefComps()
         {
-            if ((Left is FunctionDefinition && !(Right is FunctionDefinition)) ||
-                Left is AlgebraComp)
-                return new ExComp[] { Left, Right };
+            if ((GetLeft() is FunctionDefinition && !(GetRight() is FunctionDefinition)) ||
+                GetLeft() is AlgebraComp)
+                return new ExComp[] { GetLeft(), GetRight() };
 
             return null;
         }
@@ -254,12 +249,12 @@ namespace MathSolverWebsite.MathSolverLibrary
                     // To allow for assignments this needs to be commented out.
                     FunctionDefinition funcDef = _sides[i] as FunctionDefinition;
                     bool allEqual = true;
-                    if ((funcDef.CallArgs != null && funcDef.InputArgs != null &&
-                        funcDef.CallArgs.Length == funcDef.InputArgs.Length))
+                    if ((funcDef.GetCallArgs() != null && funcDef.GetInputArgs() != null &&
+                        funcDef.GetCallArgs().Length == funcDef.GetInputArgs().Length))
                     {
-                        for (int j = 0; j < funcDef.CallArgs.Length; ++j)
+                        for (int j = 0; j < funcDef.GetCallArgs().Length; ++j)
                         {
-                            if (!funcDef.CallArgs[j].IsEqualTo(funcDef.InputArgs[j]))
+                            if (!funcDef.GetCallArgs()[j].IsEqualTo(funcDef.GetInputArgs()[j]))
                             {
                                 allEqual = false;
                                 break;
@@ -322,7 +317,7 @@ namespace MathSolverWebsite.MathSolverLibrary
 
         public SolveResult ImplicitDifferentiation(string derivativeOfStr, string withRespectToStr, AlgebraSolver agSolver, ref TermType.EvalData pEvalData)
         {
-            if (Left == null || Right == null)
+            if (GetLeft() == null || GetRight() == null)
             {
                 pEvalData.AddFailureMsg("Internal error.");
                 return SolveResult.Failure();
@@ -333,18 +328,18 @@ namespace MathSolverWebsite.MathSolverLibrary
             AlgebraComp withRespectTo = new AlgebraComp(withRespectToStr);
             AlgebraComp derivOf = new AlgebraComp(derivativeOfStr);
 
-            Derivative derivLeft = Derivative.ConstructDeriv(Left, withRespectTo, derivOf);
-            Derivative derivRight = Derivative.ConstructDeriv(Right, withRespectTo, derivOf);
+            Derivative derivLeft = Derivative.ConstructDeriv(GetLeft(), withRespectTo, derivOf);
+            Derivative derivRight = Derivative.ConstructDeriv(GetRight(), withRespectTo, derivOf);
 
-            pEvalData.WorkMgr.FromSides(derivLeft, derivRight, "Take the implicit derivative of each side.");
-            pEvalData.WorkMgr.FromFormatted("`{0}`", "First take the derivative of the left side.", Left);
+            pEvalData.GetWorkMgr().FromSides(derivLeft, derivRight, "Take the implicit derivative of each side.");
+            pEvalData.GetWorkMgr().FromFormatted("`{0}`", "First take the derivative of the left side.", GetLeft());
             ExComp left = derivLeft.Evaluate(false, ref pEvalData);
-            pEvalData.WorkMgr.FromFormatted("`{0}`", "Now take the derivative of the right side.", Right);
+            pEvalData.GetWorkMgr().FromFormatted("`{0}`", "Now take the derivative of the right side.", GetRight());
             ExComp right = derivRight.Evaluate(false, ref pEvalData);
 
             AlgebraComp solveFor = derivLeft.ConstructImplicitDerivAgCmp();
 
-            return agSolver.SolveEquationEquality(solveFor.Var, left.ToAlgTerm(), right.ToAlgTerm(), ref pEvalData);
+            return agSolver.SolveEquationEquality(solveFor.GetVar(), left.ToAlgTerm(), right.ToAlgTerm(), ref pEvalData);
         }
 
         public LexemeTable CreateLexemeTable()
@@ -391,16 +386,6 @@ namespace MathSolverWebsite.MathSolverLibrary
             return false;
         }
 
-        public void SetLeft(ExComp left)
-        {
-            Left = left;
-        }
-
-        public void SetRight(ExComp right)
-        {
-            Right = right;
-        }
-
         public void Substitute(ExComp subOut, ExComp subIn)
         {
             for (int i = 0; i < _sides.Count; ++i)
@@ -415,8 +400,8 @@ namespace MathSolverWebsite.MathSolverLibrary
 
         public bool IsLinearAlgebraTerm()
         {
-            ExComp leftEx = Left;
-            ExComp rightEx = Right;
+            ExComp leftEx = GetLeft();
+            ExComp rightEx = GetRight();
 
             return leftEx is ExMatrix || rightEx is ExMatrix ||
                 MatrixHelper.TermContainsMatrices(leftEx) ||

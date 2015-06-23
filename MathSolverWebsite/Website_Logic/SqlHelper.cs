@@ -39,7 +39,7 @@ namespace MathSolverWebsite.Website_Logic
                         cmd.CommandType = System.Data.CommandType.Text;
                         foreach (StringPair stringPair in pairs)
                         {
-                            cmd.Parameters.AddWithValue(stringPair.Data1, stringPair.Data2);
+                            cmd.Parameters.AddWithValue(stringPair.GetData1(), stringPair.GetData2());
                         }
 
                         int rowsAffected = cmd.ExecuteNonQuery();
