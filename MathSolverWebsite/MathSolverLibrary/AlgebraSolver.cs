@@ -868,9 +868,9 @@ namespace MathSolverWebsite.MathSolverLibrary
             AlgebraTerm useTerm = (AlgebraTerm)completeTerm.CloneEx();
             AlgebraTerm subInTerm = useTerm.Substitute(solveForComp, new Number(testPoint));
             subInTerm = subInTerm.ApplyOrderOfOperations();
-            AlgebraTerm final = subInTerm.MakeWorkable().ToAlgTerm();
+            AlgebraTerm finalTerm = subInTerm.MakeWorkable().ToAlgTerm();
 
-            ExComp simpEx = Simplifier.HarshSimplify(final, ref pEvalData, false);
+            ExComp simpEx = Simplifier.HarshSimplify(finalTerm, ref pEvalData, false);
 
             if (simpEx is AlgebraTerm)
                 simpEx = (simpEx as AlgebraTerm).HarshEvaluation().RemoveRedundancies();

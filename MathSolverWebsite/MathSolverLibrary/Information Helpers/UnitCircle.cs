@@ -261,8 +261,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
                 return AngleDen;
 
             ExComp num = MulOp.StaticCombine(nAngNum, Constant.ParseConstant("pi"));
-            ExComp final = DivOp.StaticCombine(num, nAngDen);
-            return final;
+            ExComp finalDivided = DivOp.StaticCombine(num, nAngDen);
+            return finalDivided;
         }
 
         public override string ToString()

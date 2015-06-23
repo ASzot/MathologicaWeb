@@ -996,10 +996,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (antiDerivVDUEval is Integral)
                 return null;
 
-            ExComp final = SubOp.StaticCombine(uv, antiDerivVDUEval);
-            pEvalData.GetWorkMgr().FromSides(final, null);
+            ExComp finalEx = SubOp.StaticCombine(uv, antiDerivVDUEval);
+            pEvalData.GetWorkMgr().FromSides(finalEx, null);
 
-            return final;
+            return finalEx;
         }
 
         private static bool IsDerivAcceptable(ExComp ex, AlgebraComp dVar)

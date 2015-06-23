@@ -110,13 +110,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
 
                     //IMPROVE:
                     // This could be improved by a lot.
-                    Number final = n1.CloneEx() as Number;
+                    Number finalNCloned = n1.CloneEx() as Number;
                     for (int i = 1; i < iPow; ++i)
                     {
-                        final = Number.OpMul(final, (Number)n1.CloneEx());
+                        finalNCloned = Number.OpMul(finalNCloned, (Number)n1.CloneEx());
                     }
 
-                    return final;
+                    return finalNCloned;
                 }
             }
 
@@ -391,33 +391,33 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
 
                     SinFunction sin = new SinFunction(frac);
                     ExComp p2 = MulOp.StaticCombine(Number.GetImagOne(), sin.Evaluate(false, ref pEvalData));
-                    ExComp final;
+                    ExComp finalExResult;
                     ExComp add = AddOp.StaticCombine(p1, p2);
 
                     if (add is AlgebraTerm)
                         add = (add as AlgebraTerm).CompoundFractions();
                     if (Number.GetOne().IsEqualTo(p0))
                     {
-                        final = add;
+                        finalExResult = add;
                     }
                     else if (Number.GetOne().IsEqualTo(add))
                     {
-                        final = p0;
+                        finalExResult = p0;
                     }
                     else
                     {
                         if (add is AlgebraTerm && (add as AlgebraTerm).GetGroupCount() != 1)
-                            final = MulOp.StaticWeakCombine(p0, add);
+                            finalExResult = MulOp.StaticWeakCombine(p0, add);
                         else
-                            final = MulOp.StaticCombine(p0, add);
+                            finalExResult = MulOp.StaticCombine(p0, add);
                     }
 
                     if (showWork)
                     {
-                        pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "root({0})({1})={2}" + WorkMgr.EDM, "Using De Moivre's theorem the root " + WorkMgr.STM + "{2}" + WorkMgr.EDM + " was found.", root, ex1, final);
+                        pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "root({0})({1})={2}" + WorkMgr.EDM, "Using De Moivre's theorem the root " + WorkMgr.STM + "{2}" + WorkMgr.EDM + " was found.", root, ex1, finalExResult);
                     }
 
-                    roots[(int)k.GetRealComp()] = final.ToAlgTerm();
+                    roots[(int)k.GetRealComp()] = finalExResult.ToAlgTerm();
                 }
 
                 return new AlgebraTermArray(roots);

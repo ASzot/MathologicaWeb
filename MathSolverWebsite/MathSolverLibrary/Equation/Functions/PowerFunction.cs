@@ -168,9 +168,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                     }
 
                     AlgebraTerm multiplied = new AlgebraTerm(groups.ToArray());
-                    ExComp final = multiplied;//.MakeWorkable();
+                    ExComp finalMult = multiplied;
 
-                    return final;
+                    return finalMult;
                 }
 
                 return MulOp.StaticWeakCombine(pf, term);

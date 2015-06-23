@@ -763,9 +763,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
             ExComp imagEx = Operators.MulOp.StaticCombine(imagCoeffEx, new Number(0.0, 1.0));
 
-            ExComp final = Operators.AddOp.StaticCombine(realEx, imagEx);
+            ExComp finalCombined = Operators.AddOp.StaticCombine(realEx, imagEx);
 
-            return final;
+            return finalCombined;
         }
 
         public static Number OpPow(Number n1, double d)

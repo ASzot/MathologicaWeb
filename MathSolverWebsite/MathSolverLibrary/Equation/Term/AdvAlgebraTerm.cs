@@ -1613,7 +1613,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
                         }
                     }
 
-                    AlgebraTerm final = new AlgebraTerm();
+                    AlgebraTerm finalAlgTerm = new AlgebraTerm();
                     AlgebraTerm nonModNum = new AlgebraTerm();
                     foreach (ExComp nonModifiedNum in nonModifiedNums)
                     {
@@ -1644,9 +1644,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
                         }
 
                         if (singleDenGp.Count > 0)
-                            final.Add(AlgebraTerm.FromFraction(nonModNum, GroupHelper.ToAlgTerm(singleDenGp.ToArray())));
+                            finalAlgTerm.Add(AlgebraTerm.FromFraction(nonModNum, GroupHelper.ToAlgTerm(singleDenGp.ToArray())));
                         else
-                            final.Add(nonModNum);
+                            finalAlgTerm.Add(nonModNum);
                     }
 
                     foreach (TypePair<ExComp, ExComp> modNumDenPair in modifiedNumDenPairs)
@@ -1656,15 +1656,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
                             addEx = modNumDenPair.GetData1();
                         else
                             addEx = AlgebraTerm.FromFraction(modNumDenPair.GetData1(), modNumDenPair.GetData2());
-                        if (final.GetTermCount() > 0)
-                            final.Add(new AddOp());
-                        final.Add(addEx);
+                        if (finalAlgTerm.GetTermCount() > 0)
+                            finalAlgTerm.Add(new AddOp());
+                        finalAlgTerm.Add(addEx);
                     }
 
-                    final = final.ApplyOrderOfOperations();
-                    final = final.MakeWorkable().ToAlgTerm();
+                    finalAlgTerm = finalAlgTerm.ApplyOrderOfOperations();
+                    finalAlgTerm = finalAlgTerm.MakeWorkable().ToAlgTerm();
 
-                    return final;
+                    return finalAlgTerm;
 
                     #endregion Cancel Numerator denominator
                 }

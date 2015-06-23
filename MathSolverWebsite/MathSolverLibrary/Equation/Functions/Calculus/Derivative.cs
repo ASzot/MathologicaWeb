@@ -357,11 +357,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             ca_derivSymb = "d/(d" + _withRespectTo.ToDispString() + ")";
 
-            ExComp final = GetInnerEx();
+            ExComp finalInnerEx = GetInnerEx();
 
-            if (final is ExVector)
+            if (finalInnerEx is ExVector)
             {
-                ExVector vec = final as ExVector;
+                ExVector vec = finalInnerEx as ExVector;
                 // Take the derivative of each component separately.
                 ExVector derivVec = vec.CreateEmptyBody();
 
@@ -383,7 +383,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
                 return derivVec;
             }
-            else if (final is ExMatrix)
+            else if (finalInnerEx is ExMatrix)
             {
                 // Don't know if this works.
                 return Number.GetUndefined();
@@ -393,20 +393,20 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 + " derivative of the above.", GetInnerEx());
             for (int i = 0; i < order; ++i)
             {
-                ExComp tmp = TakeDerivativeOf(final, ref pEvalData);
+                ExComp tmp = TakeDerivativeOf(finalInnerEx, ref pEvalData);
                 pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[{0}]={1}`", "The final " + (i + 1).ToString() +
-                    MathHelper.GetCountingPrefix(i + 1) + " derivative.", final, tmp);
-                final = tmp;
+                    MathHelper.GetCountingPrefix(i + 1) + " derivative.", finalInnerEx, tmp);
+                finalInnerEx = tmp;
             }
 
             if (_inputVal != null)
             {
-                final = final.ToAlgTerm().Substitute(_withRespectTo, _inputVal);
-                AlgebraTerm termWrapper = new AlgebraTerm(final);
-                final = Simplifier.Simplify(termWrapper, ref pEvalData);
+                finalInnerEx = finalInnerEx.ToAlgTerm().Substitute(_withRespectTo, _inputVal);
+                AlgebraTerm termWrapper = new AlgebraTerm(finalInnerEx);
+                finalInnerEx = Simplifier.Simplify(termWrapper, ref pEvalData);
             }
 
-            return final;
+            return finalInnerEx;
         }
 
         public override string FinalToAsciiString()
@@ -758,10 +758,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         private ExComp ApplyPowBaseDeriv(PowerFunction powFunc, ref TermType.EvalData pEvalData)
         {
-            ExComp final = MulOp.StaticCombine(powFunc.GetPower(), LogFunction.Ln(powFunc.GetBase()));
-            pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[{0}]=({0})*d/(dx)[{1}]`", "This comes from the definition for the derivative of `d/(dx)[x^x]=x^x*d/(dx)[x*ln(x)]`.", powFunc, final);
+            ExComp finalEx = MulOp.StaticCombine(powFunc.GetPower(), LogFunction.Ln(powFunc.GetBase()));
+            pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[{0}]=({0})*d/(dx)[{1}]`", "This comes from the definition for the derivative of `d/(dx)[x^x]=x^x*d/(dx)[x*ln(x)]`.", powFunc, finalEx);
 
-            return MulOp.StaticCombine(powFunc, TakeDerivativeOf(final, ref pEvalData));
+            return MulOp.StaticCombine(powFunc, TakeDerivativeOf(finalEx, ref pEvalData));
         }
 
         private ExComp ApplyPower(PowerFunction pfGpCmp, ref TermType.EvalData pEvalData)
@@ -1038,7 +1038,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 }
 
                 List<ExComp[]> gps = term.GetGroupsNoOps();
-                AlgebraTerm final = new AlgebraTerm();
+                AlgebraTerm finalAlgTerm = new AlgebraTerm();
 
                 if (gps.Count != 1 && pEvalData.GetWorkMgr().AllowWork)
                 {
@@ -1059,12 +1059,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     ExComp deriv = TakeDerivativeOfGp(gps[i], ref pEvalData);
                     if (deriv.ToAlgTerm().IsZero())
                         continue;
-                    final.Add(deriv);
+                    finalAlgTerm.Add(deriv);
                     if (i != gps.Count - 1)
-                        final.Add(new AddOp());
+                        finalAlgTerm.Add(new AddOp());
                 }
 
-                return final;
+                return finalAlgTerm;
             }
 
             // Whatever this is, the derivative of it can't be taken.

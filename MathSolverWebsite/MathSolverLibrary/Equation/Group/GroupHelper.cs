@@ -630,12 +630,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             group = group.OrderBy(g => g.GetCompareVal()).Reverse().ToArray();
             if (coeffs.Count != 0 || constants.Count > 0)
             {
-                List<ExComp> final = new List<ExComp>();
+                List<ExComp> finalExList = new List<ExComp>();
                 if (coeffs.Count != 0)
-                    final.AddRange(coeffs);
-                final.AddRange(constants);
-                final.AddRange(group);
-                group = final.ToArray();
+                    finalExList.AddRange(coeffs);
+                finalExList.AddRange(constants);
+                finalExList.AddRange(group);
+                group = finalExList.ToArray();
             }
 
             if (ContainsVectors(@group))

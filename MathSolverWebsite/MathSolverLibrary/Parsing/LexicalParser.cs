@@ -629,20 +629,20 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                     AlgebraTerm algebraTerm = LexemeTableToAlgebraTerm(setLexemeTable, ref pParseErrors, true);
                     if (algebraTerm == null)
                         return null;
-                    ExComp final = algebraTerm.RemoveRedundancies(true);
-                    if (final is AgOp)
+                    ExComp finalNoRedun = algebraTerm.RemoveRedundancies(true);
+                    if (finalNoRedun is AgOp)
                     {
                         return null;
                     }
-                    Type startingType = final.GetType();
-                    if (final is AlgebraTerm)
+                    Type startingType = finalNoRedun.GetType();
+                    if (finalNoRedun is AlgebraTerm)
                     {
-                        AlgebraTerm finalTerm = final as AlgebraTerm;
-                        final = finalTerm.WeakMakeWorkable(ref pParseErrors, ref p_EvalData);
-                        if (final == null)
+                        AlgebraTerm finalTerm = finalNoRedun as AlgebraTerm;
+                        finalNoRedun = finalTerm.WeakMakeWorkable(ref pParseErrors, ref p_EvalData);
+                        if (finalNoRedun == null)
                             return null;
                     }
-                    EqSet addEqSet = new EqSet(final, equationSet);
+                    EqSet addEqSet = new EqSet(finalNoRedun, equationSet);
                     addEqSet.SetStartingType(startingType);
                     eqSets.Add(addEqSet);
                     continue;
@@ -674,16 +674,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                         AlgebraTerm algebraTerm = LexemeTableToAlgebraTerm(lt, ref pParseErrors, true);
                         if (algebraTerm == null)
                             return null;
-                        ExComp final = algebraTerm.RemoveRedundancies(true);
-                        if (final is AlgebraTerm)
+                        ExComp finalEx = algebraTerm.RemoveRedundancies(true);
+                        if (finalEx is AlgebraTerm)
                         {
-                            AlgebraTerm finalTerm = final as AlgebraTerm;
-                            final = finalTerm.WeakMakeWorkable(ref pParseErrors, ref p_EvalData);
-                            if (final == null)
+                            AlgebraTerm finalTerm = finalEx as AlgebraTerm;
+                            finalEx = finalTerm.WeakMakeWorkable(ref pParseErrors, ref p_EvalData);
+                            if (finalEx == null)
                                 return null;
                         }
 
-                        parsedTerms.Add(final);
+                        parsedTerms.Add(finalEx);
                     }
 
                     EqSet singleEqSet = new EqSet(parsedTerms, solveTypes);
@@ -706,16 +706,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                     AlgebraTerm algebraTerm = LexemeTableToAlgebraTerm(lexemeTable, ref pParseErrors, true);
                     if (algebraTerm == null)
                         return null;
-                    ExComp final = algebraTerm.RemoveRedundancies(true);
-                    if (final is AlgebraTerm)
+                    ExComp finalExNoRedun = algebraTerm.RemoveRedundancies(true);
+                    if (finalExNoRedun is AlgebraTerm)
                     {
-                        AlgebraTerm finalTerm = final as AlgebraTerm;
-                        final = finalTerm.WeakMakeWorkable(ref pParseErrors, ref p_EvalData);
-                        if (final == null)
+                        AlgebraTerm finalTerm = finalExNoRedun as AlgebraTerm;
+                        finalExNoRedun = finalTerm.WeakMakeWorkable(ref pParseErrors, ref p_EvalData);
+                        if (finalExNoRedun == null)
                             return null;
                     }
 
-                    parsedExs[i] = final;
+                    parsedExs[i] = finalExNoRedun;
                 }
 
                 eqSets.Add(new EqSet(parsedExs[0], parsedExs[1], solveType));

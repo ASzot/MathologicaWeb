@@ -260,15 +260,15 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             ex0 = MulOp.StaticCombine(ex0, a);
             ExComp ex1 = MulOp.StaticCombine(b, aos);
 
-            ExComp final = AddOp.StaticCombine(ex0, ex1);
-            if (final is AlgebraTerm)
-                final = (final as AlgebraTerm).CompoundFractions();
-            final = AddOp.StaticCombine(final, c);
+            ExComp finalCombined = AddOp.StaticCombine(ex0, ex1);
+            if (finalCombined is AlgebraTerm)
+                finalCombined = (finalCombined as AlgebraTerm).CompoundFractions();
+            finalCombined = AddOp.StaticCombine(finalCombined, c);
 
-            if (final is AlgebraTerm)
-                final = (final as AlgebraTerm).CompoundFractions();
+            if (finalCombined is AlgebraTerm)
+                finalCombined = (finalCombined as AlgebraTerm).CompoundFractions();
 
-            return new ExVector(aos, final);
+            return new ExVector(aos, finalCombined);
         }
 
         private static ExComp FindVertex(ExComp a, ExComp b, ExComp c)
@@ -296,19 +296,19 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 hVal = (hVal as AlgebraTerm).CompoundFractions();
             }
 
-            AlgebraTerm final = new AlgebraTerm();
+            AlgebraTerm finalTerm = new AlgebraTerm();
             if (!Number.GetOne().IsEqualTo(a))
-                final.Add(a, new MulOp());
+                finalTerm.Add(a, new MulOp());
 
             if (!Number.GetZero().IsEqualTo(halfB))
-                final.Add(new Equation.Functions.PowerFunction(new AlgebraTerm(solveFor, new AddOp(), halfB), new Number(2.0)));
+                finalTerm.Add(new Equation.Functions.PowerFunction(new AlgebraTerm(solveFor, new AddOp(), halfB), new Number(2.0)));
             else
-                final.Add(solveFor);
+                finalTerm.Add(solveFor);
 
             if (!Number.GetZero().IsEqualTo(hVal))
-                final.Add(new AddOp(), hVal);
+                finalTerm.Add(new AddOp(), hVal);
 
-            return final;
+            return finalTerm;
         }
     }
 }
