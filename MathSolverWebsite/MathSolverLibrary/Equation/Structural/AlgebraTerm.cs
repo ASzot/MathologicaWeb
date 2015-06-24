@@ -1629,9 +1629,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             }
 
             if (comps.Count != 0 && comps.First() is AgOp)
-                comps.RemoveAt(0);
+                ArrayFunc.RemoveIndex(comps, 0);
             if (comps.Count != 0 && comps.Last() is AgOp)
-                comps.RemoveAt(comps.Count - 1);
+                ArrayFunc.RemoveIndex(comps, comps.Count - 1);
         }
 
         private List<ExComp> RecursiveGroupGCFSolve(List<ExComp[]> groups)

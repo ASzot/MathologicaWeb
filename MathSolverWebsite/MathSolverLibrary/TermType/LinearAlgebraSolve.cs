@@ -3,6 +3,7 @@ using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
 using MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg;
 using MathSolverWebsite.MathSolverLibrary.Parsing;
 using System.Collections.Generic;
+using MathSolverWebsite.MathSolverLibrary.LangCompat;
 using LexemeTable = System.Collections.Generic.List<
 MathSolverWebsite.MathSolverLibrary.TypePair<MathSolverWebsite.MathSolverLibrary.Parsing.LexemeType, string>>;
 
@@ -180,13 +181,13 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 for (int j = 0; j < solveVarsLeft.Count; ++j)
                 {
                     if (!leftVars.Contains(solveVarsLeft[j]))
-                        solveVarsLeft.RemoveAt(j--);
+                        ArrayFunc.RemoveIndex(solveVarsLeft, j--);
                 }
 
                 for (int j = 0; j < solveVarsRight.Count; ++j)
                 {
                     if (!rightVars.Contains(solveVarsRight[j]))
-                        solveVarsRight.RemoveAt(j--);
+                        ArrayFunc.RemoveIndex(solveVarsRight, j--);
                 }
 
                 foreach (string leftVar in leftVars)
@@ -211,7 +212,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 if (solveVarsRight.Contains(solveVarsLeft[i]))
                 {
                     solveVarsRight.Remove(solveVarsLeft[i]);
-                    solveVarsLeft.RemoveAt(i--);
+                    ArrayFunc.RemoveIndex(solveVarsLeft, i--);
                 }
             }
 

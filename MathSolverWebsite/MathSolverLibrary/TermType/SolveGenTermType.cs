@@ -2,6 +2,7 @@
 using MathSolverWebsite.MathSolverLibrary.Parsing;
 using System.Collections.Generic;
 using System.Linq;
+using MathSolverWebsite.MathSolverLibrary.LangCompat;
 
 namespace MathSolverWebsite.MathSolverLibrary.TermType
 {
@@ -30,7 +31,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             {
                 if (solveVarKeys[i] == probSolveVar)
                 {
-                    solveVarKeys.RemoveAt(i);
+                    ArrayFunc.RemoveIndex(solveVarKeys, i);
                     break;
                 }
             }
@@ -41,7 +42,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             {
                 if (solveVarKeys[i] == noIncludeVar)
                 {
-                    solveVarKeys.RemoveAt(i);
+                    ArrayFunc.RemoveIndex(solveVarKeys, i);
                     break;
                 }
             }
@@ -86,7 +87,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             {
                 if (solveVarKeys[i] == probSolveVar)
                 {
-                    solveVarKeys.RemoveAt(i);
+                    ArrayFunc.RemoveIndex(solveVarKeys, i);
                     break;
                 }
             }

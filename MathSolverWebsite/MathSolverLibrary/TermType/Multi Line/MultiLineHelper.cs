@@ -1,6 +1,6 @@
 ﻿using MathSolverWebsite.MathSolverLibrary.Equation;
 using System.Collections.Generic;
-
+using MathSolverWebsite.MathSolverLibrary.LangCompat;
 using LexemeTable = System.Collections.Generic.List<
 MathSolverWebsite.MathSolverLibrary.TypePair<MathSolverWebsite.MathSolverLibrary.Parsing.LexemeType, string>>;
 
@@ -77,7 +77,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 if (AttemptAddFuncDef(eqs, i, ref pEvalData) || AttemptAddIntervalDef(eqs[i], eqLt, ref pEvalData))
                 {
                     lts.RemoveRange(ltsCount, eqs[i].GetValidComparisonOps().Count + 1);
-                    eqs.RemoveAt(i--);
+                    ArrayFunc.RemoveIndex(eqs, i--);
                 }
                 else
                     ltsCount += eqs[i].GetValidComparisonOps().Count + 1;
@@ -133,21 +133,6 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                     }
                 }
             }
-
-            //solveVars = new Dictionary<string, int>();
-
-            //foreach (EqSet eqSet in eqs)
-            //{
-            //    List<string> comps = eqSet.LeftTerm.GetAllAlgebraCompsStr();
-
-            //    if (eqSet.Right != null)
-            //        comps.AddRange(eqSet.RightTerm.GetAllAlgebraCompsStr());
-
-            //    foreach (string comp in comps)
-            //    {
-            //        solveVars[comp] = 1;
-            //    }
-            //}
 
             return eqs;
         }

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MathSolverWebsite.MathSolverLibrary.LangCompat;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation
 {
@@ -127,7 +128,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 int comparePow = _info[i].GetData2();
                 if (comparePow == pow)
                 {
-                    _info.RemoveAt(i);
+                    ArrayFunc.RemoveIndex(_info, i);
                     return;
                 }
             }

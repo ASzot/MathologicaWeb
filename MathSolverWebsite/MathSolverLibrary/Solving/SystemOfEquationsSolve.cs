@@ -4,6 +4,7 @@ using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MathSolverWebsite.MathSolverLibrary.LangCompat;
 using MathSolverWebsite.MathSolverLibrary.TermType;
 using LexemeTable = System.Collections.Generic.List<
 MathSolverWebsite.MathSolverLibrary.TypePair<MathSolverWebsite.MathSolverLibrary.Parsing.LexemeType, string>>;
@@ -73,7 +74,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                     {
                         AlgebraComp varFor = eqSet.GetLeft() is AlgebraComp ? eqSet.GetLeft() as AlgebraComp : eqSet.GetRight() as AlgebraComp;
 
-                        equations.RemoveAt(i--);
+                        ArrayFunc.RemoveIndex(equations, i--);
 
                         for (int j = 0; j < equations.Count; ++j)
                         {
@@ -351,7 +352,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
                 solveResult.Solutions.Add(new Solution(solveForComp, result.CloneEx()));
 
-                iterGenerations.RemoveAt(i);
+                ArrayFunc.RemoveIndex(iterGenerations, i);
 
                 foreach (EqSet subInEqSet in iterGenerations)
                 {

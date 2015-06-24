@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using MathSolverWebsite.MathSolverLibrary.LangCompat;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation
 {
@@ -89,7 +90,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             for (int i = 0; i < _terms.Count; ++i)
             {
                 if (_terms[i].IsComplex())
-                    _terms.RemoveAt(i--);
+                    ArrayFunc.RemoveIndex(_terms, i--);
             }
         }
 
@@ -108,7 +109,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
                     if (term.IsEqualTo(compareTerm))
                     {
-                        _terms.RemoveAt(i--);
+                        ArrayFunc.RemoveIndex(_terms, i--);
                         break;
                     }
                 }

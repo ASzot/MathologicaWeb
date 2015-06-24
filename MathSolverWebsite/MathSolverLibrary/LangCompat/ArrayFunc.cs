@@ -34,10 +34,9 @@ namespace MathSolverWebsite.MathSolverLibrary.LangCompat
             return list;
         }
 
-        public static List<T> RemoveIndex<T>(List<T> list, int index)
+        public static void RemoveIndex<T>(List<T> list, int index)
         {
             list.RemoveAt(index);
-            return list;
         }
     }
 }

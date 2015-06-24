@@ -3,6 +3,7 @@ using MathSolverWebsite.MathSolverLibrary.Parsing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MathSolverWebsite.MathSolverLibrary.LangCompat;
 
 namespace MathSolverWebsite.MathSolverLibrary
 {
@@ -313,7 +314,7 @@ namespace MathSolverWebsite.MathSolverLibrary
 
         public void PopStep()
         {
-            _workSteps.RemoveAt(_workSteps.Count - 1);
+            ArrayFunc.RemoveIndex(_workSteps, _workSteps.Count - 1);
         }
 
         public void PopStepsCount(int count)

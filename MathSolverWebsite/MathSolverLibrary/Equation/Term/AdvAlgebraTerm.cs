@@ -159,7 +159,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
             }
 
             if (variableLogCount == 1)
-                combinedLogs.RemoveAt(varLogIndex);
+                ArrayFunc.RemoveIndex(combinedLogs, varLogIndex);
 
             foreach (LogFunction logFunc in logFuncs)
             {
@@ -1255,7 +1255,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
 
                         groups[i] = trigCoeffPair.GetData2();
 
-                        groups.RemoveAt(k);
+                        ArrayFunc.RemoveIndex(groups, k);
                         breakLoop = true;
                         break;
                     }
@@ -1322,8 +1322,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
                     if (compareResult != null)
                     {
                         finalGroup.Add(compareResult);
-                        checkGroup.RemoveAt(i--);
-                        checkGroup.RemoveAt(--j);
+                        ArrayFunc.RemoveIndex(checkGroup, i--);
+                        ArrayFunc.RemoveIndex(checkGroup, --j);
                         break;
                     }
                 }
@@ -1524,7 +1524,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
                                 {
                                     // The cancel result will stay on the numerator.
                                     numGroups[i][j] = cancelResult;
-                                    useDenGroup.RemoveAt(k--);
+                                    ArrayFunc.RemoveIndex(useDenGroup, k--);
                                     if (modifiedDens[i] == null)
                                     {
                                         if (useDenGroup.Count == 0)
@@ -1561,7 +1561,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
                             if (modifiedNumDenPairs[i].GetData2().IsEqualTo(modifiedNumDenPairs[j].GetData2()))
                             {
                                 modifiedNumDenPairs[j].SetData1(AddOp.StaticCombine(modifiedNumDenPairs[i].GetData1(), modifiedNumDenPairs[j].GetData1()));
-                                modifiedNumDenPairs.RemoveAt(i--);
+                                ArrayFunc.RemoveIndex(modifiedNumDenPairs, i--);
                                 break;
                             }
                         }
@@ -1584,13 +1584,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
                                     if (modDenTerm[j] is TrigFunction)
                                     {
                                         topMultTerm.Add((modDenTerm[j] as TrigFunction).GetReciprocalOf(), new MulOp());
-                                        gp.RemoveAt(j);
+                                        ArrayFunc.RemoveIndex(gp, j);
                                     }
                                 }
 
                                 // Remove the tailing operator if there is one.
                                 if (gp.Count > 0 && gp[gp.Count - 1] is AgOp)
-                                    gp.RemoveAt(gp.Count - 1);
+                                    ArrayFunc.RemoveIndex(gp, gp.Count - 1);
 
                                 modifiedNumDenPairs[i].SetData2(GroupHelper.ToAlgTerm(gp.ToArray()));
                             }
@@ -1626,7 +1626,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
                     // Remove the last '+' operator.
                     if (nonModNum.GetTermCount() > 0)
                     {
-                        nonModNum.GetSubComps().RemoveAt(nonModNum.GetTermCount() - 1);
+                        ArrayFunc.RemoveIndex(nonModNum.GetSubComps(), nonModNum.GetTermCount() - 1);
 
                         AlgebraTerm topMultTerm = new AlgebraTerm();
 
@@ -1636,13 +1636,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
                             if (singleDenGp[i] is TrigFunction)
                             {
                                 topMultTerm.Add((denGroups[0][i] as TrigFunction).GetReciprocalOf(), new MulOp());
-                                singleDenGp.RemoveAt(i);
+                                ArrayFunc.RemoveIndex(singleDenGp, i);
                             }
                         }
 
                         if (topMultTerm.GetTermCount() > 0)
                         {
-                            topMultTerm.GetSubComps().RemoveAt(topMultTerm.GetTermCount() - 1);
+                            ArrayFunc.RemoveIndex(topMultTerm.GetSubComps(), topMultTerm.GetTermCount() - 1);
                             nonModNum = MulOp.StaticWeakCombine(topMultTerm, nonModNum).ToAlgTerm();
                         }
 

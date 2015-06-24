@@ -156,7 +156,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                             TypePair<LexemeType, MatchTolken> compareTolken = tolkenMatches[j];
                             if (compareTolken.GetData2().Index < minIndex)
                             {
-                                tolkenMatches.RemoveAt(j--);
+                                ArrayFunc.RemoveIndex(tolkenMatches, j--);
                                 continue;
                             }
                             if (compareTolken.GetData2().Value == ")")
@@ -189,7 +189,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                                     (tolken.GetData2().Length + tolken.GetData2().Index) >=
                                     (compTolken.GetData2().Index + compTolken.GetData2().Length))
                                 {
-                                    tolkenRange.RemoveAt(k--);
+                                    ArrayFunc.RemoveIndex(tolkenRange, k--);
                                     if (k < j)
                                         j--;
                                 }
@@ -338,7 +338,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
 
                     if (func.EndsWith(funcStartStr))
                     {
-                        orderedTolkensList.RemoveAt(i);
+                        ArrayFunc.RemoveIndex(orderedTolkensList, i);
                         orderedTolkensList.Insert(i, new TypePair<MathSolverWebsite.MathSolverLibrary.Parsing.LexemeType, string>(LexemeType.StartPara, "("));
                         LexemeType lt;
                         if (funcParamStr == "e")
@@ -351,7 +351,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                     }
                     else if (func.EndsWith("_"))
                     {
-                        orderedTolkensList.RemoveAt(i);
+                        ArrayFunc.RemoveIndex(orderedTolkensList, i);
                         orderedTolkensList.Insert(i, new TypePair<MathSolverWebsite.MathSolverLibrary.Parsing.LexemeType, string>(LexemeType.Identifier, funcStartStr));
                         orderedTolkensList.Insert(i + 1, new TypePair<MathSolverWebsite.MathSolverLibrary.Parsing.LexemeType, string>(LexemeType.StartPara, "("));
                         orderedTolkensList.Insert(i + 2, new TypePair<MathSolverWebsite.MathSolverLibrary.Parsing.LexemeType, string>(LexemeType.Identifier, funcParamStr));
@@ -382,7 +382,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                     if (!orderedTolkensList[i - 1].GetData2().EndsWith(funcStartStr))
                         continue;
 
-                    orderedTolkensList.RemoveAt(i);
+                    ArrayFunc.RemoveIndex(orderedTolkensList, i);
                     orderedTolkensList.Insert(i, new TypePair<MathSolverWebsite.MathSolverLibrary.Parsing.LexemeType, string>(LexemeType.Operator, "^"));
                     orderedTolkensList.Insert(i + 1, new TypePair<MathSolverWebsite.MathSolverLibrary.Parsing.LexemeType, string>(LexemeType.Number, raisedStr));
                     orderedTolkensList.Insert(i + 2, new TypePair<MathSolverWebsite.MathSolverLibrary.Parsing.LexemeType, string>(LexemeType.StartPara, "("));
@@ -462,32 +462,32 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                     {
                         if (i > 0)
                         {
-                            orderedTolkensList.RemoveAt(i - 1);
+                            ArrayFunc.RemoveIndex(orderedTolkensList, i - 1));
                         }
                         if (i < orderedTolkensList.Count && !tolken.GetData2().Contains("^") &&
                             orderedTolkensList[i].GetData1() == LexemeType.FunctionDef)
-                            orderedTolkensList.RemoveAt(i--);
+                            ArrayFunc.RemoveIndex(orderedTolkensList, i--);
                     }
                 }
 
                 if (tolken.GetData1() == LexemeType.Limit && i < orderedTolkensList.Count - 1 &&
                     orderedTolkensList[i + 1].GetData2() == "lim")
-                    orderedTolkensList.RemoveAt(i + 1);
+                    ArrayFunc.RemoveIndex(orderedTolkensList, i + 1);
 
                 if (tolken.GetData1() == LexemeType.Summation && i < orderedTolkensList.Count - 1 &&
                     orderedTolkensList[i + 1].GetData2() == "sum")
-                    orderedTolkensList.RemoveAt(i + 1);
+                    ArrayFunc.RemoveIndex(orderedTolkensList, i + 1);
                 else if (tolken.GetData1() == LexemeType.Derivative && i < orderedTolkensList.Count - 1 &&
                          orderedTolkensList[i + 1].GetData1() == LexemeType.Differential &&
                          tolken.GetData2().Contains(orderedTolkensList[i + 1].GetData2()))
                 {
-                    orderedTolkensList.RemoveAt(i + 1);
+                    ArrayFunc.RemoveIndex(orderedTolkensList, i + 1);
                 }
                 else if (tolken.GetData1() == LexemeType.FuncDeriv && i < orderedTolkensList.Count - 1 &&
                          orderedTolkensList[i + 1].GetData1() == LexemeType.FunctionDef &&
                          tolken.GetData2().EndsWith(orderedTolkensList[i + 1].GetData2()))
                 {
-                    orderedTolkensList.RemoveAt(i + 1);
+                    ArrayFunc.RemoveIndex(orderedTolkensList, i + 1);
                 }
                 else if (i >= 2 && tolken.GetData1() == LexemeType.FuncIden && orderedTolkensList[i - 1].GetData2() == "^" &&
                          orderedTolkensList[i - 2].GetData1() == LexemeType.Identifier)
@@ -506,8 +506,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                         string temp = orderedTolkensList[i - 1].GetData2() + orderedTolkensList[i].GetData2();
                         orderedTolkensList[i - 1].SetData2(temp);
                         orderedTolkensList[i - 2].SetData2(orderedTolkensList[i - 2].GetData2() + temp);
-                        orderedTolkensList.RemoveAt(i--);
-                        orderedTolkensList.RemoveAt(i--);
+                        ArrayFunc.RemoveIndex(orderedTolkensList, i--);
+                        ArrayFunc.RemoveIndex(orderedTolkensList, i--);
                     }
                 }
             }
@@ -1141,13 +1141,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                     if (nextLexeme.GetData1() == LexemeType.Number)
                     {
                         lexemeTable[i + 1].SetData2(nextLexeme.GetData2().Insert(0, "-"));
-                        lexemeTable.RemoveAt(i--);
+                        ArrayFunc.RemoveIndex(lexemeTable, i--);
                     }
                     else
                     {
                         TypePair<MathSolverWebsite.MathSolverLibrary.Parsing.LexemeType, string> negateNumLexeme = new TypePair<MathSolverWebsite.MathSolverLibrary.Parsing.LexemeType, string>(LexemeType.Number, "-1");
                         TypePair<MathSolverWebsite.MathSolverLibrary.Parsing.LexemeType, string> multiplyLexeme = new TypePair<MathSolverWebsite.MathSolverLibrary.Parsing.LexemeType, string>(LexemeType.Operator, "*");
-                        lexemeTable.RemoveAt(i);
+                        ArrayFunc.RemoveIndex(lexemeTable, i);
                         lexemeTable.Insert(i, negateNumLexeme);
                         lexemeTable.Insert(i + 1, multiplyLexeme);
                     }
@@ -1451,13 +1451,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                 // Remove the operator that is probably preceeding it.
                 if (lt[i - 1].GetData1() == LexemeType.Operator)
                 {
-                    lt.RemoveAt(i - 1);
+                    ArrayFunc.RemoveIndex(lt, i - 1);
                     i--;
                 }
 
                 if (i != lt.Count - 1 && lt[i + 1].GetData1() == LexemeType.Operator)
                 {
-                    lt.RemoveAt(i + 1);
+                    ArrayFunc.RemoveIndex(lt, i + 1);
                 }
 
                 if (!(lt[i - 1].GetData1() == LexemeType.EndPara ||
@@ -1467,7 +1467,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                     // Just the single lexeme.
                     if (lt[i - 1].GetData1() == LexemeType.Operator)
                         return false;
-                    lt.RemoveAt(i);
+                    ArrayFunc.RemoveIndex(lt, i);
                     lt.Insert(i - 1, lex);
                     continue;
                 }
@@ -1497,7 +1497,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                 if (endIndex == -1)
                     return false;
 
-                lt.RemoveAt(i);
+                ArrayFunc.RemoveIndex(lt, i);
                 lt.Insert(endIndex, lex);
             }
 
@@ -1557,7 +1557,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                                 TypePair<MathSolverWebsite.MathSolverLibrary.Parsing.LexemeType, string> insertLex = new TypePair<MathSolverWebsite.MathSolverLibrary.Parsing.LexemeType, string>(LexemeType.Derivative, MathSolver.PLAIN_TEXT
                                     ? "(partial" + funcIden + ")/(partial" + split[1] + ")"
                                     : "frac(partial" + funcIden + ")(partial" + split[1] + ")");
-                                lt.RemoveAt(i);
+                                ArrayFunc.RemoveIndex(lt, i);
                                 lt.Insert(i, insertLex);
                             }
                         }
@@ -2010,7 +2010,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
 
                     // This is due to a function definition also being parsed as part of the combination or permutation.
                     if (lexeme.GetData2().Contains("text") && currentIndex < lexemeTable.Count - 1)
-                        lexemeTable.RemoveAt(currentIndex + 1);
+                        ArrayFunc.RemoveIndex(lexemeTable, currentIndex + 1);
                     return algebraOp;
 
                 case LexemeType.Identifier:
@@ -3002,7 +3002,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
             // This could be in the line integral vector path notation.
             if (integralTerm.Count > 0 && integralTerm[integralTerm.Count - 1].GetData2() == "*")
             {
-                integralTerm.RemoveAt(integralTerm.Count - 1);
+                ArrayFunc.RemoveIndex(integralTerm, integralTerm.Count - 1);
             }
 
             AlgebraTerm innerTerm = LexemeTableToAlgebraTerm(integralTerm, ref pParseErrors, false);

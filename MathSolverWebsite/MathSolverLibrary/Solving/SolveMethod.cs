@@ -2,6 +2,7 @@
 using MathSolverWebsite.MathSolverLibrary.Equation.Functions;
 using System.Collections.Generic;
 using System.Linq;
+using MathSolverWebsite.MathSolverLibrary.LangCompat;
 using MathSolverWebsite.MathSolverLibrary.TermType;
 
 namespace MathSolverWebsite.MathSolverLibrary.Solving
@@ -61,7 +62,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                         }
 
                         if (!matchFound)
-                            constantGroupsLeft.RemoveAt(j--);
+                            ArrayFunc.RemoveIndex(constantGroupsLeft, j--);
                     }
                 }
 

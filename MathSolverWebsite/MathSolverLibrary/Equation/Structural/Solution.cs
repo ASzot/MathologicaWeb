@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MathSolverWebsite.MathSolverLibrary.LangCompat;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation
 {
@@ -278,7 +279,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                     continue;
                 if (Solutions[i].Result.ToAlgTerm().IsComplex())
                 {
-                    Solutions.RemoveAt(i--);
+                    ArrayFunc.RemoveIndex(Solutions, i--));
                     complexSolsRemoved = true;
                 }
             }
@@ -312,7 +313,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
                     if (comp0.IsEqualTo(comp1))
                     {
-                        Solutions.RemoveAt(j);
+                        ArrayFunc.RemoveIndex(Solutions, j);
                         j--;
                         equalCount++;
                     }
@@ -368,7 +369,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                         pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "{0}\\ne{1}" + WorkMgr.EDM, "Plugging " + WorkMgr.STM + varSolStr + WorkMgr.EDM +
                             " back into the original equation gives the above. The equation doesn't hold true under this solution therefore " + WorkMgr.STM +
                             varSolStr + WorkMgr.EDM + " is an extraneous solution.", leftEx, rightEx);
-                        Solutions.RemoveAt(i--);
+                        ArrayFunc.RemoveIndex(Solutions, i--);
                     }
                 }
             }
@@ -389,13 +390,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                     if (genSol != null)
                     {
                         if (Number.IsUndef(genSol))
-                            Solutions.RemoveAt(i--);
+                            ArrayFunc.RemoveIndex(Solutions, i--);
                     }
                 }
                 else
                 {
                     if (Number.IsUndef(result))
-                        Solutions.RemoveAt(i--);
+                        ArrayFunc.RemoveIndex(Solutions, i--);
                 }
             }
 

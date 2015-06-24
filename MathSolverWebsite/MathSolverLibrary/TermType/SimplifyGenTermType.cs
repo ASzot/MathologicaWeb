@@ -6,6 +6,7 @@ using MathSolverWebsite.MathSolverLibrary.Parsing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MathSolverWebsite.MathSolverLibrary.LangCompat;
 
 namespace MathSolverWebsite.MathSolverLibrary.TermType
 {
@@ -59,10 +60,10 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             for (int i = 0; i < solveVarKeys.Count; ++i)
             {
                 if (solveVarKeys[i] == null)
-                    solveVarKeys.RemoveAt(i--);
+                    ArrayFunc.RemoveIndex(solveVarKeys, i--);
                 else if (solveVarKeys[i] == probSolveVar)
                 {
-                    solveVarKeys.RemoveAt(i);
+                    ArrayFunc.RemoveIndex(solveVarKeys, i);
                     break;
                 }
             }
