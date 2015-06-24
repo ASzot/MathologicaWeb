@@ -1,6 +1,7 @@
 ﻿using MathSolverWebsite.MathSolverLibrary.Equation.Term;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using MathSolverWebsite.MathSolverLibrary.TermType;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation
 {
@@ -112,14 +113,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return "w_" + (dimen + 1).ToString();
         }
 
-        /// <summary>
-        ///
-        /// </summary>
+        ///  <summary>
+        /// 
+        ///  </summary>
         /// <param name="iden">The identifier of the function.</param>
         /// <param name="args">The definition of the arguments. Null is not acceptable.</param>
         /// <param name="callArgs">What the user is inputting. These are not defined. Null is acceptable.</param>
         /// <param name="funcNotation">True means the function will output like y(x). False means the function will output just y.</param>
-        public FunctionDefinition(AlgebraComp iden, AlgebraComp[] args, ExComp[] callArgs, bool funcNotation = true)
+        public FunctionDefinition(AlgebraComp iden, AlgebraComp[] args, ExComp[] callArgs, bool funcNotation)
         {
             _iden = iden;
             _args = args;
@@ -127,7 +128,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             _funcNotation = funcNotation;
         }
 
-        public ExComp CallFunc(KeyValuePair<FunctionDefinition, ExComp> def, ref TermType.EvalData pEvalData, bool callSubFuncs = true)
+        public ExComp CallFunc(KeyValuePair<FunctionDefinition, ExComp> def, ref EvalData pEvalData, bool callSubFuncs)
         {
             if (def.Value == null)
             {
@@ -185,7 +186,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         public ExComp CallFunc(ref TermType.EvalData pEvalData)
         {
             KeyValuePair<FunctionDefinition, ExComp> def = pEvalData.GetFuncDefs().GetDefinition(this);
-            return CallFunc(def, ref pEvalData);
+            return CallFunc(def, ref pEvalData, true);
         }
 
         public override ExComp CloneEx()

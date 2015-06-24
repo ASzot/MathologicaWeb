@@ -577,6 +577,8 @@
     <Compile Include="MathSolverLibrary\Information Helpers\FuncDefHelper.cs" />
     <Compile Include="MathSolverLibrary\Information Helpers\UnitCircle.cs" />
     <Compile Include="MathSolverLibrary\Information Helpers\WorkMgr.cs" />
+    <Compile Include="MathSolverLibrary\LangCompat\ArrayFunc.cs" />
+    <Compile Include="MathSolverLibrary\LangCompat\DoubleFunc.cs" />
     <Compile Include="MathSolverLibrary\MathHelper.cs" />
     <Compile Include="MathSolverLibrary\MathSolver.cs" />
     <Compile Include="MathSolverLibrary\Parsing\LexemeType.cs" />
@@ -603,20 +605,20 @@
     <Compile Include="MathSolverLibrary\Solving\SubstitutionSolve.cs" />
     <Compile Include="MathSolverLibrary\Solving\SystemOfEquationsSolve.cs" />
     <Compile Include="MathSolverLibrary\Solving\TrigSolve.cs" />
-    <Compile Include="MathSolverLibrary\TermType\Multi Line\DiffEqTermType.cs" />
-    <Compile Include="MathSolverLibrary\TermType\EqualityCheckTermType.cs" />
-    <Compile Include="MathSolverLibrary\TermType\Multi Line\EquationSystemTermType.cs" />
+    <Compile Include="MathSolverLibrary\TermType\Multi Line\DiffEqGenTermType.cs" />
+    <Compile Include="MathSolverLibrary\TermType\EqualityCheckGenTermType.cs" />
+    <Compile Include="MathSolverLibrary\TermType\Multi Line\EquationSystemGenTermType.cs" />
     <Compile Include="MathSolverLibrary\TermType\EvalData.cs" />
     <Compile Include="MathSolverLibrary\TermType\FunctionType.cs" />
     <Compile Include="MathSolverLibrary\TermType\InputType.cs" />
     <Compile Include="MathSolverLibrary\TermType\LinearAlgebraSolve.cs" />
-    <Compile Include="MathSolverLibrary\TermType\LogTermType.cs" />
+    <Compile Include="MathSolverLibrary\TermType\LogGenTermType.cs" />
     <Compile Include="MathSolverLibrary\TermType\Multi Line\MultiLineHelper.cs" />
-    <Compile Include="MathSolverLibrary\TermType\QuadraticTermType.cs" />
-    <Compile Include="MathSolverLibrary\TermType\SimplifyTermType.cs" />
-    <Compile Include="MathSolverLibrary\TermType\SinusodalTermType.cs" />
-    <Compile Include="MathSolverLibrary\TermType\SolveTermType.cs" />
-    <Compile Include="MathSolverLibrary\TermType\TermType.cs" />
+    <Compile Include="MathSolverLibrary\TermType\QuadraticGenTermType.cs" />
+    <Compile Include="MathSolverLibrary\TermType\SimplifyGenTermType.cs" />
+    <Compile Include="MathSolverLibrary\TermType\SinusodalGenTermType.cs" />
+    <Compile Include="MathSolverLibrary\TermType\SolveGenTermType.cs" />
+    <Compile Include="MathSolverLibrary\TermType\GenTermType.cs" />
     <Compile Include="multiline.aspx.cs">
       <DependentUpon>multiline.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

@@ -144,7 +144,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                     return new NoSolutions();
             }
 
-            left = left.RemoveRedundancies().ToAlgTerm();
+            left = left.RemoveRedundancies(false).ToAlgTerm();
 
             List<ExComp> powersOfVar = left.GetPowersOfVar(solveForComp);
 
@@ -157,11 +157,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             List<ExComp[]> linearGroups = left.GetGroupContainingTerm(solveForComp);
             List<AlgebraGroup> constantGroup = left.GetGroupsConstantTo(solveForComp);
 
-            IEnumerable<AlgebraTerm> aTerms = from squaredGroup in squaredGroups
-                         select GroupHelper.ToAlgTerm(GroupHelper.GetUnrelatableTermsOfGroup(squaredGroup, solveForComp));
+            AlgebraTerm[] aTerms = new AlgebraTerm[squaredGroups.Count];
+            for (int i = 0; i < squaredGroups.Count; ++i)
+                aTerms[i] = GroupHelper.ToAlgTerm(GroupHelper.GetUnrelatableTermsOfGroup(squaredGroups[i], solveForComp));
 
-            IEnumerable<AlgebraTerm> bTerms = from linearGroup in linearGroups
-                         select GroupHelper.ToAlgTerm(GroupHelper.GetUnrelatableTermsOfGroup(linearGroup, solveForComp));
+            AlgebraTerm[] bTerms = new AlgebraTerm[linearGroups.Count];
+            for (int i = 0; i < linearGroups.Count; ++i)
+                bTerms[i] = GroupHelper.ToAlgTerm(GroupHelper.GetUnrelatableTermsOfGroup(linearGroups[i], solveForComp));
 
             AlgebraTerm a = new AlgebraTerm();
             foreach (AlgebraTerm aTerm in aTerms)
@@ -215,9 +217,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 }
             }
 
-            ExComp exA = a.RemoveRedundancies();
-            ExComp exB = b.RemoveRedundancies();
-            ExComp exC = c.RemoveRedundancies();
+            ExComp exA = a.RemoveRedundancies(false);
+            ExComp exB = b.RemoveRedundancies(false);
+            ExComp exC = c.RemoveRedundancies(false);
 
             QuadraticSolveMethod originalSolveMethod = pEvalData.GetQuadSolveMethod();
             if (pEvalData.GetQuadSolveMethod() == QuadraticSolveMethod.Factor)

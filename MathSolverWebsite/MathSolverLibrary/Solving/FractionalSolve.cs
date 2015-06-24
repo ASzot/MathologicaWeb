@@ -129,7 +129,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 right = AlgebraTerm.OpSub(right, left);
                 left = new AlgebraTerm();
 
-                right = right.RemoveRedundancies().ToAlgTerm();
+                right = right.RemoveRedundancies(false).ToAlgTerm();
 
                 // Only have the variable fractions on the left side.
                 // Move the variable fractions from the right side to the left side.
@@ -162,7 +162,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 for (int i = 0; i < leftDen.Length; ++i)
                 {
                     if (leftDen[i] is AlgebraTerm)
-                        leftDen[i] = AdvAlgebraTerm.FactorizeTerm((leftDen[i] as AlgebraTerm), ref pEvalData);
+                        leftDen[i] = AdvAlgebraTerm.FactorizeTerm((leftDen[i] as AlgebraTerm), ref pEvalData, false);
                 }
             }
 
@@ -171,7 +171,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 for (int i = 0; i < rightDen.Length; ++i)
                 {
                     if (rightDen[i] is AlgebraTerm)
-                        rightDen[i] = AdvAlgebraTerm.FactorizeTerm((rightDen[i] as AlgebraTerm), ref pEvalData);
+                        rightDen[i] = AdvAlgebraTerm.FactorizeTerm((rightDen[i] as AlgebraTerm), ref pEvalData, false);
                 }
             }
 
@@ -264,14 +264,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             AlgebraTerm finalLeftTerm = new AlgebraTerm();
             foreach (ExComp leftTerm in leftTerms)
             {
-                ExComp[] leftTermGroup = { leftTerm };
+                ExComp[] leftTermGroup = new ExComp[] { leftTerm };
                 finalLeftTerm.AddGroup(leftTermGroup);
             }
 
             AlgebraTerm finalRightTerm = new AlgebraTerm();
             foreach (ExComp rightTerm in rightTerms)
             {
-                ExComp[] rightTermGroup = { rightTerm };
+                ExComp[] rightTermGroup = new ExComp[] { rightTerm };
                 finalRightTerm.AddGroup(rightTermGroup);
             }
 

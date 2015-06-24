@@ -190,8 +190,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
             pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + integralStr + "(" + innerStr + ")(" + surfaceDiffStr + ")d" + withRespect0Str + "d" + withRespect1Str + WorkMgr.EDM);
             ExComp innerEx = MulOp.StaticCombine(innerTerm, crossedVecLength);
 
-            Integral firstIntegral = Integral.ConstructIntegral(innerEx, withRespect0, respect0Rest.GetLower(), respect0Rest.GetUpper());
-            Integral secondIntegral = Integral.ConstructIntegral(firstIntegral, withRespect1, respect1Rest.GetLower(), respect1Rest.GetUpper());
+            Integral firstIntegral = Integral.ConstructIntegral(innerEx, withRespect0, respect0Rest.GetLower(), respect0Rest.GetUpper(), false, true);
+            Integral secondIntegral = Integral.ConstructIntegral(firstIntegral, withRespect1, respect1Rest.GetLower(), respect1Rest.GetUpper(), false, true);
 
             pEvalData.GetWorkMgr().FromFormatted("", "Use the surface domain to convert to a definite integral.");
             lastStep = pEvalData.GetWorkMgr().GetLast();

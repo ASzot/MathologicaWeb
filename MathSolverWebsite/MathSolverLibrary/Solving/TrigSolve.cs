@@ -5,6 +5,7 @@ using MathSolverWebsite.MathSolverLibrary.Equation.Term;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MathSolverWebsite.MathSolverLibrary.LangCompat;
 
 namespace MathSolverWebsite.MathSolverLibrary.Solving
 {
@@ -92,11 +93,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 return multiGroupSolveResult;
             }
 
-            DivideByVariableCoeffs(ref left, ref right, solveForComp, ref pEvalData);
+            DivideByVariableCoeffs(ref left, ref right, solveForComp, ref pEvalData, false);
 
-            ExComp leftEx = left.RemoveRedundancies();
+            ExComp leftEx = left.RemoveRedundancies(false);
             if (leftEx is AlgebraTerm)
-                leftEx = (leftEx as AlgebraTerm).RemoveRedundancies();
+                leftEx = (leftEx as AlgebraTerm).RemoveRedundancies(false);
             if (!(leftEx is TrigFunction))
             {
                 if (leftEx is InverseTrigFunction)
@@ -150,7 +151,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
             left = appliedTrigFunc.GetInnerTerm();
 
-            AlgebraTermArray rightArray = new AlgebraTermArray(rights.ToList());
+            AlgebraTermArray rightArray = new AlgebraTermArray(ArrayFunc.ToList(rights));
             bool allSols;
             AlgebraTermArray solvedArray = rightArray.SimulSolve(left, solveFor, p_agSolver, ref pEvalData, out allSols);
             if (allSols)
@@ -187,7 +188,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 {
                     pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "\\text{Undefined}" + WorkMgr.EDM, WorkMgr.STM + "arcsin" + WorkMgr.EDM + " is undefined at " + WorkMgr.STM + "{0}" + WorkMgr.EDM, inverseOf);
 
-                    ExComp[] singularSol = { evaluated };
+                    ExComp[] singularSol = new ExComp[] { evaluated };
                     return singularSol;
                 }
 
@@ -204,7 +205,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 {
                     pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "\\text{Undefined}" + WorkMgr.EDM, WorkMgr.STM + "arccos" + WorkMgr.EDM + " is undefined at " + WorkMgr.STM + "{0}" + WorkMgr.EDM, inverseOf);
 
-                    ExComp[] singularSol = { evaluated };
+                    ExComp[] singularSol = new ExComp[] { evaluated };
                     return singularSol;
                 }
 
@@ -217,7 +218,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 inverseTrigFunc = new ATanFunction(inverseOf);
                 evaluated = inverseTrigFunc.Evaluate(false, ref pEvalData);
 
-                ExComp[] singularSol = { evaluated };
+                ExComp[] singularSol = new ExComp[] { evaluated };
                 return singularSol;
             }
             else if (appliedTrigFunc is CscFunction)
@@ -229,7 +230,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 {
                     pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "\\text{Undefined}" + WorkMgr.EDM, WorkMgr.STM + "arccsc" + WorkMgr.EDM + " is undefined at " + WorkMgr.STM + "{0}" + WorkMgr.EDM, inverseOf);
 
-                    ExComp[] singularSol = { evaluated };
+                    ExComp[] singularSol = new ExComp[] { evaluated };
                     return singularSol;
                 }
 
@@ -246,7 +247,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 {
                     pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "\\text{Undefined}" + WorkMgr.EDM, WorkMgr.STM + "arcsec" + WorkMgr.EDM + " is undefined at " + WorkMgr.STM + "{0}" + WorkMgr.EDM, inverseOf);
 
-                    ExComp[] singularSol = { evaluated };
+                    ExComp[] singularSol = new ExComp[] { evaluated };
                     return singularSol;
                 }
 
@@ -259,7 +260,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 inverseTrigFunc = new ACotFunction(inverseOf);
                 evaluated = inverseTrigFunc.Evaluate(false, ref pEvalData);
 
-                ExComp[] singularSol = { evaluated };
+                ExComp[] singularSol = new ExComp[] { evaluated };
                 return singularSol;
             }
             else
@@ -271,7 +272,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             if (pEvalData.GetUseRad() && simpFrac.Init(otherAngle.ToAlgTerm()))
             {
                 Number nNum, nDen;
-                if (simpFrac.IsSimpleUnitCircleAngle(out nNum, out nDen))
+                if (simpFrac.IsSimpleUnitCircleAngle(out nNum, out nDen, true))
                 {
                     ExComp numEx = MulOp.StaticCombine(nNum, Constant.GetPi());
                     otherAngle = AlgebraTerm.FromFraction(numEx, nDen);
@@ -279,13 +280,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             }
 
             if (otherAngle is AlgebraTerm)
-                otherAngle = (otherAngle as AlgebraTerm).RemoveRedundancies();
+                otherAngle = (otherAngle as AlgebraTerm).RemoveRedundancies(false);
             if (evaluated is AlgebraTerm)
-                evaluated = (evaluated as AlgebraTerm).RemoveRedundancies();
+                evaluated = (evaluated as AlgebraTerm).RemoveRedundancies(false);
 
             if (otherAngle.IsEqualTo(evaluated) || TrigFunction.GetFullRot(pEvalData.GetUseRad()).IsEqualTo(otherAngle))
             {
-                ExComp[] singularSol = { evaluated };
+                ExComp[] singularSol = new ExComp[] { evaluated };
 
                 pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "{0}={1}" + WorkMgr.EDM, "The " + appliedTrigFunc.GetFuncName() + " function is equal to the value " + WorkMgr.STM + "{2}" + WorkMgr.EDM +
                     " at the angles " + WorkMgr.STM + "{1}" + WorkMgr.EDM, appliedTrigFunc.GetInnerEx(),
@@ -301,7 +302,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 " function is equal to the value " + WorkMgr.STM + "{3}" + WorkMgr.EDM + " at the angles " + WorkMgr.STM + "{1}" + WorkMgr.EDM + " and " + WorkMgr.STM + "{2}" + WorkMgr.EDM, appliedTrigFunc,
                 evaluated, otherAngle, inverseOf);
 
-            ExComp[] sols = { sol0, sol1 };
+            ExComp[] sols = new ExComp[] { sol0, sol1 };
 
             return sols;
         }
@@ -366,19 +367,20 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 }
             }
 
-            overallTerm = overallTerm.RemoveRedundancies().ToAlgTerm();
+            overallTerm = overallTerm.RemoveRedundancies(false).ToAlgTerm();
             List<ExComp> trigFuncs = overallTerm.GetTrigFunctions();
 
             ///////////////////////////////////////////////////////
             // Try to divide to remove one of the trig functions.
             if (groups.Count == 2)
             {
-                IEnumerable<TypePair<int, ExComp>> complexities = from trigFunc in trigFuncs
-                                   select new TypePair<int, ExComp>((int)TrigFunction.GetTrigFuncComplexity(trigFunc), trigFunc);
+                TypePair<int, ExComp>[] complexitiesArr = (TypePair<int, ExComp>[]) (new object[trigFuncs.Count]);
+                for (int i = 0; i < trigFuncs.Count; ++i)
+                    complexitiesArr[i] = new TypePair<int, ExComp>(TrigFunction.GetTrigFuncComplexity(trigFuncs[i]), trigFuncs[i]);
 
                 TrigFunction minTrigFunc = null;
                 int minVal = int.MaxValue;
-                foreach (TypePair<int, ExComp> complexity in complexities)
+                foreach (TypePair<int, ExComp> complexity in complexitiesArr)
                 {
                     if (complexity.GetData1() > 2)
                     {

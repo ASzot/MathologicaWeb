@@ -43,7 +43,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             ExComp trigSubbed = MulOp.StaticCombine(subbedResult, differential);
             trigSubbed = Simplifier.Simplify(trigSubbed.ToAlgTerm(), ref pEvalData);
             if (trigSubbed is AlgebraTerm)
-                trigSubbed = (trigSubbed as AlgebraTerm).RemoveRedundancies();
+                trigSubbed = (trigSubbed as AlgebraTerm).RemoveRedundancies(false);
 
             string trigSubbedStr = WorkMgr.ToDisp(trigSubbed);
 
@@ -77,13 +77,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             AlgebraTerm left = subVal.ToAlgTerm();
             AlgebraTerm right = dVar.ToAlgTerm();
             Solving.SolveMethod.ConstantsToRight(ref left, ref right, subVar, ref pEvalData);
-            Solving.SolveMethod.DivideByVariableCoeffs(ref left, ref right, subVar, ref pEvalData);
+            Solving.SolveMethod.DivideByVariableCoeffs(ref left, ref right, subVar, ref pEvalData, false);
 
             List<WorkStep> stepRange = pEvalData.GetWorkMgr().GetWorkSteps().GetRange(workStepStart, pEvalData.GetWorkMgr().GetWorkSteps().Count - workStepStart);
             pEvalData.GetWorkMgr().GetWorkSteps().RemoveRange(workStepStart, pEvalData.GetWorkMgr().GetWorkSteps().Count - workStepStart);
 
             // It should now just be the isolated trig function.
-            ExComp leftEx = left.RemoveRedundancies();
+            ExComp leftEx = left.RemoveRedundancies(false);
             if (!(leftEx is TrigFunction))
                 return null;
             TrigFunction trigFunc = leftEx as TrigFunction;
@@ -301,7 +301,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     int subSubbedIndex = -1;
                     for (int j = 0; j < subGps.Count; ++j)
                     {
-                        subSubbedResult = TrigSubstitutionGetSub(subGps[j], dVar, out subVar, out subOut, out subbedResult, ref pEvalData, GroupHelper.CloneGroup(@group),
+                        subSubbedResult = TrigSubstitutionGetSub(subGps[j], dVar, out subVar, out subOut, out subbedResult, ref pEvalData, GroupHelper.CloneGroup(group),
                             GroupHelper.CloneGpList(subGps), i, j);
                         if (subSubbedResult != null)
                         {
@@ -324,7 +324,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
                         (group[i] as AlgebraTerm).SetSubComps(summedTerm.ToAlgTerm().GetSubComps());
 
-                        subbedResult = GroupHelper.ToAlgTerm(@group);
+                        subbedResult = GroupHelper.ToAlgTerm(group);
                         return subSubbedResult;
                     }
                 }
@@ -342,10 +342,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 AlgebraTerm[] numDen = powTerm.GetNumDenFrac();
                 if (numDen == null)
                     continue;
-                if (!numDen[1].RemoveRedundancies().IsEqualTo(new Number(2.0)))
+                if (!numDen[1].RemoveRedundancies(false).IsEqualTo(new Number(2.0)))
                     continue;
 
-                if (!Number.GetOne().IsEqualTo(numDen[0].RemoveRedundancies()))
+                if (!Number.GetOne().IsEqualTo(numDen[0].RemoveRedundancies(false)))
                 {
                     PowerFunction nestedPf = new PowerFunction(new PowerFunction(powFunc.GetBase(), AlgebraTerm.FromFraction(Number.GetOne(), new Number(2.0))), numDen[0]);
 
@@ -355,7 +355,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     continue;
                 }
 
-                AlgebraTerm baseTerm = (@group[i] as PowerFunction).GetBase().ToAlgTerm();
+                AlgebraTerm baseTerm = (group[i] as PowerFunction).GetBase().ToAlgTerm();
 
                 // Is it x^2?
                 List<ExComp> basePows = baseTerm.GetPowersOfVar(dVar);
@@ -373,7 +373,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     continue;
 
                 AlgebraTerm bSqTerm = AlgebraGroup.GetConstantTo(varGroups, dVar);
-                ExComp bSq = bSqTerm.RemoveRedundancies();
+                ExComp bSq = bSqTerm.RemoveRedundancies(false);
 
                 // Find the a value.
                 List<AlgebraGroup> constGroups = baseTerm.GetGroupsConstantTo(dVar);
@@ -381,7 +381,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     continue;
 
                 AlgebraTerm aSqTerm = AlgebraGroup.ToTerm(constGroups);
-                ExComp aSq = aSqTerm.RemoveRedundancies();
+                ExComp aSq = aSqTerm.RemoveRedundancies(false);
 
                 Number aCoeff = null;
                 if (bSq is Number)
@@ -439,15 +439,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 ExComp bVal = PowOp.StaticCombine(bSq, AlgebraTerm.FromFraction(Number.GetOne(), new Number(2.0)));
 
                 if (aVal is AlgebraTerm)
-                    aVal = (aVal as AlgebraTerm).RemoveRedundancies();
+                    aVal = (aVal as AlgebraTerm).RemoveRedundancies(false);
                 if (bVal is AlgebraTerm)
-                    bVal = (bVal as AlgebraTerm).RemoveRedundancies();
+                    bVal = (bVal as AlgebraTerm).RemoveRedundancies(false);
 
                 ExComp subIn = MulOp.StaticCombine(DivOp.StaticCombine(aVal, bVal), usedTrigFunc);
 
                 // Replace the value in the group itself.
                 ExComp baseTermSubbed = AddOp.StaticCombine(new AlgebraTerm(bSq, new MulOp(), PowOp.StaticWeakCombine(subIn, new Number(2.0))), aSq);
-                ExComp pfPow = (@group[i] as PowerFunction).GetPower();
+                ExComp pfPow = (group[i] as PowerFunction).GetPower();
 
                 group[i] = new PowerFunction(baseTermSubbed, pfPow);
                 SubstituteIn(ref dispGp, dispSubGps, group, index, subIndex);
@@ -508,7 +508,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
                 pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "\\int (" + WorkMgr.ToDisp(GroupHelper.ToAlgTerm(dispGp)) + ") d" + dVar.ToDispString() + WorkMgr.EDM);
 
-                subbedResult = GroupHelper.ToAlgTerm(@group);
+                subbedResult = GroupHelper.ToAlgTerm(group);
 
                 return subIn;
             }

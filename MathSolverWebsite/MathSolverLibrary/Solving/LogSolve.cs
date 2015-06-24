@@ -51,10 +51,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             System.Collections.Generic.List<ExComp[]> rightGroups = right.GetGroups();
             if (leftGroups.Count == 1 && rightGroups.Count == 1 && left.Contains(solveForComp) && right.Contains(solveForComp))
             {
-                left = AdvAlgebraTerm.ForceLogCoeffToPow(left);
-                right = AdvAlgebraTerm.ForceLogCoeffToPow(right);
-                ExComp log0Ex = left.RemoveRedundancies();
-                ExComp log1Ex = right.RemoveRedundancies();
+                left = AdvAlgebraTerm.ForceLogCoeffToPow(left, null);
+                right = AdvAlgebraTerm.ForceLogCoeffToPow(right, null);
+                ExComp log0Ex = left.RemoveRedundancies(false);
+                ExComp log1Ex = right.RemoveRedundancies(false);
 
                 if (log0Ex is LogFunction && log1Ex is LogFunction)
                 {
@@ -167,9 +167,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 pEvalData.AddFailureMsg("Couldn't combine variable logarithms to singular term.");
                 return null;
             }
-            DivideByVariableCoeffs(ref left, ref right, solveForComp, ref pEvalData);
+            DivideByVariableCoeffs(ref left, ref right, solveForComp, ref pEvalData, false);
 
-            ExComp leftEx = left.RemoveRedundancies();
+            ExComp leftEx = left.RemoveRedundancies(false);
             if (!(leftEx is LogFunction))
                 return null;
 

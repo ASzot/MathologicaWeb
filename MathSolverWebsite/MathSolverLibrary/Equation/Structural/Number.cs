@@ -3,6 +3,8 @@ using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MathSolverWebsite.MathSolverLibrary;
+using MathSolverWebsite.MathSolverLibrary.LangCompat;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation
 {
@@ -219,7 +221,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             // 8 - 4 -> 2^3 - 2^2
 
             int[] divisors = MathHelper.GetCommonDivisors(i1, i2, true);
-            List<int> sortedDivisors = divisors.ToList();
+            List<int> sortedDivisors = ArrayFunc.ToList(divisors);
             sortedDivisors.Sort();
 
             int minVal = -1;
@@ -397,7 +399,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             int n = (int)d_realComp;
 
             int[] divisors = MathHelper.GetDivisors(n);
-            List<int> sortedDivisors = divisors.ToList();
+            List<int> sortedDivisors = ArrayFunc.ToList(divisors);
             sortedDivisors.Sort();
 
             int minVal = -1;
@@ -561,14 +563,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return signInvariantDivisors;
         }
 
-        public override int GetHashCode()
-        {
-            //TODO:
-            // Make this an actual hash value!
-            int modifier = d_realComp < d_imagComp ? 0x45f : 0x5ab;
-            return modifier;
-        }
-
         public void GetPolarData(out ExComp mag, out ExComp angle, ref TermType.EvalData pEvalData)
         {
             mag = null;
@@ -600,7 +594,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
             Term.SimpleFraction simpFrac = new Term.SimpleFraction();
             Number num, den;
-            if (simpFrac.LooseInit(evaluated.ToAlgTerm()) && simpFrac.IsSimpleUnitCircleAngle(out num, out den))
+            if (simpFrac.LooseInit(evaluated.ToAlgTerm()) && simpFrac.IsSimpleUnitCircleAngle(out num, out den, true))
             {
                 // Adjusting might have to be done to the angle as atan has a range of [-pi/2, pi/2].
 
@@ -660,7 +654,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public bool IsInfinity()
         {
-            return Double.IsInfinity(d_realComp);
+            return DoubleFunc.IsInfinity(d_realComp);
         }
 
         public static Number OpSub(Number n1, Number n2)
@@ -1003,7 +997,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return d_realComp.ToString();
         }
 
-        public ExComp ToPolarForm(ref TermType.EvalData pEvalData)
+        public ExComp ToPolarForm(ref MathSolverLibrary.TermType.EvalData pEvalData)
         {
             ExComp mag, angle;
             GetPolarData(out mag, out angle, ref pEvalData);

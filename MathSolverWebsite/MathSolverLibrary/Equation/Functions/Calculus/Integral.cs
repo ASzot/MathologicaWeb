@@ -82,12 +82,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         public override ExComp CloneEx()
         {
-            return ConstructIntegral(GetInnerTerm(), _dVar, GetLowerLimit(), GetUpperLimit(), _isInnerIntegral);
+            return ConstructIntegral(GetInnerTerm(), _dVar, GetLowerLimit(), GetUpperLimit(), _isInnerIntegral, true);
         }
 
         public static Integral ConstructIntegral(ExComp innerEx, AlgebraComp dVar)
         {
-            return ConstructIntegral(innerEx, dVar, null, null);
+            return ConstructIntegral(innerEx, dVar, null, null, false, true);
         }
 
         private static Dictionary<string, Integral> GetIntegralDepths(Integral integral, ref Dictionary<string, Integral> dict, out ExComp baseValue)
@@ -156,7 +156,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             return overallIntegral;
         }
 
-        public static Integral ConstructIntegral(ExComp innerEx, AlgebraComp dVar, ExComp lower, ExComp upper, bool isInner = false, bool rearrange = true)
+        public static Integral ConstructIntegral(ExComp innerEx, AlgebraComp dVar, ExComp lower, ExComp upper, bool isInner, bool rearrange)
         {
             Integral integral = new Integral(innerEx);
             integral._dVar = dVar;
@@ -204,7 +204,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             AlgebraTerm lowerLim = GetLowerLimit() == null ? null : GetLowerLimitTerm().Substitute(subOut, subIn);
             AlgebraTerm innerTerm = GetInnerTerm().Substitute(subOut, subIn);
 
-            return ConstructIntegral(innerTerm, _dVar, lowerLim, upperLim, _isInnerIntegral);
+            return ConstructIntegral(innerTerm, _dVar, lowerLim, upperLim, _isInnerIntegral, true);
         }
 
         public override ExComp Evaluate(bool harshEval, ref TermType.EvalData pEvalData)
@@ -214,7 +214,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             AlgebraTerm innerTerm = GetInnerTerm();
             ExComp innerEx = Simplifier.Simplify(innerTerm, ref pEvalData);
             if (innerEx is AlgebraTerm)
-                innerEx = (innerEx as AlgebraTerm).RemoveRedundancies();
+                innerEx = (innerEx as AlgebraTerm).RemoveRedundancies(false);
 
             if (Number.IsUndef(innerEx))
                 return Number.GetUndefined();
@@ -260,8 +260,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             {
                 // Evaluating from infinity in both directions.
                 // Split the integral up.
-                Integral upperInt = Integral.ConstructIntegral(GetInnerTerm(), _dVar, Number.GetZero(), Number.GetPosInfinity());
-                Integral lowerInt = Integral.ConstructIntegral(GetInnerTerm(), _dVar, Number.GetNegInfinity(), Number.GetZero());
+                Integral upperInt = Integral.ConstructIntegral(GetInnerTerm(), _dVar, Number.GetZero(), Number.GetPosInfinity(), false, true);
+                Integral lowerInt = Integral.ConstructIntegral(GetInnerTerm(), _dVar, Number.GetNegInfinity(), Number.GetZero(), false, true);
                 pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + integralStr + "=" + upperInt.FinalToDispStr() + "+" +
                     lowerInt.FinalToDispStr() + WorkMgr.EDM,
                     "Split the integral.");
@@ -296,7 +296,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (_failure)
                 return indefinite;      // Just 'this'
 
-            ExComp indefiniteEx = indefinite.RemoveRedundancies();
+            ExComp indefiniteEx = indefinite.RemoveRedundancies(false);
 
             if (GetLowerLimit() == null || GetUpperLimit() == null)
             {
@@ -354,7 +354,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (result is AlgebraTerm)
                 result = (result as AlgebraTerm).CompoundFractions();
 
-            result = TermType.SimplifyTermType.BasicSimplify(result, ref pEvalData);
+            result = TermType.SimplifyGenTermType.BasicSimplify(result, ref pEvalData, true);
 
             if (subVar != null)
             {
@@ -459,7 +459,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         protected override AlgebraTerm CreateInstance(params ExComp[] args)
         {
-            return ConstructIntegral(args[0], this._dVar, GetLowerLimit(), GetUpperLimit());
+            return ConstructIntegral(args[0], this._dVar, GetLowerLimit(), GetUpperLimit(), false, true);
         }
 
         public override string FinalToAsciiString()

@@ -47,7 +47,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
             foreach (ExComp[] group in groups)
             {
-                if (GroupHelper.ContainsFrac(@group))
+                if (GroupHelper.ContainsFrac(group))
                     return true;
             }
 
@@ -60,7 +60,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
             foreach (ExComp[] group in groups)
             {
-                if (!GroupHelper.ContainsFrac(@group))
+                if (!GroupHelper.ContainsFrac(group))
                     return false;
             }
 
@@ -70,10 +70,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         public int GetAppliedFuncCount(AlgebraComp varFor, FunctionType type)
         {
             List<FunctionType> appliedFuncs = GetAppliedFunctionsNoPow(varFor);
-            IEnumerable<FunctionType> appliedFunc = from af in appliedFuncs
-                                                    where af == type
-                                                    select af;
-            return appliedFunc.Count();
+            int count = 0;
+            for (int i = 0; i < appliedFuncs.Count; ++i)
+            {
+                if (appliedFuncs[i] == type)
+                    count++;
+            }
+
+            return count;
         }
 
         public virtual List<FunctionType> GetAppliedFunctionsNoPow(AlgebraComp varFor)
@@ -150,12 +154,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             }
 
             List<ExComp[]> groups = GetGroupsNoOps();
-            IEnumerable<ExComp[]> unrelatedGroups = from gp in groups
-                                                    where GroupHelper.ToAlgTerm(gp).Contains(varFor)
-                                                    select GroupHelper.GetUnrelatableTermsOfGroup(gp, varFor);
+
+            ExComp[][] unrelatedGroupsArr = new ExComp[groups.Count][];
+            for (int i = 0; i < groups.Count; ++i)
+            {
+                if (GroupHelper.ToAlgTerm(groups[i]).Contains(varFor))
+                    unrelatedGroupsArr[i] = GroupHelper.GetUnrelatableTermsOfGroup(groups[i], varFor);
+            }
 
             // Combine all of the unrelated terms.
-            AlgebraTerm unrelatedTerm = new AlgebraTerm(unrelatedGroups.ToArray());
+            AlgebraTerm unrelatedTerm = new AlgebraTerm(unrelatedGroupsArr);
             if (unrelatedTerm.GetGroupCount() > 1)
             {
                 unrelatedTerm = unrelatedTerm.ApplyOrderOfOperations();
@@ -168,9 +176,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         public virtual List<Number> GetCoeffs()
         {
             List<ExComp[]> groups = GetGroups();
-            IEnumerable<Number> coeffs = from gp in groups
-                         select GetCoeffTerm(gp);
-            return coeffs.ToList();
+
+            List<Number> coeffsList = new List<Number>();
+            for (int i = 0; i < groups.Count; ++i)
+                coeffsList.Add(GetCoeffTerm(groups[i]));
+
+            return coeffsList;
         }
 
         public int GetComplexityOfVar(AlgebraComp varFor)
@@ -483,9 +494,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
             foreach (ExComp[] group in groups)
             {
-                if (GroupHelper.ContainsFrac(@group))
+                if (GroupHelper.ContainsFrac(group))
                 {
-                    AlgebraTerm denTerm = GroupHelper.ToAlgTerm(GroupHelper.GetDenominator(@group));
+                    AlgebraTerm denTerm = GroupHelper.ToAlgTerm(GroupHelper.GetDenominator(group, false));
 
                     if (denTerm.Contains(varFor))
                         return true;

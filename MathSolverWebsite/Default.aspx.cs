@@ -292,7 +292,7 @@ namespace MathSolverWebsite
 
         private bool UpdateUI(string inputStr, int selectIndex = 0)
         {
-            TermType termEval = null;
+            GenTermType genTermEval = null;
             bool inputSizeExceeded = inputStr.Length > MAX_INPUT_LEN;
 
             List<string> parseErrors = new List<string>();
@@ -303,15 +303,15 @@ namespace MathSolverWebsite
 
                 EvalData evalData = new EvalData(UseRad, new WorkMgr(), FuncDefHelper);
 
-                termEval = MathSolver.ParseInput(inputStr, ref evalData, ref parseErrors);
+                genTermEval = MathSolver.ParseInput(inputStr, ref evalData, ref parseErrors);
             }
 
             evalDropDownList.Items.Clear();
 
             // Display the commands for the parsed input.
-            if (termEval != null && termEval.GetCommands() != null)
+            if (genTermEval != null && genTermEval.GetCommands() != null)
             {
-                string[] cmds = termEval.GetCommands();
+                string[] cmds = genTermEval.GetCommands();
 
                 parseErrorSpan.InnerHtml = "";
                 for (int i = 0; i < cmds.Length; ++i)
@@ -323,7 +323,7 @@ namespace MathSolverWebsite
             }
             else  // Display the appropriate error message.
             {
-                termEval = null;
+                genTermEval = null;
                 string parseErrorsTxt = "";
                 for (int i = 0; i < parseErrors.Count; ++i)
                 {

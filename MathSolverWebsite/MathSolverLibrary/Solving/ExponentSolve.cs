@@ -60,9 +60,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 }
 
                 if (leftEx is AlgebraTerm)
-                    leftEx = (leftEx as AlgebraTerm).RemoveRedundancies();
+                    leftEx = (leftEx as AlgebraTerm).RemoveRedundancies(false);
                 if (rightEx is AlgebraTerm)
-                    rightEx = (rightEx as AlgebraTerm).RemoveRedundancies();
+                    rightEx = (rightEx as AlgebraTerm).RemoveRedundancies(false);
 
                 if (leftEx is PowerFunction && rightEx is PowerFunction)
                 {
@@ -98,15 +98,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                     ExComp[] gpConst0 = GroupHelper.GetUnrelatableTermsOfGroup(gp0, solveForComp);
                     ExComp[] gpConst1 = GroupHelper.GetUnrelatableTermsOfGroup(gp1, solveForComp);
 
-                    ExComp exConst0 = GroupHelper.ToAlgTerm(gpConst0).RemoveRedundancies();
-                    ExComp exConst1 = GroupHelper.ToAlgTerm(gpConst1).RemoveRedundancies();
+                    ExComp exConst0 = GroupHelper.ToAlgTerm(gpConst0).RemoveRedundancies(false);
+                    ExComp exConst1 = GroupHelper.ToAlgTerm(gpConst1).RemoveRedundancies(false);
 
                     ExComp negExConst0 = MulOp.Negate(exConst0);
 
                     if (negExConst0.IsEqualTo(exConst1))
                     {
-                        ExComp exVar0 = GroupHelper.ToAlgTerm(GroupHelper.RemoveExTerms(gp0, gpConst0)).RemoveRedundancies();
-                        ExComp exVar1 = GroupHelper.ToAlgTerm(GroupHelper.RemoveExTerms(gp1, gpConst1)).RemoveRedundancies();
+                        ExComp exVar0 = GroupHelper.ToAlgTerm(GroupHelper.RemoveExTerms(gp0, gpConst0)).RemoveRedundancies(false);
+                        ExComp exVar1 = GroupHelper.ToAlgTerm(GroupHelper.RemoveExTerms(gp1, gpConst1)).RemoveRedundancies(false);
 
                         if (exVar0 is PowerFunction && exVar1 is PowerFunction)
                         {
@@ -124,16 +124,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 pEvalData.AddFailureMsg("Too many exponents are present");
                 return null;
             }
-            DivideByVariableCoeffs(ref left, ref right, solveForComp, ref pEvalData);
+            DivideByVariableCoeffs(ref left, ref right, solveForComp, ref pEvalData, false);
 
             // We should now have an isolated exponent term. (base)^(term containing our solve variable).
-            leftEx = left.RemoveRedundancies();
+            leftEx = left.RemoveRedundancies(false);
             if (!(leftEx is PowerFunction))
                 return null;
 
             PowerFunction powFunc = leftEx as PowerFunction;
 
-            rightEx = right.RemoveRedundancies();
+            rightEx = right.RemoveRedundancies(false);
             if (powFunc.GetBase() is Number && rightEx is Number)
             {
                 // We might be able to find a common base.

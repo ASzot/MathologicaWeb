@@ -3,13 +3,13 @@ using MathSolverWebsite.MathSolverLibrary.Parsing;
 
 namespace MathSolverWebsite.MathSolverLibrary.TermType
 {
-    internal class EqualityCheckTermType : TermType
+    internal class EqualityCheckGenTermType : GenTermType
     {
         private LexemeType _comparison;
         private ExComp _side0;
         private ExComp _side1;
 
-        public EqualityCheckTermType(ExComp side0, ExComp side1, LexemeType comparison)
+        public EqualityCheckGenTermType(ExComp side0, ExComp side1, LexemeType comparison)
             : base("Verify")
         {
             _side0 = side0;
@@ -82,7 +82,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                     side = (side as AlgebraTerm).CompoundFractions();
                 side = Equation.Functions.PowerFunction.FixFraction(side);
                 if (side is AlgebraTerm)
-                    side = (side as AlgebraTerm).RemoveRedundancies();
+                    side = (side as AlgebraTerm).RemoveRedundancies(false);
             }
 
             agTerm = side.ToAlgTerm();
@@ -91,7 +91,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             ExComp simpEx = Simplifier.Simplify(surroundedAgTerm, ref pEvalData);
 
             if (simpEx is AlgebraTerm)
-                simpEx = (simpEx as AlgebraTerm).RemoveRedundancies();
+                simpEx = (simpEx as AlgebraTerm).RemoveRedundancies(false);
 
             return simpEx;
         }

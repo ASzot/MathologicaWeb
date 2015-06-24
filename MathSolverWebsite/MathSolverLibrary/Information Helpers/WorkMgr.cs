@@ -259,7 +259,7 @@ namespace MathSolverWebsite.MathSolverLibrary
                 finalFormatted += ToDisp(sides[i + 1]);
             }
 
-            _workSteps.Add(new WorkStep(finalFormatted + GetWorkLabel(), desc));
+            _workSteps.Add(new WorkStep(finalFormatted + GetWorkLabel(), desc, false));
         }
 
         /// <summary>
@@ -370,7 +370,7 @@ namespace MathSolverWebsite.MathSolverLibrary
             return _subWorkSteps;
         }
 
-        public WorkStep(string work, string workDesc, bool correctOutput = false)
+        public WorkStep(string work, string workDesc, bool correctOutput)
         {
             _work = work;
             _workDesc = workDesc;
@@ -500,7 +500,7 @@ namespace MathSolverWebsite.MathSolverLibrary
                 workDesc = workDesc.Replace("-" + WorkMgr.EDM + "<span class='changeText'>" + WorkMgr.STM + "-", WorkMgr.EDM + "<span class='changeText'>" + WorkMgr.STM + "+");
             }
 
-            return new WorkStep(work, workDesc);
+            return new WorkStep(work, workDesc, false);
         }
     }
 }

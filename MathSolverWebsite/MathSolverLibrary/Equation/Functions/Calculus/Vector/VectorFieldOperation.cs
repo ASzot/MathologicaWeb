@@ -23,7 +23,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
                 {
                     innerEx = def.Value;
                     if (innerEx is AlgebraTerm)
-                        innerEx = (innerEx as AlgebraTerm).RemoveRedundancies();
+                        innerEx = (innerEx as AlgebraTerm).RemoveRedundancies(false);
                 }
             }
 

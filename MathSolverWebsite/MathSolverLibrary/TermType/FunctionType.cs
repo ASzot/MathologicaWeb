@@ -5,13 +5,13 @@ using System.Linq;
 
 namespace MathSolverWebsite.MathSolverLibrary.TermType
 {
-    internal class FunctionTermType : TermType
+    internal class FunctionGenTermType : GenTermType
     {
         private AlgebraSolver _agSolver;
         private ExComp _assignTo;
         private FunctionDefinition _func;
 
-        public FunctionTermType()
+        public FunctionGenTermType()
             : base()
         {
         }

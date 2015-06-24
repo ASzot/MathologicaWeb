@@ -97,7 +97,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 Solution solToAdd = new Solution(result);
                 if (result is AlgebraTerm)
                 {
-                    ExComp harshEval = Simplifier.HarshSimplify(result.CloneEx() as AlgebraTerm, ref pEvalData);
+                    ExComp harshEval = Simplifier.HarshSimplify(result.CloneEx() as AlgebraTerm, ref pEvalData, true);
                     if (!harshEval.IsEqualTo(result))
                         solToAdd.ApproximateResult = harshEval;
                 }
@@ -305,10 +305,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                     if (comp0 == null)
                         continue;
                     if (comp0 is AlgebraTerm)
-                        comp0 = (comp0 as AlgebraTerm).RemoveRedundancies();
+                        comp0 = (comp0 as AlgebraTerm).RemoveRedundancies(false);
                     ExComp comp1 = compareSol.Result;
                     if (comp1 is AlgebraTerm)
-                        comp1 = (comp1 as AlgebraTerm).RemoveRedundancies();
+                        comp1 = (comp1 as AlgebraTerm).RemoveRedundancies(false);
 
                     if (comp0.IsEqualTo(comp1))
                     {
@@ -350,8 +350,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                     AlgebraTerm leftSubbed = left.CloneEx().ToAlgTerm().Substitute(Solutions[i].SolveFor, solution);
                     AlgebraTerm rightSubbed = right.CloneEx().ToAlgTerm().Substitute(Solutions[i].SolveFor, solution);
 
-                    ExComp leftEx = TermType.SimplifyTermType.BasicSimplify(leftSubbed, ref pEvalData);
-                    ExComp rightEx = TermType.SimplifyTermType.BasicSimplify(rightSubbed, ref pEvalData);
+                    ExComp leftEx = TermType.SimplifyGenTermType.BasicSimplify(leftSubbed, ref pEvalData, true);
+                    ExComp rightEx = TermType.SimplifyGenTermType.BasicSimplify(rightSubbed, ref pEvalData, true);
 
                     leftEx = Simplifier.HarshSimplify(leftEx.ToAlgTerm(), ref pEvalData, false);
                     rightEx = Simplifier.HarshSimplify(rightEx.ToAlgTerm(), ref pEvalData, false);
@@ -361,7 +361,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                     if (rightEx is Number)
                         (rightEx as Number).Round(Number.FINAL_ROUND_COUNT);
 
-                    if (!TermType.EqualityCheckTermType.EvalComparison(leftEx, rightEx, comparison))
+                    if (!TermType.EqualityCheckGenTermType.EvalComparison(leftEx, rightEx, comparison))
                     {
                         string varSolStr = Solutions[i].SolveFor.ToAsciiString() + "=" + WorkMgr.ToDisp(Solutions[i].Result);
 
@@ -408,8 +408,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             left = left.Substitute(solveFor, sol);
             right = right.Substitute(solveFor, sol);
 
-            leftEx = TermType.SimplifyTermType.BasicSimplify(left, ref pEvalData);
-            rightEx = TermType.SimplifyTermType.BasicSimplify(right, ref pEvalData);
+            leftEx = TermType.SimplifyGenTermType.BasicSimplify(left, ref pEvalData, true);
+            rightEx = TermType.SimplifyGenTermType.BasicSimplify(right, ref pEvalData, true);
 
             return leftEx.IsEqualTo(rightEx);
         }
@@ -485,9 +485,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public override bool IsValidValue(ExComp value, ref TermType.EvalData pEvalData)
         {
-            ExComp harshEvalVal = Simplifier.HarshSimplify(value.CloneEx().ToAlgTerm(), ref pEvalData);
+            ExComp harshEvalVal = Simplifier.HarshSimplify(value.CloneEx().ToAlgTerm(), ref pEvalData, true);
             if (harshEvalVal is AlgebraTerm)
-                harshEvalVal = (harshEvalVal as AlgebraTerm).RemoveRedundancies();
+                harshEvalVal = (harshEvalVal as AlgebraTerm).RemoveRedundancies(false);
 
             if (harshEvalVal is Number && _harshSimpCompare0 is Number && _harshSimpCompare1 is Number)
             {
@@ -495,8 +495,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 Number nComp0 = _harshSimpCompare0 as Number;
                 Number nComp1 = _harshSimpCompare1 as Number;
 
-                return TermType.EqualityCheckTermType.EvalComparison(nComp0, nVal, Comparison0) &&
-                    TermType.EqualityCheckTermType.EvalComparison(nVal, nComp1, Comparison1);
+                return TermType.EqualityCheckGenTermType.EvalComparison(nComp0, nVal, Comparison0) &&
+                    TermType.EqualityCheckGenTermType.EvalComparison(nVal, nComp1, Comparison1);
             }
 
             return true;
@@ -538,13 +538,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             {
                 AlgebraTermArray resultArray = result as AlgebraTermArray;
 
-                IEnumerable<NotRestriction> rests = from term in resultArray.GetTerms()
-                            select new NotRestriction(varFor, term);
+                List<AlgebraTerm> resultArrayTerms = resultArray.GetTerms();
+                NotRestriction[] restsArr = new NotRestriction[resultArrayTerms.Count];
+                for (int i = 0; i < resultArrayTerms.Count; ++i)
+                    restsArr[i] = new NotRestriction(varFor, resultArrayTerms[i]);
 
-                return rests.ToArray();
+                return restsArr;
             }
 
-            NotRestriction[] singleRest = { new NotRestriction(varFor, result) };
+            NotRestriction[] singleRest = new NotRestriction[] { new NotRestriction(varFor, result) };
 
             return singleRest;
         }
@@ -681,16 +683,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public override bool IsValidValue(ExComp value, ref TermType.EvalData pEvalData)
         {
-            ExComp harshEvalVal = Simplifier.HarshSimplify(value.CloneEx().ToAlgTerm(), ref pEvalData);
+            ExComp harshEvalVal = Simplifier.HarshSimplify(value.CloneEx().ToAlgTerm(), ref pEvalData, true);
             if (harshEvalVal is AlgebraTerm)
-                harshEvalVal = (harshEvalVal as AlgebraTerm).RemoveRedundancies();
+                harshEvalVal = (harshEvalVal as AlgebraTerm).RemoveRedundancies(false);
 
             if (harshEvalVal is Number && _harshSimpCompare is Number)
             {
                 Number nVal = harshEvalVal as Number;
                 Number nComp = _harshSimpCompare as Number;
 
-                return TermType.EqualityCheckTermType.EvalComparison(nVal, nComp, Comparison);
+                return TermType.EqualityCheckGenTermType.EvalComparison(nVal, nComp, Comparison);
             }
 
             return true;
@@ -939,13 +941,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             ExComp upper1 = rest1.GetUpper();
 
             if (lower0 is AlgebraTerm)
-                lower0 = (lower0 as AlgebraTerm).RemoveRedundancies();
+                lower0 = (lower0 as AlgebraTerm).RemoveRedundancies(false);
             if (lower1 is AlgebraTerm)
-                lower1 = (lower1 as AlgebraTerm).RemoveRedundancies();
+                lower1 = (lower1 as AlgebraTerm).RemoveRedundancies(false);
             if (upper0 is AlgebraTerm)
-                upper0 = (upper0 as AlgebraTerm).RemoveRedundancies();
+                upper0 = (upper0 as AlgebraTerm).RemoveRedundancies(false);
             if (upper1 is AlgebraTerm)
-                upper1 = (upper1 as AlgebraTerm).RemoveRedundancies();
+                upper1 = (upper1 as AlgebraTerm).RemoveRedundancies(false);
 
             if (lower0 is Constant)
                 lower0 = (lower0 as Constant).GetValue();
@@ -1166,13 +1168,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         public void CalculateApproximate(ref TermType.EvalData pEvalData)
         {
             if (Result is AlgebraTerm)
-                Result = (Result as AlgebraTerm).RemoveRedundancies();
+                Result = (Result as AlgebraTerm).RemoveRedundancies(false);
 
             if (Result != null && !(Result is SpecialSolution) && ApproximateResult == null)
             {
-                ExComp harshSimpResult = Simplifier.HarshSimplify(Result.CloneEx().ToAlgTerm(), ref pEvalData);
+                ExComp harshSimpResult = Simplifier.HarshSimplify(Result.CloneEx().ToAlgTerm(), ref pEvalData, true);
                 if (harshSimpResult is AlgebraTerm)
-                    harshSimpResult = (harshSimpResult as AlgebraTerm).RemoveRedundancies();
+                    harshSimpResult = (harshSimpResult as AlgebraTerm).RemoveRedundancies(false);
                 if (!harshSimpResult.IsEqualTo(Result))
                     ApproximateResult = harshSimpResult;
             }

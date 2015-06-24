@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MathSolverWebsite.MathSolverLibrary;
+using MathSolverWebsite.MathSolverLibrary.LangCompat;
 
 namespace MathSolverWebsite.MathSolverLibrary
 {
@@ -19,7 +21,7 @@ namespace MathSolverWebsite.MathSolverLibrary
             if (double.IsNaN(n1) || double.IsNaN(n2))
                 return double.NaN;
 
-            if (double.IsInfinity(n1) || double.IsInfinity(n2))
+            if (DoubleFunc.IsInfinity(n1) || DoubleFunc.IsInfinity(n2))
                 return double.PositiveInfinity;
 
             double an1 = Math.Abs(n1);
@@ -92,7 +94,7 @@ namespace MathSolverWebsite.MathSolverLibrary
             return an2;
         }
 
-        public static int[] GetCommonDivisors(int n1, int n2, bool includeSelf = false)
+        public static int[] GetCommonDivisors(int n1, int n2, bool includeSelf)
         {
             List<int> divisors = new List<int>();
             int[] divisorsN1 = GetDivisors(n1, includeSelf);

@@ -67,11 +67,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
                 (left.Contains(dVar) && !left.Contains(funcVar) && right.Contains(funcVar) && !right.Contains(dVar)))
             {
                 List<ExComp[]> groups = left.GetGroupsNoOps();
-                IEnumerable<ExComp[]> unrelatedGroups = from gp in groups
-                                      select GroupHelper.GetUnrelatableTermsOfGroup(gp, derivVar);
+
+                ExComp[][] unrelatedGroupsArr = new ExComp[groups.Count][];
+                for (int i = 0; i < groups.Count; ++i)
+                    unrelatedGroupsArr[i] = GroupHelper.GetUnrelatableTermsOfGroup(groups[i], derivVar);
 
                 // Combine all of the unrelated terms.
-                AlgebraTerm leftDivideOut = new AlgebraTerm(unrelatedGroups.ToArray());
+                AlgebraTerm leftDivideOut = new AlgebraTerm(unrelatedGroupsArr);
 
                 if (leftDivideOut.GetGroupCount() > 1)
                 {
@@ -86,7 +88,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             }
             else
             {
-                SolveMethod.DivideByVariableCoeffs(ref left, ref right, derivVar, ref pEvalData);
+                SolveMethod.DivideByVariableCoeffs(ref left, ref right, derivVar, ref pEvalData, false);
             }
 
             if (numDen == null)

@@ -2,10 +2,11 @@
 using MathSolverWebsite.MathSolverLibrary.Parsing;
 using System.Collections.Generic;
 using System.Linq;
+using MathSolverWebsite.MathSolverLibrary.LangCompat;
 
 namespace MathSolverWebsite.MathSolverLibrary.TermType
 {
-    internal class EquationSystemTermType : TermType
+    internal class EquationSystemGenTermType : GenTermType
     {
         private Dictionary<string, int> _allIdens;
         private List<EqSet> _eqSets;
@@ -13,7 +14,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
         private string[] _graphStrs;
         private string _graphVarStr = null;
 
-        public EquationSystemTermType(List<EqSet> eqSets, List<List<TypePair<LexemeType, string>>> lts, Dictionary<string, int> allIdens)
+        public EquationSystemGenTermType(List<EqSet> eqSets, List<List<TypePair<LexemeType, string>>> lts, Dictionary<string, int> allIdens)
             : base()
         {
             _lts = lts;
@@ -25,7 +26,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
         /// Everything will be created automatically.
         /// </summary>
         /// <param name="eqSets"></param>
-        public EquationSystemTermType(List<EqSet> eqSets)
+        public EquationSystemGenTermType(List<EqSet> eqSets)
         {
         }
 
@@ -40,12 +41,16 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
                 Solving.EquationSystemSolve solveMethod = new Solving.EquationSystemSolve(agSolver);
 
-                solveMethod.SetSolveFors(solveVars.ToList());
+                solveMethod.SetSolveFors(ArrayFunc.ToList(solveVars));
 
-                IEnumerable<EqSet> clonedEqSet = from eqSet in _eqSets
-                                  select eqSet.Clone();
+                List<EqSet> clonedEqSet = new List<EqSet>();
+                for (int i = 0; i < _eqSets.Count; ++i)
+                {
+                    clonedEqSet.Add(_eqSets[i].Clone());
+                }
+
                 solveMethod.SetSolvingMethod(Solving.EquationSystemSolveMethod.Substitution);
-                return solveMethod.SolveEquationArray(clonedEqSet.ToList(), _lts, _allIdens, ref pEvalData);
+                return solveMethod.SolveEquationArray(clonedEqSet, _lts, _allIdens, ref pEvalData);
             }
             else if (command.StartsWith("Solve by elimination for "))
             {
@@ -56,12 +61,14 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
                 Solving.EquationSystemSolve solveMethod = new Solving.EquationSystemSolve(agSolver);
 
-                solveMethod.SetSolveFors(solveVars.ToList());
+                solveMethod.SetSolveFors(ArrayFunc.ToList(solveVars));
 
-                IEnumerable<EqSet> clonedEqSet = from eqSet in _eqSets
-                                  select eqSet.Clone();
+                List<EqSet> clonedEqSet = new List<EqSet>();
+                for (int i = 0; i < _eqSets.Count; ++i)
+                    clonedEqSet.Add(_eqSets[i]);
+
                 solveMethod.SetSolvingMethod(Solving.EquationSystemSolveMethod.Elimination);
-                return solveMethod.SolveEquationArray(clonedEqSet.ToList(), _lts, _allIdens, ref pEvalData);
+                return solveMethod.SolveEquationArray(clonedEqSet, _lts, _allIdens, ref pEvalData);
             }
             else if (command == "Graph")
             {

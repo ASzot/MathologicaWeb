@@ -175,7 +175,12 @@ namespace MathSolverWebsite.MathSolverLibrary
             _iterationCount = 0;
         }
 
-        public ExComp Solve(AlgebraVar solveFor, AlgebraTerm left, AlgebraTerm right, ref TermType.EvalData pEvalData, bool showFinalStep = false)
+        public ExComp Solve(AlgebraVar solveFor, AlgebraTerm left, AlgebraTerm right, ref TermType.EvalData pEvalData)
+        {
+            return Solve(solveFor, left, right, ref pEvalData, false);
+        }
+
+        public ExComp Solve(AlgebraVar solveFor, AlgebraTerm left, AlgebraTerm right, ref TermType.EvalData pEvalData, bool showFinalStep)
         {
             SolveMethod solveMethod;
 
@@ -194,8 +199,8 @@ namespace MathSolverWebsite.MathSolverLibrary
                 return Number.GetUndefined();
             }
 
-            ExComp leftEx = left.RemoveRedundancies();
-            ExComp rightEx = right.RemoveRedundancies();
+            ExComp leftEx = left.RemoveRedundancies(false);
+            ExComp rightEx = right.RemoveRedundancies(false);
             AlgebraComp solveForComp = solveFor.ToAlgebraComp();
 
             if (left is AlgebraFunction)
@@ -397,6 +402,16 @@ namespace MathSolverWebsite.MathSolverLibrary
             return result;
         }
 
+        public ExComp SolveEq(AlgebraVar solveFor, AlgebraTerm left, AlgebraTerm right, ref TermType.EvalData pEvalData)
+        {
+            return SolveEq(solveFor, left, right, ref pEvalData, false, false);
+        }
+
+        public ExComp SolveEq(AlgebraVar solveFor, AlgebraTerm left, AlgebraTerm right, ref TermType.EvalData pEvalData, bool stayIterLevel)
+        {
+            return SolveEq(solveFor, left, right, ref pEvalData, false, stayIterLevel);
+        }
+
         /// <summary>
         /// Solves the equation in addition to cleaning up the formatting.
         /// </summary>
@@ -407,7 +422,7 @@ namespace MathSolverWebsite.MathSolverLibrary
         /// <param name="showFinalStep"></param>
         /// <param name="stayIterLevel"></param>
         /// <returns></returns>
-        public ExComp SolveEq(AlgebraVar solveFor, AlgebraTerm left, AlgebraTerm right, ref TermType.EvalData pEvalData, bool showFinalStep = false, bool stayIterLevel = false)
+        public ExComp SolveEq(AlgebraVar solveFor, AlgebraTerm left, AlgebraTerm right, ref TermType.EvalData pEvalData, bool showFinalStep, bool stayIterLevel)
         {
             if (!stayIterLevel)
                 _iterationCount++;
@@ -551,7 +566,7 @@ namespace MathSolverWebsite.MathSolverLibrary
             completeTerm.EvaluateFunctions(false, ref pEvalData);
             completeTerm = completeTerm.CompoundFractions();
 
-            if (completeTerm.RemoveRedundancies().IsEqualTo(Number.GetZero()))
+            if (completeTerm.RemoveRedundancies(false).IsEqualTo(Number.GetZero()))
             {
                 if (Restriction.IsEqualTo(comparison))
                 {
@@ -604,7 +619,7 @@ namespace MathSolverWebsite.MathSolverLibrary
             else
             {
                 pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "{0}{1}{2}" + WorkMgr.EDM, "Solve the equation just like an equality.", left, Restriction.ComparisonOpToStr(comparison), right);
-                if (right.RemoveRedundancies().IsEqualTo(solveForComp))
+                if (right.RemoveRedundancies(false).IsEqualTo(solveForComp))
                 {
                     OrRestriction orRest = new OrRestriction(solveForComp, Restriction.InvertComparison(comparison), left, ref pEvalData);
                     pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + orRest.ToMathAsciiStr() + WorkMgr.EDM, "The resulting equality.");
@@ -717,9 +732,9 @@ namespace MathSolverWebsite.MathSolverLibrary
                 // We can only do this if all the solutions are numbers.
                 foreach (Solution sol in result.Solutions)
                 {
-                    ExComp harshSimplified = Simplifier.HarshSimplify(sol.Result.CloneEx().ToAlgTerm(), ref pEvalData);
+                    ExComp harshSimplified = Simplifier.HarshSimplify(sol.Result.CloneEx().ToAlgTerm(), ref pEvalData, true);
                     if (harshSimplified is AlgebraTerm)
-                        harshSimplified = (harshSimplified as AlgebraTerm).RemoveRedundancies();
+                        harshSimplified = (harshSimplified as AlgebraTerm).RemoveRedundancies(false);
                     if (!(harshSimplified is Number) || (harshSimplified is Number && (harshSimplified as Number).HasImaginaryComp()))
                     {
                         pEvalData.AddFailureMsg("Couldn't solve inequality");
@@ -873,7 +888,7 @@ namespace MathSolverWebsite.MathSolverLibrary
             ExComp simpEx = Simplifier.HarshSimplify(finalTerm, ref pEvalData, false);
 
             if (simpEx is AlgebraTerm)
-                simpEx = (simpEx as AlgebraTerm).HarshEvaluation().RemoveRedundancies();
+                simpEx = (simpEx as AlgebraTerm).HarshEvaluation().RemoveRedundancies(false);
 
             if (!(simpEx is Number) || (simpEx is Number && (simpEx as Number).HasImaginaryComp()))
                 return null;

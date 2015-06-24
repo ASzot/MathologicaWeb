@@ -54,7 +54,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
 
             ExComp divCheck = DivOp.StaticCombine(fullNFunc, nx);
             if (divCheck is AlgebraTerm)
-                divCheck = (divCheck as AlgebraTerm).RemoveRedundancies();
+                divCheck = (divCheck as AlgebraTerm).RemoveRedundancies(false);
 
             if (!divCheck.IsEqualTo(funcVar))
                 return null;

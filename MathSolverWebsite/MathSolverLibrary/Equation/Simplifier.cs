@@ -1,4 +1,5 @@
 ﻿using MathSolverWebsite.MathSolverLibrary.Equation.Term;
+using MathSolverWebsite.MathSolverLibrary.TermType;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation
 {
@@ -28,9 +29,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             if (divided.IsEqualTo(term))
             {
                 if (num is AlgebraTerm)
-                    num = AdvAlgebraTerm.FactorizeTerm((num as AlgebraTerm), ref pEvalData);
+                    num = AdvAlgebraTerm.FactorizeTerm((num as AlgebraTerm), ref pEvalData, false);
                 if (den is AlgebraTerm)
-                    den = AdvAlgebraTerm.FactorizeTerm((den as AlgebraTerm), ref pEvalData);
+                    den = AdvAlgebraTerm.FactorizeTerm((den as AlgebraTerm), ref pEvalData, false);
 
                 divided = Operators.DivOp.StaticCombine(num, den);
             }
@@ -46,7 +47,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         /// <param name="pEvalData"></param>
         /// <param name="order"></param>
         /// <returns></returns>
-        public static ExComp HarshSimplify(AlgebraTerm term, ref TermType.EvalData pEvalData, bool order = true)
+        public static ExComp HarshSimplify(AlgebraTerm term, ref EvalData pEvalData, bool order)
         {
             // Harsh simplify per component.
             for (int i = 0; i < term.GetTermCount(); ++i)
@@ -65,7 +66,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
             term.EvaluateFunctions(true, ref pEvalData);
 
-            term = term.RemoveRedundancies().ToAlgTerm();
+            term = term.RemoveRedundancies(false).ToAlgTerm();
 
             term = term.ApplyOrderOfOperations();
 
@@ -74,9 +75,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             term = term.HarshEvaluation();
 
             if (!order)
-                return term.RemoveRedundancies();
+                return term.RemoveRedundancies(false);
 
-            term = term.RemoveRedundancies().ToAlgTerm();
+            term = term.RemoveRedundancies(false).ToAlgTerm();
 
             term = term.Order();
 

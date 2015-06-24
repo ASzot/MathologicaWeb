@@ -13,15 +13,15 @@ namespace MathSolverWebsite.MathSolverLibrary
         public const bool USE_TEX_DEBUG = true;
         public const bool PLAIN_TEXT = false;
 
-        public static TermType.TermType DetermineSingularEqSet(EqSet singularEqSet, List<TypePair<LexemeType, string>> completeLexemeTable,
+        public static TermType.GenTermType DetermineSingularEqSet(EqSet singularEqSet, List<TypePair<LexemeType, string>> completeLexemeTable,
             Dictionary<string, int> solveVars, MultiLineHelper mlh, ref TermType.EvalData pEvalData)
         {
             string probSolveVar = AlgebraSolver.GetProbableVar(solveVars);
 
-            DiffEqTermType diffEqTT = new DiffEqTermType();
-            diffEqTT.AttachMultiLineHelper(mlh);
-            if (!singularEqSet.GetIsSingular() && diffEqTT.Init(singularEqSet, solveVars, probSolveVar, ref pEvalData))
-                return diffEqTT;
+            DiffEqGenTermType diffEqGenTt = new DiffEqGenTermType();
+            diffEqGenTt.AttachMultiLineHelper(mlh);
+            if (!singularEqSet.GetIsSingular() && diffEqGenTt.Init(singularEqSet, solveVars, probSolveVar, ref pEvalData))
+                return diffEqGenTt;
 
             EquationInformation eqInfo = singularEqSet.GetIsSingular() ? new EquationInformation(singularEqSet.GetLeftTerm(), new AlgebraComp(probSolveVar)) :
                 new EquationInformation(singularEqSet.GetLeftTerm(), singularEqSet.GetRightTerm(), new AlgebraComp(probSolveVar));
@@ -29,11 +29,11 @@ namespace MathSolverWebsite.MathSolverLibrary
             // Error type for equations with no comparison sign.
             if (singularEqSet.GetComparisonOp() == LexemeType.EqualsOp || singularEqSet.GetComparisonOp() == LexemeType.ErrorType)
             {
-                QuadraticTermType qtt = new QuadraticTermType();
+                QuadraticGenTermType qtt = new QuadraticGenTermType();
                 if (qtt.Init(eqInfo, singularEqSet.GetLeft(), singularEqSet.GetRight(), completeLexemeTable, solveVars, probSolveVar, ref pEvalData))
                     return qtt;
 
-                SinusodalTermType stt = new SinusodalTermType();
+                SinusodalGenTermType stt = new SinusodalGenTermType();
                 if (stt.Init(eqInfo, singularEqSet.GetLeft(), singularEqSet.GetRight(), completeLexemeTable, solveVars, probSolveVar, ref pEvalData))
                     return stt;
             }
@@ -47,13 +47,13 @@ namespace MathSolverWebsite.MathSolverLibrary
                 if (!singularEqSet.FixEqFuncDefs(ref pEvalData))
                     return null;
                 // The single term is always in the left component.
-                return new SimplifyTermType(singularEqSet.GetLeft(), completeLexemeTable, solveVars, probSolveVar, singularEqSet.GetStartingType(), isFuncDef);
+                return new SimplifyGenTermType(singularEqSet.GetLeft(), completeLexemeTable, solveVars, probSolveVar, singularEqSet.GetStartingType(), isFuncDef);
             }
             else
             {
                 if (singularEqSet.GetComparisonOp() == LexemeType.EqualsOp && singularEqSet.GetComparisonOps().Count == 1)
                 {
-                    FunctionTermType funcType = new FunctionTermType();
+                    FunctionGenTermType funcType = new FunctionGenTermType();
                     if (funcType.Init(singularEqSet, completeLexemeTable, solveVars, probSolveVar))
                         return funcType;
                 }
@@ -61,7 +61,7 @@ namespace MathSolverWebsite.MathSolverLibrary
                 if (solveVars.Count == 0 && singularEqSet.GetComparisonOps().Count == 1)
                 {
                     // There are no variables in this expression.
-                    return new EqualityCheckTermType(singularEqSet.GetLeft(), singularEqSet.GetRight(), singularEqSet.GetComparisonOp());
+                    return new EqualityCheckGenTermType(singularEqSet.GetLeft(), singularEqSet.GetRight(), singularEqSet.GetComparisonOp());
                 }
 
                 if (!singularEqSet.FixEqFuncDefs(ref pEvalData))
@@ -72,7 +72,7 @@ namespace MathSolverWebsite.MathSolverLibrary
                     return new LinearAlgebraSolve(singularEqSet, probSolveVar, ref pEvalData);
                 }
 
-                return new SolveTermType(singularEqSet, completeLexemeTable, solveVars, probSolveVar);
+                return new SolveGenTermType(singularEqSet, completeLexemeTable, solveVars, probSolveVar);
             }
         }
 
@@ -89,18 +89,18 @@ namespace MathSolverWebsite.MathSolverLibrary
             Information_Helpers.UnitCircle.Init();
         }
 
-        public static TermType.TermType ParseInput(string input, ref TermType.EvalData pEvalData, ref List<string> pParseErrors)
+        public static TermType.GenTermType ParseInput(string input, ref TermType.EvalData pEvalData, ref List<string> pParseErrors)
         {
             LexicalParser lexParser = new LexicalParser(pEvalData);
             List<TypePair<LexemeType, string>> completeLexemeTable = lexParser.CreateLexemeTable(input, ref pParseErrors);
             if (completeLexemeTable == null)
                 return null;
-            TermType.TermType result = ParseInput(completeLexemeTable, lexParser, input, ref pEvalData, ref pParseErrors);
+            TermType.GenTermType result = ParseInput(completeLexemeTable, lexParser, input, ref pEvalData, ref pParseErrors);
 
             return result;
         }
 
-        public static TermType.TermType ParseInput(LexemeTable completeLexemeTable, LexicalParser lexParser, string input, ref TermType.EvalData pEvalData, ref List<string> pParseErrors)
+        public static TermType.GenTermType ParseInput(LexemeTable completeLexemeTable, LexicalParser lexParser, string input, ref TermType.EvalData pEvalData, ref List<string> pParseErrors)
         {
             List<LexemeTable> lexemeTables;
             List<EqSet> terms = lexParser.ParseInput(input, out lexemeTables, ref pParseErrors);
@@ -126,9 +126,9 @@ namespace MathSolverWebsite.MathSolverLibrary
             }
             else
             {
-                DiffEqTermType diffEqTT = new DiffEqTermType();
-                if (diffEqTT.Init(terms))
-                    return diffEqTT;
+                DiffEqGenTermType diffEqGenTt = new DiffEqGenTermType();
+                if (diffEqGenTt.Init(terms))
+                    return diffEqGenTt;
 
                 MultiLineHelper mlh = new MultiLineHelper();
                 int prevCount = terms.Count;
@@ -144,13 +144,13 @@ namespace MathSolverWebsite.MathSolverLibrary
 
                 if (terms.Count == 1)
                 {
-                    TermType.TermType singularTermType = DetermineSingularEqSet(terms[0], completeLexemeTable, solveVars, mlh, ref pEvalData);
-                    singularTermType.AttachMultiLineHelper(mlh);
-                    return singularTermType;
+                    TermType.GenTermType singularGenTermType = DetermineSingularEqSet(terms[0], completeLexemeTable, solveVars, mlh, ref pEvalData);
+                    singularGenTermType.AttachMultiLineHelper(mlh);
+                    return singularGenTermType;
                 }
                 else if (terms.Count == 0)
                 {
-                    SimplifyTermType simp = new SimplifyTermType();
+                    SimplifyGenTermType simp = new SimplifyGenTermType();
                     simp.AttachMultiLineHelper(mlh);
                     return simp;
                 }
@@ -168,14 +168,14 @@ namespace MathSolverWebsite.MathSolverLibrary
 
                 if (simpTermCount <= 1)
                 {
-                    EquationSystemTermType estt = new EquationSystemTermType(terms, lexemeTables, solveVars);
+                    EquationSystemGenTermType estt = new EquationSystemGenTermType(terms, lexemeTables, solveVars);
                     estt.AttachMultiLineHelper(mlh);
                     if (estt.Init(ref pEvalData))
                         return estt;
                 }
                 else if (simpTermCount == terms.Count)
                 {
-                    EquationSystemTermType estt = new EquationSystemTermType(terms, lexemeTables, solveVars);
+                    EquationSystemGenTermType estt = new EquationSystemGenTermType(terms, lexemeTables, solveVars);
                     estt.AttachMultiLineHelper(mlh);
                     if (estt.InitGraphingOnly(ref pEvalData))
                         return estt;

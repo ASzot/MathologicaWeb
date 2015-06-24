@@ -2,6 +2,7 @@
 using MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg;
 using System.Collections.Generic;
 using System.Linq;
+using MathSolverWebsite.MathSolverLibrary.LangCompat;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 {
@@ -244,7 +245,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                         if (upperContains && lowerContains)
                         {
                             AlgebraComp tmpBoundryVar = new AlgebraComp("a");
-                            Integral otherInt = Integral.ConstructIntegral(finalInt.GetInnerTerm(), finalInt.GetDVar(), finalInt.GetLowerLimit(), tmpBoundryVar);
+                            Integral otherInt = Integral.ConstructIntegral(finalInt.GetInnerTerm(), finalInt.GetDVar(), finalInt.GetLowerLimit(), tmpBoundryVar, false, true);
                             finalInt.SetLowerLimit(tmpBoundryVar);
 
                             pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + ca_derivSymb + "[" + finalInt.FinalToDispStr() + "+" + otherInt.FinalToDispStr() + "]" + WorkMgr.EDM, "Split the integral");
@@ -257,7 +258,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                         }
                         else if (lowerContains)
                         {
-                            Integral tmpInt = Integral.ConstructIntegral(MulOp.Negate(finalInt.GetInnerEx()), finalInt.GetDVar(), finalInt.GetUpperLimit(), finalInt.GetLowerLimit());
+                            Integral tmpInt = Integral.ConstructIntegral(MulOp.Negate(finalInt.GetInnerEx()), finalInt.GetDVar(), finalInt.GetUpperLimit(), finalInt.GetLowerLimit(), false, true);
                             pEvalData.GetWorkMgr().FromSides(tmpInt, null, "Switch the integral bounds.");
                             ints = new Integral[] { tmpInt };
                         }
@@ -958,7 +959,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         private ExComp TakeDerivativeOf(ExComp ex, ref TermType.EvalData pEvalData)
         {
             if (ex is AlgebraTerm)
-                ex = (ex as AlgebraTerm).RemoveRedundancies();
+                ex = (ex as AlgebraTerm).RemoveRedundancies(false);
 
             if (ca_derivSymb == null)
             {
@@ -1025,8 +1026,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 AlgebraTerm[] numDen = term.GetNumDenFrac();
                 if (numDen != null)
                 {
-                    ExComp numEx = numDen[0].RemoveRedundancies();
-                    ExComp denEx = numDen[1].RemoveRedundancies();
+                    ExComp numEx = numDen[0].RemoveRedundancies(false);
+                    ExComp denEx = numDen[1].RemoveRedundancies(false);
 
                     if (Number.GetOne().IsEqualTo(numEx) && denEx is PowerFunction)
                     {
@@ -1084,7 +1085,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             if (constTo.Length == 1 && constTo[0].IsEqualTo(Number.GetOne()))
             {
-                ExComp[] empty = { };
+                ExComp[] empty = new ExComp[] { };
                 constTo = empty;
             }
 
@@ -1113,7 +1114,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             else
             {
                 ExComp[] num = GroupHelper.GetNumerator(varTo);
-                ExComp[] den = GroupHelper.GetDenominator(varTo);
+                ExComp[] den = GroupHelper.GetDenominator(varTo, false);
 
                 if (den != null && den.Length > 0)
                 {
@@ -1158,7 +1159,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 else
                 {
                     ExComp u = num[0];
-                    ExComp v = GroupHelper.ToAlgTerm(num.ToList().GetRange(1, num.Length - 1).ToArray());
+                    ExComp v = GroupHelper.ToAlgTerm(ArrayFunc.ToList(num).GetRange(1, num.Length - 1).ToArray());
 
                     pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[" + GroupHelper.ToAsciiString(num) + "]`",
                         "Apply the product rule which states `d/(dx)[u*v]=u'v+uv'` in this case `u={0}`, `v={1}`", u, v);

@@ -14,21 +14,21 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
             // Range of acos is [0, pi].
 
             if (x is AlgebraTerm)
-                x = (x as AlgebraTerm).RemoveRedundancies();
+                x = (x as AlgebraTerm).RemoveRedundancies(false);
 
             // This will work because we are starting at angle zero and will reach
             foreach (UnitCirclePoint unitCirclePoint in UnitCirclePoints)
             {
                 ExComp ucX = unitCirclePoint.X.CloneEx();
                 if (ucX is AlgebraTerm)
-                    ucX = (ucX as AlgebraTerm).RemoveRedundancies();
+                    ucX = (ucX as AlgebraTerm).RemoveRedundancies(false);
 
                 if (ucX.IsEqualTo(x))
                     return unitCirclePoint;
 
                 AlgebraTerm secondCheck = ucX.ToAlgTerm();
                 secondCheck.ConvertPowFracsToDecimal();
-                if (secondCheck.RemoveRedundancies().IsEqualTo(x))
+                if (secondCheck.RemoveRedundancies(false).IsEqualTo(x))
                     return unitCirclePoint;
             }
 
@@ -40,14 +40,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
             // Range of asin is [-pi/2, pi/2].
 
             if (y is AlgebraTerm)
-                y = (y as AlgebraTerm).RemoveRedundancies();
+                y = (y as AlgebraTerm).RemoveRedundancies(false);
 
             // Check fourth quadrant.
             for (int i = UnitCirclePoints.Count - 5; i < UnitCirclePoints.Count; ++i)
             {
                 ExComp ucY = UnitCirclePoints[i].Y.CloneEx();
                 if (ucY is AlgebraTerm)
-                    ucY = (ucY as AlgebraTerm).RemoveRedundancies();
+                    ucY = (ucY as AlgebraTerm).RemoveRedundancies(false);
 
                 if (ucY.IsEqualTo(y))
                 {
@@ -56,7 +56,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
 
                 AlgebraTerm secondCheck = ucY.ToAlgTerm();
                 secondCheck.ConvertPowFracsToDecimal();
-                if (secondCheck.RemoveRedundancies().IsEqualTo(y))
+                if (secondCheck.RemoveRedundancies(false).IsEqualTo(y))
                     return UnitCirclePoints[i];
             }
 
@@ -65,7 +65,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
             {
                 ExComp ucY = UnitCirclePoints[i].Y.CloneEx();
                 if (ucY is AlgebraTerm)
-                    ucY = (ucY as AlgebraTerm).RemoveRedundancies();
+                    ucY = (ucY as AlgebraTerm).RemoveRedundancies(false);
 
                 if (ucY.IsEqualTo(y))
                 {
@@ -74,7 +74,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
 
                 AlgebraTerm secondCheck = ucY.ToAlgTerm();
                 secondCheck.ConvertPowFracsToDecimal();
-                if (secondCheck.RemoveRedundancies().IsEqualTo(y))
+                if (secondCheck.RemoveRedundancies(false).IsEqualTo(y))
                     return UnitCirclePoints[i];
             }
 
@@ -86,19 +86,19 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
             // Range of atan is [-pi/2, pi/2].
 
             if (y_over_x is AlgebraTerm)
-                y_over_x = (y_over_x as AlgebraTerm).RemoveRedundancies();
+                y_over_x = (y_over_x as AlgebraTerm).RemoveRedundancies(false);
 
             for (int i = UnitCirclePoints.Count - 5; i < UnitCirclePoints.Count; ++i)
             {
                 ExComp ucYoverX = UnitCirclePoints[i].Y_over_X.CloneEx();
                 if (ucYoverX is AlgebraTerm)
-                    ucYoverX = (ucYoverX as AlgebraTerm).RemoveRedundancies();
+                    ucYoverX = (ucYoverX as AlgebraTerm).RemoveRedundancies(false);
 
                 if (ucYoverX.IsEqualTo(y_over_x))
                     return UnitCirclePoints[i];
                 AlgebraTerm secondCheck = ucYoverX.ToAlgTerm();
                 secondCheck.ConvertPowFracsToDecimal();
-                if (secondCheck.RemoveRedundancies().IsEqualTo(y_over_x))
+                if (secondCheck.RemoveRedundancies(false).IsEqualTo(y_over_x))
                     return UnitCirclePoints[i];
             }
 
@@ -107,7 +107,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
             {
                 ExComp ucYoverX = UnitCirclePoints[i].Y_over_X.CloneEx();
                 if (ucYoverX is AlgebraTerm)
-                    ucYoverX = (ucYoverX as AlgebraTerm).RemoveRedundancies();
+                    ucYoverX = (ucYoverX as AlgebraTerm).RemoveRedundancies(false);
 
                 if (ucYoverX.IsEqualTo(y_over_x))
                     return UnitCirclePoints[i];
@@ -203,22 +203,22 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
         public UnitCirclePoint(Number angleNum, Number angleDen, ExComp x, ExComp y)
         {
             if (x is AlgebraTerm)
-                x = (x as AlgebraTerm).RemoveRedundancies();
+                x = (x as AlgebraTerm).RemoveRedundancies(false);
             if (y is AlgebraTerm)
-                y = (y as AlgebraTerm).RemoveRedundancies();
+                y = (y as AlgebraTerm).RemoveRedundancies(false);
             AngleNum = angleNum;
             AngleDen = angleDen;
             this.X = x;
             this.Y = y;
 
-            Y_over_X = DivOp.StaticCombine(y.CloneEx(), x.CloneEx()).ToAlgTerm().MakeFormattingCorrect().RemoveRedundancies();
-            X_over_Y = DivOp.StaticCombine(x.CloneEx(), y.CloneEx()).ToAlgTerm().MakeFormattingCorrect().RemoveRedundancies();
+            Y_over_X = DivOp.StaticCombine(y.CloneEx(), x.CloneEx()).ToAlgTerm().MakeFormattingCorrect().RemoveRedundancies(false);
+            X_over_Y = DivOp.StaticCombine(x.CloneEx(), y.CloneEx()).ToAlgTerm().MakeFormattingCorrect().RemoveRedundancies(false);
 
             AlgebraTerm overXDiv = DivOp.StaticCombine(Number.GetOne(), x.CloneEx()).ToAlgTerm();
             AlgebraTerm overYDiv = DivOp.StaticCombine(Number.GetOne(), y.CloneEx()).ToAlgTerm();
 
-            over_X = overXDiv.MakeFormattingCorrect().RemoveRedundancies();
-            over_Y = overYDiv.MakeFormattingCorrect().RemoveRedundancies();
+            over_X = overXDiv.MakeFormattingCorrect().RemoveRedundancies(false);
+            over_Y = overYDiv.MakeFormattingCorrect().RemoveRedundancies(false);
         }
 
         /// <summary>

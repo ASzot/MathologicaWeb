@@ -37,7 +37,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 nonZeroTerm = left.IsZero() ? right : left;
             }
 
-            DivideByVariableCoeffs(ref nonZeroTerm, ref zero, solveForComp, ref pEvalData);
+            DivideByVariableCoeffs(ref nonZeroTerm, ref zero, solveForComp, ref pEvalData, false);
 
             List<ExComp[]> groups = nonZeroTerm.GetGroupsNoOps();
 
@@ -50,7 +50,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
             // The factors are the algebra terms of this groups.
             AlgebraTerm[] factors = (from onlyGroupComp in onlyGroup
-                                     select onlyGroupComp.ToAlgTerm().RemoveRedundancies().ToAlgTerm()).ToArray();
+                                     select onlyGroupComp.ToAlgTerm().RemoveRedundancies(false).ToAlgTerm()).ToArray();
 
             return SolveEquationFactors(solveFor, ref pEvalData, factors);
         }

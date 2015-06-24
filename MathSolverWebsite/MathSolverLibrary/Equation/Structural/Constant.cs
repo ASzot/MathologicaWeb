@@ -41,7 +41,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public static Constant ParseConstant(string parseStr)
         {
-            foreach (Constant constant in _definedConstants.ToList())
+            foreach (Constant constant in _definedConstants)
             {
                 if (constant.GetVar().GetVar() == parseStr)
                     return constant;

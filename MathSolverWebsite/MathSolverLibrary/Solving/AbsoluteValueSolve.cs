@@ -33,20 +33,20 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                     return new NoSolutions();
             }
             CombineFractions(ref left, ref right, ref pEvalData);
-            DivideByVariableCoeffs(ref left, ref right, solveForComp, ref pEvalData);
+            DivideByVariableCoeffs(ref left, ref right, solveForComp, ref pEvalData, false);
 
             pEvalData.AttemptSetInputType(TermType.InputType.AbsoluteValue);
 
             if (left.GetGroupCount() == 1)
             {
-                AbsValFunction absValFunc = left.RemoveRedundancies() as AbsValFunction;
+                AbsValFunction absValFunc = left.RemoveRedundancies(false) as AbsValFunction;
                 if (absValFunc == null)
                 {
                     pEvalData.AddFailureMsg("Couldn't solve absolute value equation.");
                     return null;
                 }
 
-                ExComp rightEx = right.RemoveRedundancies();
+                ExComp rightEx = right.RemoveRedundancies(false);
                 if (rightEx is Number && !(rightEx as Number).HasImaginaryComp() && Number.OpLT((rightEx as Number), -1.0))
                 {
                     pEvalData.GetWorkMgr().FromSides(left, right, "An absolute value will never equal a negative number. So there are no solutions to this equation.");
@@ -65,7 +65,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "{0}=\\pm({1})" + WorkMgr.EDM, "The absolute value function allows the right hand side to be both positive and negative.", absValFunc, right);
 
                 AlgebraTermArray termArray = new AlgebraTermArray(solve1, solve2);
-                string[] solveDescs = { "Solve for the positive case.", "Solve for the negative case" };
+                string[] solveDescs = new string[] { "Solve for the positive case.", "Solve for the negative case" };
                 termArray.SetSolveDescs(solveDescs);
                 bool allSols;
                 AlgebraTermArray solvedTermArray = termArray.SimulSolve(innerTerm, solveFor, p_agSolver, ref pEvalData, out allSols);

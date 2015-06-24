@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MathSolverWebsite.MathSolverLibrary.TermType;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
 {
@@ -476,7 +477,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
             return this;
         }
 
-        public override ExComp RemoveRedundancies(bool postWorkable = false)
+        public override ExComp RemoveRedundancies(bool postWorkable)
         {
             if (!postWorkable && GetRows() == 1 && GetCols() == 1)
                 return _exData[0][0];
@@ -729,7 +730,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
             return totalStr;
         }
 
-        public override void CallFunction(FunctionDefinition funcDef, ExComp def, ref TermType.EvalData pEvalData, bool callSubTerms = true)
+        public override void CallFunction(FunctionDefinition funcDef, ExComp def, ref EvalData pEvalData, bool callSubTerms)
         {
             for (int i = 0; i < GetRows(); ++i)
             {

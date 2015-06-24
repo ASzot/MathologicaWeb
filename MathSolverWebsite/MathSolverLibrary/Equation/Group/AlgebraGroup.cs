@@ -14,7 +14,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public int GetGroupCount()
         {
-            return _group.Count();
+            return _group.Length;
         }
 
         public void SetItem(int i, ExComp value)
@@ -53,7 +53,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         public override string ToString()
         {
             string finalStr = "";
-            for (int i = 0; i < _group.Count(); ++i)
+            for (int i = 0; i < _group.Length; ++i)
                 finalStr += _group[i].ToString();
             return finalStr;
         }
@@ -69,11 +69,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public static AlgebraTerm GetConstantTo(List<AlgebraGroup> gps, AlgebraComp cmp)
         {
-            IEnumerable<AlgebraTerm> terms = from squaredGroup in gps
-                                             select GroupHelper.ToAlgTerm(GroupHelper.GetUnrelatableTermsOfGroup(squaredGroup.GetGroup(), cmp));
+            AlgebraTerm[] termsArr = new AlgebraTerm[gps.Count];
+            for (int i = 0; i < gps.Count; ++i)
+                termsArr[i] = GroupHelper.ToAlgTerm(GroupHelper.GetUnrelatableTermsOfGroup(gps[i].GetGroup(), cmp));
 
             AlgebraTerm totalTerm = new AlgebraTerm();
-            foreach (AlgebraTerm term in terms)
+            foreach (AlgebraTerm term in termsArr)
             {
                 totalTerm = AlgebraTerm.OpAdd(totalTerm, term);
             }

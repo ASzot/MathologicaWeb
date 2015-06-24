@@ -2,6 +2,7 @@
 using MathSolverWebsite.MathSolverLibrary.Equation.Term;
 
 using System.Collections.Generic;
+using MathSolverWebsite.MathSolverLibrary.LangCompat;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 {
@@ -67,7 +68,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             // Is the point defined?
             if (_reducedInner == null)
-                _reducedInner = TermType.SimplifyTermType.BasicSimplify(GetInnerTerm(), ref pEvalData, false);
+                _reducedInner = TermType.SimplifyGenTermType.BasicSimplify(GetInnerTerm(), ref pEvalData, false);
 
             AlgebraTerm reduced = _reducedInner.ToAlgTerm();
             if (!reduced.Contains(_varFor))
@@ -77,7 +78,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (Number.GetNegInfinity().IsEqualTo(_valTo) || Number.GetPosInfinity().IsEqualTo(_valTo))
             {
                 PolynomialExt poly = new PolynomialExt();
-                ExComp harshSimp = Simplifier.HarshSimplify(reduced.CloneEx().ToAlgTerm(), ref pEvalData);
+                ExComp harshSimp = Simplifier.HarshSimplify(reduced.CloneEx().ToAlgTerm(), ref pEvalData, true);
                 if (poly.Init(reduced) || poly.Init(harshSimp.ToAlgTerm()))
                     return EvaluatePoly(poly, ref pEvalData);
 
@@ -116,7 +117,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     overall = AddOp.StaticCombine(overall, eval);
             }
             if (overall is AlgebraTerm)
-                overall = (overall as AlgebraTerm).RemoveRedundancies();
+                overall = (overall as AlgebraTerm).RemoveRedundancies(false);
 
             if (overall is Limit)
             {
@@ -221,7 +222,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             bool posInfinity = Number.GetPosInfinity().IsEqualTo(_valTo);
 
             if (ex is AlgebraTerm)
-                ex = (ex as AlgebraTerm).RemoveRedundancies();
+                ex = (ex as AlgebraTerm).RemoveRedundancies(false);
 
             if (ex is PowerFunction)
             {
@@ -237,7 +238,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     // Get the coefficient of the power.
                     AlgebraTerm power = pf.GetPower().ToAlgTerm();
                     List<ExComp> powers = power.GetPowersOfVar(_varFor);
-                    if (powers.Count != 1 || !powers[0].ToAlgTerm().RemoveRedundancies().IsEqualTo(Number.GetOne()))
+                    if (powers.Count != 1 || !powers[0].ToAlgTerm().RemoveRedundancies(false).IsEqualTo(Number.GetOne()))
                         return null;
 
                     ExComp powCoeff = power.GetCoeffOfVar(_varFor);
@@ -245,7 +246,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                         return null;
 
                     if (powCoeff is AlgebraTerm)
-                        powCoeff = (powCoeff as AlgebraTerm).RemoveRedundancies();
+                        powCoeff = (powCoeff as AlgebraTerm).RemoveRedundancies(false);
 
                     if (!(powCoeff is Number) || (powCoeff as Number).HasImaginaryComp())
                         return null;
@@ -286,7 +287,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     ExComp coeff = baseTerm.GetCoeffOfVar(_varFor);
 
                     if (coeff is AlgebraTerm)
-                        coeff = (coeff as AlgebraTerm).RemoveRedundancies();
+                        coeff = (coeff as AlgebraTerm).RemoveRedundancies(false);
 
                     if (!(coeff is Number) || (coeff as Number).HasImaginaryComp())
                         return null;
@@ -317,7 +318,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 ExComp coeff = innerTerm.GetCoeffOfVar(_varFor);
 
                 if (coeff is AlgebraTerm)
-                    coeff = (coeff as AlgebraTerm).RemoveRedundancies();
+                    coeff = (coeff as AlgebraTerm).RemoveRedundancies(false);
 
                 if (coeff == null || !(coeff is Number) || (coeff as Number).HasImaginaryComp())
                     return null;
@@ -441,11 +442,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 if (numDen == null)
                     return null;
 
-                Number numNum = numDen[0].RemoveRedundancies() as Number;
+                Number numNum = numDen[0].RemoveRedundancies(false) as Number;
                 if (numNum == null || numNum.HasImaginaryComp())
                     return null;
 
-                ExComp den = numDen[1].RemoveRedundancies();
+                ExComp den = numDen[1].RemoveRedundancies(false);
 
                 bool isNeg = Number.OpLT(numNum, 0.0);
                 if (den is AlgebraTerm && !(den is PowerFunction))
@@ -463,7 +464,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     }
 
                     if (constEx is AlgebraTerm)
-                        constEx = (ex as AlgebraTerm).RemoveRedundancies();
+                        constEx = (ex as AlgebraTerm).RemoveRedundancies(false);
 
                     if (!constEx.IsEqualTo(MulOp.Negate(_valTo)))
                         return null;
@@ -483,7 +484,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                             isNeg = !isNeg;
                     }
                     else
-                        den = varGps[0].ToTerm().RemoveRedundancies();
+                        den = varGps[0].ToTerm().RemoveRedundancies(false);
                 }
                 else if (!Number.GetZero().IsEqualTo(_valTo))
                     return null;
@@ -665,7 +666,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 "As the limit approaches from the positive direction.");
             ExComp posEval = Limit.TakeLim(posSimp.CloneEx(), _varFor, nValTo, ref pEvalData);
             if (posEval is AlgebraTerm)
-                posEval = (posEval as AlgebraTerm).RemoveRedundancies();
+                posEval = (posEval as AlgebraTerm).RemoveRedundancies(false);
             if (!(posEval is Number))
                 return false;
             lastStep.GoUp(ref pEvalData);
@@ -683,7 +684,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 "As the limit approaches from the negative direction.");
             ExComp negEval = Limit.TakeLim(negSimp.CloneEx(), _varFor, nValTo, ref pEvalData);
             if (negEval is AlgebraTerm)
-                negEval = (negEval as AlgebraTerm).RemoveRedundancies();
+                negEval = (negEval as AlgebraTerm).RemoveRedundancies(false);
             if (!(negEval is Number))
                 return false;
             lastStep.GoUp(ref pEvalData);
@@ -800,10 +801,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
                 ExComp[] group = groups[i];
                 ExComp[] constTo, varTo;
-                GroupHelper.GetConstVarTo(@group, out varTo, out constTo, varFor);
+                GroupHelper.GetConstVarTo(group, out varTo, out constTo, varFor);
                 if (varTo.Length == 0)
                 {
-                    finalTerm.Add(DivOp.StaticCombine(GroupHelper.ToAlgTerm(@group), dividend));
+                    finalTerm.Add(DivOp.StaticCombine(GroupHelper.ToAlgTerm(group), dividend));
                     continue;
                 }
 
@@ -922,7 +923,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         private ExComp PlugIn(ExComp ex, ref TermType.EvalData pEvalData)
         {
             AlgebraTerm subbedIn = _reducedInner.ToAlgTerm().Substitute(_varFor, _valTo);
-            ExComp evaluated = TermType.SimplifyTermType.BasicSimplify(subbedIn.CloneEx(), ref pEvalData);
+            ExComp evaluated = TermType.SimplifyGenTermType.BasicSimplify(subbedIn.CloneEx(), ref pEvalData, true);
 
             if (evaluated != null && !Number.IsUndef(evaluated) && !(evaluated is AlgebraTerm && (evaluated as AlgebraTerm).IsUndefined()))
             {
@@ -948,7 +949,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 AlgebraTerm[] numDen = GroupHelper.ToAlgTerm(groups[i]).GetNumDenFrac();
 
                 if (numDen != null && !numDen[0].Contains(_varFor) && numDen[1].Contains(_varFor))
-                    groups.RemoveAt(i--);
+                    ArrayFunc.RemoveIndex(groups, i--);
                 else
                 {
                     for (int j = 0; j < groups[i].Length; ++j)
@@ -980,8 +981,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (numDen == null || !numContains || !denContains)
                 return null;
 
-            numDen[0] = numDen[0].RemoveRedundancies().ToAlgTerm();
-            numDen[1] = numDen[1].RemoveRedundancies().ToAlgTerm();
+            numDen[0] = numDen[0].RemoveRedundancies(false).ToAlgTerm();
+            numDen[1] = numDen[1].RemoveRedundancies(false).ToAlgTerm();
 
             Number numPow = GetHighestPower(numDen[0], ref pEvalData);
             if (numPow == null)
@@ -1089,8 +1090,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             List<ExComp[]> numGps = numDen[0].GetGroups();
             if (numGps.Count != 2)
                 return null;
-            ExComp numGp0 = GroupHelper.ToAlgTerm(numGps[0]).RemoveRedundancies();
-            ExComp numGp1 = GroupHelper.ToAlgTerm(numGps[1]).RemoveRedundancies();
+            ExComp numGp0 = GroupHelper.ToAlgTerm(numGps[0]).RemoveRedundancies(false);
+            ExComp numGp1 = GroupHelper.ToAlgTerm(numGps[1]).RemoveRedundancies(false);
 
             bool numGp0IsRadical = (numGp0 is PowerFunction && (numGp0 as PowerFunction).IsRadical());
             bool numGp1IsRadical = (numGp1 is PowerFunction && (numGp1 as PowerFunction).IsRadical());

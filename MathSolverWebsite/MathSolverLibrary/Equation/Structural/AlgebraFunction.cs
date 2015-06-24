@@ -1,6 +1,7 @@
 ﻿using MathSolverWebsite.MathSolverLibrary.Equation.Functions;
 using System.Collections.Generic;
 using System.Linq;
+using MathSolverWebsite.MathSolverLibrary.LangCompat;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation
 {
@@ -94,7 +95,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
                 if (!combined)
                 {
-                    List<ExComp> groupList = group.ToList();
+                    List<ExComp> groupList = ArrayFunc.ToList(group);
                     groupList.Add(af);
                     groups[i] = GroupHelper.RemoveOneCoeffs(groupList.ToArray());
                 }

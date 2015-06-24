@@ -8,9 +8,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
         public static ExComp StaticCombine(ExComp ex1, ExComp ex2)
         {
             if (ex1 is AlgebraTerm)
-                ex1 = (ex1 as AlgebraTerm).RemoveRedundancies();
+                ex1 = (ex1 as AlgebraTerm).RemoveRedundancies(false);
             if (ex2 is AlgebraTerm)
-                ex2 = (ex2 as AlgebraTerm).RemoveRedundancies();
+                ex2 = (ex2 as AlgebraTerm).RemoveRedundancies(false);
 
             if (Number.IsUndef(ex1) || Number.IsUndef(ex2))
                 return Number.GetUndefined();
@@ -134,11 +134,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
         public override ExComp Combine(ExComp ex1, ExComp ex2)
         {
             return StaticCombine(ex1, ex2);
-        }
-
-        public override int GetHashCode()
-        {
-            return (int)((double)"Add".GetHashCode() * Math.E);
         }
 
         public override string ToString()

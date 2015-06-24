@@ -67,7 +67,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
                         new AlgebraComp("x"),
                         new AlgebraComp("y"),
                         new AlgebraComp("z")
-                    }, null);
+                    }, null, true);
             }
 
             if (innerEx is ExVector)

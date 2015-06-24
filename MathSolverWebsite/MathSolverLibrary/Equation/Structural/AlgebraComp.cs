@@ -36,11 +36,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             SetVar(var);
         }
 
-        public override int GetHashCode()
-        {
-            return GetVar().GetHashCode();
-        }
-
         public bool IsGarbage()
         {
             return GetVar() == GARBAGE_VALUE;
@@ -114,11 +109,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         public override double GetCompareVal()
         {
             return 1.0;
-        }
-
-        public override int GetHashCode()
-        {
-            return GetVar().GetHashCode();
         }
 
         public override bool IsEqualTo(ExComp comp)

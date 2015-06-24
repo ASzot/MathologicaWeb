@@ -17,7 +17,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public ExComp GetInnerEx()
         {
-            return GetInnerTerm().RemoveRedundancies();
+            return GetInnerTerm().RemoveRedundancies(false);
         }
 
         public AlgebraTerm GetInnerTerm()
@@ -119,7 +119,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         public override List<ExComp[]> GetGroups()
         {
             List<ExComp[]> groups = new List<ExComp[]>();
-            ExComp[] onlyGroup = { this.CloneEx() };
+            ExComp[] onlyGroup = new ExComp[] { this.CloneEx() };
             groups.Add(onlyGroup);
             return groups;
         }
@@ -155,7 +155,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             return CreateInstance(innerEx);
         }
 
-        public override ExComp RemoveRedundancies(bool postWorkable = false)
+        public override ExComp RemoveRedundancies(bool postWorkable)
         {
             ExComp nonRedundantInner = GetInnerTerm().RemoveRedundancies(postWorkable);
             return CreateInstance(nonRedundantInner);
@@ -201,9 +201,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public override ExComp CloneEx()
         {
-            IEnumerable<ExComp> cloned = from arg in _args
-                                         select arg.CloneEx();
-            return CreateInstance(cloned.ToArray());
+            ExComp[] cloned = new ExComp[_args.Length];
+            for (int i = 0; i < _args.Length; ++i)
+                cloned[i] = _args[i].CloneEx();
+            return CreateInstance(cloned);
         }
 
         public override AlgebraTerm CompoundFractions()
@@ -220,38 +221,43 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public override AlgebraTerm HarshEvaluation()
         {
-            IEnumerable<ExComp> harshEval = from arg in _args
-                                            select arg.ToAlgTerm().HarshEvaluation();
-            AlgebraTerm created = CreateInstance(harshEval.ToArray());
+            ExComp[] harshEval = new ExComp[_args.Length];
+            for (int i = 0; i < _args.Length; ++i)
+                harshEval[i] = _args[i].ToAlgTerm().HarshEvaluation();
+            AlgebraTerm created = CreateInstance(harshEval);
             return created;
         }
 
         public override AlgebraTerm Order()
         {
-            IEnumerable<ExComp> ordered = from arg in _args
-                                          select arg.ToAlgTerm().Order();
-            return CreateInstance(ordered.ToArray());
+            ExComp[] orderedArr = new ExComp[_args.Length];
+            for (int i = 0; i < _args.Length; ++i)
+                orderedArr[i] = _args[i].ToAlgTerm().Order();
+            return CreateInstance(orderedArr);
         }
 
         public override AlgebraTerm RemoveOneCoeffs()
         {
-            IEnumerable<ExComp> noOneCoeffs = from arg in _args
-                                              select (arg is AlgebraTerm ? (arg as AlgebraTerm).RemoveOneCoeffs() : arg);
-            return CreateInstance(noOneCoeffs.ToArray());
+            ExComp[] noOneCoeffsArr = new ExComp[_args.Length];
+            for (int i = 0; i < _args.Length; ++i)
+                noOneCoeffsArr[i] = (_args[i] is AlgebraTerm ? (_args[i] as AlgebraTerm).RemoveOneCoeffs() : _args[i]);
+            return CreateInstance(noOneCoeffsArr);
         }
 
-        public override ExComp RemoveRedundancies(bool postWorkable = false)
+        public override ExComp RemoveRedundancies(bool postWorkable)
         {
-            IEnumerable<ExComp> noRedun = from arg in _args
-                                          select arg.ToAlgTerm().RemoveRedundancies(postWorkable);
-            return CreateInstance(noRedun.ToArray());
+            ExComp[] noRedunArr = new ExComp[_args.Length];
+            for (int i = 0; i < _args.Length; ++i)
+                noRedunArr[i] = _args[i].ToAlgTerm().RemoveRedundancies(postWorkable);
+            return CreateInstance(noRedunArr);
         }
 
         public override AlgebraTerm Substitute(ExComp subOut, ExComp subIn)
         {
-            IEnumerable<ExComp> substituted = from arg in _args
-                                              select arg.ToAlgTerm().Substitute(subOut, subIn);
-            return CreateInstance(substituted.ToArray());
+            ExComp[] substitutedArr = new ExComp[_args.Length];
+            for (int i = 0; i < _args.Length; ++i)
+                substitutedArr[i] = _args[i].ToAlgTerm().Substitute(subOut, subIn);
+            return CreateInstance(substitutedArr);
         }
 
         public override AlgebraTerm Substitute(ExComp subOut, ExComp subIn, ref bool success)

@@ -156,7 +156,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
 
             lastStep.GoDown(ref pEvalData);
 
-            Integral integral = Integral.ConstructIntegral(totalInner, pathVar, pathRestriction.GetLower(), pathRestriction.GetUpper());
+            Integral integral = Integral.ConstructIntegral(totalInner, pathVar, pathRestriction.GetLower(), pathRestriction.GetUpper(), false, true);
             ExComp integralEval = integral.Evaluate(false, ref pEvalData);
 
             lastStep.GoUp(ref pEvalData);
@@ -204,7 +204,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
                 innerTerm = innerTerm.Substitute(new AlgebraComp(useDef.GetData1()), useDef.GetData2());
             }
 
-            ExComp innerEx = innerTerm is AlgebraTerm ? (innerTerm as AlgebraTerm).RemoveRedundancies() : innerTerm;
+            ExComp innerEx = innerTerm is AlgebraTerm ? (innerTerm as AlgebraTerm).RemoveRedundancies(false) : innerTerm;
             if (!(innerEx is ExVector))
                 return this;
 
@@ -234,7 +234,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
 
             pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + innerVec.FinalToDispStr() + "*" + pathStr + "=" + WorkMgr.ToDisp(overallTerm) + WorkMgr.EDM);
 
-            Integral integral = Integral.ConstructIntegral(overallTerm, pathVar, pathRestriction.GetLower(), pathRestriction.GetUpper());
+            Integral integral = Integral.ConstructIntegral(overallTerm, pathVar, pathRestriction.GetLower(), pathRestriction.GetUpper(), false, true);
 
             pEvalData.GetWorkMgr().FromFormatted("", "Use the path domain to convert to a definite integral.");
             lastStep = pEvalData.GetWorkMgr().GetLast();

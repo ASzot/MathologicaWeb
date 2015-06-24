@@ -5,14 +5,14 @@ using System.Linq;
 
 namespace MathSolverWebsite.MathSolverLibrary.TermType
 {
-    internal class SolveTermType : TermType
+    internal class SolveGenTermType : GenTermType
     {
         private AlgebraSolver _agSolver;
         private EqSet _eqSet;
         private List<TypePair<LexemeType, string>> _lt;
         private string[] s_promptStrs;
 
-        public SolveTermType(EqSet eqSet, List<TypePair<LexemeType, string>> lt, Dictionary<string, int> solveVars,
+        public SolveGenTermType(EqSet eqSet, List<TypePair<LexemeType, string>> lt, Dictionary<string, int> solveVars,
             string probSolveVar, string[] promptStrs, string noIncludeVar)
         {
             s_promptStrs = promptStrs;
@@ -66,7 +66,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             _cmds = tmpCmds.ToArray();
         }
 
-        public SolveTermType(EqSet eqSet, List<TypePair<LexemeType, string>> lt, Dictionary<string, int> solveVars, string probSolveVar, string promptStr)
+        public SolveGenTermType(EqSet eqSet, List<TypePair<LexemeType, string>> lt, Dictionary<string, int> solveVars, string probSolveVar, string promptStr)
             : base()
         {
             s_promptStrs = new string[1];
@@ -119,7 +119,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             _cmds = cmds.ToArray();
         }
 
-        public SolveTermType(EqSet eqSet, List<TypePair<LexemeType, string>> lt, Dictionary<string, int> solveVars,
+        public SolveGenTermType(EqSet eqSet, List<TypePair<LexemeType, string>> lt, Dictionary<string, int> solveVars,
             string probSolveVar)
             : this(eqSet, lt, solveVars, probSolveVar, "Solve for ")
         {

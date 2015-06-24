@@ -28,7 +28,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             // Combine the fractions.
             SolveMethod.CombineFractions(ref left, ref right, ref pEvalData);
 
-            SolveMethod.DivideByVariableCoeffs(ref left, ref right, derivVar, ref pEvalData);
+            SolveMethod.DivideByVariableCoeffs(ref left, ref right, derivVar, ref pEvalData, false);
 
             AlgebraTerm[] numDen = right.GetNumDenFrac();
             if (numDen == null)
@@ -101,8 +101,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             // Divide each group by the maximum power of x.
             ExComp xPf = xPowMax == 1 ? dVar : (ExComp)dVar.ToPow((double)xPowMax);
 
-            numDen[0] = numDen[0].RemoveRedundancies().ToAlgTerm();
-            numDen[1] = numDen[1].RemoveRedundancies().ToAlgTerm();
+            numDen[0] = numDen[0].RemoveRedundancies(false).ToAlgTerm();
+            numDen[1] = numDen[1].RemoveRedundancies(false).ToAlgTerm();
 
             numDen[0] = Limit.ComponentWiseDiv(numDen[0], xPf, dVar).ToAlgTerm();
             numDen[1] = Limit.ComponentWiseDiv(numDen[1], xPf, dVar).ToAlgTerm();
@@ -165,7 +165,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
                 }
 
                 ExComp[] num = GroupHelper.GetNumerator(gp);
-                ExComp[] den = GroupHelper.GetDenominator(gp);
+                ExComp[] den = GroupHelper.GetDenominator(gp, false);
 
                 if (den.Length == 0)
                     continue;
@@ -228,7 +228,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
                 {
                     ExComp exBase = (gp[j] as PowerFunction).GetBase();
                     if (exBase is AlgebraTerm)
-                        exBase = (exBase as AlgebraTerm).RemoveRedundancies();
+                        exBase = (exBase as AlgebraTerm).RemoveRedundancies(false);
 
                     if (!exBase.IsEqualTo(searchVar))
                         continue;

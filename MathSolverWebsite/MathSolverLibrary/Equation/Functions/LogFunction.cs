@@ -270,7 +270,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             return log;
         }
 
-        public override ExComp RemoveRedundancies(bool postWorkable = false)
+        public override ExComp RemoveRedundancies(bool postWorkable)
         {
             ExComp innerEx = GetInnerTerm().RemoveRedundancies(postWorkable);
             ExComp baseEx = _baseEx is AlgebraTerm ? (_baseEx as AlgebraTerm).RemoveRedundancies(postWorkable) : _baseEx;

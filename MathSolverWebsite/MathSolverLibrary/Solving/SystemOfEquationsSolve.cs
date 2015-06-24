@@ -4,6 +4,7 @@ using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MathSolverWebsite.MathSolverLibrary.TermType;
 using LexemeTable = System.Collections.Generic.List<
 MathSolverWebsite.MathSolverLibrary.TypePair<MathSolverWebsite.MathSolverLibrary.Parsing.LexemeType, string>>;
 
@@ -398,11 +399,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 equations[i].SetRight(right);
             }
 
-            return SolveEquationSystemRecur(equations, eqLexemeTables, ref pEvalData);
+            return SolveEquationSystemRecur(equations, eqLexemeTables, ref pEvalData, true);
         }
 
-        private SolveResult SolveEquationSystemRecur(List<EqSet> completeEqs,
-            List<LexemeTable> eqLexemeTables, ref TermType.EvalData pEvalData, bool ascending = true)
+        private SolveResult SolveEquationSystemRecur(List<EqSet> completeEqs, List<LexemeTable> eqLexemeTables, ref EvalData pEvalData, bool ascending)
         {
             List<EqSet> clonedEqs = (from completeEq in completeEqs
                                      select completeEq.Clone()).ToList();
@@ -513,7 +513,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 AlgebraTerm term0 = completeEqs[i].GetLeftTerm();
                 AlgebraTerm term1 = completeEqs[i].GetRightTerm();
 
-                ExComp ex0 = term0.RemoveRedundancies();
+                ExComp ex0 = term0.RemoveRedundancies(false);
                 if (!(ex0 is AlgebraComp))
                 {
                     pEvalData.AddFailureMsg("In solving systems of equations one of the solved terms didn't only contain the variable.");

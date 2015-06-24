@@ -189,9 +189,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
         public static ExComp StaticCombine(ExComp ex1, ExComp ex2)
         {
             if (ex1 is AlgebraTerm)
-                ex1 = (ex1 as AlgebraTerm).RemoveRedundancies();
+                ex1 = (ex1 as AlgebraTerm).RemoveRedundancies(false);
             if (ex2 is AlgebraTerm)
-                ex2 = (ex2 as AlgebraTerm).RemoveRedundancies();
+                ex2 = (ex2 as AlgebraTerm).RemoveRedundancies(false);
 
             if (ex1 is Functions.Calculus.CalcConstant)
                 return ex1;
@@ -250,7 +250,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 ExComp ex1Power = powFunc1.GetPower();
                 powFunc1.SetPower(MulOp.StaticCombine(ex1Power, ex2));
 
-                ExComp resultant = powFunc1.RemoveRedundancies();
+                ExComp resultant = powFunc1.RemoveRedundancies(false);
 
                 return resultant;
             }
@@ -296,8 +296,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
 
                 if (numDen != null)
                 {
-                    ExComp num = numDen[0].RemoveRedundancies();
-                    ExComp den = numDen[1].RemoveRedundancies();
+                    ExComp num = numDen[0].RemoveRedundancies(false);
+                    ExComp den = numDen[1].RemoveRedundancies(false);
 
                     if (num is Number && den is Number)
                     {
@@ -455,11 +455,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
         public override ExComp Combine(ExComp ex1, ExComp ex2)
         {
             return StaticCombine(ex1, ex2);
-        }
-
-        public override int GetHashCode()
-        {
-            return (int)((double)"Pow".GetHashCode() * Math.E);
         }
 
         public override string ToString()

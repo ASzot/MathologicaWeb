@@ -2,6 +2,7 @@
 using MathSolverWebsite.MathSolverLibrary.Equation.Functions;
 using System.Collections.Generic;
 using System.Linq;
+using MathSolverWebsite.MathSolverLibrary.TermType;
 
 namespace MathSolverWebsite.MathSolverLibrary.Solving
 {
@@ -13,14 +14,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             if (left != null)
             {
                 left = left.CompoundFractions(out fracCombine0);
-                left = left.RemoveRedundancies().ToAlgTerm();
+                left = left.RemoveRedundancies(false).ToAlgTerm();
             }
 
             bool fracCombine1 = false;
             if (right != null)
             {
                 right = right.CompoundFractions(out fracCombine1);
-                right = right.RemoveRedundancies().ToAlgTerm();
+                right = right.RemoveRedundancies(false).ToAlgTerm();
             }
 
             if (fracCombine0 || fracCombine1)
@@ -83,8 +84,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 right = Equation.Operators.SubOp.StaticCombine(right, subTerm).ToAlgTerm();
             }
 
-            left = left.RemoveZeros().RemoveRedundancies().ToAlgTerm();
-            right = right.RemoveZeros().RemoveRedundancies().ToAlgTerm();
+            left = left.RemoveZeros().RemoveRedundancies(false).ToAlgTerm();
+            right = right.RemoveZeros().RemoveRedundancies(false).ToAlgTerm();
 
             if (right.GetTermCount() == 0)
                 right = Number.GetZero().ToAlgTerm();
@@ -107,19 +108,20 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
         /// <param name="solveForComp"></param>
         /// <param name="pEvalData"></param>
         /// <param name="strongDivide"></param>
-        public static void DivideByVariableCoeffs(ref AlgebraTerm left, ref AlgebraTerm right, AlgebraComp solveForComp, ref TermType.EvalData pEvalData,
-            bool strongDivide = false)
+        public static void DivideByVariableCoeffs(ref AlgebraTerm left, ref AlgebraTerm right, AlgebraComp solveForComp, ref EvalData pEvalData, bool strongDivide)
         {
             if (right.GetSubComps().Count == 0)
                 right.Add(Number.GetZero());
             if (left.GetTermCount() != 1)
             {
                 List<ExComp[]> groups = left.GetGroupsNoOps();
-                IEnumerable<ExComp[]> unrelatedGroups = from gp in groups
-                                      select GroupHelper.GetUnrelatableTermsOfGroup(gp, solveForComp);
+
+                ExComp[][] unrelatedGroupsArr = new ExComp[groups.Count][];
+                for (int i = 0; i < groups.Count; ++i)
+                    unrelatedGroupsArr[i] = GroupHelper.GetUnrelatableTermsOfGroup(groups[i], solveForComp);
 
                 // Combine all of the unrelated terms.
-                AlgebraTerm factoredOutUnrelatedTerm = new AlgebraTerm(unrelatedGroups.ToArray());
+                AlgebraTerm factoredOutUnrelatedTerm = new AlgebraTerm(unrelatedGroupsArr);
 
                 bool displayFactoringWork = false;
                 if (factoredOutUnrelatedTerm.GetGroupCount() > 1)
@@ -139,7 +141,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
                 if (pEvalData.GetNegDivCount() > -1)
                 {
-                    factoredOutUnrelatedTerm = factoredOutUnrelatedTerm.RemoveRedundancies().ToAlgTerm();
+                    factoredOutUnrelatedTerm = factoredOutUnrelatedTerm.RemoveRedundancies(false).ToAlgTerm();
                     foreach (ExComp subComp in factoredOutUnrelatedTerm.GetSubComps())
                     {
                         if (Number.GetNegOne().IsEqualTo(subComp) || (subComp is Number && !(subComp as Number).HasImaginaryComp() && Number.OpLT((subComp as Number), 0.0)))
@@ -206,7 +208,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             if (workableTerm is AlgebraTerm)
             {
                 AlgebraTerm compactedTerm = (workableTerm as AlgebraTerm).CompoundFractions();
-                workableTerm = compactedTerm.RemoveRedundancies();
+                workableTerm = compactedTerm.RemoveRedundancies(false);
             }
 
             term = workableTerm.ToAlgTerm();
@@ -248,14 +250,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             {
                 ExComp workableLeft = left.MakeWorkable();
                 if (workableLeft is AlgebraTerm)
-                    workableLeft = (workableLeft as AlgebraTerm).RemoveRedundancies();
+                    workableLeft = (workableLeft as AlgebraTerm).RemoveRedundancies(false);
                 left = workableLeft.ToAlgTerm();
             }
             if (right != null)
             {
                 ExComp workableRight = right.MakeWorkable();
                 if (workableRight is AlgebraTerm)
-                    workableRight = (workableRight as AlgebraTerm).RemoveRedundancies();
+                    workableRight = (workableRight as AlgebraTerm).RemoveRedundancies(false);
                 right = workableRight.ToAlgTerm();
             }
 

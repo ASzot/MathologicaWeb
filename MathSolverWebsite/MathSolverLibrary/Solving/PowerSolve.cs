@@ -60,10 +60,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 }
             }
 
-            DivideByVariableCoeffs(ref left, ref right, solveForComp, ref pEvalData);
+            DivideByVariableCoeffs(ref left, ref right, solveForComp, ref pEvalData, false);
 
             // Get the reciprocal of the power.
-            ExComp tmp = left.RemoveRedundancies();
+            ExComp tmp = left.RemoveRedundancies(false);
             if (!(tmp is PowerFunction))
             {
                 return null;
@@ -119,7 +119,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 // The powers should cancel.
                 left = PowOp.StaticCombine(left, reciprocalPow).ToAlgTerm();
 
-                ExComp tmpRight = PowOp.TakeRoot(right.RemoveRedundancies(), power as Number, ref pEvalData, true);
+                ExComp tmpRight = PowOp.TakeRoot(right.RemoveRedundancies(false), power as Number, ref pEvalData, true);
                 if (tmpRight is AlgebraTermArray)
                 {
                     AlgebraTermArray rights = tmpRight as AlgebraTermArray;

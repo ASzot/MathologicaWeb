@@ -33,11 +33,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
             return StaticCombine(ex1, ex2);
         }
 
-        public override int GetHashCode()
-        {
-            return (int)((double)"Sub".GetHashCode() * Math.E);
-        }
-
         public override string ToString()
         {
             return "-";

@@ -72,9 +72,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             last.SetWorkHtml(WorkMgr.STM + "\\frac{\\partial N}{\\partial " + dVar.ToDispString() + "}=" + WorkMgr.ToDisp(nx) + WorkMgr.EDM);
 
             if (my is AlgebraTerm)
-                my = (my as AlgebraTerm).RemoveRedundancies();
+                my = (my as AlgebraTerm).RemoveRedundancies(false);
             if (nx is AlgebraTerm)
-                nx = (nx as AlgebraTerm).RemoveRedundancies();
+                nx = (nx as AlgebraTerm).RemoveRedundancies(false);
 
             if (!my.IsEqualTo(nx))
                 return null;

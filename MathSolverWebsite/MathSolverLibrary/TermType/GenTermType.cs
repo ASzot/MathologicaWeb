@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace MathSolverWebsite.MathSolverLibrary.TermType
 {
-    internal abstract class TermType
+    internal abstract class GenTermType
     {
         protected string[] _cmds = null;
         protected MultiLineHelper _multiLineHelper = null;
@@ -13,12 +13,12 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             return _cmds.Length;
         }
 
-        public TermType(params string[] cmds)
+        public GenTermType(params string[] cmds)
         {
             _cmds = cmds;
         }
 
-        public TermType()
+        public GenTermType()
         {
         }
 

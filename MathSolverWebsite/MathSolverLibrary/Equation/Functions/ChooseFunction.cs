@@ -36,8 +36,8 @@
 
         public ChooseFunction(ExComp top, ExComp bottom)
             : base(FunctionType.ChooseFunction, typeof(ChooseFunction),
-            top is AlgebraTerm ? (top as AlgebraTerm).RemoveRedundancies() : top,
-            bottom is AlgebraTerm ? (bottom as AlgebraTerm).RemoveRedundancies() : bottom)
+            top is AlgebraTerm ? (top as AlgebraTerm).RemoveRedundancies(false) : top,
+            bottom is AlgebraTerm ? (bottom as AlgebraTerm).RemoveRedundancies(false) : bottom)
         {
         }
 

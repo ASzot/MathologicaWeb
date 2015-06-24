@@ -28,7 +28,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
             if (_root is AlgebraTerm)
             {
-                _root = (_root as AlgebraTerm).RemoveRedundancies();
+                _root = (_root as AlgebraTerm).RemoveRedundancies(false);
             }
 
             System.Collections.Generic.List<ExComp> rootTerms = left.GetGroupPow(_root);

@@ -35,11 +35,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                     return new NoSolutions();
             }
             CombineFractions(ref left, ref right, ref pEvalData);
-            DivideByVariableCoeffs(ref left, ref right, solveForComp, ref pEvalData);
+            DivideByVariableCoeffs(ref left, ref right, solveForComp, ref pEvalData, false);
 
             right = right.Order();
 
-            if (!left.RemoveRedundancies().IsEqualTo(solveForComp))
+            if (!left.RemoveRedundancies(false).IsEqualTo(solveForComp))
             {
                 pEvalData.SetIsWorkable(false);
                 // We may have a fraction which hasn't been entirely solved.

@@ -15,7 +15,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
 
         public ExComp GetDenEx()
         {
-            return _den.RemoveRedundancies();
+            return _den.RemoveRedundancies(false);
         }
 
         public AlgebraTerm GetNum()
@@ -25,7 +25,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
 
         public ExComp GetNumEx()
         {
-            return _num.RemoveRedundancies();
+            return _num.RemoveRedundancies(false);
         }
 
         public ExComp GetReciprocal()
@@ -56,7 +56,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
 
                 return true;
             }
-            term = term.RemoveRedundancies().ToAlgTerm();
+            term = term.RemoveRedundancies(false).ToAlgTerm();
 
             if (term.GetTermCount() == 1)
             {
@@ -95,7 +95,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
             return Number.GetOne().IsEqualTo(GetDenEx());
         }
 
-        public bool IsSimpleUnitCircleAngle(out Number num, out Number den, bool handleNegs = true)
+        public bool IsSimpleUnitCircleAngle(out Number num, out Number den, bool handleNegs)
         {
             num = null;
             den = null;

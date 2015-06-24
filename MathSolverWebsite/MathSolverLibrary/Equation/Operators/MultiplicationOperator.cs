@@ -23,9 +23,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
         public static ExComp StaticCombine(ExComp ex1, ExComp ex2)
         {
             if (ex1 is AlgebraTerm)
-                ex1 = (ex1 as AlgebraTerm).RemoveRedundancies();
+                ex1 = (ex1 as AlgebraTerm).RemoveRedundancies(false);
             if (ex2 is AlgebraTerm)
-                ex2 = (ex2 as AlgebraTerm).RemoveRedundancies();
+                ex2 = (ex2 as AlgebraTerm).RemoveRedundancies(false);
 
             if (ex1 is Functions.Calculus.CalcConstant)
                 return ex1;
@@ -141,13 +141,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                     ExComp denTerm2 = numDenTerm2 != null ? (numDenTerm2[1] as ExComp) : (Number.GetOne() as ExComp);
 
                     if (numTerm1 is AlgebraTerm)
-                        numTerm1 = (numTerm1 as AlgebraTerm).RemoveRedundancies();
+                        numTerm1 = (numTerm1 as AlgebraTerm).RemoveRedundancies(false);
                     if (numTerm2 is AlgebraTerm)
-                        numTerm2 = (numTerm2 as AlgebraTerm).RemoveRedundancies();
+                        numTerm2 = (numTerm2 as AlgebraTerm).RemoveRedundancies(false);
                     if (denTerm1 is AlgebraTerm)
-                        denTerm1 = (denTerm1 as AlgebraTerm).RemoveRedundancies();
+                        denTerm1 = (denTerm1 as AlgebraTerm).RemoveRedundancies(false);
                     if (denTerm2 is AlgebraTerm)
-                        denTerm2 = (denTerm2 as AlgebraTerm).RemoveRedundancies();
+                        denTerm2 = (denTerm2 as AlgebraTerm).RemoveRedundancies(false);
 
                     if (numTerm2.IsEqualTo(denTerm1))
                         return DivOp.StaticCombine(numTerm1, denTerm2);
@@ -202,7 +202,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 AlgebraComp comp = ex1 is AlgebraComp ? ex1 as AlgebraComp : ex2 as AlgebraComp;
 
                 AlgebraTerm[] numDen = term.GetNumDenFrac();
-                if (numDen != null && Number.GetOne().IsEqualTo(numDen[0].RemoveRedundancies()) && comp.IsEqualTo(numDen[1].RemoveRedundancies()))
+                if (numDen != null && Number.GetOne().IsEqualTo(numDen[0].RemoveRedundancies(false)) && comp.IsEqualTo(numDen[1].RemoveRedundancies(false)))
                 {
                     return Number.GetOne();
                 }
@@ -218,7 +218,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 {
                     ExComp[] group = groups[i];
                     bool matchingFound = false;
-                    for (int j = 0; j < group.Count(); ++j)
+                    for (int j = 0; j < group.Length; ++j)
                     {
                         ExComp groupComp = group[j];
 
@@ -234,7 +234,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
 
                     if (!matchingFound)
                     {
-                        AlgebraTerm.AddTermToGroup(ref group, comp);
+                        AlgebraTerm.AddTermToGroup(ref group, comp, true);
                     }
 
                     combinedGroups.Add(group);
@@ -348,11 +348,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
         public override ExComp Combine(ExComp ex1, ExComp ex2)
         {
             return StaticCombine(ex1, ex2);
-        }
-
-        public override int GetHashCode()
-        {
-            return (int)((double)"Mul".GetHashCode() * Math.E);
         }
 
         public override string ToString()

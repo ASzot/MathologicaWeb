@@ -5,10 +5,11 @@ using MathSolverWebsite.MathSolverLibrary.Equation.Term;
 using MathSolverWebsite.MathSolverLibrary.Parsing;
 using System.Collections.Generic;
 using System.Linq;
+using MathSolverWebsite.MathSolverLibrary.LangCompat;
 
 namespace MathSolverWebsite.MathSolverLibrary.TermType
 {
-    internal class QuadraticTermType : TermType
+    internal class QuadraticGenTermType : GenTermType
     {
         private ExComp _a;
         private ExComp _b;
@@ -16,11 +17,11 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
         private AlgebraTerm _eq;
         private ExComp _funcIden;
         private AlgebraVar _solveFor;
-        private FunctionTermType tt_func = null;
-        private SolveTermType tt_solve = null;
+        private FunctionGenTermType tt_func = null;
+        private SolveGenTermType _ttSolveGen = null;
         private string _graphStr = null;
 
-        public QuadraticTermType()
+        public QuadraticGenTermType()
             : base()
         {
         }
@@ -90,7 +91,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
             if (tt_func != null && tt_func.IsValidCommand(command))
                 return tt_func.ExecuteCommand(command, ref pEvalData);
-            else if (tt_solve != null && tt_solve.IsValidCommand(command))
+            else if (_ttSolveGen != null && _ttSolveGen.IsValidCommand(command))
             {
                 if (command.Contains("completing the square"))
                     pEvalData.SetQuadSolveMethod(Solving.QuadraticSolveMethod.CompleteSquare);
@@ -101,7 +102,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                     // The default is factoring as this will go on to the quadratic formula method if necessary.
                     pEvalData.SetQuadSolveMethod(Solving.QuadraticSolveMethod.Factor);
                 }
-                return tt_solve.ExecuteCommand(command, ref pEvalData);
+                return _ttSolveGen.ExecuteCommand(command, ref pEvalData);
             }
 
             return SolveResult.InvalidCmd(ref pEvalData);
@@ -135,7 +136,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
             if (_funcIden is FunctionDefinition)
             {
-                tt_func = new FunctionTermType();
+                tt_func = new FunctionGenTermType();
                 if (!tt_func.Init(new EqSet(_funcIden, left == null ? right : left, LexemeType.EqualsOp), lexemeTable, solveVars, probSolveVar))
                     tt_func = null;
             }
@@ -166,36 +167,44 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             }
 
             if (promptStrs != null)
-                tt_solve = new SolveTermType(new EqSet(_eq, Number.GetZero(), LexemeType.EqualsOp), lexemeTable, solveVars, probSolveVar, promptStrs,
+                _ttSolveGen = new SolveGenTermType(new EqSet(_eq, Number.GetZero(), LexemeType.EqualsOp), lexemeTable, solveVars, probSolveVar, promptStrs,
                     _funcIden is AlgebraComp ? (_funcIden as AlgebraComp).GetVar().GetVar() : "");
 
             AlgebraTerm nullTerm = null;
 
             Solving.SolveMethod.PrepareForSolving(ref _eq, ref nullTerm, ref pEvalData);
 
-            _eq = _eq.RemoveRedundancies().ToAlgTerm();
+            _eq = _eq.RemoveRedundancies(false).ToAlgTerm();
 
             List<ExComp[]> squaredGroups = _eq.GetGroupContainingTerm(solveForComp.ToPow(2.0));
             List<ExComp[]> linearGroups = _eq.GetGroupContainingTerm(solveForComp);
             List<AlgebraGroup> constantGroup = _eq.GetGroupsConstantTo(solveForComp);
 
-            IEnumerable<AlgebraTerm> aTerms = from squaredGroup in squaredGroups
-                         select GroupHelper.ToAlgTerm(GroupHelper.GetUnrelatableTermsOfGroup(squaredGroup, solveForComp));
+            AlgebraTerm[] aTermsArr = new AlgebraTerm[squaredGroups.Count];
+            for (int i = 0; i < squaredGroups.Count; ++i)
+            {
+                aTermsArr[i] =
+                    GroupHelper.ToAlgTerm(GroupHelper.GetUnrelatableTermsOfGroup(squaredGroups[i], solveForComp));
+            }
 
-            IEnumerable<AlgebraTerm> bTerms = from linearGroup in linearGroups
-                         select GroupHelper.ToAlgTerm(GroupHelper.GetUnrelatableTermsOfGroup(linearGroup, solveForComp));
+            AlgebraTerm[] bTermsArr = new AlgebraTerm[linearGroups.Count];
+            for (int i = 0; i < linearGroups.Count; ++i)
+            {
+                bTermsArr[i] =
+                    GroupHelper.ToAlgTerm(GroupHelper.GetUnrelatableTermsOfGroup(linearGroups[i], solveForComp));
+            }
 
-            if (aTerms.Count() == 0)
+            if (aTermsArr.Length == 0)
                 return false;
 
             AlgebraTerm a = new AlgebraTerm();
-            foreach (AlgebraTerm aTerm in aTerms)
+            foreach (AlgebraTerm aTerm in aTermsArr)
             {
                 a = AlgebraTerm.OpAdd(a, aTerm);
             }
 
             AlgebraTerm b = new AlgebraTerm();
-            foreach (AlgebraTerm bTerm in bTerms)
+            foreach (AlgebraTerm bTerm in bTermsArr)
             {
                 b = AlgebraTerm.OpAdd(b, bTerm);
             }
@@ -209,16 +218,16 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             _c = c;
 
             if (_a is AlgebraTerm)
-                _a = (_a as AlgebraTerm).RemoveRedundancies();
+                _a = (_a as AlgebraTerm).RemoveRedundancies(false);
             if (_b is AlgebraTerm)
-                _b = (_b as AlgebraTerm).RemoveRedundancies();
+                _b = (_b as AlgebraTerm).RemoveRedundancies(false);
             if (_c is AlgebraTerm)
-                _c = (_c as AlgebraTerm).RemoveRedundancies();
+                _c = (_c as AlgebraTerm).RemoveRedundancies(false);
 
             List<string> tmpCmds = new List<string>();
-            if (tt_solve != null)
+            if (_ttSolveGen != null)
             {
-                tmpCmds.AddRange(tt_solve.GetCommands());
+                tmpCmds.AddRange(_ttSolveGen.GetCommands());
             }
             tmpCmds.Add("To vertex form");
             tmpCmds.Add("Find the vertex");
@@ -228,8 +237,8 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
             if (tt_func != null)
             {
-                if (tt_solve != null)
-                    tmpCmds.AddRange(tt_func.GetCommands().ToList().GetRange(0, 2));
+                if (_ttSolveGen != null)
+                    tmpCmds.AddRange(ArrayFunc.ToList(tt_func.GetCommands()).GetRange(0, 2));
                 else
                     tmpCmds.AddRange(tt_func.GetCommands());
             }

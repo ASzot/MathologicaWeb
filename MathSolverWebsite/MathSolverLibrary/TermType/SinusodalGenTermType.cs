@@ -4,10 +4,11 @@ using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
 using MathSolverWebsite.MathSolverLibrary.Parsing;
 using System.Collections.Generic;
 using System.Linq;
+using MathSolverWebsite.MathSolverLibrary.LangCompat;
 
 namespace MathSolverWebsite.MathSolverLibrary.TermType
 {
-    internal class SinusodalTermType : TermType
+    internal class SinusodalGenTermType : GenTermType
     {
         private ExComp _coeff;
         private ExComp _funcIden = null;
@@ -15,12 +16,12 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
         private ExComp _phaseShift;
         private AlgebraVar _solveFor;
         private TrigFunction _trigFunc;
-        private FunctionTermType tt_func = null;
-        private SimplifyTermType tt_simp = null;
-        private SolveTermType tt_solve = null;
+        private FunctionGenTermType tt_func = null;
+        private SimplifyGenTermType tt_simp = null;
+        private SolveGenTermType _ttSolveGen = null;
         private string _graphStr = null;
 
-        public SinusodalTermType()
+        public SinusodalGenTermType()
         {
         }
 
@@ -65,8 +66,8 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             }
             else if (tt_func != null && tt_func.IsValidCommand(command))
                 return tt_func.ExecuteCommand(command, ref pEvalData);
-            else if (tt_solve != null && tt_solve.IsValidCommand(command))
-                return tt_solve.ExecuteCommand(command, ref pEvalData);
+            else if (_ttSolveGen != null && _ttSolveGen.IsValidCommand(command))
+                return _ttSolveGen.ExecuteCommand(command, ref pEvalData);
             else if (tt_simp != null && tt_simp.IsValidCommand(command))
                 return tt_simp.ExecuteCommand(command, ref pEvalData);
 
@@ -115,7 +116,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
             if (_funcIden is FunctionDefinition)
             {
-                tt_func = new FunctionTermType();
+                tt_func = new FunctionGenTermType();
                 if (!tt_func.Init(new EqSet(_funcIden, overall, LexemeType.EqualsOp), lexemeTable, solveVars,
                     _funcIden is AlgebraComp ? (_funcIden as AlgebraComp).GetVar().GetVar() : ""))
                     tt_func = null;
@@ -133,10 +134,10 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             else
             {
                 promptStr = "Find zeros for ";
-                tt_simp = new SimplifyTermType(left != null ? left : right);
+                tt_simp = new SimplifyGenTermType(left != null ? left : right);
             }
 
-            tt_solve = new SolveTermType(new EqSet(overall, Number.GetZero(), LexemeType.EqualsOp), lexemeTable, solveVars,
+            _ttSolveGen = new SolveGenTermType(new EqSet(overall, Number.GetZero(), LexemeType.EqualsOp), lexemeTable, solveVars,
                 probSolveVar, promptStr);
 
             int groupCount = overall.GetGroupCount();
@@ -152,7 +153,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
             _coeff = GroupHelper.ToAlgTerm(variableCoeffs);
 
-            List<ExComp> varGroupList = variableGroup.ToList();
+            List<ExComp> varGroupList = ArrayFunc.ToList(variableGroup);
 
             foreach (ExComp varCoeff in variableCoeffs)
             {
@@ -165,7 +166,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
             ExComp singleGpCmp = varGroupList[0];
             if (singleGpCmp is AlgebraTerm)
-                singleGpCmp = (singleGpCmp as AlgebraTerm).RemoveRedundancies();
+                singleGpCmp = (singleGpCmp as AlgebraTerm).RemoveRedundancies(false);
 
             if (!(singleGpCmp is TrigFunction))
                 return false;
@@ -186,24 +187,24 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             tmpCmds.Add("Get amplitude");
             tmpCmds.Add("Get phase shift");
 
-            if (tt_func != null && tt_solve != null)
+            if (tt_func != null && _ttSolveGen != null)
             {
-                tmpCmds.AddRange(tt_func.GetCommands().ToList().GetRange(0, 3));
-                tmpCmds.AddRange(tt_solve.GetCommands());
+                tmpCmds.AddRange(ArrayFunc.ToList(tt_func.GetCommands()).GetRange(0, 3));
+                tmpCmds.AddRange(_ttSolveGen.GetCommands());
             }
             else if (tt_func != null)
             {
                 tmpCmds.AddRange(tt_func.GetCommands());
             }
-            else if (tt_solve != null)
+            else if (_ttSolveGen != null)
             {
-                tmpCmds.AddRange(tt_solve.GetCommands());
+                tmpCmds.AddRange(_ttSolveGen.GetCommands());
             }
 
             if (tt_simp != null)
             {
                 tt_simp.SetToSimpOnly();
-                tmpCmds.Add(SimplifyTermType.KEY_SIMPLIFY);
+                tmpCmds.Add(SimplifyGenTermType.KEY_SIMPLIFY);
             }
 
             if (!tmpCmds.Contains("Graph"))

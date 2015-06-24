@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace MathSolverWebsite.MathSolverLibrary.TermType
 {
-    internal class SimplifyTermType : TermType
+    internal class SimplifyGenTermType : GenTermType
     {
         public const string KEY_SIMPLIFY = "Simplify";
         private AlgebraSolver _agSolver;
@@ -17,18 +17,18 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
         private PolynomialExt _numPolyInfo = null;
         private ExComp _term;
 
-        public SimplifyTermType()
+        public SimplifyGenTermType()
         {
             _cmds = new string[] { KEY_SIMPLIFY };
         }
 
-        public SimplifyTermType(ExComp term)
+        public SimplifyGenTermType(ExComp term)
         {
             _term = term;
             _agSolver = new AlgebraSolver();
         }
 
-        public SimplifyTermType(ExComp term, List<TypePair<LexemeType, string>> lt, Dictionary<string, int> solveVars, string probSolveVar, Type startingType, bool isFuncDef = false)
+        public SimplifyGenTermType(ExComp term, List<TypePair<LexemeType, string>> lt, Dictionary<string, int> solveVars, string probSolveVar, Type startingType, bool isFuncDef)
             : base()
         {
             _term = term;
@@ -176,14 +176,14 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             }
         }
 
-        public static ExComp BasicSimplify(ExComp term, ref EvalData pEvalData, bool factor = true)
+        public static ExComp BasicSimplify(ExComp term, ref EvalData pEvalData, bool factor)
         {
             AlgebraTerm tmpTerm = term.ToAlgTerm();
 
             // Surround in AlgebraTerm body to ensure that all of the functions are called.
             tmpTerm = new AlgebraTerm(tmpTerm);
             tmpTerm.CallFunctions(ref pEvalData);
-            term = tmpTerm.RemoveRedundancies();
+            term = tmpTerm.RemoveRedundancies(false);
 
             AlgebraTerm agTerm;
             if (term is AlgebraTerm)
@@ -209,7 +209,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
                 term = Equation.Functions.PowerFunction.FixFraction(term);
                 if (term is AlgebraTerm)
-                    term = (term as AlgebraTerm).RemoveRedundancies();
+                    term = (term as AlgebraTerm).RemoveRedundancies(false);
             }
 
             agTerm = term.ToAlgTerm();
@@ -218,7 +218,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             ExComp simpEx = Simplifier.Simplify(surroundedAgTerm, ref pEvalData);
 
             if (simpEx is AlgebraTerm)
-                simpEx = (simpEx as AlgebraTerm).RemoveRedundancies();
+                simpEx = (simpEx as AlgebraTerm).RemoveRedundancies(false);
             return simpEx;
         }
 
@@ -226,14 +226,14 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
         {
             if (Number.IsUndef(term))
                 return SolveResult.Simplified(Number.GetUndefined());
-            ExComp simpEx = BasicSimplify(term, ref pEvalData);
+            ExComp simpEx = BasicSimplify(term, ref pEvalData, true);
 
             Solution solution;
 
             solution = new Solution(simpEx);
             if (simpEx is AlgebraTerm)
             {
-                ExComp harshSimpEx = Simplifier.HarshSimplify(simpEx.CloneEx() as AlgebraTerm, ref pEvalData);
+                ExComp harshSimpEx = Simplifier.HarshSimplify(simpEx.CloneEx() as AlgebraTerm, ref pEvalData, true);
                 if (!harshSimpEx.IsEqualTo(simpEx))
                 {
                     // Display the harsh simplified equation as well.
@@ -319,7 +319,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             {
                 ExComp factorized = AdvAlgebraTerm.FactorizeTerm(_term.CloneEx().ToAlgTerm(), ref pEvalData, true);
                 if (factorized is AlgebraTerm)
-                    factorized = (factorized as AlgebraTerm).RemoveRedundancies();
+                    factorized = (factorized as AlgebraTerm).RemoveRedundancies(false);
 
                 return SolveResult.Simplified(factorized);
             }
@@ -334,7 +334,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             }
             else if (command == "Condense logs")
             {
-                return SolveResult.Simplified(AdvAlgebraTerm.CompoundLogs(_term.ToAlgTerm()));
+                return SolveResult.Simplified(AdvAlgebraTerm.CompoundLogs(_term.ToAlgTerm(), null));
             }
             else if (command == "Expand logs")
             {

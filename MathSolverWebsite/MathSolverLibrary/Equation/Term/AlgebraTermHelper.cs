@@ -3,6 +3,7 @@ using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MathSolverWebsite.MathSolverLibrary.LangCompat;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation
 {
@@ -10,19 +11,19 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
     {
         public static bool GroupsCombinable(ExComp[] group1, ExComp[] group2)
         {
-            IEnumerable<ExComp> compareGroup1 = GetCombinableGroup(group1);
-            IEnumerable<ExComp> compareGroup2 = GetCombinableGroup(group2);
+            List<ExComp> compareGroup1 = GetCombinableGroup(group1, false);
+            List<ExComp> compareGroup2 = GetCombinableGroup(group2, false);
 
             // For this the coefficients don't matter.
             List<TypePair<bool, ExComp>> checkGroups2 = (from comp in compareGroup2
                                 select new TypePair<bool, ExComp>(false, comp)).ToList();
 
-            if (compareGroup1.Count() != compareGroup2.Count())
+            if (compareGroup1.Count!= compareGroup2.Count)
                 return false;
 
             foreach (ExComp comp in compareGroup1)
             {
-                for (int j = 0; j < checkGroups2.Count(); ++j)
+                for (int j = 0; j < checkGroups2.Count; ++j)
                 {
                     TypePair<bool, ExComp> checkGroup = checkGroups2.ElementAt(j);
                     if (checkGroup.GetData1())
@@ -58,7 +59,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public static ExComp Intersect(AlgebraTerm term, Number number)
         {
-            ExComp[] group = { number };
+            ExComp[] group = new ExComp[] { number };
 
             ExComp[] matchingGroup = term.GetMatchingGroup(group);
             if (matchingGroup == null)
@@ -72,10 +73,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             if (coeff == null)
             {
                 coeff = new Number(1.0);
-                int matchingGroupCount = matchingGroup.Count();
-                Array.Resize<ExComp>(ref matchingGroup, matchingGroupCount + 2);
-                matchingGroup[matchingGroupCount] = new Operators.MulOp();
-                matchingGroup[matchingGroupCount + 1] = coeff;
+                int matchingGroupCount = matchingGroup.Length;
+                ExComp[] tmpGp = new ExComp[matchingGroupCount + 2];
+                for (int i = 0; i < matchingGroupCount + 2; ++i)
+                {
+                    tmpGp[i] = matchingGroup[i];
+                }
+                tmpGp[matchingGroupCount] = new Operators.MulOp();
+                tmpGp[matchingGroupCount + 1] = coeff;
+
+                matchingGroup = tmpGp;
             }
 
             coeff.Add(number);
@@ -87,7 +94,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public static ExComp Intersect(AlgebraTerm term, AlgebraComp comp)
         {
-            ExComp[] group = { comp };
+            ExComp[] group = new ExComp[] { comp };
 
             ExComp[] matchingGroup = term.GetMatchingGroup(group);
             if (matchingGroup == null)
@@ -106,10 +113,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             if (coeff1 == null)
             {
                 coeff1 = new Number(1.0);
-                int matchingGroupCount = matchingGroup.Count();
-                Array.Resize<ExComp>(ref matchingGroup, matchingGroupCount + 2);
-                matchingGroup[matchingGroupCount] = new Operators.MulOp();
-                matchingGroup[matchingGroupCount + 1] = coeff1;
+                int matchingGroupCount = matchingGroup.Length;
+                ExComp[] tmpGp = new ExComp[matchingGroupCount + 2];
+                for (int i = 0; i < matchingGroupCount; ++i)
+                {
+                    tmpGp[i] = matchingGroup[i];
+                }
+                tmpGp[matchingGroupCount] = new Operators.MulOp();
+                tmpGp[matchingGroupCount + 1] = coeff1;
+
+                matchingGroup = tmpGp;
             }
 
             coeff1.Add(1.0);
@@ -159,7 +172,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                     if (Number.OpNotEquals(combinedCoeff, 0.0))
                     {
                         if (Number.OpNotEquals(combinedCoeff, 1.0))
-                            AddTermToGroup(ref baseGroup, combinedCoeff);
+                            AddTermToGroup(ref baseGroup, combinedCoeff, true);
 
                         intersectedGroups.Add(baseGroup);
                     }
@@ -180,7 +193,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         {
             List<ExComp> combinedGroup = new List<ExComp>();
             bool matchingFound = false;
-            for (int j = 0; j < group.Count(); ++j)
+            for (int j = 0; j < group.Length; ++j)
             {
                 ExComp groupComp = group[j];
 
@@ -265,7 +278,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                         throw new InvalidOperationException();
                 }
 
-                trigFuncIntPows.OrderBy(trigFuncIntPow => trigFuncIntPow.GetData1());
+                trigFuncIntPows = ArrayFunc.OrderList(trigFuncIntPows);
 
                 if (trigFuncIntPows.Count > 0)
                 {
@@ -274,17 +287,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             }
 
             return trigEx;
-        }
-
-        public void MultiplyGroupsBy(ExComp exComp)
-        {
-            List<ExComp[]> groups = GetGroups();
-
-            AlgebraTerm overallTerm = new AlgebraTerm();
-            foreach (ExComp[] group in groups)
-            {
-                AlgebraTerm term = new AlgebraTerm();
-            }
         }
     }
 }

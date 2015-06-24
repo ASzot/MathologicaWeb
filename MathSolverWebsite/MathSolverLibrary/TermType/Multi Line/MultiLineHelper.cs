@@ -168,7 +168,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
             ExComp centerEx = eqSet.GetSides()[1];
             if (centerEx is AlgebraTerm)
-                centerEx = (centerEx as AlgebraTerm).RemoveRedundancies();
+                centerEx = (centerEx as AlgebraTerm).RemoveRedundancies(false);
 
             bool addWork = !centerEx.IsEqualTo(new AlgebraComp(solveVar));
 
@@ -200,11 +200,11 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
             ExComp left = eqSet.GetLeft();
             if (left is AlgebraTerm)
-                left = (left as AlgebraTerm).RemoveRedundancies();
+                left = (left as AlgebraTerm).RemoveRedundancies(false);
 
             ExComp right = eqSet.GetRight();
             if (right is AlgebraTerm)
-                right = (right as AlgebraTerm).RemoveRedundancies();
+                right = (right as AlgebraTerm).RemoveRedundancies(false);
 
             if (left is FunctionDefinition)
             {

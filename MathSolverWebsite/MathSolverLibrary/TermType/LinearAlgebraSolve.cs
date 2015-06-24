@@ -8,7 +8,7 @@ MathSolverWebsite.MathSolverLibrary.TypePair<MathSolverWebsite.MathSolverLibrary
 
 namespace MathSolverWebsite.MathSolverLibrary.TermType
 {
-    internal class LinearAlgebraSolve : TermType
+    internal class LinearAlgebraSolve : GenTermType
     {
         private string GAUSSIAN_SOLVE = "Gaussian solve for ";
         private string INVERSE_SOLVE = "Solve using inverses";
@@ -335,9 +335,9 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                     ExComp rightEx = rightSubbed.MakeWorkable();
 
                     if (leftEx is AlgebraTerm)
-                        leftEx = (leftEx as AlgebraTerm).RemoveRedundancies();
+                        leftEx = (leftEx as AlgebraTerm).RemoveRedundancies(false);
                     if (rightEx is AlgebraTerm)
-                        rightEx = (rightEx as AlgebraTerm).RemoveRedundancies();
+                        rightEx = (rightEx as AlgebraTerm).RemoveRedundancies(false);
 
                     if (!leftEx.IsEqualTo(rightEx))
                     {
@@ -358,7 +358,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 if (i == 0)
                     end = pEvalData.GetWorkMgr().GetWorkSteps().Count;
                 if (tmpResult is AlgebraTerm)
-                    tmpResult = (tmpResult as AlgebraTerm).RemoveRedundancies();
+                    tmpResult = (tmpResult as AlgebraTerm).RemoveRedundancies(false);
 
                 if (tmpResult is AllSolutions)
                     continue;

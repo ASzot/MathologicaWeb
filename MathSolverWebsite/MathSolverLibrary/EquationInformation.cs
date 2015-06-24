@@ -195,8 +195,8 @@ namespace MathSolverWebsite.MathSolverLibrary
                 List<AlgebraGroup> groupsConstTo = totalTerm.GetGroupsConstantTo(varFor);
                 if (groupsVarTo.Count == 2 && groupsConstTo.Count == 1)
                 {
-                    ExComp variableTerm0 = groupsVarTo[0].GetVariableGroupComps(varFor).ToTerm().RemoveRedundancies();
-                    ExComp variableTerm1 = groupsVarTo[1].GetVariableGroupComps(varFor).ToTerm().RemoveRedundancies();
+                    ExComp variableTerm0 = groupsVarTo[0].GetVariableGroupComps(varFor).ToTerm().RemoveRedundancies(false);
+                    ExComp variableTerm1 = groupsVarTo[1].GetVariableGroupComps(varFor).ToTerm().RemoveRedundancies(false);
 
                     ExComp pow0;
                     ExComp pow1;
@@ -244,11 +244,15 @@ namespace MathSolverWebsite.MathSolverLibrary
 
             if (HasOnlyOrFunctionsBasicOnly(FunctionType.Logarithm, FunctionType.Sinusodal, FunctionType.AbsoluteValue) && GetNumberOfPowers() > 1)
             {
-                IEnumerable<ExComp> variableTermsPows = from varGp in groupsVarTo
-                                        select varGp.GetVariableGroupComps(varFor).ToTerm().RemoveRedundancies();
+                ExComp[] variableTermsPowsArr = new ExComp[groupsVarTo.Count];
+                for (int i = 0; i < groupsVarTo.Count; ++i)
+                {
+                    variableTermsPowsArr[i] =
+                        groupsVarTo[i].GetVariableGroupComps(varFor).ToTerm().RemoveRedundancies(false);
+                }
 
                 List<AlgebraTerm> variableTerms = new List<AlgebraTerm>();
-                foreach (ExComp varTermPow in variableTermsPows)
+                foreach (ExComp varTermPow in variableTermsPowsArr)
                 {
                     if (varTermPow.IsEqualTo(varFor))
                         return null;
@@ -259,15 +263,6 @@ namespace MathSolverWebsite.MathSolverLibrary
                         variableTerms.Add(baseTerm);
                         continue;
                     }
-                    //else if (varTermPow is AlgebraTerm)
-                    //{
-                    //    AlgebraTerm varTerm = varTermPow as AlgebraTerm;
-                    //    bool allPows = true;
-                    //    foreach (ExComp subComp in varTerm)
-                    //    {
-                    //        if (!(subComp is PowerFunction))
-                    //    }
-                    //}
                     variableTerms.Add(varTermPow.ToAlgTerm());
                 }
 

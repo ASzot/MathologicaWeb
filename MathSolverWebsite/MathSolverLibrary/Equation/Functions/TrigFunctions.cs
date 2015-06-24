@@ -142,7 +142,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             AlgebraTerm recipInner = AlgebraTerm.FromFraction(Number.GetOne(), GetInnerEx());
             recipInner = recipInner.MakeFormattingCorrect();
 
-            ATanFunction asin = new ATanFunction(recipInner.RemoveRedundancies());
+            ATanFunction asin = new ATanFunction(recipInner.RemoveRedundancies(false));
             return asin.Evaluate(harshEval, ref pEvalData);
         }
 
@@ -189,7 +189,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             AlgebraTerm recipInner = AlgebraTerm.FromFraction(Number.GetOne(), GetInnerEx());
             recipInner = recipInner.MakeFormattingCorrect();
 
-            ASinFunction asin = new ASinFunction(recipInner.RemoveRedundancies());
+            ASinFunction asin = new ASinFunction(recipInner.RemoveRedundancies(false));
             asin.SkipDomain = true;
             return asin.Evaluate(harshEval, ref pEvalData);
         }
@@ -239,7 +239,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             AlgebraTerm recipInner = AlgebraTerm.FromFraction(Number.GetOne(), GetInnerEx());
             recipInner = recipInner.MakeFormattingCorrect();
 
-            ACosFunction asin = new ACosFunction(recipInner.RemoveRedundancies());
+            ACosFunction asin = new ACosFunction(recipInner.RemoveRedundancies(false));
             asin.SkipDomain = true;
             return asin.Evaluate(harshEval, ref pEvalData);
         }
@@ -500,7 +500,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
             if (harshEval)
             {
-                ExComp innerEx = GetInnerTerm(pEvalData.GetUseRad()).RemoveRedundancies();
+                ExComp innerEx = GetInnerTerm(pEvalData.GetUseRad()).RemoveRedundancies(false);
                 if (innerEx is AlgebraTerm)
                     innerEx = Simplifier.HarshSimplify(innerEx as AlgebraTerm, ref pEvalData, false);
                 if (innerEx is Number && !(innerEx as Number).HasImaginaryComp())
@@ -598,7 +598,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
             if (harshEval)
             {
-                ExComp innerEx = GetInnerTerm(pEvalData.GetUseRad()).RemoveRedundancies();
+                ExComp innerEx = GetInnerTerm(pEvalData.GetUseRad()).RemoveRedundancies(false);
                 if (innerEx is AlgebraTerm)
                     innerEx = Simplifier.HarshSimplify(innerEx as AlgebraTerm, ref pEvalData, false);
                 if (innerEx is Number && !(innerEx as Number).HasImaginaryComp())
@@ -615,7 +615,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             if (!simplFrac.LooseInit(GetInnerTerm(pEvalData.GetUseRad())))
                 return this;
             Number num, den;
-            if (!simplFrac.IsSimpleUnitCircleAngle(out num, out den))
+            if (!simplFrac.IsSimpleUnitCircleAngle(out num, out den, true))
                 return this;
 
             UnitCirclePoint unitCirclePoint = UnitCircle.GetPointForAngle(num, den);
@@ -727,7 +727,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
             if (harshEval)
             {
-                ExComp innerEx = GetInnerTerm(pEvalData.GetUseRad()).RemoveRedundancies();
+                ExComp innerEx = GetInnerTerm(pEvalData.GetUseRad()).RemoveRedundancies(false);
                 if (innerEx is AlgebraTerm)
                     innerEx = Simplifier.HarshSimplify(innerEx as AlgebraTerm, ref pEvalData, false);
                 if (innerEx is Number && !(innerEx as Number).HasImaginaryComp())
@@ -744,7 +744,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             if (!simplFrac.LooseInit(GetInnerTerm(pEvalData.GetUseRad())))
                 return this;
             Number num, den;
-            if (!simplFrac.IsSimpleUnitCircleAngle(out num, out den))
+            if (!simplFrac.IsSimpleUnitCircleAngle(out num, out den, true))
                 return this;
 
             UnitCirclePoint unitCirclePoint = UnitCircle.GetPointForAngle(num, den);
@@ -899,7 +899,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
             if (harshEval)
             {
-                ExComp innerEx = GetInnerTerm(pEvalData.GetUseRad()).RemoveRedundancies();
+                ExComp innerEx = GetInnerTerm(pEvalData.GetUseRad()).RemoveRedundancies(false);
                 if (innerEx is AlgebraTerm)
                     innerEx = Simplifier.HarshSimplify(innerEx as AlgebraTerm, ref pEvalData, false);
                 if (innerEx is Number && !(innerEx as Number).HasImaginaryComp())
@@ -1030,7 +1030,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
             if (harshEval)
             {
-                ExComp innerEx = GetInnerTerm(pEvalData.GetUseRad()).RemoveRedundancies();
+                ExComp innerEx = GetInnerTerm(pEvalData.GetUseRad()).RemoveRedundancies(false);
                 if (innerEx is AlgebraTerm)
                     innerEx = Simplifier.HarshSimplify(innerEx as AlgebraTerm, ref pEvalData, false);
                 if (innerEx is Number && !(innerEx as Number).HasImaginaryComp())
@@ -1044,7 +1044,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             if (!simplFrac.LooseInit(GetInnerTerm(pEvalData.GetUseRad())))
                 return this;
             Number num, den;
-            if (!simplFrac.IsSimpleUnitCircleAngle(out num, out den))
+            if (!simplFrac.IsSimpleUnitCircleAngle(out num, out den, true))
                 return this;
 
             UnitCirclePoint unitCirclePoint = UnitCircle.GetPointForAngle(num, den);
@@ -1128,7 +1128,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
             if (harshEval)
             {
-                ExComp innerEx = GetInnerTerm(pEvalData.GetUseRad()).RemoveRedundancies();
+                ExComp innerEx = GetInnerTerm(pEvalData.GetUseRad()).RemoveRedundancies(false);
                 if (innerEx is AlgebraTerm)
                     innerEx = Simplifier.HarshSimplify(innerEx as AlgebraTerm, ref pEvalData, false);
                 if (innerEx is Number && !(innerEx as Number).HasImaginaryComp())
@@ -1142,7 +1142,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             if (!simplFrac.LooseInit(GetInnerTerm(pEvalData.GetUseRad())))
                 return this;
             Number num, den;
-            if (!simplFrac.IsSimpleUnitCircleAngle(out num, out den))
+            if (!simplFrac.IsSimpleUnitCircleAngle(out num, out den, true))
                 return this;
 
             UnitCirclePoint unitCirclePoint = UnitCircle.GetPointForAngle(num, den);
@@ -1214,7 +1214,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
     internal abstract class TrigFunction : BasicAppliedFunc
     {
-        public enum TrigFuncComplexity { PowComplex = 3, FracComplex = 2, RecipComplex = 1, RegComplex = 0 };
+        public const int POW_COMPLEX = 3;
+        public const int FRAC_COMPLEX = 2;
+        public const int RECIP_COMPLEX = 1;
+        public const int REG_COMPLEX = 0;
 
         public TrigFunction(ExComp innerEx, string iden, FunctionType ft, Type type)
             : base(innerEx, iden, ft, type)
@@ -1259,16 +1262,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                 return new Number(180);
         }
 
-        public static TrigFuncComplexity GetTrigFuncComplexity(ExComp trigFunc)
+        public static int GetTrigFuncComplexity(ExComp trigFunc)
         {
             if (trigFunc is PowerFunction)
-                return TrigFuncComplexity.PowComplex;
+                return POW_COMPLEX;
             else if (trigFunc is TanFunction || trigFunc is CotFunction)
-                return TrigFuncComplexity.FracComplex;
+                return FRAC_COMPLEX;
             else if (trigFunc is CscFunction || trigFunc is SecFunction)
-                return TrigFuncComplexity.RecipComplex;
+                return RECIP_COMPLEX;
             else
-                return TrigFuncComplexity.RegComplex;
+                return REG_COMPLEX;
         }
 
         public static string GetTrigType(ExComp ex)
@@ -1329,7 +1332,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         public static ExComp TrigCancel(ExComp ex0, ExComp ex1, bool isEx1Den = false)
         {
             if (ex0 is AlgebraTerm)
-                ex0 = (ex0 as AlgebraTerm).RemoveRedundancies();
+                ex0 = (ex0 as AlgebraTerm).RemoveRedundancies(false);
             if (isEx1Den && Number.GetOne().IsEqualTo(ex0))
             {
                 if (ex1 is TrigFunction)

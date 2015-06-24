@@ -18,7 +18,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public static AlgebraTerm OpSub(AlgebraTerm term, AlgebraGroup group)
         {
-            if (@group.GetGroupCount() == 0)
+            if (group.GetGroupCount() == 0)
                 return term;
 
             AlgebraTerm groupTerm = group.ToTerm();
@@ -75,7 +75,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public static AlgebraTerm OpMul(AlgebraTerm term, AlgebraGroup group)
         {
-            if (@group.GetGroupCount() == 0)
+            if (group.GetGroupCount() == 0)
                 return term;
 
             AlgebraTerm groupTerm = group.ToTerm();
@@ -110,7 +110,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public static AlgebraTerm OpDiv(AlgebraTerm term, AlgebraGroup group)
         {
-            if (@group.GetGroupCount() == 0)
+            if (group.GetGroupCount() == 0)
                 return term;
 
             AlgebraTerm groupTerm = group.ToTerm();
@@ -145,7 +145,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public static AlgebraTerm OpAdd(AlgebraTerm term, AlgebraGroup group)
         {
-            if (@group.GetGroupCount() == 0)
+            if (group.GetGroupCount() == 0)
                 return term;
 
             AlgebraTerm groupTerm = group.ToTerm();

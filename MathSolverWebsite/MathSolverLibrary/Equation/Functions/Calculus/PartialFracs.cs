@@ -13,7 +13,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
     {
         public static ExComp Split(AlgebraTerm num, AlgebraTerm den, PolynomialExt numPoly, AlgebraComp dVar, ref TermType.EvalData pEvalData)
         {
-            den = den.RemoveRedundancies().ToAlgTerm();
+            den = den.RemoveRedundancies(false).ToAlgTerm();
             AlgebraTerm[] factors = AdvAlgebraTerm.GetFactors(den, ref pEvalData);
             if (factors == null || factors.Length < 2)
                 return null;
@@ -21,7 +21,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             List<ExComp> bottomFactors = new List<ExComp>();
             for (int i = 0; i < factors.Length; ++i)
             {
-                ExComp factorEx = factors[i].RemoveRedundancies();
+                ExComp factorEx = factors[i].RemoveRedundancies(false);
                 if (factorEx is PowerFunction)
                 {
                     ExComp pow = (factorEx as PowerFunction).GetPower();
@@ -122,11 +122,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 int pow = iPows[i];
 
                 List<ExComp[]> decomVarGroups = leftTerm.GetGroupContainingTerm(PowOp.StaticCombine(dVar, new Number(pow)));
-                IEnumerable<AlgebraTerm> decomVarTerms = from decomVarGroup in decomVarGroups
-                                                         select GroupHelper.ToAlgTerm(GroupHelper.GetUnrelatableTermsOfGroup(decomVarGroup, dVar));
+                AlgebraTerm[] decomVarTermsArr = new AlgebraTerm[decomVarGroups.Count];
+                for (int j = 0; j < decomVarGroups.Count; ++j)
+                    decomVarTermsArr[j] =
+                        GroupHelper.ToAlgTerm(GroupHelper.GetUnrelatableTermsOfGroup(decomVarGroups[i], dVar)); 
 
                 AlgebraTerm decomCoeff = new AlgebraTerm();
-                foreach (AlgebraTerm aTerm in decomVarTerms)
+                foreach (AlgebraTerm aTerm in decomVarTermsArr)
                 {
                     decomCoeff = AlgebraTerm.OpAdd(decomCoeff, aTerm);
                 }

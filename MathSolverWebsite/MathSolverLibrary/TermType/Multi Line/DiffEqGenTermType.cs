@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace MathSolverWebsite.MathSolverLibrary.TermType
 {
-    internal class DiffEqTermType : TermType
+    internal class DiffEqGenTermType : GenTermType
     {
         private string _errorMsg = null;
 
@@ -17,7 +17,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
         private ExComp _right;
 
-        public DiffEqTermType()
+        public DiffEqGenTermType()
         {
         }
 

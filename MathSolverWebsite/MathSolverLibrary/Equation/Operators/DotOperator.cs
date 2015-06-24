@@ -14,7 +14,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 if (funcDef1.GetHasCallArgs() || funcDef1.GetInputArgCount() != 1)
                     return null;
 
-                ExComp[] callArgs = { funcDef2 };
+                ExComp[] callArgs = new ExComp[] { funcDef2 };
                 funcDef1.SetCallArgs(callArgs);
 
                 return funcDef1;
@@ -44,11 +44,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
         public override ExComp Combine(ExComp ex1, ExComp ex2)
         {
             return StaticCombine(ex1, ex2);
-        }
-
-        public override int GetHashCode()
-        {
-            return (int)((double)"Dot".GetHashCode() * Math.E);
         }
 
         public override ExComp WeakCombine(ExComp ex1, ExComp ex2)

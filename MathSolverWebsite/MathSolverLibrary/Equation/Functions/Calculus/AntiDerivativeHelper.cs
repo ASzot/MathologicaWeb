@@ -3,6 +3,7 @@ using MathSolverWebsite.MathSolverLibrary.Equation.Term;
 using MathSolverWebsite.MathSolverLibrary.TermType;
 using System.Collections.Generic;
 using System.Linq;
+using MathSolverWebsite.MathSolverLibrary.LangCompat;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 {
@@ -227,7 +228,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             if (gp.Length == 1 || gp.Length == 2)
             {
-                ExComp[] den = GroupHelper.GetDenominator(gp);
+                ExComp[] den = GroupHelper.GetDenominator(gp, false);
                 if (den != null && den.Length == 1)
                 {
                     ExComp[] num = GroupHelper.GetNumerator(gp);
@@ -668,14 +669,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         private static ExComp TryU(ExComp[] group, ExComp uatmpt, AlgebraComp dVar, ref IntegrationInfo pIntInfo, ref EvalData pEvalData)
         {
-            string groupStr = GroupHelper.ToAlgTerm(GroupHelper.CloneGroup(@group).ToArray()).FinalToDispStr();
+            string groupStr = GroupHelper.ToAlgTerm(GroupHelper.CloneGroup(group).ToArray()).FinalToDispStr();
             string thisStr = "\\int(" + groupStr + ")" + dVar.ToDispString();
             string atmptStr = uatmpt.ToAlgTerm().FinalToDispStr();
 
             pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "\\int (" + groupStr + ") \\d" + dVar.ToDispString() + WorkMgr.EDM,
                 "Use u-substitution.");
 
-            AlgebraTerm term = GroupHelper.ToAlgNoRedunTerm(@group);
+            AlgebraTerm term = GroupHelper.ToAlgNoRedunTerm(group);
             AlgebraComp subInVar;
             if (term.Contains(new AlgebraComp("u")))
             {
@@ -730,15 +731,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
                 if (varTo.Length == 0)
                 {
-                    if (GroupHelper.GroupContains(@group, dVar))
+                    if (GroupHelper.GroupContains(group, dVar))
                         return null;
 
                     pEvalData.GetWorkMgr().GetWorkSteps().Add(new WorkStep(WorkMgr.STM + thisStr +
-                        WorkMgr.EDM, "Make the substitution " + WorkMgr.STM + subInVar.ToDispString() + "=" +
-                        atmptStr + WorkMgr.EDM + " and " + WorkMgr.STM + "d" + subInVar.ToDispString() + "=" +
-                        evaluated.ToAlgTerm().FinalToDispStr() + WorkMgr.EDM, true));
+                                                                           WorkMgr.EDM, "Make the substitution " + WorkMgr.STM + subInVar.ToDispString() + "=" +
+                                                                                        atmptStr + WorkMgr.EDM + " and " + WorkMgr.STM + "d" + subInVar.ToDispString() + "=" +
+                                                                                        evaluated.ToAlgTerm().FinalToDispStr() + WorkMgr.EDM, true));
 
-                    pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + constEx.ToAlgTerm().FinalToDispStr() + "\\int (" + GroupHelper.ToAlgTerm(@group.ToArray()).FinalToDispStr() + ") d" + subInVar.ToDispString() + WorkMgr.EDM);
+                    pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + constEx.ToAlgTerm().FinalToDispStr() + "\\int (" + GroupHelper.ToAlgTerm(group.ToArray()).FinalToDispStr() + ") d" + subInVar.ToDispString() + WorkMgr.EDM);
 
                     ExComp innerAntiDeriv = TakeAntiDerivativeGp(group.ToArray(), subInVar, ref pIntInfo, ref pEvalData);
                     if (innerAntiDeriv == null)
@@ -755,7 +756,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     return retEx;
                 }
 
-                evaluated = GroupHelper.ToAlgTerm(varTo).RemoveRedundancies();
+                evaluated = GroupHelper.ToAlgTerm(varTo).RemoveRedundancies(false);
             }
             else
             {
@@ -772,24 +773,24 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             {
                 if (group[j].IsEqualTo(evaluated))
                 {
-                    List<ExComp> groupList = group.ToList();
-                    groupList.RemoveAt(j);
+                    List<ExComp> groupList = ArrayFunc.ToList(group);
+                    ArrayFunc.RemoveIndex(groupList, j);
 
                     pEvalData.GetWorkMgr().GetWorkSteps().Add(new WorkStep(WorkMgr.STM + thisStr +
-                        WorkMgr.EDM, "Make the substitution " + WorkMgr.STM + subInVar.ToDispString() + "=" +
-                        atmptStr + WorkMgr.EDM + " and " + WorkMgr.STM + "d" + subInVar.ToDispString() + "=" +
-                        evaluated.ToAlgTerm().FinalToDispStr() + WorkMgr.EDM));
+                                                                           WorkMgr.EDM, "Make the substitution " + WorkMgr.STM + subInVar.ToDispString() + "=" +
+                                                                                        atmptStr + WorkMgr.EDM + " and " + WorkMgr.STM + "d" + subInVar.ToDispString() + "=" +
+                                                                                        evaluated.ToAlgTerm().FinalToDispStr() + WorkMgr.EDM, false));
 
                     bool mulInCost = constEx != null && !Number.GetOne().IsEqualTo(constEx);
                     string mulInCostStr = (mulInCost ? constEx.ToAlgTerm().FinalToDispStr() : "");
 
                     group = groupList.ToArray();
 
-                    if (GroupHelper.GroupContains(@group, dVar))
+                    if (GroupHelper.GroupContains(group, dVar))
                         return null;
 
                     pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + mulInCostStr +
-                        "\\int (" + GroupHelper.ToAlgTerm(@group).FinalToDispStr() + ") d" + subInVar.ToDispString() + WorkMgr.EDM);
+                        "\\int (" + GroupHelper.ToAlgTerm(group).FinalToDispStr() + ") d" + subInVar.ToDispString() + WorkMgr.EDM);
 
                     ExComp innerAntiDeriv = TakeAntiDerivativeGp(group, subInVar, ref pIntInfo, ref pEvalData);
                     if (innerAntiDeriv == null)
@@ -811,7 +812,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     pEvalData.GetWorkMgr().FromSides(retEx, null);
                     return retEx;
                 }
-                else if (group[j] is PowerFunction && evaluated is PowerFunction && (@group[j] as PowerFunction).GetPower().IsEqualTo((evaluated as PowerFunction).GetPower()))
+                else if (group[j] is PowerFunction && evaluated is PowerFunction && (group[j] as PowerFunction).GetPower().IsEqualTo((evaluated as PowerFunction).GetPower()))
                 {
                     PowerFunction groupPf = group[j] as PowerFunction;
                     PowerFunction evaluatedPf = evaluated as PowerFunction;
@@ -824,21 +825,21 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                         {
                             if (baseGps[0][k].IsEqualTo(evaluatedPf.GetBase()))
                             {
-                                List<ExComp> baseGpsList = baseGps[0].ToList();
-                                baseGpsList.RemoveAt(k);
+                                List<ExComp> baseGpsList = ArrayFunc.ToList(baseGps[0]);
+                                ArrayFunc.RemoveIndex(baseGpsList, k);
 
                                 group[j] = new PowerFunction(GroupHelper.ToAlgTerm(baseGpsList.ToArray()), evaluatedPf.GetPower());
 
                                 pEvalData.GetWorkMgr().GetWorkSteps().Add(new WorkStep(WorkMgr.STM + thisStr +
-                                    WorkMgr.EDM, "Make the substitution " + WorkMgr.STM + subInVar.ToDispString() + "=" +
-                                    atmptStr + WorkMgr.EDM + " and " + WorkMgr.STM + "d" + subInVar.ToDispString() + "=" +
-                                    evaluated.ToAlgTerm().FinalToDispStr() + WorkMgr.EDM));
+                                                                                       WorkMgr.EDM, "Make the substitution " + WorkMgr.STM + subInVar.ToDispString() + "=" +
+                                                                                                    atmptStr + WorkMgr.EDM + " and " + WorkMgr.STM + "d" + subInVar.ToDispString() + "=" +
+                                                                                                    evaluated.ToAlgTerm().FinalToDispStr() + WorkMgr.EDM, false));
 
                                 bool mulInCost = constEx != null && !Number.GetOne().IsEqualTo(constEx);
                                 string mulInCostStr = (mulInCost ? constEx.ToAlgTerm().FinalToDispStr() : "");
 
                                 pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + mulInCostStr +
-                                    "\\int (" + GroupHelper.ToAlgTerm(@group).FinalToDispStr() + ") d" + subInVar.ToDispString() + WorkMgr.EDM);
+                                    "\\int (" + GroupHelper.ToAlgTerm(group).FinalToDispStr() + ") d" + subInVar.ToDispString() + WorkMgr.EDM);
 
                                 ExComp innerAntiDeriv = TakeAntiDerivativeGp(group, subInVar, ref pIntInfo, ref pEvalData);
                                 if (innerAntiDeriv == null)
@@ -1029,11 +1030,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                         if (pfBasePf.GetPower().IsEqualTo(new Number(0.5)) || pfBasePf.GetPower().IsEqualTo(AlgebraTerm.FromFraction(Number.GetOne(), new Number(2.0))))
                         {
                             // Is this arcsin or arccos?
-                            ExComp compare = AddOp.StaticCombine(MulOp.Negate(PowOp.StaticCombine(dVar, new Number(2.0))), Number.GetOne()).ToAlgTerm().RemoveRedundancies();
+                            ExComp compare = AddOp.StaticCombine(MulOp.Negate(PowOp.StaticCombine(dVar, new Number(2.0))), Number.GetOne()).ToAlgTerm().RemoveRedundancies(false);
 
                             ExComp useBase;
                             if (pfBasePf.GetBase() is AlgebraTerm)
-                                useBase = (pfBasePf.GetBase() as AlgebraTerm).RemoveRedundancies();
+                                useBase = (pfBasePf.GetBase() as AlgebraTerm).RemoveRedundancies(false);
                             else
                                 useBase = pfBasePf.GetBase();
 

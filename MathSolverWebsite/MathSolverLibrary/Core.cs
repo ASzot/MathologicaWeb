@@ -1,6 +1,8 @@
 ﻿using MathSolverWebsite.MathSolverLibrary.Equation;
 using System;
 using System.Collections.Generic;
+using MathSolverWebsite.MathSolverLibrary;
+using MathSolverWebsite.MathSolverLibrary.LangCompat;
 
 namespace MathSolverWebsite.MathSolverLibrary
 {
@@ -8,7 +10,7 @@ namespace MathSolverWebsite.MathSolverLibrary
     {
         public static bool IsInteger(double d)
         {
-            if (double.IsInfinity(d) || double.IsNaN(d))
+            if (DoubleFunc.IsInfinity(d) || double.IsNaN(d))
                 return false;
             string str = d.ToString();
             return !str.Contains(".");

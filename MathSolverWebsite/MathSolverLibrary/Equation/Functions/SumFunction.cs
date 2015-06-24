@@ -73,7 +73,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             if (divTest is Limit)
                 return null;
             if (divTest is AlgebraTerm)
-                divTest = (divTest as AlgebraTerm).RemoveRedundancies();
+                divTest = (divTest as AlgebraTerm).RemoveRedundancies(false);
             if (!divTest.IsEqualTo(Number.GetZero()))
             {
                 pEvalData.GetWorkMgr().FromFormatted(thisStr, "The limit did not equal zero, the series is divergent.");
@@ -82,9 +82,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
             // The p-series test.
             AlgebraTerm[] frac = innerTerm.GetNumDenFrac();
-            if (frac != null && frac[0].RemoveRedundancies().IsEqualTo(Number.GetOne()))
+            if (frac != null && frac[0].RemoveRedundancies(false).IsEqualTo(Number.GetOne()))
             {
-                ExComp den = frac[1].RemoveRedundancies();
+                ExComp den = frac[1].RemoveRedundancies(false);
                 if (den is PowerFunction)
                 {
                     PowerFunction powFunc = den as PowerFunction;
@@ -168,7 +168,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                             return false;
                         }
 
-                        if (pfPow.RemoveRedundancies().IsEqualTo(SubOp.StaticCombine(GetIterVar(), GetIterStart())))
+                        if (pfPow.RemoveRedundancies(false).IsEqualTo(SubOp.StaticCombine(GetIterVar(), GetIterStart())))
                         {
                             ExComp tmpDen = SubOp.StaticCombine(Number.GetOne(), exBase);
                             tmpDen = tmpDen.ToAlgTerm().CompoundFractions();
@@ -312,7 +312,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                     if (lastStep != null)
                         lastStep.GoDown(ref pEvalData);
 
-                    ExComp simpInnerEx = TermType.SimplifyTermType.BasicSimplify(innerTerm.CloneEx().ToAlgTerm().RemoveRedundancies(), ref pEvalData);
+                    ExComp simpInnerEx = TermType.SimplifyGenTermType.BasicSimplify(innerTerm.CloneEx().ToAlgTerm().RemoveRedundancies(false), ref pEvalData, true);
 
                     if (lastStep != null)
                         lastStep.GoUp(ref pEvalData);
@@ -359,15 +359,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         {
             return new SumFunction(GetInnerTerm().Substitute(subOut, subIn),
                 GetIterVar().IsEqualTo(subOut) ? (AlgebraComp)subIn : GetIterVar(),
-                GetIterStart().ToAlgTerm().Substitute(subOut, subIn).RemoveRedundancies(),
-                GetIterCount().ToAlgTerm().Substitute(subOut, subIn).RemoveRedundancies());
+                GetIterStart().ToAlgTerm().Substitute(subOut, subIn).RemoveRedundancies(false),
+                GetIterCount().ToAlgTerm().Substitute(subOut, subIn).RemoveRedundancies(false));
         }
 
         protected override AlgebraTerm CreateInstance(params ExComp[] args)
         {
             ExComp useArg1;
             if (args[1] is AlgebraTerm)
-                useArg1 = (args[1] as AlgebraTerm).RemoveRedundancies();
+                useArg1 = (args[1] as AlgebraTerm).RemoveRedundancies(false);
             else
                 useArg1 = args[1];
 

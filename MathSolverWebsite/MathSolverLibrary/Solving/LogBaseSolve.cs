@@ -29,12 +29,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 else
                     return new NoSolutions();
             }
-            left = AdvAlgebraTerm.CompoundLogs(left);
+            left = AdvAlgebraTerm.CompoundLogs(left, null);
 
             if (left.GetGroupCount() != 1)
                 return null;
 
-            ExComp leftLogEx = left.RemoveRedundancies();
+            ExComp leftLogEx = left.RemoveRedundancies(false);
 
             if (!(leftLogEx is LogFunction))
             {
