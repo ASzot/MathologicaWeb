@@ -47,7 +47,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public bool IsZero()
         {
-            return _group.Length == 1 && Number.GetZero().IsEqualTo(_group[0]);
+            return _group.Length == 1 && ExNumber.GetZero().IsEqualTo(_group[0]);
         }
 
         public override string ToString()
@@ -80,7 +80,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             }
 
             if (totalTerm.GetSubComps().Count == 0)
-                return Number.GetOne().ToAlgTerm();
+                return ExNumber.GetOne().ToAlgTerm();
 
             return totalTerm;
         }

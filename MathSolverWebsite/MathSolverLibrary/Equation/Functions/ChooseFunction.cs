@@ -63,7 +63,7 @@
             ExComp n = GetTop();
             ExComp k = GetBottom();
 
-            if (n is Number && k is Number && (n as Number).IsRealInteger() && (k as Number).IsRealInteger())
+            if (n is ExNumber && k is ExNumber && (n as ExNumber).IsRealInteger() && (k as ExNumber).IsRealInteger())
             {
                 FactorialFunction nFactorial = new FactorialFunction(n);
 
@@ -72,16 +72,16 @@
                 FactorialFunction nMinusKFactorial = new FactorialFunction(Operators.SubOp.StaticCombine(n, k));
 
                 ExComp nFactEval = nFactorial.Evaluate(harshEval, ref pEvalData);
-                if (Number.IsUndef(nFactEval))
-                    return Number.GetUndefined();
+                if (ExNumber.IsUndef(nFactEval))
+                    return ExNumber.GetUndefined();
 
                 ExComp kFactEval = kFactorial.Evaluate(harshEval, ref pEvalData);
-                if (Number.IsUndef(kFactEval))
-                    return Number.GetUndefined();
+                if (ExNumber.IsUndef(kFactEval))
+                    return ExNumber.GetUndefined();
 
                 ExComp nMinusKFactEval = nMinusKFactorial.Evaluate(harshEval, ref pEvalData);
-                if (Number.IsUndef(nMinusKFactEval))
-                    return Number.GetUndefined();
+                if (ExNumber.IsUndef(nMinusKFactEval))
+                    return ExNumber.GetUndefined();
 
                 ExComp divBy = Operators.MulOp.StaticCombine(kFactEval, nMinusKFactEval);
                 return Operators.DivOp.StaticCombine(nFactEval, divBy);

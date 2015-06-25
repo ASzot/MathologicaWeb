@@ -14,7 +14,7 @@
                 AlgebraComp generic = new AlgebraComp(alphaChar.ToString());
                 int reversedI = deg - i;
 
-                ExComp raised = Operators.PowOp.StaticCombine(varFor, new Number(reversedI));
+                ExComp raised = Operators.PowOp.StaticCombine(varFor, new ExNumber(reversedI));
 
                 finalTerm.Add(Operators.MulOp.StaticCombine(generic, raised));
 

@@ -38,7 +38,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
         private readonly List<string> _definedFuncs = new List<string>();
 
         private readonly TypePair<string, LexemeType>[] _rulesets =
-            (TypePair<string, LexemeType>[])(new object[]
+            new TypePair<string, LexemeType>[]
         {
             new TypePair<string, LexemeType>(@"\+|\-|\^|\/|\*|circ|text\(P\)|text\(C\)|" + CrossProductOp.IDEN,
                 LexemeType.Operator),
@@ -81,7 +81,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
             new TypePair<string, LexemeType>(@"\$d(" + IDEN_MATCH + @")", LexemeType.Differential),
             new TypePair<string, LexemeType>(INF_MATCH, LexemeType.Infinity),
             new TypePair<string, LexemeType>(@"(sum)|(lim)", LexemeType.ErrorType)
-        });
+        };
 
         private bool _fixIntegrals = true;
         private Dictionary<string, List<List<TypePair<LexemeType,string>>>> _funcStore = new Dictionary<string, List<List<TypePair<LexemeType,string>>>>();
@@ -117,7 +117,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
             List<TypePair<LexemeType, MatchTolken>> tolkenMatches = new List<TypePair<LexemeType, MatchTolken>>();
             foreach (TypePair<string, LexemeType> rulset in _rulesets)
             {
-                MatchCollection matches = Regex.Matches(inputStr, rulset.GetData1());
+                MatchCollection matches = TypeHelper.Matches(inputStr, rulset.GetData1());
                 foreach (Match match in matches)
                     tolkenMatches.Add(new TypePair<LexemeType, MatchTolken>(rulset.GetData2(), new MatchTolken(match)));
             }
@@ -462,7 +462,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                     {
                         if (i > 0)
                         {
-                            ArrayFunc.RemoveIndex(orderedTolkensList, i - 1));
+                            ArrayFunc.RemoveIndex(orderedTolkensList, i - 1);
                         }
                         if (i < orderedTolkensList.Count && !tolken.GetData2().Contains("^") &&
                             orderedTolkensList[i].GetData1() == LexemeType.FunctionDef)
@@ -1512,7 +1512,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                 if (lt[i].GetData1() == LexemeType.Function && lt[i].GetData2().StartsWith("vector"))
                 {
                     // Skip to the end of this vector function.
-                    string removed = lt[i].GetData2().Remove(0, "vector".Length);
+                    string removed = StringFunc.Rm(lt[i].GetData2(), 0, "vector".Length);
                     int dimen;
                     if (removed == "a")
                         dimen = 2;
@@ -1687,7 +1687,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                     return ParseMultiVarFunc(ref currentIndex, lexemeTable, ref pParseErrors);
 
                 case LexemeType.Infinity:
-                    return Number.GetPosInfinity();
+                    return ExNumber.GetPosInfinity();
 
                 case LexemeType.Function:
                     endIndex = -1;
@@ -1732,7 +1732,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                             if (power is AlgebraTerm)
                                 power = (power as AlgebraTerm).RemoveRedundancies(false);
 
-                            if (Number.GetNegOne().IsEqualTo(power) && trigFunc is TrigFunction)
+                            if (ExNumber.GetNegOne().IsEqualTo(power) && trigFunc is TrigFunction)
                             {
                                 return (trigFunc as TrigFunction).GetInverseOf();
                             }
@@ -2002,7 +2002,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
 
                 case LexemeType.I_Number:
                 case LexemeType.Number:
-                    Number number = Number.Parse(lexeme.GetData2());
+                    ExNumber number = ExNumber.Parse(lexeme.GetData2());
                     return number;
 
                 case LexemeType.Operator:
@@ -2246,10 +2246,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
             string[] topBottom = derivStr.Split('/');
             if (topBottom.Length != 2)
                 return null;
-            string top = topBottom[0].Remove(0, 1);
-            top = top.Remove(top.Length - 1, 1);
-            string bottom = topBottom[1].Remove(0, 1);
-            bottom = bottom.Remove(bottom.Length - 1, 1);
+            string top = StringFunc.Rm(topBottom[0], 0, 1);
+            top = StringFunc.Rm(top, top.Length - 1, 1);
+            string bottom = StringFunc.Rm(topBottom[1], 0, 1);
+            bottom = StringFunc.Rm(bottom, bottom.Length - 1, 1);
 
             bool isPartial = top.Contains("partial");
             if (isPartial != bottom.Contains("partial"))
@@ -2267,7 +2267,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
             int indexOfDeriv = -1;
             if (top.Contains("^"))
             {
-                Match match = Regex.Match(top, NUM_MATCH);
+                Match match = TypeHelper.Match(top, NUM_MATCH);
                 if (!match.Success)
                     return null;
                 string matchStr = match.Value;
@@ -2279,20 +2279,20 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
 
                 if (!bottom.Contains("^"))
                     return null;
-                match = Regex.Match(bottom, NUM_MATCH);
+                match = TypeHelper.Match(bottom, NUM_MATCH);
                 if (!match.Success)
                     return null;
                 if (match.Value != matchStr)
                     return null;
             }
 
-            top = top.Remove(0, 1);
-            bottom = bottom.Remove(0, 1);
+            top = StringFunc.Rm(top, 0, 1);
+            bottom = StringFunc.Rm(bottom, 0, 1);
 
             if (indexOfDeriv != -1)
             {
-                Match topSymbMatch = Regex.Match(top, IDEN_MATCH);
-                Match bottomSymbMatch = Regex.Match(bottom, IDEN_MATCH);
+                Match topSymbMatch = TypeHelper.Match(top, IDEN_MATCH);
+                Match bottomSymbMatch = TypeHelper.Match(bottom, IDEN_MATCH);
                 if (!bottomSymbMatch.Success)
                     return null;
 
@@ -2313,7 +2313,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                     return null;
                 }
 
-                return Derivative.Parse(top, bottom, new Number(indexOfDeriv), isPartial, ref p_EvalData);
+                return Derivative.Parse(top, bottom, new ExNumber(indexOfDeriv), isPartial, ref p_EvalData);
             }
 
             currentIndex++;
@@ -2338,7 +2338,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                 return null;
             }
 
-            return Derivative.Parse(bottom, innerEx, new Number(indexOfDeriv), isPartial);
+            return Derivative.Parse(bottom, innerEx, new ExNumber(indexOfDeriv), isPartial);
         }
 
         private AlgebraTerm ParseDerivativeTeX(ref int currentIndex, List<TypePair<LexemeType,string>> lt, ref List<string> pParseErrors)
@@ -2349,8 +2349,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
             string[] topBottom = derivStr.Split(')');
             if (topBottom.Length != 3)
                 return null;
-            string top = topBottom[0].Remove(0, "frac(".Length);
-            string bottom = topBottom[1].Remove(0, 1);
+            string top = StringFunc.Rm(topBottom[0], 0, "frac(".Length);
+            string bottom = StringFunc.Rm(topBottom[1], 0, 1);
 
             bool isPartial = top.Contains("partial");
             if (isPartial != bottom.Contains("partial"))
@@ -2368,7 +2368,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
             int indexOfDeriv = -1;
             if (top.Contains("^"))
             {
-                Match match = Regex.Match(top, NUM_MATCH);
+                Match match = TypeHelper.Match(top, NUM_MATCH);
                 if (!match.Success)
                     return null;
                 string matchStr = match.Value;
@@ -2380,20 +2380,20 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
 
                 if (!bottom.Contains("^"))
                     return null;
-                match = Regex.Match(bottom, NUM_MATCH);
+                match = TypeHelper.Match(bottom, NUM_MATCH);
                 if (!match.Success)
                     return null;
                 if (match.Value != matchStr)
                     return null;
             }
 
-            top = top.Remove(0, 1);
-            bottom = bottom.Remove(0, 1);
+            top = StringFunc.Rm(top, 0, 1);
+            bottom = StringFunc.Rm(bottom, 0, 1);
 
             if (indexOfDeriv != -1)
             {
-                Match topSymbMatch = Regex.Match(top, IDEN_MATCH);
-                Match bottomSymbMatch = Regex.Match(bottom, IDEN_MATCH);
+                Match topSymbMatch = TypeHelper.Match(top, IDEN_MATCH);
+                Match bottomSymbMatch = TypeHelper.Match(bottom, IDEN_MATCH);
                 if (!bottomSymbMatch.Success)
                     return null;
 
@@ -2416,7 +2416,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                     return null;
                 }
 
-                return Derivative.Parse(top, bottom, new Number(indexOfDeriv), isPartial, ref p_EvalData);
+                return Derivative.Parse(top, bottom, new ExNumber(indexOfDeriv), isPartial, ref p_EvalData);
             }
 
             currentIndex++;
@@ -2441,7 +2441,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                 return null;
             }
 
-            return Derivative.Parse(bottom, innerEx, new Number(indexOfDeriv), isPartial);
+            return Derivative.Parse(bottom, innerEx, new ExNumber(indexOfDeriv), isPartial);
         }
 
         private AlgebraTerm ParseFraction(ref int currentIndex, List<TypePair<LexemeType,string>> lt, ref List<string> pParseErrors)
@@ -2481,28 +2481,28 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
             {
                 string[] tmps = lex.GetData2().Split('(');
                 str = tmps[0];
-                withRespectTo = tmps[1].Remove(tmps[1].Length - 1, 1);
+                withRespectTo = StringFunc.Rm(tmps[1], tmps[1].Length - 1, 1);
             }
             else
                 str = lex.GetData2();
 
             // Convert this over to the Leibniz notation.
-            Match funcMatch = Regex.Match(str, IDEN_MATCH);
+            Match funcMatch = TypeHelper.Match(str, IDEN_MATCH);
             if (!funcMatch.Success)
                 return null;
 
-            str = str.Remove(0, funcMatch.Length);
+            str = StringFunc.Rm(str, 0, funcMatch.Length);
             ExComp order = null;
             if (str.Contains("'"))
-                order = new Number(str.Length); // Just the number of primes we have.
+                order = new ExNumber(str.Length); // Just the number of primes we have.
             else
             {
-                str = str.Remove(0, 1);
+                str = StringFunc.Rm(str, 0, 1);
                 // This is in the notation f^2(x)
 
                 int iTmp;
                 if (int.TryParse(str, out iTmp))
-                    order = new Number(iTmp);
+                    order = new ExNumber(iTmp);
                 else if (Regex.IsMatch(str, IDEN_MATCH))
                     order = new AlgebraComp(str);
                 else
@@ -2576,7 +2576,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
 
         private AlgebraTerm ParseLimit(ref int currentIndex, List<TypePair<LexemeType,string>> lt, ref List<string> pParseErrors)
         {
-            string limitStr = lt[currentIndex].GetData2().Remove(0, "lim_(".Length);
+            string limitStr = StringFunc.Rm(lt[currentIndex].GetData2(), 0, "lim_(".Length);
 
             int index = limitStr.IndexOf("to");
             if (index == -1)
@@ -2809,16 +2809,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
             if (innerEx == null || innerEx is AgOp)
                 return null;
 
-            AlgebraTerm retVal = new AlgebraTerm(innerEx, new PowOp(), new AlgebraTerm(Number.GetOne(), new DivOp(), rootEx));
+            AlgebraTerm retVal = new AlgebraTerm(innerEx, new PowOp(), new AlgebraTerm(ExNumber.GetOne(), new DivOp(), rootEx));
 
             return retVal;
         }
 
         private AlgebraTerm ParseSummation(ref int currentIndex, List<TypePair<LexemeType,string>> lt, ref List<string> pParseErrors)
         {
-            string varStr = lt[currentIndex].GetData2().Remove(0, "sum_(".Length);
+            string varStr = StringFunc.Rm(lt[currentIndex].GetData2(), 0, "sum_(".Length);
             // Remove the equals sign.
-            varStr = varStr.Remove(varStr.Length - 1, 1);
+            varStr = StringFunc.Rm(varStr, varStr.Length - 1, 1);
 
             AlgebraComp iterVar = new AlgebraComp(varStr);
 
@@ -3024,7 +3024,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
             }
 
             // Remove the first 'd' character from the differential.
-            string withRespectVar = lt[endIndex].GetData2().Remove(0, 1);
+            string withRespectVar = StringFunc.Rm(lt[endIndex].GetData2(), 0, 1);
             AlgebraComp dVar = new AlgebraComp(withRespectVar);
 
             if (upper == null && lower != null)
@@ -3040,7 +3040,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
             List<TypePair<LexemeType,string>> parseLt = _vectorStore[tmps[1]];
 
             // Get the dimensionality of this vector
-            string endCharacter = tmps[0].Remove(0, "vector".Length);
+            string endCharacter = StringFunc.Rm(tmps[0], 0, "vector".Length);
             int dimen = 0;
             if (endCharacter == "a")
                 dimen = 2;

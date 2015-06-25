@@ -75,7 +75,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
                 // This is the transpose operation.
                 return mat.Transpose();
             }
-            else if (ex is Number && Number.OpEqual((ex as Number), -1) && !(mat is ExVector))
+            else if (ex is ExNumber && ExNumber.OpEqual((ex as ExNumber), -1) && !(mat is ExVector))
             {
                 // This is the inverse operation.
                 return mat.GetInverse();
@@ -147,7 +147,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
 
             // Matrix multiplication.
             if (mat0.GetCols() != mat1.GetRows())
-                return Number.GetUndefined();
+                return ExNumber.GetUndefined();
 
             ExMatrix resultant = new ExMatrix(mat0.GetRows(), mat1.GetCols());
 
@@ -167,9 +167,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
 
         public static ExComp DivOpCombine(ExMatrix mat, ExComp ex)
         {
-            if (ex is Number)
+            if (ex is ExNumber)
             {
-                Number n = ex as Number;
+                ExNumber n = ex as ExNumber;
                 // Divide each component by n.
                 mat.ModifyEach((ExComp ele) =>
                     {

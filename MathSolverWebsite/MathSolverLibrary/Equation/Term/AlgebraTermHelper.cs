@@ -15,8 +15,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             List<ExComp> compareGroup2 = GetCombinableGroup(group2, false);
 
             // For this the coefficients don't matter.
-            List<TypePair<bool, ExComp>> checkGroups2 = (from comp in compareGroup2
-                                select new TypePair<bool, ExComp>(false, comp)).ToList();
+            List<TypePair<bool, ExComp>> checkGroups2 = new List<TypePair<bool, ExComp>>();
+
+            for (int i = 0; i < compareGroup2.Count; ++i)
+                checkGroups2.Add(new TypePair<bool, ExComp>(false, compareGroup2[i]));
 
             if (compareGroup1.Count!= compareGroup2.Count)
                 return false;
@@ -47,8 +49,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public static ExComp Intersect(AlgebraTerm term, ExComp comp)
         {
-            if (comp is Number)
-                return Intersect(term, comp as Number);
+            if (comp is ExNumber)
+                return Intersect(term, comp as ExNumber);
             else if (comp is AlgebraComp)
                 return Intersect(term, comp as AlgebraComp);
             else if (comp is AlgebraTerm)
@@ -57,7 +59,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 throw new ArgumentException("Couldn't cast ExComp!");
         }
 
-        public static ExComp Intersect(AlgebraTerm term, Number number)
+        public static ExComp Intersect(AlgebraTerm term, ExNumber number)
         {
             ExComp[] group = new ExComp[] { number };
 
@@ -69,10 +71,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             term.RemoveGroup(matchingGroup);
 
             // Combine the groups.
-            Number coeff = GetCoeffTerm(matchingGroup);
+            ExNumber coeff = GetCoeffTerm(matchingGroup);
             if (coeff == null)
             {
-                coeff = new Number(1.0);
+                coeff = new ExNumber(1.0);
                 int matchingGroupCount = matchingGroup.Length;
                 ExComp[] tmpGp = new ExComp[matchingGroupCount + 2];
                 for (int i = 0; i < matchingGroupCount + 2; ++i)
@@ -87,7 +89,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
             coeff.Add(number);
 
-            if (Number.OpNotEquals(coeff, 0.0))
+            if (ExNumber.OpNotEquals(coeff, 0.0))
                 term.AddGroup(matchingGroup);
             return term;
         }
@@ -109,10 +111,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
             term.RemoveGroup(matchingGroup);
 
-            Number coeff1 = GetCoeffTerm(matchingGroup);
+            ExNumber coeff1 = GetCoeffTerm(matchingGroup);
             if (coeff1 == null)
             {
-                coeff1 = new Number(1.0);
+                coeff1 = new ExNumber(1.0);
                 int matchingGroupCount = matchingGroup.Length;
                 ExComp[] tmpGp = new ExComp[matchingGroupCount + 2];
                 for (int i = 0; i < matchingGroupCount; ++i)
@@ -135,8 +137,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public static ExComp Intersect(AlgebraTerm term1, AlgebraTerm term2)
         {
-            List<TypePair<ExComp[], bool>> group2Checks = (from gr in term2.GetGroupsNoOps()
-                                select new TypePair<ExComp[], bool>(gr, false)).ToList();
+            List<TypePair<ExComp[], bool>> group2Checks = new List<TypePair<ExComp[], bool>>();
+
+            List<ExComp[]> term2GroupsNoOps = term2.GetGroupsNoOps();
+            for (int i = 0; i < term2GroupsNoOps.Count; ++i)
+                group2Checks.Add(new TypePair<ExComp[], bool>(term2GroupsNoOps[i], false));
+
             List<ExComp[]> groups1 = term1.GetGroupsNoOps();
 
             List<ExComp[]> intersectedGroups = new List<ExComp[]>();
@@ -165,13 +171,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 {
                     ExComp[] baseGroup = RemoveCoeffs(match);
 
-                    Number coeff1 = GetCoeffTerm(group1) ?? new Number(1.0);
-                    Number coeff2 = GetCoeffTerm(match) ?? new Number(1.0);
-                    Number combinedCoeff = Number.OpAdd(coeff1, coeff2);
+                    ExNumber coeff1 = GetCoeffTerm(group1) ?? new ExNumber(1.0);
+                    ExNumber coeff2 = GetCoeffTerm(match) ?? new ExNumber(1.0);
+                    ExNumber combinedCoeff = ExNumber.OpAdd(coeff1, coeff2);
 
-                    if (Number.OpNotEquals(combinedCoeff, 0.0))
+                    if (ExNumber.OpNotEquals(combinedCoeff, 0.0))
                     {
-                        if (Number.OpNotEquals(combinedCoeff, 1.0))
+                        if (ExNumber.OpNotEquals(combinedCoeff, 1.0))
                             AddTermToGroup(ref baseGroup, combinedCoeff, true);
 
                         intersectedGroups.Add(baseGroup);
@@ -205,7 +211,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
                     combinable = base1.IsEqualTo(base2);
                 }
-                else if (groupComp is Number && comp is Number)
+                else if (groupComp is ExNumber && comp is ExNumber)
                     combinable = true;
                 else
                     combinable = groupComp.IsEqualTo(comp);
@@ -264,9 +270,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                     if (trigFunc is PowerFunction)
                     {
                         PowerFunction pfTf = trigFunc as PowerFunction;
-                        if (!(pfTf.GetPower() is Number))
+                        if (!(pfTf.GetPower() is ExNumber))
                             return null;
-                        Number pfTfPow = pfTf.GetPower() as Number;
+                        ExNumber pfTfPow = pfTf.GetPower() as ExNumber;
                         if (!pfTfPow.IsRealInteger())
                             return null;
                         int pow = (int)pfTfPow.GetRealComp();

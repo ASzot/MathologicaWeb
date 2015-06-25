@@ -3,6 +3,7 @@ using MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg;
 using System.Collections.Generic;
 using System.Linq;
 using MathSolverWebsite.MathSolverLibrary.LangCompat;
+using MathSolverWebsite.MathSolverLibrary.TermType;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 {
@@ -13,7 +14,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         private AlgebraComp _derivOf = null;
         private bool _isDefined = true;
         private bool _isPartial = false;
-        private ExComp _order = Number.GetOne();
+        private ExComp _order = ExNumber.GetOne();
         private AlgebraComp _withRespectTo;
         private string ca_derivSymb = null;
         private AlgebraComp ca_impDeriv = null;
@@ -47,9 +48,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         public int GetOrderInt()
         {
-            if (!(_order is Number))
+            if (!(_order is ExNumber))
                 return -1;
-            Number num = _order as Number;
+            ExNumber num = _order as ExNumber;
             if (!num.IsRealInteger())
                 return -1;
 
@@ -73,12 +74,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         public static Derivative ConstructDeriv(ExComp innerEx, AlgebraComp withRespect, AlgebraComp derivOf)
         {
-            return ConstructDeriv(derivOf, innerEx, null, withRespect, Number.GetOne());
+            return ConstructDeriv(derivOf, innerEx, null, withRespect, ExNumber.GetOne());
         }
 
         public static Derivative ConstructDeriv(AlgebraComp withRespect, AlgebraComp derivOf)
         {
-            Derivative deriv = ConstructDeriv(derivOf, Number.GetZero(), null, withRespect, Number.GetOne());
+            Derivative deriv = ConstructDeriv(derivOf, ExNumber.GetZero(), null, withRespect, ExNumber.GetOne());
             deriv._isDefined = false;
 
             return deriv;
@@ -86,7 +87,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         public static Derivative ConstructDeriv(AlgebraComp funcIden, ExComp inputVal, ExComp order)
         {
-            return ConstructDeriv(funcIden, Number.GetZero(), inputVal, null, order);
+            return ConstructDeriv(funcIden, ExNumber.GetZero(), inputVal, null, order);
         }
 
         public static Derivative ConstructDeriv(AlgebraComp derivOf, ExComp innerEx, ExComp inputVal, AlgebraComp withRespect, ExComp order)
@@ -109,7 +110,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             AlgebraComp respectToCmp = withRespectTo == null ? null : new AlgebraComp(withRespectTo);
 
             Derivative deriv;
-            deriv = new Derivative(Number.GetZero());
+            deriv = new Derivative(ExNumber.GetZero());
             deriv._isDefined = false;
             deriv._derivOf = new AlgebraComp(function);
 
@@ -133,7 +134,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             return deriv;
         }
 
-        public static ExComp TakeDeriv(ExComp term, AlgebraComp withRespectTo, ref TermType.EvalData pEvalData, bool isPartial = false, bool isFuncDeriv = false)
+        public static ExComp TakeDeriv(ExComp term, AlgebraComp withRespectTo, ref EvalData pEvalData, bool isPartial, bool isFuncDeriv)
         {
             if ((term is AlgebraComp || term is FunctionDefinition) && !term.IsEqualTo(withRespectTo) && isFuncDeriv)
                 return ConstructImplicitDerivAgCmp(term, withRespectTo, isPartial);
@@ -198,7 +199,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         public AlgebraComp ConstructImplicitDerivAgCmp()
         {
             if (ca_impDeriv == null)
-                ca_impDeriv = ConstructImplicitDerivAgCmp(_derivOf, _withRespectTo);
+                ca_impDeriv = ConstructImplicitDerivAgCmp(_derivOf, _withRespectTo, false);
             return ca_impDeriv;
         }
 
@@ -212,7 +213,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             return _order.ToAlgTerm().Contains(varFor) || base.Contains(varFor);
         }
 
-        private static AlgebraComp ConstructImplicitDerivAgCmp(ExComp derivOf, ExComp withRespectTo, bool isPartial = false)
+        private static AlgebraComp ConstructImplicitDerivAgCmp(ExComp derivOf, ExComp withRespectTo, bool isPartial)
         {
             string iden = isPartial ? "\\partial" : "d";
             return new AlgebraComp("(" + iden + derivOf.ToDispString() + ")/(" + iden + withRespectTo.ToDispString() + ")");
@@ -220,10 +221,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         public override ExComp CancelWith(ExComp innerEx, ref TermType.EvalData pEvalData)
         {
-            if (!(_order is Number && (_order as Number).IsRealInteger()))
+            if (!(_order is ExNumber && (_order as ExNumber).IsRealInteger()))
                 return null;
 
-            int order = (int)(_order as Number).GetRealComp();
+            int order = (int)(_order as ExNumber).GetRealComp();
 
             if (innerEx is Integral && _derivOf == null && order == 1)
             {
@@ -345,10 +346,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (_withRespectTo == null)
                 return this;
 
-            if (!(_order is Number && (_order as Number).IsRealInteger()))
+            if (!(_order is ExNumber && (_order as ExNumber).IsRealInteger()))
                 return this;
 
-            int order = (int)(_order as Number).GetRealComp();
+            int order = (int)(_order as ExNumber).GetRealComp();
 
             if (order > MAX_DERIV)
                 return this;
@@ -387,7 +388,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             else if (finalInnerEx is ExMatrix)
             {
                 // Don't know if this works.
-                return Number.GetUndefined();
+                return ExNumber.GetUndefined();
             }
 
             pEvalData.GetWorkMgr().FromFormatted("`{0}`", "Find the " + (_order).ToString() + MathHelper.GetCountingPrefix(order)
@@ -414,9 +415,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         {
             string orderStr = GetIsOrderOne() ? "" : "^{" + _order.ToAsciiString() + "}";
             string followingStr = null;
-            if (_order is Number && (_order as Number).IsRealInteger())
+            if (_order is ExNumber && (_order as ExNumber).IsRealInteger())
             {
-                int order = (int)(_order as Number).GetRealComp();
+                int order = (int)(_order as ExNumber).GetRealComp();
                 if (order < 3)
                 {
                     followingStr = "";
@@ -449,9 +450,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         {
             string orderStr = GetIsOrderOne() ? "" : "^{" + _order.ToTexString() + "}";
             string followingStr = null;
-            if (_order is Number && (_order as Number).IsRealInteger())
+            if (_order is ExNumber && (_order as ExNumber).IsRealInteger())
             {
-                int order = (int)(_order as Number).GetRealComp();
+                int order = (int)(_order as ExNumber).GetRealComp();
                 if (order < 3)
                 {
                     followingStr = "";
@@ -506,7 +507,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             deriv._isPartial = this._isPartial;
             if (this._inputVal != null)
                 deriv._inputVal = this._inputVal.IsEqualTo(subOut) ? subIn : this._inputVal;
-            if (this._order.IsEqualTo(subOut) && (subIn is AlgebraComp || subIn is Number))
+            if (this._order.IsEqualTo(subOut) && (subIn is AlgebraComp || subIn is ExNumber))
                 deriv._order = subIn;
             else
                 deriv._order = this._order;
@@ -523,7 +524,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             deriv._derivOf = this._derivOf;
             deriv._isDefined = this._isDefined;
             deriv._isPartial = this._isPartial;
-            if (this._order.IsEqualTo(subOut) && subIn is AlgebraComp || subIn is Number)
+            if (this._order.IsEqualTo(subOut) && subIn is AlgebraComp || subIn is ExNumber)
             {
                 deriv._order = subIn;
                 success = true;
@@ -541,9 +542,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         {
             string orderStr = GetIsOrderOne() ? "" : "^{" + _order.ToAsciiString() + "}";
             string followingStr = null;
-            if (_order is Number && (_order as Number).IsRealInteger())
+            if (_order is ExNumber && (_order as ExNumber).IsRealInteger())
             {
-                int order = (int)(_order as Number).GetRealComp();
+                int order = (int)(_order as ExNumber).GetRealComp();
                 if (order < 3)
                 {
                     followingStr = "";
@@ -586,9 +587,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         {
             string orderStr = GetIsOrderOne() ? "" : "^{" + _order.ToTexString() + "}";
             string followingStr = null;
-            if (_order is Number && (_order as Number).IsRealInteger())
+            if (_order is ExNumber && (_order as ExNumber).IsRealInteger())
             {
-                int order = (int)(_order as Number).GetRealComp();
+                int order = (int)(_order as ExNumber).GetRealComp();
                 if (order < 3)
                 {
                     followingStr = "";
@@ -724,14 +725,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[{0}]=1/({1})`",
                     "Using the definition that `d/(dx)[log_b(x)]=1/(ln(b)x)` which can be extended to natural logs to say `d/(dx)[ln(x)]=1/x`",
                     log, log.GetInnerTerm());
-                deriv = DivOp.StaticCombine(Number.GetOne(), log.GetInnerTerm());
+                deriv = DivOp.StaticCombine(ExNumber.GetOne(), log.GetInnerTerm());
             }
             else
             {
                 pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[{0}]=1/(ln({2})({1}))`",
                     "Using the definition that `d/(dx)[log_b(x)]=1/(ln(b)x)`",
                     log, log.GetInnerTerm(), log.GetBase());
-                deriv = DivOp.StaticCombine(Number.GetOne(), MulOp.StaticWeakCombine(log.GetInnerTerm(), LogFunction.Ln(log.GetBase())));
+                deriv = DivOp.StaticCombine(ExNumber.GetOne(), MulOp.StaticWeakCombine(log.GetInnerTerm(), LogFunction.Ln(log.GetBase())));
             }
 
             pEvalData.AttemptSetInputType(TermType.InputType.DerivLog);
@@ -788,7 +789,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         private ExComp ApplyPowerRuleBase(PowerFunction powFunc, ref TermType.EvalData pEvalData)
         {
-            if (powFunc.GetPower().IsEqualTo(Number.GetNegOne()))
+            if (powFunc.GetPower().IsEqualTo(ExNumber.GetNegOne()))
             {
                 // Don't include the constants which are still contained under the neg one power.
                 if (powFunc.GetBase() is AlgebraTerm)
@@ -801,12 +802,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                         GroupHelper.GetConstVarTo(gp, out varTo, out constTo, _withRespectTo);
                         if (varTo.Length != 0 && constTo.Length != 0)
                         {
-                            AlgebraTerm agConst = AlgebraTerm.FromFraction(Number.GetOne(), GroupHelper.ToAlgTerm(constTo));
+                            AlgebraTerm agConst = AlgebraTerm.FromFraction(ExNumber.GetOne(), GroupHelper.ToAlgTerm(constTo));
                             AlgebraTerm agVarTo = GroupHelper.ToAlgNoRedunTerm(varTo);
                             if (agVarTo is PowerFunction)
                                 (agVarTo as PowerFunction).SetPower(MulOp.Negate((agVarTo as PowerFunction).GetPower()));
                             else
-                                agVarTo = new PowerFunction(agVarTo, Number.GetNegOne());
+                                agVarTo = new PowerFunction(agVarTo, ExNumber.GetNegOne());
 
                             pEvalData.GetWorkMgr().FromFormatted("`" + agConst.ToDispString() + ca_derivSymb + "[" + agVarTo.FinalToDispStr() + "]`",
                                 "Bring out all constants as they will have no effect on the derivative. This comes from the derivative property that `d/(dx)[kf(x)]=k*d/(dx)[f(x)]` the constants will be multiplied back in at the end.");
@@ -820,7 +821,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             ExComp term = powFunc.GetPower().CloneEx();
 
-            ExComp power = SubOp.StaticCombine(powFunc.GetPower(), Number.GetOne());
+            ExComp power = SubOp.StaticCombine(powFunc.GetPower(), ExNumber.GetOne());
             if (power is AlgebraTerm)
                 power = (power as AlgebraTerm).CompoundFractions();
 
@@ -973,7 +974,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (!ContainsVarOfInterest(ex))
             {
                 pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[{0}]=0`", "The entire term is constant therefore the derivative equals `0`", ex);
-                return Number.GetZero();
+                return ExNumber.GetZero();
             }
 
             if (ex is AlgebraComp)
@@ -982,7 +983,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 {
                     pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[{0}]=1`",
                         "Use the power rule.", ex);
-                    return Number.GetOne();
+                    return ExNumber.GetOne();
                 }
                 else if (_derivOf != null && _derivOf.IsEqualTo(ex))
                 {
@@ -1029,7 +1030,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     ExComp numEx = numDen[0].RemoveRedundancies(false);
                     ExComp denEx = numDen[1].RemoveRedundancies(false);
 
-                    if (Number.GetOne().IsEqualTo(numEx) && denEx is PowerFunction)
+                    if (ExNumber.GetOne().IsEqualTo(numEx) && denEx is PowerFunction)
                     {
                         PowerFunction pfDen = denEx as PowerFunction;
                         pfDen.SetPower(MulOp.Negate(pfDen.GetPower()));
@@ -1041,7 +1042,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 List<ExComp[]> gps = term.GetGroupsNoOps();
                 AlgebraTerm finalAlgTerm = new AlgebraTerm();
 
-                if (gps.Count != 1 && pEvalData.GetWorkMgr().AllowWork)
+                if (gps.Count != 1 && pEvalData.GetWorkMgr().GetAllowWork())
                 {
                     string indvDerivs = "";
                     for (int i = 0; i < gps.Count; ++i)
@@ -1083,7 +1084,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             else
                 GroupHelper.GetConstVarTo(gp, out varTo, out constTo, _withRespectTo, _derivOf);
 
-            if (constTo.Length == 1 && constTo[0].IsEqualTo(Number.GetOne()))
+            if (constTo.Length == 1 && constTo[0].IsEqualTo(ExNumber.GetOne()))
             {
                 ExComp[] empty = new ExComp[] { };
                 constTo = empty;
@@ -1092,7 +1093,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (varTo.Length == 0)
             {
                 pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[" + GroupHelper.FinalToMathAsciiString(gp) + "]=0`", "The entire term is constant therefore the derivative equals `0`");
-                return Number.GetZero();
+                return ExNumber.GetZero();
             }
 
             string varToStr = GroupHelper.ToAlgTerm(varTo).ToAsciiString();
@@ -1152,7 +1153,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     ExComp tmpMul1 = MulOp.StaticCombine(denDeriv.CloneEx(), numEx);
 
                     ExComp tmpNum = SubOp.StaticCombine(tmpMul0, tmpMul1);
-                    ExComp tmpDen = PowOp.StaticCombine(denEx, new Number(2.0));
+                    ExComp tmpDen = PowOp.StaticCombine(denEx, new ExNumber(2.0));
 
                     derivTerm = DivOp.StaticCombine(tmpNum, tmpDen);
                 }

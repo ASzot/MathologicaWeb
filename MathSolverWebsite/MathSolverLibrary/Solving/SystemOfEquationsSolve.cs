@@ -6,8 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using MathSolverWebsite.MathSolverLibrary.LangCompat;
 using MathSolverWebsite.MathSolverLibrary.TermType;
-using LexemeTable = System.Collections.Generic.List<
-MathSolverWebsite.MathSolverLibrary.TypePair<MathSolverWebsite.MathSolverLibrary.Parsing.LexemeType, string>>;
 
 //TODO:
 // Make sure no inequalities are used in systems of equations.
@@ -70,7 +68,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
                     //TODO:
                     // Allow more complex assignments other than just numbers.
-                    if (other is Number)
+                    if (other is ExNumber)
                     {
                         AlgebraComp varFor = eqSet.GetLeft() is AlgebraComp ? eqSet.GetLeft() as AlgebraComp : eqSet.GetRight() as AlgebraComp;
 
@@ -89,7 +87,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             return anySubbed;
         }
 
-        public SolveResult SolveEquationArray(List<EqSet> equations, List<LexemeTable> lexemeTables, Dictionary<string, int> allIdens, ref TermType.EvalData pEvalData)
+        public SolveResult SolveEquationArray(List<EqSet> equations, List<List<TypePair<MathSolverLibrary.Parsing.LexemeType, string>>> lexemeTables, Dictionary<string, int> allIdens, ref TermType.EvalData pEvalData)
         {
             DoAssignments(ref equations);
 
@@ -140,10 +138,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 return null;
             }
 
-            if (Number.GetZero().IsEqualTo(elimCoeff0) || (elimCoeff0 is AlgebraTerm && (elimCoeff0 as AlgebraTerm).IsZero()))
-                elimCoeff0 = Number.GetOne();
-            if (Number.GetZero().IsEqualTo(elimCoeff1) || (elimCoeff1 is AlgebraTerm && (elimCoeff1 as AlgebraTerm).IsZero()))
-                elimCoeff1 = Number.GetOne();
+            if (ExNumber.GetZero().IsEqualTo(elimCoeff0) || (elimCoeff0 is AlgebraTerm && (elimCoeff0 as AlgebraTerm).IsZero()))
+                elimCoeff0 = ExNumber.GetOne();
+            if (ExNumber.GetZero().IsEqualTo(elimCoeff1) || (elimCoeff1 is AlgebraTerm && (elimCoeff1 as AlgebraTerm).IsZero()))
+                elimCoeff1 = ExNumber.GetOne();
 
             ExComp gcf = GroupHelper.LCF(elimCoeff0, elimCoeff1);
 
@@ -153,13 +151,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             mul0 = AbsValFunction.MakePositive(mul0);
             mul1 = AbsValFunction.MakePositive(mul1);
 
-            if (pEvalData.GetWorkMgr().AllowWork && (!Number.GetOne().IsEqualTo(mul0) || !Number.GetOne().IsEqualTo(mul1)))
+            if (pEvalData.GetWorkMgr().GetAllowWork() && (!ExNumber.GetOne().IsEqualTo(mul0) || !ExNumber.GetOne().IsEqualTo(mul1)))
             {
-                ExComp tmpEq0Left = Number.GetOne().IsEqualTo(mul0) ? eq0Left : MulOp.StaticWeakCombine(mul0, eq0Left);
-                ExComp tmpEq0Right = Number.GetOne().IsEqualTo(mul0) ? eq0Right : MulOp.StaticWeakCombine(mul0, eq0Right);
+                ExComp tmpEq0Left = ExNumber.GetOne().IsEqualTo(mul0) ? eq0Left : MulOp.StaticWeakCombine(mul0, eq0Left);
+                ExComp tmpEq0Right = ExNumber.GetOne().IsEqualTo(mul0) ? eq0Right : MulOp.StaticWeakCombine(mul0, eq0Right);
 
-                ExComp tmpEq1Left = Number.GetOne().IsEqualTo(mul1) ? eq1Left : MulOp.StaticWeakCombine(mul1, eq1Left);
-                ExComp tmpEq1Right = Number.GetOne().IsEqualTo(mul1) ? eq1Right : MulOp.StaticWeakCombine(mul1, eq1Right);
+                ExComp tmpEq1Left = ExNumber.GetOne().IsEqualTo(mul1) ? eq1Left : MulOp.StaticWeakCombine(mul1, eq1Left);
+                ExComp tmpEq1Right = ExNumber.GetOne().IsEqualTo(mul1) ? eq1Right : MulOp.StaticWeakCombine(mul1, eq1Right);
 
                 pEvalData.GetWorkMgr().FromArraySides("Eliminate the variable " + elimAgComp.ToAsciiString() + ". To do so make the variable in the equations have equal coefficients.",
                     tmpEq0Left, tmpEq0Right,
@@ -172,7 +170,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             eq1Left = MulOp.StaticCombine(mul1, eq1Left).ToAlgTerm();
             eq1Right = MulOp.StaticCombine(mul1, eq1Right).ToAlgTerm();
 
-            if (pEvalData.GetWorkMgr().AllowWork && (!Number.GetOne().IsEqualTo(mul0) || !Number.GetOne().IsEqualTo(mul1)))
+            if (pEvalData.GetWorkMgr().GetAllowWork() && (!ExNumber.GetOne().IsEqualTo(mul0) || !ExNumber.GetOne().IsEqualTo(mul1)))
             {
                 pEvalData.GetWorkMgr().FromArraySides(eq0Left, eq0Right,
                     eq1Left, eq1Right);
@@ -304,7 +302,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
             AlgebraVar eliminate = GetLowestComplexityVar(equations[0].GetLeftTerm(), equations[0].GetRightTerm());
 
-            if (pEvalData.GetWorkMgr().AllowWork)
+            if (pEvalData.GetWorkMgr().GetAllowWork())
             {
                 List<AlgebraTerm> sides = EqSet.GetSides(equations).ToList();
                 string finalStr = "";
@@ -375,15 +373,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             return solveResult;
         }
 
-        private SolveResult SolveEquationArraySubstitution(List<EqSet> equations, List<LexemeTable> lexemeTables, ref TermType.EvalData pEvalData)
+        private SolveResult SolveEquationArraySubstitution(List<EqSet> equations, List<List<TypePair<MathSolverLibrary.Parsing.LexemeType, string>>> lexemeTables, ref TermType.EvalData pEvalData)
         {
-            List<LexemeTable> eqLexemeTables = new List<LexemeTable>();
+            List<List<TypePair<MathSolverLibrary.Parsing.LexemeType, string>>> eqLexemeTables = new List<List<TypePair<MathSolverLibrary.Parsing.LexemeType, string>>>();
             for (int i = 0; i < lexemeTables.Count; i += 2)
             {
-                LexemeTable lt0 = lexemeTables[i];
-                LexemeTable lt1 = lexemeTables[i + 1];
+                List<TypePair<MathSolverLibrary.Parsing.LexemeType, string>> lt0 = lexemeTables[i];
+                List<TypePair<MathSolverLibrary.Parsing.LexemeType, string>> lt1 = lexemeTables[i + 1];
 
-                LexemeTable compoundedLexemeTable = Parsing.LexicalParser.CompoundLexemeTable(lt0, lt1);
+                List<TypePair<MathSolverLibrary.Parsing.LexemeType, string>> compoundedLexemeTable = Parsing.LexicalParser.CompoundLexemeTable(lt0, lt1);
                 eqLexemeTables.Add(compoundedLexemeTable);
             }
 
@@ -403,7 +401,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             return SolveEquationSystemRecur(equations, eqLexemeTables, ref pEvalData, true);
         }
 
-        private SolveResult SolveEquationSystemRecur(List<EqSet> completeEqs, List<LexemeTable> eqLexemeTables, ref EvalData pEvalData, bool ascending)
+        private SolveResult SolveEquationSystemRecur(List<EqSet> completeEqs, List<List<TypePair<MathSolverLibrary.Parsing.LexemeType, string>>> eqLexemeTables, ref EvalData pEvalData, bool ascending)
         {
             List<EqSet> clonedEqs = (from completeEq in completeEqs
                                      select completeEq.Clone()).ToList();
@@ -423,7 +421,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 endVal = 0;
             }
 
-            if (pEvalData.GetWorkMgr().AllowWork)
+            if (pEvalData.GetWorkMgr().GetAllowWork())
             {
                 string idensDisp = "";
                 for (int j = 0; j < completeEqs.Count; ++j)

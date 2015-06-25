@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using MathSolverWebsite.MathSolverLibrary.LangCompat;
 using MathSolverWebsite.MathSolverLibrary.TermType;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
@@ -60,7 +61,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                 if (combinedPowTerm.IsZero())
                 {
                     AlgebraTerm term = new AlgebraTerm();
-                    term.Add(new Number(1.0));
+                    term.Add(new ExNumber(1.0));
                     return term;
                 }
                 if (combinedPowTerm.IsOne())
@@ -86,7 +87,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         {
             if (!pf.GetBase().IsEqualTo(comp))
             {
-                if (Number.GetOne().IsEqualTo(pf.GetBase()))
+                if (ExNumber.GetOne().IsEqualTo(pf.GetBase()))
                     return comp;
 
                 AlgebraTerm term = new AlgebraTerm();
@@ -94,7 +95,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
                 return term;
             }
-            PowerFunction compFunc = new PowerFunction(comp, new Number(1.0));
+            PowerFunction compFunc = new PowerFunction(comp, new ExNumber(1.0));
             ExComp resultant = PowerFunction.OpMul(pf, compFunc);
             return resultant;
         }
@@ -127,7 +128,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                             break;
                         }
                         else if (groupComp is PowerFunction && (groupComp as PowerFunction).GetPower().IsEqualTo(pf.GetPower()) &&
-                            (groupComp as PowerFunction).GetBase() is Number && pf.GetBase() is Number)
+                            (groupComp as PowerFunction).GetBase() is ExNumber && pf.GetBase() is ExNumber)
                         {
                             if (modGroupCount != i)
                                 continue;
@@ -176,7 +177,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
                 return MulOp.StaticWeakCombine(pf, term);
             }
-            PowerFunction termFunc = new PowerFunction(term, new Number(1.0));
+            PowerFunction termFunc = new PowerFunction(term, new ExNumber(1.0));
             ExComp resultant = PowerFunction.OpMul(pf, termFunc);
             return resultant;
         }
@@ -191,10 +192,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                 power.Add(pf1.GetPower(), new SubOp(), pf2.GetPower());
                 ExComp workablePow = power.MakeWorkable();
                 if ((workablePow is AlgebraTerm && (workablePow as AlgebraTerm).IsZero()) ||
-                    (workablePow is Number && Number.OpEqual((workablePow as Number), 0.0)))
+                    (workablePow is ExNumber && ExNumber.OpEqual((workablePow as ExNumber), 0.0)))
                 {
                     AlgebraTerm term = new AlgebraTerm();
-                    term.Add(new Number(1.0));
+                    term.Add(new ExNumber(1.0));
                     return term;
                 }
 
@@ -251,9 +252,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         {
             if (power is AlgebraTerm)
                 power = (power as AlgebraTerm).RemoveRedundancies(false);
-            if (power is PowerFunction && (power as PowerFunction).GetPower().IsEqualTo(Number.GetNegOne()))
+            if (power is PowerFunction && (power as PowerFunction).GetPower().IsEqualTo(ExNumber.GetNegOne()))
             {
-                power = MulOp.StaticWeakCombine(Number.GetOne(), power);
+                power = MulOp.StaticWeakCombine(ExNumber.GetOne(), power);
             }
 
             return power;
@@ -350,11 +351,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         public override ExComp Evaluate(bool harshEval, ref TermType.EvalData pEvalData)
         {
             ExComp baseEx = GetBase();
-            if (Number.IsUndef(baseEx) || Number.IsUndef(_power))
-                return Number.GetUndefined();
+            if (ExNumber.IsUndef(baseEx) || ExNumber.IsUndef(_power))
+                return ExNumber.GetUndefined();
 
-            if (Number.GetZero().IsEqualTo(baseEx) && !Number.GetNegOne().IsEqualTo(_power))
-                return Number.GetZero();
+            if (ExNumber.GetZero().IsEqualTo(baseEx) && !ExNumber.GetNegOne().IsEqualTo(_power))
+                return ExNumber.GetZero();
 
             if (baseEx is AlgebraTerm)
             {
@@ -372,12 +373,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
             if (harshEval)
             {
-                if (baseEx is Number && _power is Number)
+                if (baseEx is ExNumber && _power is ExNumber)
                 {
-                    Number nBase = baseEx as Number;
-                    Number nPow = _power as Number;
+                    ExNumber nBase = baseEx as ExNumber;
+                    ExNumber nPow = _power as ExNumber;
 
-                    Number raised = Number.RaiseToPower(nBase, nPow);
+                    ExNumber raised = ExNumber.RaiseToPower(nBase, nPow);
                     if (raised != null)
                         return raised;
                 }
@@ -391,7 +392,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         {
             string powerAsciiStr = _power.ToAsciiString();
             if (powerAsciiStr == ("-1"))
-                powerAsciiStr = powerAsciiStr.Remove(0, 2);
+                powerAsciiStr = StringFunc.Rm(powerAsciiStr, 0, 2);
 
             ExComp baseNoRedun = GetBase() is AlgebraTerm ? (GetBase() as AlgebraTerm).RemoveRedundancies(false) : GetBase();
             if (baseNoRedun is TrigFunction || baseNoRedun is InverseTrigFunction)
@@ -418,9 +419,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                     ExComp num = numDen[0].RemoveRedundancies(false);
                     ExComp den = numDen[1].RemoveRedundancies(false);
 
-                    if (Number.GetOne().IsEqualTo(num))
+                    if (ExNumber.GetOne().IsEqualTo(num))
                     {
-                        if ((new Number(2.0)).IsEqualTo(den))
+                        if ((new ExNumber(2.0)).IsEqualTo(den))
                             return "sqrt(" + baseAsciiStr + ")";
                         else
                             return "root(" + den.ToAsciiString() + ")(" + baseAsciiStr + ")";
@@ -438,7 +439,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         {
             string powerTexStr = _power.ToTexString();
             if (powerTexStr == ("-1"))
-                powerTexStr = powerTexStr.Remove(0, 2);
+                powerTexStr = StringFunc.Rm(powerTexStr, 0, 2);
 
             ExComp baseNoRedun = GetBase() is AlgebraTerm ? (GetBase() as AlgebraTerm).RemoveRedundancies(false) : GetBase();
             if (baseNoRedun is TrigFunction || baseNoRedun is InverseTrigFunction)
@@ -465,9 +466,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                     ExComp num = numDen[0].RemoveRedundancies(false);
                     ExComp den = numDen[1].RemoveRedundancies(false);
 
-                    if (Number.GetOne().IsEqualTo(num))
+                    if (ExNumber.GetOne().IsEqualTo(num))
                     {
-                        if ((new Number(2.0)).IsEqualTo(den))
+                        if ((new ExNumber(2.0)).IsEqualTo(den))
                             return "sqrt(" + baseTexStr + ")";
                         else
                             return "root(" + den.ToTexString() + ")(" + baseTexStr + ")";
@@ -485,13 +486,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public ExComp FlipFrac()
         {
-            AlgebraTerm powTerm = new AlgebraTerm(Number.GetNegOne(), new MulOp(), _power);
+            AlgebraTerm powTerm = new AlgebraTerm(ExNumber.GetNegOne(), new MulOp(), _power);
             _power = powTerm.MakeWorkable();
 
             if (_power is AlgebraTerm)
                 _power = (_power as AlgebraTerm).RemoveRedundancies(false);
 
-            if (_power is Number && Number.OpEqual((_power as Number), 1.0))
+            if (_power is ExNumber && ExNumber.OpEqual((_power as ExNumber), 1.0))
                 return GetBase();
 
             return this;
@@ -526,24 +527,24 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public override double GetCompareVal()
         {
-            Number powerNum = null;
+            ExNumber powerNum = null;
             if (_power is AlgebraTerm)
             {
                 AlgebraTerm powerTerm = _power as AlgebraTerm;
-                if (powerTerm.GetTermCount() == 1 && powerTerm.GetSubComps()[0] is Number)
-                    powerNum = powerTerm.GetSubComps()[0] as Number;
+                if (powerTerm.GetTermCount() == 1 && powerTerm.GetSubComps()[0] is ExNumber)
+                    powerNum = powerTerm.GetSubComps()[0] as ExNumber;
                 AlgebraTerm[] numDen = powerTerm.GetNumDenFrac();
                 if (numDen != null)
                 {
                     ExComp num = numDen[0].RemoveRedundancies(false);
                     ExComp den = numDen[1].RemoveRedundancies(false);
-                    if (Number.GetOne().IsEqualTo(num) && den is Number && (den as Number).IsRealInteger())
-                        return (den as Number).GetReciprocal().GetRealComp();
+                    if (ExNumber.GetOne().IsEqualTo(num) && den is ExNumber && (den as ExNumber).IsRealInteger())
+                        return (den as ExNumber).GetReciprocal().GetRealComp();
                 }
             }
-            else if (_power is Number)
+            else if (_power is ExNumber)
             {
-                powerNum = _power as Number;
+                powerNum = _power as ExNumber;
             }
 
             if (powerNum == null)
@@ -556,13 +557,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             int root;
             if (HasIntRoot(out root))
             {
-                if (root % 2 != 0 || GetBase() is Number)
+                if (root % 2 != 0 || GetBase() is ExNumber)
                     return null;
 
                 pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + this.FinalToDispStr() + WorkMgr.EDM, "The above radical cannot be anything less than 0. The domain will be restricted by " + WorkMgr.STM + "{0}" +
                     Restriction.ComparisonOpToStr(Parsing.LexemeType.GreaterEqual) + "0" + WorkMgr.EDM, GetBase());
 
-                SolveResult result = agSolver.SolveRegInequality(GetBase().ToAlgTerm(), Number.GetZero().ToAlgTerm(), Parsing.LexemeType.GreaterEqual, varFor, ref pEvalData);
+                SolveResult result = agSolver.SolveRegInequality(GetBase().ToAlgTerm(), ExNumber.GetZero().ToAlgTerm(), Parsing.LexemeType.GreaterEqual, varFor, ref pEvalData);
                 if (!result.Success)
                     return null;
 
@@ -612,7 +613,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                 evalPow = (_power as AlgebraTerm).HarshEvaluation();
 
             ExComp evalBase;
-            if (!(evalPow is Number) && GetBase() is Constant)
+            if (!(evalPow is ExNumber) && GetBase() is Constant)
                 evalBase = GetBase();
             else
                 evalBase = GetBase().ToAlgTerm().HarshEvaluation();
@@ -625,7 +626,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         {
             if (_power is AlgebraTerm)
                 _power = (_power as AlgebraTerm).RemoveRedundancies(false);
-            if (_power is Number && (_power as Number).IsRealInteger())
+            if (_power is ExNumber && (_power as ExNumber).IsRealInteger())
             {
                 return true;
             }
@@ -638,9 +639,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             pow = int.MaxValue;
             if (_power is AlgebraTerm)
                 _power = (_power as AlgebraTerm).RemoveRedundancies(false);
-            if (_power is Number && (_power as Number).IsRealInteger())
+            if (_power is ExNumber && (_power as ExNumber).IsRealInteger())
             {
-                pow = (int)(_power as Number).GetRealComp();
+                pow = (int)(_power as ExNumber).GetRealComp();
                 return true;
             }
 
@@ -652,9 +653,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             root = int.MaxValue;
             if (_power is AlgebraTerm)
                 _power = (_power as AlgebraTerm).RemoveRedundancies(false);
-            if (_power is Number)
+            if (_power is ExNumber)
             {
-                Number powRecip = (_power as Number).GetReciprocal();
+                ExNumber powRecip = (_power as ExNumber).GetReciprocal();
                 if (!powRecip.IsRealInteger())
                     return false;
                 root = (int)powRecip.GetRealComp();
@@ -667,9 +668,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                     return false;
 
                 ExComp recip = frac.GetReciprocal();
-                if (recip is Number && (recip as Number).IsRealInteger())
+                if (recip is ExNumber && (recip as ExNumber).IsRealInteger())
                 {
-                    root = (int)(recip as Number).GetRealComp();
+                    root = (int)(recip as ExNumber).GetRealComp();
                 }
             }
             else
@@ -720,10 +721,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         {
             if (_power is AlgebraTerm)
                 _power = (_power as AlgebraTerm).RemoveRedundancies(false);
-            if (_power is Number)
+            if (_power is ExNumber)
             {
-                Number powNum = _power as Number;
-                return Number.OpEqual(powNum, -1.0);
+                ExNumber powNum = _power as ExNumber;
+                return ExNumber.OpEqual(powNum, -1.0);
             }
 
             return false;
@@ -739,7 +740,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                 {
                     // There are different ways to represent powers.
                     // 0.5 or 1/2.
-                    if (powerFunc.GetPower() is AlgebraTerm && _power is Number)
+                    if (powerFunc.GetPower() is AlgebraTerm && _power is ExNumber)
                     {
                         AlgebraTerm powerFuncPowTerm = powerFunc.GetPower() as AlgebraTerm;
                         AlgebraTerm[] numDen = powerFuncPowTerm.GetNumDenFrac();
@@ -748,15 +749,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                             ExComp num = numDen[0].RemoveRedundancies(false);
                             ExComp den = numDen[1].RemoveRedundancies(false);
 
-                            if (num is Number && den is Number)
+                            if (num is ExNumber && den is ExNumber)
                             {
-                                ExComp divNum = Number.OpDiv((num as Number), (den as Number));
+                                ExComp divNum = ExNumber.OpDiv((num as ExNumber), (den as ExNumber));
                                 if (divNum.IsEqualTo(_power))
                                     return true;
                             }
                         }
                     }
-                    else if (_power is AlgebraTerm && powerFunc.GetPower() is Number)
+                    else if (_power is AlgebraTerm && powerFunc.GetPower() is ExNumber)
                     {
                         AlgebraTerm powerTerm = _power as AlgebraTerm;
                         AlgebraTerm[] numDen = powerTerm.GetNumDenFrac();
@@ -765,9 +766,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                             ExComp num = numDen[0].RemoveRedundancies(false);
                             ExComp den = numDen[1].RemoveRedundancies(false);
 
-                            if (num is Number && den is Number)
+                            if (num is ExNumber && den is ExNumber)
                             {
-                                ExComp divNum = Number.OpDiv((num as Number), (den as Number));
+                                ExComp divNum = ExNumber.OpDiv((num as ExNumber), (den as ExNumber));
                                 if (divNum.IsEqualTo(powerFunc.GetPower()))
                                     return true;
                             }
@@ -783,7 +784,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public bool IsRadical()
         {
-            if (_power is Number && !(_power as Number).IsRealInteger())
+            if (_power is ExNumber && !(_power as ExNumber).IsRealInteger())
                 return true;
 
             if (_power is AlgebraTerm && (_power as AlgebraTerm).ContainsOnlyFractions())
@@ -794,9 +795,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public override bool IsUndefined()
         {
-            if (GetBase() is Number && (GetBase() as Number).IsUndefined())
+            if (GetBase() is ExNumber && (GetBase() as ExNumber).IsUndefined())
                 return true;
-            if (_power is Number && (_power as Number).IsUndefined())
+            if (_power is ExNumber && (_power as ExNumber).IsUndefined())
                 return true;
             if (GetBase() is AlgebraTerm && (GetBase() as AlgebraTerm).IsUndefined())
                 return true;
@@ -876,12 +877,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             ExComp baseTerm = GetBase() is AlgebraTerm ? (GetBase() as AlgebraTerm).RemoveRedundancies(postWorkable) : GetBase();
             ExComp powerTerm = GetPower() is AlgebraTerm ? (GetPower() as AlgebraTerm).RemoveRedundancies(postWorkable) : GetPower();
 
-            if (powerTerm is Number)
+            if (powerTerm is ExNumber)
             {
-                Number powerNum = powerTerm as Number;
-                if (Number.OpEqual(powerNum, 0.0))
-                    return new Number(1.0);
-                else if (Number.OpEqual(powerNum, 1.0))
+                ExNumber powerNum = powerTerm as ExNumber;
+                if (ExNumber.OpEqual(powerNum, 0.0))
+                    return new ExNumber(1.0);
+                else if (ExNumber.OpEqual(powerNum, 1.0))
                     return baseTerm;
             }
 
@@ -893,7 +894,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             AlgebraTerm baseTerm = GetBase() is AlgebraTerm ? (GetBase() as AlgebraTerm).RemoveZeros() : GetBase().ToAlgTerm();
 
             AlgebraTerm oneTerm = new AlgebraTerm();
-            oneTerm.Add(new Number(1.0));
+            oneTerm.Add(new ExNumber(1.0));
 
             ExComp power = null;
             if (_power is AlgebraTerm)
@@ -905,12 +906,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
                 power = powerTerm;
             }
-            else if (_power is Number)
+            else if (_power is ExNumber)
             {
-                Number number = _power as Number;
-                if (Number.OpEqual(number, 0.0))
+                ExNumber number = _power as ExNumber;
+                if (ExNumber.OpEqual(number, 0.0))
                     return oneTerm;
-                if (Number.OpEqual(number, 1.0))
+                if (ExNumber.OpEqual(number, 1.0))
                     return baseTerm;
 
                 power = number;
@@ -924,7 +925,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public ExComp SimplifyRadical()
         {
-            int root;
+            int root = 0;
             if (!HasIntRoot(out root))
                 return this;
 
@@ -938,9 +939,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             {
                 ExComp subComp = baseTerm[i];
 
-                if (subComp is Number && (subComp as Number).IsRealInteger())
+                if (subComp is ExNumber && (subComp as ExNumber).IsRealInteger())
                 {
-                    Number nSubComp = subComp as Number;
+                    ExNumber nSubComp = subComp as ExNumber;
                     int n = (int)nSubComp.GetRealComp();
 
                     if (root % 2 == 0)
@@ -948,17 +949,17 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                         // This is an even root. Take out any negative terms in the radical.
                         if (n < 0)
                         {
-                            mulTerms.Add(new Number(0.0, 1.0));
-                            baseTerm[i] = Number.OpSub(nSubComp);
+                            mulTerms.Add(new ExNumber(0.0, 1.0));
+                            baseTerm[i] = ExNumber.OpSub(nSubComp);
                             n = -n;
                         }
                     }
 
                     int[] divisors;
                     if (root % 2 != 0)
-                        divisors = MathHelper.GetDivisors(Math.Abs(n), true);
+                        divisors = MathHelper.GetDivisors(Math.Abs(n), true, false);
                     else
-                        divisors = MathHelper.GetDivisors(n, true);
+                        divisors = MathHelper.GetDivisors(n, true, false);
 
                     for (int j = divisors.Length - 1; j >= 0; --j)
                     {
@@ -972,8 +973,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                                 rootResult = -rootResult;
                                 n = -n;
                             }
-                            baseTerm[i] = new Number(n);
-                            Number outside = new Number(rootResult);
+                            baseTerm[i] = new ExNumber(n);
+                            ExNumber outside = new ExNumber(rootResult);
                             mulTerms.Add(outside);
                             break;
                         }
@@ -994,8 +995,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
                         if (outside != 0)
                         {
-                            ExComp outsideEx = outside == 1 ? powBase : PowOp.StaticCombine(powBase, new Number(outside));
-                            ExComp insideEx = inside == 1 ? powBase : PowOp.StaticCombine(powBase, new Number(inside));
+                            ExComp outsideEx = outside == 1 ? powBase : PowOp.StaticCombine(powBase, new ExNumber(outside));
+                            ExComp insideEx = inside == 1 ? powBase : PowOp.StaticCombine(powBase, new ExNumber(inside));
 
                             baseTerm[i] = insideEx;
                             mulTerms.Add(outsideEx);
@@ -1014,7 +1015,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             ExComp baseEx = baseTerm.MakeWorkable();
             if (baseEx is AlgebraTerm)
                 baseEx = (baseEx as AlgebraTerm).RemoveRedundancies(false);
-            if (Number.GetOne().IsEqualTo(baseEx))
+            if (ExNumber.GetOne().IsEqualTo(baseEx))
                 return outsideTerm.MakeWorkable();
 
             ExComp finalPowFunc = PowOp.StaticWeakCombine(baseEx, _power);
@@ -1034,7 +1035,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                 {
                     ExComp gcf = DivOp.GetCommonFactor(_power, pfSubOut._power);
 
-                    if (gcf != null && !Number.GetZero().IsEqualTo(gcf) && !Number.GetOne().IsEqualTo(gcf))
+                    if (gcf != null && !ExNumber.GetZero().IsEqualTo(gcf) && !ExNumber.GetOne().IsEqualTo(gcf))
                     {
                         ExComp divPow = DivOp.StaticCombine(_power, gcf);
                         return PowOp.StaticCombine(subIn, divPow).ToAlgTerm();
@@ -1073,7 +1074,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                 {
                     ExComp gcf = DivOp.GetCommonFactor(_power, pfSubOut._power);
 
-                    if (gcf != null && !Number.GetZero().IsEqualTo(gcf) && !Number.GetOne().IsEqualTo(gcf))
+                    if (gcf != null && !ExNumber.GetZero().IsEqualTo(gcf) && !ExNumber.GetOne().IsEqualTo(gcf))
                     {
                         ExComp divPow = DivOp.StaticCombine(_power, gcf);
                         success = true;
@@ -1114,7 +1115,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             // This is to prevent stuff like 2 and sqrt(2) from combining.
             // While technically these could combine to keep things looking nice
             // they are not combined in this program.
-            if (comp is Number)
+            if (comp is ExNumber)
                 return false;
 
             if (comp is PowerFunction)
@@ -1132,7 +1133,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         {
             string powerAsciiStr = _power.ToAsciiString();
             if (powerAsciiStr.StartsWith("-1") && !powerAsciiStr.StartsWith("-1*") && !powerAsciiStr.StartsWith("-1."))
-                powerAsciiStr = powerAsciiStr.Remove(0, 2);
+                powerAsciiStr = StringFunc.Rm(powerAsciiStr, 0, 2);
 
             ExComp baseNoRedun = GetBase() is AlgebraTerm ? (GetBase() as AlgebraTerm).RemoveRedundancies(false) : GetBase();
             if (baseNoRedun is TrigFunction || baseNoRedun is InverseTrigFunction)
@@ -1165,9 +1166,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                     ExComp num = numDen[0].RemoveRedundancies(false);
                     ExComp den = numDen[1].RemoveRedundancies(false);
 
-                    if (Number.GetOne().IsEqualTo(num))
+                    if (ExNumber.GetOne().IsEqualTo(num))
                     {
-                        if ((new Number(2.0)).IsEqualTo(den))
+                        if ((new ExNumber(2.0)).IsEqualTo(den))
                             return "sqrt(" + finalBaseAsciiStr + ")";
                         else
                             return "root(" + den.ToAsciiString() + ")(" + finalBaseAsciiStr + ")";
@@ -1183,7 +1184,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                 }
             }
 
-            if (!surrounded && GetBase() is Number)
+            if (!surrounded && GetBase() is ExNumber)
             {
                 baseAsciiStr = StringHelper.SurroundWithParas(baseAsciiStr);
             }
@@ -1214,7 +1215,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         {
             string powerTexStr = _power.ToTexString();
             if (powerTexStr.StartsWith("-1") && !powerTexStr.StartsWith("-1*") && !powerTexStr.StartsWith("-1."))
-                powerTexStr = powerTexStr.Remove(0, 2);
+                powerTexStr = StringFunc.Rm(powerTexStr, 0, 2);
 
             ExComp baseNoRedun = GetBase() is AlgebraTerm ? (GetBase() as AlgebraTerm).RemoveRedundancies(false) : GetBase();
             if (baseNoRedun is TrigFunction || baseNoRedun is InverseTrigFunction)
@@ -1233,7 +1234,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                 return @"\sqrt{" + baseTexStr + "}";
             else if (powerTexStr.StartsWith(@"\frac"))
             {
-                MatchCollection matches = Regex.Matches(powerTexStr, MathSolverLibrary.Parsing.LexicalParser.REAL_NUM_PATTERN);
+                MatchCollection matches = TypeHelper.Matches(powerTexStr, MathSolverLibrary.Parsing.LexicalParser.REAL_NUM_PATTERN);
                 if (matches.Count != 2)
                     throw new ArgumentException();
                 string numStr = matches[0].Value;

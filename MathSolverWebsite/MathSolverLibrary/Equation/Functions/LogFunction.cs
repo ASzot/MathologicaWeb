@@ -5,7 +5,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 {
     internal class LogFunction : BasicAppliedFunc
     {
-        private ExComp _baseEx = new Number(10.0);
+        private ExComp _baseEx = new ExNumber(10.0);
 
         public void SetBase(ExComp value)
         {
@@ -115,17 +115,17 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             double dLogVal = double.NaN;
             ExComp innerEx = GetInnerEx();
 
-            if (Number.IsUndef(innerEx))
-                return Number.GetUndefined();
+            if (ExNumber.IsUndef(innerEx))
+                return ExNumber.GetUndefined();
 
-            if ((innerEx is Number && !(innerEx as Number).HasImaginaryComp()) ||
+            if ((innerEx is ExNumber && !(innerEx as ExNumber).HasImaginaryComp()) ||
                 (innerEx is Constant && !(innerEx as Constant).GetValue().HasImaginaryComp()))
             {
-                dInnerVal = innerEx is Constant ? (innerEx as Constant).GetValue().GetRealComp() : (innerEx as Number).GetRealComp();
-                if ((_baseEx is Number && !(_baseEx as Number).HasImaginaryComp()) ||
+                dInnerVal = innerEx is Constant ? (innerEx as Constant).GetValue().GetRealComp() : (innerEx as ExNumber).GetRealComp();
+                if ((_baseEx is ExNumber && !(_baseEx as ExNumber).HasImaginaryComp()) ||
                     (_baseEx is Constant && !(_baseEx as Constant).GetValue().HasImaginaryComp()))
                 {
-                    dBaseVal = _baseEx is Constant ? (_baseEx as Constant).GetValue().GetRealComp() : (_baseEx as Number).GetRealComp();
+                    dBaseVal = _baseEx is Constant ? (_baseEx as Constant).GetValue().GetRealComp() : (_baseEx as ExNumber).GetRealComp();
 
                     if (dInnerVal > 0.0)
                     {
@@ -138,17 +138,17 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             {
                 if (!double.IsNaN(dInnerVal) && !double.IsNaN(dBaseVal) && !double.IsNaN(dLogVal))
                 {
-                    return new Number(dLogVal);
+                    return new ExNumber(dLogVal);
                 }
 
                 if (dInnerVal <= 0.0)
-                    return Number.GetUndefined();
+                    return ExNumber.GetUndefined();
 
                 return this;
             }
 
             if (DoubleHelper.IsInteger(dLogVal))
-                return new Number(dLogVal);
+                return new ExNumber(dLogVal);
 
             if (GetInnerEx() is PowerFunction)
             {
@@ -172,7 +172,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             }
 
             string baseStr = "";
-            if (!(new Number(10.0)).IsEqualTo(_baseEx))
+            if (!(new ExNumber(10.0)).IsEqualTo(_baseEx))
                 baseStr = "_(" + _baseEx.ToAlgTerm().FinalToDispStr() + ")";
             string finalStr = @"\log" + baseStr + "(" + GetInnerTerm().FinalToDispStr() + ")";
 
@@ -194,7 +194,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             }
 
             string baseStr = "";
-            if (!(new Number(10.0)).IsEqualTo(_baseEx))
+            if (!(new ExNumber(10.0)).IsEqualTo(_baseEx))
                 baseStr = "_{" + _baseEx.ToAlgTerm().FinalToDispStr() + "}";
             string finalStr = @"\log" + baseStr + "(" + GetInnerTerm().FinalToDispStr() + ")";
 
@@ -203,7 +203,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public override List<Restriction> GetDomain(AlgebraVar varFor, AlgebraSolver agSolver, ref TermType.EvalData pEvalData)
         {
-            SolveResult result = agSolver.SolveRegInequality(GetInnerTerm(), Number.GetZero().ToAlgTerm(), Parsing.LexemeType.Greater, varFor, ref pEvalData);
+            SolveResult result = agSolver.SolveRegInequality(GetInnerTerm(), ExNumber.GetZero().ToAlgTerm(), Parsing.LexemeType.Greater, varFor, ref pEvalData);
             if (!result.Success)
                 return null;
 
@@ -251,7 +251,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public override bool IsUndefined()
         {
-            if (_baseEx is Number && (_baseEx as Number).IsUndefined())
+            if (_baseEx is ExNumber && (_baseEx as ExNumber).IsUndefined())
                 return true;
             if (GetInnerTerm().IsUndefined())
                 return true;
@@ -309,7 +309,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             }
 
             string baseStr = "";
-            if (!(new Number(10.0)).IsEqualTo(_baseEx))
+            if (!(new ExNumber(10.0)).IsEqualTo(_baseEx))
                 baseStr = "_(" + WorkMgr.ToDisp(_baseEx) + ")";
             string finalStr = @"\log" + baseStr + "(" + GetInnerTerm().FinalToAsciiString() + ")";
 
@@ -345,7 +345,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             }
 
             string baseStr = "";
-            if (!(new Number(10.0)).IsEqualTo(_baseEx))
+            if (!(new ExNumber(10.0)).IsEqualTo(_baseEx))
                 baseStr = "_{" + _baseEx.ToTexString() + "}";
             string finalStr = @"\log" + baseStr + "(" + GetInnerTerm().ToTexString() + ")";
 

@@ -1,5 +1,6 @@
 ﻿using MathSolverWebsite.MathSolverLibrary.Equation;
 using System.Linq;
+using MathSolverWebsite.MathSolverLibrary.LangCompat;
 
 namespace MathSolverWebsite.MathSolverLibrary.TermType
 {
@@ -50,7 +51,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
         public virtual bool IsValidCommand(string cmd)
         {
-            if (_cmds.Contains(cmd))
+            if (ArrayFunc.Contains(_cmds, cmd))
                 return true;
             return false;
         }

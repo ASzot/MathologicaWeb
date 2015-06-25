@@ -35,7 +35,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
         public override ExComp CancelWith(ExComp innerEx, ref TermType.EvalData evalData)
         {
             if (innerEx is CurlFunc)
-                return Number.GetZero();
+                return ExNumber.GetZero();
             return null;
         }
 
@@ -44,7 +44,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
             CallChildren(harshEval, ref pEvalData);
 
             if (!IsSuitableField(GetInnerEx()))
-                return Number.GetUndefined();
+                return ExNumber.GetUndefined();
 
             ExComp p, q, r;
             ExComp innerEx = GetCorrectedInnerEx(ref pEvalData);
@@ -104,7 +104,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
             if (z != null)
                 r_z = Derivative.TakeDeriv(r, z, ref pEvalData, true, isFuncDeriv);
             else
-                r_z = Number.GetZero();
+                r_z = ExNumber.GetZero();
 
             return AddOp.StaticCombine(AddOp.StaticCombine(p_x, q_y), r_z);
         }

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MathSolverWebsite.MathSolverLibrary.LangCompat;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 {
@@ -69,10 +70,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         protected void CallChildren(bool harshEval, ref TermType.EvalData pEvalData)
         {
-            for (int i = 0; i < _subComps.Count; ++i)
+            for (int i = 0; i < ArrayFunc.GetCount(_subComps); ++i)
             {
-                if (_subComps[i] is AlgebraFunction)
-                    _subComps[i] = (_subComps[i] as AlgebraFunction).Evaluate(harshEval, ref pEvalData);
+                if (ArrayFunc.GetAt(_subComps, i) is AlgebraFunction)
+                {
+                    ExComp evaluated = ((AlgebraFunction) ArrayFunc.GetAt(_subComps, i)).Evaluate(harshEval,
+                        ref pEvalData);
+                    ArrayFunc.SetAt(_subComps, i, evaluated);
+                }
             }
         }
 
@@ -185,191 +190,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         protected virtual AlgebraTerm CreateInstance(params ExComp[] args)
         {
-            return (AlgebraTerm)Activator.CreateInstance(_type, args[0]);
+            return (AlgebraTerm)TypeHelper.CreateInstance(_type, args[0]);
         }
     }
 
-    internal abstract class AppliedFunction_NArgs : AppliedFunction
-    {
-        protected ExComp[] _args;
-
-        public AppliedFunction_NArgs(FunctionType functionType, Type type, params ExComp[] args)
-            : base(args[0], functionType, type)
-        {
-            _args = args;
-        }
-
-        public override ExComp CloneEx()
-        {
-            ExComp[] cloned = new ExComp[_args.Length];
-            for (int i = 0; i < _args.Length; ++i)
-                cloned[i] = _args[i].CloneEx();
-            return CreateInstance(cloned);
-        }
-
-        public override AlgebraTerm CompoundFractions()
-        {
-            return this;
-        }
-
-        public override AlgebraTerm CompoundFractions(out bool valid)
-        {
-            valid = false;
-
-            return this;
-        }
-
-        public override AlgebraTerm HarshEvaluation()
-        {
-            ExComp[] harshEval = new ExComp[_args.Length];
-            for (int i = 0; i < _args.Length; ++i)
-                harshEval[i] = _args[i].ToAlgTerm().HarshEvaluation();
-            AlgebraTerm created = CreateInstance(harshEval);
-            return created;
-        }
-
-        public override AlgebraTerm Order()
-        {
-            ExComp[] orderedArr = new ExComp[_args.Length];
-            for (int i = 0; i < _args.Length; ++i)
-                orderedArr[i] = _args[i].ToAlgTerm().Order();
-            return CreateInstance(orderedArr);
-        }
-
-        public override AlgebraTerm RemoveOneCoeffs()
-        {
-            ExComp[] noOneCoeffsArr = new ExComp[_args.Length];
-            for (int i = 0; i < _args.Length; ++i)
-                noOneCoeffsArr[i] = (_args[i] is AlgebraTerm ? (_args[i] as AlgebraTerm).RemoveOneCoeffs() : _args[i]);
-            return CreateInstance(noOneCoeffsArr);
-        }
-
-        public override ExComp RemoveRedundancies(bool postWorkable)
-        {
-            ExComp[] noRedunArr = new ExComp[_args.Length];
-            for (int i = 0; i < _args.Length; ++i)
-                noRedunArr[i] = _args[i].ToAlgTerm().RemoveRedundancies(postWorkable);
-            return CreateInstance(noRedunArr);
-        }
-
-        public override AlgebraTerm Substitute(ExComp subOut, ExComp subIn)
-        {
-            ExComp[] substitutedArr = new ExComp[_args.Length];
-            for (int i = 0; i < _args.Length; ++i)
-                substitutedArr[i] = _args[i].ToAlgTerm().Substitute(subOut, subIn);
-            return CreateInstance(substitutedArr);
-        }
-
-        public override AlgebraTerm Substitute(ExComp subOut, ExComp subIn, ref bool success)
-        {
-            ExComp[] substituted = new ExComp[_args.Length];
-            for (int i = 0; i < _args.Length; ++i)
-            {
-                substituted[i] = _args[i].ToAlgTerm().Substitute(subOut, subIn, ref success);
-            }
-
-            return CreateInstance(substituted);
-        }
-
-        protected override AlgebraTerm CreateInstance(params ExComp[] args)
-        {
-            return (AlgebraTerm)Activator.CreateInstance(_type, args);
-        }
-    }
-
-    internal abstract class BasicAppliedFunc : AppliedFunction
-    {
-        protected string _useEnd = ")";
-        protected string _useStart = "(";
-        protected string s_name;
-
-        public virtual string GetFuncName()
-        {
-            return s_name;
-        }
-
-        public BasicAppliedFunc(ExComp innerEx, string name, FunctionType ft, Type type)
-            : base(innerEx, ft, type)
-        {
-            s_name = name;
-        }
-
-        public static ExComp Parse(string parseStr, ExComp innerEx, ref List<string> pParseErrors)
-        {
-            if (parseStr == "sin")
-                return new SinFunction(innerEx);
-            else if (parseStr == "cos")
-                return new CosFunction(innerEx);
-            else if (parseStr == "tan")
-                return new TanFunction(innerEx);
-            else if (parseStr == "log")
-                return new LogFunction(innerEx);   // By default we are log base 10.
-            else if (parseStr == "ln")
-            {
-                LogFunction log = new LogFunction(innerEx);
-                log.SetBase(Constant.ParseConstant("e"));
-                return log;
-            }
-            else if (parseStr == "sec")
-                return new SecFunction(innerEx);
-            else if (parseStr == "csc")
-                return new CscFunction(innerEx);
-            else if (parseStr == "cot")
-                return new CotFunction(innerEx);
-            else if (parseStr == "asin" || parseStr == "arcsin")
-                return new ASinFunction(innerEx);
-            else if (parseStr == "acos" || parseStr == "arccos")
-                return new ACosFunction(innerEx);
-            else if (parseStr == "atan" || parseStr == "arctan")
-                return new ATanFunction(innerEx);
-            else if (parseStr == "acsc" || parseStr == "arccsc")
-                return new ACscFunction(innerEx);
-            else if (parseStr == "asec" || parseStr == "arcsec")
-                return new ASecFunction(innerEx);
-            else if (parseStr == "acot" || parseStr == "arccot")
-                return new ACotFunction(innerEx);
-            else if (parseStr == "sqrt")
-                return new AlgebraTerm(innerEx, new Operators.PowOp(), new AlgebraTerm(Number.GetOne(), new Operators.DivOp(), new Number(2.0)));
-            else if (parseStr == "det")
-                return new Structural.LinearAlg.Determinant(innerEx);
-            else if (parseStr == "curl")
-                return new CurlFunc(innerEx);
-            else if (parseStr == "div")
-                return new DivergenceFunc(innerEx);
-            else if (parseStr == "!")
-                return new FactorialFunction(innerEx);
-
-            return null;
-        }
-
-        public override string FinalToDispStr()
-        {
-            return s_name + _useStart + GetInnerTerm().FinalToDispStr() + _useEnd;
-        }
-
-        public override string ToAsciiString()
-        {
-            return s_name + _useStart + GetInnerTerm().ToAsciiString() + _useEnd;
-        }
-
-        public override string ToJavaScriptString(bool useRad)
-        {
-            string innerStr = GetInnerTerm().ToJavaScriptString(useRad);
-            if (GetInnerTerm() == null)
-                return null;
-            return "Math." + s_name + "(" + innerStr + ")";
-        }
-
-        public override string ToString()
-        {
-            if (MathSolver.USE_TEX_DEBUG)
-                return ToTexString();
-            return s_name + _useStart + GetInnerTerm().ToString() + _useEnd;
-        }
-
-        public override string ToTexString()
-        {
-            return s_name + _useStart + GetInnerTerm().ToTexString() + _useEnd;
-        }
-    }
 }

@@ -15,19 +15,19 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
 
         public ExComp GetX()
         {
-            return 0 < GetLength() ? Get(0) : Number.GetZero();
+            return 0 < GetLength() ? Get(0) : ExNumber.GetZero();
         }
 
         public ExComp GetY()
         {
-            return 1 < GetLength() ? Get(1) : Number.GetZero();
+            return 1 < GetLength() ? Get(1) : ExNumber.GetZero();
         }
 
         public ExComp GetZ()
         {
             // Not all vectors will have Z component whereas
             // they are garunteed to have a least an x and y component.
-            return 2 < GetLength() ? Get(2) : Number.GetZero();
+            return 2 < GetLength() ? Get(2) : ExNumber.GetZero();
         }
 
         public ExComp[] Components
@@ -61,9 +61,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
         public static ExComp Dot(ExVector vec0, ExVector vec1)
         {
             if (vec0.GetLength() != vec1.GetLength())
-                return Number.GetUndefined();
+                return ExNumber.GetUndefined();
 
-            ExComp totalSum = Number.GetZero();
+            ExComp totalSum = ExNumber.GetZero();
             for (int i = 0; i < vec0.GetLength(); ++i)
             {
                 ExComp prod = MulOp.StaticCombine(vec0.Get(i), vec1.Get(i));
@@ -84,13 +84,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
 
         public ExComp GetVecLength()
         {
-            ExComp sum = Number.GetZero();
+            ExComp sum = ExNumber.GetZero();
             for (int i = 0; i < this.GetLength(); ++i)
             {
-                sum = AddOp.StaticCombine(PowOp.StaticCombine(Get(i), new Number(2.0)), sum);
+                sum = AddOp.StaticCombine(PowOp.StaticCombine(Get(i), new ExNumber(2.0)), sum);
             }
 
-            return PowOp.StaticCombine(sum, AlgebraTerm.FromFraction(Number.GetOne(), new Number(2.0)));
+            return PowOp.StaticCombine(sum, AlgebraTerm.FromFraction(ExNumber.GetOne(), new ExNumber(2.0)));
         }
 
         public override ExComp CloneEx()

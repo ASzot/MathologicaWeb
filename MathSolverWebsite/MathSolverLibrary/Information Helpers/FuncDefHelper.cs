@@ -1,6 +1,7 @@
 ﻿using MathSolverWebsite.MathSolverLibrary.Equation;
 using MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg;
 using System.Collections.Generic;
+using MathSolverWebsite.MathSolverLibrary.LangCompat;
 
 namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
 {
@@ -196,7 +197,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
                     return def;
             }
 
-            return new KeyValuePair<FunctionDefinition, ExComp>(null, null);
+            return ArrayFunc.CreateKeyValuePair<FunctionDefinition, ExComp>(null, null);
         }
 
         public KeyValuePair<FunctionDefinition, ExComp> GetDefinition(AlgebraComp searchFuncIden)
@@ -207,7 +208,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
                     return def;
             }
 
-            return new KeyValuePair<FunctionDefinition, ExComp>(null, null);
+            return ArrayFunc.CreateKeyValuePair<FunctionDefinition, ExComp>(null, null);
         }
 
         public TypePair<string, ExComp>[] GetDefinitionToPara(FunctionDefinition func)

@@ -46,7 +46,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             }
             else if (command == "Factor")
             {
-                AlgebraTerm[] factors = AdvAlgebraTerm.Factorize(_a, _b, _c, _solveFor, ref pEvalData);
+                AlgebraTerm[] factors = AdvAlgebraTerm.Factorize(_a, _b, _c, _solveFor, ref pEvalData, false);
                 if (factors == null)
                 {
                     pEvalData.AddFailureMsg("Couldn't factor.");
@@ -68,8 +68,8 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 pEvalData.GetWorkMgr().FromFormatted("`({0})^2-4({1})({2})`", "Plug the values into the equation.", _a, _b, _c);
 
                 ExComp subVal = MulOp.StaticCombine(_a, _c);
-                subVal = MulOp.StaticCombine(subVal, new Number(4.0));
-                ExComp discriminant = SubOp.StaticCombine(PowOp.StaticCombine(_b, new Number(2.0)), subVal);
+                subVal = MulOp.StaticCombine(subVal, new ExNumber(4.0));
+                ExComp discriminant = SubOp.StaticCombine(PowOp.StaticCombine(_b, new ExNumber(2.0)), subVal);
 
                 pEvalData.GetWorkMgr().FromFormatted("`" + WorkMgr.ToDisp(discriminant) + "`", "Simplify getting the final discriminant.");
 
@@ -120,7 +120,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             _solveFor = new AlgebraVar(probSolveVar);
             AlgebraComp solveForComp = _solveFor.ToAlgebraComp();
 
-            if (eqInfo.AppliedFunctions.Count != 0 || !eqInfo.HasOnlyPowers(new Number(2.0), new Number(1.0)))
+            if (eqInfo.AppliedFunctions.Count != 0 || !eqInfo.HasOnlyPowers(new ExNumber(2.0), new ExNumber(1.0)))
                 return false;
 
             if ((left is AlgebraComp && !solveForComp.IsEqualTo(left)) || left is FunctionDefinition)
@@ -167,7 +167,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             }
 
             if (promptStrs != null)
-                _ttSolveGen = new SolveGenTermType(new EqSet(_eq, Number.GetZero(), LexemeType.EqualsOp), lexemeTable, solveVars, probSolveVar, promptStrs,
+                _ttSolveGen = new SolveGenTermType(new EqSet(_eq, ExNumber.GetZero(), LexemeType.EqualsOp), lexemeTable, solveVars, probSolveVar, promptStrs,
                     _funcIden is AlgebraComp ? (_funcIden as AlgebraComp).GetVar().GetVar() : "");
 
             AlgebraTerm nullTerm = null;
@@ -214,7 +214,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             _a = a;
             _b = b;
             if (c.GetTermCount() == 0)
-                c.Add(Number.GetZero());
+                c.Add(ExNumber.GetZero());
             _c = c;
 
             if (_a is AlgebraTerm)
@@ -258,7 +258,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
         private static ExComp FindAOS(ExComp a, ExComp b)
         {
             ExComp num = MulOp.Negate(b);
-            ExComp den = MulOp.StaticCombine(new Number(2.0), a);
+            ExComp den = MulOp.StaticCombine(new ExNumber(2.0), a);
 
             return DivOp.StaticCombine(num, den);
         }
@@ -289,14 +289,14 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
         private static ExComp ToVertexForm(ExComp a, ExComp b, ExComp c, AlgebraComp solveFor, ref EvalData pEvalData)
         {
-            if (!Number.GetOne().IsEqualTo(a))
+            if (!ExNumber.GetOne().IsEqualTo(a))
             {
                 b = DivOp.StaticCombine(b, a);
                 c = DivOp.StaticCombine(c, a);
             }
 
-            ExComp halfB = DivOp.StaticCombine(b, new Number(2.0));
-            ExComp completeTheSquareTerm = PowOp.RaiseToPower(halfB, new Number(2.0), ref pEvalData);
+            ExComp halfB = DivOp.StaticCombine(b, new ExNumber(2.0));
+            ExComp completeTheSquareTerm = PowOp.RaiseToPower(halfB, new ExNumber(2.0), ref pEvalData, false);
 
             ExComp hVal = AddOp.StaticCombine(c, MulOp.Negate(completeTheSquareTerm));
 
@@ -306,15 +306,15 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             }
 
             AlgebraTerm finalTerm = new AlgebraTerm();
-            if (!Number.GetOne().IsEqualTo(a))
+            if (!ExNumber.GetOne().IsEqualTo(a))
                 finalTerm.Add(a, new MulOp());
 
-            if (!Number.GetZero().IsEqualTo(halfB))
-                finalTerm.Add(new Equation.Functions.PowerFunction(new AlgebraTerm(solveFor, new AddOp(), halfB), new Number(2.0)));
+            if (!ExNumber.GetZero().IsEqualTo(halfB))
+                finalTerm.Add(new Equation.Functions.PowerFunction(new AlgebraTerm(solveFor, new AddOp(), halfB), new ExNumber(2.0)));
             else
                 finalTerm.Add(solveFor);
 
-            if (!Number.GetZero().IsEqualTo(hVal))
+            if (!ExNumber.GetZero().IsEqualTo(hVal))
                 finalTerm.Add(new AddOp(), hVal);
 
             return finalTerm;

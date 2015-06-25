@@ -64,7 +64,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public static AlgebraTerm OpSub(AlgebraTerm term)
         {
-            ExComp negTerm = Operators.MulOp.StaticCombine(Number.GetNegOne(), term);
+            ExComp negTerm = Operators.MulOp.StaticCombine(ExNumber.GetNegOne(), term);
             return negTerm.ToAlgTerm();
         }
 
@@ -128,9 +128,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         public static AlgebraTerm OpDiv(AlgebraTerm term1, AlgebraTerm term2)
         {
             if (term2.GetTermCount() == 0)
-                return Number.GetUndefined().ToAlgTerm();
+                return ExNumber.GetUndefined().ToAlgTerm();
             if (term1.GetTermCount() == 0)
-                return Number.GetZero().ToAlgTerm();
+                return ExNumber.GetZero().ToAlgTerm();
 
             ExComp combined = Operators.DivOp.StaticCombine(term1, term2);
             if (combined is AlgebraTerm)

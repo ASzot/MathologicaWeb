@@ -43,10 +43,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             {
                 // Move everything to the left side.
 
-                pEvalData.GetWorkMgr().FromSides(SubOp.StaticWeakCombine(left, right), Number.GetZero(), "Move everything to the left side.");
+                pEvalData.GetWorkMgr().FromSides(SubOp.StaticWeakCombine(left, right), ExNumber.GetZero(), "Move everything to the left side.");
 
                 left = SubOp.StaticCombine(left, right).ToAlgTerm();
-                right = Number.GetZero().ToAlgTerm();
+                right = ExNumber.GetZero().ToAlgTerm();
 
                 if (!left.Contains(solveFor.ToAlgebraComp()))
                 {
@@ -67,21 +67,21 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             bool allValid = true;
             foreach (ExComp pow in powersOfVar)
             {
-                if (!(pow is Number))
+                if (!(pow is ExNumber))
                 {
                     allValid = false;
                     break;
                 }
 
-                Number nPow = pow as Number;
-                if (Number.OpGT(nPow, (new Number(3.0))))
+                ExNumber nPow = pow as ExNumber;
+                if (ExNumber.OpGT(nPow, (new ExNumber(3.0))))
                 {
                     allValid = false;
                     break;
                 }
             }
 
-            if (!powersOfVar.Contains(new Number(3.0)) || !allValid)
+            if (!powersOfVar.Contains(new ExNumber(3.0)) || !allValid)
                 return p_agSolver.SolveEq(solveFor, left, right, ref pEvalData);
 
             ExComp[] groupGcf = left.GetGroupGCF();
@@ -116,7 +116,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 return null;
             }
 
-            if (pEvalData.GetWorkMgr().AllowWork)
+            if (pEvalData.GetWorkMgr().GetAllowWork())
             {
                 string factorsStr = "";
                 foreach (AlgebraTerm factor in factors)
@@ -127,7 +127,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + factorsStr + "=0" + WorkMgr.EDM, "Solve for each of the factors independently.");
             }
 
-            AlgebraTerm zeroTerm = Number.GetZero().ToAlgTerm();
+            AlgebraTerm zeroTerm = ExNumber.GetZero().ToAlgTerm();
 
             AlgebraTermArray factorsArray = new AlgebraTermArray(factors);
             bool allSols = false;

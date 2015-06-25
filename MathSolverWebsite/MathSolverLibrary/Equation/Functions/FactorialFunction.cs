@@ -13,26 +13,26 @@
 
             ExComp innerEx = GetInnerEx();
 
-            if (innerEx is Number && (innerEx as Number).IsRealInteger())
+            if (innerEx is ExNumber && (innerEx as ExNumber).IsRealInteger())
             {
-                int num = (int)(innerEx as Number).GetRealComp();
+                int num = (int)(innerEx as ExNumber).GetRealComp();
 
                 long factorialResult = 1;
 
                 if (num < 0)
                 {
-                    return Number.GetUndefined();
+                    return ExNumber.GetUndefined();
                 }
 
                 if (num == 0)
-                    return Number.GetOne();
+                    return ExNumber.GetOne();
 
                 for (int i = 1; i <= num; ++i)
                 {
                     factorialResult *= i;
                 }
 
-                return new Number(factorialResult);
+                return new ExNumber(factorialResult);
             }
 
             return this;

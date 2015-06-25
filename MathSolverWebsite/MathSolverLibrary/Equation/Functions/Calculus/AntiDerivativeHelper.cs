@@ -9,8 +9,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 {
     internal static class AntiDerivativeHelper
     {
-        public static ExComp TakeAntiDerivativeGp(ExComp[] gp, AlgebraComp dVar, ref IntegrationInfo pIntInfo, ref EvalData pEvalData,
-            string lowerStr = "", string upperStr = "")
+        public static ExComp TakeAntiDerivativeGp(ExComp[] gp, AlgebraComp dVar, ref IntegrationInfo pIntInfo, ref EvalData pEvalData, string lowerStr, string upperStr)
         {
             string boundaryStr = (lowerStr == "" ? "" : "_" + lowerStr) + (upperStr == "" ? "" : "^" + upperStr);
             pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "\\int" + boundaryStr + "(" + GroupHelper.ToAlgTerm(gp).FinalToDispStr() + ")\\d" + dVar.ToDispString() + WorkMgr.EDM,
@@ -21,7 +20,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             gp = GroupHelper.ForceDistributeExponent(gp);
             GroupHelper.GetConstVarTo(gp, out varTo, out constTo, dVar);
 
-            if (varTo.Length == 1 && varTo[0] is PowerFunction && (varTo[0] as PowerFunction).GetPower().IsEqualTo(Number.GetNegOne()))
+            if (varTo.Length == 1 && varTo[0] is PowerFunction && (varTo[0] as PowerFunction).GetPower().IsEqualTo(ExNumber.GetNegOne()))
             {
                 PowerFunction pf = varTo[0] as PowerFunction;
 
@@ -34,7 +33,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
                     GroupHelper.GetConstVarTo(denGp, out denVarTo, out denConstTo, dVar);
 
-                    if (denConstTo.Length != 0 && !(denConstTo.Length == 1 && denConstTo[0].IsEqualTo(Number.GetOne())))
+                    if (denConstTo.Length != 0 && !(denConstTo.Length == 1 && denConstTo[0].IsEqualTo(ExNumber.GetOne())))
                     {
                         ExComp[] tmpConstTo = new ExComp[constTo.Length + 1];
                         for (int i = 0; i < constTo.Length; ++i)
@@ -42,9 +41,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                             tmpConstTo[i] = constTo[i];
                         }
 
-                        tmpConstTo[tmpConstTo.Length - 1] = new PowerFunction(GroupHelper.ToAlgTerm(denConstTo), Number.GetNegOne());
+                        tmpConstTo[tmpConstTo.Length - 1] = new PowerFunction(GroupHelper.ToAlgTerm(denConstTo), ExNumber.GetNegOne());
                         constTo = tmpConstTo;
-                        varTo = new ExComp[] { new PowerFunction(GroupHelper.ToAlgTerm(denVarTo), Number.GetNegOne()) };
+                        varTo = new ExComp[] { new PowerFunction(GroupHelper.ToAlgTerm(denVarTo), ExNumber.GetNegOne()) };
                     }
                 }
             }
@@ -90,7 +89,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                         WorkStep lastStep = pEvalData.GetWorkMgr().GetLast();
 
                         lastStep.GoDown(ref pEvalData);
-                        ExComp aderiv = AntiDerivativeHelper.TakeAntiDerivativeGp(gps[i], dVar, ref integrationInfo, ref pEvalData);
+                        ExComp aderiv = AntiDerivativeHelper.TakeAntiDerivativeGp(gps[i], dVar, ref integrationInfo, ref pEvalData, lowerStr, upperStr);
                         lastStep.GoUp(ref pEvalData);
 
                         if (aderiv == null)
@@ -186,7 +185,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             {
                 pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "({0}^(1+1))/(1+1)=({0}^2)/(2)" + WorkMgr.EDM,
                     "Use the antiderivative power rule.", gp[0]);
-                return AlgebraTerm.FromFraction(new PowerFunction(gp[0], new Number(2.0)), new Number(2.0));
+                return AlgebraTerm.FromFraction(new PowerFunction(gp[0], new ExNumber(2.0)), new ExNumber(2.0));
             }
             else if (gp.Length == 2)      // Is this two functions multiplied together?
             {
@@ -297,10 +296,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             else if (ex0 is PowerFunction)
             {
                 PowerFunction pf0 = ex0 as PowerFunction;
-                if (pf0.GetBase() is TrigFunction && pf0.GetPower() is Number && (pf0.GetPower() as Number).IsRealInteger())
+                if (pf0.GetBase() is TrigFunction && pf0.GetPower() is ExNumber && (pf0.GetPower() as ExNumber).IsRealInteger())
                 {
                     tf0 = pf0.GetBase() as TrigFunction;
-                    tf0Pow = (int)(pf0.GetPower() as Number).GetRealComp();
+                    tf0Pow = (int)(pf0.GetPower() as ExNumber).GetRealComp();
                 }
             }
             else
@@ -314,10 +313,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             else if (ex1 is PowerFunction)
             {
                 PowerFunction pf1 = ex1 as PowerFunction;
-                if (pf1.GetBase() is TrigFunction && pf1.GetPower() is Number && (pf1.GetPower() as Number).IsRealInteger())
+                if (pf1.GetBase() is TrigFunction && pf1.GetPower() is ExNumber && (pf1.GetPower() as ExNumber).IsRealInteger())
                 {
                     tf1 = pf1.GetBase() as TrigFunction;
-                    tf1Pow = (int)(pf1.GetPower() as Number).GetRealComp();
+                    tf1Pow = (int)(pf1.GetPower() as ExNumber).GetRealComp();
                 }
             }
             else
@@ -415,7 +414,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "\\int \\sec^{" + (sp - 1).ToString() + "}" + innerStr +
                     "sec" + innerStr + "tan" + innerStr + " d" + dVar.ToDispString() + WorkMgr.EDM, "Split the term up.");
 
-                ExComp subbedIn = PowOp.StaticCombine(subInVar, new Number(sp - 1));
+                ExComp subbedIn = PowOp.StaticCombine(subInVar, new ExNumber(sp - 1));
                 pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "\\int " + subInVar.ToDispString() + "^{" + (sp - 1).ToString() + "} d" + subInVar.ToDispString() + WorkMgr.EDM,
                     "Make the substitution " + WorkMgr.STM + subInVar.ToDispString() + "=\\sec" + innerStr + ", d" + subInVar.ToDispString() +
                     "=sec" + innerStr + "tan" + innerStr + "d" + subInVar.ToDispString());
@@ -460,11 +459,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 // Use cos^2(x) = 1 - sin^2(x)
                 ExComp subbedCos = PowOp.StaticCombine(
                     SubOp.StaticCombine(
-                    Number.GetOne(),
-                    PowOp.StaticCombine(new SinFunction(cf.GetInnerEx()), new Number(2.0))),
-                    new Number((cp - 1) / 2));
+                    ExNumber.GetOne(),
+                    PowOp.StaticCombine(new SinFunction(cf.GetInnerEx()), new ExNumber(2.0))),
+                    new ExNumber((cp - 1) / 2));
 
-                subbedCos = MulOp.StaticCombine(cf, MulOp.StaticCombine(PowOp.StaticCombine(sf, new Number(sp)), subbedCos));
+                subbedCos = MulOp.StaticCombine(cf, MulOp.StaticCombine(PowOp.StaticCombine(sf, new ExNumber(sp)), subbedCos));
 
                 pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + dispStr + " =  \\int ( " + WorkMgr.ToDisp(subbedCos) + " ) d" + dVar.ToDispString() + WorkMgr.EDM,
                     "Use the identity " + WorkMgr.STM + "cos^{2}(x)=1-sin^{2}(x)" + WorkMgr.EDM);
@@ -476,11 +475,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 // Using sin^2(x) = 1 - cos^2(x)
                 ExComp subbedCos = PowOp.StaticCombine(
                     SubOp.StaticCombine(
-                    Number.GetOne(),
-                    PowOp.StaticCombine(new CosFunction(sf.GetInnerEx()), new Number(2.0))),
-                    new Number((sp - 1) / 2));
+                    ExNumber.GetOne(),
+                    PowOp.StaticCombine(new CosFunction(sf.GetInnerEx()), new ExNumber(2.0))),
+                    new ExNumber((sp - 1) / 2));
 
-                subbedCos = MulOp.StaticCombine(sf, MulOp.StaticCombine(PowOp.StaticCombine(cf, new Number(cp)), subbedCos));
+                subbedCos = MulOp.StaticCombine(sf, MulOp.StaticCombine(PowOp.StaticCombine(cf, new ExNumber(cp)), subbedCos));
 
                 pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + dispStr + " = \\int ( " + WorkMgr.ToDisp(subbedCos) + " ) d" + dVar.ToDispString() + WorkMgr.EDM,
                     "Use the identity " + WorkMgr.STM + "sin^{2}(x)=1-cos^{2}(x)" + WorkMgr.EDM);
@@ -492,14 +491,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 // Using sin^2(x) = (1/2)(1-cos(2x))
                 // Using cos^2(x) = (1/2)(1+cos(2x))
                 ExComp sinSub = MulOp.StaticCombine(
-                    AlgebraTerm.FromFraction(Number.GetOne(), new Number(2.0)),
-                    SubOp.StaticCombine(Number.GetOne(), new CosFunction(MulOp.StaticCombine(new Number(2.0), sf.GetInnerEx()))));
+                    AlgebraTerm.FromFraction(ExNumber.GetOne(), new ExNumber(2.0)),
+                    SubOp.StaticCombine(ExNumber.GetOne(), new CosFunction(MulOp.StaticCombine(new ExNumber(2.0), sf.GetInnerEx()))));
                 ExComp cosSub = MulOp.StaticCombine(
-                    AlgebraTerm.FromFraction(Number.GetOne(), new Number(2.0)),
-                    AddOp.StaticCombine(Number.GetOne(), new CosFunction(MulOp.StaticCombine(new Number(2.0), sf.GetInnerEx()))));
+                    AlgebraTerm.FromFraction(ExNumber.GetOne(), new ExNumber(2.0)),
+                    AddOp.StaticCombine(ExNumber.GetOne(), new CosFunction(MulOp.StaticCombine(new ExNumber(2.0), sf.GetInnerEx()))));
                 ExComp finalEx = MulOp.StaticCombine(
-                    PowOp.StaticCombine(sinSub, new Number(sp / 2)),
-                    PowOp.StaticCombine(cosSub, new Number(cp / 2)));
+                    PowOp.StaticCombine(sinSub, new ExNumber(sp / 2)),
+                    PowOp.StaticCombine(cosSub, new ExNumber(cp / 2)));
 
                 pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + dispStr + "=" + WorkMgr.ToDisp(finalEx) + WorkMgr.EDM,
                     "Use the identities " + WorkMgr.STM + "sin^2(x)=\\frac{1}{2}(1-cos(2x))" + WorkMgr.EDM + " and " + WorkMgr.STM +
@@ -515,7 +514,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         {
             ExComp a = tf0.GetInnerEx();
             ExComp b = tf1.GetInnerEx();
-            AlgebraTerm half = AlgebraTerm.FromFraction(Number.GetOne(), new Number(2.0));
+            AlgebraTerm half = AlgebraTerm.FromFraction(ExNumber.GetOne(), new ExNumber(2.0));
             if (tf0 is SinFunction && tf1 is SinFunction)
                 return MulOp.StaticCombine(half,
                     SubOp.StaticCombine(
@@ -669,7 +668,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         private static ExComp TryU(ExComp[] group, ExComp uatmpt, AlgebraComp dVar, ref IntegrationInfo pIntInfo, ref EvalData pEvalData)
         {
-            string groupStr = GroupHelper.ToAlgTerm(GroupHelper.CloneGroup(group).ToArray()).FinalToDispStr();
+            string groupStr = GroupHelper.ToAlgTerm(GroupHelper.CloneGroup(group)).FinalToDispStr();
             string thisStr = "\\int(" + groupStr + ")" + dVar.ToDispString();
             string atmptStr = uatmpt.ToAlgTerm().FinalToDispStr();
 
@@ -727,7 +726,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 ExComp[] varTo, constTo;
                 GroupHelper.GetConstVarTo(singularGp, out varTo, out constTo, dVar);
 
-                constEx = constTo.Length == 0 ? Number.GetOne() : (ExComp)AlgebraTerm.FromFraction(Number.GetOne(), GroupHelper.ToAlgTerm(constTo));
+                constEx = constTo.Length == 0 ? ExNumber.GetOne() : (ExComp)AlgebraTerm.FromFraction(ExNumber.GetOne(), GroupHelper.ToAlgTerm(constTo));
 
                 if (varTo.Length == 0)
                 {
@@ -741,7 +740,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
                     pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + constEx.ToAlgTerm().FinalToDispStr() + "\\int (" + GroupHelper.ToAlgTerm(group.ToArray()).FinalToDispStr() + ") d" + subInVar.ToDispString() + WorkMgr.EDM);
 
-                    ExComp innerAntiDeriv = TakeAntiDerivativeGp(group.ToArray(), subInVar, ref pIntInfo, ref pEvalData);
+                    ExComp innerAntiDeriv = TakeAntiDerivativeGp(group, subInVar, ref pIntInfo, ref pEvalData, "", "");
                     if (innerAntiDeriv == null)
                         return null;
 
@@ -766,7 +765,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
                 AlgebraTerm constToAg = GroupHelper.ToAlgTerm(constTo);
                 evaluated = DivOp.StaticCombine(evaluated, constToAg.CloneEx());
-                constEx = AlgebraTerm.FromFraction(Number.GetOne(), constToAg);
+                constEx = AlgebraTerm.FromFraction(ExNumber.GetOne(), constToAg);
             }
 
             for (int j = 0; j < group.Length; ++j)
@@ -781,7 +780,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                                                                                         atmptStr + WorkMgr.EDM + " and " + WorkMgr.STM + "d" + subInVar.ToDispString() + "=" +
                                                                                         evaluated.ToAlgTerm().FinalToDispStr() + WorkMgr.EDM, false));
 
-                    bool mulInCost = constEx != null && !Number.GetOne().IsEqualTo(constEx);
+                    bool mulInCost = constEx != null && !ExNumber.GetOne().IsEqualTo(constEx);
                     string mulInCostStr = (mulInCost ? constEx.ToAlgTerm().FinalToDispStr() : "");
 
                     group = groupList.ToArray();
@@ -792,7 +791,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + mulInCostStr +
                         "\\int (" + GroupHelper.ToAlgTerm(group).FinalToDispStr() + ") d" + subInVar.ToDispString() + WorkMgr.EDM);
 
-                    ExComp innerAntiDeriv = TakeAntiDerivativeGp(group, subInVar, ref pIntInfo, ref pEvalData);
+                    ExComp innerAntiDeriv = TakeAntiDerivativeGp(group, subInVar, ref pIntInfo, ref pEvalData, "", "");
                     if (innerAntiDeriv == null)
                         return null;
 
@@ -835,13 +834,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                                                                                                     atmptStr + WorkMgr.EDM + " and " + WorkMgr.STM + "d" + subInVar.ToDispString() + "=" +
                                                                                                     evaluated.ToAlgTerm().FinalToDispStr() + WorkMgr.EDM, false));
 
-                                bool mulInCost = constEx != null && !Number.GetOne().IsEqualTo(constEx);
+                                bool mulInCost = constEx != null && !ExNumber.GetOne().IsEqualTo(constEx);
                                 string mulInCostStr = (mulInCost ? constEx.ToAlgTerm().FinalToDispStr() : "");
 
                                 pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + mulInCostStr +
                                     "\\int (" + GroupHelper.ToAlgTerm(group).FinalToDispStr() + ") d" + subInVar.ToDispString() + WorkMgr.EDM);
 
-                                ExComp innerAntiDeriv = TakeAntiDerivativeGp(group, subInVar, ref pIntInfo, ref pEvalData);
+                                ExComp innerAntiDeriv = TakeAntiDerivativeGp(@group, subInVar, ref pIntInfo, ref pEvalData, "", "");
                                 if (innerAntiDeriv == null)
                                     return null;
 
@@ -871,7 +870,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         private static ExComp SingularIntByParts(ExComp ex0, AlgebraComp dVar, string thisSTr, ref IntegrationInfo pIntInfo, ref EvalData pEvalData)
         {
-            return IntByParts(ex0, Number.GetOne(), dVar, thisSTr, ref pIntInfo, ref pEvalData);
+            return IntByParts(ex0, ExNumber.GetOne(), dVar, thisSTr, ref pIntInfo, ref pEvalData);
         }
 
         private static ExComp IntByParts(ExComp ex0, ExComp ex1, AlgebraComp dVar, string thisStr, ref IntegrationInfo pIntInfo, ref EvalData pEvalData)
@@ -894,25 +893,25 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             //}
 
             ExComp u, dv;
-            if (ex0 is Number)
+            if (ex0 is ExNumber)
             {
                 u = ex1;
                 dv = ex0;
             }
-            else if (ex1 is Number)
+            else if (ex1 is ExNumber)
             {
                 u = ex0;
                 dv = ex1;
             }
-            else if ((ex0 is PowerFunction && (ex0 as PowerFunction).GetPower() is Number &&
-                !((ex0 as PowerFunction).GetBase() is PowerFunction && !(((ex0 as PowerFunction).GetBase() as PowerFunction).GetPower() is Number))) ||
+            else if ((ex0 is PowerFunction && (ex0 as PowerFunction).GetPower() is ExNumber &&
+                !((ex0 as PowerFunction).GetBase() is PowerFunction && !(((ex0 as PowerFunction).GetBase() as PowerFunction).GetPower() is ExNumber))) ||
                 ex0 is AlgebraComp)
             {
                 u = ex0;
                 dv = ex1;
             }
-            else if ((ex1 is PowerFunction && (ex1 as PowerFunction).GetPower() is Number &&
-                !((ex1 as PowerFunction).GetBase() is PowerFunction && !(((ex1 as PowerFunction).GetBase() as PowerFunction).GetPower() is Number))) ||
+            else if ((ex1 is PowerFunction && (ex1 as PowerFunction).GetPower() is ExNumber &&
+                !((ex1 as PowerFunction).GetBase() is PowerFunction && !(((ex1 as PowerFunction).GetBase() as PowerFunction).GetPower() is ExNumber))) ||
                 ex1 is AlgebraComp)
             {
                 u = ex1;
@@ -1020,17 +1019,17 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 // Add one to the power and then divide by the power.
                 PowerFunction pf = single as PowerFunction;
 
-                if (pf.GetPower().IsEqualTo(Number.GetNegOne()))
+                if (pf.GetPower().IsEqualTo(ExNumber.GetNegOne()))
                 {
                     ExComp pfBase = pf.GetBase();
 
                     if (pfBase is PowerFunction)
                     {
                         PowerFunction pfBasePf = pfBase as PowerFunction;
-                        if (pfBasePf.GetPower().IsEqualTo(new Number(0.5)) || pfBasePf.GetPower().IsEqualTo(AlgebraTerm.FromFraction(Number.GetOne(), new Number(2.0))))
+                        if (pfBasePf.GetPower().IsEqualTo(new ExNumber(0.5)) || pfBasePf.GetPower().IsEqualTo(AlgebraTerm.FromFraction(ExNumber.GetOne(), new ExNumber(2.0))))
                         {
                             // Is this arcsin or arccos?
-                            ExComp compare = AddOp.StaticCombine(MulOp.Negate(PowOp.StaticCombine(dVar, new Number(2.0))), Number.GetOne()).ToAlgTerm().RemoveRedundancies(false);
+                            ExComp compare = AddOp.StaticCombine(MulOp.Negate(PowOp.StaticCombine(dVar, new ExNumber(2.0))), ExNumber.GetOne()).ToAlgTerm().RemoveRedundancies(false);
 
                             ExComp useBase;
                             if (pfBasePf.GetBase() is AlgebraTerm)
@@ -1051,7 +1050,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                         if (IsDerivAcceptable(pfBasePf, dVar) && !pfBasePf.GetPower().ToAlgTerm().Contains(dVar))
                         {
                             ExComp power = MulOp.Negate(pfBasePf.GetPower());
-                            ExComp powChange = AddOp.StaticCombine(power, Number.GetOne());
+                            ExComp powChange = AddOp.StaticCombine(power, ExNumber.GetOne());
                             if (powChange is AlgebraTerm)
                                 powChange = (powChange as AlgebraTerm).CompoundFractions();
 
@@ -1060,7 +1059,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                         }
                     }
 
-                    if (pfBase.IsEqualTo(AddOp.StaticCombine(Number.GetOne(), PowOp.StaticCombine(dVar, new Number(2.0)))))
+                    if (pfBase.IsEqualTo(AddOp.StaticCombine(ExNumber.GetOne(), PowOp.StaticCombine(dVar, new ExNumber(2.0)))))
                     {
                         ATanFunction atan = new ATanFunction(dVar);
                         pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "\\int(\\frac{1}{" + dVar.ToDispString() + "^2+1})\\d" + dVar.ToDispString() +
@@ -1084,20 +1083,20 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     return finalEx;
                 }
 
-                if (pf.GetBase() is TrigFunction && pf.GetPower() is Number && (pf.GetPower() as Number).IsRealInteger())
+                if (pf.GetBase() is TrigFunction && pf.GetPower() is ExNumber && (pf.GetPower() as ExNumber).IsRealInteger())
                 {
-                    int pow = (int)(pf.GetPower() as Number).GetRealComp();
+                    int pow = (int)(pf.GetPower() as ExNumber).GetRealComp();
                     if (pow < 0)
                     {
                         // Convert to the reciprocal.
-                        pf = new PowerFunction((pf.GetBase() as TrigFunction).GetReciprocalOf(), new Number(-pow));
+                        pf = new PowerFunction((pf.GetBase() as TrigFunction).GetReciprocalOf(), new ExNumber(-pow));
                     }
                 }
 
                 if (IsDerivAcceptable(pf, dVar) && !pf.GetPower().ToAlgTerm().Contains(dVar))
                 {
                     // The special case for the power function anti-dervivative.
-                    if (Number.GetNegOne().IsEqualTo(pf.GetPower()))
+                    if (ExNumber.GetNegOne().IsEqualTo(pf.GetPower()))
                     {
                         pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "\\int(" + pf.FinalToDispStr() + ")\\d" + dVar.ToDispString() +
                             "=ln(|" + dVar + "|)" + WorkMgr.EDM, "This comes from the known derivative " + WorkMgr.STM +
@@ -1107,11 +1106,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                         return LogFunction.Ln(dVar);
                     }
 
-                    ExComp powChange = AddOp.StaticCombine(pf.GetPower(), Number.GetOne());
+                    ExComp powChange = AddOp.StaticCombine(pf.GetPower(), ExNumber.GetOne());
                     if (powChange is AlgebraTerm)
                         powChange = (powChange as AlgebraTerm).CompoundFractions();
 
-                    string changedPowStr = WorkMgr.ToDisp(AddOp.StaticWeakCombine(pf.GetPower(), Number.GetOne()));
+                    string changedPowStr = WorkMgr.ToDisp(AddOp.StaticWeakCombine(pf.GetPower(), ExNumber.GetOne()));
                     pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "\\int(" + WorkMgr.ToDisp(single) + ")\\d" + dVar.ToDispString() +
                         "=\\frac{" + dVar.ToDispString() + "^{" + changedPowStr + "}}{" + changedPowStr + "}" + WorkMgr.EDM,
                         "Use the power rule of antiderivatives.");
@@ -1119,7 +1118,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     pf.SetPower(powChange);
                     return DivOp.StaticCombine(pf, powChange);
                 }
-                else if ((new Number(2.0)).IsEqualTo(pf.GetPower()) && pf.GetBase() is TrigFunction && (pf.GetBase() as TrigFunction).GetInnerEx().IsEqualTo(dVar) &&
+                else if ((new ExNumber(2.0)).IsEqualTo(pf.GetPower()) && pf.GetBase() is TrigFunction && (pf.GetBase() as TrigFunction).GetInnerEx().IsEqualTo(dVar) &&
                     (pf.GetBase() is SecFunction || pf.GetBase() is CscFunction))
                 {
                     ExComp ad = null;
@@ -1136,115 +1135,115 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                         return ad;
                     }
                 }
-                else if (pf.GetBase() is SinFunction && pf.GetPower() is Number && (pf.GetPower() as Number).IsRealInteger() &&
-                    (int)((pf.GetPower() as Number).GetRealComp()) > 1 && (int)((pf.GetPower() as Number).GetRealComp()) % 2 == 0)
+                else if (pf.GetBase() is SinFunction && pf.GetPower() is ExNumber && (pf.GetPower() as ExNumber).IsRealInteger() &&
+                    (int)((pf.GetPower() as ExNumber).GetRealComp()) > 1 && (int)((pf.GetPower() as ExNumber).GetRealComp()) % 2 == 0)
                 {
-                    int iPow = (int)(pf.GetPower() as Number).GetRealComp();
+                    int iPow = (int)(pf.GetPower() as ExNumber).GetRealComp();
                     SinFunction sf = pf.GetBase() as SinFunction;
                     ExComp subbed = MulOp.StaticCombine(
-                        AlgebraTerm.FromFraction(Number.GetOne(), new Number(2.0)),
-                        SubOp.StaticCombine(Number.GetOne(), new CosFunction(MulOp.StaticCombine(new Number(2.0), sf.GetInnerEx()))));
+                        AlgebraTerm.FromFraction(ExNumber.GetOne(), new ExNumber(2.0)),
+                        SubOp.StaticCombine(ExNumber.GetOne(), new CosFunction(MulOp.StaticCombine(new ExNumber(2.0), sf.GetInnerEx()))));
 
-                    subbed = PowOp.StaticCombine(subbed, new Number(iPow / 2));
+                    subbed = PowOp.StaticCombine(subbed, new ExNumber(iPow / 2));
 
                     pEvalData.GetWorkMgr().FromSides(pf, subbed,
                         "Use the trig identity " + WorkMgr.STM + "sin^{2}(x) = \\frac{1}{2}(1-cos(2x))" + WorkMgr.EDM);
 
                     return Integral.TakeAntiDeriv(subbed, dVar, ref pEvalData);
                 }
-                else if (pf.GetBase() is SinFunction && pf.GetPower() is Number && (pf.GetPower() as Number).IsRealInteger() &&
-                    (int)((pf.GetPower() as Number).GetRealComp()) > 1 && (int)((pf.GetPower() as Number).GetRealComp()) % 2 != 0)
+                else if (pf.GetBase() is SinFunction && pf.GetPower() is ExNumber && (pf.GetPower() as ExNumber).IsRealInteger() &&
+                    (int)((pf.GetPower() as ExNumber).GetRealComp()) > 1 && (int)((pf.GetPower() as ExNumber).GetRealComp()) % 2 != 0)
                 {
-                    int iPow = (int)(pf.GetPower() as Number).GetRealComp();
+                    int iPow = (int)(pf.GetPower() as ExNumber).GetRealComp();
                     SinFunction sf = pf.GetBase() as SinFunction;
                     ExComp finalEx = MulOp.StaticCombine(sf,
                         PowOp.StaticCombine(
                         SubOp.StaticCombine(
-                        Number.GetOne(),
-                        PowOp.StaticCombine(new CosFunction(sf.GetInnerEx()), new Number(2.0))),
-                        new Number((iPow - 1) / 2)));
+                        ExNumber.GetOne(),
+                        PowOp.StaticCombine(new CosFunction(sf.GetInnerEx()), new ExNumber(2.0))),
+                        new ExNumber((iPow - 1) / 2)));
 
                     pEvalData.GetWorkMgr().FromSides(pf, finalEx,
                         "Use the trig identity " + WorkMgr.STM + "sin^{2}(x) = \\frac{1}{2}(1-cos(2x))" + WorkMgr.EDM);
 
                     return Integral.TakeAntiDeriv(finalEx, dVar, ref pEvalData);
                 }
-                else if (pf.GetBase() is CosFunction && pf.GetPower() is Number && (pf.GetPower() as Number).IsRealInteger() &&
-                    (int)((pf.GetPower() as Number).GetRealComp()) > 1 && (int)((pf.GetPower() as Number).GetRealComp()) % 2 == 0)
+                else if (pf.GetBase() is CosFunction && pf.GetPower() is ExNumber && (pf.GetPower() as ExNumber).IsRealInteger() &&
+                    (int)((pf.GetPower() as ExNumber).GetRealComp()) > 1 && (int)((pf.GetPower() as ExNumber).GetRealComp()) % 2 == 0)
                 {
-                    int iPow = (int)(pf.GetPower() as Number).GetRealComp();
+                    int iPow = (int)(pf.GetPower() as ExNumber).GetRealComp();
                     CosFunction cf = pf.GetBase() as CosFunction;
                     ExComp subbed = MulOp.StaticCombine(
-                        AlgebraTerm.FromFraction(Number.GetOne(), new Number(2.0)),
-                        AddOp.StaticCombine(Number.GetOne(), new CosFunction(MulOp.StaticCombine(new Number(2.0), cf.GetInnerEx()))));
+                        AlgebraTerm.FromFraction(ExNumber.GetOne(), new ExNumber(2.0)),
+                        AddOp.StaticCombine(ExNumber.GetOne(), new CosFunction(MulOp.StaticCombine(new ExNumber(2.0), cf.GetInnerEx()))));
 
-                    subbed = PowOp.StaticCombine(subbed, new Number(iPow / 2));
+                    subbed = PowOp.StaticCombine(subbed, new ExNumber(iPow / 2));
 
                     pEvalData.GetWorkMgr().FromSides(pf, subbed,
                         "Use the trig identity " + WorkMgr.STM + "cos^{2}(x) = \\frac{1}{2}(1+cos(2x))" + WorkMgr.EDM);
 
                     return Integral.TakeAntiDeriv(subbed, dVar, ref pEvalData);
                 }
-                else if (pf.GetBase() is CosFunction && pf.GetPower() is Number && (pf.GetPower() as Number).IsRealInteger() &&
-                    (int)((pf.GetPower() as Number).GetRealComp()) > 1 && (int)((pf.GetPower() as Number).GetRealComp()) % 2 != 0)
+                else if (pf.GetBase() is CosFunction && pf.GetPower() is ExNumber && (pf.GetPower() as ExNumber).IsRealInteger() &&
+                    (int)((pf.GetPower() as ExNumber).GetRealComp()) > 1 && (int)((pf.GetPower() as ExNumber).GetRealComp()) % 2 != 0)
                 {
-                    int iPow = (int)(pf.GetPower() as Number).GetRealComp();
+                    int iPow = (int)(pf.GetPower() as ExNumber).GetRealComp();
                     CosFunction cf = pf.GetBase() as CosFunction;
                     ExComp finalEx = MulOp.StaticCombine(cf,
                         PowOp.StaticCombine(
                         SubOp.StaticCombine(
-                        Number.GetOne(),
-                        PowOp.StaticCombine(new SinFunction(cf.GetInnerEx()), new Number(2.0))),
-                        new Number((iPow - 1) / 2)));
+                        ExNumber.GetOne(),
+                        PowOp.StaticCombine(new SinFunction(cf.GetInnerEx()), new ExNumber(2.0))),
+                        new ExNumber((iPow - 1) / 2)));
 
                     pEvalData.GetWorkMgr().FromSides(pf, finalEx,
                         "Use the trig identity " + WorkMgr.STM + "cos^{2}(x) = \\frac{1}{2}(1+cos(2x))" + WorkMgr.EDM);
 
                     return Integral.TakeAntiDeriv(finalEx, dVar, ref pEvalData);
                 }
-                else if (pf.GetBase() is CscFunction && pf.GetPower() is Number && (pf.GetPower() as Number).IsRealInteger() &&
-                    (int)((pf.GetPower() as Number).GetRealComp()) > 1 && (int)((pf.GetPower() as Number).GetRealComp()) % 2 == 0)
+                else if (pf.GetBase() is CscFunction && pf.GetPower() is ExNumber && (pf.GetPower() as ExNumber).IsRealInteger() &&
+                    (int)((pf.GetPower() as ExNumber).GetRealComp()) > 1 && (int)((pf.GetPower() as ExNumber).GetRealComp()) % 2 == 0)
                 {
                     // In the form csc^n(x) where n is even.
-                    int iPow = (int)(pf.GetPower() as Number).GetRealComp();
+                    int iPow = (int)(pf.GetPower() as ExNumber).GetRealComp();
                     CscFunction cf = pf.GetBase() as CscFunction;
-                    ExComp finalEx = MulOp.StaticCombine(new PowerFunction(cf, new Number(2.0)),
+                    ExComp finalEx = MulOp.StaticCombine(new PowerFunction(cf, new ExNumber(2.0)),
                         PowOp.StaticCombine(
                             AddOp.StaticCombine(
-                                Number.GetOne(),
-                                new PowerFunction(new CotFunction(cf.GetInnerTerm()), new Number(2.0))),
-                            new Number((iPow / 2) - 1)));
+                                ExNumber.GetOne(),
+                                new PowerFunction(new CotFunction(cf.GetInnerTerm()), new ExNumber(2.0))),
+                            new ExNumber((iPow / 2) - 1)));
 
                     pEvalData.GetWorkMgr().FromSides(pf, finalEx,
                         "Use the trig identity " + WorkMgr.STM + "csc^2(x) = 1 + cot^2(x)" + WorkMgr.EDM);
 
                     return Integral.TakeAntiDeriv(finalEx, dVar, ref pEvalData);
                 }
-                else if (pf.GetBase() is TanFunction && pf.GetPower() is Number && (pf.GetPower() as Number).IsRealInteger() &&
-                    (int)((pf.GetPower() as Number).GetRealComp()) > 1 && (int)((pf.GetPower() as Number).GetRealComp()) % 2 == 0)
+                else if (pf.GetBase() is TanFunction && pf.GetPower() is ExNumber && (pf.GetPower() as ExNumber).IsRealInteger() &&
+                    (int)((pf.GetPower() as ExNumber).GetRealComp()) > 1 && (int)((pf.GetPower() as ExNumber).GetRealComp()) % 2 == 0)
                 {
                     // In the form tan^n where n is even.
-                    int iPow = (int)(pf.GetPower() as Number).GetRealComp();
+                    int iPow = (int)(pf.GetPower() as ExNumber).GetRealComp();
                     if (iPow > 2)
                         return null;
                     TanFunction tf = pf.GetBase() as TanFunction;
-                    ExComp finalEx = SubOp.StaticCombine(PowOp.StaticCombine(new SecFunction(tf.GetInnerTerm()), new Number(2.0)), Number.GetOne());
+                    ExComp finalEx = SubOp.StaticCombine(PowOp.StaticCombine(new SecFunction(tf.GetInnerTerm()), new ExNumber(2.0)), ExNumber.GetOne());
 
                     pEvalData.GetWorkMgr().FromSides(pf, finalEx,
                         "Use the trig identity " + WorkMgr.STM + "tan^2(x) = sec^2(x)-1" + WorkMgr.EDM);
 
                     return Integral.TakeAntiDeriv(finalEx, dVar, ref pEvalData);
                 }
-                else if (pf.GetBase() is TanFunction && pf.GetPower() is Number && (pf.GetPower() as Number).IsRealInteger() &&
-                    (int)((pf.GetPower() as Number).GetRealComp()) > 1 && (int)((pf.GetPower() as Number).GetRealComp()) % 2 != 0)
+                else if (pf.GetBase() is TanFunction && pf.GetPower() is ExNumber && (pf.GetPower() as ExNumber).IsRealInteger() &&
+                    (int)((pf.GetPower() as ExNumber).GetRealComp()) > 1 && (int)((pf.GetPower() as ExNumber).GetRealComp()) % 2 != 0)
                 {
                     // In the form tan^k where k is odd.
-                    int iPow = (int)(pf.GetPower() as Number).GetRealComp();
+                    int iPow = (int)(pf.GetPower() as ExNumber).GetRealComp();
                     TanFunction tf = pf.GetBase() as TanFunction;
 
                     ExComp finalEx = PowOp.StaticCombine(
-                        SubOp.StaticCombine(PowOp.StaticCombine(new SecFunction(tf.GetInnerTerm()), new Number(2.0)), Number.GetOne()),
-                        new Number((iPow - 1) / 2));
+                        SubOp.StaticCombine(PowOp.StaticCombine(new SecFunction(tf.GetInnerTerm()), new ExNumber(2.0)), ExNumber.GetOne()),
+                        new ExNumber((iPow - 1) / 2));
 
                     pEvalData.GetWorkMgr().FromSides(pf, finalEx,
                         "Use the trig identity " + WorkMgr.STM + "tan^2(x) = sec^2(x)-1" + WorkMgr.EDM);

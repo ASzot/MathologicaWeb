@@ -89,27 +89,27 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 reciprocalPow = AlgebraTerm.FromFraction(numDen[1], numDen[0]);
             }
             else
-                reciprocalPow = AlgebraTerm.FromFraction(Number.GetOne(), power);
+                reciprocalPow = AlgebraTerm.FromFraction(ExNumber.GetOne(), power);
 
-            if (power is Number)
+            if (power is ExNumber)
             {
-                Number nPower = power as Number;
+                ExNumber nPower = power as ExNumber;
                 string rootStr;
                 string rootName;
-                if (Number.OpEqual(nPower, 2.0))
+                if (ExNumber.OpEqual(nPower, 2.0))
                 {
                     rootName = "square";
                     rootStr = "sqrt";
                 }
-                else if (Number.OpEqual(nPower, 3.0))
+                else if (ExNumber.OpEqual(nPower, 3.0))
                 {
                     rootName = "cube";
-                    rootStr = "root(" + (power as Number).FinalToDispString() + ")";
+                    rootStr = "root(" + (power as ExNumber).FinalToDispString() + ")";
                 }
                 else
                 {
                     rootName = WorkMgr.STM + nPower.FinalToDispString() + WorkMgr.EDM + nPower.GetCountingPrefix();
-                    rootStr = "root(" + (power as Number).FinalToDispString() + ")";
+                    rootStr = "root(" + (power as ExNumber).FinalToDispString() + ")";
                 }
 
                 pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + rootStr + "({0})=" + rootStr + "({1})" + WorkMgr.EDM, "Take the " +
@@ -119,7 +119,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 // The powers should cancel.
                 left = PowOp.StaticCombine(left, reciprocalPow).ToAlgTerm();
 
-                ExComp tmpRight = PowOp.TakeRoot(right.RemoveRedundancies(false), power as Number, ref pEvalData, true);
+                ExComp tmpRight = PowOp.TakeRoot(right.RemoveRedundancies(false), power as ExNumber, ref pEvalData, true);
                 if (tmpRight is AlgebraTermArray)
                 {
                     AlgebraTermArray rights = tmpRight as AlgebraTermArray;
@@ -182,9 +182,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 return null;
             }
 
-            if (solveForPowFrac.GetDenEx() is Number)
+            if (solveForPowFrac.GetDenEx() is ExNumber)
             {
-                Number root = solveForPowFrac.GetDenEx() as Number;
+                ExNumber root = solveForPowFrac.GetDenEx() as ExNumber;
 
                 pEvalData.GetWorkMgr().FromFormatted("`({1})^({0})=({2})^({0})`", "Raise both sides to the `{0}` power.", root, left, right);
 
@@ -198,7 +198,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 left = SubOp.StaticCombine(left, right.CloneEx()).ToAlgTerm();
 
                 left = left.RemoveZeros();
-                right = Number.GetZero().ToAlgTerm();
+                right = ExNumber.GetZero().ToAlgTerm();
 
                 pEvalData.GetWorkMgr().FromSides(left, right);
 

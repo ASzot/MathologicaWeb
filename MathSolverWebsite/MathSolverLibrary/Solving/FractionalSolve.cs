@@ -234,7 +234,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
             pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + overallWork + WorkMgr.EDM, "Convert all fractions to have the same denominator so they can be combined");
 
-            if (pEvalData.GetWorkMgr().AllowWork)
+            if (pEvalData.GetWorkMgr().GetAllowWork())
             {
                 string simpWork = "";
 

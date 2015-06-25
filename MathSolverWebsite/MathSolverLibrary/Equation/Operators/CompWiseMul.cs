@@ -20,7 +20,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
             ExVector vec1 = ex2 as ExVector;
 
             if (vec0.GetLength() != vec1.GetLength())
-                return Number.GetUndefined();
+                return ExNumber.GetUndefined();
 
             ExVector vec = vec0.CreateEmptyBody();
 

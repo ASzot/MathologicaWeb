@@ -25,7 +25,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
         {
             AlgebraComp solveForComp = solveFor.ToAlgebraComp();
             AlgebraTerm nonZeroTerm = left.IsZero() ? right : left;
-            AlgebraTerm zero = new AlgebraTerm(Number.GetZero());
+            AlgebraTerm zero = new AlgebraTerm(ExNumber.GetZero());
 
             if (_overallTerm != null)
             {
@@ -63,22 +63,22 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             {
                 int mulplicity = 1;
                 AlgebraTerm leftSolve = factor;
-                pEvalData.GetWorkMgr().FromSides(leftSolve, Number.GetZero(), "Solve when one of the factors equals zero.");
+                pEvalData.GetWorkMgr().FromSides(leftSolve, ExNumber.GetZero(), "Solve when one of the factors equals zero.");
                 if (factor is PowerFunction)
                 {
                     PowerFunction pfFactor = factor as PowerFunction;
-                    if (pfFactor.GetPower() is Number && (pfFactor.GetPower() as Number).IsRealInteger())
+                    if (pfFactor.GetPower() is ExNumber && (pfFactor.GetPower() as ExNumber).IsRealInteger())
                     {
-                        mulplicity = (int)(pfFactor.GetPower() as Number).GetRealComp();
+                        mulplicity = (int)(pfFactor.GetPower() as ExNumber).GetRealComp();
                         pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "{1}={2}" + WorkMgr.EDM, "Since the factor has a power of " + WorkMgr.STM + "{0}" + WorkMgr.EDM + " it also has a mulplicity of " +
                             WorkMgr.STM + "{0}" + WorkMgr.EDM +
-                            " Just ignore the power when solving as it determines the multiplicity not the solution.", mulplicity, leftSolve, Number.GetZero());
+                            " Just ignore the power when solving as it determines the multiplicity not the solution.", mulplicity, leftSolve, ExNumber.GetZero());
                         leftSolve = pfFactor.GetBase().ToAlgTerm();
                     }
                 }
 
                 p_agSolver.ClearLinearSolveRepeatCount();
-                ExComp solved = p_agSolver.SolveEq(solveFor, leftSolve, Number.GetZero().ToAlgTerm(), ref pEvalData, true);
+                ExComp solved = p_agSolver.SolveEq(solveFor, leftSolve, ExNumber.GetZero().ToAlgTerm(), ref pEvalData, true);
                 for (int i = 0; i < mulplicity; ++i)
                 {
                     solutions.Add(solved);

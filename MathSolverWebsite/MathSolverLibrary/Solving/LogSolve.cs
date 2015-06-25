@@ -70,15 +70,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                         return p_agSolver.SolveEq(solveFor, left, right, ref pEvalData);
                     }
 
-                    if (log0.GetBase() is Number && log1.GetBase() is Number)
+                    if (log0.GetBase() is ExNumber && log1.GetBase() is ExNumber)
                     {
                         ExComp log0Inner = log0.GetInnerEx();
                         ExComp log1Inner = log1.GetInnerEx();
 
-                        Number nLog0Base = log0.GetBase() as Number;
-                        Number nLog1Base = log1.GetBase() as Number;
+                        ExNumber nLog0Base = log0.GetBase() as ExNumber;
+                        ExNumber nLog1Base = log1.GetBase() as ExNumber;
 
-                        if (Number.OpEqual(Number.OpMod(nLog0Base, nLog1Base), 0))
+                        if (ExNumber.OpEqual(ExNumber.OpMod(nLog0Base, nLog1Base), 0))
                         {
                             AlgebraComp tmpSolveFor = p_agSolver.NextSubVar();
                             AlgebraComp tmpSolveFor0 = new AlgebraComp(tmpSolveFor.GetVar().GetVar() + "_0");
@@ -95,9 +95,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                             AlgebraTerm tmpLeft = PowOp.StaticWeakCombine(nLog1Base, tmpSolveFor).ToAlgTerm();
                             AlgebraTerm tmpRight = nLog0Base.ToAlgTerm();
 
-                            pEvalData.GetWorkMgr().AllowWork = false;
+                            pEvalData.GetWorkMgr().SetAllowWork(false);
                             ExComp raiseTo = expSolve.SolveEquation(tmpLeft, tmpRight, tmpSolveFor.GetVar(), ref pEvalData);
-                            pEvalData.GetWorkMgr().AllowWork = true;
+                            pEvalData.GetWorkMgr().SetAllowWork(true);
 
                             ExComp tmpRaiseTo = MulOp.StaticCombine(raiseTo, tmpSolveFor0);
 
@@ -108,7 +108,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                             pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "{0}={1}" + WorkMgr.EDM + "<br />" + WorkMgr.STM + "{0}={2}" + WorkMgr.EDM, "The left hand sides are now equal. So " +
                                 WorkMgr.STM + "{0}={1}={2}" + WorkMgr.EDM, PowOp.StaticWeakCombine(nLog0Base, tmpSolveFor0), log0Inner, log1Inner);
                         }
-                        else if (Number.OpEqual(Number.OpMod(nLog1Base, nLog0Base), 0))
+                        else if (ExNumber.OpEqual(ExNumber.OpMod(nLog1Base, nLog0Base), 0))
                         {
                             AlgebraComp tmpSolveFor = p_agSolver.NextSubVar();
                             AlgebraComp tmpSolveFor0 = new AlgebraComp(tmpSolveFor.GetVar().GetVar() + "_0");
@@ -125,9 +125,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                             AlgebraTerm tmpLeft = PowOp.StaticWeakCombine(nLog0Base, tmpSolveFor).ToAlgTerm();
                             AlgebraTerm tmpRight = nLog1Base.ToAlgTerm();
 
-                            pEvalData.GetWorkMgr().AllowWork = false;
+                            pEvalData.GetWorkMgr().SetAllowWork(false);
                             ExComp raiseTo = expSolve.SolveEquation(tmpLeft, tmpRight, tmpSolveFor.GetVar(), ref pEvalData);
-                            pEvalData.GetWorkMgr().AllowWork = true;
+                            pEvalData.GetWorkMgr().SetAllowWork(true);
 
                             ExComp tmpRaiseTo = MulOp.StaticCombine(raiseTo, tmpSolveFor1);
 

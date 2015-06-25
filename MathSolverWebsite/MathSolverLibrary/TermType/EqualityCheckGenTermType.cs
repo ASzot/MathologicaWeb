@@ -25,25 +25,25 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 valid = side0.IsEqualTo(side1);
             else if (comparison == LexemeType.Greater)
             {
-                if (side0 is Number && side1 is Number)
-                    valid = Number.OpGT((side0 as Number), (side1 as Number));
+                if (side0 is ExNumber && side1 is ExNumber)
+                    valid = ExNumber.OpGT((side0 as ExNumber), (side1 as ExNumber));
             }
             else if (comparison == LexemeType.GreaterEqual)
             {
-                if (side0 is Number && side1 is Number)
-                    valid = Number.OpGE((side0 as Number),(side1 as Number));
+                if (side0 is ExNumber && side1 is ExNumber)
+                    valid = ExNumber.OpGE((side0 as ExNumber),(side1 as ExNumber));
                 else
                     valid = side0.IsEqualTo(side1);
             }
             else if (comparison == LexemeType.Less)
             {
-                if (side0 is Number && side1 is Number)
-                    valid = Number.OpLT((side0 as Number), (side1 as Number));
+                if (side0 is ExNumber && side1 is ExNumber)
+                    valid = ExNumber.OpLT((side0 as ExNumber), (side1 as ExNumber));
             }
             else if (comparison == LexemeType.LessEqual)
             {
-                if (side0 is Number && side1 is Number)
-                    valid = Number.OpLE((side0 as Number), (side1 as Number));
+                if (side0 is ExNumber && side1 is ExNumber)
+                    valid = ExNumber.OpLE((side0 as ExNumber), (side1 as ExNumber));
                 else
                     valid = side0.IsEqualTo(side1);
             }

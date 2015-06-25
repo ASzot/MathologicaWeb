@@ -47,7 +47,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 }
 
                 ExComp rightEx = right.RemoveRedundancies(false);
-                if (rightEx is Number && !(rightEx as Number).HasImaginaryComp() && Number.OpLT((rightEx as Number), -1.0))
+                if (rightEx is ExNumber && !(rightEx as ExNumber).HasImaginaryComp() && ExNumber.OpLT((rightEx as ExNumber), -1.0))
                 {
                     pEvalData.GetWorkMgr().FromSides(left, right, "An absolute value will never equal a negative number. So there are no solutions to this equation.");
                     return new NoSolutions();
@@ -60,7 +60,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                     return p_agSolver.Solve(solveFor, innerTerm, right, ref pEvalData);
                 }
                 AlgebraTerm solve1 = right;
-                AlgebraTerm solve2 = MulOp.StaticCombine(Number.GetNegOne(), right).ToAlgTerm();
+                AlgebraTerm solve2 = MulOp.StaticCombine(ExNumber.GetNegOne(), right).ToAlgTerm();
 
                 pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "{0}=\\pm({1})" + WorkMgr.EDM, "The absolute value function allows the right hand side to be both positive and negative.", absValFunc, right);
 

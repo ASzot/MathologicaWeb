@@ -134,7 +134,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public Functions.PowerFunction ToPow(double realNum)
         {
-            return new Functions.PowerFunction(this, new Number(realNum));
+            return new Functions.PowerFunction(this, new ExNumber(realNum));
         }
 
         public override string ToJavaScriptString(bool useRad)

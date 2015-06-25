@@ -23,15 +23,15 @@ namespace MathSolverWebsite.MathSolverLibrary
         {
             if (str.StartsWith("(") && str.EndsWith(")"))
             {
-                str = str.Remove(0, 1);
-                str = str.Remove(str.Length - 1, 1);
+                str = StringFunc.Rm(str, 0, 1);
+                str = StringFunc.Rm(str, str.Length - 1, 1);
             }
             return str;
         }
 
         public static string SurroundWithParas(string str)
         {
-            return str.Insert(str.Length, ")").Insert(0, "(");
+            return StringFunc.Ins(StringFunc.Ins(str, str.Length, ")"), 0, "(");
         }
     }
 

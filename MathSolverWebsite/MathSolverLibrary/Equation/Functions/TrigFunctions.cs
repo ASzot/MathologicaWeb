@@ -24,7 +24,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             CallChildren(harshEval, ref pEvalData);
 
             if (!b_skipDomain && !InStandardDomain(ref pEvalData))
-                return Number.GetUndefined();
+                return ExNumber.GetUndefined();
 
             ExComp innerEx = GetInnerEx();
             if (innerEx is AlgebraTerm)
@@ -36,10 +36,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                 return TrigFunction.FinalEvalAngle(point.GetAngle(), pEvalData.GetUseRad());
             }
 
-            if (!(innerEx is Number))
+            if (!(innerEx is ExNumber))
                 return this;
 
-            Number nInnerEx = innerEx as Number;
+            ExNumber nInnerEx = innerEx as ExNumber;
 
             if (nInnerEx.HasImaginaryComp())
                 return this;
@@ -50,11 +50,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
             if (harshEval)
             {
-                return TrigFunction.FinalEvalAngle(new Number(dACos), pEvalData.GetUseRad());
+                return TrigFunction.FinalEvalAngle(new ExNumber(dACos), pEvalData.GetUseRad());
             }
 
             if (DoubleHelper.IsInteger(dACos))
-                return TrigFunction.FinalEvalAngle(new Number(dACos), pEvalData.GetUseRad());
+                return TrigFunction.FinalEvalAngle(new ExNumber(dACos), pEvalData.GetUseRad());
 
             return this;
         }
@@ -62,8 +62,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         public static ExComp CreateDerivativeOf(ExComp ex)
         {
             return MulOp.Negate(AlgebraTerm.FromFraction(
-                Number.GetOne(),
-                PowOp.WeakTakeSqrt(AddOp.StaticWeakCombine(Number.GetOne(), MulOp.Negate(PowOp.StaticWeakCombine(ex, new Number(2.0)))))));
+                ExNumber.GetOne(),
+                PowOp.WeakTakeSqrt(AddOp.StaticWeakCombine(ExNumber.GetOne(), MulOp.Negate(PowOp.StaticWeakCombine(ex, new ExNumber(2.0)))))));
         }
 
         public override ExComp GetDerivativeOf()
@@ -83,8 +83,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
             AlgebraComp varForCmp = varFor.ToAlgebraComp();
 
-            ExComp lower = Number.GetNegOne();
-            ExComp upper = Number.GetOne();
+            ExComp lower = ExNumber.GetNegOne();
+            ExComp upper = ExNumber.GetOne();
 
             if (!GetInnerEx().IsEqualTo(varForCmp))
             {
@@ -134,12 +134,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         {
             CallChildren(harshEval, ref pEvalData);
 
-            if (Number.GetZero().IsEqualTo(GetInnerEx()))
+            if (ExNumber.GetZero().IsEqualTo(GetInnerEx()))
             {
-                return AlgebraTerm.FromFraction(Constant.GetPi(), new Number(2.0));
+                return AlgebraTerm.FromFraction(Constant.GetPi(), new ExNumber(2.0));
             }
 
-            AlgebraTerm recipInner = AlgebraTerm.FromFraction(Number.GetOne(), GetInnerEx());
+            AlgebraTerm recipInner = AlgebraTerm.FromFraction(ExNumber.GetOne(), GetInnerEx());
             recipInner = recipInner.MakeFormattingCorrect();
 
             ATanFunction asin = new ATanFunction(recipInner.RemoveRedundancies(false));
@@ -149,8 +149,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         public static ExComp CreateDerivativeOf(ExComp ex)
         {
             return MulOp.Negate(AlgebraTerm.FromFraction(
-                Number.GetOne(),
-                AddOp.StaticWeakCombine(Number.GetOne(), PowOp.StaticWeakCombine(ex, new Number(2.0)))));
+                ExNumber.GetOne(),
+                AddOp.StaticWeakCombine(ExNumber.GetOne(), PowOp.StaticWeakCombine(ex, new ExNumber(2.0)))));
         }
 
         public override ExComp GetDerivativeOf()
@@ -183,10 +183,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         {
             CallChildren(harshEval, ref pEvalData);
 
-            if (InStandardDomain(ref pEvalData) && GetInnerEx() is Number)
-                return Number.GetUndefined();
+            if (InStandardDomain(ref pEvalData) && GetInnerEx() is ExNumber)
+                return ExNumber.GetUndefined();
 
-            AlgebraTerm recipInner = AlgebraTerm.FromFraction(Number.GetOne(), GetInnerEx());
+            AlgebraTerm recipInner = AlgebraTerm.FromFraction(ExNumber.GetOne(), GetInnerEx());
             recipInner = recipInner.MakeFormattingCorrect();
 
             ASinFunction asin = new ASinFunction(recipInner.RemoveRedundancies(false));
@@ -198,8 +198,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         {
             return MulOp.Negate(
                 AlgebraTerm.FromFraction(
-                Number.GetOne(),
-                MulOp.StaticWeakCombine(new AbsValFunction(ex), PowOp.WeakTakeSqrt(AddOp.StaticWeakCombine(PowOp.StaticWeakCombine(ex, new Number(2.0)), MulOp.Negate(Number.GetOne())))))
+                ExNumber.GetOne(),
+                MulOp.StaticWeakCombine(new AbsValFunction(ex), PowOp.WeakTakeSqrt(AddOp.StaticWeakCombine(PowOp.StaticWeakCombine(ex, new ExNumber(2.0)), MulOp.Negate(ExNumber.GetOne())))))
                 );
         }
 
@@ -233,10 +233,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         {
             CallChildren(harshEval, ref pEvalData);
 
-            if (InStandardDomain(ref pEvalData) && GetInnerEx() is Number)
-                return Number.GetUndefined();
+            if (InStandardDomain(ref pEvalData) && GetInnerEx() is ExNumber)
+                return ExNumber.GetUndefined();
 
-            AlgebraTerm recipInner = AlgebraTerm.FromFraction(Number.GetOne(), GetInnerEx());
+            AlgebraTerm recipInner = AlgebraTerm.FromFraction(ExNumber.GetOne(), GetInnerEx());
             recipInner = recipInner.MakeFormattingCorrect();
 
             ACosFunction asin = new ACosFunction(recipInner.RemoveRedundancies(false));
@@ -247,8 +247,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         public static ExComp CreateDerivativeOf(ExComp ex)
         {
             return AlgebraTerm.FromFraction(
-                Number.GetOne(),
-                MulOp.StaticWeakCombine(new AbsValFunction(ex), PowOp.WeakTakeSqrt(AddOp.StaticWeakCombine(PowOp.StaticWeakCombine(ex, new Number(2.0)), MulOp.Negate(Number.GetOne())))));
+                ExNumber.GetOne(),
+                MulOp.StaticWeakCombine(new AbsValFunction(ex), PowOp.WeakTakeSqrt(AddOp.StaticWeakCombine(PowOp.StaticWeakCombine(ex, new ExNumber(2.0)), MulOp.Negate(ExNumber.GetOne())))));
         }
 
         public override ExComp GetDerivativeOf()
@@ -289,7 +289,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             CallChildren(harshEval, ref pEvalData);
 
             if (!b_skipDomain && !InStandardDomain(ref pEvalData))
-                return Number.GetUndefined();
+                return ExNumber.GetUndefined();
 
             ExComp innerEx = GetInnerEx();
             if (innerEx is AlgebraTerm)
@@ -301,10 +301,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                 return TrigFunction.FinalEvalAngle(point.GetAngle(), pEvalData.GetUseRad());
             }
 
-            if (!(innerEx is Number))
+            if (!(innerEx is ExNumber))
                 return this;
 
-            Number nInnerEx = innerEx as Number;
+            ExNumber nInnerEx = innerEx as ExNumber;
 
             if (nInnerEx.HasImaginaryComp())
                 return this;
@@ -315,11 +315,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
             if (harshEval)
             {
-                return TrigFunction.FinalEvalAngle(new Number(dASin), pEvalData.GetUseRad());
+                return TrigFunction.FinalEvalAngle(new ExNumber(dASin), pEvalData.GetUseRad());
             }
 
             if (DoubleHelper.IsInteger(dASin))
-                return TrigFunction.FinalEvalAngle(new Number(dASin), pEvalData.GetUseRad());
+                return TrigFunction.FinalEvalAngle(new ExNumber(dASin), pEvalData.GetUseRad());
 
             return this;
         }
@@ -327,8 +327,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         public static ExComp CreateDerivativeOf(ExComp ex)
         {
             return AlgebraTerm.FromFraction(
-                Number.GetOne(),
-                PowOp.WeakTakeSqrt(AddOp.StaticWeakCombine(Number.GetOne(), MulOp.Negate(PowOp.StaticWeakCombine(ex, new Number(2.0))))));
+                ExNumber.GetOne(),
+                PowOp.WeakTakeSqrt(AddOp.StaticWeakCombine(ExNumber.GetOne(), MulOp.Negate(PowOp.StaticWeakCombine(ex, new ExNumber(2.0))))));
         }
 
         public override ExComp GetDerivativeOf()
@@ -350,8 +350,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
             AlgebraComp varForCmp = varFor.ToAlgebraComp();
 
-            ExComp lower = Number.GetNegOne();
-            ExComp upper = Number.GetOne();
+            ExComp lower = ExNumber.GetNegOne();
+            ExComp upper = ExNumber.GetOne();
 
             if (!GetInnerEx().IsEqualTo(varForCmp))
             {
@@ -404,9 +404,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             if (innerEx is AlgebraTerm)
                 innerEx = (innerEx as AlgebraTerm).MakeFormattingCorrect();
 
-            if (Number.IsUndef(innerEx))
+            if (ExNumber.IsUndef(innerEx))
             {
-                return pEvalData.GetUseRad() ? (ExComp)AlgebraTerm.FromFraction(Constant.GetPi(), new Number(2.0)) : new Number(90.0);
+                return pEvalData.GetUseRad() ? (ExComp)AlgebraTerm.FromFraction(Constant.GetPi(), new ExNumber(2.0)) : new ExNumber(90.0);
             }
 
             UnitCirclePoint point = UnitCircle.GetAngleForPoint_Y_over_X(innerEx);
@@ -416,10 +416,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                 return TrigFunction.FinalEvalAngle(point.GetAngle(), pEvalData.GetUseRad());
             }
 
-            if (!(innerEx is Number))
+            if (!(innerEx is ExNumber))
                 return this;
 
-            Number nInnerEx = innerEx as Number;
+            ExNumber nInnerEx = innerEx as ExNumber;
 
             if (nInnerEx.HasImaginaryComp())
                 return this;
@@ -430,11 +430,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
             if (harshEval)
             {
-                return TrigFunction.FinalEvalAngle(new Number(dATan), pEvalData.GetUseRad());
+                return TrigFunction.FinalEvalAngle(new ExNumber(dATan), pEvalData.GetUseRad());
             }
 
             if (DoubleHelper.IsInteger(dATan))
-                return TrigFunction.FinalEvalAngle(new Number(dATan), pEvalData.GetUseRad());
+                return TrigFunction.FinalEvalAngle(new ExNumber(dATan), pEvalData.GetUseRad());
 
             return this;
         }
@@ -442,8 +442,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         public static ExComp CreateDerivativeOf(ExComp ex)
         {
             return AlgebraTerm.FromFraction(
-                Number.GetOne(),
-                AddOp.StaticWeakCombine(Number.GetOne(), PowOp.StaticWeakCombine(ex, new Number(2.0))));
+                ExNumber.GetOne(),
+                AddOp.StaticWeakCombine(ExNumber.GetOne(), PowOp.StaticWeakCombine(ex, new ExNumber(2.0))));
         }
 
         public override ExComp GetDerivativeOf()
@@ -477,7 +477,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         public override ExComp CancelWith(TrigFunction tf)
         {
             if (tf is SecFunction && tf.GetInnerEx().IsEqualTo(this.GetInnerEx()))
-                return Number.GetOne();
+                return ExNumber.GetOne();
             if (tf is TanFunction)
             {
                 TanFunction tanFunc = tf as TanFunction;
@@ -503,17 +503,17 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                 ExComp innerEx = GetInnerTerm(pEvalData.GetUseRad()).RemoveRedundancies(false);
                 if (innerEx is AlgebraTerm)
                     innerEx = Simplifier.HarshSimplify(innerEx as AlgebraTerm, ref pEvalData, false);
-                if (innerEx is Number && !(innerEx as Number).HasImaginaryComp())
+                if (innerEx is ExNumber && !(innerEx as ExNumber).HasImaginaryComp())
                 {
-                    double cos = Math.Cos((innerEx as Number).GetRealComp());
-                    return new Number(cos);
+                    double cos = Math.Cos((innerEx as ExNumber).GetRealComp());
+                    return new ExNumber(cos);
                 }
             }
 
             Term.SimpleFraction simplFrac = new Term.SimpleFraction();
             if (!simplFrac.LooseInit(GetInnerTerm(pEvalData.GetUseRad())))
                 return this;
-            Number num, den;
+            ExNumber num = null, den = null;
             if (!simplFrac.IsSimpleUnitCircleAngle(out num, out den, false))
                 return this;
 
@@ -552,7 +552,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             if (coeff == null)
                 return null;
 
-            ExComp interval = Operators.DivOp.StaticCombine((useRad ? Constant.GetTwoPi() : (ExComp)(new Number(360.0))), coeff);
+            ExComp interval = Operators.DivOp.StaticCombine((useRad ? Constant.GetTwoPi() : (ExComp)(new ExNumber(360.0))), coeff);
 
             return interval;
         }
@@ -575,7 +575,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         public override ExComp CancelWith(TrigFunction tf)
         {
             if (tf is TanFunction && tf.GetInnerEx().IsEqualTo(this.GetInnerEx()))
-                return Number.GetOne();
+                return ExNumber.GetOne();
             if (tf is SinFunction)
             {
                 SinFunction sinFunc = tf as SinFunction;
@@ -601,20 +601,20 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                 ExComp innerEx = GetInnerTerm(pEvalData.GetUseRad()).RemoveRedundancies(false);
                 if (innerEx is AlgebraTerm)
                     innerEx = Simplifier.HarshSimplify(innerEx as AlgebraTerm, ref pEvalData, false);
-                if (innerEx is Number && !(innerEx as Number).HasImaginaryComp())
+                if (innerEx is ExNumber && !(innerEx as ExNumber).HasImaginaryComp())
                 {
-                    double tan = Math.Tan((innerEx as Number).GetRealComp());
+                    double tan = Math.Tan((innerEx as ExNumber).GetRealComp());
                     if (tan == 0.0)
-                        return Number.GetUndefined();
+                        return ExNumber.GetUndefined();
                     double recipTan = 1.0 / tan;
-                    return new Number(recipTan);
+                    return new ExNumber(recipTan);
                 }
             }
 
             Term.SimpleFraction simplFrac = new Term.SimpleFraction();
             if (!simplFrac.LooseInit(GetInnerTerm(pEvalData.GetUseRad())))
                 return this;
-            Number num, den;
+            ExNumber num = null, den = null;
             if (!simplFrac.IsSimpleUnitCircleAngle(out num, out den, true))
                 return this;
 
@@ -627,7 +627,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public override ExComp GetDerivativeOf()
         {
-            return MulOp.Negate(PowOp.StaticWeakCombine(new CscFunction(GetInnerEx()), new Number(2.0)));
+            return MulOp.Negate(PowOp.StaticWeakCombine(new CscFunction(GetInnerEx()), new ExNumber(2.0)));
         }
 
         public override string GetDerivativeOfStr()
@@ -653,7 +653,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             if (coeff == null)
                 return null;
 
-            ExComp interval = Operators.DivOp.StaticCombine((useRad ? Constant.GetPi() : (ExComp)(new Number(180.0))), coeff);
+            ExComp interval = Operators.DivOp.StaticCombine((useRad ? Constant.GetPi() : (ExComp)(new ExNumber(180.0))), coeff);
 
             return interval;
         }
@@ -667,7 +667,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         {
             List<Restriction> rests = new List<Restriction>();
 
-            AlgebraTerm neTerm = Number.GetZero().ToAlgTerm();
+            AlgebraTerm neTerm = ExNumber.GetZero().ToAlgTerm();
             ExComp interval = Constant.GetPi();
 
             pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + GetInnerTerm().FinalToDispStr() + "\\ne" + neTerm.FinalToDispStr() + WorkMgr.EDM,
@@ -704,7 +704,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         public override ExComp CancelWith(TrigFunction tf)
         {
             if (tf is SinFunction && tf.GetInnerEx().IsEqualTo(this.GetInnerEx()))
-                return Number.GetOne();
+                return ExNumber.GetOne();
             if (tf is TanFunction)
             {
                 TanFunction tanFunc = tf as TanFunction;
@@ -730,20 +730,20 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                 ExComp innerEx = GetInnerTerm(pEvalData.GetUseRad()).RemoveRedundancies(false);
                 if (innerEx is AlgebraTerm)
                     innerEx = Simplifier.HarshSimplify(innerEx as AlgebraTerm, ref pEvalData, false);
-                if (innerEx is Number && !(innerEx as Number).HasImaginaryComp())
+                if (innerEx is ExNumber && !(innerEx as ExNumber).HasImaginaryComp())
                 {
-                    double sin = Math.Sin((innerEx as Number).GetRealComp());
+                    double sin = Math.Sin((innerEx as ExNumber).GetRealComp());
                     if (sin == 0.0)
-                        return Number.GetUndefined();
+                        return ExNumber.GetUndefined();
                     double recipSin = 1.0 / sin;
-                    return new Number(recipSin);
+                    return new ExNumber(recipSin);
                 }
             }
 
             Term.SimpleFraction simplFrac = new Term.SimpleFraction();
             if (!simplFrac.LooseInit(GetInnerTerm(pEvalData.GetUseRad())))
                 return this;
-            Number num, den;
+            ExNumber num = null, den = null;
             if (!simplFrac.IsSimpleUnitCircleAngle(out num, out den, true))
                 return this;
 
@@ -774,7 +774,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             // All numbers except for x = pin.
             List<Restriction> rests = new List<Restriction>();
 
-            AlgebraTerm neTerm = Number.GetZero().ToAlgTerm();
+            AlgebraTerm neTerm = ExNumber.GetZero().ToAlgTerm();
             ExComp interval = Constant.GetPi();
 
             pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + GetInnerTerm().FinalToDispStr() + "\\ne" + neTerm.FinalToDispStr() + WorkMgr.EDM,
@@ -803,7 +803,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             if (coeff == null)
                 return null;
 
-            ExComp interval = Operators.DivOp.StaticCombine((useRad ? Constant.GetTwoPi() : (ExComp)(new Number(360.0))), coeff);
+            ExComp interval = Operators.DivOp.StaticCombine((useRad ? Constant.GetTwoPi() : (ExComp)(new ExNumber(360.0))), coeff);
 
             return interval;
         }
@@ -851,12 +851,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             ExComp innerEx = GetInnerEx().CloneEx();
             innerEx = Simplifier.HarshSimplify(innerEx.ToAlgTerm(), ref pEvalData, false);
 
-            if (innerEx is Number)
+            if (innerEx is ExNumber)
             {
-                Number nInner = innerEx as Number;
-                if (Number.OpGT(nInner, 1.0))
+                ExNumber nInner = innerEx as ExNumber;
+                if (ExNumber.OpGT(nInner, 1.0))
                     return false;
-                if (Number.OpLT(nInner, -1.0))
+                if (ExNumber.OpLT(nInner, -1.0))
                     return false;
             }
 
@@ -876,7 +876,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         public override ExComp CancelWith(TrigFunction tf)
         {
             if (tf is CosFunction && tf.GetInnerEx().IsEqualTo(this.GetInnerEx()))
-                return Number.GetOne();
+                return ExNumber.GetOne();
             if (tf is CotFunction)
             {
                 CotFunction cotFunc = tf as CotFunction;
@@ -902,20 +902,20 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                 ExComp innerEx = GetInnerTerm(pEvalData.GetUseRad()).RemoveRedundancies(false);
                 if (innerEx is AlgebraTerm)
                     innerEx = Simplifier.HarshSimplify(innerEx as AlgebraTerm, ref pEvalData, false);
-                if (innerEx is Number && !(innerEx as Number).HasImaginaryComp())
+                if (innerEx is ExNumber && !(innerEx as ExNumber).HasImaginaryComp())
                 {
-                    double cos = Math.Cos((innerEx as Number).GetRealComp());
+                    double cos = Math.Cos((innerEx as ExNumber).GetRealComp());
                     if (cos == 0.0)
-                        return Number.GetUndefined();
+                        return ExNumber.GetUndefined();
                     double recipCos = 1.0 / cos;
-                    return new Number(recipCos);
+                    return new ExNumber(recipCos);
                 }
             }
 
             Term.SimpleFraction simplFrac = new Term.SimpleFraction();
             if (!simplFrac.LooseInit(GetInnerTerm(pEvalData.GetUseRad())))
                 return this;
-            Number num, den;
+            ExNumber num = null, den = null;
             if (!simplFrac.IsSimpleUnitCircleAngle(out num, out den, false))
                 return this;
 
@@ -954,7 +954,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             if (coeff == null)
                 return null;
 
-            ExComp interval = Operators.DivOp.StaticCombine((useRad ? Constant.GetTwoPi() : (ExComp)(new Number(360.0))), coeff);
+            ExComp interval = Operators.DivOp.StaticCombine((useRad ? Constant.GetTwoPi() : (ExComp)(new ExNumber(360.0))), coeff);
 
             return interval;
         }
@@ -969,7 +969,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             // All numbers except for x = pi / 2 + pin.
             List<Restriction> rests = new List<Restriction>();
 
-            AlgebraTerm neTerm = AlgebraTerm.FromFraction(Constant.GetPi(), new Number(2.0));
+            AlgebraTerm neTerm = AlgebraTerm.FromFraction(Constant.GetPi(), new ExNumber(2.0));
             ExComp interval = Constant.GetPi();
 
             pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + GetInnerTerm().FinalToDispStr() + "\\ne" + neTerm.FinalToDispStr() + WorkMgr.EDM,
@@ -1007,7 +1007,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         public override ExComp CancelWith(TrigFunction tf)
         {
             if (tf is CscFunction && tf.GetInnerEx().IsEqualTo(this.GetInnerEx()))
-                return Number.GetOne();
+                return ExNumber.GetOne();
             if (tf is CotFunction)
             {
                 CotFunction cotFunc = tf as CotFunction;
@@ -1033,17 +1033,17 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                 ExComp innerEx = GetInnerTerm(pEvalData.GetUseRad()).RemoveRedundancies(false);
                 if (innerEx is AlgebraTerm)
                     innerEx = Simplifier.HarshSimplify(innerEx as AlgebraTerm, ref pEvalData, false);
-                if (innerEx is Number && !(innerEx as Number).HasImaginaryComp())
+                if (innerEx is ExNumber && !(innerEx as ExNumber).HasImaginaryComp())
                 {
-                    double sin = Math.Sin((innerEx as Number).GetRealComp());
-                    return new Number(sin);
+                    double sin = Math.Sin((innerEx as ExNumber).GetRealComp());
+                    return new ExNumber(sin);
                 }
             }
 
             Term.SimpleFraction simplFrac = new Term.SimpleFraction();
             if (!simplFrac.LooseInit(GetInnerTerm(pEvalData.GetUseRad())))
                 return this;
-            Number num, den;
+            ExNumber num = null, den = null;
             if (!simplFrac.IsSimpleUnitCircleAngle(out num, out den, true))
                 return this;
 
@@ -1082,7 +1082,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             if (coeff == null)
                 return null;
 
-            ExComp interval = Operators.DivOp.StaticCombine((useRad ? Constant.GetTwoPi() : (ExComp)(new Number(360.0))), coeff);
+            ExComp interval = Operators.DivOp.StaticCombine((useRad ? Constant.GetTwoPi() : (ExComp)(new ExNumber(360.0))), coeff);
 
             return interval;
         }
@@ -1105,7 +1105,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         public override ExComp CancelWith(TrigFunction tf)
         {
             if (tf is CotFunction && tf.GetInnerEx().IsEqualTo(this.GetInnerEx()))
-                return Number.GetOne();
+                return ExNumber.GetOne();
             if (tf is CosFunction)
             {
                 CosFunction cosFunc = tf as CosFunction;
@@ -1131,17 +1131,17 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                 ExComp innerEx = GetInnerTerm(pEvalData.GetUseRad()).RemoveRedundancies(false);
                 if (innerEx is AlgebraTerm)
                     innerEx = Simplifier.HarshSimplify(innerEx as AlgebraTerm, ref pEvalData, false);
-                if (innerEx is Number && !(innerEx as Number).HasImaginaryComp())
+                if (innerEx is ExNumber && !(innerEx as ExNumber).HasImaginaryComp())
                 {
-                    double tan = Math.Tan((innerEx as Number).GetRealComp());
-                    return new Number(tan);
+                    double tan = Math.Tan((innerEx as ExNumber).GetRealComp());
+                    return new ExNumber(tan);
                 }
             }
 
             Term.SimpleFraction simplFrac = new Term.SimpleFraction();
             if (!simplFrac.LooseInit(GetInnerTerm(pEvalData.GetUseRad())))
                 return this;
-            Number num, den;
+            ExNumber num = null, den = null;
             if (!simplFrac.IsSimpleUnitCircleAngle(out num, out den, true))
                 return this;
 
@@ -1154,7 +1154,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public override ExComp GetDerivativeOf()
         {
-            return PowOp.StaticWeakCombine(new SecFunction(GetInnerEx()), new Number(2.0));
+            return PowOp.StaticWeakCombine(new SecFunction(GetInnerEx()), new ExNumber(2.0));
         }
 
         public override string GetDerivativeOfStr()
@@ -1167,7 +1167,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             // All numbers except for x = pi / 2 + pin.
             List<Restriction> rests = new List<Restriction>();
 
-            AlgebraTerm neTerm = AlgebraTerm.FromFraction(Constant.GetPi(), new Number(2.0));
+            AlgebraTerm neTerm = AlgebraTerm.FromFraction(Constant.GetPi(), new ExNumber(2.0));
             ExComp interval = Constant.GetPi();
 
             pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + GetInnerTerm().FinalToDispStr() + "\\ne" + neTerm.FinalToDispStr() + WorkMgr.EDM,
@@ -1201,7 +1201,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             if (coeff == null)
                 return null;
 
-            ExComp interval = Operators.DivOp.StaticCombine((useRad ? Constant.GetPi() : (ExComp)(new Number(180))), coeff);
+            ExComp interval = Operators.DivOp.StaticCombine((useRad ? Constant.GetPi() : (ExComp)(new ExNumber(180))), coeff);
 
             return interval;
         }
@@ -1227,7 +1227,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         public static ExComp DegToRad(ExComp deg)
         {
             deg = Operators.MulOp.StaticCombine(deg, Constant.GetPi());
-            deg = Operators.DivOp.StaticCombine(deg, new Number(180.0));
+            deg = Operators.DivOp.StaticCombine(deg, new ExNumber(180.0));
 
             return deg;
         }
@@ -1251,7 +1251,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             if (useRad)
                 return Constant.GetTwoPi();
             else
-                return new Number(360);
+                return new ExNumber(360);
         }
 
         public static ExComp GetHalfRot(bool useRad)
@@ -1259,7 +1259,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             if (useRad)
                 return Constant.GetPi();
             else
-                return new Number(180);
+                return new ExNumber(180);
         }
 
         public static int GetTrigFuncComplexity(ExComp trigFunc)
@@ -1320,7 +1320,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public static ExComp RadToDeg(ExComp rad)
         {
-            rad = Operators.MulOp.StaticCombine(rad, new Number(180.0));
+            rad = Operators.MulOp.StaticCombine(rad, new ExNumber(180.0));
             rad = Operators.DivOp.StaticCombine(rad, Constant.GetPi());
 
             if (rad is AlgebraTerm)
@@ -1329,11 +1329,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             return rad;
         }
 
-        public static ExComp TrigCancel(ExComp ex0, ExComp ex1, bool isEx1Den = false)
+        public static ExComp TrigCancel(ExComp ex0, ExComp ex1, bool isEx1Den)
         {
             if (ex0 is AlgebraTerm)
                 ex0 = (ex0 as AlgebraTerm).RemoveRedundancies(false);
-            if (isEx1Den && Number.GetOne().IsEqualTo(ex0))
+            if (isEx1Den && ExNumber.GetOne().IsEqualTo(ex0))
             {
                 if (ex1 is TrigFunction)
                     return (ex1 as TrigFunction).GetReciprocalOf();
@@ -1382,26 +1382,26 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                         {
                             return new PowerFunction(cancelResult, pf0.GetPower());
                         }
-                        else if (pf0.GetPower() is Number && pf1.GetPower() is Number)
+                        else if (pf0.GetPower() is ExNumber && pf1.GetPower() is ExNumber)
                         {
-                            Number nPf0Pow = pf0.GetPower() as Number;
-                            Number nPf1Pow = pf1.GetPower() as Number;
+                            ExNumber nPf0Pow = pf0.GetPower() as ExNumber;
+                            ExNumber nPf1Pow = pf1.GetPower() as ExNumber;
 
                             AlgebraTerm resultingTerm = new AlgebraTerm();
 
-                            Number nMinPow;
-                            if (Number.OpGT(nPf0Pow, nPf1Pow))
+                            ExNumber nMinPow;
+                            if (ExNumber.OpGT(nPf0Pow, nPf1Pow))
                             {
-                                resultingTerm.Add(new PowerFunction(pf0Base, Number.OpSub(nPf0Pow, nPf1Pow)));
+                                resultingTerm.Add(new PowerFunction(pf0Base, ExNumber.OpSub(nPf0Pow, nPf1Pow)));
                                 nMinPow = nPf1Pow;
                             }
                             else
                             {
-                                resultingTerm.Add(new PowerFunction(pf1Base, Number.OpSub(nPf1Pow, nPf0Pow)));
+                                resultingTerm.Add(new PowerFunction(pf1Base, ExNumber.OpSub(nPf1Pow, nPf0Pow)));
                                 nMinPow = nPf0Pow;
                             }
 
-                            if (!Number.GetOne().IsEqualTo(cancelResult))
+                            if (!ExNumber.GetOne().IsEqualTo(cancelResult))
                             {
                                 resultingTerm.Add(new Operators.MulOp(), new PowerFunction(cancelResult, nMinPow));
                             }
@@ -1430,9 +1430,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                     ExComp cancelResult = (pf.GetBase() as TrigFunction).CancelWith(this);
                     if (cancelResult == null)
                         return null;
-                    pf.SetPower(Operators.SubOp.StaticCombine(pf.GetPower(), Number.GetOne()));
+                    pf.SetPower(Operators.SubOp.StaticCombine(pf.GetPower(), ExNumber.GetOne()));
 
-                    if (Number.GetOne().IsEqualTo(cancelResult))
+                    if (ExNumber.GetOne().IsEqualTo(cancelResult))
                     {
                         return pf.GetBase();
                     }
@@ -1460,13 +1460,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         {
             ExComp innerEx = GetInnerEx();
 
-            if (innerEx is Number)
+            if (innerEx is ExNumber)
             {
-                Number nInner = innerEx as Number;
+                ExNumber nInner = innerEx as ExNumber;
 
-                if (Number.OpLT(nInner, -1.0))
+                if (ExNumber.OpLT(nInner, -1.0))
                     return false;
-                else if (Number.OpGT(nInner, 1.0))
+                else if (ExNumber.OpGT(nInner, 1.0))
                     return false;
             }
 

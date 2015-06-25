@@ -27,7 +27,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             {
                 pEvalData.AttemptSetInputType(InputType.FunctionInverse);
 
-                if (pEvalData.GetWorkMgr().AllowWork && _func.GetInputArgCount() > 0)
+                if (pEvalData.GetWorkMgr().GetAllowWork() && _func.GetInputArgCount() > 0)
                 {
                     string funcStr = WorkMgr.ToDisp(_func);
                     string callArgStr = WorkMgr.ToDisp(_func.GetInputArgs()[0]);
@@ -40,7 +40,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 AlgebraTerm left = _func.GetInputArgs()[0].ToAlgTerm();
                 AlgebraTerm right = _assignTo.CloneEx().ToAlgTerm().Substitute(_func.GetInputArgs()[0], inverseFunc);
 
-                if (pEvalData.GetWorkMgr().AllowWork)
+                if (pEvalData.GetWorkMgr().GetAllowWork())
                     pEvalData.GetWorkMgr().FromSides(left, right, "`" + WorkMgr.ToDisp(inverseFunc) + "` is the inverse function, solve for it.");
 
                 return _agSolver.SolveEquationEquality(inverseFunc.GetVar(), left, right, ref pEvalData);
@@ -135,7 +135,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 // The input variable for the function needs to be assumed.
                 AlgebraComp[] useVars;
                 if (_assignTo is Equation.Structural.LinearAlg.ExMatrix ||
-                    _assignTo is Number)
+                    _assignTo is ExNumber)
                 {
                     useVars = new AlgebraComp[] { new AlgebraComp(AlgebraVar.GetGarbageVar()) };
                 }
@@ -151,7 +151,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 _func = new FunctionDefinition(funcIden, useVars, null, false);
             }
 
-            if (_assignTo == null || Number.IsUndef(_assignTo))
+            if (_assignTo == null || ExNumber.IsUndef(_assignTo))
                 return false;
 
             //if (_func.HasCallArgs)

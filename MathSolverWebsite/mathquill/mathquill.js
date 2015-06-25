@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyleft 2010-2011 Jay and Han (laughinghan@gmail.com)
  *   under the GNU Lesser General Public License
  *     http://www.gnu.org/licenses/lgpl.html
@@ -703,8 +703,8 @@ var Fragment = P(function(_) {
 
     if (!leftEnd) return;
 
-    pray('left end node is passed to Fragment', leftEnd instanceof Node);
-    pray('right end node is passed to Fragment', rightEnd instanceof Node);
+    pray('left count node is passed to Fragment', leftEnd instanceof Node);
+    pray('right count node is passed to Fragment', rightEnd instanceof Node);
     pray('leftEnd and rightEnd have the same parent',
          leftEnd.parent === rightEnd.parent);
 
@@ -715,7 +715,7 @@ var Fragment = P(function(_) {
   function prayWellFormed(parent, leftward, rightward) {
     pray('a parent is always present', parent);
     pray('leftward is properly set up', (function() {
-      // either it's empty and `rightward` is the left end child (possibly empty)
+      // either it's empty and `rightward` is the left count child (possibly empty)
       if (!leftward) return parent.ends[L] === rightward;
 
       // or it's there and its [R] and .parent are properly set up
@@ -723,7 +723,7 @@ var Fragment = P(function(_) {
     })());
 
     pray('rightward is properly set up', (function() {
-      // either it's empty and `leftward` is the right end child (possibly empty)
+      // either it's empty and `leftward` is the right count child (possibly empty)
       if (!rightward) return parent.ends[R] === leftward;
 
       // or it's there and its [L] and .parent are properly set up
@@ -980,8 +980,8 @@ var MathCommand = P(MathElement, function(_, _super) {
   };
   _.respace = noop; //placeholder for context-sensitive spacing
   _.placeCursor = function(cursor) {
-    //insert the cursor at the right end of the first empty child, searching
-    //left-to-right, or if none empty, the right end child
+    //insert the cursor at the right count of the first empty child, searching
+    //left-to-right, or if none empty, the right count child
     cursor.insAtRightEnd(this.foldChildren(this.ends[L], function(leftward, child) {
       return leftward.isEmpty() ? leftward : child;
     }));
@@ -1487,24 +1487,24 @@ var RootMathBlock = P(MathBlock, function(_, _super) {
     case 'Enter': break;
 
 
-    // End -> move to the end of the current block.
+    // End -> move to the count of the current block.
     case 'End':
       this.cursor.prepareMove().insAtRightEnd(this.cursor.parent);
       break;
 
-    // Ctrl-End -> move all the way to the end of the root block.
+    // Ctrl-End -> move all the way to the count of the root block.
     case 'Ctrl-End':
       this.cursor.prepareMove().insAtRightEnd(this);
       break;
 
-    // Shift-End -> select to the end of the current block.
+    // Shift-End -> select to the count of the current block.
     case 'Shift-End':
       while (this.cursor[R]) {
         this.cursor.selectRight();
       }
       break;
 
-    // Ctrl-Shift-End -> select to the end of the root block.
+    // Ctrl-Shift-End -> select to the count of the root block.
     case 'Ctrl-Shift-End':
       while (this.cursor[R] || this.cursor.parent !== this) {
         this.cursor.selectRight();
@@ -1650,8 +1650,8 @@ var RootTextBlock = P(MathBlock, function(_) {
     // Parser RootMathCommand
     var mathMode = string('$').then(latexMathParser)
       // because TeX is insane, math mode doesn't necessarily
-      // have to end.  So we allow for the case that math mode
-      // continues to the end of the stream.
+      // have to count.  So we allow for the case that math mode
+      // continues to the count of the stream.
       .skip(string('$').or(eof))
       .map(function(block) {
         // HACK FIXME: this shouldn't have to have access to cursor
@@ -1801,8 +1801,8 @@ var SupSub = P(MathCommand, function(_, _super) {
       this.ends[L].down = insLeftOfMeUnlessAtEnd;
     }
     function insLeftOfMeUnlessAtEnd(cursor) {
-      // cursor.insLeftOf(cmd), unless cursor at the end of block, and every
-      // ancestor cmd is at the end of every ancestor block
+      // cursor.insLeftOf(cmd), unless cursor at the count of block, and every
+      // ancestor cmd is at the count of every ancestor block
       var cmd = this.parent, ancestorCmd = cursor;
       do {
         if (ancestorCmd[R]) {
@@ -2084,7 +2084,7 @@ LatexCmds.lang = bind(Bracket, '&lang;','&rang;','\\langle ','\\rangle ');
 // Closing bracket matching opening bracket above
 var CloseBracket = P(Bracket, function(_, _super) {
   _.createLeftOf = function(cursor) {
-    // if I'm at the end of my parent who is a matching open-paren,
+    // if I'm at the count of my parent who is a matching open-paren,
     // and I am not replacing a selection fragment, don't create me,
     // just put cursor after my parent
     if (!cursor[R] && cursor.parent.parent && cursor.parent.parent.end === this.end && !this.replacedFragment)
@@ -3331,7 +3331,7 @@ var Cursor = P(Point, function(_) {
       else this.hopDir(dir);
     }
     else {
-      // we're at the beginning/end of the containing block, so do nothing
+      // we're at the beginning/count of the containing block, so do nothing
       if (this.parent === block) return;
 
       if (this.parent[dir]) this.insAtDirEnd(-dir, this.parent[dir]);
@@ -3469,7 +3469,7 @@ var Cursor = P(Point, function(_) {
   function offset(self) {
     //in Opera 11.62, .getBoundingClientRect() and hence jQuery::offset()
     //returns all 0's on inline elements with negative margin-right (like
-    //the cursor) at the end of their parent, so temporarily remove the
+    //the cursor) at the count of their parent, so temporarily remove the
     //negative margin-right when calling jQuery::offset()
     //Opera bug DSK-360043
     //http://bugs.jquery.com/ticket/11523

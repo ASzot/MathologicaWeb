@@ -10,8 +10,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
     {
         private static AlgebraTerm FromFractionFix(ExComp num, ExComp den)
         {
-            ExComp finalNum = Number.GetOne();
-            ExComp finalDen = Number.GetOne();
+            ExComp finalNum = ExNumber.GetOne();
+            ExComp finalDen = ExNumber.GetOne();
 
             if (num is AlgebraTerm)
             {
@@ -96,7 +96,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
 
             if (numDen == null)
             {
-                numDen = new AlgebraTerm[] { right, Number.GetOne().ToAlgTerm() };
+                numDen = new AlgebraTerm[] { right, ExNumber.GetOne().ToAlgTerm() };
             }
 
             // The 'dx' on the left is implied.
@@ -110,18 +110,18 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             }
             else if (!numDen[1].Contains(funcVar) && !numDen[0].Contains(dVar))
             {
-                left = FromFractionFix(Number.GetOne(), numDen[0]);
-                right = FromFractionFix(Number.GetOne(), numDen[1]);
+                left = FromFractionFix(ExNumber.GetOne(), numDen[0]);
+                right = FromFractionFix(ExNumber.GetOne(), numDen[1]);
             }
             else if (!numDen[0].Contains(funcVar) && !numDen[1].Contains(funcVar))
             {
-                left = Number.GetOne().ToAlgTerm();
+                left = ExNumber.GetOne().ToAlgTerm();
                 right = FromFractionFix(numDen[0], numDen[1]);
             }
             else if (!numDen[0].Contains(dVar) && !numDen[1].Contains(dVar))
             {
                 left = FromFractionFix(numDen[1], numDen[2]);
-                right = Number.GetOne().ToAlgTerm();
+                right = ExNumber.GetOne().ToAlgTerm();
             }
             else
             {
@@ -133,7 +133,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
                 {
                     AlgebraTerm divTerm = AlgebraGroup.GetConstantTo(yVarTo, funcVar);
 
-                    left = AlgebraTerm.FromFraction(Number.GetOne(), DivOp.StaticCombine(right, divTerm));
+                    left = AlgebraTerm.FromFraction(ExNumber.GetOne(), DivOp.StaticCombine(right, divTerm));
                     if (left.Contains(dVar))
                         return null;
                     right = divTerm;
@@ -142,7 +142,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
                 {
                     AlgebraTerm divTerm = AlgebraGroup.GetConstantTo(xVarTo, dVar);
 
-                    left = AlgebraTerm.FromFraction(Number.GetOne(), divTerm);
+                    left = AlgebraTerm.FromFraction(ExNumber.GetOne(), divTerm);
                     right = DivOp.StaticCombine(right, divTerm).ToAlgTerm();
                     if (right.Contains(funcVar))
                         return null;

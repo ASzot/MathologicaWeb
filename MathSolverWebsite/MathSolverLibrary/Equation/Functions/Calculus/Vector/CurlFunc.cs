@@ -37,7 +37,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
             if (innerEx is GradientFunc)
             {
                 pEvalData.GetWorkMgr().FromFormatted(FinalToDispStr() + "=0", "From the identity " + WorkMgr.STM + "curl(\\nablaF)=0" + WorkMgr.EDM);
-                return Number.GetZero();
+                return ExNumber.GetZero();
             }
 
             return null;
@@ -48,7 +48,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
             CallChildren(harshEval, ref pEvalData);
 
             if (!IsSuitableField(GetInnerEx()))
-                return Number.GetUndefined();
+                return ExNumber.GetUndefined();
 
             ExComp p, q, r;
             ExComp innerEx = GetCorrectedInnerEx(ref pEvalData);
@@ -62,7 +62,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
             if (innerEx is AlgebraComp)
             {
                 innerEx = new FunctionDefinition(innerEx as AlgebraComp,
-                    new[]
+                    new AlgebraComp[]
                     {
                         new AlgebraComp("x"),
                         new AlgebraComp("y"),
@@ -151,7 +151,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
                 lastStep.SetWorkHtml(WorkMgr.STM + stepStr + "=" + WorkMgr.ToDisp(r_y) + WorkMgr.EDM);
             }
             else
-                r_y = Number.GetZero();
+                r_y = ExNumber.GetZero();
 
             ExComp q_z;
             if (z != null)
@@ -167,7 +167,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
                 lastStep.SetWorkHtml(WorkMgr.STM + stepStr + "=" + WorkMgr.ToDisp(q_z) + WorkMgr.EDM);
             }
             else
-                q_z = Number.GetZero();
+                q_z = ExNumber.GetZero();
 
             ExComp p_z;
             if (z != null)
@@ -183,7 +183,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
                 lastStep.SetWorkHtml(WorkMgr.STM + stepStr + "=" + WorkMgr.ToDisp(p_z) + WorkMgr.EDM);
             }
             else
-                p_z = Number.GetZero();
+                p_z = ExNumber.GetZero();
 
             ExComp r_x;
             if (z != null)
@@ -199,7 +199,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
                 lastStep.SetWorkHtml(WorkMgr.STM + stepStr + "=" + WorkMgr.ToDisp(r_x) + WorkMgr.EDM);
             }
             else
-                r_x = Number.GetZero();
+                r_x = ExNumber.GetZero();
 
             stepStr = "\\frac{\\partial Q}{\\partial " + x.ToDispString() + "}";
             pEvalData.GetWorkMgr().FromFormatted("", "Find " + WorkMgr.STM + stepStr + WorkMgr.EDM);

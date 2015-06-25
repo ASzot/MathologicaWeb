@@ -12,12 +12,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
 
         public static ExComp Negate(ExComp ex1)
         {
-            if (Number.GetNegInfinity().IsEqualTo(ex1))
-                return Number.GetPosInfinity();
-            else if (Number.GetPosInfinity().IsEqualTo(ex1))
-                return Number.GetNegInfinity();
+            if (ExNumber.GetNegInfinity().IsEqualTo(ex1))
+                return ExNumber.GetPosInfinity();
+            else if (ExNumber.GetPosInfinity().IsEqualTo(ex1))
+                return ExNumber.GetNegInfinity();
 
-            return StaticCombine(Number.GetNegOne(), ex1);
+            return StaticCombine(ExNumber.GetNegOne(), ex1);
         }
 
         public static ExComp StaticCombine(ExComp ex1, ExComp ex2)
@@ -32,27 +32,27 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
             else if (ex2 is Functions.Calculus.CalcConstant)
                 return ex2;
 
-            if (ex2 is PowerFunction && Number.GetZero().IsEqualTo((ex2 as PowerFunction).GetBase()) &&
-                Number.GetNegOne().IsEqualTo((ex2 as PowerFunction).GetPower()))
-                return Number.GetUndefined();
+            if (ex2 is PowerFunction && ExNumber.GetZero().IsEqualTo((ex2 as PowerFunction).GetBase()) &&
+                ExNumber.GetNegOne().IsEqualTo((ex2 as PowerFunction).GetPower()))
+                return ExNumber.GetUndefined();
 
-            if (ex1 is PowerFunction && Number.GetZero().IsEqualTo((ex1 as PowerFunction).GetBase()) &&
-                Number.GetNegOne().IsEqualTo((ex1 as PowerFunction).GetPower()))
-                return Number.GetUndefined();
+            if (ex1 is PowerFunction && ExNumber.GetZero().IsEqualTo((ex1 as PowerFunction).GetBase()) &&
+                ExNumber.GetNegOne().IsEqualTo((ex1 as PowerFunction).GetPower()))
+                return ExNumber.GetUndefined();
 
-            if (Number.GetZero().IsEqualTo(ex1) || Number.GetZero().IsEqualTo(ex2))
-                return Number.GetZero();
+            if (ExNumber.GetZero().IsEqualTo(ex1) || ExNumber.GetZero().IsEqualTo(ex2))
+                return ExNumber.GetZero();
 
-            if (ex1 is PowerFunction && (ex1 as PowerFunction).IsDenominator() && !Number.GetNegOne().IsEqualTo((ex1 as PowerFunction).GetPower()))
+            if (ex1 is PowerFunction && (ex1 as PowerFunction).IsDenominator() && !ExNumber.GetNegOne().IsEqualTo((ex1 as PowerFunction).GetPower()))
             {
-                (ex1 as PowerFunction).SetPower(DivOp.StaticCombine((ex1 as PowerFunction).GetPower(), Number.GetNegOne()));
-                ex1 = new PowerFunction(ex1, Number.GetNegOne());
+                (ex1 as PowerFunction).SetPower(DivOp.StaticCombine((ex1 as PowerFunction).GetPower(), ExNumber.GetNegOne()));
+                ex1 = new PowerFunction(ex1, ExNumber.GetNegOne());
             }
 
-            if (ex2 is PowerFunction && (ex2 as PowerFunction).IsDenominator() && !Number.GetNegOne().IsEqualTo((ex2 as PowerFunction).GetPower()))
+            if (ex2 is PowerFunction && (ex2 as PowerFunction).IsDenominator() && !ExNumber.GetNegOne().IsEqualTo((ex2 as PowerFunction).GetPower()))
             {
-                (ex2 as PowerFunction).SetPower(DivOp.StaticCombine((ex2 as PowerFunction).GetPower(), Number.GetNegOne()));
-                ex2 = new PowerFunction(ex2, Number.GetNegOne());
+                (ex2 as PowerFunction).SetPower(DivOp.StaticCombine((ex2 as PowerFunction).GetPower(), ExNumber.GetNegOne()));
+                ex2 = new PowerFunction(ex2, ExNumber.GetNegOne());
             }
 
             if (ex1 is ExMatrix || ex2 is ExMatrix)
@@ -137,8 +137,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                     ExComp numTerm1 = numDenTerm1 != null ? numDenTerm1[0] : term1;
                     ExComp numTerm2 = numDenTerm2 != null ? numDenTerm2[0] : term2;
 
-                    ExComp denTerm1 = numDenTerm1 != null ? (numDenTerm1[1] as ExComp) : (Number.GetOne() as ExComp);
-                    ExComp denTerm2 = numDenTerm2 != null ? (numDenTerm2[1] as ExComp) : (Number.GetOne() as ExComp);
+                    ExComp denTerm1 = numDenTerm1 != null ? (numDenTerm1[1] as ExComp) : (ExNumber.GetOne() as ExComp);
+                    ExComp denTerm2 = numDenTerm2 != null ? (numDenTerm2[1] as ExComp) : (ExNumber.GetOne() as ExComp);
 
                     if (numTerm1 is AlgebraTerm)
                         numTerm1 = (numTerm1 as AlgebraTerm).RemoveRedundancies(false);
@@ -202,9 +202,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 AlgebraComp comp = ex1 is AlgebraComp ? ex1 as AlgebraComp : ex2 as AlgebraComp;
 
                 AlgebraTerm[] numDen = term.GetNumDenFrac();
-                if (numDen != null && Number.GetOne().IsEqualTo(numDen[0].RemoveRedundancies(false)) && comp.IsEqualTo(numDen[1].RemoveRedundancies(false)))
+                if (numDen != null && ExNumber.GetOne().IsEqualTo(numDen[0].RemoveRedundancies(false)) && comp.IsEqualTo(numDen[1].RemoveRedundancies(false)))
                 {
-                    return Number.GetOne();
+                    return ExNumber.GetOne();
                 }
                 else if (numDen != null)
                 {
@@ -244,22 +244,22 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
 
                 return term;
             }
-            else if ((ex1 is AlgebraTerm && ex2 is Number) ||
-                (ex1 is Number && ex2 is AlgebraTerm))
+            else if ((ex1 is AlgebraTerm && ex2 is ExNumber) ||
+                (ex1 is ExNumber && ex2 is AlgebraTerm))
             {
                 AlgebraTerm term = ex1 is AlgebraTerm ? ex1 as AlgebraTerm : ex2 as AlgebraTerm;
 
-                Number num = ex1 is Number ? ex1 as Number : ex2 as Number;
+                ExNumber num = ex1 is ExNumber ? ex1 as ExNumber : ex2 as ExNumber;
                 if (term is Functions.PowerFunction && ex2 is AlgebraTerm)
                 {
                     Functions.PowerFunction pfTmpTerm = term as Functions.PowerFunction;
-                    if (Number.GetNegOne().IsEqualTo(pfTmpTerm.GetPower()))
+                    if (ExNumber.GetNegOne().IsEqualTo(pfTmpTerm.GetPower()))
                     {
                         return DivOp.StaticCombine(num, pfTmpTerm.GetBase());
                     }
                 }
 
-                if (Number.OpEqual(num, 1.0))
+                if (ExNumber.OpEqual(num, 1.0))
                     return term;
 
                 List<ExComp[]> groups = term.GetGroupsNoOps();
@@ -273,11 +273,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                         break;
                     }
                     ExComp[] groupToAdd = AlgebraTerm.RemoveCoeffs(group);
-                    Number coeff = AlgebraTerm.GetCoeffTerm(group);
+                    ExNumber coeff = AlgebraTerm.GetCoeffTerm(group);
                     if (coeff == null)
-                        coeff = new Number(1.0);
+                        coeff = new ExNumber(1.0);
 
-                    Number newCoeff = Number.OpMul(coeff, num);
+                    ExNumber newCoeff = ExNumber.OpMul(coeff, num);
                     AlgebraTerm.AddTermToGroup(ref groupToAdd, newCoeff, false);
 
                     combinedGroups.Add(groupToAdd);
@@ -288,28 +288,28 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
 
                 return finalTerm.ReduceFracs();
             }
-            else if ((ex1 is AlgebraComp && ex2 is Number) ||
-                (ex1 is Number && ex2 is AlgebraComp))
+            else if ((ex1 is AlgebraComp && ex2 is ExNumber) ||
+                (ex1 is ExNumber && ex2 is AlgebraComp))
             {
                 AlgebraComp comp = ex1 is AlgebraComp ? ex1 as AlgebraComp : ex2 as AlgebraComp;
-                Number number = ex1 is Number ? ex1 as Number : ex2 as Number;
+                ExNumber number = ex1 is ExNumber ? ex1 as ExNumber : ex2 as ExNumber;
 
-                if (Number.OpEqual(number, 1.0))
+                if (ExNumber.OpEqual(number, 1.0))
                     return comp;
 
-                if (Number.OpEqual(number, 1.0))
+                if (ExNumber.OpEqual(number, 1.0))
                     return comp;
 
                 AlgebraTerm term = new AlgebraTerm();
                 term.Add(number, new Operators.MulOp(), comp);
                 return term;
             }
-            else if (ex1 is Number && ex2 is Number)
+            else if (ex1 is ExNumber && ex2 is ExNumber)
             {
-                Number n1 = ex1 as Number;
-                Number n2 = ex2 as Number;
+                ExNumber n1 = ex1 as ExNumber;
+                ExNumber n2 = ex2 as ExNumber;
 
-                Number result = Number.OpMul(n1, n2);
+                ExNumber result = ExNumber.OpMul(n1, n2);
                 return result;
             }
             else if (ex1 is AlgebraComp && ex2 is AlgebraComp)
@@ -319,7 +319,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
 
                 if (c1.IsEqualTo(c2))
                 {
-                    Functions.PowerFunction powFunc = new Functions.PowerFunction(c1, new Number(2.0));
+                    Functions.PowerFunction powFunc = new Functions.PowerFunction(c1, new ExNumber(2.0));
                     return powFunc;
                 }
                 else

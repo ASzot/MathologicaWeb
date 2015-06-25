@@ -26,7 +26,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public bool GetIsInfiniteSeries()
         {
-            return GetIterCount().IsEqualTo(Number.GetPosInfinity());
+            return GetIterCount().IsEqualTo(ExNumber.GetPosInfinity());
         }
 
         public SumFunction(ExComp term, AlgebraComp iterVar, ExComp iterStart, ExComp iterCount)
@@ -69,12 +69,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             pEvalData.GetWorkMgr().FromFormatted(thisStr, "If " + WorkMgr.STM +
                 "\\lim_{" + GetIterVar().ToDispString() + " \\to \\infty}" + GroupHelper.ToAlgTerm(gp).FinalToDispStr() + "\\ne 0 " + WorkMgr.EDM + " then the series is divergent");
 
-            ExComp divTest = Limit.TakeLim(innerTerm, GetIterVar(), Number.GetPosInfinity(), ref pEvalData);
+            ExComp divTest = Limit.TakeLim(innerTerm, GetIterVar(), ExNumber.GetPosInfinity(), ref pEvalData, 0);
             if (divTest is Limit)
                 return null;
             if (divTest is AlgebraTerm)
                 divTest = (divTest as AlgebraTerm).RemoveRedundancies(false);
-            if (!divTest.IsEqualTo(Number.GetZero()))
+            if (!divTest.IsEqualTo(ExNumber.GetZero()))
             {
                 pEvalData.GetWorkMgr().FromFormatted(thisStr, "The limit did not equal zero, the series is divergent.");
                 return false;
@@ -82,17 +82,17 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
             // The p-series test.
             AlgebraTerm[] frac = innerTerm.GetNumDenFrac();
-            if (frac != null && frac[0].RemoveRedundancies(false).IsEqualTo(Number.GetOne()))
+            if (frac != null && frac[0].RemoveRedundancies(false).IsEqualTo(ExNumber.GetOne()))
             {
                 ExComp den = frac[1].RemoveRedundancies(false);
                 if (den is PowerFunction)
                 {
                     PowerFunction powFunc = den as PowerFunction;
-                    if (powFunc.GetBase().IsEqualTo(GetIterVar()) && powFunc.GetPower() is Number && Number.OpGT((powFunc.GetPower() as Number), 0.0) &&
-                        GetIterStart() is Number && Number.OpGE((GetIterStart() as Number), 1.0))
+                    if (powFunc.GetBase().IsEqualTo(GetIterVar()) && powFunc.GetPower() is ExNumber && ExNumber.OpGT((powFunc.GetPower() as ExNumber), 0.0) &&
+                        GetIterStart() is ExNumber && ExNumber.OpGE((GetIterStart() as ExNumber), 1.0))
                     {
-                        Number nPow = powFunc.GetPower() as Number;
-                        bool isConvergent = Number.OpGT(nPow, 1.0);
+                        ExNumber nPow = powFunc.GetPower() as ExNumber;
+                        bool isConvergent = ExNumber.OpGT(nPow, 1.0);
                         pEvalData.GetWorkMgr().FromFormatted(thisStr, "In the form " + WorkMgr.STM + "1/n^p" + WorkMgr.EDM + " if " +
                             WorkMgr.STM + "p \\gt 1" + WorkMgr.EDM + " then the series is convergent.");
                         if (isConvergent)
@@ -108,16 +108,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             if (varGp.Length == 2 || varGp.Length == 1)
             {
                 ExComp ele0 = varGp[0];
-                ExComp ele1 = varGp.Length > 1 ? varGp[1] : Number.GetOne();
+                ExComp ele1 = varGp.Length > 1 ? varGp[1] : ExNumber.GetOne();
                 bool ele0Den = false;
                 bool ele1Den = false;
 
-                if (ele0 is PowerFunction && (ele0 as PowerFunction).GetPower().IsEqualTo(Number.GetNegOne()))
+                if (ele0 is PowerFunction && (ele0 as PowerFunction).GetPower().IsEqualTo(ExNumber.GetNegOne()))
                 {
                     ele0Den = true;
                     ele0 = (ele0 as PowerFunction).GetBase();
                 }
-                if (ele1 is PowerFunction && (ele1 as PowerFunction).GetPower().IsEqualTo(Number.GetNegOne()))
+                if (ele1 is PowerFunction && (ele1 as PowerFunction).GetPower().IsEqualTo(ExNumber.GetNegOne()))
                 {
                     ele1Den = true;
                     ele1 = (ele1 as PowerFunction).GetBase();
@@ -140,29 +140,29 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                     pfDen = ele1Den;
                 }
 
-                if (a != null && pf != null && !a.ToAlgTerm().Contains(GetIterVar()) && pf.GetBase() is Number && !(pf.GetBase() as Number).HasImaginaryComp() &&
-                    GetIterStart() is Number && Number.OpGE((GetIterStart() as Number), 0.0))
+                if (a != null && pf != null && !a.ToAlgTerm().Contains(GetIterVar()) && pf.GetBase() is ExNumber && !(pf.GetBase() as ExNumber).HasImaginaryComp() &&
+                    GetIterStart() is ExNumber && ExNumber.OpGE((GetIterStart() as ExNumber), 0.0))
                 {
-                    Number nBase = pf.GetBase() as Number;
+                    ExNumber nBase = pf.GetBase() as ExNumber;
                     ExComp exBase = nBase;
                     if (pfDen)
-                        exBase = Number.OpDiv(Number.GetOne(), nBase);
+                        exBase = ExNumber.OpDiv(ExNumber.GetOne(), nBase);
 
-                    if (!(exBase is Number))
+                    if (!(exBase is ExNumber))
                         return null;
 
-                    nBase = exBase as Number;
+                    nBase = exBase as ExNumber;
                     if (pfDen)
-                        exBase = DivOp.StaticCombine(Number.GetOne(), pf.GetBase() as Number);
+                        exBase = DivOp.StaticCombine(ExNumber.GetOne(), pf.GetBase() as ExNumber);
 
-                    nBase = Number.Abs(nBase);
+                    nBase = ExNumber.Abs(nBase);
                     AlgebraTerm pfPow = pf.GetPower().ToAlgTerm();
                     List<ExComp> powers = pfPow.GetPowersOfVar(GetIterVar());
-                    if (powers.Count == 1 && powers[0].IsEqualTo(Number.GetOne()))
+                    if (powers.Count == 1 && powers[0].IsEqualTo(ExNumber.GetOne()))
                     {
                         pEvalData.GetWorkMgr().FromFormatted(thisStr, "In the geometric series form " + WorkMgr.STM + "ar^{n-1}" + WorkMgr.EDM + " if " +
                             WorkMgr.STM + "|r| \\lt 1 " + WorkMgr.EDM + " than the series is convergent");
-                        if (Number.OpGE(nBase, 1.0))
+                        if (ExNumber.OpGE(nBase, 1.0))
                         {
                             pEvalData.GetWorkMgr().FromFormatted(thisStr, WorkMgr.STM + "|r| \\ge 1" + WorkMgr.EDM + ", the series is divergent.");
                             return false;
@@ -170,7 +170,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
                         if (pfPow.RemoveRedundancies(false).IsEqualTo(SubOp.StaticCombine(GetIterVar(), GetIterStart())))
                         {
-                            ExComp tmpDen = SubOp.StaticCombine(Number.GetOne(), exBase);
+                            ExComp tmpDen = SubOp.StaticCombine(ExNumber.GetOne(), exBase);
                             tmpDen = tmpDen.ToAlgTerm().CompoundFractions();
 
                             result = DivOp.StaticCombine(a, tmpDen);
@@ -212,7 +212,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
             // Split into groups and take the summation of each group independently.
             List<ExComp[]> gps = GetInnerTerm().GetGroupsNoOps();
-            ExComp overallResult = Number.GetZero();
+            ExComp overallResult = ExNumber.GetZero();
             for (int i = 0; i < gps.Count; ++i)
             {
                 ExComp gpResult;
@@ -237,20 +237,20 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             CallChildren(harshEval, ref pEvalData);
 
             // No negative numbers with summations.
-            if ((GetIterCount() is Number && Number.OpLT((GetIterCount() as Number), 0.0)) ||
-                (GetIterStart() is Number && Number.OpLT((GetIterStart() as Number), 0.0)))
+            if ((GetIterCount() is ExNumber && ExNumber.OpLT((GetIterCount() as ExNumber), 0.0)) ||
+                (GetIterStart() is ExNumber && ExNumber.OpLT((GetIterStart() as ExNumber), 0.0)))
                 return this;
 
-            bool toInfinity = GetIterCount() is Number && GetIterCount().IsEqualTo(Number.GetPosInfinity());
+            bool toInfinity = GetIterCount() is ExNumber && GetIterCount().IsEqualTo(ExNumber.GetPosInfinity());
             if (!GetInnerTerm().Contains(GetIterVar()))
             {
                 // Is this just a sum of numbers.
                 if (toInfinity)
-                    return Number.GetPosInfinity();
+                    return ExNumber.GetPosInfinity();
 
-                ExComp sumTotal = Number.GetZero();
-                if (!Number.GetOne().IsEqualTo(GetIterStart()))
-                    sumTotal = SubOp.StaticCombine(GetIterCount(), SubOp.StaticCombine(GetIterStart(), Number.GetOne()));
+                ExComp sumTotal = ExNumber.GetZero();
+                if (!ExNumber.GetOne().IsEqualTo(GetIterStart()))
+                    sumTotal = SubOp.StaticCombine(GetIterCount(), SubOp.StaticCombine(GetIterStart(), ExNumber.GetOne()));
                 else
                     sumTotal = GetIterCount();
                 return MulOp.StaticCombine(sumTotal, GetInnerTerm());
@@ -269,25 +269,25 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                     if (result != null)
                         return result;
                     if (!converges.Value)
-                        return Number.GetPosInfinity();
+                        return ExNumber.GetPosInfinity();
                 }
 
                 return this;
             }
 
             ExComp innerEx = GetInnerEx();
-            if (innerEx.IsEqualTo(GetIterVar()) && GetIterStart().IsEqualTo(Number.GetOne()))
+            if (innerEx.IsEqualTo(GetIterVar()) && GetIterStart().IsEqualTo(ExNumber.GetOne()))
             {
-                return DivOp.StaticCombine(MulOp.StaticCombine(GetIterCount(), AddOp.StaticCombine(GetIterCount(), Number.GetOne())), new Number(2.0));
+                return DivOp.StaticCombine(MulOp.StaticCombine(GetIterCount(), AddOp.StaticCombine(GetIterCount(), ExNumber.GetOne())), new ExNumber(2.0));
             }
 
-            if (GetIterCount() is Number && (GetIterCount() as Number).IsRealInteger() &&
-                GetIterStart() is Number && (GetIterStart() as Number).IsRealInteger())
+            if (GetIterCount() is ExNumber && (GetIterCount() as ExNumber).IsRealInteger() &&
+                GetIterStart() is ExNumber && (GetIterStart() as ExNumber).IsRealInteger())
             {
-                int count = (int)(GetIterCount() as Number).GetRealComp();
-                int start = (int)(GetIterStart() as Number).GetRealComp();
+                int count = (int)(GetIterCount() as ExNumber).GetRealComp();
+                int start = (int)(GetIterStart() as ExNumber).GetRealComp();
 
-                AlgebraTerm totalTerm = new AlgebraTerm(Number.GetZero());
+                AlgebraTerm totalTerm = new AlgebraTerm(ExNumber.GetZero());
 
                 if (count > MAX_SUM_COUNT)
                     return this;
@@ -296,7 +296,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
                 for (int i = start; i <= count; ++i)
                 {
-                    iterVal = new Number(i);
+                    iterVal = new ExNumber(i);
 
                     AlgebraTerm innerTerm = GetInnerTerm().CloneEx().ToAlgTerm();
 
@@ -342,11 +342,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public override string ToString()
         {
-            if (MathSolver.USE_TEX_DEBUG)
-                return ToTexString();
-            return string.Format("Sum({0},{1},{2},{3})", GetInnerTerm().ToString(),
-                GetIterCount().ToString(), GetIterStart().ToString(),
-                GetIterVar().ToString());
+            return ToTexString();
         }
 
         public override string ToTexString()

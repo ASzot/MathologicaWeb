@@ -511,6 +511,8 @@
     <Compile Include="MathSolverLibrary\Equation\ExComp.cs" />
     <Compile Include="MathSolverLibrary\Equation\Functions\AbsValFunction.cs" />
     <Compile Include="MathSolverLibrary\Equation\Functions\AppliedFunction.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Functions\AppliedFunction_NArgs.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Functions\BasicAppliedFunc.cs" />
     <Compile Include="MathSolverLibrary\Equation\Functions\Calculus\AntiDerivativeHelper.cs" />
     <Compile Include="MathSolverLibrary\Equation\Functions\Calculus\CalcConstant.cs" />
     <Compile Include="MathSolverLibrary\Equation\Functions\Calculus\Derivative.cs" />
@@ -561,7 +563,7 @@
     <Compile Include="MathSolverLibrary\Equation\Structural\LinearAlg\MatrixInverse.cs" />
     <Compile Include="MathSolverLibrary\Equation\Structural\LinearAlg\Transpose.cs" />
     <Compile Include="MathSolverLibrary\Equation\Structural\LinearAlg\Vector.cs" />
-    <Compile Include="MathSolverLibrary\Equation\Structural\Number.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Structural\ExNumber.cs" />
     <Compile Include="MathSolverLibrary\Equation\Structural\Polynomial\PolynomialGen.cs" />
     <Compile Include="MathSolverLibrary\Equation\Structural\Solution.cs" />
     <Compile Include="MathSolverLibrary\Equation\Structural\SpecialSolutions.cs" />
@@ -579,6 +581,8 @@
     <Compile Include="MathSolverLibrary\Information Helpers\WorkMgr.cs" />
     <Compile Include="MathSolverLibrary\LangCompat\ArrayFunc.cs" />
     <Compile Include="MathSolverLibrary\LangCompat\DoubleFunc.cs" />
+    <Compile Include="MathSolverLibrary\LangCompat\StringFunc.cs" />
+    <Compile Include="MathSolverLibrary\LangCompat\TypeHelper.cs" />
     <Compile Include="MathSolverLibrary\MathHelper.cs" />
     <Compile Include="MathSolverLibrary\MathSolver.cs" />
     <Compile Include="MathSolverLibrary\Parsing\LexemeType.cs" />

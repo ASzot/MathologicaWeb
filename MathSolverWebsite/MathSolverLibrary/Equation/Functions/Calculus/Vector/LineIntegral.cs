@@ -112,7 +112,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
                 lastStep = pEvalData.GetWorkMgr().GetLast();
 
                 lastStep.GoDown(ref pEvalData);
-                derived[i] = Derivative.TakeDeriv(useDefs[i].GetData2(), pathVar, ref pEvalData);
+                derived[i] = Derivative.TakeDeriv(useDefs[i].GetData2(), pathVar, ref pEvalData, false, false);
                 lastStep.GoUp(ref pEvalData);
 
                 lastStep.SetWorkHtml(WorkMgr.STM + "\\frac{d" + useDefs[i].GetData1() + "}{d" + pathVar.ToDispString() + "}=" + WorkMgr.ToDisp(derived[i]) + WorkMgr.EDM);
@@ -123,7 +123,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
             {
                 lastStep = pEvalData.GetWorkMgr().GetLast();
 
-                squared[i] = PowOp.StaticCombine(derived[i], new Number(2.0));
+                squared[i] = PowOp.StaticCombine(derived[i], new ExNumber(2.0));
 
                 pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "(\\frac{d" + useDefs[i].GetData1() + "}{d" + pathVar.ToDispString() + "})^{2}=" + WorkMgr.ToDisp(squared[i]) + WorkMgr.EDM);
             }
@@ -137,7 +137,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
                     combined = AddOp.StaticCombine(combined, squared[i]);
             }
 
-            ExComp surfaceDifferential = PowOp.StaticCombine(combined, AlgebraTerm.FromFraction(Number.GetOne(), new Number(2.0)));
+            ExComp surfaceDifferential = PowOp.StaticCombine(combined, AlgebraTerm.FromFraction(ExNumber.GetOne(), new ExNumber(2.0)));
             pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "d" + _dVar.ToDispString() + "=" + totalFuncStr + "=" + WorkMgr.ToDisp(surfaceDifferential) + WorkMgr.EDM);
 
             AlgebraTerm innerTerm = GetInnerTerm();
@@ -178,7 +178,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
                 lastStep = pEvalData.GetWorkMgr().GetLast();
 
                 lastStep.GoDown(ref pEvalData);
-                pathDerivs[i] = Derivative.TakeDeriv(useDefs[i].GetData2(), pathVar, ref pEvalData);
+                pathDerivs[i] = Derivative.TakeDeriv(useDefs[i].GetData2(), pathVar, ref pEvalData, false, false);
                 lastStep.GoUp(ref pEvalData);
 
                 lastStep.SetWorkHtml(WorkMgr.STM + "\\frac{d" + useDefs[i].GetData1() + "}{d" + pathVar.ToDispString() + "}=" + WorkMgr.ToDisp(pathDerivs[i]) + WorkMgr.EDM);
@@ -281,7 +281,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
                 return this;
             else
             {
-                useDefs = new TypePair<string, ExComp>[paraFuncs.Count];
+                useDefs = (TypePair<string, ExComp>[])(new object[paraFuncs.Count]);
                 pathVar = paraFuncs[0].GetInputArgs()[0];
                 for (int i = 0; i < useDefs.Length; ++i)
                 {

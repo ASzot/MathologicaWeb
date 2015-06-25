@@ -36,7 +36,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             {
                 AlgebraSolver agSolver = new AlgebraSolver();
 
-                command = command.Remove(0, "Solve by substitution for ".Length);
+                command = StringFunc.Rm(command, 0, "Solve by substitution for ".Length);
                 string[] solveVars = command.Split(',');
 
                 Solving.EquationSystemSolve solveMethod = new Solving.EquationSystemSolve(agSolver);
@@ -56,7 +56,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             {
                 AlgebraSolver agSolver = new AlgebraSolver();
 
-                command = command.Remove(0, "Solve by elimination for ".Length);
+                command = StringFunc.Rm(command, 0, "Solve by elimination for ".Length);
                 string[] solveVars = command.Split(',');
 
                 Solving.EquationSystemSolve solveMethod = new Solving.EquationSystemSolve(agSolver);

@@ -34,7 +34,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             WorkStep lastStep = pEvalData.GetWorkMgr().GetLast();
 
             lastStep.GoDown(ref pEvalData);
-            ExComp differential = Derivative.TakeDeriv(subIn.CloneEx(), subVar, ref pEvalData);
+            ExComp differential = Derivative.TakeDeriv(subIn.CloneEx(), subVar, ref pEvalData, false, false);
             lastStep.GoUp(ref pEvalData);
 
             lastStep.SetWorkHtml(WorkMgr.STM + "d" + dVar.ToDispString() + " = "
@@ -94,7 +94,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             AlgebraTerm[] numDen = right.GetNumDenFrac();
             if (numDen == null)
-                numDen = new AlgebraTerm[] { right, Number.GetOne().ToAlgTerm() };
+                numDen = new AlgebraTerm[] { right, ExNumber.GetOne().ToAlgTerm() };
 
             if (trigFunc is SinFunction)
             {
@@ -131,20 +131,20 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (hyp == null)
             {
                 hyp = PowOp.StaticCombine(
-                    AddOp.StaticCombine(PowOp.StaticCombine(adj, new Number(2.0)), PowOp.StaticCombine(opp, new Number(2.0))),
-                    AlgebraTerm.FromFraction(Number.GetOne(), new Number(2.0)));
+                    AddOp.StaticCombine(PowOp.StaticCombine(adj, new ExNumber(2.0)), PowOp.StaticCombine(opp, new ExNumber(2.0))),
+                    AlgebraTerm.FromFraction(ExNumber.GetOne(), new ExNumber(2.0)));
             }
             else if (opp == null)
             {
                 opp = PowOp.StaticCombine(
-                    SubOp.StaticCombine(PowOp.StaticCombine(hyp, new Number(2.0)), PowOp.StaticCombine(adj, new Number(2.0))),
-                    AlgebraTerm.FromFraction(Number.GetOne(), new Number(2.0)));
+                    SubOp.StaticCombine(PowOp.StaticCombine(hyp, new ExNumber(2.0)), PowOp.StaticCombine(adj, new ExNumber(2.0))),
+                    AlgebraTerm.FromFraction(ExNumber.GetOne(), new ExNumber(2.0)));
             }
             else if (adj == null)
             {
                 adj = PowOp.StaticCombine(
-                    SubOp.StaticCombine(PowOp.StaticCombine(hyp, new Number(2.0)), PowOp.StaticCombine(opp, new Number(2.0))),
-                    AlgebraTerm.FromFraction(Number.GetOne(), new Number(2.0)));
+                    SubOp.StaticCombine(PowOp.StaticCombine(hyp, new ExNumber(2.0)), PowOp.StaticCombine(opp, new ExNumber(2.0))),
+                    AlgebraTerm.FromFraction(ExNumber.GetOne(), new ExNumber(2.0)));
             }
 
             List<string> defDispStrs = new List<string>();
@@ -342,12 +342,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 AlgebraTerm[] numDen = powTerm.GetNumDenFrac();
                 if (numDen == null)
                     continue;
-                if (!numDen[1].RemoveRedundancies(false).IsEqualTo(new Number(2.0)))
+                if (!numDen[1].RemoveRedundancies(false).IsEqualTo(new ExNumber(2.0)))
                     continue;
 
-                if (!Number.GetOne().IsEqualTo(numDen[0].RemoveRedundancies(false)))
+                if (!ExNumber.GetOne().IsEqualTo(numDen[0].RemoveRedundancies(false)))
                 {
-                    PowerFunction nestedPf = new PowerFunction(new PowerFunction(powFunc.GetBase(), AlgebraTerm.FromFraction(Number.GetOne(), new Number(2.0))), numDen[0]);
+                    PowerFunction nestedPf = new PowerFunction(new PowerFunction(powFunc.GetBase(), AlgebraTerm.FromFraction(ExNumber.GetOne(), new ExNumber(2.0))), numDen[0]);
 
                     // Go back over this element.
                     group[i] = nestedPf;
@@ -362,7 +362,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 if (basePows.Count != 1)
                     continue;
                 ExComp singlePow = basePows[0];
-                if (!(singlePow is Number) && Number.OpEqual((singlePow as Number), 2.0))
+                if (!(singlePow is ExNumber) && ExNumber.OpEqual((singlePow as ExNumber), 2.0))
                     continue;
 
                 subOut = dVar;
@@ -383,9 +383,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 AlgebraTerm aSqTerm = AlgebraGroup.ToTerm(constGroups);
                 ExComp aSq = aSqTerm.RemoveRedundancies(false);
 
-                Number aCoeff = null;
-                if (bSq is Number)
-                    aCoeff = aSq as Number;
+                ExNumber aCoeff = null;
+                if (bSq is ExNumber)
+                    aCoeff = aSq as ExNumber;
                 else if (aSq is AlgebraTerm)
                 {
                     ExComp[] aValGp = GroupHelper.GetUnrelatableTermsOfGroup(varGroups[0].GetGroup(), dVar);
@@ -395,9 +395,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 if (aCoeff == null)
                     return null;
 
-                Number bCoeff = null;
-                if (bSq is Number)
-                    bCoeff = bSq as Number;
+                ExNumber bCoeff = null;
+                if (bSq is ExNumber)
+                    bCoeff = bSq as ExNumber;
                 else if (bSq is AlgebraTerm)
                 {
                     bCoeff = GroupHelper.GetCoeff(constGroups[0].GetGroup());
@@ -409,8 +409,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 if (aCoeff.HasImaginaryComp() || bCoeff.HasImaginaryComp())
                     return null;
 
-                bool aNeg = Number.OpLT(aCoeff, 0.0);
-                bool bNeg = Number.OpLT(bCoeff, 0.0);
+                bool aNeg = ExNumber.OpLT(aCoeff, 0.0);
+                bool bNeg = ExNumber.OpLT(bCoeff, 0.0);
 
                 if (aNeg)
                     aSq = (new AbsValFunction(aSq)).Evaluate(false, ref pEvalData);
@@ -435,8 +435,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 if (usedTrigFunc == null)
                     return null;
 
-                ExComp aVal = PowOp.StaticCombine(aSq, AlgebraTerm.FromFraction(Number.GetOne(), new Number(2.0)));
-                ExComp bVal = PowOp.StaticCombine(bSq, AlgebraTerm.FromFraction(Number.GetOne(), new Number(2.0)));
+                ExComp aVal = PowOp.StaticCombine(aSq, AlgebraTerm.FromFraction(ExNumber.GetOne(), new ExNumber(2.0)));
+                ExComp bVal = PowOp.StaticCombine(bSq, AlgebraTerm.FromFraction(ExNumber.GetOne(), new ExNumber(2.0)));
 
                 if (aVal is AlgebraTerm)
                     aVal = (aVal as AlgebraTerm).RemoveRedundancies(false);
@@ -446,7 +446,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 ExComp subIn = MulOp.StaticCombine(DivOp.StaticCombine(aVal, bVal), usedTrigFunc);
 
                 // Replace the value in the group itself.
-                ExComp baseTermSubbed = AddOp.StaticCombine(new AlgebraTerm(bSq, new MulOp(), PowOp.StaticWeakCombine(subIn, new Number(2.0))), aSq);
+                ExComp baseTermSubbed = AddOp.StaticCombine(new AlgebraTerm(bSq, new MulOp(), PowOp.StaticWeakCombine(subIn, new ExNumber(2.0))), aSq);
                 ExComp pfPow = (group[i] as PowerFunction).GetPower();
 
                 group[i] = new PowerFunction(baseTermSubbed, pfPow);
@@ -467,17 +467,17 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
                 if (usedTrigFunc is SinFunction)
                 {
-                    useTerm.Add(Number.GetOne(), new SubOp(), PowOp.StaticWeakCombine(usedTrigFunc, new Number(2.0)));
+                    useTerm.Add(ExNumber.GetOne(), new SubOp(), PowOp.StaticWeakCombine(usedTrigFunc, new ExNumber(2.0)));
                     simpTo = new CosFunction((usedTrigFunc as AppliedFunction).GetInnerTerm());
                 }
                 else if (usedTrigFunc is SecFunction)
                 {
-                    useTerm.Add(PowOp.StaticWeakCombine(usedTrigFunc, new Number(2.0)), new SubOp(), Number.GetOne());
+                    useTerm.Add(PowOp.StaticWeakCombine(usedTrigFunc, new ExNumber(2.0)), new SubOp(), ExNumber.GetOne());
                     simpTo = new TanFunction((usedTrigFunc as AppliedFunction).GetInnerTerm());
                 }
                 else if (usedTrigFunc is TanFunction)
                 {
-                    useTerm.Add(PowOp.StaticWeakCombine(usedTrigFunc, new Number(2.0)), new AddOp(), Number.GetOne());
+                    useTerm.Add(PowOp.StaticWeakCombine(usedTrigFunc, new ExNumber(2.0)), new AddOp(), ExNumber.GetOne());
                     simpTo = new SecFunction((usedTrigFunc as AppliedFunction).GetInnerTerm());
                 }
                 else
@@ -490,18 +490,18 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     "Simplify.");
 
                 dispIdenStep = new AlgebraTerm();
-                if (aVal is Number && Number.OpNotEquals((aVal as Number), 1.0))
+                if (aVal is ExNumber && ExNumber.OpNotEquals((aVal as ExNumber), 1.0))
                 {
                     dispIdenStep.Add(aVal, new MulOp());
                 }
 
-                dispIdenStep.Add(new PowerFunction(PowOp.StaticWeakCombine(simpTo, new Number(2.0)), pfPow));
+                dispIdenStep.Add(new PowerFunction(PowOp.StaticWeakCombine(simpTo, new ExNumber(2.0)), pfPow));
 
                 group[i] = dispIdenStep;
                 SubstituteIn(ref dispGp, dispSubGps, group, index, subIndex);
 
                 pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "\\int (" + WorkMgr.ToDisp(GroupHelper.ToAlgTerm(dispGp)) + ") d" + dVar.ToDispString() + WorkMgr.EDM, "Use the trig identity " +
-                    WorkMgr.STM + WorkMgr.ToDisp(PowOp.StaticWeakCombine(simpTo, new Number(2.0))) + " = " + useTerm.FinalToDispStr() + WorkMgr.EDM);
+                    WorkMgr.STM + WorkMgr.ToDisp(PowOp.StaticWeakCombine(simpTo, new ExNumber(2.0))) + " = " + useTerm.FinalToDispStr() + WorkMgr.EDM);
 
                 group[i] = MulOp.StaticCombine(aVal, simpTo);
                 SubstituteIn(ref dispGp, dispSubGps, group, index, subIndex);

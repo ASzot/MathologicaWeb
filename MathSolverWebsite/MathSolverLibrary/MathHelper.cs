@@ -13,8 +13,8 @@ namespace MathSolverWebsite.MathSolverLibrary
 
         public static double GCFDouble(double n1, double n2)
         {
-            n1 = Equation.Number.EpsilonCorrect(n1);
-            n2 = Equation.Number.EpsilonCorrect(n2);
+            n1 = Equation.ExNumber.EpsilonCorrect(n1);
+            n2 = Equation.ExNumber.EpsilonCorrect(n2);
             if (n1 == 0.0 || n2 == 0.0)
                 return 0.0;
 
@@ -97,8 +97,8 @@ namespace MathSolverWebsite.MathSolverLibrary
         public static int[] GetCommonDivisors(int n1, int n2, bool includeSelf)
         {
             List<int> divisors = new List<int>();
-            int[] divisorsN1 = GetDivisors(n1, includeSelf);
-            int[] divisorsN2 = GetDivisors(n2, includeSelf);
+            int[] divisorsN1 = GetDivisors(n1, includeSelf, false);
+            int[] divisorsN2 = GetDivisors(n2, includeSelf, false);
 
             divisors.AddRange(divisorsN1);
             divisors.AddRange(divisorsN2);
@@ -120,7 +120,7 @@ namespace MathSolverWebsite.MathSolverLibrary
             return "th";
         }
 
-        public static int[] GetDivisors(int n, bool includeSelf = false, bool includeOne = false)
+        public static int[] GetDivisors(int n, bool includeSelf, bool includeOne)
         {
             List<int> divisors = new List<int>();
             if (includeSelf)
@@ -157,8 +157,8 @@ namespace MathSolverWebsite.MathSolverLibrary
 
         public static double LCFDouble(double d1, double d2)
         {
-            d1 = Equation.Number.EpsilonCorrect(d1);
-            d2 = Equation.Number.EpsilonCorrect(d2);
+            d1 = Equation.ExNumber.EpsilonCorrect(d1);
+            d2 = Equation.ExNumber.EpsilonCorrect(d2);
 
             if (d1 == 0.0 || d2 == 0.0)
                 return 0.0;

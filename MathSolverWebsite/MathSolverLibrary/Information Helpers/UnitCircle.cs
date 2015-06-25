@@ -116,7 +116,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
             return null;
         }
 
-        public static UnitCirclePoint GetPointForAngle(Number angleNum, Number angleDen)
+        public static UnitCirclePoint GetPointForAngle(ExNumber angleNum, ExNumber angleDen)
         {
             foreach (UnitCirclePoint unitCirclePoint in UnitCirclePoints)
             {
@@ -137,36 +137,36 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
             if (UnitCirclePoints.Count != 0)
                 return;
 
-            Number zero = Number.GetZero();
-            Number one = Number.GetOne();
-            Number two = new Number(2.0);
-            AlgebraTerm half = AlgebraTerm.FromFraction(Number.GetOne(), new Number(2.0));
-            PowerFunction sqrt3 = new PowerFunction(new Number(3.0), half);
-            PowerFunction sqrt2 = new PowerFunction(new Number(2.0), half);
-            AlgebraTerm sqrt3Over2 = AlgebraTerm.FromFraction(sqrt3, new Number(2.0));
-            AlgebraTerm sqrt3Over3 = AlgebraTerm.FromFraction(sqrt3, new Number(3.0));
-            AlgebraTerm sqrt2Over2 = AlgebraTerm.FromFraction(sqrt2, new Number(2.0));
-            AlgebraTerm sqrt3_mul2_Over2 = AlgebraTerm.FromFraction(new AlgebraTerm(new Number(2.0), new MulOp(), sqrt3), new Number(3.0));
+            ExNumber zero = ExNumber.GetZero();
+            ExNumber one = ExNumber.GetOne();
+            ExNumber two = new ExNumber(2.0);
+            AlgebraTerm half = AlgebraTerm.FromFraction(ExNumber.GetOne(), new ExNumber(2.0));
+            PowerFunction sqrt3 = new PowerFunction(new ExNumber(3.0), half);
+            PowerFunction sqrt2 = new PowerFunction(new ExNumber(2.0), half);
+            AlgebraTerm sqrt3Over2 = AlgebraTerm.FromFraction(sqrt3, new ExNumber(2.0));
+            AlgebraTerm sqrt3Over3 = AlgebraTerm.FromFraction(sqrt3, new ExNumber(3.0));
+            AlgebraTerm sqrt2Over2 = AlgebraTerm.FromFraction(sqrt2, new ExNumber(2.0));
+            AlgebraTerm sqrt3_mul2_Over2 = AlgebraTerm.FromFraction(new AlgebraTerm(new ExNumber(2.0), new MulOp(), sqrt3), new ExNumber(3.0));
 
-            UnitCirclePoints.Add(new UnitCirclePoint(0.0, 0.0, one, zero, zero, Number.GetUndefined(), one, Number.GetUndefined()));
+            UnitCirclePoints.Add(new UnitCirclePoint(0.0, 0.0, one, zero, zero, ExNumber.GetUndefined(), one, ExNumber.GetUndefined()));
 
             UnitCirclePoints.Add(new UnitCirclePoint(1.0, 6.0, sqrt3Over2, half, sqrt3Over3, sqrt3, sqrt3_mul2_Over2, two));
             UnitCirclePoints.Add(new UnitCirclePoint(1.0, 4.0, sqrt2Over2, sqrt2Over2, one, one, sqrt2, sqrt2));
             UnitCirclePoints.Add(new UnitCirclePoint(1.0, 3.0, half, sqrt3Over2, sqrt3, sqrt3Over3, two, sqrt3_mul2_Over2));
 
-            UnitCirclePoints.Add(new UnitCirclePoint(1.0, 2.0, zero, one, Number.GetUndefined(), Number.GetZero(), Number.GetUndefined(), one));
+            UnitCirclePoints.Add(new UnitCirclePoint(1.0, 2.0, zero, one, ExNumber.GetUndefined(), ExNumber.GetZero(), ExNumber.GetUndefined(), one));
 
             UnitCirclePoints.Add(new UnitCirclePoint(2.0, 3.0, MulOp.Negate(half), sqrt3Over2, MulOp.Negate(sqrt3), MulOp.Negate(sqrt3Over3), MulOp.Negate(two), sqrt3_mul2_Over2));
             UnitCirclePoints.Add(new UnitCirclePoint(3.0, 4.0, MulOp.Negate(sqrt2Over2), sqrt2Over2, MulOp.Negate(one), MulOp.Negate(one), MulOp.Negate(sqrt2), sqrt2));
             UnitCirclePoints.Add(new UnitCirclePoint(5.0, 6.0, MulOp.Negate(sqrt3Over2), half, MulOp.Negate(sqrt3Over3), MulOp.Negate(sqrt3), MulOp.Negate(sqrt3_mul2_Over2), two));
 
-            UnitCirclePoints.Add(new UnitCirclePoint(1.0, 1.0, MulOp.Negate(one), zero, zero, Number.GetUndefined(), MulOp.Negate(one), Number.GetUndefined()));
+            UnitCirclePoints.Add(new UnitCirclePoint(1.0, 1.0, MulOp.Negate(one), zero, zero, ExNumber.GetUndefined(), MulOp.Negate(one), ExNumber.GetUndefined()));
 
             UnitCirclePoints.Add(new UnitCirclePoint(7.0, 6.0, MulOp.Negate(sqrt3Over2), MulOp.Negate(half), sqrt3Over3, sqrt3, MulOp.Negate(sqrt3_mul2_Over2), MulOp.Negate(two)));
             UnitCirclePoints.Add(new UnitCirclePoint(5.0, 4.0, MulOp.Negate(sqrt2Over2), MulOp.Negate(sqrt2Over2), one, one, MulOp.Negate(sqrt2), MulOp.Negate(sqrt2)));
             UnitCirclePoints.Add(new UnitCirclePoint(4.0, 3.0, MulOp.Negate(half), MulOp.Negate(sqrt3Over2), sqrt3, sqrt3Over3, MulOp.Negate(two), MulOp.Negate(sqrt3_mul2_Over2)));
 
-            UnitCirclePoints.Add(new UnitCirclePoint(3.0, 2.0, zero, MulOp.Negate(one), Number.GetUndefined(), zero, Number.GetUndefined(), MulOp.Negate(one)));
+            UnitCirclePoints.Add(new UnitCirclePoint(3.0, 2.0, zero, MulOp.Negate(one), ExNumber.GetUndefined(), zero, ExNumber.GetUndefined(), MulOp.Negate(one)));
 
             UnitCirclePoints.Add(new UnitCirclePoint(5.0, 3.0, half, MulOp.Negate(sqrt3Over2), MulOp.Negate(sqrt3), MulOp.Negate(sqrt3Over3), two, MulOp.Negate(sqrt3_mul2_Over2)));
             UnitCirclePoints.Add(new UnitCirclePoint(7.0, 4.0, sqrt2Over2, MulOp.Negate(sqrt2Over2), MulOp.Negate(one), MulOp.Negate(one), sqrt2, MulOp.Negate(sqrt2)));
@@ -176,9 +176,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
 
     internal class UnitCirclePoint
     {
-        public Number AngleDen;
+        public ExNumber AngleDen;
 
-        public Number AngleNum;
+        public ExNumber AngleNum;
 
         public ExComp over_X;
 
@@ -200,7 +200,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
         /// <param name="angleDen"></param>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        public UnitCirclePoint(Number angleNum, Number angleDen, ExComp x, ExComp y)
+        public UnitCirclePoint(ExNumber angleNum, ExNumber angleDen, ExComp x, ExComp y)
         {
             if (x is AlgebraTerm)
                 x = (x as AlgebraTerm).RemoveRedundancies(false);
@@ -214,8 +214,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
             Y_over_X = DivOp.StaticCombine(y.CloneEx(), x.CloneEx()).ToAlgTerm().MakeFormattingCorrect().RemoveRedundancies(false);
             X_over_Y = DivOp.StaticCombine(x.CloneEx(), y.CloneEx()).ToAlgTerm().MakeFormattingCorrect().RemoveRedundancies(false);
 
-            AlgebraTerm overXDiv = DivOp.StaticCombine(Number.GetOne(), x.CloneEx()).ToAlgTerm();
-            AlgebraTerm overYDiv = DivOp.StaticCombine(Number.GetOne(), y.CloneEx()).ToAlgTerm();
+            AlgebraTerm overXDiv = DivOp.StaticCombine(ExNumber.GetOne(), x.CloneEx()).ToAlgTerm();
+            AlgebraTerm overYDiv = DivOp.StaticCombine(ExNumber.GetOne(), y.CloneEx()).ToAlgTerm();
 
             over_X = overXDiv.MakeFormattingCorrect().RemoveRedundancies(false);
             over_Y = overYDiv.MakeFormattingCorrect().RemoveRedundancies(false);
@@ -234,8 +234,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
         /// <param name="overY"></param>
         public UnitCirclePoint(double angleNum, double angleDen, ExComp x, ExComp y, ExComp y_over_x, ExComp x_over_y, ExComp overX, ExComp overY)
         {
-            this.AngleNum = new Number(angleNum);
-            this.AngleDen = new Number(angleDen);
+            this.AngleNum = new ExNumber(angleNum);
+            this.AngleDen = new ExNumber(angleDen);
             this.over_X = overX;
             this.over_Y = overY;
             this.X = x;
@@ -245,7 +245,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
         }
 
         public UnitCirclePoint(double angleNum, double angleDen, ExComp x, ExComp y)
-            : this(new Number(angleNum), new Number(angleDen), x, y)
+            : this(new ExNumber(angleNum), new ExNumber(angleDen), x, y)
         {
         }
 
@@ -253,11 +253,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Information_Helpers
         {
             //Number nAngNum = (Number)AngleNum.Clone();
             //Number nAngDen = (Number)AngleDen.Clone();
-            Number nAngNum = AngleNum;
-            Number nAngDen = AngleDen;
+            ExNumber nAngNum = AngleNum;
+            ExNumber nAngDen = AngleDen;
 
             // Do we have the zero angle.
-            if (Number.OpEqual(nAngDen, 0.0))
+            if (ExNumber.OpEqual(nAngDen, 0.0))
                 return AngleDen;
 
             ExComp num = MulOp.StaticCombine(nAngNum, Constant.ParseConstant("pi"));

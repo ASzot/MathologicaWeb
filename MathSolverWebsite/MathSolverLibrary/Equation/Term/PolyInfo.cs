@@ -61,7 +61,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                     if (HasPower(i))
                         continue;
 
-                    TypePair<ExComp, int> newInfo = new TypePair<ExComp, int>(Number.GetZero(), i);
+                    TypePair<ExComp, int> newInfo = new TypePair<ExComp, int>(ExNumber.GetZero(), i);
                     _info.Add(newInfo);
                 }
             }
@@ -159,17 +159,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             if (GetTermCount() == 0)
                 return "0";
 
-            List<TypePair<ExComp, int>> orderedInfo = (from termInfo in _info
-                               orderby termInfo.GetData2()
-                               select termInfo).ToList();
+            List<TypePair<ExComp, int>> orderedInfo = ArrayFunc.OrderList(_info);
 
-            orderedInfo.Reverse();
+            ArrayFunc.Reverse(orderedInfo);
 
             string finalStr = "";
             for (int i = 0; i < orderedInfo.Count; ++i)
             {
                 TypePair<ExComp, int> termInfo = orderedInfo[i];
-                string addStr = (MulOp.StaticCombine(termInfo.GetData1(), PowOp.StaticCombine(_var, new Number(termInfo.GetData2())))).ToAsciiString();
+                string addStr = (MulOp.StaticCombine(termInfo.GetData1(), PowOp.StaticCombine(_var, new ExNumber(termInfo.GetData2())))).ToAsciiString();
                 if (addStr == "0")
                     addStr = "0" + _var.ToAsciiString();
                 finalStr += addStr;
@@ -183,10 +181,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
     internal class PolyInfo
     {
-        private List<TypePair<Number, int>> _info;
+        private List<TypePair<ExNumber, int>> _info;
         private AlgebraComp _var;
 
-        public List<TypePair<Number, int>> GetInfo()
+        public List<TypePair<ExNumber, int>> GetInfo()
         {
             return _info;
         }
@@ -201,7 +199,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return _var;
         }
 
-        public PolyInfo(List<TypePair<Number, int>> polyInfo, AlgebraComp var)
+        public PolyInfo(List<TypePair<ExNumber, int>> polyInfo, AlgebraComp var)
         {
             _info = polyInfo;
             _var = var;
@@ -212,7 +210,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             if (_info.Count > 1)
             {
                 int min = int.MaxValue, max = int.MinValue;
-                foreach (TypePair<Number, int> info in _info)
+                foreach (TypePair<ExNumber, int> info in _info)
                 {
                     min = Math.Min(min, info.GetData2());
                     max = Math.Max(max, info.GetData2());
@@ -224,15 +222,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                     if (HasPower(i))
                         continue;
 
-                    TypePair<Number, int> newInfo = new TypePair<Number, int>(Number.GetZero(), i);
+                    TypePair<ExNumber, int> newInfo = new TypePair<ExNumber, int>(ExNumber.GetZero(), i);
                     _info.Add(newInfo);
                 }
             }
         }
 
-        public Number GetCoeffForPow(int pow)
+        public ExNumber GetCoeffForPow(int pow)
         {
-            foreach (TypePair<Number, int> info in _info)
+            foreach (TypePair<ExNumber, int> info in _info)
             {
                 if (info.GetData2() == pow)
                     return info.GetData1();
@@ -244,7 +242,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         public int GetMaxPow()
         {
             int max = -1;
-            foreach (TypePair<Number, int> infoPair in GetInfo())
+            foreach (TypePair<ExNumber, int> infoPair in GetInfo())
             {
                 max = Math.Max(infoPair.GetData2(), max);
             }
@@ -260,7 +258,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             foreach (int pow in powers)
             {
                 bool found = false;
-                foreach (TypePair<Number, int> info in _info)
+                foreach (TypePair<ExNumber, int> info in _info)
                 {
                     if (info.GetData2() == pow)
                         found = true;
@@ -274,7 +272,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public bool HasPower(int pow)
         {
-            foreach (TypePair<Number, int> info in _info)
+            foreach (TypePair<ExNumber, int> info in _info)
             {
                 if (info.GetData2() == pow)
                     return true;

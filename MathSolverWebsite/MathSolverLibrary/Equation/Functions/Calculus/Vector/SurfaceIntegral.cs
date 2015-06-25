@@ -2,6 +2,7 @@
 using MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg;
 using MathSolverWebsite.MathSolverLibrary.Information_Helpers;
 using System.Collections.Generic;
+using MathSolverWebsite.MathSolverLibrary.LangCompat;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
 {
@@ -66,7 +67,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
         {
             CallChildren(harshEval, ref pEvalData);
 
-            int startingWorkSteps = pEvalData.GetWorkMgr().GetWorkSteps().Count;
+            int startingWorkSteps = ArrayFunc.GetCount(pEvalData.GetWorkMgr().GetWorkSteps());
             // Only the surface differential identifier was specified.
             List<FunctionDefinition> vectorFuncs = pEvalData.GetFuncDefs().GetAllVecEquations(2);
             FunctionDefinition vectorFunc = FuncDefHelper.GetMostCurrentDef(vectorFuncs, _dVar);
@@ -138,7 +139,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
             lastStep = pEvalData.GetWorkMgr().GetLast();
 
             lastStep.GoDown(ref pEvalData);
-            ExComp surfacePartial0 = Derivative.TakeDeriv(vectorDef, withRespect0, ref pEvalData, true);
+            ExComp surfacePartial0 = Derivative.TakeDeriv(vectorDef, withRespect0, ref pEvalData, true, false);
             lastStep.GoUp(ref pEvalData);
 
             lastStep.SetWorkHtml(WorkMgr.STM + "\\frac{\\partial " + vectorFuncIden + "}{\\partial " + withRespect0Str + "}=" + WorkMgr.ToDisp(surfacePartial0) + WorkMgr.EDM);
@@ -147,7 +148,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
             lastStep = pEvalData.GetWorkMgr().GetLast();
 
             lastStep.GoDown(ref pEvalData);
-            ExComp surfacePartial1 = Derivative.TakeDeriv(vectorDef, withRespect1, ref pEvalData, true);
+            ExComp surfacePartial1 = Derivative.TakeDeriv(vectorDef, withRespect1, ref pEvalData, true, false);
             lastStep.GoUp(ref pEvalData);
 
             lastStep.SetWorkHtml(WorkMgr.STM + "\\frac{\\partial " + vectorFuncIden + "}{\\partial " + withRespect1Str + "}=" + WorkMgr.ToDisp(surfacePartial1) + WorkMgr.EDM);
@@ -158,7 +159,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
 
             if (!(crossed is ExVector))
             {
-                pEvalData.GetWorkMgr().GetWorkSteps().RemoveRange(startingWorkSteps, pEvalData.GetWorkMgr().GetWorkSteps().Count - startingWorkSteps);
+                pEvalData.GetWorkMgr().GetWorkSteps().RemoveRange(startingWorkSteps, ArrayFunc.GetCount(pEvalData.GetWorkMgr().GetWorkSteps()) - startingWorkSteps);
                 return this;
             }
 
@@ -197,7 +198,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
             lastStep = pEvalData.GetWorkMgr().GetLast();
 
             lastStep.GoDown(ref pEvalData);
-            ExComp evaluated = secondIntegral.Evaluate(false, ref pEvalData);
+            ExComp evaluated = ((Integral)secondIntegral.CloneEx()).Evaluate(false, ref pEvalData);
             lastStep.GoUp(ref pEvalData);
 
             lastStep.SetWorkHtml(WorkMgr.STM + secondIntegral.FinalToDispStr() + (evaluated is Integral ? "" : "=" + WorkMgr.ToDisp(evaluated)) + WorkMgr.EDM);

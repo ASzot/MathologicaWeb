@@ -44,7 +44,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public static bool CompsRelatable(ExComp ex1, ExComp ex2)
         {
-            if (ex1 is Number && ex2 is Number)
+            if (ex1 is ExNumber && ex2 is ExNumber)
                 return true;
             if (ex1 is AlgebraComp && ex2 is AlgebraComp)
             {
@@ -92,8 +92,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         {
             if (group.Length == 1)
             {
-                if (group[0] is Number)
-                    return (group[0] as Number).FinalToDispString();
+                if (group[0] is ExNumber)
+                    return (group[0] as ExNumber).FinalToDispString();
                 if (group[0] is AlgebraTerm)
                     return (group[0] as AlgebraTerm).FinalToDispStr();
             }
@@ -164,7 +164,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public static ExComp[] ForceDistributeExponent(ExComp[] group)
         {
-            if (group.Length == 1 && group[0] is PowerFunction && !(group[0] as PowerFunction).GetPower().IsEqualTo(Number.GetNegOne()))
+            if (group.Length == 1 && group[0] is PowerFunction && !(group[0] as PowerFunction).GetPower().IsEqualTo(ExNumber.GetNegOne()))
             {
                 PowerFunction pf = group[0] as PowerFunction;
                 if (pf.GetBase() is AlgebraTerm)
@@ -197,7 +197,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 {
                     PowerFunction powFunc = groupComp as PowerFunction;
 
-                    powFunc.SetPower(Number.GetNegOne());
+                    powFunc.SetPower(ExNumber.GetNegOne());
                     if (powFunc.GetPower() is AlgebraTerm)
                         powFunc.SetPower((powFunc.GetPower() as AlgebraTerm).MakeWorkable());
                     denGroup.Add(powFunc.GetBase());
@@ -206,7 +206,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
             if (denGroup.Count == 0 && force)
             {
-                denGroup.Add(new Number(1.0));
+                denGroup.Add(new ExNumber(1.0));
             }
 
             ExComp[] denGroupArray = denGroup.ToArray();
@@ -226,14 +226,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 {
                     ExComp compareGroupComp = compareGroup[j];
 
-                    if (groupComp is Number && compareGroupComp is Number)
+                    if (groupComp is ExNumber && compareGroupComp is ExNumber)
                     {
-                        Number groupCompNum = groupComp as Number;
-                        Number comapreGroupCompNum = compareGroupComp as Number;
-                        Number gcf = Number.GCF(groupCompNum, comapreGroupCompNum);
-                        if (Number.OpEqual(gcf, groupCompNum))
+                        ExNumber groupCompNum = groupComp as ExNumber;
+                        ExNumber comapreGroupCompNum = compareGroupComp as ExNumber;
+                        ExNumber gcf = ExNumber.GCF(groupCompNum, comapreGroupCompNum);
+                        if (ExNumber.OpEqual(gcf, groupCompNum))
                         {
-                            ExComp diff = Number.OpDiv(comapreGroupCompNum, groupCompNum);
+                            ExComp diff = ExNumber.OpDiv(comapreGroupCompNum, groupCompNum);
                             factorOfList.Add(diff);
                             found = true;
                             break;
@@ -260,14 +260,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                         if (power2 is AlgebraTerm)
                             power2 = (power2 as AlgebraTerm).RemoveRedundancies(false);
 
-                        if (power1 is Number && power2 is Number)
+                        if (power1 is ExNumber && power2 is ExNumber)
                         {
-                            Number powNum1 = power1 as Number;
-                            Number powNum2 = power2 as Number;
+                            ExNumber powNum1 = power1 as ExNumber;
+                            ExNumber powNum2 = power2 as ExNumber;
 
-                            if (Number.OpLT(powNum1, powNum2))
+                            if (ExNumber.OpLT(powNum1, powNum2))
                             {
-                                factorOfList.Add(Number.OpSub(powNum2, powNum1));
+                                factorOfList.Add(ExNumber.OpSub(powNum2, powNum1));
                                 found = true;
                                 break;
                             }
@@ -276,9 +276,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                     else if (groupComp is AlgebraComp && compareGroupComp is PowerFunction)
                     {
                         PowerFunction compareGroupPowFunc = compareGroupComp as PowerFunction;
-                        if (compareGroupPowFunc.GetBase().IsEqualTo(groupComp) && compareGroupPowFunc.GetPower() is Number)
+                        if (compareGroupPowFunc.GetBase().IsEqualTo(groupComp) && compareGroupPowFunc.GetPower() is ExNumber)
                         {
-                            Number powNum = compareGroupPowFunc.GetPower() as Number;
+                            ExNumber powNum = compareGroupPowFunc.GetPower() as ExNumber;
                             factorOfList.Add(powNum);
                             found = true;
                             break;
@@ -321,7 +321,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
             if (numGroupArray.Length == 0)
             {
-                ExComp[] oneGroup = new ExComp[] { Number.GetOne() };
+                ExComp[] oneGroup = new ExComp[] { ExNumber.GetOne() };
                 return oneGroup;
             }
 
@@ -398,7 +398,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
             if (unrelatableTerms.Count == 0)
             {
-                unrelatableTerms.Add(Number.GetOne());
+                unrelatableTerms.Add(ExNumber.GetOne());
             }
 
             return unrelatableTerms.ToArray();
@@ -445,7 +445,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         {
             foreach (ExComp gpCmp in group)
             {
-                if (gpCmp is Number && Number.OpLT((gpCmp as Number), 0.0))
+                if (gpCmp is ExNumber && ExNumber.OpLT((gpCmp as ExNumber), 0.0))
                     return true;
             }
 
@@ -456,12 +456,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         {
             if (comp1.IsEqualTo(comp2))
                 return comp2;
-            if (comp1 is Number && comp2 is Number)
+            if (comp1 is ExNumber && comp2 is ExNumber)
             {
-                Number n1 = comp1 as Number;
-                Number n2 = comp2 as Number;
+                ExNumber n1 = comp1 as ExNumber;
+                ExNumber n2 = comp2 as ExNumber;
 
-                Number lcf = Number.LCF(n1, n2);
+                ExNumber lcf = ExNumber.LCF(n1, n2);
                 return lcf;
             }
             else if (comp1 is PowerFunction && comp2 is PowerFunction)
@@ -474,9 +474,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                     return pow1;
                 }
 
-                if (pow1.GetPower() is Number && pow2.GetPower() is Number)
+                if (pow1.GetPower() is ExNumber && pow2.GetPower() is ExNumber)
                 {
-                    Number max = Number.Maximum(pow1.GetPower() as Number, pow2.GetPower() as Number);
+                    ExNumber max = ExNumber.Maximum(pow1.GetPower() as ExNumber, pow2.GetPower() as ExNumber);
                     PowerFunction maxPow = new PowerFunction(pow1.GetBase(), max);
                     return maxPow;
                 }
@@ -487,13 +487,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 PowerFunction pow = comp1 is PowerFunction ? comp1 as PowerFunction : comp2 as PowerFunction;
                 AlgebraComp agComp = comp1 is AlgebraComp ? comp1 as AlgebraComp : comp2 as AlgebraComp;
 
-                if (pow.GetPower() is Number && Number.OpGT((pow.GetPower() as Number), 1.0))
+                if (pow.GetPower() is ExNumber && ExNumber.OpGT((pow.GetPower() as ExNumber), 1.0))
                     return pow;
             }
 
-            if (Number.GetOne().IsEqualTo(comp1))
+            if (ExNumber.GetOne().IsEqualTo(comp1))
                 return comp2;
-            if (Number.GetOne().IsEqualTo(comp2))
+            if (ExNumber.GetOne().IsEqualTo(comp2))
                 return comp1;
 
             Operators.MulOp mulOp = new Operators.MulOp();
@@ -531,8 +531,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             group2 = RemoveRedundancies(group2);
             List<ExComp> lcmComps = new List<ExComp>();
 
-            List<TypePair<ExComp, bool>> group2Checks = (from gpCmp in group2
-                                                         select new TypePair<ExComp, bool>(gpCmp, false)).ToList();
+            List<TypePair<ExComp, bool>> group2Checks = new List<TypePair<ExComp, bool>>();
+
+            for (int i = 0; i < group2.Length; ++i)
+                group2Checks.Add(new TypePair<ExComp, bool>(group2[i], false));
 
             foreach (ExComp group1Comp in group1)
             {
@@ -556,7 +558,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
             for (int i = 0; i < lcmComps.Count; ++i)
             {
-                if (Number.GetOne().IsEqualTo(lcmComps[i]))
+                if (ExNumber.GetOne().IsEqualTo(lcmComps[i]))
                     ArrayFunc.RemoveIndex(lcmComps, i);
             }
 
@@ -591,22 +593,22 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return corresponding;
         }
 
-        public static Number GetCoeff(ExComp[] group)
+        public static ExNumber GetCoeff(ExComp[] group)
         {
             foreach (ExComp gpCmp in group)
             {
-                if (gpCmp is Number)
-                    return gpCmp as Number;
+                if (gpCmp is ExNumber)
+                    return gpCmp as ExNumber;
             }
 
             return null;
         }
 
-        public static void AssignCoeff(ExComp[] group, Number coeff)
+        public static void AssignCoeff(ExComp[] group, ExNumber coeff)
         {
             for (int i = 0; i < group.Length; ++i)
             {
-                if (group[i] is Number)
+                if (group[i] is ExNumber)
                 {
                     group[i] = coeff;
                     break;
@@ -616,11 +618,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public static ExComp[] OrderGroup(ExComp[] group)
         {
-            List<Number> coeffs = new List<Number>();
+            List<ExNumber> coeffs = new List<ExNumber>();
             foreach (ExComp gpCmp in group)
             {
-                if (gpCmp is Number)
-                    coeffs.Add(gpCmp as Number);
+                if (gpCmp is ExNumber)
+                    coeffs.Add(gpCmp as ExNumber);
             }
             if (coeffs.Count != 0)
                 group = AlgebraTerm.RemoveCoeffs(group);
@@ -628,7 +630,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             List<Constant> constants = GetConstantTerms(group);
             group = RemoveExTerms(group, constants);
 
-            group = group.OrderBy(g => g.GetCompareVal()).Reverse().ToArray();
+            group = ArrayFunc.OrderListReverse(ArrayFunc.ToList(group)).ToArray();
             if (coeffs.Count != 0 || constants.Count > 0)
             {
                 List<ExComp> finalExList = new List<ExComp>();
@@ -726,7 +728,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             {
                 if (groupComp is AlgebraTerm && (groupComp as AlgebraTerm).IsOne())
                     continue;
-                else if (groupComp is Number && Number.OpEqual((groupComp as Number), 1.0))
+                else if (groupComp is ExNumber && ExNumber.OpEqual((groupComp as ExNumber), 1.0))
                     continue;
                 removedList.Add(groupComp);
             }
@@ -738,7 +740,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public static ExComp[] RemoveOperators(ExComp[] group)
         {
-            List<ExComp> groupList = group.ToList();
+            List<ExComp> groupList = ArrayFunc.ToList(group);
 
             for (int i = 0; i < groupList.Count; ++i)
             {
@@ -795,10 +797,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             {
                 ExComp groupComp = group[i];
                 finalStr += groupComp.ToAsciiString();
-                if ((groupComp is Number && Number.OpEqual((groupComp as Number), -1) && group.Length > 1) ||
-                    (groupComp is Number && i < group.Length - 1 && group[i + 1] is Number))
+                if ((groupComp is ExNumber && ExNumber.OpEqual((groupComp as ExNumber), -1) && group.Length > 1) ||
+                    (groupComp is ExNumber && i < group.Length - 1 && group[i + 1] is ExNumber))
                     finalStr += "*";
-                else if (groupComp is AlgebraComp || groupComp is Number)
+                else if (groupComp is AlgebraComp || groupComp is ExNumber)
                     finalStr += " ";
             }
 
@@ -812,8 +814,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             {
                 ExComp groupComp = group[i];
                 finalStr += groupComp.ToTexString();
-                if ((groupComp is Number && Number.OpEqual((groupComp as Number), -1) && group.Length > 1) ||
-                    (groupComp is Number && i < group.Length - 1 && group[i + 1] is Number))
+                if ((groupComp is ExNumber && ExNumber.OpEqual((groupComp as ExNumber), -1) && group.Length > 1) ||
+                    (groupComp is ExNumber && i < group.Length - 1 && group[i + 1] is ExNumber))
                     finalStr += "*";
                 else if (groupComp is AlgebraComp)
                     finalStr += " ";

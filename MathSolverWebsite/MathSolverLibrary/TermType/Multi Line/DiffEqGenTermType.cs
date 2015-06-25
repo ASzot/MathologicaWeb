@@ -2,6 +2,7 @@
 using MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus;
 using MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs;
 using System.Collections.Generic;
+using MathSolverWebsite.MathSolverLibrary.LangCompat;
 
 namespace MathSolverWebsite.MathSolverLibrary.TermType
 {
@@ -31,7 +32,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
             if (command.StartsWith("Solve for d"))
             {
-                command = command.Remove(0, "Solve for d".Length);
+                command = StringFunc.Rm(command, 0, "Solve for d".Length);
                 string[] tmps = command.Split('/');
 
                 // Remove the first 'd'

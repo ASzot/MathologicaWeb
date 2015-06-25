@@ -4,8 +4,6 @@ using MathSolverWebsite.MathSolverLibrary.Equation.Term;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using LexemeTable = System.Collections.Generic.List<
-MathSolverWebsite.MathSolverLibrary.TypePair<MathSolverWebsite.MathSolverLibrary.Parsing.LexemeType, string>>;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 {
@@ -25,10 +23,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 if (factorEx is PowerFunction)
                 {
                     ExComp pow = (factorEx as PowerFunction).GetPower();
-                    if (!(pow is Number) || !(pow as Number).IsRealInteger())
+                    if (!(pow is ExNumber) || !(pow as ExNumber).IsRealInteger())
                         return null;
 
-                    int iPow = (int)(pow as Number).GetRealComp();
+                    int iPow = (int)(pow as ExNumber).GetRealComp();
 
                     if (iPow < 0)
                         return null;
@@ -36,7 +34,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     ExComp baseEx = (factorEx as PowerFunction).GetBase();
                     for (int j = 1; j <= iPow; ++j)
                     {
-                        bottomFactors.Add(PowOp.StaticCombine(baseEx, new Number(j)));
+                        bottomFactors.Add(PowOp.StaticCombine(baseEx, new ExNumber(j)));
                     }
                 }
                 else
@@ -109,9 +107,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             for (int i = 0; i < pows.Count; ++i)
             {
                 ExComp pow = pows[i];
-                if (!(pow is Number) || !(pow as Number).IsRealInteger())
+                if (!(pow is ExNumber) || !(pow as ExNumber).IsRealInteger())
                     return null;
-                int powInt = (int)(pow as Number).GetRealComp();
+                int powInt = (int)(pow as ExNumber).GetRealComp();
                 iPows.Add(powInt);
             }
 
@@ -121,7 +119,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             {
                 int pow = iPows[i];
 
-                List<ExComp[]> decomVarGroups = leftTerm.GetGroupContainingTerm(PowOp.StaticCombine(dVar, new Number(pow)));
+                List<ExComp[]> decomVarGroups = leftTerm.GetGroupContainingTerm(PowOp.StaticCombine(dVar, new ExNumber(pow)));
                 AlgebraTerm[] decomVarTermsArr = new AlgebraTerm[decomVarGroups.Count];
                 for (int j = 0; j < decomVarGroups.Count; ++j)
                     decomVarTermsArr[j] =
@@ -156,7 +154,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             {
                 int pow = iPows[i];
                 ExComp coeffForPow = numPoly.GetInfo().GetCoeffForPow(pow);
-                ExComp right = coeffForPow ?? Number.GetZero();
+                ExComp right = coeffForPow ?? ExNumber.GetZero();
 
                 equations.Add(new EqSet(decomCoeffs[i], right, Parsing.LexemeType.EqualsOp));
             }
@@ -169,7 +167,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             for (int i = 0; i < usedVars.Length; ++i)
             {
-                LexemeTable lt = new LexemeTable();
+                List<TypePair<MathSolverLibrary.Parsing.LexemeType, string>> lt = new List<TypePair<MathSolverLibrary.Parsing.LexemeType, string>>();
                 for (int j = 0; j < usedVars[i].Length; ++j)
                 {
                     lt.Add(new TypePair<Parsing.LexemeType, string>(Parsing.LexemeType.Identifier, usedVars[i][j]));
@@ -179,7 +177,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 lts.Add(lt);
                 // Add nothing for the other side of the equation.
                 // It doesn't matter as they will be compounded upon solving anyways.
-                lts.Add(new LexemeTable());
+                lts.Add(new List<TypePair<MathSolverLibrary.Parsing.LexemeType, string>>());
             }
 
             SolveResult solveResult = soe.SolveEquationArray(equations, lts, allIdens, ref pEvalData);

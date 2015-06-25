@@ -15,7 +15,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
 
             ExMatrix mat = GetInnerEx() as ExMatrix;
             if (mat == null)
-                return Number.GetUndefined();
+                return ExNumber.GetUndefined();
 
             return mat.Transpose();
         }

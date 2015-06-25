@@ -44,16 +44,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             ExComp evaluated = trigFunc.Evaluate(false, ref pEvalData);
             ExComp innerEx = inverseTrigFunc.GetInnerEx();
 
-            if (Number.IsUndef(evaluated))
+            if (ExNumber.IsUndef(evaluated))
             {
-                if (inverseTrigFunc is ATanFunction && AlgebraTerm.FromFraction(Number.GetOne(), solveFor.ToAlgebraComp()).IsEqualTo(inverseTrigFunc.GetInnerEx()))
-                    return Number.GetZero();
+                if (inverseTrigFunc is ATanFunction && AlgebraTerm.FromFraction(ExNumber.GetOne(), solveFor.ToAlgebraComp()).IsEqualTo(inverseTrigFunc.GetInnerEx()))
+                    return ExNumber.GetZero();
                 else
                 {
                     pEvalData.GetWorkMgr().FromSides(innerEx, evaluated, "The " + trigFunc.GetFuncName() + " function is undefined at the angle " +
                         WorkMgr.STM + (right is AlgebraTerm ? (right as AlgebraTerm).FinalToDispStr() : right.ToAsciiString()) + WorkMgr.EDM);
 
-                    return Number.GetUndefined();
+                    return ExNumber.GetUndefined();
                 }
             }
 
@@ -118,7 +118,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             }
 
             ExComp[] rights = GetSolutionsForInverse(appliedTrigFunc, right, ref pEvalData);
-            if (rights.Length == 1 && Number.IsUndef(rights[0]))
+            if (rights.Length == 1 && ExNumber.IsUndef(rights[0]))
                 return rights[0];
 
             pEvalData.GetWorkMgr().FromFormatted("Period " + WorkMgr.STM + "={0}" + WorkMgr.EDM, "The period of " + WorkMgr.STM + "{1}" + WorkMgr.EDM + " is " + WorkMgr.STM + "{0}" + WorkMgr.EDM, period, appliedTrigFunc);
@@ -184,7 +184,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             {
                 inverseTrigFunc = new ASinFunction(inverseOf);
                 evaluated = inverseTrigFunc.Evaluate(false, ref pEvalData);
-                if (Number.IsUndef(evaluated))
+                if (ExNumber.IsUndef(evaluated))
                 {
                     pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "\\text{Undefined}" + WorkMgr.EDM, WorkMgr.STM + "arcsin" + WorkMgr.EDM + " is undefined at " + WorkMgr.STM + "{0}" + WorkMgr.EDM, inverseOf);
 
@@ -201,7 +201,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 inverseTrigFunc = new ACosFunction(inverseOf);
                 evaluated = inverseTrigFunc.Evaluate(false, ref pEvalData);
 
-                if (Number.IsUndef(evaluated))
+                if (ExNumber.IsUndef(evaluated))
                 {
                     pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "\\text{Undefined}" + WorkMgr.EDM, WorkMgr.STM + "arccos" + WorkMgr.EDM + " is undefined at " + WorkMgr.STM + "{0}" + WorkMgr.EDM, inverseOf);
 
@@ -226,7 +226,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 inverseTrigFunc = new ACscFunction(inverseOf);
                 evaluated = inverseTrigFunc.Evaluate(false, ref pEvalData);
 
-                if (Number.IsUndef(evaluated))
+                if (ExNumber.IsUndef(evaluated))
                 {
                     pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "\\text{Undefined}" + WorkMgr.EDM, WorkMgr.STM + "arccsc" + WorkMgr.EDM + " is undefined at " + WorkMgr.STM + "{0}" + WorkMgr.EDM, inverseOf);
 
@@ -243,7 +243,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 inverseTrigFunc = new ASecFunction(inverseOf);
                 evaluated = inverseTrigFunc.Evaluate(false, ref pEvalData);
 
-                if (Number.IsUndef(evaluated))
+                if (ExNumber.IsUndef(evaluated))
                 {
                     pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "\\text{Undefined}" + WorkMgr.EDM, WorkMgr.STM + "arcsec" + WorkMgr.EDM + " is undefined at " + WorkMgr.STM + "{0}" + WorkMgr.EDM, inverseOf);
 
@@ -271,7 +271,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             SimpleFraction simpFrac = new SimpleFraction();
             if (pEvalData.GetUseRad() && simpFrac.Init(otherAngle.ToAlgTerm()))
             {
-                Number nNum, nDen;
+                ExNumber nNum, nDen;
                 if (simpFrac.IsSimpleUnitCircleAngle(out nNum, out nDen, true))
                 {
                     ExComp numEx = MulOp.StaticCombine(nNum, Constant.GetPi());
@@ -313,20 +313,20 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             ExComp subIn = null;
             if (simplifyTo is SinFunction)
             {
-                subOut = new PowerFunction(new CosFunction(simplifyTo.GetInnerEx()), new Number(2.0));
-                subIn = new AlgebraTerm(Number.GetOne(), new AddOp(), Number.GetNegOne(), new MulOp(), new PowerFunction(simplifyTo, new Number(2.0)));
+                subOut = new PowerFunction(new CosFunction(simplifyTo.GetInnerEx()), new ExNumber(2.0));
+                subIn = new AlgebraTerm(ExNumber.GetOne(), new AddOp(), ExNumber.GetNegOne(), new MulOp(), new PowerFunction(simplifyTo, new ExNumber(2.0)));
             }
             else if (simplifyTo is CosFunction)
             {
-                subOut = new PowerFunction(new SinFunction(simplifyTo.GetInnerEx()), new Number(2.0));
-                subIn = new AlgebraTerm(Number.GetOne(), new AddOp(), Number.GetNegOne(), new MulOp(), new PowerFunction(simplifyTo, new Number(2.0)));
+                subOut = new PowerFunction(new SinFunction(simplifyTo.GetInnerEx()), new ExNumber(2.0));
+                subIn = new AlgebraTerm(ExNumber.GetOne(), new AddOp(), ExNumber.GetNegOne(), new MulOp(), new PowerFunction(simplifyTo, new ExNumber(2.0)));
             }
 
             if (subOut != null && subIn != null)
             {
                 success = false;
                 AlgebraTerm subbedTerm = term.Substitute(subOut, subIn, ref success);
-                if (success && pEvalData.GetWorkMgr().AllowWork)
+                if (success && pEvalData.GetWorkMgr().GetAllowWork())
                 {
                     pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + subbedTerm.FinalToDispStr() + WorkMgr.EDM,
                         "Make the substitution " + WorkMgr.STM + subOut.FinalToDispStr() + "=" + WorkMgr.ToDisp(subIn) + WorkMgr.EDM +
@@ -354,12 +354,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             if (gcf != null)
             {
                 AlgebraTerm gcfTerm = GroupHelper.ToAlgNoRedunTerm(gcf);
-                if (!Number.GetZero().IsEqualTo(gcfTerm) && !Number.GetOne().IsEqualTo(gcfTerm) && gcfTerm.Contains(solveForComp))
+                if (!ExNumber.GetZero().IsEqualTo(gcfTerm) && !ExNumber.GetOne().IsEqualTo(gcfTerm) && gcfTerm.Contains(solveForComp))
                 {
                     AlgebraTerm otherFactor = DivOp.StaticCombine(overallTerm, gcfTerm).ToAlgTerm();
                     if (otherFactor.Contains(solveForComp) && gcfTerm.Contains(solveForComp))
                     {
-                        pEvalData.GetWorkMgr().FromSides(MulOp.StaticWeakCombine(gcfTerm, otherFactor), Number.GetZero(), "Factor " +
+                        pEvalData.GetWorkMgr().FromSides(MulOp.StaticWeakCombine(gcfTerm, otherFactor), ExNumber.GetZero(), "Factor " +
                             WorkMgr.STM + gcfTerm.FinalToDispStr() + WorkMgr.EDM + " from the expression. Solve for each factor as it equals.");
                         FactorSolve factorSolve = new FactorSolve(p_agSolver);
                         return factorSolve.SolveEquationFactors(solveFor, ref pEvalData, gcfTerm, otherFactor);
@@ -405,7 +405,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                     AlgebraTerm gpTerm0 = GroupHelper.ToAlgTerm(groups[0]);
                     AlgebraTerm gpTerm1 = GroupHelper.ToAlgTerm(groups[1]);
 
-                    if (pEvalData.GetWorkMgr().AllowWork)
+                    if (pEvalData.GetWorkMgr().GetAllowWork())
                     {
                         string divisor = minTrigFunc.FinalToDispStr();
                         pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "(" + gpTerm0.FinalToDispStr() + "+" + gpTerm1.FinalToDispStr() + ")/(" +
@@ -422,9 +422,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                     overallTerm = overallTerm.ApplyOrderOfOperations();
                     overallTerm = overallTerm.MakeWorkable().ToAlgTerm();
 
-                    pEvalData.GetWorkMgr().FromSides(overallTerm, Number.GetZero(), "Simplify.");
+                    pEvalData.GetWorkMgr().FromSides(overallTerm, ExNumber.GetZero(), "Simplify.");
 
-                    return p_agSolver.SolveEq(solveFor, overallTerm.ToAlgTerm(), Number.GetZero().ToAlgTerm(), ref pEvalData);
+                    return p_agSolver.SolveEq(solveFor, overallTerm.ToAlgTerm(), ExNumber.GetZero().ToAlgTerm(), ref pEvalData);
                 }
             }
 
@@ -440,9 +440,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 {
                     overallTerm = overallTerm.ApplyOrderOfOperations();
                     ExComp overallEx = overallTerm.MakeWorkable();
-                    if (pEvalData.GetWorkMgr().AllowWork)
+                    if (pEvalData.GetWorkMgr().GetAllowWork())
                         pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + overallTerm.FinalToDispStr() + "=0" + WorkMgr.EDM, "Simplify.");
-                    return p_agSolver.SolveEq(solveFor, overallTerm.ToAlgTerm(), Number.GetZero().ToAlgTerm(), ref pEvalData);
+                    return p_agSolver.SolveEq(solveFor, overallTerm.ToAlgTerm(), ExNumber.GetZero().ToAlgTerm(), ref pEvalData);
                 }
             }
 

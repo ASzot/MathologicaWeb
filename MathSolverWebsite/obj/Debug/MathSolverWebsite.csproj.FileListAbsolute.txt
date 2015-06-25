@@ -589,7 +589,6 @@ C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\bin
 C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\obj\Debug\MathSolverWebsite.csprojResolveAssemblyReference.cache
 C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\obj\Debug\MathSolverWebsite.dll
 C:\Users\Andrew\Documents\Projects\Mathologica\MainWebsite\MathSolverWebsite\obj\Debug\MathSolverWebsite.pdb
-C:\Users\Andrew\Desktop\Mathologica\mathologica-web\MathSolverWebsite\obj\Debug\MathSolverWebsite.csprojResolveAssemblyReference.cache
 C:\Users\Andrew\Desktop\Mathologica\mathologica-web\MathSolverWebsite\bin\MathSolverWebsite.dll
 C:\Users\Andrew\Desktop\Mathologica\mathologica-web\MathSolverWebsite\bin\MathSolverWebsite.pdb
 C:\Users\Andrew\Desktop\Mathologica\mathologica-web\MathSolverWebsite\bin\Antlr3.Runtime.dll
@@ -917,3 +916,4 @@ C:\Users\728812\Desktop\mathologica-web\MathSolverWebsite\bin\zh-Hant\System.Spa
 C:\Users\728812\Desktop\mathologica-web\MathSolverWebsite\obj\Debug\MathSolverWebsite.csprojResolveAssemblyReference.cache
 C:\Users\728812\Desktop\mathologica-web\MathSolverWebsite\obj\Debug\MathSolverWebsite.dll
 C:\Users\728812\Desktop\mathologica-web\MathSolverWebsite\obj\Debug\MathSolverWebsite.pdb
+C:\Users\Andrew\Desktop\Mathologica\mathologica-web\MathSolverWebsite\obj\Debug\MathSolverWebsite.csprojResolveAssemblyReference.cache

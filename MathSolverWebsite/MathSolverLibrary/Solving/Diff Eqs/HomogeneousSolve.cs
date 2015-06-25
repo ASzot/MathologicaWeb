@@ -57,10 +57,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
 
             foreach (ExComp xPow in xNumPowers)
             {
-                if (!(xPow is Number) || !(xPow as Number).IsRealInteger())
+                if (!(xPow is ExNumber) || !(xPow as ExNumber).IsRealInteger())
                     return null;
 
-                int iPow = (int)(xPow as Number).GetRealComp();
+                int iPow = (int)(xPow as ExNumber).GetRealComp();
                 if (iPow < 1.0)
                     return null;
 
@@ -69,10 +69,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
 
             foreach (ExComp yPow in yNumPowers)
             {
-                if (!(yPow is Number) || !(yPow as Number).IsRealInteger())
+                if (!(yPow is ExNumber) || !(yPow as ExNumber).IsRealInteger())
                     return null;
 
-                int iPow = (int)(yPow as Number).GetRealComp();
+                int iPow = (int)(yPow as ExNumber).GetRealComp();
                 if (iPow < 1.0)
                     return null;
 
@@ -183,11 +183,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
                     return null;
                 powDiff = Math.Abs(powDiff);
 
-                ExComp vSubIn = PowOp.StaticCombine(subInVar, new Number(Math.Min(numPowAndIndex[0], denPowAndIndex[0])));
+                ExComp vSubIn = PowOp.StaticCombine(subInVar, new ExNumber(Math.Min(numPowAndIndex[0], denPowAndIndex[0])));
 
                 if (powDiff != 0)
                 {
-                    num[numPowAndIndex[1]] = PowOp.StaticCombine(funcVar, new Number(powDiff));
+                    num[numPowAndIndex[1]] = PowOp.StaticCombine(funcVar, new ExNumber(powDiff));
                     ExComp[] tmpNum = new ExComp[num.Length + 1];
                     for (int j = 0; j < tmpNum.Length; ++j)
                         tmpNum[j] = num[j];
@@ -207,7 +207,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
                 }
 
                 if (den.Length != 0)
-                    gps[i][gps[i].Length - 1] = new PowerFunction(GroupHelper.ToAlgTerm(den), Number.GetNegOne());
+                    gps[i][gps[i].Length - 1] = new PowerFunction(GroupHelper.ToAlgTerm(den), ExNumber.GetNegOne());
             }
 
             return new AlgebraTerm(gps.ToArray());
@@ -234,10 +234,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
                         continue;
 
                     ExComp power = (gp[j] as PowerFunction).GetPower();
-                    if (!(power is Number) || !(power as Number).IsRealInteger())
+                    if (!(power is ExNumber) || !(power as ExNumber).IsRealInteger())
                         continue;
 
-                    pow = (int)(power as Number).GetRealComp();
+                    pow = (int)(power as ExNumber).GetRealComp();
                     if (pow < 1.0)
                         continue;
 

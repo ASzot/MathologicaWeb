@@ -166,11 +166,11 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             }
             else if (command.StartsWith("Implicit differentiation "))
             {
-                string differential = command.Remove(0, "Implicit differentiation ".Length);
+                string differential = StringFunc.Rm(command, 0, "Implicit differentiation ".Length);
                 string[] split = differential.Split('/');
 
-                split[0] = split[0].Remove(0, 1);
-                split[1] = split[1].Remove(0, 1);
+                split[0] = StringFunc.Rm(split[0], 0, 1);
+                split[1] = StringFunc.Rm(split[1], 0, 1);
 
                 SolveResult result = _eqSet.ImplicitDifferentiation(split[0], split[1], _agSolver, ref pEvalData);
                 result.RemoveUndefinedSolutions();

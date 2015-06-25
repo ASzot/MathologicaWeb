@@ -137,7 +137,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 tt_simp = new SimplifyGenTermType(left != null ? left : right);
             }
 
-            _ttSolveGen = new SolveGenTermType(new EqSet(overall, Number.GetZero(), LexemeType.EqualsOp), lexemeTable, solveVars,
+            _ttSolveGen = new SolveGenTermType(new EqSet(overall, ExNumber.GetZero(), LexemeType.EqualsOp), lexemeTable, solveVars,
                 probSolveVar, promptStr);
 
             int groupCount = overall.GetGroupCount();
@@ -157,7 +157,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
             foreach (ExComp varCoeff in variableCoeffs)
             {
-                if (!varGroupList.Remove(varCoeff) && !Number.GetOne().IsEqualTo(varCoeff))
+                if (!varGroupList.Remove(varCoeff) && !ExNumber.GetOne().IsEqualTo(varCoeff))
                     return false;
             }
 
@@ -174,7 +174,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             _trigFunc = singleGpCmp as TrigFunction;
 
             List<AlgebraGroup> innerConstantTerms = _trigFunc.GetInnerTerm().GetGroupsConstantTo(solveForComp);
-            _phaseShift = Number.GetZero();
+            _phaseShift = ExNumber.GetZero();
             foreach (AlgebraGroup innerConstantTerm in innerConstantTerms)
                 _phaseShift = AddOp.StaticCombine(_phaseShift, innerConstantTerm.ToTerm()).ToAlgTerm();
 

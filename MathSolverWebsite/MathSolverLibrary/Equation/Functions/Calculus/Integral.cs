@@ -216,8 +216,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (innerEx is AlgebraTerm)
                 innerEx = (innerEx as AlgebraTerm).RemoveRedundancies(false);
 
-            if (Number.IsUndef(innerEx))
-                return Number.GetUndefined();
+            if (ExNumber.IsUndef(innerEx))
+                return ExNumber.GetUndefined();
 
             if (innerEx is ExVector && !GetIsDefinite())
             {
@@ -238,7 +238,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             else if (innerEx is ExMatrix)
             {
                 // Don't know if this works.
-                return Number.GetUndefined();
+                return ExNumber.GetUndefined();
             }
 
             string integralStr = FinalToDispStr();
@@ -246,12 +246,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             ExComp useUpper;
             ExComp useLower;
 
-            if (GetUpperLimit() is Number && (GetUpperLimit() as Number).IsInfinity())
+            if (GetUpperLimit() is ExNumber && (GetUpperLimit() as ExNumber).IsInfinity())
                 useUpper = new AlgebraComp("$n");
             else
                 useUpper = GetUpperLimit();
 
-            if (GetLowerLimit() is Number && (GetLowerLimit() as Number).IsInfinity())
+            if (GetLowerLimit() is ExNumber && (GetLowerLimit() as ExNumber).IsInfinity())
                 useLower = new AlgebraComp("$n");
             else
                 useLower = GetLowerLimit();
@@ -260,8 +260,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             {
                 // Evaluating from infinity in both directions.
                 // Split the integral up.
-                Integral upperInt = Integral.ConstructIntegral(GetInnerTerm(), _dVar, Number.GetZero(), Number.GetPosInfinity(), false, true);
-                Integral lowerInt = Integral.ConstructIntegral(GetInnerTerm(), _dVar, Number.GetNegInfinity(), Number.GetZero(), false, true);
+                Integral upperInt = Integral.ConstructIntegral(GetInnerTerm(), _dVar, ExNumber.GetZero(), ExNumber.GetPosInfinity(), false, true);
+                Integral lowerInt = Integral.ConstructIntegral(GetInnerTerm(), _dVar, ExNumber.GetNegInfinity(), ExNumber.GetZero(), false, true);
                 pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + integralStr + "=" + upperInt.FinalToDispStr() + "+" +
                     lowerInt.FinalToDispStr() + WorkMgr.EDM,
                     "Split the integral.");
@@ -323,12 +323,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (!useUpper.IsEqualTo(GetUpperLimit()))
             {
                 subVar = useUpper as AlgebraComp;
-                limVal = Number.GetPosInfinity();
+                limVal = ExNumber.GetPosInfinity();
             }
             else if (!useLower.IsEqualTo(GetLowerLimit()))
             {
                 subVar = useLower as AlgebraComp;
-                limVal = Number.GetNegInfinity();
+                limVal = ExNumber.GetNegInfinity();
             }
 
             integralStr = "\\int_{" + WorkMgr.ToDisp(useLower) + "}^{" + WorkMgr.ToDisp(useUpper) + "}(" + GetInnerTerm().FinalToDispStr() + ")d" + _dVar.ToDispString();
@@ -360,7 +360,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             {
                 pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "\\lim_{" + subVar.ToDispString() + " \\to \\infty}" +
                     WorkMgr.ToDisp(result) + WorkMgr.EDM, "Take the limit to infinity.");
-                result = Limit.TakeLim(result, subVar, limVal, ref pEvalData);
+                result = Limit.TakeLim(result, subVar, limVal, ref pEvalData, 0);
             }
 
             pEvalData.AddInputType(TermType.InputAddType.IntDef);
@@ -421,7 +421,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     last.GoDown(ref pEvalData);
                 }
 
-                ExComp aderiv = AntiDerivativeHelper.TakeAntiDerivativeGp(gps[i], _dVar, ref integrationInfo, ref pEvalData);
+                ExComp aderiv = AntiDerivativeHelper.TakeAntiDerivativeGp(gps[i], _dVar, ref integrationInfo, ref pEvalData, "", "");
 
                 if (gps.Count > 1)
                     last.GoUp(ref pEvalData);

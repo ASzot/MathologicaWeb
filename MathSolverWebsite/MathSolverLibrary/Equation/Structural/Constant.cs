@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Linq;
+using DotNetOpenAuth.OpenId.Extensions.SimpleRegistration;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation
 {
     internal class Constant : AlgebraComp
     {
         private static Constant[] _definedConstants =
+            new Constant[]
         {
             new Constant("e", Math.E),
             new Constant("pi", Math.PI),
@@ -25,12 +27,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public static AlgebraTerm GetTwoPi()
         {
-            return new AlgebraTerm(new Number(2.0), new Operators.MulOp(), GetPi());
+            return new AlgebraTerm(new ExNumber(2.0), new Operators.MulOp(), GetPi());
         }
 
-        public Number GetValue()
+        public ExNumber GetValue()
         {
-            return new Number(d_value);
+            return new ExNumber(d_value);
         }
 
         public Constant(string iden, double value)

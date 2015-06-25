@@ -24,7 +24,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
                 return SubOp.StaticCombine(MulOp.StaticCombine(a, d), MulOp.StaticCombine(b, c));
             }
 
-            ExComp total = Number.GetZero();
+            ExComp total = ExNumber.GetZero();
             for (int i = 0; i < mat.GetCols(); ++i)
             {
                 ExComp factor = mat.Get(0, i);
@@ -47,7 +47,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
             if (mat == null || !mat.GetIsSquare())
             {
                 pEvalData.AddMsg("Only the deteriment of square matrices can be taken");
-                return Number.GetUndefined();
+                return ExNumber.GetUndefined();
             }
 
             if (mat.GetRows() > MAX_DET_DIMEN)

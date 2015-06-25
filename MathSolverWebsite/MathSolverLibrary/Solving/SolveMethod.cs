@@ -89,10 +89,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             right = right.RemoveZeros().RemoveRedundancies(false).ToAlgTerm();
 
             if (right.GetTermCount() == 0)
-                right = Number.GetZero().ToAlgTerm();
+                right = ExNumber.GetZero().ToAlgTerm();
 
             if (left.GetTermCount() == 0)
-                left = Number.GetZero().ToAlgTerm();
+                left = ExNumber.GetZero().ToAlgTerm();
 
             if (displaySimpStep)
                 pEvalData.GetWorkMgr().FromSides(left, right, "Simplify");
@@ -112,7 +112,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
         public static void DivideByVariableCoeffs(ref AlgebraTerm left, ref AlgebraTerm right, AlgebraComp solveForComp, ref EvalData pEvalData, bool strongDivide)
         {
             if (right.GetSubComps().Count == 0)
-                right.Add(Number.GetZero());
+                right.Add(ExNumber.GetZero());
             if (left.GetTermCount() != 1)
             {
                 List<ExComp[]> groups = left.GetGroupsNoOps();
@@ -145,7 +145,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                     factoredOutUnrelatedTerm = factoredOutUnrelatedTerm.RemoveRedundancies(false).ToAlgTerm();
                     foreach (ExComp subComp in factoredOutUnrelatedTerm.GetSubComps())
                     {
-                        if (Number.GetNegOne().IsEqualTo(subComp) || (subComp is Number && !(subComp as Number).HasImaginaryComp() && Number.OpLT((subComp as Number), 0.0)))
+                        if (ExNumber.GetNegOne().IsEqualTo(subComp) || (subComp is ExNumber && !(subComp as ExNumber).HasImaginaryComp() && ExNumber.OpLT((subComp as ExNumber), 0.0)))
                         {
                             pEvalData.SetNegDivCount(pEvalData.GetNegDivCount() + 1);
                             break;
@@ -153,7 +153,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                     }
                 }
 
-                if (pEvalData.GetWorkMgr().AllowWork)
+                if (pEvalData.GetWorkMgr().GetAllowWork())
                 {
                     if (displayFactoringWork)
                     {
@@ -234,13 +234,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             if (left != null)
             {
                 if (left.GetTermCount() == 0)
-                    left.Add(Number.GetZero());
+                    left.Add(ExNumber.GetZero());
                 left = left.ApplyOrderOfOperations();
             }
             if (right != null)
             {
                 if (right.GetTermCount() == 0)
-                    right.Add(Number.GetZero());
+                    right.Add(ExNumber.GetZero());
                 right = right.ApplyOrderOfOperations();
             }
 
@@ -304,7 +304,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             right = right.RemoveZeros();
 
             if (right.GetTermCount() == 0)
-                right = Number.GetZero().ToAlgTerm();
+                right = ExNumber.GetZero().ToAlgTerm();
 
             if (variableGroupsRight.Count != 0)
                 pEvalData.GetWorkMgr().FromSides(left, right, "Simplify");

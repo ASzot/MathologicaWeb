@@ -11,16 +11,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
         public static ExComp MakePositive(ExComp ex)
         {
-            if (ex is Number)
-                return Number.Abs(ex as Number);
+            if (ex is ExNumber)
+                return ExNumber.Abs(ex as ExNumber);
             else if (ex is AlgebraTerm)
             {
                 AlgebraTerm term = ex as AlgebraTerm;
                 for (int i = 0; i < term.GetTermCount(); ++i)
                 {
-                    if (term[i] is Number)
+                    if (term[i] is ExNumber)
                     {
-                        term[i] = Number.Abs(term[i] as Number);
+                        term[i] = ExNumber.Abs(term[i] as ExNumber);
                     }
                     if (term[i] is AlgebraTerm)
                     {
@@ -38,9 +38,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         {
             for (int i = 0; i < group.Length; ++i)
             {
-                if (group[i] is Number && Number.OpLT((group[i] as Number), 0.0))
+                if (group[i] is ExNumber && ExNumber.OpLT((group[i] as ExNumber), 0.0))
                 {
-                    group[i] = Number.OpMul((group[i] as Number), -1.0);
+                    group[i] = ExNumber.OpMul((group[i] as ExNumber), -1.0);
                 }
             }
 
@@ -53,11 +53,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
             ExComp innerEx = GetInnerEx();
 
-            if (Number.IsUndef(innerEx))
-                return Number.GetUndefined();
-            if (innerEx is Number)
+            if (ExNumber.IsUndef(innerEx))
+                return ExNumber.GetUndefined();
+            if (innerEx is ExNumber)
             {
-                Number absInner = Number.Abs(innerEx as Number);
+                ExNumber absInner = ExNumber.Abs(innerEx as ExNumber);
                 return absInner;
             }
             else if (innerEx is Equation.Structural.LinearAlg.ExVector)
@@ -72,10 +72,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
                 if (groups.Count == 1)
                 {
                     ExComp[] gp = groups[0];
-                    Number coeff = GroupHelper.GetCoeff(gp);
+                    ExNumber coeff = GroupHelper.GetCoeff(gp);
                     if (coeff != null)
                     {
-                        coeff = Number.Abs(coeff);
+                        coeff = ExNumber.Abs(coeff);
                         GroupHelper.AssignCoeff(gp, coeff);
                         return new AbsValFunction(GroupHelper.ToAlgTerm(gp));
                     }
@@ -106,7 +106,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
         public override string ToString()
         {
             return ToTexString();
-            return "AbVl(" + base.ToString() + ")";
         }
 
         public override string ToTexString()

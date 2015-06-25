@@ -342,7 +342,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
                     if (!leftEx.IsEqualTo(rightEx))
                     {
-                        return SolveResult.Simplified(Number.GetUndefined());
+                        return SolveResult.Simplified(ExNumber.GetUndefined());
                     }
                 }
 
@@ -368,7 +368,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                     solveResult = tmpResult;
                 else if (!solveResult.IsEqualTo(tmpResult))
                 {
-                    return SolveResult.Solved(solveForVar, Number.GetUndefined(), ref pEvalData);
+                    return SolveResult.Solved(solveForVar, ExNumber.GetUndefined(), ref pEvalData);
                 }
             }
 
@@ -383,7 +383,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
             if (command.StartsWith("Solve for ") && _eqSets != null)
             {
-                string solveForStr = command.Remove(0, "Solve for ".Length);
+                string solveForStr = StringFunc.Rm(command, 0, "Solve for ".Length);
                 return SolveVectorEquation(solveForStr, ref pEvalData);
             }
             else if (command.StartsWith(GAUSSIAN_SOLVE))

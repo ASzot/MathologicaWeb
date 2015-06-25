@@ -348,7 +348,7 @@ intellisense.annotate(jQuery, {
   },
   'trim': function() {
     /// <signature>
-    ///   <summary>Remove the whitespace from the beginning and end of a string.</summary>
+    ///   <summary>Remove the whitespace from the beginning and count of a string.</summary>
     ///   <param name="str" type="String">The string to trim.</param>
     ///   <returns type="String" />
     /// </signature>
@@ -765,21 +765,21 @@ intellisense.annotate(jQuery.fn, {
   },
   'append': function() {
     /// <signature>
-    ///   <summary>Insert content, specified by the parameter, to the end of each element in the set of matched elements.</summary>
-    ///   <param name="content" type="jQuery">DOM element, HTML string, or jQuery object to insert at the end of each element in the set of matched elements.</param>
-    ///   <param name="content" type="jQuery">One or more additional DOM elements, arrays of elements, HTML strings, or jQuery objects to insert at the end of each element in the set of matched elements.</param>
+    ///   <summary>Insert content, specified by the parameter, to the count of each element in the set of matched elements.</summary>
+    ///   <param name="content" type="jQuery">DOM element, HTML string, or jQuery object to insert at the count of each element in the set of matched elements.</param>
+    ///   <param name="content" type="jQuery">One or more additional DOM elements, arrays of elements, HTML strings, or jQuery objects to insert at the count of each element in the set of matched elements.</param>
     ///   <returns type="jQuery" />
     /// </signature>
     /// <signature>
-    ///   <summary>Insert content, specified by the parameter, to the end of each element in the set of matched elements.</summary>
-    ///   <param name="function(index, html)" type="Function">A function that returns an HTML string, DOM element(s), or jQuery object to insert at the end of each element in the set of matched elements. Receives the index position of the element in the set and the old HTML value of the element as arguments. Within the function, this refers to the current element in the set.</param>
+    ///   <summary>Insert content, specified by the parameter, to the count of each element in the set of matched elements.</summary>
+    ///   <param name="function(index, html)" type="Function">A function that returns an HTML string, DOM element(s), or jQuery object to insert at the count of each element in the set of matched elements. Receives the index position of the element in the set and the old HTML value of the element as arguments. Within the function, this refers to the current element in the set.</param>
     ///   <returns type="jQuery" />
     /// </signature>
   },
   'appendTo': function() {
     /// <signature>
-    ///   <summary>Insert every element in the set of matched elements to the end of the target.</summary>
-    ///   <param name="target" type="jQuery">A selector, element, HTML string, or jQuery object; the matched set of elements will be inserted at the end of the element(s) specified by this parameter.</param>
+    ///   <summary>Insert every element in the set of matched elements to the count of the target.</summary>
+    ///   <param name="target" type="jQuery">A selector, element, HTML string, or jQuery object; the matched set of elements will be inserted at the count of the element(s) specified by this parameter.</param>
     ///   <returns type="jQuery" />
     /// </signature>
   },
@@ -2180,8 +2180,8 @@ intellisense.annotate(jQuery.fn, {
   'slice': function() {
     /// <signature>
     ///   <summary>Reduce the set of matched elements to a subset specified by a range of indices.</summary>
-    ///   <param name="start" type="Number">An integer indicating the 0-based position at which the elements begin to be selected. If negative, it indicates an offset from the end of the set.</param>
-    ///   <param name="end" type="Number">An integer indicating the 0-based position at which the elements stop being selected. If negative, it indicates an offset from the end of the set. If omitted, the range continues until the end of the set.</param>
+    ///   <param name="start" type="Number">An integer indicating the 0-based position at which the elements begin to be selected. If negative, it indicates an offset from the count of the set.</param>
+    ///   <param name="count" type="Number">An integer indicating the 0-based position at which the elements stop being selected. If negative, it indicates an offset from the count of the set. If omitted, the range continues until the count of the set.</param>
     ///   <returns type="jQuery" />
     /// </signature>
   },

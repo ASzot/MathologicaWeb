@@ -7,23 +7,23 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 {
     partial class AlgebraTerm
     {
-        public static Number GetCoeffTerm(ExComp[] group)
+        public static ExNumber GetCoeffTerm(ExComp[] group)
         {
             foreach (ExComp comp in group)
             {
-                if (comp is Number)
-                    return comp as Number;
+                if (comp is ExNumber)
+                    return comp as ExNumber;
             }
 
             return null;
         }
 
-        public static Number GetCoeffTerm(List<ExComp> comps)
+        public static ExNumber GetCoeffTerm(List<ExComp> comps)
         {
             foreach (ExComp comp in comps)
             {
-                if (comp is Number)
-                    return comp as Number;
+                if (comp is ExNumber)
+                    return comp as ExNumber;
             }
             return null;
         }
@@ -150,7 +150,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
             if (GetTermCount() == 1)
             {
-                return Number.GetOne();
+                return ExNumber.GetOne();
             }
 
             List<ExComp[]> groups = GetGroupsNoOps();
@@ -173,11 +173,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             return unrelatedTerm;
         }
 
-        public virtual List<Number> GetCoeffs()
+        public virtual List<ExNumber> GetCoeffs()
         {
             List<ExComp[]> groups = GetGroups();
 
-            List<Number> coeffsList = new List<Number>();
+            List<ExNumber> coeffsList = new List<ExNumber>();
             for (int i = 0; i < groups.Count; ++i)
                 coeffsList.Add(GetCoeffTerm(groups[i]));
 
@@ -206,7 +206,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                         ExComp varForEx = varFor.IsEqualTo(gpc0) ? gpc0 : gpc1;
                         ExComp otherEx = varFor.IsEqualTo(gpc0) ? gpc1 : gpc0;
 
-                        if (otherEx is Number && Number.GetNegOne().IsEqualTo(otherEx))
+                        if (otherEx is ExNumber && ExNumber.GetNegOne().IsEqualTo(otherEx))
                         {
                             complexity += 1;
                             continue;
@@ -268,7 +268,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                     return null;
 
                 AlgebraComp variable = null;
-                ExComp coeff = new Number(1.0);
+                ExComp coeff = new ExNumber(1.0);
                 int pow = -1;
                 foreach (ExComp groupComp in group)
                 {
@@ -282,17 +282,17 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                     else if (groupComp is PowerFunction)
                     {
                         PowerFunction powFunc = groupComp as PowerFunction;
-                        if (!(powFunc.GetPower() is Number))
+                        if (!(powFunc.GetPower() is ExNumber))
                             return null;
-                        Number powNum = powFunc.GetPower() as Number;
+                        ExNumber powNum = powFunc.GetPower() as ExNumber;
                         if (!powNum.IsRealInteger())
                             return null;
 
                         if (-1 == (int)powNum.GetRealComp())
                         {
-                            if (!(powFunc.GetBase() is Number))
+                            if (!(powFunc.GetBase() is ExNumber))
                                 return null;
-                            coeff = Operators.MulOp.StaticCombine(coeff, Number.OpDiv(Number.GetOne(), (powFunc.GetBase() as Number)));
+                            coeff = Operators.MulOp.StaticCombine(coeff, ExNumber.OpDiv(ExNumber.GetOne(), (powFunc.GetBase() as ExNumber)));
                         }
                         else
                         {
@@ -308,9 +308,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                             pow = (int)powNum.GetRealComp();
                         }
                     }
-                    else if (groupComp is Number)
+                    else if (groupComp is ExNumber)
                     {
-                        coeff = Operators.MulOp.StaticCombine(coeff, (groupComp as Number));
+                        coeff = Operators.MulOp.StaticCombine(coeff, (groupComp as ExNumber));
                     }
                     else
                         return null;
@@ -322,7 +322,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 if (variable != null && (variable == null || !variable.IsEqualTo(polyVar)))
                     return null;
                 if (coeff == null)
-                    coeff = new Number(1.0);
+                    coeff = new ExNumber(1.0);
                 if (pow == -1)
                     pow = 0;
 
@@ -339,7 +339,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             if (groups.Count == 0)
                 return null;
 
-            List<TypePair<Number, int>> polyInfo = new List<TypePair<Number, int>>();
+            List<TypePair<ExNumber, int>> polyInfo = new List<TypePair<ExNumber, int>>();
 
             AlgebraComp polyVar = null;
             foreach (ExComp[] group in groups)
@@ -348,7 +348,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                     return null;
 
                 AlgebraComp variable = null;
-                Number coeff = null;
+                ExNumber coeff = null;
                 int pow = -1;
                 foreach (ExComp groupComp in group)
                 {
@@ -361,9 +361,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                     else if (groupComp is PowerFunction)
                     {
                         PowerFunction powFunc = groupComp as PowerFunction;
-                        if (!(powFunc.GetPower() is Number))
+                        if (!(powFunc.GetPower() is ExNumber))
                             return null;
-                        Number powNum = powFunc.GetPower() as Number;
+                        ExNumber powNum = powFunc.GetPower() as ExNumber;
                         if (!powNum.IsRealInteger())
                             return null;
 
@@ -377,9 +377,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                         if (polyVar == null)
                             polyVar = variable;
                     }
-                    else if (groupComp is Number)
+                    else if (groupComp is ExNumber)
                     {
-                        coeff = groupComp as Number;
+                        coeff = groupComp as ExNumber;
                     }
                 }
 
@@ -389,11 +389,11 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 if (variable != null && (variable == null || !variable.IsEqualTo(polyVar)))
                     return null;
                 if (coeff == null)
-                    coeff = new Number(1.0);
+                    coeff = new ExNumber(1.0);
                 if (pow == -1)
                     pow = 0;
 
-                polyInfo.Add(new TypePair<Number, int>(coeff, pow));
+                polyInfo.Add(new TypePair<ExNumber, int>(coeff, pow));
             }
 
             return new PolyInfo(polyInfo, polyVar);
@@ -405,7 +405,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             foreach (ExComp subComp in _subComps)
             {
                 if (subComp is AlgebraComp && (subComp as AlgebraComp).IsEqualTo(varFor))
-                    powersApplied.Add(Number.GetOne());
+                    powersApplied.Add(ExNumber.GetOne());
                 else if (subComp is PowerFunction)
                 {
                     PowerFunction subCompPowFunc = subComp as PowerFunction;
@@ -523,7 +523,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             {
                 if (subComp is AlgebraTerm && (subComp as AlgebraTerm).IsComplex())
                     return true;
-                else if (subComp is Number && (subComp as Number).HasImaginaryComp())
+                else if (subComp is ExNumber && (subComp as ExNumber).HasImaginaryComp())
                     return true;
             }
 
@@ -533,7 +533,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         public override bool IsEqualTo(ExComp ex)
         {
             if (GetTermCount() == 0)
-                Add(Number.GetZero());
+                Add(ExNumber.GetZero());
 
             if (ex is AlgebraFunction)
                 return false;
@@ -586,8 +586,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public virtual bool IsOne()
         {
-            if (GetTermCount() == 1 && _subComps[0] is Number)
-                return Number.OpEqual((_subComps[0] as Number), 1.0);
+            if (GetTermCount() == 1 && _subComps[0] is ExNumber)
+                return ExNumber.OpEqual((_subComps[0] as ExNumber), 1.0);
             return false;
         }
 
@@ -595,7 +595,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         {
             foreach (ExComp subComp in _subComps)
             {
-                if (subComp is Number && (subComp as Number).IsUndefined())
+                if (subComp is ExNumber && (subComp as ExNumber).IsUndefined())
                     return true;
                 if (subComp is AlgebraTerm && (subComp as AlgebraTerm).IsUndefined())
                     return true;
@@ -607,8 +607,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
         {
             if (GetTermCount() == 1)
             {
-                if (_subComps[0] is Number)
-                    return Number.OpEqual((_subComps[0] as Number), 0.0);
+                if (_subComps[0] is ExNumber)
+                    return ExNumber.OpEqual((_subComps[0] as ExNumber), 0.0);
                 else if (_subComps[0] is AlgebraTerm)
                     return (_subComps[0] as AlgebraTerm).IsZero();
             }
@@ -620,13 +620,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                 bool allZero = true;
                 foreach (ExComp[] group in groups)
                 {
-                    Number coeff = GetCoeffTerm(group);
+                    ExNumber coeff = GetCoeffTerm(group);
                     if (coeff == null)
                     {
                         allZero = false;
                         break;
                     }
-                    else if (Number.OpNotEquals(coeff, 0.0))
+                    else if (ExNumber.OpNotEquals(coeff, 0.0))
                     {
                         allZero = false;
                         break;

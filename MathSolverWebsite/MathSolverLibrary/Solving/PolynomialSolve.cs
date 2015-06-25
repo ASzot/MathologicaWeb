@@ -29,7 +29,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             }
 
             left = SubOp.StaticCombine(left, right).ToAlgTerm();
-            right = Number.GetZero().ToAlgTerm();
+            right = ExNumber.GetZero().ToAlgTerm();
 
             if (!left.Contains(solveFor.ToAlgebraComp()))
             {

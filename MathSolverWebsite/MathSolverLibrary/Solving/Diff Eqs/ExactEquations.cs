@@ -25,7 +25,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             if (left.IsZero())
             {
                 left = SubOp.StaticCombine(left, right).ToAlgTerm();
-                right = Number.GetZero().ToAlgTerm();
+                right = ExNumber.GetZero().ToAlgTerm();
                 pEvalData.GetWorkMgr().FromSides(left, right, "Move everything to the left hand side.");
             }
 
@@ -57,7 +57,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             WorkStep last = pEvalData.GetWorkMgr().GetLast();
 
             last.GoDown(ref pEvalData);
-            ExComp my = Derivative.TakeDeriv(funcM.CloneEx(), funcVar, ref pEvalData, true);
+            ExComp my = Derivative.TakeDeriv(funcM.CloneEx(), funcVar, ref pEvalData, true, false);
             last.GoUp(ref pEvalData);
 
             last.SetWorkHtml(WorkMgr.STM + "\\frac{\\partial M}{\\partial " + funcVar.ToDispString() + "}=" + WorkMgr.ToDisp(my) + WorkMgr.EDM);
@@ -66,7 +66,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             last = pEvalData.GetWorkMgr().GetLast();
 
             last.GoDown(ref pEvalData);
-            ExComp nx = Derivative.TakeDeriv(funcN.CloneEx(), dVar, ref pEvalData, true);
+            ExComp nx = Derivative.TakeDeriv(funcN.CloneEx(), dVar, ref pEvalData, true, false);
             last.GoUp(ref pEvalData);
 
             last.SetWorkHtml(WorkMgr.STM + "\\frac{\\partial N}{\\partial " + dVar.ToDispString() + "}=" + WorkMgr.ToDisp(nx) + WorkMgr.EDM);
@@ -116,7 +116,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             last = pEvalData.GetWorkMgr().GetLast();
 
             last.GoDown(ref pEvalData);
-            ExComp tmpPsi = Derivative.TakeDeriv(psi, solveForConstVar, ref pEvalData, true);
+            ExComp tmpPsi = Derivative.TakeDeriv(psi, solveForConstVar, ref pEvalData, true, false);
             last.GoUp(ref pEvalData);
 
             last.SetWorkHtml(WorkMgr.STM + "\\psi_" + funcVar.ToDispString() + " = " + WorkMgr.ToDisp(tmpPsi) + "+" + (constX ? "h'(x)" : "h'(y)") + WorkMgr.EDM);
@@ -143,7 +143,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
 
             pEvalData.GetWorkMgr().FromSides(new AlgebraComp("psi"), psi);
 
-            ExComp[] sols = new ExComp[] { psi, Number.GetZero() };
+            ExComp[] sols = new ExComp[] { psi, ExNumber.GetZero() };
             pEvalData.GetWorkMgr().FromSides(sols[0], sols[1]);
 
             return sols;

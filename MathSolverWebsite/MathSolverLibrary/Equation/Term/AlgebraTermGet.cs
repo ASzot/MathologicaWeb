@@ -103,14 +103,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
                     if (exComp is Operators.SubOp)
                     {
-                        Number coeff = GetCoeffTerm(group);
+                        ExNumber coeff = GetCoeffTerm(group);
                         if (coeff == null)
                         {
-                            coeff = new Number(1.0);
+                            coeff = new ExNumber(1.0);
                             group.Add(new Operators.MulOp());
                             group.Add(coeff);
                         }
-                        coeff = Number.OpMul(coeff, new Number(-1.0f));
+                        coeff = ExNumber.OpMul(coeff, new ExNumber(-1.0f));
                     }
 
                     groups.Add(group.ToArray());
@@ -233,7 +233,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             List<ExComp> compareGroupList = new List<ExComp>();
             for (int i = 0; i < groupToSort.Length; ++i)
             {
-                if (!(groupToSort[i] is AgOp) && (!(groupToSort[i] is Number) || includeNumbers))
+                if (!(groupToSort[i] is AgOp) && (!(groupToSort[i] is ExNumber) || includeNumbers))
                     compareGroupList.Add(groupToSort[i]);
             }
 

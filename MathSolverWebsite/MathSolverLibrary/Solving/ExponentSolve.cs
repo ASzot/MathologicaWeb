@@ -44,7 +44,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 // Took out because logs are used to solve some of these equations so there is no base converting.
                 //WorkMgr.FromSides(left, right, "Both sides must be converted to a like base.");
 
-                if (gcf != null && !Number.GetOne().IsEqualTo(gcf) && !Number.GetZero().IsEqualTo(gcf))
+                if (gcf != null && !ExNumber.GetOne().IsEqualTo(gcf) && !ExNumber.GetZero().IsEqualTo(gcf))
                 {
                     pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "({0})/({1})=({2})/({1})" + WorkMgr.EDM, "Divide by the greatest common factor.", left, gcf, right);
 
@@ -134,13 +134,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             PowerFunction powFunc = leftEx as PowerFunction;
 
             rightEx = right.RemoveRedundancies(false);
-            if (powFunc.GetBase() is Number && rightEx is Number)
+            if (powFunc.GetBase() is ExNumber && rightEx is ExNumber)
             {
                 // We might be able to find a common base.
-                Number nLeftPow;
-                Number nRightPow;
-                Number nBase;
-                Number.GCF_Base(powFunc.GetBase() as Number, rightEx as Number, out nLeftPow, out nRightPow, out nBase);
+                ExNumber nLeftPow;
+                ExNumber nRightPow;
+                ExNumber nBase;
+                ExNumber.GCF_Base(powFunc.GetBase() as ExNumber, rightEx as ExNumber, out nLeftPow, out nRightPow, out nBase);
 
                 if (nLeftPow != null && nRightPow != null && nBase != null)
                 {
@@ -206,19 +206,19 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 return p_agSolver.SolveEq(solveFor, pfLeft.GetPower().ToAlgTerm(), pfRight.ToAlgTerm(), ref pEvalData);
             }
 
-            if (leftBaseEx is Number && rightBaseEx is Number && !(leftBaseEx as Number).HasImaginaryComp() &&
-                !(rightBaseEx as Number).HasImaginaryComp())
+            if (leftBaseEx is ExNumber && rightBaseEx is ExNumber && !(leftBaseEx as ExNumber).HasImaginaryComp() &&
+                !(rightBaseEx as ExNumber).HasImaginaryComp())
             {
-                Number nLeftBase = leftBaseEx as Number;
-                Number nRightBase = rightBaseEx as Number;
-                Number nLeftPow, nRightPow, nBase;
+                ExNumber nLeftBase = leftBaseEx as ExNumber;
+                ExNumber nRightBase = rightBaseEx as ExNumber;
+                ExNumber nLeftPow, nRightPow, nBase;
 
-                Number.GCF_Base(nLeftBase, nRightBase, out nLeftPow, out nRightPow, out nBase);
+                ExNumber.GCF_Base(nLeftBase, nRightBase, out nLeftPow, out nRightPow, out nBase);
 
                 if (nLeftPow != null && nRightPow != null && nBase != null)
                 {
-                    string coeff0Str = Number.OpNotEquals(nLeftPow, 1.0) ? "{1}*" : "";
-                    string coeff1Str = Number.OpNotEquals(nRightPow, 1.0) ? "{3}*" : "";
+                    string coeff0Str = ExNumber.OpNotEquals(nLeftPow, 1.0) ? "{1}*" : "";
+                    string coeff1Str = ExNumber.OpNotEquals(nRightPow, 1.0) ? "{3}*" : "";
 
                     pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "({0})^(" + coeff0Str + "({2}))=({0})^(" + coeff1Str + "({4}))" + WorkMgr.EDM, "Convert both sides to have like bases.",
                         nBase, nLeftPow, pfLeft.GetPower(), nRightPow, pfRight.GetPower());

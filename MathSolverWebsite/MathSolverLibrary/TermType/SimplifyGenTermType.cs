@@ -119,9 +119,9 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 solveVarKeys.Count != 0)
                 tmpCmds.Add("Factor");
 
-            if (term is Number)
+            if (term is ExNumber)
             {
-                Number num = term as Number;
+                ExNumber num = term as ExNumber;
                 if (num.HasImaginaryComp())
                 {
                     tmpCmds.Add("To polar form");
@@ -225,8 +225,8 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
         public static SolveResult SimplfyTerm(ExComp term, ref EvalData pEvalData)
         {
-            if (Number.IsUndef(term))
-                return SolveResult.Simplified(Number.GetUndefined());
+            if (ExNumber.IsUndef(term))
+                return SolveResult.Simplified(ExNumber.GetUndefined());
             ExComp simpEx = BasicSimplify(term, ref pEvalData, true);
 
             Solution solution;
@@ -262,7 +262,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             }
             else if (command == "To polar form")
             {
-                Number num = _term as Number;
+                ExNumber num = _term as ExNumber;
                 if (num == null)
                     return SolveResult.Failure();
 
@@ -270,7 +270,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             }
             else if (command == "To exponential form")
             {
-                Number num = _term as Number;
+                ExNumber num = _term as ExNumber;
                 if (num == null)
                     return SolveResult.Failure();
 

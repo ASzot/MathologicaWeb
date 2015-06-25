@@ -72,7 +72,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
             LoosePolyInfo polyInfo = new LoosePolyInfo(coeffPowPairs, _info.GetVar());
 
             ExComp resultingPow = polyInfo.GetCoeffForPow(0);
-            if (Number.GetZero().IsEqualTo(resultingPow))
+            if (ExNumber.GetZero().IsEqualTo(resultingPow))
             {
                 polyInfo.RemovePowCoeffPair(0);
                 polyInfo.ShiftPowers(-1);
@@ -89,23 +89,26 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
 
         public IEnumerable<ExComp> GetCoeffs()
         {
+            List<ExComp> coeffs = new List<ExComp>();
             for (int i = 0; i <= i_maxPow; ++i)
             {
                 ExComp coeff = _info.GetCoeffForPow(i);
                 if (coeff == null)
-                    yield return Number.GetZero();
+                    coeffs.Add(ExNumber.GetZero());
                 else
-                    yield return coeff;
+                    coeffs.Add(coeff);
             }
+
+            return coeffs;
         }
 
         public List<ExComp> GetRationalPossibleRoots()
         {
-            if (!(GetLeadingCoeff() is Number) || !(GetConstantCoeff() is Number))
+            if (!(GetLeadingCoeff() is ExNumber) || !(GetConstantCoeff() is ExNumber))
                 return null;
 
-            Number a = GetLeadingCoeff() as Number;
-            Number nConst = GetConstantCoeff() as Number;
+            ExNumber a = GetLeadingCoeff() as ExNumber;
+            ExNumber nConst = GetConstantCoeff() as ExNumber;
 
             if (a.IsRealInteger() && nConst.IsRealInteger())
             {
@@ -124,7 +127,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
                 {
                     foreach (int aDiv in aDivs)
                     {
-                        ExComp posRoot = Operators.DivOp.StaticCombine(new Number(constDiv), new Number(aDiv));
+                        ExComp posRoot = Operators.DivOp.StaticCombine(new ExNumber(constDiv), new ExNumber(aDiv));
                         posRoots.Add(posRoot);
                     }
                 }
@@ -168,7 +171,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
 
             foreach (TypePair<ExComp, int> coeffPow in _info.GetInfo())
             {
-                if (Number.GetZero().IsEqualTo(coeffPow.GetData1()))
+                if (ExNumber.GetZero().IsEqualTo(coeffPow.GetData1()))
                     continue;
 
                 if (coeffPow.GetData2() == 0.0)
@@ -183,7 +186,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
                     continue;
                 }
 
-                ExComp varPow = new Functions.PowerFunction(_info.GetVar(), new Number(coeffPow.GetData2()));
+                ExComp varPow = new Functions.PowerFunction(_info.GetVar(), new ExNumber(coeffPow.GetData2()));
                 finalTerm.AddGroup(MulOp.StaticCombine(coeffPow.GetData1(), varPow));
             }
 

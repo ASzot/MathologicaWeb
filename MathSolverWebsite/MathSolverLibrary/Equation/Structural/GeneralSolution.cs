@@ -38,7 +38,7 @@
 
         public bool IsResultUndef()
         {
-            return Number.IsUndef(_result);
+            return ExNumber.IsUndef(_result);
         }
 
         public override bool IsEqualTo(ExComp ex)
@@ -86,10 +86,10 @@
         {
             string finalStr = "";
 
-            if (Number.IsUndef(_result))
-                return Number.GetUndefined().ToAsciiString();
+            if (ExNumber.IsUndef(_result))
+                return ExNumber.GetUndefined().ToAsciiString();
 
-            if (!Number.GetZero().IsEqualTo(_result) && !(_result is AlgebraTerm && (_result as AlgebraTerm).IsZero()))
+            if (!ExNumber.GetZero().IsEqualTo(_result) && !(_result is AlgebraTerm && (_result as AlgebraTerm).IsZero()))
             {
                 if (_result is AlgebraTerm)
                     finalStr += (_result as AlgebraTerm).FinalToDispStr();
@@ -111,10 +111,10 @@
         {
             string finalStr = "";
 
-            if (Number.IsUndef(_result))
-                return Number.GetUndefined().ToTexString();
+            if (ExNumber.IsUndef(_result))
+                return ExNumber.GetUndefined().ToTexString();
 
-            if (!Number.GetZero().IsEqualTo(_result) && !(_result is AlgebraTerm && (_result as AlgebraTerm).IsZero()))
+            if (!ExNumber.GetZero().IsEqualTo(_result) && !(_result is AlgebraTerm && (_result as AlgebraTerm).IsZero()))
             {
                 if (_result is AlgebraTerm)
                     finalStr += (_result as AlgebraTerm).FinalToTexString();

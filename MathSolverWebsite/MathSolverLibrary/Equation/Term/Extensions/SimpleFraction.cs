@@ -51,8 +51,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
                 throw new ArgumentException();
             if (term.IsZero())
             {
-                _num = Number.GetZero().ToAlgTerm();
-                _den = Number.GetZero().ToAlgTerm();
+                _num = ExNumber.GetZero().ToAlgTerm();
+                _den = ExNumber.GetZero().ToAlgTerm();
 
                 return true;
             }
@@ -60,15 +60,15 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
 
             if (term.GetTermCount() == 1)
             {
-                if (term is PowerFunction && (term as PowerFunction).GetPower().IsEqualTo(Number.GetNegOne()))
+                if (term is PowerFunction && (term as PowerFunction).GetPower().IsEqualTo(ExNumber.GetNegOne()))
                 {
-                    _num = Number.GetOne().ToAlgTerm();
+                    _num = ExNumber.GetOne().ToAlgTerm();
                     _den = (term as PowerFunction).GetBase().ToAlgTerm();
                 }
                 else
                 {
                     _num = term.ToAlgTerm();
-                    _den = Number.GetOne().ToAlgTerm();
+                    _den = ExNumber.GetOne().ToAlgTerm();
                 }
 
                 return true;
@@ -92,22 +92,22 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
 
         public bool IsDenOne()
         {
-            return Number.GetOne().IsEqualTo(GetDenEx());
+            return ExNumber.GetOne().IsEqualTo(GetDenEx());
         }
 
-        public bool IsSimpleUnitCircleAngle(out Number num, out Number den, bool handleNegs)
+        public bool IsSimpleUnitCircleAngle(out ExNumber num, out ExNumber den, bool handleNegs)
         {
             num = null;
             den = null;
 
-            if (GetNumEx() is Number && Number.OpEqual((GetNumEx() as Number), 0.0))
+            if (GetNumEx() is ExNumber && ExNumber.OpEqual((GetNumEx() as ExNumber), 0.0))
             {
-                num = Number.GetZero();
-                den = Number.GetZero();
+                num = ExNumber.GetZero();
+                den = ExNumber.GetZero();
                 return true;
             }
 
-            if (!(GetDenEx() is Number))
+            if (!(GetDenEx() is ExNumber))
                 return false;
 
             if (!GetNum().Contains(Constant.ParseConstant(@"pi")))
@@ -126,39 +126,39 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
                 ExComp piConstant = first is Constant ? first : second;
                 ExComp otherEx = first is Constant ? second : first;
 
-                if (!(otherEx is Number))
+                if (!(otherEx is ExNumber))
                     return false;
 
-                num = otherEx as Number;
+                num = otherEx as ExNumber;
             }
             else if (numGroup.Length == 1)
-                num = Number.GetOne();
+                num = ExNumber.GetOne();
             else
                 return false;
 
-            den = GetDenEx() as Number;
+            den = GetDenEx() as ExNumber;
 
             if (!num.IsRealInteger() || !den.IsRealInteger())
                 return false;
 
-            Number doubleDen = Number.OpMul(den, 2.0);
+            ExNumber doubleDen = ExNumber.OpMul(den, 2.0);
             bool isNeg = false;
-            if (Number.OpLT(num, 0.0))
+            if (ExNumber.OpLT(num, 0.0))
             {
-                num = Number.OpMul(num, -1.0);
+                num = ExNumber.OpMul(num, -1.0);
                 isNeg = true;
             }
-            if (Number.OpLE(doubleDen, num))
+            if (ExNumber.OpLE(doubleDen, num))
             {
-                num = Number.OpMod(num, doubleDen);
-                if (Number.OpEqual(num, 0.0))
-                    den = new Number(0.0);
+                num = ExNumber.OpMod(num, doubleDen);
+                if (ExNumber.OpEqual(num, 0.0))
+                    den = new ExNumber(0.0);
             }
 
             if (isNeg && handleNegs)
             {
-                Number numSub = Number.OpMul(den, 2.0);
-                num = Number.OpSub(numSub, num);
+                ExNumber numSub = ExNumber.OpMul(den, 2.0);
+                num = ExNumber.OpSub(numSub, num);
             }
 
             return true;
@@ -170,8 +170,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
                 return false;
             if (term.IsZero())
             {
-                _num = Number.GetZero().ToAlgTerm();
-                _den = Number.GetZero().ToAlgTerm();
+                _num = ExNumber.GetZero().ToAlgTerm();
+                _den = ExNumber.GetZero().ToAlgTerm();
 
                 return true;
             }
@@ -193,7 +193,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
             if (term.GetGroupCount() == 1)
             {
                 _num = term.ToAlgTerm();
-                _den = Number.GetOne().ToAlgTerm();
+                _den = ExNumber.GetOne().ToAlgTerm();
 
                 return true;
             }

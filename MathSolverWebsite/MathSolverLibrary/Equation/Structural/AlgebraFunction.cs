@@ -38,7 +38,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             }
             else if (a1.IsEqualTo(a2))
             {
-                PowerFunction powFunc = new PowerFunction(a1, new Number(2.0));
+                PowerFunction powFunc = new PowerFunction(a1, new ExNumber(2.0));
                 return powFunc;
             }
             else
@@ -81,14 +81,14 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                     if (groupComp.IsEqualTo(af))
                     {
                         combined = true;
-                        group[j] = new PowerFunction(group[j], new Number(2.0));
+                        group[j] = new PowerFunction(group[j], new ExNumber(2.0));
                         break;
                     }
                     else if (groupComp is PowerFunction && (groupComp as PowerFunction).GetBase().IsEqualTo(af))
                     {
                         combined = true;
                         group[j] = new PowerFunction(af,
-                            Operators.AddOp.StaticCombine((groupComp as PowerFunction).GetPower(), Number.GetOne()));
+                            Operators.AddOp.StaticCombine((groupComp as PowerFunction).GetPower(), ExNumber.GetOne()));
                         break;
                     }
                 }

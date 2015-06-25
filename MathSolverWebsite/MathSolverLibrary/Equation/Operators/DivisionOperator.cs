@@ -43,8 +43,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 ExComp divCoeff = DivOp.StaticCombine(dividend.GetLeadingCoeff(), divisor.GetLeadingCoeff());
 
                 ExComp[] singularGroup =
+                    new ExComp[]
                 {
-                    MulOp.StaticCombine(divCoeff, PowOp.StaticCombine(varFor, new Number(divPow)))
+                    MulOp.StaticCombine(divCoeff, PowOp.StaticCombine(varFor, new ExNumber(divPow)))
                 };
 
                 divided.AddGroup(singularGroup);
@@ -69,7 +70,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                     {
                         ExComp coeff = coeffs.GetCoeffForPow(subCoeffInfo.GetData2());
                         coeff = SubOp.StaticCombine(coeff, subCoeffInfo.GetData1());
-                        if (Number.GetZero().IsEqualTo(coeff))
+                        if (ExNumber.GetZero().IsEqualTo(coeff))
                             coeffs.RemovePowCoeffPair(subCoeffInfo.GetData2());
                         else
                             coeffs.SetCoeffForPow(subCoeffInfo.GetData2(), coeff);
@@ -125,7 +126,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
         public static ExComp FactorOutTerm(ExComp exComp, ExComp factorOutTerm)
         {
             if (exComp.IsEqualTo(factorOutTerm))
-                return Number.GetOne();
+                return ExNumber.GetOne();
 
             if (exComp is PowerFunction && factorOutTerm is PowerFunction)
             {
@@ -141,7 +142,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 AlgebraTerm atFactorOut = factorOutTerm as AlgebraTerm;
 
                 if (pfExCmp.GetBase().IsEqualTo(atFactorOut))
-                    return AlgebraTerm.OpDiv(pfExCmp, new PowerFunction(atFactorOut, Number.GetOne()));
+                    return AlgebraTerm.OpDiv(pfExCmp, new PowerFunction(atFactorOut, ExNumber.GetOne()));
             }
             else if (exComp is AlgebraTerm && factorOutTerm is PowerFunction)
             {
@@ -149,7 +150,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 PowerFunction pfFactorOut = factorOutTerm as PowerFunction;
 
                 if (pfFactorOut.GetBase().IsEqualTo(atExCmp))
-                    return PowerFunction.OpDiv((new PowerFunction(atExCmp, Number.GetOne())), pfFactorOut);
+                    return PowerFunction.OpDiv((new PowerFunction(atExCmp, ExNumber.GetOne())), pfFactorOut);
             }
 
             if (exComp is AlgebraTerm)
@@ -176,12 +177,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                             PowerFunction pfSingleGroupComp = singleGroupComp as PowerFunction;
                             if (pfSingleGroupComp.GetBase().IsEqualTo(factorOutTerm))
                             {
-                                ExComp changedPow = SubOp.StaticCombine(pfSingleGroupComp.GetPower().CloneEx(), Number.GetOne());
-                                if (!(changedPow is Number))
+                                ExComp changedPow = SubOp.StaticCombine(pfSingleGroupComp.GetPower().CloneEx(), ExNumber.GetOne());
+                                if (!(changedPow is ExNumber))
                                     continue;
-                                if (!(changedPow as Number).IsRealInteger())
+                                if (!(changedPow as ExNumber).IsRealInteger())
                                     continue;
-                                if (Number.GetOne().IsEqualTo(changedPow))
+                                if (ExNumber.GetOne().IsEqualTo(changedPow))
                                 {
                                     singleGroup[i] = pfSingleGroupComp.GetBase();
                                 }
@@ -190,7 +191,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                                     (singleGroup[i] as PowerFunction).SetPower(changedPow);
                                 }
 
-                                return GroupHelper.ToAlgTerm(singleGroup.ToArray());
+                                return GroupHelper.ToAlgTerm(singleGroup);
                             }
                         }
                     }
@@ -236,7 +237,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
         {
             if (group.Length == 1 && group[0].IsEqualTo(factorOutTerm))
             {
-                ExComp[] singularGp = new ExComp[] { Number.GetOne() };
+                ExComp[] singularGp = new ExComp[] { ExNumber.GetOne() };
                 return singularGp;
             }
 
@@ -250,7 +251,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                         continue;
                     }
                     PowerFunction powFuncGroup = group[i] is PowerFunction ? group[i] as PowerFunction :
-                        new PowerFunction(group[i], Number.GetOne());
+                        new PowerFunction(group[i], ExNumber.GetOne());
                     if (powFuncFactorOut.GetBase().IsEqualTo(powFuncGroup.GetBase()))
                     {
                         ExComp factoredOut = PowerFunction.OpDiv(powFuncGroup, powFuncFactorOut);
@@ -258,7 +259,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                         {
                             factoredOut = (factoredOut as AlgebraTerm).RemoveRedundancies(false);
                         }
-                        if (!Number.GetOne().IsEqualTo(factoredOut) || group.Length == 1)
+                        if (!ExNumber.GetOne().IsEqualTo(factoredOut) || group.Length == 1)
                             group[i] = factoredOut;
                         else
                         {
@@ -305,8 +306,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                         else if (groupRelatableComp is PowerFunction)
                         {
                             PowerFunction groupRelatablePowFunc = groupRelatableComp as PowerFunction;
-                            groupRelatablePowFunc.SetPower(SubOp.StaticCombine(groupRelatablePowFunc.GetPower(), Number.GetOne()));
-                            if (Number.GetOne().IsEqualTo(groupRelatablePowFunc.GetPower()))
+                            groupRelatablePowFunc.SetPower(SubOp.StaticCombine(groupRelatablePowFunc.GetPower(), ExNumber.GetOne()));
+                            if (ExNumber.GetOne().IsEqualTo(groupRelatablePowFunc.GetPower()))
                             {
                                 group[i] = groupRelatablePowFunc.GetBase();
                             }
@@ -354,13 +355,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
 
                 return group;
             }
-            else if (factorOutTerm is Number)
+            else if (factorOutTerm is ExNumber)
             {
                 for (int i = 0; i < group.Length; ++i)
                 {
-                    if (group[i] is Number)
+                    if (group[i] is ExNumber)
                     {
-                        group[i] = Number.OpDiv((group[i] as Number), (factorOutTerm as Number));
+                        group[i] = ExNumber.OpDiv((group[i] as ExNumber), (factorOutTerm as ExNumber));
                         return group;
                     }
                 }
@@ -399,9 +400,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                             {
                                 ExComp pow1Num = pow1Frac[0].RemoveRedundancies(false);
                                 ExComp pow1Den = pow1Frac[1].RemoveRedundancies(false);
-                                if (pow1Num is Number && pow1Den is Number)
+                                if (pow1Num is ExNumber && pow1Den is ExNumber)
                                 {
-                                    pow1 = (Number.OpDiv((Number)pow1Num, (Number)pow1Den));
+                                    pow1 = (ExNumber.OpDiv((ExNumber)pow1Num, (ExNumber)pow1Den));
                                 }
                             }
                         }
@@ -414,21 +415,21 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                                 ExComp pow2Num = pow2Frac[0].RemoveRedundancies(false);
                                 ExComp pow2Den = pow2Frac[1].RemoveRedundancies(false);
 
-                                if (pow2Num is Number && pow2Den is Number)
-                                    pow2 = Number.OpDiv((Number)pow2Num, (Number)pow2Den);
+                                if (pow2Num is ExNumber && pow2Den is ExNumber)
+                                    pow2 = ExNumber.OpDiv((ExNumber)pow2Num, (ExNumber)pow2Den);
                             }
                         }
 
-                        if (pow1 is Number && pow2 is Number)
+                        if (pow1 is ExNumber && pow2 is ExNumber)
                         {
-                            Number pow1Num = pow1 as Number;
-                            Number pow2Num = pow2 as Number;
+                            ExNumber pow1Num = pow1 as ExNumber;
+                            ExNumber pow2Num = pow2 as ExNumber;
                             ExComp usePow;
-                            if (Number.OpLT(pow1Num, pow2Num))
+                            if (ExNumber.OpLT(pow1Num, pow2Num))
                                 usePow = origPow1;
                             else
                                 usePow = origPow2;
-                            ExComp powerGcf = Number.Minimum(pow1Num, pow2Num);
+                            ExComp powerGcf = ExNumber.Minimum(pow1Num, pow2Num);
                             PowerFunction powerFuncGcf = new PowerFunction(powFunc1.GetBase(), usePow);
                             return powerFuncGcf;
                         }
@@ -444,16 +445,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 if (powFunc.GetBase().IsEqualTo(nonPowFunc))
                 {
                     // Return whichever one has less of a power.
-                    if (powFunc.GetPower() is Number)
-                        return Number.OpLT((powFunc.GetPower() as Number), Number.GetOne()) ? powFunc : nonPowFunc;
+                    if (powFunc.GetPower() is ExNumber)
+                        return ExNumber.OpLT((powFunc.GetPower() as ExNumber), ExNumber.GetOne()) ? powFunc : nonPowFunc;
                     else if (powFunc.GetPower() is AlgebraTerm)
                     {
                         SimpleFraction simpFrac = new SimpleFraction();
                         if (simpFrac.Init(powFunc.GetPower() as AlgebraTerm))
                         {
-                            if (simpFrac.GetNumEx() is Number && simpFrac.GetDenEx() is Number)
+                            if (simpFrac.GetNumEx() is ExNumber && simpFrac.GetDenEx() is ExNumber)
                             {
-                                return Number.OpGT((simpFrac.GetNumEx() as Number), (simpFrac.GetDenEx() as Number)) ? nonPowFunc : powFunc;
+                                return ExNumber.OpGT((simpFrac.GetNumEx() as ExNumber), (simpFrac.GetDenEx() as ExNumber)) ? nonPowFunc : powFunc;
                             }
                         }
                     }
@@ -553,21 +554,21 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 else
                     return null;
             }
-            else if ((ex1 is AlgebraTerm && ex2 is Number) ||
-                (ex2 is AlgebraTerm && ex1 is Number))
+            else if ((ex1 is AlgebraTerm && ex2 is ExNumber) ||
+                (ex2 is AlgebraTerm && ex1 is ExNumber))
             {
                 AlgebraTerm term = ex1 is AlgebraTerm ? ex1 as AlgebraTerm : ex2 as AlgebraTerm;
-                Number num = ex2 is Number ? ex2 as Number : ex1 as Number;
+                ExNumber num = ex2 is ExNumber ? ex2 as ExNumber : ex1 as ExNumber;
 
-                List<Number> coeffs = term.GetCoeffs();
-                foreach (Number coeff in coeffs)
+                List<ExNumber> coeffs = term.GetCoeffs();
+                foreach (ExNumber coeff in coeffs)
                 {
                     if (coeff == null)
                         return null;
                 }
 
-                Number coeffsGCF = Number.GCF(coeffs);
-                Number totalGCF = Number.GCF(coeffsGCF, num);
+                ExNumber coeffsGCF = ExNumber.GCF(coeffs);
+                ExNumber totalGCF = ExNumber.GCF(coeffsGCF, num);
 
                 return totalGCF;
             }
@@ -581,12 +582,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 else
                     return null;
             }
-            else if (ex1 is Number && ex2 is Number)
+            else if (ex1 is ExNumber && ex2 is ExNumber)
             {
-                Number num1 = ex1 as Number;
-                Number num2 = ex2 as Number;
+                ExNumber num1 = ex1 as ExNumber;
+                ExNumber num2 = ex2 as ExNumber;
 
-                Number resulant = Number.GCF(num1, num2);
+                ExNumber resulant = ExNumber.GCF(num1, num2);
                 if (num1.GetRealComp() < 0.0 && num2.GetRealComp() < 0.0)
                     resulant.SetRealComp(resulant.GetRealComp()*-1.0);
                 if (num1.GetImagComp() < 0.0 && num2.GetImagComp() < 0.0)
@@ -636,17 +637,17 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
             else if (ex2 is Functions.Calculus.CalcConstant)
                 return ex2;
 
-            if (ex2 is Number && Number.OpEqual((ex2 as Number), 0.0))
-                return Number.GetUndefined();
-            else if (ex1 is Number && Number.OpEqual((ex1 as Number), 0.0))
-                return Number.GetZero();
-            else if (Number.GetPosInfinity().IsEqualTo(ex1) || Number.GetPosInfinity().IsEqualTo(ex2))
-                return Number.GetPosInfinity();
-            else if (Number.GetNegInfinity().IsEqualTo(ex1) || Number.GetNegInfinity().IsEqualTo(ex2))
-                return Number.GetNegInfinity();
+            if (ex2 is ExNumber && ExNumber.OpEqual((ex2 as ExNumber), 0.0))
+                return ExNumber.GetUndefined();
+            else if (ex1 is ExNumber && ExNumber.OpEqual((ex1 as ExNumber), 0.0))
+                return ExNumber.GetZero();
+            else if (ExNumber.GetPosInfinity().IsEqualTo(ex1) || ExNumber.GetPosInfinity().IsEqualTo(ex2))
+                return ExNumber.GetPosInfinity();
+            else if (ExNumber.GetNegInfinity().IsEqualTo(ex1) || ExNumber.GetNegInfinity().IsEqualTo(ex2))
+                return ExNumber.GetNegInfinity();
 
             if (ex1.IsEqualTo(ex2))
-                return Number.GetOne();
+                return ExNumber.GetOne();
 
             if (ex1 is ExMatrix || ex2 is ExMatrix)
             {
@@ -712,27 +713,27 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                 }
             }
 
-            if (ex1 is Number && ex2 is Number)
+            if (ex1 is ExNumber && ex2 is ExNumber)
             {
-                Number nEx1 = ex1 as Number;
-                Number nEx2 = ex2 as Number;
+                ExNumber nEx1 = ex1 as ExNumber;
+                ExNumber nEx2 = ex2 as ExNumber;
 
                 if (nEx1.HasImagRealComp() || nEx2.HasImagRealComp())
                 {
-                    return Number.OpDiv(nEx1, nEx2);
+                    return ExNumber.OpDiv(nEx1, nEx2);
                 }
             }
 
             ExComp commonFactor = GetCommonFactor(ex1, ex2);
             if (commonFactor is AlgebraTerm)
                 commonFactor = (commonFactor as AlgebraTerm).RemoveRedundancies(false);
-            if (Number.GetZero().IsEqualTo(commonFactor) || Number.GetOne().IsEqualTo(commonFactor))
+            if (ExNumber.GetZero().IsEqualTo(commonFactor) || ExNumber.GetOne().IsEqualTo(commonFactor))
                 commonFactor = null;
             if (commonFactor != null)
             {
-                if (commonFactor is Number)
+                if (commonFactor is ExNumber)
                 {
-                    Number commonFactorNumber = commonFactor as Number;
+                    ExNumber commonFactorNumber = commonFactor as ExNumber;
                     ex1 = FactorOutTerm(ex1, commonFactor);
                     ex2 = FactorOutTerm(ex2, commonFactor);
 
@@ -763,7 +764,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                     if (ex1Gcf is AlgebraTerm)
                         ex1Gcf = (ex1Gcf as AlgebraTerm).RemoveRedundancies(false);
 
-                    if (!Number.GetZero().IsEqualTo(ex1Gcf))
+                    if (!ExNumber.GetZero().IsEqualTo(ex1Gcf))
                     {
                         ExComp remainder = FactorOutTerm(ex1.CloneEx(), ex1Gcf);
 
@@ -778,7 +779,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
             if (ex1 is AlgebraTerm)
                 ex1 = (ex1 as AlgebraTerm).RemoveZeros();
 
-            if (ex2 is Number && Number.OpEqual((ex2 as Number), 1.0))
+            if (ex2 is ExNumber && ExNumber.OpEqual((ex2 as ExNumber), 1.0))
             {
                 return ex1;
             }

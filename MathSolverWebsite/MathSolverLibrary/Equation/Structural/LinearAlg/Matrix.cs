@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MathSolverWebsite.MathSolverLibrary.LangCompat;
 using MathSolverWebsite.MathSolverLibrary.TermType;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
@@ -164,7 +165,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
             ExMatrix minor = GetMatrixMinor(row, col);
             ExComp minorDet = Determinant.TakeDeteriment(minor);
 
-            ExComp signedVal = Operators.PowOp.StaticCombine(Number.GetNegOne(), Operators.AddOp.StaticCombine(new Number(row), new Number(col)));
+            ExComp signedVal = Operators.PowOp.StaticCombine(ExNumber.GetNegOne(), Operators.AddOp.StaticCombine(new ExNumber(row), new ExNumber(col)));
 
             return Operators.MulOp.StaticCombine(signedVal, minorDet);
         }
@@ -204,7 +205,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
                 for (int j = 0; j < GetCols(); ++j)
                 {
                     List<string> allVars = _exData[i][j].ToAlgTerm().GetAllAlgebraCompsStr();
-                    overallList.Intersect(allVars);
+                    ArrayFunc.IntersectLists(overallList, allVars);
                 }
             }
 
@@ -221,10 +222,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
                 return null;
 
             ExComp det = Determinant.TakeDeteriment((ExMatrix)this.CloneEx());
-            if (det.IsEqualTo(Number.GetZero()))
+            if (det.IsEqualTo(ExNumber.GetZero()))
                 return null;
 
-            ExComp recipDet = Operators.DivOp.StaticCombine(Number.GetOne(), det);
+            ExComp recipDet = Operators.DivOp.StaticCombine(ExNumber.GetOne(), det);
 
             ExMatrix adjoint = this.GetAdjointMatrix();
             ExComp inverse = Operators.MulOp.StaticCombine(recipDet, adjoint);
