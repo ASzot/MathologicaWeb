@@ -196,7 +196,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                     {
                         // We have a power solve.
                         PowerSolve powSolve = new PowerSolve(p_agSolver, new ExNumber(2.0));
-                        return powSolve.SolveEquation(left, right, solveFor, ref pEvalData);
+                        ExComp powSolveResult = powSolve.SolveEquation(left, right, solveFor, ref pEvalData);
+                        return powSolveResult;
                     }
                     else
                     {

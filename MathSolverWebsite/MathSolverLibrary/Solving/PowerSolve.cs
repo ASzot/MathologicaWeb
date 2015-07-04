@@ -50,7 +50,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 if (AdvAlgebraTerm.IsSimpleFraction(_solveForPower))
                 {
                     // We are dealing with simple radicals.
-                    return SolveMultipleRadicalEq(left, right, solveFor, ref pEvalData);
+                    ExComp radicalSolve = SolveMultipleRadicalEq(left, right, solveFor, ref pEvalData);
+                    return radicalSolve;
                 }
                 else
                 {
@@ -133,7 +134,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                     }
                     rights.SetSolveDescs(descs);
                     bool allSols;
-                    AlgebraTermArray solutions = rights.SimulSolve(left, solveFor, p_agSolver, ref pEvalData, out allSols);
+                    AlgebraTermArray solutions = rights.SimulSolve(left, solveFor, p_agSolver, ref pEvalData, out allSols, false);
                     if (allSols)
                         return new AllSolutions();
                     if (solutions == null)
@@ -159,7 +160,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 pEvalData.GetWorkMgr().FromSides(left, right, "Simplify.");
             }
 
-            return p_agSolver.SolveEq(solveFor, left, right, ref pEvalData);
+            ExComp finalSolveResult = p_agSolver.SolveEq(solveFor, left, right, ref pEvalData);
+            return finalSolveResult;
         }
 
         private ExComp Solve_N_Group_2_Root_Eq(AlgebraTerm left, AlgebraTerm right, AlgebraVar solveFor,
@@ -202,7 +204,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
                 pEvalData.GetWorkMgr().FromSides(left, right);
 
-                return p_agSolver.SolveEq(solveFor, left, right, ref pEvalData);
+                ExComp agSolveResult = p_agSolver.SolveEq(solveFor, left, right, ref pEvalData);
+                return agSolveResult;
             }
 
             pEvalData.AddFailureMsg("There is a variable power which can't be dealt with.");

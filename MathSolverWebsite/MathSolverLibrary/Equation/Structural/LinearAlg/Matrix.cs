@@ -775,7 +775,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
                 }
             }
 
-            return Restriction.CompoundRestrictions(allDomain, ref pEvalData);
+            List<Restriction> compoundedDomain = Restriction.CompoundRestrictions(allDomain, ref pEvalData);
+            return compoundedDomain;
         }
 
         public override ExComp Evaluate(bool harshEval, ref TermType.EvalData pEvalData)

@@ -1681,11 +1681,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
             switch (lexeme.GetData1())
             {
                 case LexemeType.VectorStore:
-                    return ParseVector(ref currentIndex, lexemeTable, ref pParseErrors);
+                    ExComp parsedVector = ParseVector(ref currentIndex, lexemeTable, ref pParseErrors);
+                    return parsedVector;
 
                 case LexemeType.MultiVarFuncStore:
-                    return ParseMultiVarFunc(ref currentIndex, lexemeTable, ref pParseErrors);
-
+                    ExComp multiValFunc = ParseMultiVarFunc(ref currentIndex, lexemeTable, ref pParseErrors);
+                    return multiValFunc;
                 case LexemeType.Infinity:
                     return ExNumber.GetPosInfinity();
 
@@ -1694,15 +1695,30 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                     depth = 0;
 
                     if (lexeme.GetData2() == "log_")
-                        return ParseLogBaseInner(ref currentIndex, lexemeTable, ref pParseErrors);
+                    {
+                        ExComp parsedLogBaseInner = ParseLogBaseInner(ref currentIndex, lexemeTable, ref pParseErrors);
+                        return parsedLogBaseInner;
+                    }
                     if (lexeme.GetData2() == "root")
-                        return ParseRootInner(ref currentIndex, lexemeTable, ref pParseErrors);
+                    {
+                        ExComp rootParsed = ParseRootInner(ref currentIndex, lexemeTable, ref pParseErrors);
+                        return rootParsed;
+                    }
                     if (lexeme.GetData2() == "frac")
-                        return ParseFraction(ref currentIndex, lexemeTable, ref pParseErrors);
+                    {
+                        ExComp parsedFraction = ParseFraction(ref currentIndex, lexemeTable, ref pParseErrors);
+                        return parsedFraction;
+                    }
                     if (lexeme.GetData2().StartsWith("vector"))
-                        return ParseVectorNotation(ref currentIndex, lexemeTable, ref pParseErrors);
+                    {
+                        ExComp parsedVectorEx = ParseVectorNotation(ref currentIndex, lexemeTable, ref pParseErrors);
+                        return parsedVectorEx;
+                    }
                     if (lexeme.GetData2().StartsWith("binom"))
-                        return ParseBinomNotation(ref currentIndex, lexemeTable, ref pParseErrors);
+                    {
+                        ExComp parsedBinom = ParseBinomNotation(ref currentIndex, lexemeTable, ref pParseErrors);
+                        return parsedBinom;
+                    }
 
                     if (TrigFunction.IsValidType(lexeme.GetData2()) ||
                         InverseTrigFunction.IsValidType(lexeme.GetData2()))
@@ -1798,7 +1814,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                                 return new GradientFunc(innerEx);
                             }
 
-                            return BasicAppliedFunc.Parse(parseLexeme, innerEx, ref pParseErrors);
+                            ExComp basicAppliedParsed = BasicAppliedFunc.Parse(parseLexeme, innerEx, ref pParseErrors);
+                            return basicAppliedParsed;
                         }
                         return null;
                     }
@@ -1970,20 +1987,20 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                     return algebraTerm;
 
                 case LexemeType.Derivative:
-                    return ParseDerivative(ref currentIndex, lexemeTable, ref pParseErrors);
-
+                    ExComp parsedDeriv = ParseDerivative(ref currentIndex, lexemeTable, ref pParseErrors);
+                    return parsedDeriv;
                 case LexemeType.FuncDeriv:
-                    return ParseFuncDerivative(ref currentIndex, lexemeTable, ref pParseErrors);
-
+                    ExComp parsedFuncDeriv = ParseFuncDerivative(ref currentIndex, lexemeTable, ref pParseErrors);
+                    return parsedFuncDeriv;
                 case LexemeType.Summation:
-                    return ParseSummation(ref currentIndex, lexemeTable, ref pParseErrors);
-
+                    ExComp parsedSum = ParseSummation(ref currentIndex, lexemeTable, ref pParseErrors);
+                    return parsedSum;
                 case LexemeType.Limit:
-                    return ParseLimit(ref currentIndex, lexemeTable, ref pParseErrors);
-
+                    ExComp parsedLim = ParseLimit(ref currentIndex, lexemeTable, ref pParseErrors);
+                    return parsedLim;
                 case LexemeType.Integral:
-                    return ParseIntegral(ref currentIndex, lexemeTable, ref pParseErrors);
-
+                    ExComp parsedInt = ParseIntegral(ref currentIndex, lexemeTable, ref pParseErrors);
+                    return parsedInt;
                 case LexemeType.Differential:
                     // If the lexeme before is a derivative just ignore this, it is probably an error.
                     if (currentIndex == 0 || lexemeTable[currentIndex - 1].GetData1() != LexemeType.Derivative ||
@@ -1996,7 +2013,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                     if (currentIndex + 1 < lexemeTable.Count)
                     {
                         currentIndex++;
-                        return LexemeToExComp(lexemeTable, ref currentIndex, ref pParseErrors);
+                        ExComp lexToEx = LexemeToExComp(lexemeTable, ref currentIndex, ref pParseErrors);
+                        return lexToEx;
                     }
                     return null;
 
@@ -2234,8 +2252,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
         private AlgebraTerm ParseDerivative(ref int currentIndex, List<TypePair<LexemeType,string>> lt, ref List<string> pParseErrors)
         {
             if (MathSolver.PLAIN_TEXT)
-                return ParseDerivativePlainText(ref currentIndex, lt, ref pParseErrors);
-            return ParseDerivativeTeX(ref currentIndex, lt, ref pParseErrors);
+            {
+                AlgebraTerm parsedDerivText = ParseDerivativePlainText(ref currentIndex, lt, ref pParseErrors);
+                return parsedDerivText;
+            }
+            AlgebraTerm parsedTeXDeriv = ParseDerivativeTeX(ref currentIndex, lt, ref pParseErrors);
+            return parsedTeXDeriv;
         }
 
         private AlgebraTerm ParseDerivativePlainText(ref int currentIndex, List<TypePair<LexemeType,string>> lt, ref List<string> pParseErrors)
@@ -2313,7 +2335,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                     return null;
                 }
 
-                return Derivative.Parse(top, bottom, new ExNumber(indexOfDeriv), isPartial, ref p_EvalData);
+                Derivative parsedDeriv = Derivative.Parse(top, bottom, new ExNumber(indexOfDeriv), isPartial, ref p_EvalData);
+                return parsedDeriv;
             }
 
             currentIndex++;
@@ -2416,7 +2439,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
                     return null;
                 }
 
-                return Derivative.Parse(top, bottom, new ExNumber(indexOfDeriv), isPartial, ref p_EvalData);
+                Derivative derivParsed = Derivative.Parse(top, bottom, new ExNumber(indexOfDeriv), isPartial, ref p_EvalData);
+                return derivParsed;
             }
 
             currentIndex++;
@@ -2751,7 +2775,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
             currentIndex = endIndex;
             if (algebraTermLexemeTable.Count == 0)
                 return null;
-            return LexemeTableToAlgebraTerm(algebraTermLexemeTable, ref pParseErrors, false);
+            AlgebraTerm lexToAlg = LexemeTableToAlgebraTerm(algebraTermLexemeTable, ref pParseErrors, false);
+            return lexToAlg;
         }
 
         private AlgebraTerm ParseRootInner(ref int currentIndex, List<TypePair<LexemeType,string>> lexemeTable, ref List<string> pParseErrors)
@@ -3082,7 +3107,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
 
             lt[currentIndex] = new TypePair<MathSolverWebsite.MathSolverLibrary.Parsing.LexemeType, string>(LexemeType.VectorStore, storeKey);
 
-            return ParseVector(ref currentIndex, lt, ref pParseErrors);
+            ExComp parsedVector = ParseVector(ref currentIndex, lt, ref pParseErrors);
+            return parsedVector;
         }
 
         private ExComp ParseBinomNotation(ref int currentIndex, List<TypePair<LexemeType,string>> lt, ref List<string> pParseErrors)

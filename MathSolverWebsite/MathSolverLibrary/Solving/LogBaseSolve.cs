@@ -48,7 +48,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
             pEvalData.GetWorkMgr().FromSides(powFunc, log.GetInnerEx(), "Convert from logarithm form to exponential form.");
 
-            return p_agSolver.SolveEq(solveFor, powFunc, log.GetInnerTerm(), ref pEvalData);
+            ExComp solveResult = p_agSolver.SolveEq(solveFor, powFunc, log.GetInnerTerm(), ref pEvalData);
+            return solveResult;
         }
     }
 }

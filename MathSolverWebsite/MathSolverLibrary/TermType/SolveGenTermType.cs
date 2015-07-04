@@ -24,8 +24,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
             _agSolver.CreateUSubTable(solveVars);
 
-            List<string> solveVarKeys = (from solveVar in solveVars
-                                         select solveVar.Key).Distinct().ToList();
+            List<string> solveVarKeys = ArrayFunc.Distinct(solveVars);
 
             for (int i = 0; i < solveVarKeys.Count; ++i)
             {
@@ -80,8 +79,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
             _agSolver.CreateUSubTable(solveVars);
 
-            List<string> solveVarKeys = (from solveVar in solveVars
-                                         select solveVar.Key).Distinct().ToList();
+            List<string> solveVarKeys = ArrayFunc.Distinct(solveVars);
 
             for (int i = 0; i < solveVarKeys.Count; ++i)
             {
@@ -150,8 +148,12 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
                     result.RemoveUndefinedSolutions();
                     result.RemoveExtraneousSolutions(_eqSet, ref pEvalData);
-                    if (!result.GetHasSolutions() && !result.GetHasRestrictions() && !pEvalData.GetHasPartialSolutions() && result.Success)
-                        return SolveResult.Solved(solveFor, new NoSolutions(), ref pEvalData);
+                    if (!result.GetHasSolutions() && !result.GetHasRestrictions() && !pEvalData.GetHasPartialSolutions() &&
+                        result.Success)
+                    {
+                        SolveResult solved = SolveResult.Solved(solveFor, new NoSolutions(), ref pEvalData);
+                        return solved;
+                    }
 
                     return result;
                 }
@@ -162,7 +164,8 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 string varForKey = command.Substring("Domain of ".Length, command.Length - "Domain of ".Length);
                 AlgebraVar varFor = new AlgebraVar(varForKey);
 
-                return _agSolver.CalculateDomain(_eqSet, varFor, ref pEvalData);
+                SolveResult domainResult = _agSolver.CalculateDomain(_eqSet, varFor, ref pEvalData);
+                return domainResult;
             }
             else if (command.StartsWith("Implicit differentiation "))
             {
@@ -178,7 +181,8 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 return result;
             }
 
-            return SolveResult.InvalidCmd(ref pEvalData);
+            SolveResult invalidResult = SolveResult.InvalidCmd(ref pEvalData);
+            return invalidResult;
         }
     }
 }

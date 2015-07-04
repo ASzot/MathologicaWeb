@@ -1,6 +1,7 @@
 ﻿using MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus;
 using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
 using System.Collections.Generic;
+using MathSolverWebsite.MathSolverLibrary.LangCompat;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 {
@@ -260,7 +261,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             {
                 ExComp result = null;
 
-                int stepCount = pEvalData.GetWorkMgr().GetWorkSteps().Count;
+                int stepCount = ArrayFunc.GetCount(pEvalData.GetWorkMgr().GetWorkSteps());
                 bool? converges = Converges(ref pEvalData, out result);
                 pEvalData.GetWorkMgr().PopSteps(stepCount);
 

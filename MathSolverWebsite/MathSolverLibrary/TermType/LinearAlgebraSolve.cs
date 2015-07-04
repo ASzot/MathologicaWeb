@@ -4,8 +4,6 @@ using MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg;
 using MathSolverWebsite.MathSolverLibrary.Parsing;
 using System.Collections.Generic;
 using MathSolverWebsite.MathSolverLibrary.LangCompat;
-using LexemeTable = System.Collections.Generic.List<
-MathSolverWebsite.MathSolverLibrary.TypePair<MathSolverWebsite.MathSolverLibrary.Parsing.LexemeType, string>>;
 
 namespace MathSolverWebsite.MathSolverLibrary.TermType
 {
@@ -13,6 +11,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
     {
         private string GAUSSIAN_SOLVE = "Gaussian solve for ";
         private string INVERSE_SOLVE = "Solve using inverses";
+        private const string ERROR_MSG = "Cannot solve";
 
         /// <summary>
         /// Can either be a vector or a variable.
@@ -30,7 +29,6 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             // In the form Ax=b
             ExComp left = eqSet.GetLeft();
             ExComp right = eqSet.GetRight();
-            const string errorMsg = "Cannot solve";
 
             if (AttemptInit(left, right, probSolveVar, ref pEvalData))
             {
@@ -41,7 +39,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             }
 
             if (_cmds == null || _cmds.Length == 0)
-                _cmds = new string[] { errorMsg };
+                _cmds = new string[] { ERROR_MSG };
         }
 
         private bool AreMultiplicationsValid()
@@ -273,13 +271,15 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             ExMatrix aInverse = _A.GetInverse();
             if (aInverse == null)
             {
-                return SolveResult.Failure("No inverse exists.", ref pEvalData);
+                SolveResult noExistResult = SolveResult.Failure("No inverse exists.", ref pEvalData);
+                return noExistResult;
             }
 
             ExComp result = _aFirst ? MulOp.StaticCombine(aInverse, _B) : MulOp.StaticCombine(_B, aInverse);
             result = Simplifier.Simplify(result.ToAlgTerm(), ref pEvalData);
 
-            return SolveResult.Solved(_x == null ? (ExComp)_X : _x, result, ref pEvalData);
+            SolveResult solveResult = SolveResult.Solved(_x == null ? (ExComp)_X : _x, result, ref pEvalData);
+            return solveResult;
         }
 
         private SolveResult SolveVectorEquation(string solveForStr, ref EvalData pEvalData)
@@ -294,21 +294,21 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 EqSet eq0 = _eqSets[0];
                 EqSet eq1 = _eqSets[1];
 
-                List<LexemeTable> lts = new List<LexemeTable>();
+                List<List<TypePair<MathSolverLibrary.Parsing.LexemeType, string>>> lts = new List<List<TypePair<MathSolverLibrary.Parsing.LexemeType, string>>>();
 
-                LexemeTable lt0 = new LexemeTable();
+                List<TypePair<MathSolverLibrary.Parsing.LexemeType, string>> lt0 = new List<TypePair<MathSolverLibrary.Parsing.LexemeType, string>>();
                 lt0.Add(new TypePair<LexemeType, string>(LexemeType.Identifier, solveVars[0]));
                 lt0.Add(new TypePair<LexemeType, string>(LexemeType.Identifier, solveVars[1]));
 
                 lts.Add(lt0);
-                lts.Add(new LexemeTable());
+                lts.Add(new List<TypePair<MathSolverLibrary.Parsing.LexemeType, string>>());
 
-                LexemeTable lt1 = new LexemeTable();
+                List<TypePair<MathSolverLibrary.Parsing.LexemeType, string>> lt1 = new List<TypePair<MathSolverLibrary.Parsing.LexemeType, string>>();
                 lt1.Add(new TypePair<LexemeType, string>(LexemeType.Identifier, solveVars[0]));
                 lt1.Add(new TypePair<LexemeType, string>(LexemeType.Identifier, solveVars[1]));
 
                 lts.Add(lt1);
-                lts.Add(new LexemeTable());
+                lts.Add(new List<TypePair<MathSolverLibrary.Parsing.LexemeType, string>>());
 
                 Dictionary<string, int> allVars = new Dictionary<string, int>();
                 allVars.Add(solveVars[0], 1);
@@ -357,7 +357,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             {
                 ExComp tmpResult = agSolver.SolveEq(solveForVar, _eqSets[i].GetLeftTerm(), _eqSets[i].GetRightTerm(), ref pEvalData);
                 if (i == 0)
-                    end = pEvalData.GetWorkMgr().GetWorkSteps().Count;
+                    end = ArrayFunc.GetCount(pEvalData.GetWorkMgr().GetWorkSteps());
                 if (tmpResult is AlgebraTerm)
                     tmpResult = (tmpResult as AlgebraTerm).RemoveRedundancies(false);
 
@@ -368,13 +368,15 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                     solveResult = tmpResult;
                 else if (!solveResult.IsEqualTo(tmpResult))
                 {
-                    return SolveResult.Solved(solveForVar, ExNumber.GetUndefined(), ref pEvalData);
+                    SolveResult solved = SolveResult.Solved(solveForVar, ExNumber.GetUndefined(), ref pEvalData);
+                    return solved;
                 }
             }
 
             pEvalData.GetWorkMgr().PopSteps(end);
 
-            return SolveResult.Solved(solveForVar, solveResult, ref pEvalData);
+            SolveResult solvedResult = SolveResult.Solved(solveForVar, solveResult, ref pEvalData);
+            return solvedResult;
         }
 
         public override SolveResult ExecuteCommand(string command, ref EvalData pEvalData)
@@ -384,7 +386,8 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             if (command.StartsWith("Solve for ") && _eqSets != null)
             {
                 string solveForStr = StringFunc.Rm(command, 0, "Solve for ".Length);
-                return SolveVectorEquation(solveForStr, ref pEvalData);
+                SolveResult solveVector = SolveVectorEquation(solveForStr, ref pEvalData);
+                return solveVector;
             }
             else if (command.StartsWith(GAUSSIAN_SOLVE))
             {
@@ -395,7 +398,8 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 if (_B == null || _A == null || (_x == null && _X == null))
                     return SolveResult.Failure();
 
-                return SolveInverse(ref pEvalData);
+                SolveResult solveInverse = SolveInverse(ref pEvalData);
+                return solveInverse;
             }
 
             return SolveResult.Failure();

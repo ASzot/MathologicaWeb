@@ -493,7 +493,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Term
             if (term.GetAllAlgebraCompsStr().Count == 0)
                 return term;
 
-            int startWorkSteps = pEvalData.GetWorkMgr().GetWorkSteps().Count;
+            int startWorkSteps = ArrayFunc.GetCount(pEvalData.GetWorkMgr().GetWorkSteps());
             AlgebraTerm[] factors = GetFactors(term, ref pEvalData);
 
             if (factors != null)

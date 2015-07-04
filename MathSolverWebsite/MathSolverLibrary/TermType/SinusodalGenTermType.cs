@@ -40,7 +40,8 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
                 AbsValFunction coeffAbs = new AbsValFunction(_coeff);
 
-                return SolveResult.Simplified(coeffAbs.Evaluate(false, ref pEvalData));
+                SolveResult simpResult = SolveResult.Simplified(coeffAbs.Evaluate(false, ref pEvalData));
+                return simpResult;
             }
             else if (command == "Get phase shift")
             {
@@ -65,13 +66,23 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                     return SolveResult.Failure();
             }
             else if (tt_func != null && tt_func.IsValidCommand(command))
-                return tt_func.ExecuteCommand(command, ref pEvalData);
+            {
+                SolveResult funcSolveResult = tt_func.ExecuteCommand(command, ref pEvalData);
+                return funcSolveResult;
+            }
             else if (_ttSolveGen != null && _ttSolveGen.IsValidCommand(command))
-                return _ttSolveGen.ExecuteCommand(command, ref pEvalData);
+            {
+                SolveResult solveSolveResult = _ttSolveGen.ExecuteCommand(command, ref pEvalData);
+                return solveSolveResult;
+            }
             else if (tt_simp != null && tt_simp.IsValidCommand(command))
-                return tt_simp.ExecuteCommand(command, ref pEvalData);
+            {
+                SolveResult simpResult = tt_simp.ExecuteCommand(command, ref pEvalData);
+                return simpResult;
+            }
 
-            return SolveResult.InvalidCmd(ref pEvalData);
+            SolveResult invalidResult = SolveResult.InvalidCmd(ref pEvalData);
+            return invalidResult;
         }
 
         public bool Init(EquationInformation eqInfo, ExComp left, ExComp right, List<TypePair<LexemeType, string>> lexemeTable,

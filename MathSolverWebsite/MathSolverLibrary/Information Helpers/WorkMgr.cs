@@ -71,7 +71,7 @@ namespace MathSolverWebsite.MathSolverLibrary
 
         public static string WorkFromSynthDivTable(ExComp root, IEnumerable<ExComp> poly, IEnumerable<ExComp> muls, IEnumerable<ExComp> results)
         {
-            if (poly.Count() - 1 != muls.Count() || poly.Count() - 1 != results.Count())
+            if (ArrayFunc.GetCount(poly) - 1 != ArrayFunc.GetCount(muls) || ArrayFunc.GetCount(poly) - 1 != ArrayFunc.GetCount(results))
                 return null;
 
             string finalHtml = "";
@@ -244,8 +244,8 @@ namespace MathSolverWebsite.MathSolverLibrary
             if (!GetAllowWork())
                 return;
 
-            ExComp[] sides = enumSides.ToArray();
-            LexemeType[] comparisons = enumComparisons.ToArray();
+            ExComp[] sides = ArrayFunc.ToArray(enumSides);
+            LexemeType[] comparisons = ArrayFunc.ToArray(enumComparisons);
 
             if (sides.Length + 1 != comparisons.Length)
                 return;
@@ -324,7 +324,7 @@ namespace MathSolverWebsite.MathSolverLibrary
         /// <summary>
         /// Pop the steps from the start index to the current index.
         /// </summary>
-        /// <param name="count"></param>
+        /// <param name="startIndex"></param>
         public void PopSteps(int startIndex)
         {
             PopStepsCount(GetWorkSteps().Count - startIndex);

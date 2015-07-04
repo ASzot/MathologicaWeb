@@ -7,7 +7,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
     {
         public static bool AreEqual(AlgebraTerm term0, AlgebraTerm term1, ref TermType.EvalData pEvalData)
         {
-            return (Simplify(term0, ref pEvalData).IsEqualTo(Simplify(term1, ref pEvalData)));
+            bool areEqual = (Simplify(term0, ref pEvalData).IsEqualTo(Simplify(term1, ref pEvalData)));
+            return areEqual;
         }
 
         public static ExComp AttemptCancelations(AlgebraTerm term, ref TermType.EvalData pEvalData)

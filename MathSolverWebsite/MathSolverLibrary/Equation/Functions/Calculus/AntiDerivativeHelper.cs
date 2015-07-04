@@ -83,7 +83,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     for (int i = 0; i < gps.Count; ++i)
                     {
                         IntegrationInfo integrationInfo = new IntegrationInfo();
-                        int prevStepCount = pEvalData.GetWorkMgr().GetWorkSteps().Count;
+                        int prevStepCount = ArrayFunc.GetCount(pEvalData.GetWorkMgr().GetWorkSteps());
 
                         pEvalData.GetWorkMgr().FromFormatted("");
                         WorkStep lastStep = pEvalData.GetWorkMgr().GetLast();
@@ -94,7 +94,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
                         if (aderiv == null)
                         {
-                            pEvalData.GetWorkMgr().PopStepsCount(pEvalData.GetWorkMgr().GetWorkSteps().Count - prevStepCount);
+                            pEvalData.GetWorkMgr().PopStepsCount(ArrayFunc.GetCount(pEvalData.GetWorkMgr().GetWorkSteps()) - prevStepCount);
                             return null;
                         }
 
@@ -233,7 +233,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     ExComp[] num = GroupHelper.GetNumerator(gp);
                     if (num.Length == 1)
                     {
-                        int prePFWorkStepCount = pEvalData.GetWorkMgr().GetWorkSteps().Count;
+                        int prePFWorkStepCount = ArrayFunc.GetCount(pEvalData.GetWorkMgr().GetWorkSteps());
                         atmpt = AttemptPartialFractions(num[0], den[0], dVar, ref pIntInfo, ref pEvalData);
                         if (atmpt != null)
                             return atmpt;
@@ -243,7 +243,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             }
 
             // Trig substitutions.
-            int prevTrigSubWorkCount = pEvalData.GetWorkMgr().GetWorkSteps().Count;
+            int prevTrigSubWorkCount = ArrayFunc.GetCount(pEvalData.GetWorkMgr().GetWorkSteps());
             atmpt = (new TrigSubTech()).TrigSubstitution(gp, dVar, ref pEvalData);
             if (atmpt != null)
                 return atmpt;
@@ -260,7 +260,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 // Integration by parts.
                 if (pIntInfo.ByPartsCount < IntegrationInfo.MAX_BY_PARTS_COUNT)
                 {
-                    int prevWorkStepCount = pEvalData.GetWorkMgr().GetWorkSteps().Count;
+                    int prevWorkStepCount = ArrayFunc.GetCount(pEvalData.GetWorkMgr().GetWorkSteps());
                     string thisStr = GroupHelper.ToAlgTerm(gp).FinalToDispStr();
                     pIntInfo.IncPartsCount();
                     // Is one of these a denominator because if so don't do integration by parts.
@@ -273,7 +273,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                             return atmpt;
                         }
                         else
-                            pEvalData.GetWorkMgr().PopStepsCount(pEvalData.GetWorkMgr().GetWorkSteps().Count - prevWorkStepCount);
+                            pEvalData.GetWorkMgr().PopStepsCount(ArrayFunc.GetCount(pEvalData.GetWorkMgr().GetWorkSteps()) - prevWorkStepCount);
                     }
                 }
             }
@@ -376,11 +376,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 }
 
                 // This gets the actual anti-derivative not just evaluable form.
-                return SecTanTrig(sf, tf, sp, tp, dVar, ref pIntInfo, ref pEvalData);
+                ExComp secTanTrigEval = SecTanTrig(sf, tf, sp, tp, dVar, ref pIntInfo, ref pEvalData);
+
+                return secTanTrigEval;
             }
 
             if (simplified != null)
-                return Integral.TakeAntiDeriv(simplified, dVar, ref pEvalData);
+            {
+                ExComp intEval = Integral.TakeAntiDeriv(simplified, dVar, ref pEvalData);
+                return intEval;
+            }
 
             return null;
         }
@@ -566,14 +571,16 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 if (synthDivResult == null)
                     return null;
 
-                return Integral.TakeAntiDeriv(synthDivResult, dVar, ref pEvalData);
+                ExComp intEval = Integral.TakeAntiDeriv(synthDivResult, dVar, ref pEvalData);
+                return intEval;
             }
 
             ExComp atmpt = PartialFracs.Split(numTerm, denTerm, numPoly, dVar, ref pEvalData);
             if (atmpt == null)
                 return null;
 
-            return Integral.TakeAntiDeriv(atmpt, dVar, ref pEvalData);
+            ExComp antiDerivEval = Integral.TakeAntiDeriv(atmpt, dVar, ref pEvalData);
+            return antiDerivEval;
         }
 
         private static List<ExComp> GetPotentialU(ExComp[] group, AlgebraComp dVar)
@@ -643,12 +650,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             foreach (ExComp potentialU in potentialUs)
             {
-                int prevWorkStepCount = pEvalData.GetWorkMgr().GetWorkSteps().Count;
+                int prevWorkStepCount = ArrayFunc.GetCount(pEvalData.GetWorkMgr().GetWorkSteps());
                 ExComp attempt = TryU(group, potentialU, dVar, ref pIntInfo, ref pEvalData);
                 if (attempt != null)
                     return attempt;
                 else
-                    pEvalData.GetWorkMgr().PopStepsCount(pEvalData.GetWorkMgr().GetWorkSteps().Count - prevWorkStepCount);
+                    pEvalData.GetWorkMgr().PopStepsCount(ArrayFunc.GetCount(pEvalData.GetWorkMgr().GetWorkSteps()) - prevWorkStepCount);
             }
 
             return null;
@@ -656,12 +663,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         private static ExComp AttemptUSub(ExComp[] group, AlgebraComp dVar, ExComp forcedU, ref IntegrationInfo pIntInfo, ref EvalData pEvalData)
         {
-            int prevWorkStepCount = pEvalData.GetWorkMgr().GetWorkSteps().Count;
+            int prevWorkStepCount = ArrayFunc.GetCount(pEvalData.GetWorkMgr().GetWorkSteps());
             ExComp attempt = TryU(group, forcedU, dVar, ref pIntInfo, ref pEvalData);
             if (attempt != null)
                 return attempt;
             else
-                pEvalData.GetWorkMgr().PopStepsCount(pEvalData.GetWorkMgr().GetWorkSteps().Count - prevWorkStepCount);
+                pEvalData.GetWorkMgr().PopStepsCount(ArrayFunc.GetCount(pEvalData.GetWorkMgr().GetWorkSteps()) - prevWorkStepCount);
 
             return null;
         }
@@ -870,7 +877,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         private static ExComp SingularIntByParts(ExComp ex0, AlgebraComp dVar, string thisSTr, ref IntegrationInfo pIntInfo, ref EvalData pEvalData)
         {
-            return IntByParts(ex0, ExNumber.GetOne(), dVar, thisSTr, ref pIntInfo, ref pEvalData);
+            ExComp intByParts = IntByParts(ex0, ExNumber.GetOne(), dVar, thisSTr, ref pIntInfo, ref pEvalData);
+            return intByParts;
         }
 
         private static ExComp IntByParts(ExComp ex0, ExComp ex1, AlgebraComp dVar, string thisStr, ref IntegrationInfo pIntInfo, ref EvalData pEvalData)
@@ -930,7 +938,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             else
                 return null;
 
-            int stepCount = pEvalData.GetWorkMgr().GetWorkSteps().Count;
+            int stepCount = ArrayFunc.GetCount(pEvalData.GetWorkMgr().GetWorkSteps());
             Integral antiderivativeOfDV = Integral.ConstructIntegral(dv.CloneEx(), dVar);
             antiderivativeOfDV.SetInfo(pIntInfo);
             antiderivativeOfDV.SetAddConstant(false);
@@ -938,7 +946,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             if (v is Integral)
             {
-                pEvalData.GetWorkMgr().PopStepsCount(pEvalData.GetWorkMgr().GetWorkSteps().Count - stepCount);
+                pEvalData.GetWorkMgr().PopStepsCount(ArrayFunc.GetCount(pEvalData.GetWorkMgr().GetWorkSteps()) - stepCount);
                 // Try to switch the variables.
                 ExComp tmp = u;
                 u = dv;
@@ -952,8 +960,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     return null;
             }
 
-            List<WorkStep> stepRange = pEvalData.GetWorkMgr().GetWorkSteps().GetRange(stepCount, pEvalData.GetWorkMgr().GetWorkSteps().Count - stepCount);
-            pEvalData.GetWorkMgr().GetWorkSteps().RemoveRange(stepCount, pEvalData.GetWorkMgr().GetWorkSteps().Count - stepCount);
+            List<WorkStep> stepRange = pEvalData.GetWorkMgr().GetWorkSteps().GetRange(stepCount, ArrayFunc.GetCount(pEvalData.GetWorkMgr().GetWorkSteps()) - stepCount);
+            pEvalData.GetWorkMgr().GetWorkSteps().RemoveRange(stepCount, ArrayFunc.GetCount(pEvalData.GetWorkMgr().GetWorkSteps()) - stepCount);
 
             pEvalData.GetWorkMgr().FromFormatted("",
                 "Integrate by parts using the formula " + WorkMgr.STM + "\\int u v' = uv - \\int v u' " + WorkMgr.EDM + " where " +
@@ -1166,7 +1174,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     pEvalData.GetWorkMgr().FromSides(pf, finalEx,
                         "Use the trig identity " + WorkMgr.STM + "sin^{2}(x) = \\frac{1}{2}(1-cos(2x))" + WorkMgr.EDM);
 
-                    return Integral.TakeAntiDeriv(finalEx, dVar, ref pEvalData);
+                    ExComp finalEval = Integral.TakeAntiDeriv(finalEx, dVar, ref pEvalData);
+                    return finalEval;
                 }
                 else if (pf.GetBase() is CosFunction && pf.GetPower() is ExNumber && (pf.GetPower() as ExNumber).IsRealInteger() &&
                     (int)((pf.GetPower() as ExNumber).GetRealComp()) > 1 && (int)((pf.GetPower() as ExNumber).GetRealComp()) % 2 == 0)
@@ -1182,7 +1191,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     pEvalData.GetWorkMgr().FromSides(pf, subbed,
                         "Use the trig identity " + WorkMgr.STM + "cos^{2}(x) = \\frac{1}{2}(1+cos(2x))" + WorkMgr.EDM);
 
-                    return Integral.TakeAntiDeriv(subbed, dVar, ref pEvalData);
+                    ExComp finalEval = Integral.TakeAntiDeriv(subbed, dVar, ref pEvalData);
+                    return finalEval;
                 }
                 else if (pf.GetBase() is CosFunction && pf.GetPower() is ExNumber && (pf.GetPower() as ExNumber).IsRealInteger() &&
                     (int)((pf.GetPower() as ExNumber).GetRealComp()) > 1 && (int)((pf.GetPower() as ExNumber).GetRealComp()) % 2 != 0)
@@ -1199,7 +1209,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     pEvalData.GetWorkMgr().FromSides(pf, finalEx,
                         "Use the trig identity " + WorkMgr.STM + "cos^{2}(x) = \\frac{1}{2}(1+cos(2x))" + WorkMgr.EDM);
 
-                    return Integral.TakeAntiDeriv(finalEx, dVar, ref pEvalData);
+                    ExComp intEval = Integral.TakeAntiDeriv(finalEx, dVar, ref pEvalData);
+                    return intEval;
                 }
                 else if (pf.GetBase() is CscFunction && pf.GetPower() is ExNumber && (pf.GetPower() as ExNumber).IsRealInteger() &&
                     (int)((pf.GetPower() as ExNumber).GetRealComp()) > 1 && (int)((pf.GetPower() as ExNumber).GetRealComp()) % 2 == 0)
@@ -1217,7 +1228,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     pEvalData.GetWorkMgr().FromSides(pf, finalEx,
                         "Use the trig identity " + WorkMgr.STM + "csc^2(x) = 1 + cot^2(x)" + WorkMgr.EDM);
 
-                    return Integral.TakeAntiDeriv(finalEx, dVar, ref pEvalData);
+                    ExComp intEval = Integral.TakeAntiDeriv(finalEx, dVar, ref pEvalData);
+                    return intEval;
                 }
                 else if (pf.GetBase() is TanFunction && pf.GetPower() is ExNumber && (pf.GetPower() as ExNumber).IsRealInteger() &&
                     (int)((pf.GetPower() as ExNumber).GetRealComp()) > 1 && (int)((pf.GetPower() as ExNumber).GetRealComp()) % 2 == 0)
@@ -1232,7 +1244,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     pEvalData.GetWorkMgr().FromSides(pf, finalEx,
                         "Use the trig identity " + WorkMgr.STM + "tan^2(x) = sec^2(x)-1" + WorkMgr.EDM);
 
-                    return Integral.TakeAntiDeriv(finalEx, dVar, ref pEvalData);
+                    ExComp intEval = Integral.TakeAntiDeriv(finalEx, dVar, ref pEvalData);
+                    return intEval;
                 }
                 else if (pf.GetBase() is TanFunction && pf.GetPower() is ExNumber && (pf.GetPower() as ExNumber).IsRealInteger() &&
                     (int)((pf.GetPower() as ExNumber).GetRealComp()) > 1 && (int)((pf.GetPower() as ExNumber).GetRealComp()) % 2 != 0)
@@ -1248,7 +1261,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                     pEvalData.GetWorkMgr().FromSides(pf, finalEx,
                         "Use the trig identity " + WorkMgr.STM + "tan^2(x) = sec^2(x)-1" + WorkMgr.EDM);
 
-                    return Integral.TakeAntiDeriv(finalEx, dVar, ref pEvalData);
+                    ExComp intEval = Integral.TakeAntiDeriv(finalEx, dVar, ref pEvalData);
+                    return intEval;
                 }
             }
             else if (single is TrigFunction)

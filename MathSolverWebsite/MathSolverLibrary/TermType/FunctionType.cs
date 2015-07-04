@@ -43,7 +43,8 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 if (pEvalData.GetWorkMgr().GetAllowWork())
                     pEvalData.GetWorkMgr().FromSides(left, right, "`" + WorkMgr.ToDisp(inverseFunc) + "` is the inverse function, solve for it.");
 
-                return _agSolver.SolveEquationEquality(inverseFunc.GetVar(), left, right, ref pEvalData);
+                SolveResult solveResult = _agSolver.SolveEquationEquality(inverseFunc.GetVar(), left, right, ref pEvalData);
+                return solveResult;
             }
             else if (command.StartsWith("Assign"))
             {
@@ -72,7 +73,8 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                     return SolveResult.Failure();
             }
 
-            return SolveResult.InvalidCmd(ref pEvalData);
+            SolveResult invalidCmd = SolveResult.InvalidCmd(ref pEvalData);
+            return invalidCmd;
         }
 
         private bool ContainsSpecialFuncs(AlgebraTerm term)

@@ -296,11 +296,18 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
 
             ExComp innerEx = GetInnerEx();
             if (innerEx is ExVector)
-                return EvaluateVectorField(ref pEvalData, pathVar, pathRestriction, useDefs);
+            {
+                ExComp evalVecField = EvaluateVectorField(ref pEvalData, pathVar, pathRestriction, useDefs);
+                return evalVecField;
+            }
             else if (innerEx is ExMatrix)
                 return this;
             else
-                return EvaluateScalarField(ref pEvalData, pathVar, pathRestriction, useDefs);
+            {
+                ExComp evalScalarField = EvaluateScalarField(ref pEvalData, pathVar, pathRestriction, useDefs);
+
+                return evalScalarField;
+            }
         }
     }
 }

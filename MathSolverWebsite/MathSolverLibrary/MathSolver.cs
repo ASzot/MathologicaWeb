@@ -3,8 +3,6 @@ using MathSolverWebsite.MathSolverLibrary.Parsing;
 using MathSolverWebsite.MathSolverLibrary.TermType;
 using System.Collections.Generic;
 using System.Linq;
-using LexemeTable = System.Collections.Generic.List<
-MathSolverWebsite.MathSolverLibrary.TypePair<MathSolverWebsite.MathSolverLibrary.Parsing.LexemeType, string>>;
 
 namespace MathSolverWebsite.MathSolverLibrary
 {
@@ -100,9 +98,9 @@ namespace MathSolverWebsite.MathSolverLibrary
             return result;
         }
 
-        public static TermType.GenTermType ParseInput(LexemeTable completeLexemeTable, LexicalParser lexParser, string input, ref TermType.EvalData pEvalData, ref List<string> pParseErrors)
+        public static TermType.GenTermType ParseInput(List<TypePair<LexemeType, string>> completeLexemeTable, LexicalParser lexParser, string input, ref TermType.EvalData pEvalData, ref List<string> pParseErrors)
         {
-            List<LexemeTable> lexemeTables;
+            List<List<TypePair<LexemeType, string>>> lexemeTables;
             List<EqSet> terms = lexParser.ParseInput(input, out lexemeTables, ref pParseErrors);
             if (terms == null)
                 return null;
@@ -122,7 +120,8 @@ namespace MathSolverWebsite.MathSolverLibrary
             {
                 EqSet singularEqSet = terms[0];
 
-                return DetermineSingularEqSet(singularEqSet, completeLexemeTable, solveVars, null, ref pEvalData);
+                GenTermType gtt = DetermineSingularEqSet(singularEqSet, completeLexemeTable, solveVars, null, ref pEvalData);
+                return gtt;
             }
             else
             {

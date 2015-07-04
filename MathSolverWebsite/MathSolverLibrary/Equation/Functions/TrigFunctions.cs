@@ -143,7 +143,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
             recipInner = recipInner.MakeFormattingCorrect();
 
             ATanFunction asin = new ATanFunction(recipInner.RemoveRedundancies(false));
-            return asin.Evaluate(harshEval, ref pEvalData);
+            ExComp evalASin = asin.Evaluate(harshEval, ref pEvalData);
+            return evalASin;
         }
 
         public static ExComp CreateDerivativeOf(ExComp ex)
@@ -191,7 +192,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
             ASinFunction asin = new ASinFunction(recipInner.RemoveRedundancies(false));
             asin.SkipDomain = true;
-            return asin.Evaluate(harshEval, ref pEvalData);
+            ExComp evalASin = asin.Evaluate(harshEval, ref pEvalData);
+            return evalASin;
         }
 
         public static ExComp CreateDerivativeOf(ExComp ex)
@@ -241,7 +243,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions
 
             ACosFunction asin = new ACosFunction(recipInner.RemoveRedundancies(false));
             asin.SkipDomain = true;
-            return asin.Evaluate(harshEval, ref pEvalData);
+            ExComp evalASin = asin.Evaluate(harshEval, ref pEvalData);
+            return evalASin;
         }
 
         public static ExComp CreateDerivativeOf(ExComp ex)

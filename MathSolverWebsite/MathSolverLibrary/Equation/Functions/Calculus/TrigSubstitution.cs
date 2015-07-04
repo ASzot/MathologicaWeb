@@ -1,6 +1,7 @@
 ﻿using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
 using MathSolverWebsite.MathSolverLibrary.TermType;
 using System.Collections.Generic;
+using MathSolverWebsite.MathSolverLibrary.LangCompat;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 {
@@ -71,7 +72,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         private static ExComp TrigSubBackIn(ExComp ex, AlgebraComp subVar, ExComp subVal, AlgebraComp dVar, ref TermType.EvalData pEvalData)
         {
-            int workStepStart = pEvalData.GetWorkMgr().GetWorkSteps().Count;
+            int workStepStart = ArrayFunc.GetCount(pEvalData.GetWorkMgr().GetWorkSteps());
             pEvalData.GetWorkMgr().FromSides(dVar, subVal, "Solve for " + WorkMgr.STM + subVar.ToDispString() + WorkMgr.EDM);
 
             AlgebraTerm left = subVal.ToAlgTerm();
@@ -79,8 +80,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             Solving.SolveMethod.ConstantsToRight(ref left, ref right, subVar, ref pEvalData);
             Solving.SolveMethod.DivideByVariableCoeffs(ref left, ref right, subVar, ref pEvalData, false);
 
-            List<WorkStep> stepRange = pEvalData.GetWorkMgr().GetWorkSteps().GetRange(workStepStart, pEvalData.GetWorkMgr().GetWorkSteps().Count - workStepStart);
-            pEvalData.GetWorkMgr().GetWorkSteps().RemoveRange(workStepStart, pEvalData.GetWorkMgr().GetWorkSteps().Count - workStepStart);
+            List<WorkStep> stepRange = pEvalData.GetWorkMgr().GetWorkSteps().GetRange(workStepStart, ArrayFunc.GetCount(pEvalData.GetWorkMgr().GetWorkSteps()) - workStepStart);
+            pEvalData.GetWorkMgr().GetWorkSteps().RemoveRange(workStepStart, ArrayFunc.GetCount(pEvalData.GetWorkMgr().GetWorkSteps()) - workStepStart);
 
             // It should now just be the isolated trig function.
             ExComp leftEx = left.RemoveRedundancies(false);
@@ -259,7 +260,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         private static ExComp TrigSubstitutionGetSub(ExComp[] group, AlgebraComp dVar, out AlgebraComp subVar, out ExComp subOut, out AlgebraTerm subbedResult, ref EvalData pEvalData)
         {
-            return TrigSubstitutionGetSub(group, dVar, out subVar, out subOut, out subbedResult, ref pEvalData, null, null, -1, -1);
+            ExComp trigSubResult = TrigSubstitutionGetSub(group, dVar, out subVar, out subOut, out subbedResult, ref pEvalData, null, null, -1, -1);
+            return trigSubResult;
         }
 
         private static void SubstituteIn(ref ExComp[] dispGp, List<ExComp[]> dispSubGps, ExComp[] group, int index, int subIndex)

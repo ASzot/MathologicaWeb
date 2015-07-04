@@ -80,7 +80,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
             pEvalData.GetWorkMgr().FromSides(left, right, "Simplify.");
 
-            return p_solver.SolveEq(solveFor, left, right, ref pEvalData);
+            ExComp agSolveResult = p_solver.SolveEq(solveFor, left, right, ref pEvalData);
+            return agSolveResult;
         }
     }
 }

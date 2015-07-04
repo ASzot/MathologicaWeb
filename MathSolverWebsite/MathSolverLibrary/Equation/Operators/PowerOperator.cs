@@ -2,6 +2,7 @@
 using MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg;
 using System;
 using System.Collections.Generic;
+using MathSolverWebsite.MathSolverLibrary.LangCompat;
 using MathSolverWebsite.MathSolverLibrary.TermType;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
@@ -154,11 +155,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Operators
                     overallEx = MulOp.StaticWeakCombine(overallEx, PowOp.StaticWeakCombine(group1, iterVar));
 
                     // Don't display the work steps associated with this.
-                    int startingWorkSteps = pEvalData.GetWorkMgr().GetWorkSteps().Count;
+                    int startingWorkSteps = ArrayFunc.GetCount(pEvalData.GetWorkMgr().GetWorkSteps());
                     SumFunction sumFunc = new SumFunction(overallEx, iterVar, ExNumber.GetZero(), power);
                     pEvalData.GetWorkMgr().PopSteps(startingWorkSteps);
 
-                    return sumFunc.Evaluate(false, ref pEvalData);
+                    ExComp evalSumFunc = sumFunc.Evaluate(false, ref pEvalData);
+                    return evalSumFunc;
                 }
 
                 int complexityRating = (int)Math.Pow(groupCount, powerInt);

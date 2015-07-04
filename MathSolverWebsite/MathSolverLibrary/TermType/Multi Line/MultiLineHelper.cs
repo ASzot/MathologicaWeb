@@ -1,8 +1,6 @@
 ﻿using MathSolverWebsite.MathSolverLibrary.Equation;
 using System.Collections.Generic;
 using MathSolverWebsite.MathSolverLibrary.LangCompat;
-using LexemeTable = System.Collections.Generic.List<
-MathSolverWebsite.MathSolverLibrary.TypePair<MathSolverWebsite.MathSolverLibrary.Parsing.LexemeType, string>>;
 
 namespace MathSolverWebsite.MathSolverLibrary.TermType
 {
@@ -61,14 +59,14 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             }
         }
 
-        public List<EqSet> AssignLines(List<EqSet> eqs, ref List<LexemeTable> lts, ref Dictionary<string, int> solveVars, out LexemeTable totalLt, ref EvalData pEvalData)
+        public List<EqSet> AssignLines(List<EqSet> eqs, ref List<List<TypePair<MathSolverLibrary.Parsing.LexemeType, string>>> lts, ref Dictionary<string, int> solveVars, out List<TypePair<MathSolverLibrary.Parsing.LexemeType, string>> totalLt, ref EvalData pEvalData)
         {
-            totalLt = new LexemeTable();
+            totalLt = new List<TypePair<MathSolverLibrary.Parsing.LexemeType, string>>();
             int ltsCount = 0;
             for (int i = 0; i < eqs.Count; ++i)
             {
                 // Compound the lts for the number of sides there are.
-                LexemeTable eqLt = new LexemeTable();
+                List<TypePair<MathSolverLibrary.Parsing.LexemeType, string>> eqLt = new List<TypePair<MathSolverLibrary.Parsing.LexemeType, string>>();
                 for (int j = ltsCount; j < ltsCount + eqs[i].GetValidComparisonOps().Count + 1; ++j)
                 {
                     eqLt.AddRange(lts[j]);
@@ -83,7 +81,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                     ltsCount += eqs[i].GetValidComparisonOps().Count + 1;
             }
 
-            foreach (LexemeTable lt in lts)
+            foreach (List<TypePair<MathSolverLibrary.Parsing.LexemeType, string>> lt in lts)
             {
                 totalLt.AddRange(lt);
             }
@@ -137,7 +135,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             return eqs;
         }
 
-        private bool AttemptAddIntervalDef(EqSet eqSet, LexemeTable lt, ref EvalData pEvalData)
+        private bool AttemptAddIntervalDef(EqSet eqSet, List<TypePair<MathSolverLibrary.Parsing.LexemeType, string>> lt, ref EvalData pEvalData)
         {
             if (eqSet.GetSides().Count != 3)
                 return false;
@@ -149,7 +147,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             Dictionary<string, int> solveVars = AlgebraSolver.GetIdenOccurances(lt);
             string solveVar = AlgebraSolver.GetProbableVar(solveVars);
 
-            int workStepCount = pEvalData.GetWorkMgr().GetWorkSteps().Count;
+            int workStepCount = ArrayFunc.GetCount(pEvalData.GetWorkMgr().GetWorkSteps());
 
             ExComp centerEx = eqSet.GetSides()[1];
             if (centerEx is AlgebraTerm)
@@ -160,10 +158,10 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             SolveResult result = algebraSolver.SolveEquationInequality(eqSet.GetSides(), eqSet.GetComparisonOps(), new AlgebraVar(solveVar), ref pEvalData);
 
             if (addWork)
-                _intervalWorkSteps.Add(pEvalData.GetWorkMgr().GetWorkSteps().GetRange(workStepCount, pEvalData.GetWorkMgr().GetWorkSteps().Count - workStepCount));
+                _intervalWorkSteps.Add(pEvalData.GetWorkMgr().GetWorkSteps().GetRange(workStepCount, ArrayFunc.GetCount(pEvalData.GetWorkMgr().GetWorkSteps()) - workStepCount));
             else
                 _intervalWorkSteps.Add(null);
-            pEvalData.GetWorkMgr().GetWorkSteps().RemoveRange(workStepCount, pEvalData.GetWorkMgr().GetWorkSteps().Count - workStepCount);
+            pEvalData.GetWorkMgr().GetWorkSteps().RemoveRange(workStepCount, ArrayFunc.GetCount(pEvalData.GetWorkMgr().GetWorkSteps()) - workStepCount);
 
             if ((result.Solutions != null && result.Solutions.Count != 0) ||
                 (result.Restrictions == null || result.Restrictions.Count != 1) ||

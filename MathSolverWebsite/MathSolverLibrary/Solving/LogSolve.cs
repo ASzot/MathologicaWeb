@@ -67,7 +67,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                         left = log0.GetInnerEx().ToAlgTerm();
                         right = log1.GetInnerEx().ToAlgTerm();
                         pEvalData.GetWorkMgr().FromSides(left, right, "By the rule if " + WorkMgr.STM + "log(x)=log(y)" + WorkMgr.EDM + " then " + WorkMgr.STM + "x=y" + WorkMgr.EDM);
-                        return p_agSolver.SolveEq(solveFor, left, right, ref pEvalData);
+                        ExComp agSolveResult = p_agSolver.SolveEq(solveFor, left, right, ref pEvalData);
+                        return agSolveResult;
                     }
 
                     if (log0.GetBase() is ExNumber && log1.GetBase() is ExNumber)
@@ -145,7 +146,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                         }
 
                         pEvalData.GetWorkMgr().FromSides(log0Inner, log1Inner, "Solve this equation.");
-                        return p_agSolver.SolveEq(solveFor, log0Inner.ToAlgTerm(), log1Inner.ToAlgTerm(), ref pEvalData);
+                        ExComp agSolveResult = p_agSolver.SolveEq(solveFor, log0Inner.ToAlgTerm(), log1Inner.ToAlgTerm(), ref pEvalData);
+                        return agSolveResult;
                     }
                 }
             }
@@ -182,7 +184,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
             pEvalData.GetWorkMgr().FromSides(left, right);
 
-            return p_agSolver.SolveEq(solveFor, left, right, ref pEvalData);
+            ExComp finalAgSolveResult = p_agSolver.SolveEq(solveFor, left, right, ref pEvalData);
+            return finalAgSolveResult;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
 using MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg;
 using System.Collections.Generic;
+using MathSolverWebsite.MathSolverLibrary.LangCompat;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 {
@@ -92,7 +93,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
         private static Dictionary<string, Integral> GetIntegralDepths(Integral integral, ref Dictionary<string, Integral> dict, out ExComp baseValue)
         {
-            if (integral.GetDVar() == null || dict.ContainsKey(integral.GetDVar().GetVar().GetVar()) || !integral.GetIsDefinite())
+            if (integral.GetDVar() == null || ArrayFunc.ContainsKey(dict, integral.GetDVar().GetVar().GetVar()) || !integral.GetIsDefinite())
             {
                 baseValue = integral.GetInnerTerm();
                 return dict;
@@ -103,7 +104,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             ExComp innerEx = integral.GetInnerEx();
             if (innerEx is Integral)
             {
-                return GetIntegralDepths(innerEx as Integral, ref dict, out baseValue);
+                Dictionary<string, Integral> intDepths = GetIntegralDepths(innerEx as Integral, ref dict, out baseValue);
+                return intDepths;
             }
 
             baseValue = innerEx;
@@ -180,7 +182,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
         {
             Integral integral = ConstructIntegral(innerEx, dVar);
             integral._addConstant = false;
-            return integral.Evaluate(false, ref pEvalData);
+            ExComp evalIntegral = integral.Evaluate(false, ref pEvalData);
+
+            return evalIntegral;
         }
 
         public override ExComp CancelWith(ExComp innerEx, ref TermType.EvalData evalData)
@@ -408,7 +412,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             for (int i = 0; i < gps.Count; ++i)
             {
                 IntegrationInfo integrationInfo = _integralInfo ?? new IntegrationInfo();
-                int prevStepCount = pEvalData.GetWorkMgr().GetWorkSteps().Count;
+                int prevStepCount = ArrayFunc.GetCount(pEvalData.GetWorkMgr().GetWorkSteps());
 
                 string lowerStr = GetLowerLimit() == null ? "" : GetLowerLimit().ToAlgTerm().FinalToDispStr();
                 string upperStr = GetUpperLimit() == null ? "" : GetUpperLimit().ToAlgTerm().FinalToDispStr();
@@ -428,7 +432,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
                 if (aderiv == null)
                 {
-                    pEvalData.GetWorkMgr().PopStepsCount(pEvalData.GetWorkMgr().GetWorkSteps().Count - prevStepCount);
+                    pEvalData.GetWorkMgr().PopStepsCount(ArrayFunc.GetCount(pEvalData.GetWorkMgr().GetWorkSteps()) - prevStepCount);
                     _failure = true;
                     return this;
                 }

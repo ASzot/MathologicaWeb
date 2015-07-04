@@ -763,7 +763,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             ExComp finalEx = MulOp.StaticCombine(powFunc.GetPower(), LogFunction.Ln(powFunc.GetBase()));
             pEvalData.GetWorkMgr().FromFormatted("`" + ca_derivSymb + "[{0}]=({0})*d/(dx)[{1}]`", "This comes from the definition for the derivative of `d/(dx)[x^x]=x^x*d/(dx)[x*ln(x)]`.", powFunc, finalEx);
 
-            return MulOp.StaticCombine(powFunc, TakeDerivativeOf(finalEx, ref pEvalData));
+            ExComp eval = MulOp.StaticCombine(powFunc, TakeDerivativeOf(finalEx, ref pEvalData));
+            return eval;
         }
 
         private ExComp ApplyPower(PowerFunction pfGpCmp, ref TermType.EvalData pEvalData)
@@ -773,15 +774,18 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             if (powHas && baseHas)
             {
-                return ApplyPowBaseDeriv(pfGpCmp, ref pEvalData);
+                ExComp eval = ApplyPowBaseDeriv(pfGpCmp, ref pEvalData);
+                return eval;
             }
             else if (powHas)
             {
-                return ApplyPowerRulePower(pfGpCmp, ref pEvalData);
+                ExComp eval = ApplyPowerRulePower(pfGpCmp, ref pEvalData);
+                return eval;
             }
             else if (baseHas)
             {
-                return ApplyPowerRuleBase(pfGpCmp, ref pEvalData);
+                ExComp eval = ApplyPowerRuleBase(pfGpCmp, ref pEvalData);
+                return eval;
             }
             else
                 return ConstructDeriv(pfGpCmp, _withRespectTo, _derivOf);
@@ -997,23 +1001,28 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             if (ex is PowerFunction)
             {
-                return ApplyPower(ex as PowerFunction, ref pEvalData);
+                ExComp evalEx = ApplyPower(ex as PowerFunction, ref pEvalData);
+                return evalEx;
             }
             else if (ex is AbsValFunction)
             {
-                return ApplyAbsDeriv(ex as AbsValFunction, ref pEvalData);
+                ExComp evalEx = ApplyAbsDeriv(ex as AbsValFunction, ref pEvalData);
+                return evalEx;
             }
             else if (ex is TrigFunction)
             {
-                return ApplyTrigDeriv(ex as TrigFunction, ref pEvalData);
+                ExComp evalEx = ApplyTrigDeriv(ex as TrigFunction, ref pEvalData);
+                return evalEx;
             }
             else if (ex is InverseTrigFunction)
             {
-                return ApplyInvTrigDeriv(ex as InverseTrigFunction, ref pEvalData);
+                ExComp evalEx = ApplyInvTrigDeriv(ex as InverseTrigFunction, ref pEvalData);
+                return evalEx;
             }
             else if (ex is LogFunction)
             {
-                return ApplyLogDeriv(ex as LogFunction, ref pEvalData);
+                ExComp evalEx = ApplyLogDeriv(ex as LogFunction, ref pEvalData);
+                return evalEx;
             }
             else if (ex is AlgebraFunction)
             {
@@ -1035,7 +1044,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                         PowerFunction pfDen = denEx as PowerFunction;
                         pfDen.SetPower(MulOp.Negate(pfDen.GetPower()));
 
-                        return ApplyPower(pfDen, ref pEvalData);
+                        ExComp evalEx = ApplyPower(pfDen, ref pEvalData);
+                        return evalEx;
                     }
                 }
 

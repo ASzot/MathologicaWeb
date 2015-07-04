@@ -36,14 +36,16 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 string[] tmps = command.Split('/');
 
                 // Remove the first 'd'
-                tmps[1] = tmps[1].Remove(0, 1);
+                tmps[1] = StringFunc.Rm(tmps[1], 0, 1);
                 AlgebraComp funcSolveFor = new AlgebraComp(tmps[0]);
                 AlgebraComp withRespect = new AlgebraComp(tmps[1]);
 
-                return DiffAgSolver.Solve(_left, _right, funcSolveFor, withRespect, _order, ref pEvalData);
+                SolveResult diffAgSolve = DiffAgSolver.Solve(_left, _right, funcSolveFor, withRespect, _order, ref pEvalData);
+                return diffAgSolve;
             }
 
-            return SolveResult.InvalidCmd(ref pEvalData);
+            SolveResult invalidCmdSolveResult = SolveResult.InvalidCmd(ref pEvalData);
+            return invalidCmdSolveResult;
         }
 
         public bool Init(EqSet eqSet, Dictionary<string, int> solveVars, string probSolveVar, ref EvalData pEvalData)

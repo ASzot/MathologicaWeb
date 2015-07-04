@@ -54,8 +54,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 }
             }
 
-            List<string> solveVarKeys = (from solveVar in solveVars
-                                         select solveVar.Key).Distinct().ToList();
+            List<string> solveVarKeys = ArrayFunc.Distinct(solveVars);
 
             for (int i = 0; i < solveVarKeys.Count; ++i)
             {
@@ -266,7 +265,8 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 if (num == null)
                     return SolveResult.Failure();
 
-                return SolveResult.Simplified(num.ToPolarForm(ref pEvalData));
+                SolveResult polarResult = SolveResult.Simplified(num.ToPolarForm(ref pEvalData));
+                return polarResult;
             }
             else if (command == "To exponential form")
             {
@@ -274,7 +274,8 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 if (num == null)
                     return SolveResult.Failure();
 
-                return SolveResult.Simplified(num.ToExponentialForm(ref pEvalData));
+                SolveResult expResult = SolveResult.Simplified(num.ToExponentialForm(ref pEvalData));
+                return expResult;
             }
             else if (command == "Normalize")
             {
@@ -282,7 +283,8 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 if (vec == null)
                     return SolveResult.Failure();
 
-                return SolveResult.SimplifiedCalcApprox(vec.Normalize(), ref pEvalData);
+                SolveResult normResult = SolveResult.SimplifiedCalcApprox(vec.Normalize(), ref pEvalData);
+                return normResult;
             }
             else if (command == "Find determinant")
             {
@@ -292,7 +294,8 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
                 Determinant det = new Determinant(mat);
 
-                return SolveResult.SimplifiedCalcApprox(det.Evaluate(false, ref pEvalData), ref pEvalData);
+                SolveResult detResult = SolveResult.SimplifiedCalcApprox(det.Evaluate(false, ref pEvalData), ref pEvalData);
+                return detResult;
             }
             else if (command == "Find inverse")
             {
@@ -331,7 +334,8 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 Equation.Functions.Calculus.Derivative deriv = new Equation.Functions.Calculus.Derivative(_term);
                 deriv.SetWithRespectTo(new AlgebraComp(varForKey));
 
-                return SolveResult.Simplified(deriv.Evaluate(false, ref pEvalData));
+                SolveResult derivResult = SolveResult.Simplified(deriv.Evaluate(false, ref pEvalData));
+                return derivResult;
             }
             else if (command == "Condense logs")
             {
@@ -354,7 +358,8 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 string varForKey = command.Substring("Domain of ".Length, command.Length - "Domain of ".Length);
                 AlgebraVar varFor = new AlgebraVar(varForKey);
 
-                return _agSolver.CalculateDomain(_term, varFor, ref pEvalData);
+                SolveResult domainResult = _agSolver.CalculateDomain(_term, varFor, ref pEvalData);
+                return domainResult;
             }
             else if (command == "Graph")
             {
@@ -382,7 +387,8 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 return result == null ? SolveResult.Solved() : SolveResult.Simplified(result);
             }
 
-            return SolveResult.InvalidCmd(ref pEvalData);
+            SolveResult invalidResult = SolveResult.InvalidCmd(ref pEvalData);
+            return invalidResult;
         }
 
         public void SetToSimpOnly()

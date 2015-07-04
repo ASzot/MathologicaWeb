@@ -20,7 +20,7 @@ namespace MathSolverWebsite.MathSolverLibrary.LangCompat
             return arr.ToList();
         }
 
-    public static T[] ToArray<T>(List<T> list)
+    public static T[] ToArray<T>(IEnumerable<T> list)
         {
             return list.ToArray();
         }
@@ -30,6 +30,17 @@ namespace MathSolverWebsite.MathSolverLibrary.LangCompat
             return (from ele in list
                 orderby ele.GetData2().Index
                 select ele).ToList();
+        }
+
+        public static bool ContainsKey<T, K>(Dictionary<T, K> dict, T key)
+        {
+            return dict.ContainsKey(key);
+        }
+
+        public static List<string> Distinct(Dictionary<string, int> dict)
+        {
+            return (from dictPair in dict
+                    select dictPair.Key).Distinct().ToList();
         }
 
         public static List<TypePair<int, TrigFunction>> OrderList(List<TypePair<int, TrigFunction>> list)
@@ -90,6 +101,11 @@ namespace MathSolverWebsite.MathSolverLibrary.LangCompat
         public static int GetCount<T>(List<T> list)
         {
             return list.Count;
+        }
+
+        public static int GetCount<T>(IEnumerable<T> list)
+        {
+            return list.Count();
         }
 
         public static KeyValuePair<T, K> CreateKeyValuePair<T, K>(T key, K val)

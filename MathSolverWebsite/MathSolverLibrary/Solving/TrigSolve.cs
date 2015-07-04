@@ -59,7 +59,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
             pEvalData.GetWorkMgr().FromSides(innerEx, evaluated, "The trig function and its inverse cancel leaving just the inner term.");
 
-            return p_agSolver.SolveEq(solveFor, inverseTrigFunc.GetInnerEx().ToAlgTerm(), evaluated.ToAlgTerm(), ref pEvalData);
+            ExComp solveResult = p_agSolver.SolveEq(solveFor, inverseTrigFunc.GetInnerEx().ToAlgTerm(), evaluated.ToAlgTerm(), ref pEvalData);
+            return solveResult;
         }
 
         public override ExComp SolveEquation(AlgebraTerm left, AlgebraTerm right, AlgebraVar solveFor, ref TermType.EvalData pEvalData)
@@ -102,7 +103,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             {
                 if (leftEx is InverseTrigFunction)
                 {
-                    return InverseTrigSolve(left as InverseTrigFunction, right, solveFor, ref pEvalData);
+                    ExComp inverseTrigSolveResult = InverseTrigSolve(left as InverseTrigFunction, right, solveFor,
+                        ref pEvalData);
+                    return inverseTrigSolveResult;
                 }
 
                 // We have a singular group involving an undetermined amount of variable trig functions.
@@ -153,7 +156,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
             AlgebraTermArray rightArray = new AlgebraTermArray(ArrayFunc.ToList(rights));
             bool allSols;
-            AlgebraTermArray solvedArray = rightArray.SimulSolve(left, solveFor, p_agSolver, ref pEvalData, out allSols);
+            AlgebraTermArray solvedArray = rightArray.SimulSolve(left, solveFor, p_agSolver, ref pEvalData, out allSols, false);
             if (allSols)
                 return new AllSolutions();
             if (solvedArray == null)
@@ -362,7 +365,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                         pEvalData.GetWorkMgr().FromSides(MulOp.StaticWeakCombine(gcfTerm, otherFactor), ExNumber.GetZero(), "Factor " +
                             WorkMgr.STM + gcfTerm.FinalToDispStr() + WorkMgr.EDM + " from the expression. Solve for each factor as it equals.");
                         FactorSolve factorSolve = new FactorSolve(p_agSolver);
-                        return factorSolve.SolveEquationFactors(solveFor, ref pEvalData, gcfTerm, otherFactor);
+                        ExComp factorSolveResult = factorSolve.SolveEquationFactors(solveFor, ref pEvalData, gcfTerm, otherFactor);
+                        return factorSolveResult;
                     }
                 }
             }
@@ -424,7 +428,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
                     pEvalData.GetWorkMgr().FromSides(overallTerm, ExNumber.GetZero(), "Simplify.");
 
-                    return p_agSolver.SolveEq(solveFor, overallTerm.ToAlgTerm(), ExNumber.GetZero().ToAlgTerm(), ref pEvalData);
+                    ExComp agSolveResult = p_agSolver.SolveEq(solveFor, overallTerm.ToAlgTerm(), ExNumber.GetZero().ToAlgTerm(), ref pEvalData);
+                    return agSolveResult;
                 }
             }
 

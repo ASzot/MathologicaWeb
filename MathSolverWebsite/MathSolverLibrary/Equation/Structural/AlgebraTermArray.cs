@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using MathSolverWebsite.MathSolverLibrary.LangCompat;
+using MathSolverWebsite.MathSolverLibrary.TermType;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation
 {
@@ -116,7 +117,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             }
         }
 
-        public AlgebraTermArray SimulSolve(AlgebraTerm otherSide, AlgebraVar solveFor, AlgebraSolver solver, ref TermType.EvalData pEvalData, out bool allSols, bool switchSides = false)
+        public AlgebraTermArray SimulSolve(AlgebraTerm otherSide, AlgebraVar solveFor, AlgebraSolver solver, ref EvalData pEvalData, out bool allSols, bool switchSides)
         {
             allSols = false;
 

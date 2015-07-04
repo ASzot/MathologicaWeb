@@ -66,7 +66,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                     left = useNumDen[0];
                     right = MulOp.StaticCombine(right, useNumDen[1]).ToAlgTerm();
 
-                    return p_agSolver.SolveEq(solveFor, left, right, ref pEvalData);
+                    ExComp agSolveResult = p_agSolver.SolveEq(solveFor, left, right, ref pEvalData);
+                    return agSolveResult;
                 }
                 else
                 {
@@ -84,7 +85,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
                     pEvalData.GetWorkMgr().FromSides(left, right, "Simplify.");
 
-                    return p_agSolver.SolveEq(solveFor, left, right, ref pEvalData);
+                    ExComp agSolveResult = p_agSolver.SolveEq(solveFor, left, right, ref pEvalData);
+                    return agSolveResult;
                 }
             }
 
@@ -101,7 +103,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
                 pEvalData.GetWorkMgr().FromSides(left, right, "Simplify.");
 
-                return p_agSolver.SolveEq(solveFor, left, right, ref pEvalData);
+                ExComp agSolveResult = p_agSolver.SolveEq(solveFor, left, right, ref pEvalData);
+                return agSolveResult;
             }
             else if (leftNumDen == null && rightNumDen != null && !left.ContainsFractions())
             {
@@ -111,7 +114,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 left = MulOp.StaticCombine(left, rightNumDen[1]).ToAlgTerm();
                 right = rightNumDen[0];
 
-                return p_agSolver.SolveEq(solveFor, left, right, ref pEvalData);
+                ExComp agSolveResult = p_agSolver.SolveEq(solveFor, left, right, ref pEvalData);
+                return agSolveResult;
             }
             else if (leftNumDen != null && rightNumDen == null && !right.ContainsFractions())
             {
@@ -120,7 +124,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 right = MulOp.StaticCombine(right, leftNumDen[1]).ToAlgTerm();
                 left = leftNumDen[0];
 
-                return p_agSolver.SolveEq(solveFor, left, right, ref pEvalData);
+                ExComp agSolveResult = p_agSolver.SolveEq(solveFor, left, right, ref pEvalData);
+                return agSolveResult;
             }
 
             if (!b_hasOnlyFrac)
@@ -140,17 +145,25 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             List<ExComp[]> leftGroups = left.GetGroupsNoOps();
             List<ExComp[]> rightGroups = right.GetGroupsNoOps();
 
-            List<ExComp[]> leftDens = (from leftGroup in leftGroups
-                                       select GroupHelper.GetDenominator(leftGroup, true)).ToList();
+            List<ExComp[]> leftDens = new List<ExComp[]>();
 
-            List<ExComp[]> rightDens = (from rightGroup in rightGroups
-                                        select GroupHelper.GetDenominator(rightGroup, true)).ToList();
+            for (int i = 0; i < leftGroups.Count; ++i)
+                leftDens.Add(GroupHelper.GetDenominator(leftGroups[i], true));
 
-            List<ExComp[]> leftNums = (from leftGroup in leftGroups
-                                       select GroupHelper.GetNumerator(leftGroup)).ToList();
+            List<ExComp[]> rightDens = new List<ExComp[]>();
 
-            List<ExComp[]> rightNums = (from rightGroup in rightGroups
-                                        select GroupHelper.GetNumerator(rightGroup)).ToList();
+            for (int i = 0; i < rightGroups.Count; ++i)
+                rightDens.Add(GroupHelper.GetDenominator(rightGroups[i], true));
+
+            List<ExComp[]> leftNums = new List<ExComp[]>();
+
+            for (int i = 0; i < leftGroups.Count; ++i)
+                leftNums.Add(GroupHelper.GetNumerator(leftGroups[i]));
+
+            List<ExComp[]> rightNums = new List<ExComp[]>();
+
+            for (int i = 0; i < rightGroups.Count; ++i)
+                rightNums.Add(GroupHelper.GetNumerator(rightGroups[i]));
 
             if (leftDens.Count != leftNums.Count)
                 return null;
@@ -290,7 +303,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
             pEvalData.GetWorkMgr().FromSides(finalLeft, finalRight, "Cancel the denominators from both sides");
 
-            return p_agSolver.SolveEq(solveFor, finalLeftTerm, finalRightTerm, ref pEvalData);
+            ExComp finalAgSolveResult = p_agSolver.SolveEq(solveFor, finalLeftTerm, finalRightTerm, ref pEvalData);
+            return finalAgSolveResult;
         }
     }
 }

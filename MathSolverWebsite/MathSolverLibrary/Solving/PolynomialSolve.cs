@@ -56,7 +56,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                     pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "{0}={1}" + WorkMgr.EDM, "Factor out " + WorkMgr.STM + "{2}" + WorkMgr.EDM, MulOp.StaticWeakCombine(factorOut, left), right, factorOut);
                     AlgebraTerm solveFactorsTerm = AlgebraTerm.FromFactors(factorOut, left);
                     FactorSolve factorSolve = new FactorSolve(p_agSolver);
-                    return factorSolve.SolveEquation(solveFactorsTerm, right, solveFor, ref pEvalData);
+                    ExComp factorSolveResult = factorSolve.SolveEquation(solveFactorsTerm, right, solveFor, ref pEvalData);
+                    return factorSolveResult;
                 }
             }
 
@@ -65,10 +66,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 return null;
 
             List<ExComp> possibleRoots = poly.GetRationalPossibleRoots();
+            if (possibleRoots == null)
+                return null;
 
             List<ExComp> successfulRoots = new List<ExComp>();
-            if (successfulRoots == null)
-                return null;
             ExComp additionalSol = null;
 
             foreach (ExComp possibleRoot in possibleRoots)

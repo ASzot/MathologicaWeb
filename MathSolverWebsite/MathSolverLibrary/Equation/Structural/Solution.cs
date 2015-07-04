@@ -134,7 +134,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public static SolveResult Solved(AlgebraVar solveFor, ExComp result, ref TermType.EvalData pEvalData)
         {
-            return Solved(solveFor.ToAlgebraComp(), result, ref pEvalData);
+            SolveResult solved = Solved(solveFor.ToAlgebraComp(), result, ref pEvalData);
+            return solved;
         }
 
         public static SolveResult Solved(ExComp solveFor, ExComp result, ref TermType.EvalData pEvalData)
@@ -775,12 +776,19 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
 
         public static Restriction CompoundDomains(List<Restriction> rests, AlgebraVar varFor, ref TermType.EvalData pEvalData)
         {
-            List<Restriction> regRests = (from rest in rests
-                            where !(rest is NotRestriction)
-                            select rest).ToList();
+            List<Restriction> regRests = new List<Restriction>();
+
+            for (int i = 0; i < rests.Count; ++i)
+            {
+                if (!(rests[i] is NotRestriction))
+                    regRests.Add(rests[i]);
+            }
 
             if (regRests.Count == 0)
-                return OrRestriction.AllNumbers(varFor, ref pEvalData);
+            {
+                Restriction rest = OrRestriction.AllNumbers(varFor, ref pEvalData);
+                return rest;
+            }
 
             if (regRests.Count == 1)
                 return regRests[0];
@@ -803,7 +811,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
             combinedRests.AddRange(rests0);
             combinedRests.AddRange(rests1);
 
-            return CompoundRestrictions(combinedRests, ref pEvalData);
+            List<Restriction> compoundedRests = CompoundRestrictions(combinedRests, ref pEvalData);
+            return compoundedRests;
         }
 
         public static List<Restriction> CompoundRestrictions(List<Restriction> rests, ref TermType.EvalData pEvalData)

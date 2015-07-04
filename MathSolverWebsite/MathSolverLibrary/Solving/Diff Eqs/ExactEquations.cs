@@ -2,6 +2,7 @@
 using MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus;
 using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
 using System.Collections.Generic;
+using MathSolverWebsite.MathSolverLibrary.LangCompat;
 
 namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
 {
@@ -84,7 +85,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
 
             last.GoDown(ref pEvalData);
 
-            int startWorkStepCount = pEvalData.GetWorkMgr().GetWorkSteps().Count;
+            int startWorkStepCount = ArrayFunc.GetCount(pEvalData.GetWorkMgr().GetWorkSteps());
             string startWorkHtml = "\\psi = \\int (" + WorkMgr.ToDisp(funcM) + " )d" + dVar.ToDispString();
             ExComp psi = Integral.TakeAntiDeriv(funcM, dVar, ref pEvalData);
             last.SetWorkDesc("If " + WorkMgr.STM + "\\psi_" + dVar.ToDispString() + "=M" + WorkMgr.EDM + " then " + WorkMgr.STM + "\\int M d" + dVar.ToDispString() + " = \\psi" + WorkMgr.EDM);

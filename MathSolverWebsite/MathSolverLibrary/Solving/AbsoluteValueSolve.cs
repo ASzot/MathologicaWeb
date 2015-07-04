@@ -57,7 +57,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 if (right.IsZero())
                 {
                     pEvalData.GetWorkMgr().FromSides(left, right, "The absolute value has no effect as it equals zero which is neither positive or negative.");
-                    return p_agSolver.Solve(solveFor, innerTerm, right, ref pEvalData);
+                    ExComp agSolved = p_agSolver.Solve(solveFor, innerTerm, right, ref pEvalData);
+                    return agSolved;
                 }
                 AlgebraTerm solve1 = right;
                 AlgebraTerm solve2 = MulOp.StaticCombine(ExNumber.GetNegOne(), right).ToAlgTerm();
@@ -68,7 +69,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 string[] solveDescs = new string[] { "Solve for the positive case.", "Solve for the negative case" };
                 termArray.SetSolveDescs(solveDescs);
                 bool allSols;
-                AlgebraTermArray solvedTermArray = termArray.SimulSolve(innerTerm, solveFor, p_agSolver, ref pEvalData, out allSols);
+                AlgebraTermArray solvedTermArray = termArray.SimulSolve(innerTerm, solveFor, p_agSolver, ref pEvalData, out allSols, false);
                 if (allSols)
                     return new AllSolutions();
                 if (solvedTermArray == null)
@@ -95,11 +96,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
                 AlgebraTermArray termArray = new AlgebraTermArray(solve1, solve2);
                 bool allSols;
-                AlgebraTermArray solvedArray = termArray.SimulSolve(groupTerm0, solveFor, p_agSolver, ref pEvalData, out allSols);
+                AlgebraTermArray solvedArray = termArray.SimulSolve(groupTerm0, solveFor, p_agSolver, ref pEvalData, out allSols, false);
                 if (allSols)
                     return new AllSolutions();
-                if (solvedArray == null)
-                    return null;
 
                 return solvedArray;
             }

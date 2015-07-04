@@ -101,7 +101,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 else if (equations.Count == 3)
                     pEvalData.AttemptSetInputType(TermType.InputType.SOE_Sub_3Var);
 
-                return SolveEquationArraySubstitution(equations, lexemeTables, ref pEvalData);
+                SolveResult solvedSub = SolveEquationArraySubstitution(equations, lexemeTables, ref pEvalData);
+                return solvedSub;
             }
             else if (_solveMethod == EquationSystemSolveMethod.Elimination)
             {
@@ -110,7 +111,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 else if (equations.Count == 3)
                     pEvalData.AttemptSetInputType(TermType.InputType.SOE_Elim_3Var);
 
-                return SolveEquationArrayElimination(equations, allIdens, ref pEvalData);
+                SolveResult solvedElim = SolveEquationArrayElimination(equations, allIdens, ref pEvalData);
+                return solvedElim;
             }
             else
                 throw new ArgumentException("Solve method is an impossible type.");
@@ -293,7 +295,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             if (finalEquationSets.Count > 1)
                 eliminate = GetLowestComplexityVar(finalEquationSets[0].GetLeftTerm(), finalEquationSets[0].GetRightTerm());
 
-            return SolveEliminationRecur(finalEquationSets, agSolver, eliminate, ref iterGenerations, ref pEvalData);
+            bool result = SolveEliminationRecur(finalEquationSets, agSolver, eliminate, ref iterGenerations, ref pEvalData);
+            return result;
         }
 
         private SolveResult SolveEquationArrayElimination(List<EqSet> equations, Dictionary<string, int> allIdens, ref TermType.EvalData pEvalData)
@@ -398,13 +401,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 equations[i].SetRight(right);
             }
 
-            return SolveEquationSystemRecur(equations, eqLexemeTables, ref pEvalData, true);
+            SolveResult result = SolveEquationSystemRecur(equations, eqLexemeTables, ref pEvalData, true);
+            return result;
         }
 
         private SolveResult SolveEquationSystemRecur(List<EqSet> completeEqs, List<List<TypePair<MathSolverLibrary.Parsing.LexemeType, string>>> eqLexemeTables, ref EvalData pEvalData, bool ascending)
         {
-            List<EqSet> clonedEqs = (from completeEq in completeEqs
-                                     select completeEq.Clone()).ToList();
 
             // Really this whole ascending thing really doesn't do much.
             int startVal;
@@ -497,7 +499,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                     --i;
             }
 
-            return SubstituteInResults(completeEqs, ref pEvalData);
+            SolveResult solveResult = SubstituteInResults(completeEqs, ref pEvalData);
+            return solveResult;
         }
 
         private SolveResult SubstituteInResults(List<EqSet> completeEqs, ref TermType.EvalData pEvalData)

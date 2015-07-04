@@ -456,7 +456,10 @@ namespace MathSolverWebsite.MathSolverLibrary
             if (result == null)
                 return SolveResult.Failure();
             else
-                return SolveResult.Solved(solveFor, result, ref pEvalData);
+            {
+                SolveResult solved = SolveResult.Solved(solveFor, result, ref pEvalData);
+                return solved;
+            }
         }
 
         public SolveResult SolveEquationInequality(List<ExComp> sides, List<LexemeType> comparisonTypes, AlgebraVar solveFor, ref TermType.EvalData pEvalData)
@@ -639,7 +642,8 @@ namespace MathSolverWebsite.MathSolverLibrary
 
                     if (!result.GetHasSolutions() && !result.GetHasRestrictions() && !pEvalData.GetHasPartialSolutions() && result.Success)
                     {
-                        return SolveResult.Solved(solveFor, new NoSolutions(), ref pEvalData);
+                        SolveResult solved = SolveResult.Solved(solveFor, new NoSolutions(), ref pEvalData);
+                        return solved;
                     }
                     if (result.IsOnlyNoSolutions(ref pEvalData) || result.IsOnlyAllSolutions(ref pEvalData))
                     {
@@ -714,14 +718,25 @@ namespace MathSolverWebsite.MathSolverLibrary
                 if (Restriction.IsGreaterThan(comparison) == !switchSign)
                 {
                     if (!Restriction.IsEqualTo(comparison))
-                        return SolveResult.InequalitySolved(Restriction.ConstructAllBut(result.Solutions[0].Result, solveForComp, ref pEvalData));
+                    {
+                        SolveResult inequalitySolved = 
+                            SolveResult.InequalitySolved(Restriction.ConstructAllBut(result.Solutions[0].Result,
+                                solveForComp, ref pEvalData));
+                        return inequalitySolved;
+                    }
                     else
-                        return SolveResult.InequalitySolved(Restriction.AllNumbers(solveForComp, ref pEvalData));
+                    {
+                        SolveResult inequalitySolved = SolveResult.InequalitySolved(Restriction.AllNumbers(solveForComp, ref pEvalData));
+                        return inequalitySolved;
+                    }
                 }
                 else
                 {
                     if (Restriction.IsEqualTo(comparison))
-                        return SolveResult.InequalitySolved(Restriction.FromOnly(result.Solutions[0].Result, solveForComp, ref pEvalData));
+                    {
+                        SolveResult inequalitySolved = SolveResult.InequalitySolved(Restriction.FromOnly(result.Solutions[0].Result, solveForComp, ref pEvalData));
+                        return inequalitySolved;
+                    }
                     else
                         return SolveResult.NoSolutions();
                 }

@@ -33,7 +33,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                 AlgebraTermArray resultArray = result as AlgebraTermArray;
 
                 bool allSols;
-                result = resultArray.SimulSolve(_subOut.ToAlgTerm(), solveFor, p_agSolver, ref pEvalData, out allSols);
+                result = resultArray.SimulSolve(_subOut.ToAlgTerm(), solveFor, p_agSolver, ref pEvalData, out allSols, false);
                 if (allSols)
                     return new AllSolutions();
                 if (result == null)

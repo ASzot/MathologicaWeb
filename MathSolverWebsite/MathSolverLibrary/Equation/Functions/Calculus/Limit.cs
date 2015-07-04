@@ -65,7 +65,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             _thisDispStr = pEvalData.GetWorkMgr().GetAllowWork() ? this.FinalToDispStr() : "";
             _limStr = "\\lim_(" + _varFor.ToAsciiString() + "\\to" + _valTo.ToAsciiString() + ")";
 
-            int stepCount = pEvalData.GetWorkMgr().GetWorkSteps().Count;
+            int stepCount = ArrayFunc.GetCount(pEvalData.GetWorkMgr().GetWorkSteps());
 
             // Is the point defined?
             if (_reducedInner == null)
@@ -81,7 +81,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 PolynomialExt poly = new PolynomialExt();
                 ExComp harshSimp = Simplifier.HarshSimplify(reduced.CloneEx().ToAlgTerm(), ref pEvalData, true);
                 if (poly.Init(reduced) || poly.Init(harshSimp.ToAlgTerm()))
-                    return EvaluatePoly(poly, ref pEvalData);
+                {
+                    ExComp evalPoly = EvaluatePoly(poly, ref pEvalData);
+                    return evalPoly;
+                }
 
                 infEval = true;
             }
@@ -123,7 +126,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (overall is Limit)
             {
                 _evalFail = true;
-                pEvalData.GetWorkMgr().PopStepsCount(pEvalData.GetWorkMgr().GetWorkSteps().Count - stepCount);
+                pEvalData.GetWorkMgr().PopStepsCount(ArrayFunc.GetCount(pEvalData.GetWorkMgr().GetWorkSteps()) - stepCount);
             }
 
             return overall;
@@ -134,12 +137,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (!eval.Contains(_varFor))
                 return eval;
 
-            int stepCount = pEvalData.GetWorkMgr().GetWorkSteps().Count;
+            int stepCount = ArrayFunc.GetCount(pEvalData.GetWorkMgr().GetWorkSteps());
 
             ExComp attempt = EvaluateInfinity(eval, ref pEvalData);
             if (attempt == null)
             {
-                pEvalData.GetWorkMgr().PopStepsCount(pEvalData.GetWorkMgr().GetWorkSteps().Count - stepCount);
+                pEvalData.GetWorkMgr().PopStepsCount(ArrayFunc.GetCount(pEvalData.GetWorkMgr().GetWorkSteps()) - stepCount);
             }
 
             if (attempt == null)
@@ -149,13 +152,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
 
             if (attempt == null)
             {
-                int preHopitalsRuleStepCount = pEvalData.GetWorkMgr().GetWorkSteps().Count;
+                int preHopitalsRuleStepCount = ArrayFunc.GetCount(pEvalData.GetWorkMgr().GetWorkSteps());
                 attempt = AttemptLeHopitals(eval, ref pEvalData);
 
                 if (attempt == null)
                 {
                     _leHopitalCount = 0;
-                    pEvalData.GetWorkMgr().PopStepsCount(pEvalData.GetWorkMgr().GetWorkSteps().Count - preHopitalsRuleStepCount);
+                    pEvalData.GetWorkMgr().PopStepsCount(ArrayFunc.GetCount(pEvalData.GetWorkMgr().GetWorkSteps()) - preHopitalsRuleStepCount);
                     return attempt;
                 }
             }

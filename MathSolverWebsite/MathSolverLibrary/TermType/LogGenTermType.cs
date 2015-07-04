@@ -38,11 +38,18 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             }
 
             if (tt_func != null && tt_func.IsValidCommand(command))
-                return tt_func.ExecuteCommand(command, ref pEvalData);
+            {
+                SolveResult solveFuncResult = tt_func.ExecuteCommand(command, ref pEvalData);
+                return solveFuncResult;
+            }
             else if (_ttSolveGen != null && _ttSolveGen.IsValidCommand(command))
-                return _ttSolveGen.ExecuteCommand(command, ref pEvalData);
+            {
+                SolveResult solveSolveResult = _ttSolveGen.ExecuteCommand(command, ref pEvalData);
+                return solveSolveResult;
+            }
 
-            return SolveResult.InvalidCmd(ref pEvalData);
+            SolveResult solveResult = SolveResult.InvalidCmd(ref pEvalData);
+            return solveResult;
         }
 
         public bool Init(EquationInformation eqInfo, ExComp left, ExComp right, List<TypePair<LexemeType, string>> lexemeTable,

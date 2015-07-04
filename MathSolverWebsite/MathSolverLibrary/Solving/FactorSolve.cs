@@ -43,21 +43,26 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
             p_agSolver.ClearLinearSolveRepeatCount();
             if (groups.Count != 1)
-                return p_agSolver.Solve(solveFor, left, right, ref pEvalData);
+            {
+                ExComp agSolve = p_agSolver.Solve(solveFor, left, right, ref pEvalData);
+                return agSolve;
+            }
 
             ExComp[] onlyGroup = nonZeroTerm.GetGroupsNoOps()[0];
             onlyGroup = GroupHelper.RemoveOneCoeffs(onlyGroup);
 
             // The factors are the algebra terms of this groups.
-            AlgebraTerm[] factors = (from onlyGroupComp in onlyGroup
-                                     select onlyGroupComp.ToAlgTerm().RemoveRedundancies(false).ToAlgTerm()).ToArray();
+            AlgebraTerm[] factors = new AlgebraTerm[onlyGroup.Length];
 
-            return SolveEquationFactors(solveFor, ref pEvalData, factors);
+            for (int i = 0; i < onlyGroup.Length; ++i)
+                factors[i] = onlyGroup[i].ToAlgTerm().RemoveRedundancies(false).ToAlgTerm();
+
+            ExComp factorsSolve = SolveEquationFactors(solveFor, ref pEvalData, factors);
+            return factorsSolve;
         }
 
         public ExComp SolveEquationFactors(AlgebraVar solveFor, ref TermType.EvalData pEvalData, params AlgebraTerm[] factors)
         {
-            AlgebraTermArray factorTermArray = new AlgebraTermArray(factors);
             AlgebraTermArray solutions = new AlgebraTermArray();
             foreach (AlgebraTerm factor in factors)
             {

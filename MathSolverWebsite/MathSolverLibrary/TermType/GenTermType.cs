@@ -41,7 +41,8 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             if (_cmds == null || cmdIndex < 0 || cmdIndex >= _cmds.Length)
                 return SolveResult.Failure();
 
-            return ExecuteCommand(_cmds[cmdIndex], ref pEvalData);
+            SolveResult executed = ExecuteCommand(_cmds[cmdIndex], ref pEvalData);
+            return executed;
         }
 
         public virtual string[] GetCommands()

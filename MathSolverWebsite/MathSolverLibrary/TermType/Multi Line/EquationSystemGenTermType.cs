@@ -50,7 +50,8 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 }
 
                 solveMethod.SetSolvingMethod(Solving.EquationSystemSolveMethod.Substitution);
-                return solveMethod.SolveEquationArray(clonedEqSet, _lts, _allIdens, ref pEvalData);
+                SolveResult arraySolveResult = solveMethod.SolveEquationArray(clonedEqSet, _lts, _allIdens, ref pEvalData);
+                return arraySolveResult;
             }
             else if (command.StartsWith("Solve by elimination for "))
             {
@@ -68,7 +69,8 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                     clonedEqSet.Add(_eqSets[i]);
 
                 solveMethod.SetSolvingMethod(Solving.EquationSystemSolveMethod.Elimination);
-                return solveMethod.SolveEquationArray(clonedEqSet, _lts, _allIdens, ref pEvalData);
+                SolveResult arraySolveResult = solveMethod.SolveEquationArray(clonedEqSet, _lts, _allIdens, ref pEvalData);
+                return arraySolveResult;
             }
             else if (command == "Graph")
             {
@@ -78,7 +80,8 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                     return SolveResult.Failure();
             }
 
-            return SolveResult.InvalidCmd(ref pEvalData);
+            SolveResult invalidCmdResult = SolveResult.InvalidCmd(ref pEvalData);
+            return invalidCmdResult;
         }
 
         public bool InitGraphingOnly(ref EvalData pEvalData)
@@ -202,9 +205,12 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 
                 List<string> combinations = Combination(solveVars);
 
-                options = (from comb in combinations
-                           where (comb.Split(',').Length == _eqSets.Count)
-                           select comb).ToList();
+                options = new List<string>();
+                for (int i = 0; i < combinations.Count; ++i)
+                {
+                    if (combinations[i].Split(',').Length == _eqSets.Count)
+                        options.Add(combinations[i]);
+                }
             }
 
             if (options == null || options.Count == 0)

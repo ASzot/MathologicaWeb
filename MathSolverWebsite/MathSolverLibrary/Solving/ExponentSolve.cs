@@ -37,8 +37,6 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             List<ExComp[]> rightGroups = right.GetGroups();
             if (leftGroups.Count == 1 && rightGroups.Count == 1 && left.Contains(solveForComp) && right.Contains(solveForComp))
             {
-                ExComp[] leftGroup = leftGroups[0];
-                ExComp[] rightGroup = rightGroups[0];
                 ExComp gcf = DivOp.GetCommonFactor(left, right);
 
                 // Took out because logs are used to solve some of these equations so there is no base converting.
@@ -70,7 +68,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                     PowerFunction pfRight = rightEx as PowerFunction;
                     if (pfLeft.HasVariablePowers(solveForComp) && pfRight.HasVariablePowers(solveForComp))
                     {
-                        return DualVarPowSolve(pfLeft, pfRight, solveFor, ref pEvalData);
+                        ExComp dualPowResult = DualVarPowSolve(pfLeft, pfRight, solveFor, ref pEvalData);
+                        return dualPowResult;
                     }
                 }
             }
@@ -115,7 +114,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
                             if (pfGp0.HasVariablePowers(solveForComp) && pfGp1.HasVariablePowers(solveForComp))
                             {
-                                return DualVarPowSolve(pfGp0, pfGp1, solveFor, ref pEvalData);
+                                ExComp dualPowSolve = DualVarPowSolve(pfGp0, pfGp1, solveFor, ref pEvalData);
+                                return dualPowSolve;
                             }
                         }
                     }
@@ -151,7 +151,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                     pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "({0})^({1})=({0})^({2})" + WorkMgr.EDM, "The powers can be set equal because they have equal bases. This is due to " + WorkMgr.STM +
                         "a^x=a^y" + WorkMgr.EDM + " then " + WorkMgr.STM + "x=y" + WorkMgr.EDM, nBase, leftPow, nRightPow);
                     pEvalData.GetWorkMgr().FromSides(leftPow, nRightPow);
-                    return p_agSolver.SolveEq(solveFor, leftPow.ToAlgTerm(), nRightPow.ToAlgTerm(), ref pEvalData);
+                    ExComp solveResult = p_agSolver.SolveEq(solveFor, leftPow.ToAlgTerm(), nRightPow.ToAlgTerm(), ref pEvalData);
+                    return solveResult;
                 }
             }
 
@@ -188,13 +189,12 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
             pEvalData.GetWorkMgr().FromSides(left, right, "Simplify");
 
-            return p_agSolver.SolveEq(solveFor, left, right, ref pEvalData);
+            ExComp agSolved = p_agSolver.SolveEq(solveFor, left, right, ref pEvalData);
+            return agSolved;
         }
 
         private ExComp DualVarPowSolve(PowerFunction pfLeft, PowerFunction pfRight, AlgebraVar solveFor, ref TermType.EvalData pEvalData)
         {
-            AlgebraComp solveForComp = solveFor.ToAlgebraComp();
-
             AlgebraTerm left, right;
 
             ExComp leftBaseEx = pfLeft.GetBase();
@@ -203,7 +203,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             {
                 pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "{0}={1}" + WorkMgr.EDM, "Since the bases are equal set the powers equal to each other. " + WorkMgr.STM + "{2}={3}" + WorkMgr.EDM,
                     pfLeft, pfRight, pfLeft.GetPower(), pfRight.GetPower());
-                return p_agSolver.SolveEq(solveFor, pfLeft.GetPower().ToAlgTerm(), pfRight.ToAlgTerm(), ref pEvalData);
+                ExComp agSolved = p_agSolver.SolveEq(solveFor, pfLeft.GetPower().ToAlgTerm(), pfRight.ToAlgTerm(), ref pEvalData);
+                return agSolved;
             }
 
             if (leftBaseEx is ExNumber && rightBaseEx is ExNumber && !(leftBaseEx as ExNumber).HasImaginaryComp() &&
@@ -229,7 +230,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                     pEvalData.GetWorkMgr().FromFormatted(WorkMgr.STM + "({0})^({1})=({0})^({2})" + WorkMgr.EDM, "With like bases the powers can be set equal to each other. This is due to " +
                         WorkMgr.STM + "a^x=a^y" + WorkMgr.EDM + " then " + WorkMgr.STM + "x=y" + WorkMgr.EDM, nBase, left, right);
 
-                    return p_agSolver.SolveEq(solveFor, left, right, ref pEvalData);
+                    ExComp agSolved = p_agSolver.SolveEq(solveFor, left, right, ref pEvalData);
+                    return agSolved;
                 }
             }
 
@@ -254,7 +256,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
 
             pEvalData.GetWorkMgr().FromSides(left, right, "Make any exponents in the log become coefficients.");
 
-            return p_agSolver.SolveEq(solveFor, left, right, ref pEvalData);
+            ExComp finalAgSolved = p_agSolver.SolveEq(solveFor, left, right, ref pEvalData);
+            return finalAgSolved;
         }
     }
 }

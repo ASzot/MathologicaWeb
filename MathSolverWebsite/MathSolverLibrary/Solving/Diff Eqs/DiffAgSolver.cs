@@ -1,5 +1,6 @@
 ﻿using MathSolverWebsite.MathSolverLibrary.Equation;
 using MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus;
+using MathSolverWebsite.MathSolverLibrary.LangCompat;
 
 namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
 {
@@ -44,7 +45,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             for (int i = 0; i < diffSolves.Length; ++i)
             {
                 // Try separable differential equations.
-                prevWorkStepCount = pEvalData.GetWorkMgr().GetWorkSteps().Count;
+                prevWorkStepCount = ArrayFunc.GetCount(pEvalData.GetWorkMgr().GetWorkSteps());
                 atmpt = diffSolves[i].Solve((AlgebraTerm)ex0Term.CloneEx(), (AlgebraTerm)ex1Term.CloneEx(), solveForFunc, withRespect, ref pEvalData);
                 if (atmpt != null)
                 {
@@ -69,7 +70,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
         public static SolveResult Solve(ExComp ex0, ExComp ex1, AlgebraComp solveForFunc, AlgebraComp withRespect, int order, ref TermType.EvalData pEvalData)
         {
             if (order > 1)
-                return SolveResult.Failure("Cannot solve differential equations with an order greater than one", ref pEvalData);
+            {
+                SolveResult failSolved = SolveResult.Failure("Cannot solve differential equations with an order greater than one", ref pEvalData);
+                return failSolved;
+            }
 
             ExComp[] leftRight = SolveDiffEq(ex0.ToAlgTerm(), ex1.ToAlgTerm(), solveForFunc, withRespect, order, ref pEvalData);
             if (leftRight == null)
@@ -80,12 +84,13 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
 
             if (leftRight[0] is Integral || leftRight[1] is Integral)
             {
-                return SolveResult.Solved(leftRight[0], leftRight[1], ref pEvalData);
+                SolveResult resultSolved = SolveResult.Solved(leftRight[0], leftRight[1], ref pEvalData);
+                return resultSolved;
             }
 
             AlgebraSolver agSolver = new AlgebraSolver();
 
-            int startStepCount = pEvalData.GetWorkMgr().GetWorkSteps().Count;
+            int startStepCount = ArrayFunc.GetCount(pEvalData.GetWorkMgr().GetWorkSteps());
 
             pEvalData.GetWorkMgr().FromFormatted("", "Solve for " + WorkMgr.STM + solveForFunc.ToDispString() + WorkMgr.EDM);
             WorkStep lastStep = pEvalData.GetWorkMgr().GetLast();
@@ -97,7 +102,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving.Diff_Eqs
             if (solved == null)
             {
                 pEvalData.GetWorkMgr().PopSteps(startStepCount);
-                return SolveResult.Solved(leftRight[0], leftRight[1], ref pEvalData);
+                SolveResult resultSolved = SolveResult.Solved(leftRight[0], leftRight[1], ref pEvalData);
+                return resultSolved;
             }
 
             lastStep.SetWorkHtml(WorkMgr.STM + solveForFunc.ToDispString() + " = " + WorkMgr.ToDisp(solved) + WorkMgr.EDM);

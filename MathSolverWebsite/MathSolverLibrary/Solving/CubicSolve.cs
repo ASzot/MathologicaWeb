@@ -1,6 +1,7 @@
 ﻿using MathSolverWebsite.MathSolverLibrary.Equation;
 using MathSolverWebsite.MathSolverLibrary.Equation.Operators;
 using MathSolverWebsite.MathSolverLibrary.Equation.Term;
+using MathSolverWebsite.MathSolverLibrary.LangCompat;
 
 namespace MathSolverWebsite.MathSolverLibrary.Solving
 {
@@ -62,7 +63,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             System.Collections.Generic.List<ExComp> powersOfVar = left.GetPowersOfVar(solveFor.ToAlgebraComp());
 
             if (powersOfVar.Count == 1)
-                return p_agSolver.SolveEq(solveFor, left, right, ref pEvalData);
+            {
+                ExComp agSolved = p_agSolver.SolveEq(solveFor, left, right, ref pEvalData);
+                return agSolved;
+            }
 
             bool allValid = true;
             foreach (ExComp pow in powersOfVar)
@@ -82,7 +86,10 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
             }
 
             if (!powersOfVar.Contains(new ExNumber(3.0)) || !allValid)
-                return p_agSolver.SolveEq(solveFor, left, right, ref pEvalData);
+            {
+                ExComp agSolved = p_agSolver.SolveEq(solveFor, left, right, ref pEvalData);
+                return agSolved;
+            }
 
             ExComp[] groupGcf = left.GetGroupGCF();
             if (groupGcf != null && groupGcf.Length != 0)
@@ -99,19 +106,20 @@ namespace MathSolverWebsite.MathSolverLibrary.Solving
                     {
                         AlgebraTerm solveFactorsTerm = AlgebraTerm.FromFactors(factorOut, left);
                         FactorSolve factorSolve = new FactorSolve(p_agSolver);
-                        return factorSolve.SolveEquation(solveFactorsTerm, right, solveFor, ref pEvalData);
+                        ExComp factorSolvedResult = factorSolve.SolveEquation(solveFactorsTerm, right, solveFor, ref pEvalData);
+                        return factorSolvedResult;
                     }
                 }
             }
 
             pEvalData.GetWorkMgr().FromSides(left, right, "Solve this problem by factoring.");
-            int startCount = pEvalData.GetWorkMgr().GetWorkSteps().Count;
+            int startCount = ArrayFunc.GetCount(pEvalData.GetWorkMgr().GetWorkSteps());
 
             AlgebraTerm[] factors = AdvAlgebraTerm.GetFactors(left, ref pEvalData);
             if (factors == null)
             {
                 // Remove all the steps that were associated with factoring.
-                pEvalData.GetWorkMgr().PopStepsCount(pEvalData.GetWorkMgr().GetWorkSteps().Count - startCount);
+                pEvalData.GetWorkMgr().PopStepsCount(ArrayFunc.GetCount(pEvalData.GetWorkMgr().GetWorkSteps()) - startCount);
                 pEvalData.GetWorkMgr().FromSides(left, right, "This cubic doesn't factor.");
                 return null;
             }

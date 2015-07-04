@@ -6,8 +6,6 @@ using MathSolverWebsite.MathSolverLibrary.Parsing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using LexemeTable = System.Collections.Generic.List<
-MathSolverWebsite.MathSolverLibrary.TypePair<MathSolverWebsite.MathSolverLibrary.Parsing.LexemeType, string>>;
 
 namespace MathSolverWebsite.MathSolverLibrary
 {
@@ -51,9 +49,14 @@ namespace MathSolverWebsite.MathSolverLibrary
         /// </summary>
         public List<LexemeType> GetValidComparisonOps()
         {
-            return (from compOp in _comparisonOps
-                where compOp != LexemeType.ErrorType
-                select compOp).ToList();
+            List<LexemeType> lexs = new List<LexemeType>();
+            for (int i = 0; i < _comparisonOps.Count; ++i)
+            {
+                if (_comparisonOps[i] != LexemeType.ErrorType)
+                    lexs.Add(_comparisonOps[i]);
+            }
+
+            return lexs;
         }
 
         public string GetContentStr()
@@ -164,11 +167,14 @@ namespace MathSolverWebsite.MathSolverLibrary
 
         public static IEnumerable<AlgebraTerm> GetSides(List<EqSet> eqSets)
         {
+            List<AlgebraTerm> sides = new List<AlgebraTerm>();
             foreach (EqSet eqSet in eqSets)
             {
-                yield return eqSet.GetLeftTerm();
-                yield return eqSet.GetRightTerm();
+                sides.Add(eqSet.GetLeftTerm());
+                sides.Add(eqSet.GetRightTerm());
             }
+
+            return sides;
         }
 
         public EqSet Clone()
@@ -312,7 +318,8 @@ namespace MathSolverWebsite.MathSolverLibrary
                     return null;
             }
 
-            return Restriction.CompoundRestrictions(domainRests, ref pEvalData);
+            List<Restriction> compoundedRests = Restriction.CompoundRestrictions(domainRests, ref pEvalData);
+            return compoundedRests;
         }
 
         public SolveResult ImplicitDifferentiation(string derivativeOfStr, string withRespectToStr, AlgebraSolver agSolver, ref TermType.EvalData pEvalData)
@@ -342,9 +349,9 @@ namespace MathSolverWebsite.MathSolverLibrary
             return agSolver.SolveEquationEquality(solveFor.GetVar(), left.ToAlgTerm(), right.ToAlgTerm(), ref pEvalData);
         }
 
-        public LexemeTable CreateLexemeTable()
+        public List<TypePair<LexemeType, string>> CreateLexemeTable()
         {
-            LexemeTable lt = new LexemeTable();
+            List<TypePair<LexemeType, string>> lt = new List<TypePair<LexemeType, string>>();
             for (int i = 0; i < _sides.Count; ++i)
             {
                 List<string> variables = _sides[i].ToAlgTerm().GetAllAlgebraCompsStr();
@@ -363,7 +370,7 @@ namespace MathSolverWebsite.MathSolverLibrary
         {
             eqSet = new EqSet();
 
-            List<LexemeTable> lts;
+            List<List<TypePair<LexemeType, string>>> lts;
             List<string> garbageParseErrors = new List<string>();
 
             LexicalParser lexParser = new LexicalParser(pEvalData);

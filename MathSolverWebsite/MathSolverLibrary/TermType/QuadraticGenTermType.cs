@@ -35,7 +35,10 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 // To vertex form.
                 ExComp vertexForm = ToVertexForm(_a, _b, _c, _solveFor.ToAlgebraComp(), ref pEvalData);
                 if (_funcIden != null)
-                    return SolveResult.Solved(_funcIden, vertexForm, ref pEvalData);
+                {
+                    SolveResult solvedResult = SolveResult.Solved(_funcIden, vertexForm, ref pEvalData);
+                    return solvedResult;
+                }
                 return SolveResult.Simplified(vertexForm);
             }
             else if (command == "Find the vertex")
@@ -55,7 +58,10 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 // Factor.
                 AlgebraTerm factored = AlgebraTerm.FromFactors(factors);
                 if (_funcIden != null)
-                    return SolveResult.Solved(_funcIden, factored, ref pEvalData);
+                {
+                    SolveResult solvedResult = SolveResult.Solved(_funcIden, factored, ref pEvalData);
+                    return solvedResult;
+                }
                 else
                     return SolveResult.Simplified(factored);
             }
@@ -79,7 +85,8 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             {
                 // Axis of symmetry.
                 ExComp aos = FindAOS(_a, _b);
-                return SolveResult.Solved(_solveFor, aos, ref pEvalData);
+                SolveResult aosSolveResult = SolveResult.Solved(_solveFor, aos, ref pEvalData);
+                return aosSolveResult;
             }
             else if (command == "Graph")
             {
@@ -90,7 +97,10 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
             }
 
             if (tt_func != null && tt_func.IsValidCommand(command))
-                return tt_func.ExecuteCommand(command, ref pEvalData);
+            {
+                SolveResult funcSolveResult = tt_func.ExecuteCommand(command, ref pEvalData);
+                return funcSolveResult;
+            }
             else if (_ttSolveGen != null && _ttSolveGen.IsValidCommand(command))
             {
                 if (command.Contains("completing the square"))
@@ -105,7 +115,8 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
                 return _ttSolveGen.ExecuteCommand(command, ref pEvalData);
             }
 
-            return SolveResult.InvalidCmd(ref pEvalData);
+            SolveResult invalidSolveResult = SolveResult.InvalidCmd(ref pEvalData);
+            return invalidSolveResult;
         }
 
         public bool Init(EquationInformation eqInfo, ExComp left, ExComp right, List<TypePair<LexemeType, string>> lexemeTable,
