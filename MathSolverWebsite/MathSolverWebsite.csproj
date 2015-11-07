@@ -520,12 +520,12 @@
     <Compile Include="MathSolverLibrary\Equation\Functions\Calculus\IntegrationInfo.cs" />
     <Compile Include="MathSolverLibrary\Equation\Functions\Calculus\Limit.cs" />
     <Compile Include="MathSolverLibrary\Equation\Functions\Calculus\PartialFracs.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Functions\Calculus\TrigSubstitution.cs" />
     <Compile Include="MathSolverLibrary\Equation\Functions\Calculus\Vector\CurlFunc.cs" />
     <Compile Include="MathSolverLibrary\Equation\Functions\Calculus\Vector\DivergenceFunc.cs" />
     <Compile Include="MathSolverLibrary\Equation\Functions\Calculus\Vector\GradientFunc.cs" />
     <Compile Include="MathSolverLibrary\Equation\Functions\Calculus\Vector\LineIntegral.cs" />
     <Compile Include="MathSolverLibrary\Equation\Functions\Calculus\Vector\SurfaceIntegral.cs" />
-    <Compile Include="MathSolverLibrary\Equation\Functions\Calculus\TrigSubstitution.cs" />
     <Compile Include="MathSolverLibrary\Equation\Functions\Calculus\Vector\VectorFieldOperation.cs" />
     <Compile Include="MathSolverLibrary\Equation\Functions\ChooseFunction.cs" />
     <Compile Include="MathSolverLibrary\Equation\Functions\FactorialFunction.cs" />
@@ -554,6 +554,7 @@
     <Compile Include="MathSolverLibrary\Equation\Structural\AlgebraTerm.cs" />
     <Compile Include="MathSolverLibrary\Equation\Structural\AlgebraTermArray.cs" />
     <Compile Include="MathSolverLibrary\Equation\Structural\Constant.cs" />
+    <Compile Include="MathSolverLibrary\Equation\Structural\ExNumber.cs" />
     <Compile Include="MathSolverLibrary\Equation\Structural\FunctionDefinition.cs" />
     <Compile Include="MathSolverLibrary\Equation\Structural\GeneralSolution.cs" />
     <Compile Include="MathSolverLibrary\Equation\Structural\LinearAlg\ColumnVector.cs" />
@@ -563,7 +564,6 @@
     <Compile Include="MathSolverLibrary\Equation\Structural\LinearAlg\MatrixInverse.cs" />
     <Compile Include="MathSolverLibrary\Equation\Structural\LinearAlg\Transpose.cs" />
     <Compile Include="MathSolverLibrary\Equation\Structural\LinearAlg\Vector.cs" />
-    <Compile Include="MathSolverLibrary\Equation\Structural\ExNumber.cs" />
     <Compile Include="MathSolverLibrary\Equation\Structural\Polynomial\PolynomialGen.cs" />
     <Compile Include="MathSolverLibrary\Equation\Structural\Solution.cs" />
     <Compile Include="MathSolverLibrary\Equation\Structural\SpecialSolutions.cs" />
@@ -591,8 +591,8 @@
     <Compile Include="MathSolverLibrary\Solving\CubicSolve.cs" />
     <Compile Include="MathSolverLibrary\Solving\Diff Eqs\DiffAgSolver.cs" />
     <Compile Include="MathSolverLibrary\Solving\Diff Eqs\DiffSolve.cs" />
-    <Compile Include="MathSolverLibrary\Solving\Diff Eqs\HomogeneousSolve.cs" />
     <Compile Include="MathSolverLibrary\Solving\Diff Eqs\ExactEquations.cs" />
+    <Compile Include="MathSolverLibrary\Solving\Diff Eqs\HomogeneousSolve.cs" />
     <Compile Include="MathSolverLibrary\Solving\Diff Eqs\IntegratingFactorSolve.cs" />
     <Compile Include="MathSolverLibrary\Solving\Diff Eqs\SeperableSolve.cs" />
     <Compile Include="MathSolverLibrary\Solving\ExponentSolve.cs" />
@@ -609,20 +609,20 @@
     <Compile Include="MathSolverLibrary\Solving\SubstitutionSolve.cs" />
     <Compile Include="MathSolverLibrary\Solving\SystemOfEquationsSolve.cs" />
     <Compile Include="MathSolverLibrary\Solving\TrigSolve.cs" />
-    <Compile Include="MathSolverLibrary\TermType\Multi Line\DiffEqGenTermType.cs" />
     <Compile Include="MathSolverLibrary\TermType\EqualityCheckGenTermType.cs" />
-    <Compile Include="MathSolverLibrary\TermType\Multi Line\EquationSystemGenTermType.cs" />
     <Compile Include="MathSolverLibrary\TermType\EvalData.cs" />
     <Compile Include="MathSolverLibrary\TermType\FunctionType.cs" />
+    <Compile Include="MathSolverLibrary\TermType\GenTermType.cs" />
     <Compile Include="MathSolverLibrary\TermType\InputType.cs" />
     <Compile Include="MathSolverLibrary\TermType\LinearAlgebraSolve.cs" />
     <Compile Include="MathSolverLibrary\TermType\LogGenTermType.cs" />
+    <Compile Include="MathSolverLibrary\TermType\Multi Line\DiffEqGenTermType.cs" />
+    <Compile Include="MathSolverLibrary\TermType\Multi Line\EquationSystemGenTermType.cs" />
     <Compile Include="MathSolverLibrary\TermType\Multi Line\MultiLineHelper.cs" />
     <Compile Include="MathSolverLibrary\TermType\QuadraticGenTermType.cs" />
     <Compile Include="MathSolverLibrary\TermType\SimplifyGenTermType.cs" />
     <Compile Include="MathSolverLibrary\TermType\SinusodalGenTermType.cs" />
     <Compile Include="MathSolverLibrary\TermType\SolveGenTermType.cs" />
-    <Compile Include="MathSolverLibrary\TermType\GenTermType.cs" />
     <Compile Include="multiline.aspx.cs">
       <DependentUpon>multiline.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

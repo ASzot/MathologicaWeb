@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using DotNetOpenAuth.OpenId.Extensions.SimpleRegistration;
 
 namespace MathSolverWebsite.MathSolverLibrary.Equation
 {
