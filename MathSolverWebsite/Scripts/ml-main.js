@@ -264,11 +264,45 @@ var linAlg = new TopicMenu(
             ]),
     ]);
 
+
+//////////////////////////////////////////////
+// Globals
+///////////////////////////////////////////
+
 var menus = [basic, trig, calc, symb, prob, linAlg];
 var currentMenu = basic;
 
+// Refers to the number right after the text box. Like mathInputSpanN where N is the value in the array.
 var inputBoxIds = [];
 var selectedTextBox = null;
+
+function CompactModeMgr() {
+    this._compactMode = false;
+}
+
+CompactModeMgr.prototype.getCompactMode = function () {
+    return _compactMode;
+};
+
+CompactModeMgr.prototype.setCompactMode = function (isCompactMode) {
+    this._compactMode = isCompactMode;
+
+    // Redraw all window input elements.
+    var setHtml = "";
+    for (var i = 0; i < inputBoxIds.length; ++i) {
+        var createdTextBox = createInputBox(inputBoxIds[i], i == 0);
+        setHtml += createdTextBox;
+
+    }
+    $("#input-list").html(setHtml);
+
+    selectedTextBox = $("#inputMathSpan" + inputBoxIds[0]);
+}
+
+var compactMode = new CompactModeMgr();
+
+
+
 
 /////////////////////////
 // Tool-bar
@@ -304,8 +338,8 @@ function onToolBarEleClicked(clickedId, event) {
         $("#input-list").html(html);
 
         for (var i = 0; i < splitInput.length; ++i) {
-            $("#mathInputSpan" + i).mathquill('editable');
-            $("#mathInputSpan" + i).mathquill('latex', splitInput[i]);
+            setEditableByObject($("#mathInputSpan" + i));
+            setValueForObject($("#mathInputSpan" + i), splitInput[i]);
 
             if (i == 0)
                 selectedTextBox = $("#mathInputSpan" + i);
@@ -320,7 +354,7 @@ function onToolBarEleClicked(clickedId, event) {
         selectedTextBox = $("#mathInputSpan" + inputBoxIds[0]);
     }
 
-    selectedTextBox.mathquill('write', clickedItem.addStr);
+    appendValueForObject(selectedTextBox, clickedItem.addStr);
 
 
     mathInputChanged();
@@ -328,87 +362,99 @@ function onToolBarEleClicked(clickedId, event) {
     return true;
 }
 
+// The event handler for when the subject selection header is changed in the toolbar.
+function onSubjectBarBtnClicked() {
+    // Make the correct subject selected.
+    $(this).attr('class', 'subject-bar-btn-clicked');
+    var id = jQuery(this).attr("id");
+    var idIndex = id.substring(2, id.length);
+
+    for (var i = 0; i < 7; ++i) {
+        if (i == idIndex)
+            continue;
+
+        $("#sb" + i).attr('class', 'subject-bar-btn');
+    }
+
+    // Update the tool box with the correct items for the menu.
+    var selectedMenu = menus[idIndex];
+    currentMenu = selectedMenu;
+
+    var toolBoxHTML = selectedMenu.outputItems();
+
+    $('#toolbar-btn-space').html(toolBoxHTML);
+
+    if (toolBoxHTML.indexOf("extra-space") != -1) {
+        $(".toolbar-btn").css("margin-top", "-4px");
+    }
+    else if (idIndex == 5)
+        $(".toolbar-btn").css("margin-top", "-3px");
+
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub], function () {
+        $(".sub-toolbar-btn-space").each(function () {
+            $(this).hide();
+        });
+
+        $(".toolbar-btn-dropdown").each(function () {
+            var parentHeight = $(this).parent().height();
+            var parentWidth = $(this).parent().width();
+            if ($(this).hasClass("extra-space")) {
+                parentWidth += 30.0;
+            }
+
+            var paddingHeight = ((parentHeight - 19.0) / 2.0);
+            //$(this).css('padding-top', paddingHeight + "px");
+            //$(this).css('padding-bottom', paddingHeight + "px");
+            $(this).css('height', parentHeight + "px");
+            $(this).css('line-height', parentHeight + "px");
+            $(this).css('top', "-" + parentHeight + "px");
+            $(this).css('margin-bottom', "-" + parentHeight + "px");
+            var factor = Math.pow(parentWidth, new Number(1.0)) / 1.4;
+            $(this).css('left', (factor) + 'px');
+            $(this).css('width', "20px");
+
+            $(this).click(function (e) {
+                var subBtns = $(this).parent().children(".sub-toolbar-btn-space");
+                subBtns.toggle();
+                $(".sub-toolbar-btn-space").each(function () {
+                    if ($(this).attr('id') != subBtns.attr('id') && $(this).is(":visible")) {
+                        $(this).hide();
+                    }
+                });
+
+                return false;
+            });
+
+        });
+        $(".sub-toolbar-btn-space").mouseleave(function () {
+            setTimeout(function () {
+                $(".sub-toolbar-btn-space").fadeOut();
+            }, 2000);
+        });
+        $(".sub-toolbar-btn-space").mouseenter(function () {
+            $(this).stop(true, true).fadeIn();
+        });
+    });
+}
+
+
+
+
+/////////////////////////////////
+// Document initialization.
+////////////////////////////////
+
 $(document).ready(function () {
+
     $("body").click(function (e) {
         if ($(e.target).closest(".sub-toolbar-btn-space").length == 0)
             $(".sub-toolbar-btn-space").fadeOut();
     });
 
-    function onSubjectBarBtnClicked() {
-        // Make the correct subject selected.
-        $(this).attr('class', 'subject-bar-btn-clicked');
-        var id = jQuery(this).attr("id");
-        var idIndex = id.substring(2, id.length);
+    // Is this running on a mobile device?
+    compactMode = window.innerWidth < 480;
 
-        for (var i = 0; i < 7; ++i) {
-            if (i == idIndex)
-                continue;
-
-            $("#sb" + i).attr('class', 'subject-bar-btn');
-        }
-
-        // Update the tool box with the correct items for the menu.
-        var selectedMenu = menus[idIndex];
-        currentMenu = selectedMenu;
-
-        var toolBoxHTML = selectedMenu.outputItems();
-
-        $('#toolbar-btn-space').html(toolBoxHTML);
-
-        if (toolBoxHTML.indexOf("extra-space") != -1) {
-            $(".toolbar-btn").css("margin-top", "-4px");
-        }
-        else if (idIndex == 5)
-            $(".toolbar-btn").css("margin-top", "-3px");
-
-        MathJax.Hub.Queue(["Typeset", MathJax.Hub], function () {
-            $(".sub-toolbar-btn-space").each(function () {
-                $(this).hide();
-            });
-
-            $(".toolbar-btn-dropdown").each(function () {
-                var parentHeight = $(this).parent().height();
-                var parentWidth = $(this).parent().width();
-                if ($(this).hasClass("extra-space")) {
-                    parentWidth += 30.0;
-                }
-
-                var paddingHeight = ((parentHeight - 19.0) / 2.0);
-                //$(this).css('padding-top', paddingHeight + "px");
-                //$(this).css('padding-bottom', paddingHeight + "px");
-                $(this).css('height', parentHeight + "px");
-                $(this).css('line-height', parentHeight + "px");
-                $(this).css('top', "-" + parentHeight + "px");
-                $(this).css('margin-bottom', "-" + parentHeight + "px");
-                var factor = Math.pow(parentWidth, new Number(1.0)) / 1.4;
-                $(this).css('left', (factor) + 'px');
-                $(this).css('width', "20px");
-
-                $(this).click(function (e) {
-                    var subBtns = $(this).parent().children(".sub-toolbar-btn-space");
-                    subBtns.toggle();
-                    $(".sub-toolbar-btn-space").each(function () {
-                        if ($(this).attr('id') != subBtns.attr('id')) {
-                            if ($(this).is(":visible"))
-                                $(this).hide();
-                        }
-                    });
-
-                    return false;
-                });
-            });
-
-            $(".sub-toolbar-btn-space").mouseleave(function () {
-                setTimeout(function () {
-                    $(".sub-toolbar-btn-space").fadeOut();
-                }, 2000);
-            });
-            $(".sub-toolbar-btn-space").mouseenter(function () {
-                $(this).stop(true, true).fadeIn();
-            });
-        });
-    }
-
+    // Add the event handlers to the HTML toolbox header elements.
     for (var i = 0; i < 7; ++i) {
         $("#sb" + i.toString()).click(onSubjectBarBtnClicked);
     }
@@ -439,11 +485,55 @@ $(document).ready(function () {
 });
 
 
+
+/////////////////////////////////////////////
+// LaTeX helper functions for input
+//////////////////////////////////////////
+
+function getValueForId(idVal) {
+    if (compactMode.getCompactMode())
+        return $(idVal).val();
+    return $(idVal).mathquill('latex');
+}
+
+function getValueByObject(entryObject) {
+    if (compactMode.getCompactMode())
+        return entryObject.val();
+    return entryObject.mathquill('latex');
+}
+
+function setValueForId(idVal, setVal) {
+    if (compactMode.getCompactMode())
+        $(idVal).val(setVal);
+    else 
+        $(idVal).mathquill('latex', setVal);
+}
+
+function appendValueForObject(entryObject, appendVal) {
+    if (compactMode.getCompactMode())
+        entryObject.val(entryObject.val() + appendVal);
+    else
+        entryObject.mathquill('write', appendVal);
+}
+
+function setValueForObject(entryObject, setVal) {
+    if (compactMode.getCompactMode())
+        entryObject.val(setVal);
+    else 
+        entryObject.mathquill('latex', setVal);
+}
+
+function setEditableByObject(entryObject) {
+    if (!compactMode.getCompactMode())
+        entryObject.mathquill('editable');
+}
+
+// Get the math input from the user.
 function getLatexInput() {
     var latex = "";
     var lastAdded = false;
     for (var i = 0; i < inputBoxIds.length; ++i) {
-        var addLatex = $("#mathInputSpan" + inputBoxIds[i]).mathquill('latex');
+        var addLatex = getValueForId("#mathInputSpan" + inputBoxIds[i]);
 
         if (lastAdded)
             latex += "; ";
@@ -459,6 +549,8 @@ function getLatexInput() {
     return latex;
 }
 
+
+// The user wants to add another level of math input.
 function addInputBtn_Clicked() {
     // The max number of input lines is 7.
     if (inputBoxIds.length > 7)
@@ -484,23 +576,27 @@ function addInputBtn_Clicked() {
     mathInputChanged();
 }
 
+// Set the math on the selected text box.
 function setLatexInput(setInput) {
     if (selectedTextBox != null) {
-        selectedTextBox.mathquill('latex', setInput);
+        setValueForObject(selectedTextBox, setInput);
         selectedTextBox.focus();
     }
 }
 
+// Just reset the math in each of the text boxes.
 function updateInputBoxes() {
+    if (compactMode.getCompactMode())
+        return;
     for (var i = 0; i < inputBoxIds.length; ++i) {
         var index = inputBoxIds[i];
 
         var inputSpan = $("#mathInputSpan" + index);
 
-        var innerLatex = inputSpan.mathquill('latex');
+        var innerLatex = getValueByObject(inputSpan);
         inputSpan.html(innerLatex);
 
-        inputSpan.mathquill("editable");
+        setEditableByObject(inputSpan);
     }
 }
 
@@ -514,150 +610,158 @@ function removeInput() {
     selectedTextBox = $("#mathInputSpan" + inputBoxIds[0]);
 }
 
-    function clearInputBtn_Clicked() {
-        if (inputBoxIds.length == 1) {
-            // Clear the final text box.
-            removeInput();
-            return;
-        }
-
-        var index = Number(inputBoxIds.length - 1);
-
-        var html = $("#input-list").html();
-
-        var removeIndex = -1;
-        for (var i = 0; i < inputBoxIds.length; ++i) {
-            if (inputBoxIds[i] == index) {
-                removeIndex = i;
-                break;
-            }
-        }
-
-        var listEles = html.split("</li>");
-
-        for (var i = 0; i < listEles.length; ++i) {
-            if (listEles[i] == "") {
-                listEles.splice(i--, 1);
-                continue;
-            }
-
-            listEles[i] = listEles[i] + "</li>";
-        }
-
-        if (removeIndex == -1) {
-            // Some error message thing goes here.
-        }
-
-        listEles.splice(removeIndex, 1);
-
-        html = "";
-        for (var i = 0; i < listEles.length; ++i) {
-            html += listEles[i];
-        }
-
-        $("#input-list").html(html);
-
-        inputBoxIds.splice(index, 1);
-
-        updateInputBoxes();
-
-        mathInputChanged();
+// Remove one of the input entry fields from the input div.
+function clearInputBtn_Clicked() {
+    if (inputBoxIds.length == 1) {
+        // Clear the final text box.
+        removeInput();
+        return;
     }
 
-    function inputBoxLostFocus() {
-    }
+    var index = Number(inputBoxIds.length - 1);
 
-    function inputBoxGainedFocus() {
-    }
+    var html = $("#input-list").html();
 
-    function createInputBox(index, hasInputQuery) {
-        var inputBoxHtml;
-        inputBoxHtml = "<li id='inputEle" + index + "'>";
-        inputBoxHtml += "<div class='input-txt-box-area'>";
-        if (hasInputQuery)
-            inputBoxHtml += "<div class='text-notice'>&gt;</div>";
-        else {
-            inputBoxHtml += "<div style='visibility: hidden' class='text-notice'>&gt;</div>";
+    var removeIndex = -1;
+    for (var i = 0; i < inputBoxIds.length; ++i) {
+        if (inputBoxIds[i] == index) {
+            removeIndex = i;
+            break;
         }
-        //onPaste='return false'
+    }
+
+    var listEles = html.split("</li>");
+
+    for (var i = 0; i < listEles.length; ++i) {
+        if (listEles[i] == "") {
+            listEles.splice(i--, 1);
+            continue;
+        }
+
+        listEles[i] = listEles[i] + "</li>";
+    }
+
+    if (removeIndex == -1) {
+        // Some error message thing goes here.
+    }
+
+    listEles.splice(removeIndex, 1);
+
+    html = "";
+    for (var i = 0; i < listEles.length; ++i) {
+        html += listEles[i];
+    }
+
+    $("#input-list").html(html);
+
+    inputBoxIds.splice(index, 1);
+
+    updateInputBoxes();
+
+    mathInputChanged();
+}
+
+function inputBoxLostFocus() {
+}
+
+function inputBoxGainedFocus() {
+}
+
+// Create another input entry for and add it to the input div list. hasInputQuery indicates whether the user is currently editing the text box.
+function createInputBox(index, hasInputQuery) {
+    var inputBoxHtml;
+    inputBoxHtml = "<li id='inputEle" + index + "'>";
+    inputBoxHtml += "<div class='input-txt-box-area'>";
+    if (hasInputQuery)
+        inputBoxHtml += "<div class='text-notice'>&gt;</div>";
+    else {
+        inputBoxHtml += "<div style='visibility: hidden' class='text-notice'>&gt;</div>";
+    }
+    //onPaste='return false'
+    if (compactMode.getCompactMode())
+        inputBoxHtml += "<input typ='text' id='mathInputSpan" + index + "' onkeyup='mathInputChanged(event);' onclick='onMathInputSpan_Clicked(this.id);'></input>";
+    else
         inputBoxHtml += "<span runat='server'  id='mathInputSpan" + index + "' onkeyup='mathInputChanged(event);' class='mathquill-editable' onclick='onMathInputSpan_Clicked(this.id);'></span>";
-        inputBoxHtml += "</div>";
-        inputBoxHtml += "</li>";
+    inputBoxHtml += "</div>";
+    inputBoxHtml += "</li>";
 
-        return inputBoxHtml;
+    return inputBoxHtml;
+}
+
+function fixInput(selectedTxtBox) {
+    if (!compactMode.getCompactMode())
+        return;
+
+    var latex = selectedTxtBox.mathquill('latex');
+    var replaced = latex.replace(/(\\)?sqrt/g, function ($0, $1) { return $1 ? $0 : '\\sqrt{}'; });
+    replaced = replaced.replace(/<=/g, function ($0, $1) { return $1 ? $0 : '\\le'; });
+    replaced = replaced.replace(/>=/g, function ($0, $1) { return $1 ? $0 : '\\ge'; });
+
+    var fixSymbols =
+        [
+            //'arcsin',
+            //'arccos',
+            //'arctan',
+
+            //'arccsc',
+            //'arcsec',
+            //'arccot',
+
+            //'sin',
+            //'cos',
+            //'tan',
+
+            //'csc',
+            //'sec',
+            //'cot',
+
+            //'ln',
+            //'log',
+
+            'pi'
+        ];
+
+    for (var i = 0; i < fixSymbols.length; ++i) {
+        var fixSymbol = fixSymbols[i];
+        replaced = replaced.replace(new RegExp("(\\\\|arc)?" + fixSymbol, 'g'),
+            function ($0, $1) { return $1 ? $0 : '\\' + fixSymbol; });
     }
 
-    function fixInput(selectedTxtBox) {
-        var latex = selectedTxtBox.mathquill('latex');
-        var replaced = latex.replace(/(\\)?sqrt/g, function ($0, $1) { return $1 ? $0 : '\\sqrt{}'; });
-        replaced = replaced.replace(/<=/g, function ($0, $1) { return $1 ? $0 : '\\le'; });
-        replaced = replaced.replace(/>=/g, function ($0, $1) { return $1 ? $0 : '\\ge'; });
-
-        var fixSymbols =
-            [
-                //'arcsin',
-                //'arccos',
-                //'arctan',
-
-                //'arccsc',
-                //'arcsec',
-                //'arccot',
-
-                //'sin',
-                //'cos',
-                //'tan',
-
-                //'csc',
-                //'sec',
-                //'cot',
-
-                //'ln',
-                //'log',
-
-                'pi'
-            ];
-
-        for (var i = 0; i < fixSymbols.length; ++i) {
-            var fixSymbol = fixSymbols[i];
-            replaced = replaced.replace(new RegExp("(\\\\|arc)?" + fixSymbol, 'g'),
-                function ($0, $1) { return $1 ? $0 : '\\' + fixSymbol; });
-        }
-
-        if (replaced != latex) {
-            selectedTxtBox.mathquill('latex', replaced);
-        }
+    if (replaced != latex) {
+        selectedTxtBox.mathquill('latex', replaced);
     }
+}
 
-    function htmlEncode(value) {
-        return $('<div/>').text(value).html();
-    }
+function htmlEncode(value) {
+    return $('<div/>').text(value).html();
+}
 
-    function htmlDecode(value) {
-        return $('<div/>').html(value).text();
-    }
+function htmlDecode(value) {
+    return $('<div/>').html(value).text();
+}
 
-    function onMathInputSpan_Clicked(clickedId) {
-        selectedTextBox = $("#" + clickedId);
-    }
+function onMathInputSpan_Clicked(clickedId) {
+    selectedTextBox = $("#" + clickedId);
+}
 
-    function enterScrollMode() {
-        $("#work-nav-space").show();
-        $("#eval-space").hide();
-        //$("#parse-errors-id").hide();
+function enterScrollMode() {
+    $("#work-nav-space").show();
+    $("#eval-space").hide();
+    //$("#parse-errors-id").hide();
 
-        $("#work-space").css('height', 'moz-calc(100% - 204px)');
-        $("#work-space").css('height', 'webkit-calc(100% - 204px)');
-        $("#work-space").css('height', '-o-calc(100% - 204px)');
-        $("#work-space").css('height', 'calc(100% - 204px)');
-    }
+    $("#work-space").css('height', 'moz-calc(100% - 204px)');
+    $("#work-space").css('height', 'webkit-calc(100% - 204px)');
+    $("#work-space").css('height', '-o-calc(100% - 204px)');
+    $("#work-space").css('height', 'calc(100% - 204px)');
+}
 
-    function exitScrollMode() {
-        $("#work-nav-space").hide();
-        $("#eval-space").show(200);
-        //$("#parse-errors-id").show(200);
+function exitScrollMode() {
+    $("#work-nav-space").hide();
+    $("#eval-space").show(200);
+    //$("#parse-errors-id").show(200);
 
-        $("#work-space").css('height', 'moz-calc(100% - 264px)');
-        $("#work-space").css('height', 'webkit-calc(100% - 264px)');
-        $("#work-space").css('height', '-o-calc(100% - 264px)');
-        $("#work-space").css('height', 'calc(100% - 264px)');
-    }
+    $("#work-space").css('height', 'moz-calc(100% - 264px)');
+    $("#work-space").css('height', 'webkit-calc(100% - 264px)');
+    $("#work-space").css('height', '-o-calc(100% - 264px)');
+    $("#work-space").css('height', 'calc(100% - 264px)');
+}
