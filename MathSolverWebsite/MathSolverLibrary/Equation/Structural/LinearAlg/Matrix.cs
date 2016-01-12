@@ -145,6 +145,69 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Structural.LinearAlg
             return new ExMatrix(comps);
         }
 
+		public ExMatrix GetRREF()
+		{
+			ExMatrix rref = (ExMatrix)this.CloneEx();
+
+			int lead = 0;
+			int rowCount = rref.GetRows();
+			int colCount = rref.GetCols();
+
+			for (int r = 0; r < rowCount; r++)
+			{
+				if (colCount <= lead) 
+					break;
+
+				int i = r;
+				while (rref.Get(i, lead).IsEqualTo(ExNumber.GetZero()))
+				{
+					i++;
+					if (i == rowCount)
+					{
+						i = r;
+						lead++;
+						if (colCount == lead)
+						{
+							lead--;
+							break;
+						}
+					}
+				}
+
+				for (int j = 0; j < colCount; j++)
+				{
+					ExComp temp = rref.Get(r, j);
+					rref.Set(r, j, rref.Get(i, j));
+					rref.Set(i, j, temp);
+				}
+
+				ExComp div = rref.Get(r, lead);
+				if (!div.IsEqualTo(ExNumber.GetZero()))
+				{
+					for (int j = 0; j < colCount; j++)
+					{
+						rref.Set(r, j, DivOp.StaticCombine(rref.Get(r, j), div));
+					}
+				}
+
+				for (int j = 0; j < rowCount; j++)
+				{
+					if (j != r)
+					{
+						ExComp sub = rref.Get(j, lead);
+						for (int k = 0; k < colCount; k++)
+						{
+							rref.Set(j, k, SubOp.StaticCombine(rref.Get(j, k), MulOp.StaticCombine(sub, rref.Get(r, k))));
+						}
+					}
+				}
+
+				lead++;
+			}
+
+			return rref;
+		}
+
         public ExMatrix Transpose()
         {
             ExComp[][] transposedData = new ExComp[GetCols()][];
