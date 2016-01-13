@@ -20,7 +20,9 @@
 
     <!--Mathquill include-->
     <link rel="stylesheet" type="text/css" href="/mathquill/mathquill.css" />
-    <script src="/mathquill/mathquill.js"></script>
+    <script src="/mathquill/mathquill.js">
+
+    </script>
 
     <!-- Google analytics -->
     <script>
@@ -45,7 +47,6 @@
         }
 
         function mathInputChanged(event) {
-
             if (typeof event == 'object' && event !== null) {
                 if (event.which == 13 || event.key == 13) {
                     event.stopPropagation = true;
@@ -108,8 +109,8 @@
             selectedTextBox = $("#mathInputSpan0");
 
             for (var i = 0; i < inputs.length; ++i) {
-                $("#mathInputSpan" + i).mathquill('editable');
-                $("#mathInputSpan" + i).mathquill('latex', inputs[i]);
+                setEditableByObject($("#mathInputSpan" + i));
+                setValueForObject($("#mathInputSpan" + i), inputs[i]);
             }
 
             mathInputChanged(null);
@@ -146,6 +147,7 @@
         Sys.WebForms.PageRequestManager.getInstance().add_beginRequest(BeginRequestHandler);
         Sys.WebForms.PageRequestManager.getInstance().add_endRequest(EndRequestHandler);
         function BeginRequestHandler(sender, args) {
+
         }
         function EndRequestHandler(sender, args) {
             var senderId = "";
@@ -199,6 +201,7 @@
                 "</div></div><div class='horiz-divide'></div>");
 
             MathJax.Hub.Queue(["Typeset", MathJax.Hub], function () {
+
             });
 
             var workSpaceEle = $("#work-space");
@@ -320,15 +323,14 @@
 
         }
 
+        // When the user clicks the remove result section button.
         function onClearBtnClicked() {
             $("#work-list-disp").html("");
             removeInput();
             exitScrollMode();
         }
 
-
         $(document).ready(function () {
-
             $("#tool-bar-overlay").mouseenter(function () {
                 $("#tool-bar-space").show(200);
             });
@@ -422,7 +424,9 @@
 
             var html = $("#input-list").html();
 
+            // Is the input that should be pre entered?
             var inputDispVal = getParameterByName("InputDisp");
+
             if (inputDispVal !== null && inputDispVal != "") {
                 var splitInput = inputDispVal.split(';');
                 for (var i = 0; i < splitInput.length; ++i) {
@@ -433,11 +437,15 @@
                 $("#input-list").html(html);
 
                 for (var i = 0; i < splitInput.length; ++i) {
-                    $("#mathInputSpan" + i).mathquill('editable');
-                    $("#mathInputSpan" + i).mathquill('latex', splitInput[i]);
+                    // Set that index of the input box with the appropriate math.
+                    setEditableByObject($("#mathInputSpan" + i), 'editable');
+                    setValueForObject($("#mathInputSpan" + i), splitInput[i]);
 
+                    // By default have the user select the first input box of the pre entered math. 
                     if (i == 0)
                         selectedTextBox = $("#mathInputSpan" + i);
+
+                    // Add the input box to the input field text box list.
                     inputBoxIds.push(i);
                 }
             }
@@ -445,7 +453,8 @@
                 var inputBoxHtml = createInputBox(0, true);
 
                 $("#input-list").html(html + inputBoxHtml);
-                $("#mathInputSpan0").mathquill("editable");
+                // Just create the input box with no math in it. 
+                setEditableByObject($("#mathInputSpan0"), "editable");
                 selectedTextBox = $("#mathInputSpan0");
                 inputBoxIds.push(0);
             }
@@ -626,7 +635,7 @@
                     <input type="button" id="example-nav-forward" style="float: right;" class="example-nav-btn" value="&#x25B6;" />
                     <asp:UpdatePanel runat="server" UpdateMode="Conditional">
                         <ContentTemplate>
-                            <asp:Timer ID="updateExampleTimer" runat="server" Interval="10000" OnTick="updateExampleTimer_Tick"></asp:Timer>
+                            <asp:Timer ID="updateExampleTimer" runat="server" Interval="1000000" OnTick="updateExampleTimer_Tick"></asp:Timer>
                                 <div id="exampleOutputContent" runat="server"></div>
                             <asp:Button runat="server" ID="exampleNavBackBtn" CssClass="hidden" OnClick="exampleNavBackBtn_Click" />
                             <asp:Button runat="server" ID="exampleNavForwardBtn" CssClass="hidden" OnClick="exampleNavForwardBtn_Click" />

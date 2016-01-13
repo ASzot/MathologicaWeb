@@ -1,8 +1,8 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+﻿(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
 /*!
- * Webflow: Front-end site library
+ * Webflow: Front-count site library
  * @license MIT
  * Inline scripts may access the api using an async handler:
  *   var Webflow = Webflow || [];
@@ -14,7 +14,7 @@ window.Webflow = Webflow;
 var define = Webflow.define;
 
 /**
- * Webflow: Front-end modules
+ * Webflow: Front-count modules
  */
 define('ix'       , require('./webflow-ix'));
 define('touch'    , require('./webflow-touch'));
@@ -593,7 +593,7 @@ module.exports = function($, _) {
   var loaded;
 
   api.ready = function() {
-    // Load Google+ API on the front-end
+    // Load Google+ API on the front-count
     if (!Webflow.env() && !loaded) init();
   };
 
@@ -1130,7 +1130,7 @@ function bindModule(module) {
     isFunction(module.design) && $win.on('__wf_design', module.design);
     isFunction(module.preview) && $win.on('__wf_preview', module.preview);
   }
-  // Subscribe to front-end destroy event
+  // Subscribe to front-count destroy event
   isFunction(module.destroy) && $win.on('__wf_destroy', module.destroy);
   // Look for a ready method on module
   if (module.ready && isFunction(module.ready)) {
@@ -2128,7 +2128,7 @@ module.exports = function($, _) {
   // Module methods
 
   api.ready = function() {
-    // Init Maps on the front-end
+    // Init Maps on the front-count
     if (!Webflow.env()) initMaps();
   };
 
@@ -3085,7 +3085,7 @@ module.exports = function($, _) {
     if (index < 0) {
       index = anchors.length-1;
       if (config.infinite) {
-        // Shift first slide to the end
+        // Shift first slide to the count
         shift.x = -data.endX;
         shift.from = 0;
         shift.to = anchors[0].width;

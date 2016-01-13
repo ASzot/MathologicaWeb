@@ -539,8 +539,14 @@ h1 {
     position: relative;
     display: inline-block;
     vertical-align: middle;
+    line-height: 100%;
     width: 70%;
     height: 100%;
+}
+select {
+
+}
+option {
 }
 
     .gen-drop-down-wrapper:before,
@@ -579,6 +585,7 @@ h1 {
     font-size: 16pt;
     display: inline-block;
     margin-bottom: 20px;
+    line-height: 220%;
 }
 
 .solve-btn {
@@ -1179,4 +1186,33 @@ img {
 
 .work-disp-list {
     padding-left: 2%;
+}
+
+.input-box-plaintext {
+    border-radius: 10px;
+    padding: 10px;
+    border: 1px solid #3498db;
+}
+
+.sub-message {
+    font-size: 14pt;
+}
+
+    .sub-message div {
+        display: none;
+        font-size: 12pt;
+        color: #e74c3c;
+    }
+
+    .sub-message:hover div {
+        display:block;
+    }
+
+.note-popup {
+    position: absolute;
+    height: 100px;
+    width: 200px;
+    bottom: 100px;
+    left: 20px;
+    background-color:#F5F5F5;
 }

@@ -24,7 +24,7 @@ namespace MathSolverWebsite.api
             bool useRad;
             int selectedIndex = -1;
             if (((queryExecute == null || queryExecute == "" || selectedIndexStr == null || selectedIndexStr == "" || 
-                !int.TryParse(selectedIndexStr, selectedIndex)) && (queryParse == null || queryParse == "")) || 
+                !int.TryParse(selectedIndexStr, out selectedIndex)) && (queryParse == null || queryParse == "")) || 
                 useRadStr == null || useRadStr == "" || Boolean.TryParse(useRadStr, out useRad) || 
                 apiPass != PASSWORD)
             {
@@ -36,7 +36,7 @@ namespace MathSolverWebsite.api
             if (queryExecute == null)
                 output = EvalParse(queryParse, useRad);
             else
-                output = EvalSolve(queryExecute, useRadd, selectedIndex);
+                output = EvalSolve(queryExecute, useRad, selectedIndex);
 
             outputQuery.Text = output;
         }
@@ -47,7 +47,7 @@ namespace MathSolverWebsite.api
 
             var evalData = new MathSolverLibrary.TermType.EvalData(useRad, new WorkMgr(), funcDefHelper);
             var parseErrors = new List<string>();
-            var termEval = MathSolverLibrary.MathSolver.ParseInput(inputTxt, ref evalData, ref parseErrors);
+            var termEval = MathSolverLibrary.MathSolver.ParseInput(input, ref evalData, ref parseErrors);
             if (termEval == null)
             {
                 return "ERROR:" + String.Join("|", parseErrors);
@@ -64,18 +64,18 @@ namespace MathSolverWebsite.api
             var evalData = new MathSolverLibrary.TermType.EvalData(useRad, new WorkMgr(), funcDefHelper);
 
             var parseErrors = new System.Collections.Generic.List<string>();
-            var termEval = MathSolver.ParseInput(inputTxt, ref evalData, ref parseErrors);
+            var termEval = MathSolver.ParseInput(input, ref evalData, ref parseErrors);
             if (termEval == null)
                 return "ERROR:" + String.Join("|", parseErrors);
-            evalData = new MathSolverLibrary.TermType.EvalData(useRad, new WorkMgr(), FuncDefHelper);
+            evalData = new MathSolverLibrary.TermType.EvalData(useRad, new WorkMgr(), funcDefHelper);
             var solveResult = termEval.ExecuteCommandIndex(selectedIndex, ref evalData);
-            if (solveResult == null || !solveResult.Success)
+            if (!solveResult.Success)
                 return "ERROR:EVAL";
 
             string rawResultStr;
-            string solveResultHtml = HtmlHelper.SolveResultToHtml(solveResult, out rawResultStr, evalData);
+            string solveResultHtml = MathSolverWebsite.Website_Logic.HtmlHelper.SolveResultToHtml(solveResult, out rawResultStr, evalData);
 
-            string workHtml = HtmlHelper.OutputWorkStepsToHtml(evalData.GetWorkMgr());
+            string workHtml = MathSolverWebsite.Website_Logic.HtmlHelper.OutputWorkStepsToHtml(evalData.GetWorkMgr());
 
             return solveResultHtml + workHtml;
         }

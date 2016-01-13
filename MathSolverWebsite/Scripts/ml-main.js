@@ -460,7 +460,10 @@ $(document).ready(function () {
     var operatorsHTML = basic.outputItems();
     $("#toolbar-btn-space").html(operatorsHTML);
 
-    
+
+    if (compactMode.getCompactMode()) {
+        $("body").append("<div class='note-popup'>Note that Mathologica will not work as well on a mobile device a desktop is recommended.<br /><b>Tap to dismiss</b></div>");
+    }
 
     // Create the multi-line help pop up.
     if (getCookie('visited')) {
@@ -469,6 +472,10 @@ $(document).ready(function () {
     else {
         setCookie('visited', true, 999);
         // This is the user's first time on this page.
+
+        $(".note-popup").click(function () {
+            $(this).remove();
+        });
 
         setTimeout(function () {
             $("<div class='small-popup pop'><p>Multi-line input is very useful. Check out <a href='/multiline'>mathologica.com/multiline</a> for more.</p><a style='margin-top: 0px;' class='close' href='#'>Close</a></div>").insertAfter("#add-btn-id");
@@ -479,6 +486,7 @@ $(document).ready(function () {
             });
         }, 2000);
     }
+
 });
 
 
@@ -676,7 +684,7 @@ function createInputBox(index, hasInputQuery) {
     }
     //onPaste='return false'
     if (compactMode.getCompactMode())
-        inputBoxHtml += "<input typ='text' class='input-box-plaintext' id='mathInputSpan" + index + "' onkeyup='mathInputChanged(event);' onclick='onMathInputSpan_Clicked(this.id);'></input>";
+        inputBoxHtml += "<input typ='text' placeholder='Enter math here' class='input-box-plaintext' id='mathInputSpan" + index + "' onkeyup='mathInputChanged(event);' onclick='onMathInputSpan_Clicked(this.id);'></input>";
     else
         inputBoxHtml += "<span runat='server'  id='mathInputSpan" + index + "' onkeyup='mathInputChanged(event);' class='mathquill-editable' onclick='onMathInputSpan_Clicked(this.id);'></span>";
     inputBoxHtml += "</div>";
