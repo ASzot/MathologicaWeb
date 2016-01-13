@@ -308,6 +308,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation
                     ExComp definition = pEvalData.GetFuncDefs().GetSingleVarDefinition(iden);
                     if (definition == null)
                         continue;
+                    pEvalData.AddMsg("Substituting " + WorkMgr.STM + WorkMgr.ToDisp(iden) + "=" + 
+                        WorkMgr.ToDisp(definition) + WorkMgr.EDM);
                     _subComps[i] = definition;
                 }
 

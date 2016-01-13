@@ -277,11 +277,11 @@ var inputBoxIds = [];
 var selectedTextBox = null;
 
 function CompactModeMgr() {
-    this._compactMode = false;
+    this._compactMode = window.innerWidth < 480;
 }
 
 CompactModeMgr.prototype.getCompactMode = function () {
-    return _compactMode;
+    return this._compactMode;
 };
 
 CompactModeMgr.prototype.setCompactMode = function (isCompactMode) {
@@ -297,7 +297,7 @@ CompactModeMgr.prototype.setCompactMode = function (isCompactMode) {
     $("#input-list").html(setHtml);
 
     selectedTextBox = $("#inputMathSpan" + inputBoxIds[0]);
-}
+};
 
 var compactMode = new CompactModeMgr();
 
@@ -450,9 +450,6 @@ $(document).ready(function () {
         if ($(e.target).closest(".sub-toolbar-btn-space").length == 0)
             $(".sub-toolbar-btn-space").fadeOut();
     });
-
-    // Is this running on a mobile device?
-    compactMode = window.innerWidth < 480;
 
     // Add the event handlers to the HTML toolbox header elements.
     for (var i = 0; i < 7; ++i) {
@@ -679,7 +676,7 @@ function createInputBox(index, hasInputQuery) {
     }
     //onPaste='return false'
     if (compactMode.getCompactMode())
-        inputBoxHtml += "<input typ='text' id='mathInputSpan" + index + "' onkeyup='mathInputChanged(event);' onclick='onMathInputSpan_Clicked(this.id);'></input>";
+        inputBoxHtml += "<input typ='text' class='input-box-plaintext' id='mathInputSpan" + index + "' onkeyup='mathInputChanged(event);' onclick='onMathInputSpan_Clicked(this.id);'></input>";
     else
         inputBoxHtml += "<span runat='server'  id='mathInputSpan" + index + "' onkeyup='mathInputChanged(event);' class='mathquill-editable' onclick='onMathInputSpan_Clicked(this.id);'></span>";
     inputBoxHtml += "</div>";
@@ -689,7 +686,7 @@ function createInputBox(index, hasInputQuery) {
 }
 
 function fixInput(selectedTxtBox) {
-    if (!compactMode.getCompactMode())
+    if (compactMode.getCompactMode())
         return;
 
     var latex = selectedTxtBox.mathquill('latex');

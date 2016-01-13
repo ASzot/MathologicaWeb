@@ -57,6 +57,7 @@ namespace MathSolverWebsite
         private const string SOLVE_CONTINUE_SES_KEY = "SolveContinue";
         private const string FUNC_DEF_SES_KEY = "FuncDefs";
         private const string EXAMPLE_INDEX_SES_KEY = "ExampleIndex";
+        private const string SUB_MESSAGE_SES_KEY = "SubKey";
 
         private const int MAX_INPUT_LEN = 200;
         private static ExampleInputMgr _exampleInputMgr = null;
@@ -69,6 +70,19 @@ namespace MathSolverWebsite
                 if (_dataMgr == null)
                     CreateDataMgr();
                 return _dataMgr; 
+            }
+        }
+
+        private string SubWarningMessage
+        {
+            set
+            {
+                Session[SUB_MESSAGE_SES_KEY] = value;
+            }
+            get
+            {
+                object subMes = Session[SUB_MESSAGE_SES_KEY];
+                return subMes == null ? "" : (string)subMes;
             }
         }
 
@@ -280,7 +294,14 @@ namespace MathSolverWebsite
 
             inputHtml = "<div class='input-disp-area'>" + inputHtml + "</div>";
 
-            calcOutput.InnerHtml = inputHtml + solveResultHtml + workHtml;
+            calcOutput.InnerHtml = inputHtml + solveResultHtml +
+                "<div class='sub-message'>" + 
+                SubWarningMessage + 
+                "<div>" + 
+                "To delete this definition go to the 'plus' button in the toolbar hover over the definition and click delete. Or click <a href='/'>here</a>" + 
+                "</div>" +
+                "</div>" + 
+                workHtml;
 
             if (_dataMgr != null)
             {
@@ -304,6 +325,19 @@ namespace MathSolverWebsite
                 EvalData evalData = new EvalData(UseRad, new WorkMgr(), FuncDefHelper);
 
                 genTermEval = MathSolver.ParseInput(inputStr, ref evalData, ref parseErrors);
+                if (evalData.GetMsgs() != null)
+                {
+                    string subWarningMessage = "";
+                    foreach (string message in evalData.GetMsgs())
+                    {
+                        if (message.StartsWith("Sub"))
+                            subWarningMessage += message + ". ";
+                    }
+                    if (subWarningMessage != "")
+                        SubWarningMessage = subWarningMessage;
+                }
+                else
+                    SubWarningMessage = "";
             }
 
             evalDropDownList.Items.Clear();

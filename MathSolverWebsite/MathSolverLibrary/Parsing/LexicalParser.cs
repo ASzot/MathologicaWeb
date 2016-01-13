@@ -2480,6 +2480,9 @@ namespace MathSolverWebsite.MathSolverLibrary.Parsing
 
             currentIndex++;
 
+            if (currentIndex >= lt.Count)
+                return null;
+
             if (lt[currentIndex].GetData1() == LexemeType.Operator && lt[currentIndex].GetData2() == "*")
                 currentIndex++;
 

@@ -47,7 +47,6 @@
         }
 
         function mathInputChanged(event) {
-
             if (typeof event == 'object' && event !== null) {
                 if (event.which == 13 || event.key == 13) {
                     event.stopPropagation = true;

@@ -1180,3 +1180,23 @@ img {
 .work-disp-list {
     padding-left: 2%;
 }
+
+.input-box-plaintext {
+    border-radius: 10px;
+    padding: 10px;
+    border: 1px solid #3498db;
+}
+
+.sub-message {
+    font-size: 14pt;
+}
+
+    .sub-message div {
+        display: none;
+        font-size: 12pt;
+        color: #e74c3c;
+    }
+
+    .sub-message:hover div {
+        display:block;
+    }

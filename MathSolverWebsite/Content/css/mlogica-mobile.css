@@ -243,7 +243,8 @@
 
     .text-notice {
         position: relative !important;
-        top: 5px !important;
+        top: 10px !important;
+        font-size: 40px !important;
     }
 
     .gen-drop-down {
