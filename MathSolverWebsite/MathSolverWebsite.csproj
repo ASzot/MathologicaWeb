@@ -155,6 +155,7 @@
     <Content Include="account\manage.aspx" />
     <Content Include="account\register.aspx" />
     <Content Include="account\you.aspx" />
+    <Content Include="api\query.aspx" />
     <Content Include="apps.aspx" />
     <Content Include="contact.aspx" />
     <Content Include="Content\css\mlogica-def.css" />
@@ -421,6 +422,13 @@
     </Compile>
     <Compile Include="account\you.aspx.designer.cs">
       <DependentUpon>you.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="api\query.aspx.cs">
+      <DependentUpon>query.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="api\query.aspx.designer.cs">
+      <DependentUpon>query.aspx</DependentUpon>
     </Compile>
     <Compile Include="apps.aspx.cs">
       <DependentUpon>apps.aspx</DependentUpon>
