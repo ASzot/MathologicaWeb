@@ -12,6 +12,7 @@ namespace MathSolverWebsite.api
     public partial class Query : System.Web.UI.Page
     {
         private const string PASSWORD = "98ed7b4eee1c4a2385a0d9a98b7e1532";
+
         protected void Page_Load(object sender, EventArgs e)
         {
             string apiPass = Request.QueryString["p"];
@@ -23,20 +24,28 @@ namespace MathSolverWebsite.api
 
             bool useRad;
             int selectedIndex = -1;
-            if (((queryExecute == null || queryExecute == "" || selectedIndexStr == null || selectedIndexStr == "" || 
-                !int.TryParse(selectedIndexStr, out selectedIndex)) && (queryParse == null || queryParse == "")) || 
-                useRadStr == null || useRadStr == "" || Boolean.TryParse(useRadStr, out useRad) || 
-                apiPass != PASSWORD)
-            {
-                Response.Redirect("/", true);
-                return;
-            }
+
+			if ((queryExecute != null && queryExecute == "") ||
+				(queryParse != null && queryParse == "") ||
+				(selectedIndexStr != "" && (selectedIndexStr == "" || !int.TryParse(selectedIndexStr, out selectedIndex))) ||
+				(useRadStr == null || Boolean.TryParse(useRadStr, out useRad)) ||
+				apiPass != PASSWORD)
+			{
+				Response.Redirect("/", true);
+				return;
+			}
+ 				
 
             string output;
-            if (queryExecute == null)
+            if (queryExecute == null && queryParse != null)
                 output = EvalParse(queryParse, useRad);
-            else
-                output = EvalSolve(queryExecute, useRad, selectedIndex);
+			else if (queryParse == null && queryExecute != null)
+				output = EvalSolve(queryExecute, useRad, selectedIndex);
+			else
+			{
+				Response.Redirect("/", true);
+				return;
+			}
 
             outputQuery.Text = output;
         }
