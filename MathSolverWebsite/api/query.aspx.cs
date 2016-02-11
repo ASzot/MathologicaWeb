@@ -28,7 +28,7 @@ namespace MathSolverWebsite.api
 			if ((queryExecute != null && queryExecute == "") ||
 				(queryParse != null && queryParse == "") ||
 				(selectedIndexStr != "" && (selectedIndexStr == "" || !int.TryParse(selectedIndexStr, out selectedIndex))) ||
-				(useRadStr == null || Boolean.TryParse(useRadStr, out useRad)) ||
+				(useRadStr == null || !Boolean.TryParse(useRadStr, out useRad)) ||
 				apiPass != PASSWORD)
 			{
 				Response.Redirect("/", true);
