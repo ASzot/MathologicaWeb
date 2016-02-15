@@ -463,6 +463,11 @@ $(document).ready(function () {
 
     if (compactMode.getCompactMode()) {
         $("body").append("<div class='note-popup'>Note that Mathologica will not work as well on a mobile device a desktop is recommended.<br /><b>Tap to dismiss</b></div>");
+
+        // Exit the window after 5 seconds.
+        setTimeout(function () {
+            $(".note-popup").remove();
+        }, 5000);
     }
 
     // Create the multi-line help pop up.
@@ -684,7 +689,7 @@ function createInputBox(index, hasInputQuery) {
     }
     //onPaste='return false'
     if (compactMode.getCompactMode())
-        inputBoxHtml += "<input typ='text' placeholder='Enter math here' class='input-box-plaintext' id='mathInputSpan" + index + "' onkeyup='mathInputChanged(event);' onclick='onMathInputSpan_Clicked(this.id);'></input>";
+        inputBoxHtml += "<input typ='text' placeholder='Enter math here' autocapitalize='none' class='input-box-plaintext' id='mathInputSpan" + index + "' onkeyup='mathInputChanged(event);' onclick='onMathInputSpan_Clicked(this.id);'></input>";
     else
         inputBoxHtml += "<span runat='server'  id='mathInputSpan" + index + "' onkeyup='mathInputChanged(event);' class='mathquill-editable' onclick='onMathInputSpan_Clicked(this.id);'></span>";
     inputBoxHtml += "</div>";

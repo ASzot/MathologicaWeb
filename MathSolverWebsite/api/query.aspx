@@ -12,7 +12,9 @@
         This is the API for Mathologica. Please visit the contact us page for how to obtain usage of this REST API. 
         <a href="/">Back to homepage.</a> 
     </div>
-    <asp:Literal ID="outputQuery" runat="server"></asp:Literal>
+    <div runat="server" id="outputDiv">
+
+    </div>
     </form>
 </body>
 </html>

@@ -27,7 +27,7 @@ namespace MathSolverWebsite.api
 
 			if ((queryExecute != null && queryExecute == "") ||
 				(queryParse != null && queryParse == "") ||
-				(selectedIndexStr != "" && (selectedIndexStr == "" || !int.TryParse(selectedIndexStr, out selectedIndex))) ||
+				(selectedIndexStr != null && (selectedIndexStr == "" || !int.TryParse(selectedIndexStr, out selectedIndex))) ||
 				(useRadStr == null || !Boolean.TryParse(useRadStr, out useRad)) ||
 				apiPass != PASSWORD)
 			{
@@ -46,8 +46,7 @@ namespace MathSolverWebsite.api
 				Response.Redirect("/", true);
 				return;
 			}
-
-            outputQuery.Text = output;
+            outputDiv.InnerHtml = output;
         }
 
         private string EvalParse(string input, bool useRad)
