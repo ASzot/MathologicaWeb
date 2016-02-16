@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -46,11 +47,12 @@ namespace MathSolverWebsite.api
 				Response.Redirect("/", true);
 				return;
 			}
-            outputDiv.InnerHtml = output;
+            Response.Write(output);
         }
 
         private string EvalParse(string input, bool useRad)
         {
+            input = WebUtility.HtmlDecode(input);
             var funcDefHelper = new MathSolverLibrary.Information_Helpers.FuncDefHelper();
 
             var evalData = new MathSolverLibrary.TermType.EvalData(useRad, new WorkMgr(), funcDefHelper);
@@ -67,6 +69,7 @@ namespace MathSolverWebsite.api
 
         private string EvalSolve(string input, bool useRad, int selectedIndex)
         {
+            input = WebUtility.HtmlDecode(input);
             var funcDefHelper = new MathSolverLibrary.Information_Helpers.FuncDefHelper();
 
             var evalData = new MathSolverLibrary.TermType.EvalData(useRad, new WorkMgr(), funcDefHelper);
