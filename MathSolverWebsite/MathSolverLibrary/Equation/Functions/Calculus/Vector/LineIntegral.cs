@@ -281,7 +281,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus.Vector
                 return this;
             else
             {
-                useDefs = new TypePair<string, ExComp>[paraFuncs.Count];
+                useDefs = (TypePair<string, ExComp>[])(new object[paraFuncs.Count]);
                 pathVar = paraFuncs[0].GetInputArgs()[0];
                 for (int i = 0; i < useDefs.Length; ++i)
                 {
