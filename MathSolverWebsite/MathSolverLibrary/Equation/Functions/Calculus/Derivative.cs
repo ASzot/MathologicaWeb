@@ -350,6 +350,8 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
                 return this;
 
             int order = (int)(_order as ExNumber).GetRealComp();
+            if (order < 1)
+                return ExNumber.GetUndefined();
 
             if (order > MAX_DERIV)
                 return this;
@@ -357,7 +359,7 @@ namespace MathSolverWebsite.MathSolverLibrary.Equation.Functions.Calculus
             if (_isPartial)
                 pEvalData.AttemptSetInputType(TermType.InputType.PartialDerivative);
 
-            ca_derivSymb = "d/(d" + _withRespectTo.ToDispString() + ")";
+            ca_derivSymb =  GetNotationIden() + "/(" + GetNotationIden() + _withRespectTo.ToDispString() + ")";
 
             ExComp finalInnerEx = GetInnerEx();
 

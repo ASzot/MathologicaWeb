@@ -9,7 +9,7 @@
     </style>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContent" runat="server">
-    <div class="ws-container size-crit">
+    <div class="ws-container size-crit" style="margin-bottom: 100px;">
         <hgroup class="title">
             <div class="heading-1">Register</div>
             <h1 class="heading-2">Use Mathologica to the full potential.</h1>

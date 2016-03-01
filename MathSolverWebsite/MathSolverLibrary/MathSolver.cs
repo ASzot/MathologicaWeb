@@ -9,7 +9,6 @@ namespace MathSolverWebsite.MathSolverLibrary
     internal static class MathSolver
     {
         public const bool USE_TEX_DEBUG = true;
-        public const bool PLAIN_TEXT = false;
 
         public static TermType.GenTermType DetermineSingularEqSet(EqSet singularEqSet, List<TypePair<LexemeType, string>> completeLexemeTable,
             Dictionary<string, int> solveVars, MultiLineHelper mlh, ref TermType.EvalData pEvalData)

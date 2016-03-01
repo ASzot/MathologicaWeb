@@ -585,7 +585,8 @@ option {
     font-size: 16pt;
     display: inline-block;
     margin-bottom: 20px;
-    line-height: 220%;
+    line-height: 60px;
+    -webkit-appearance: menulist-button;
 }
 
 .solve-btn {

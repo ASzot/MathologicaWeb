@@ -278,6 +278,7 @@ var selectedTextBox = null;
 
 function CompactModeMgr() {
     this._compactMode = window.innerWidth < 480;
+
 }
 
 CompactModeMgr.prototype.getCompactMode = function () {
@@ -301,6 +302,16 @@ CompactModeMgr.prototype.setCompactMode = function (isCompactMode) {
 
 var compactMode = new CompactModeMgr();
 
+if (compactMode.getCompactMode()) {
+    calc.items[0] = new MenuItem("Derivative", "d/(dx)", "(d)/(dx)", true,
+        [
+            new MenuItem("Derivative of function", "(df)/(dx)", "(df)/(dx)", true),
+        ]);
+    calc.items[15] = new MenuItem("Partial Derivative", "\\frac{\\partial}{\\partial x}", "(partial)/(partial x)", true,
+        [
+            new MenuItem("Partial derivative of function", "\\frac{\\partial f}{\\partial x}", "(partial f)/(partial x)", true),
+        ]);
+}
 
 
 
@@ -755,6 +766,8 @@ function onMathInputSpan_Clicked(clickedId) {
 }
 
 function enterScrollMode() {
+    if (compactMode.getCompactMode())
+        return;
     $("#work-nav-space").show();
     $("#eval-space").hide();
     //$("#parse-errors-id").hide();
@@ -766,12 +779,16 @@ function enterScrollMode() {
 }
 
 function exitScrollMode() {
+    if (compactMode.getCompactMode())
+        return;
     $("#work-nav-space").hide();
-    $("#eval-space").show(200);
+    $("#eval-space").show(0);
     //$("#parse-errors-id").show(200);
 
     $("#work-space").css('height', 'moz-calc(100% - 264px)');
     $("#work-space").css('height', 'webkit-calc(100% - 264px)');
     $("#work-space").css('height', '-o-calc(100% - 264px)');
     $("#work-space").css('height', 'calc(100% - 264px)');
+    var objDiv = document.getElementById("work-space");
+    objDiv.scrollTop = objDiv.scrollHeight;
 }

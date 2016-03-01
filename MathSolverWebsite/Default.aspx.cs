@@ -155,6 +155,20 @@ namespace MathSolverWebsite
             }
         }
 
+        private static void GetInputData(string rawInput, out string input, out Boolean isCompact)
+        {
+            input = null;
+            isCompact = false;
+
+            string[] parts = rawInput.Split('?');
+
+            //input = Server.HtmlDecode(parts[0]);
+            input = parts[0];
+
+            if (parts.Length < 2 || !bool.TryParse(parts[1], out isCompact))
+                isCompact = false;
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             MathSolver.Init();
@@ -196,7 +210,8 @@ namespace MathSolverWebsite
                     else
                         UseRad = true;
 
-                    if (UpdateUI(eqQueryStr, selIndex))
+                    // The input passed through HTML GET is always in LaTeX therefore, there is never any plain text input.
+                    if (UpdateUI(eqQueryStr, false, selIndex))
                         DisplaySolveResult();
                 }
                 else
@@ -232,17 +247,33 @@ namespace MathSolverWebsite
             functionDefsListView.DataBind();
         }
 
+        /// <summary>
+        /// Fired whenever the user clicks the solve button.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void hiddenSolveBtn_Click(object sender, EventArgs e)
         {
             DisplaySolveResult();
         }
 
+        /// <summary>
+        /// Fired whenever the user changes the input.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void hiddenUpdateBtn_Click(object sender, EventArgs e)
         {
-            string inputStr = Server.HtmlDecode(hiddenUpdateTxtBox.Text);
-            UpdateUI(inputStr);
+            string inputStr;
+            Boolean isCompact;
+            GetInputData(hiddenUpdateTxtBox.Text, out inputStr, out isCompact);
+            inputStr = Server.HtmlDecode(inputStr);
+            UpdateUI(inputStr, isCompact);
         }
 
+        /// <summary>
+        /// Calculates and displays the solve result depending on the text in hiddenUpdateTxtBox
+        /// </summary>
         private void DisplaySolveResult()
         {
             // Store it, just to be safe.
@@ -253,9 +284,15 @@ namespace MathSolverWebsite
 
             MathSolverLibrary.TermType.EvalData evalData = new MathSolverLibrary.TermType.EvalData(useRad, new WorkMgr(), FuncDefHelper);
 
-            string inputTxt = Server.HtmlDecode(hiddenUpdateTxtBox.Text);
+            string inputStr;
+            Boolean isCompact;
+            GetInputData(hiddenUpdateTxtBox.Text, out inputStr, out isCompact);
+            inputStr = Server.HtmlDecode(inputStr);
+
+            evalData.SetPlainTextInput(isCompact);
+
             var parseErrors = new System.Collections.Generic.List<string>();
-            var termEval = MathSolver.ParseInput(inputTxt, ref evalData, ref parseErrors);
+            var termEval = MathSolver.ParseInput(inputStr, ref evalData, ref parseErrors);
 
             if (termEval == null)
             {
@@ -273,6 +310,7 @@ namespace MathSolverWebsite
             string selectedValue = evalDropDownList.SelectedValue;
 
             evalData = new MathSolverLibrary.TermType.EvalData(useRad, new WorkMgr(), FuncDefHelper);
+            evalData.SetPlainTextInput(isCompact);
             solveResult = termEval.ExecuteCommandIndex(selectedIndex, ref evalData);
 
             string rawResultStr;
@@ -288,9 +326,9 @@ namespace MathSolverWebsite
             if (selectedIndex < evalDropDownList.Items.Count && selectedIndex >= 0)
                 selectedVal = evalDropDownList.Items[selectedIndex].Text;
 
-            string inputHtml = "<div class='input-disp-txt'><span class='mathquill-rendered-math'>" + inputTxt + "</span></div>";
+            string inputHtml = "<div class='input-disp-txt'><span class='mathquill-rendered-math'>" + inputStr + "</span></div>";
             inputHtml += "<div class='selected-cmd-txt'>" + termEval.GetCommands()[selectedIndex] + "</div>";
-            inputHtml += "<p class='hidden'>" + inputTxt + "</p>";
+            inputHtml += "<p class='hidden'>" + inputStr + "</p>";
 
             inputHtml = "<div class='input-disp-area'>" + inputHtml + "</div>";
 
@@ -305,13 +343,20 @@ namespace MathSolverWebsite
 
             if (_dataMgr != null)
             {
-                _dataMgr.CreateBlobData(inputTxt, selectedValue, inputHtml, User.Identity.IsAuthenticated);
+                // Save the input and output to storage for further analysis.
+                _dataMgr.CreateBlobData(inputStr, selectedValue, inputHtml, User.Identity.IsAuthenticated);
             }
 
             BindListView();
         }
 
-        private bool UpdateUI(string inputStr, int selectIndex = 0)
+        /// <summary>
+        /// Updates the user interface according to the input. 
+        /// </summary>
+        /// <param name="inputStr"></param>
+        /// <param name="selectIndex"></param>
+        /// <returns></returns>
+        private bool UpdateUI(string inputStr, bool isCompact, int selectIndex = 0)
         {
             GenTermType genTermEval = null;
             bool inputSizeExceeded = inputStr.Length > MAX_INPUT_LEN;
@@ -323,6 +368,9 @@ namespace MathSolverWebsite
                     FuncDefHelper = new MathSolverLibrary.Information_Helpers.FuncDefHelper();
 
                 EvalData evalData = new EvalData(UseRad, new WorkMgr(), FuncDefHelper);
+                // The view being compact means the user is using the regular keyboard to input. 
+                // Therefore, change to plain text input.
+                evalData.SetPlainTextInput(isCompact);
 
                 genTermEval = MathSolver.ParseInput(inputStr, ref evalData, ref parseErrors);
                 if (evalData.GetMsgs() != null)

@@ -302,6 +302,7 @@
     <None Include="Properties\PublishProfiles\mathologica - FTP %285%29.pubxml" />
     <None Include="Properties\PublishProfiles\mathologica - FTP %286%29.pubxml" />
     <None Include="Properties\PublishProfiles\mathologica - FTP %287%29.pubxml" />
+    <None Include="Properties\PublishProfiles\mathologica - FTP %288%29.pubxml" />
     <None Include="Properties\PublishProfiles\mathologica - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\mathologica - Web Deploy %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\mathologica - Web Deploy %283%29.pubxml" />
@@ -309,6 +310,7 @@
     <None Include="Properties\PublishProfiles\mathologica - Web Deploy %285%29.pubxml" />
     <None Include="Properties\PublishProfiles\mathologica - Web Deploy %286%29.pubxml" />
     <None Include="Properties\PublishProfiles\mathologica - Web Deploy %287%29.pubxml" />
+    <None Include="Properties\PublishProfiles\mathologica - Web Deploy %288%29.pubxml" />
     <None Include="Properties\PublishProfiles\mathologica - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\mathologicabeta - FTP %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\mathologicabeta - FTP %283%29.pubxml" />

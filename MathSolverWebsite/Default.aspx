@@ -65,7 +65,7 @@
 
             var encodedLatex = htmlEncode(latex);
 
-            $("#<%= hiddenUpdateTxtBox.ClientID %>").val(encodedLatex);
+            $("#<%= hiddenUpdateTxtBox.ClientID %>").val(encodedLatex + "?" + compactMode.getCompactMode());
 
             $("#<%= hiddenUpdateBtn.ClientID %>").click();
             MathJax.Hub.Queue(["Typeset", MathJax.Hub, "funcDispList"]);

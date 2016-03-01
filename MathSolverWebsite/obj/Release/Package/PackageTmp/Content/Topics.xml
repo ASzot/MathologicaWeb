@@ -1891,9 +1891,10 @@
     <info>
       
     </info>
-    <exampleInput>
+    <!--For some reason this input is not working.--> 
+    <!--<exampleInput>
       <input>\int \sin^3(x)\cos^3(x) \dx</input>
-    </exampleInput>
+    </exampleInput>-->
     <exampleInput>
       <input>\int \cos^4(2t) dt</input>
     </exampleInput>

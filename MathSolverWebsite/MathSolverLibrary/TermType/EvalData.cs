@@ -7,6 +7,7 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
 {
     internal class EvalData
     {
+        private bool _plainTextInput = false;
         private bool _checkSolutions = false;
         private List<string> _failureMsgs = new List<string>();
         private List<string> _msgs = null;
@@ -22,6 +23,36 @@ namespace MathSolverWebsite.MathSolverLibrary.TermType
         private InputType _inputType = InputType.Invalid;
         private InputAddType _inputAddType = InputAddType.Invalid;
         private List<AndRestriction> _variableRestrictions = null;
+
+        /// <summary>
+        /// Whether the input text is in latex or plain text.
+        /// Integrals, derivatives are parsed differently.
+        /// When TRUE
+        ///     Derivatives are (d)/(dx)
+        ///     Integrals can be entered like 'int x dx'
+        /// When FALSE
+        ///     Derivatives are \frac{d}{dx}
+        ///     Integrals can be entered like \int x dx
+        /// </summary>
+        public void SetPlainTextInput(bool plainTextInput)
+        {
+            _plainTextInput = plainTextInput;
+        }
+
+        /// <summary>
+        /// Whether the input text is in latex or plain text.
+        /// Integrals, derivatives are parsed differently.
+        /// When TRUE
+        ///     Derivatives are (d)/(dx)
+        ///     Integrals can be entered like 'int x dx'
+        /// When FALSE
+        ///     Derivatives are \frac{d}{dx}
+        ///     Integrals can be entered like \int x dx
+        /// </summary>
+        public bool GetPlainTextInput()
+        {
+            return _plainTextInput;
+        }
 
         /// <summary>
         /// Can return null if the input type is invalid.

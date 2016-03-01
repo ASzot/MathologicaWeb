@@ -56,6 +56,7 @@ namespace MathSolverWebsite.api
             var funcDefHelper = new MathSolverLibrary.Information_Helpers.FuncDefHelper();
 
             var evalData = new MathSolverLibrary.TermType.EvalData(useRad, new WorkMgr(), funcDefHelper);
+            evalData.SetPlainTextInput(true);
             var parseErrors = new List<string>();
             var termEval = MathSolverLibrary.MathSolver.ParseInput(input, ref evalData, ref parseErrors);
             if (termEval == null)
@@ -73,12 +74,16 @@ namespace MathSolverWebsite.api
             var funcDefHelper = new MathSolverLibrary.Information_Helpers.FuncDefHelper();
 
             var evalData = new MathSolverLibrary.TermType.EvalData(useRad, new WorkMgr(), funcDefHelper);
+            evalData.SetPlainTextInput(true);
 
             var parseErrors = new System.Collections.Generic.List<string>();
             var termEval = MathSolver.ParseInput(input, ref evalData, ref parseErrors);
             if (termEval == null)
                 return "ERROR:" + String.Join("|", parseErrors);
+
             evalData = new MathSolverLibrary.TermType.EvalData(useRad, new WorkMgr(), funcDefHelper);
+            evalData.SetPlainTextInput(true);
+
             var solveResult = termEval.ExecuteCommandIndex(selectedIndex, ref evalData);
             if (!solveResult.Success)
                 return "ERROR:EVAL";
